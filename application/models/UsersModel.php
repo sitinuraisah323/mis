@@ -1,6 +1,6 @@
 <?php
 require_once 'Master.php';
-class Users extends Master
+class UsersModel extends Master
 {
 	public $table = 'users';
 
