@@ -51,6 +51,7 @@ class Master extends CI_Model
 	public function delete($condition = array())
 	{
 		return $this->db->delete($this->table, $condition);
+		
 	}
 
 

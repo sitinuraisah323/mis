@@ -23,6 +23,9 @@ License: You must have a valid license purchased only from themeforest(the above
         <!--begin::Fonts -->
             <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700">        
         <!--end::Fonts -->        
+        <!--begin::Page Vendors Styles(used by this page) -->
+        <link href="<?php echo base_url(); ?>assets/vendors/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
+                        <!--end::Page Vendors Styles -->
         
         <!--begin:: Global Mandatory Vendors -->
             <link href="<?php echo base_url(); ?>assets/vendors/general/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" type="text/css" />

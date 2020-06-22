@@ -110,12 +110,16 @@
 <script src="<?php echo base_url(); ?>assets/vendors/general/dompurify/dist/purify.js" type="text/javascript"></script>
 <!--end:: Global Optional Vendors -->
 
-<!--begin::Global Theme Bundle(used by all pages) -->
-    	    	   
-		    	   <script src="<?php echo base_url(); ?>assets/js/demo2/scripts.bundle.js" type="text/javascript"></script>
-				<!--end::Global Theme Bundle -->
-
+	<!--begin::Global Theme Bundle(used by all pages) -->    	    	   
+	   <script src="<?php echo base_url(); ?>assets/js/demo2/scripts.bundle.js" type="text/javascript"></script>
+	<!--end::Global Theme Bundle -->
+	<!--begin::Page Vendors(used by this page) -->
+		<script src="<?php echo base_url(); ?>assets/vendors/custom/datatables/datatables.bundle.js" type="text/javascript"></script>
+    <!--end::Page Vendors -->
+	<!--begin::Page Scripts(used by this page) -->
+	<script src="<?php echo base_url(); ?>assets/js/demo2/pages/crud/datatables/basic/paginations.js" type="text/javascript"></script>
+    <!--end::Page Scripts -->
         
-            </body>
+    </body>
     <!-- end::Body -->
 </html>
