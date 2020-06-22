@@ -6,7 +6,10 @@ class Authenticated extends Controller
 	public function __construct()
 	{
 		parent::__construct();
-
+		$session = $this->session->userdata('user');
+		if($session['logged_in'] == false){
+			redirect('login');
+		}
 	}
 
 }
