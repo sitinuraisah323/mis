@@ -45,7 +45,7 @@
                                 <a href="demo2/index.html" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Employee</span></a>
                             </li>
                             <li class="kt-menu__item "  aria-haspopup="true">
-                            <a  href="demo2/dashboards/aside.html" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Customer</span></a>
+                            <a  href="<?php echo base_url('datamaster/customers');?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Customer</span></a>
                             </li>
                             <li class="kt-menu__item "  aria-haspopup="true">
                                 <a  href="<?php echo base_url('datamaster/areas'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Area</span></a>
@@ -59,7 +59,7 @@
                             <li class="kt-menu__item "  aria-haspopup="true">
                             <a  href="demo2/dashboards/aside.html" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">STLE</span></a>
                             </li>
-                           
+
                             </ul>
                         </div>
                     </li>
@@ -85,12 +85,12 @@
                             </ul>
                         </div>
                     </li>
-                </ul>     
+                </ul>
             </div>
         </div>
         <!-- end: Header Menu -->
 		</div>
 	</div>
-    
+
 </div>
 <!-- end:: Header -->

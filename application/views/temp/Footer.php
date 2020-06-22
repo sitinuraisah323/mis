@@ -121,5 +121,16 @@
     <!--end::Page Scripts -->
         
     </body>
+=======
+<?php if(isset($js)):?>
+	<?php $this->load->view($js);?>
+<?php endif;?>
+<!--begin::Global Theme Bundle(used by all pages) -->
+
+		    	   <script src="<?php echo base_url(); ?>assets/js/demo2/scripts.bundle.js" type="text/javascript"></script>
+				<!--end::Global Theme Bundle -->
+
+            </body>
+>>>>>>> 03fb4dae608b1c7e3b2959c7a8060f06545482ff
     <!-- end::Body -->
 </html>
