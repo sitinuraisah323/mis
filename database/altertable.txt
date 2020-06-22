@@ -1,0 +1,10 @@
+ALTER TABLE public.customers ADD address_1 text NULL;
+ALTER TABLE public.customers ADD address_2 text NULL;
+ALTER TABLE public.customers ADD mobile text NULL;
+ALTER TABLE public.customers RENAME COLUMN sibling_address TO sibling_address_1;
+ALTER TABLE public.customers ADD sibling_address_2 text NULL;
+ALTER TABLE public.customers ALTER COLUMN sibling_job DROP NOT NULL;
+ALTER TABLE public.customers ALTER COLUMN sibling_birth_place DROP NOT NULL;
+ALTER TABLE public.customers ALTER COLUMN sibling_birth_date DROP NOT NULL;
+ALTER TABLE public.customers ALTER COLUMN sibling_address_1 DROP NOT NULL;
+
