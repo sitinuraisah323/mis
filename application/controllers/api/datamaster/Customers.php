@@ -144,4 +144,63 @@ class Customers extends ApiController
 		}
 	}
 
+	public function show($id)
+	{
+		if($data = $this->customers->find($id)){
+			echo json_encode(array(
+				'data'	=> $data,
+				'status'	=> true,
+				'message'	=> 'Successfully Get Data Customer'
+			));
+		}else{
+			echo json_encode(array(
+				'data'	=> $data,
+				'status'	=> true,
+				'message'	=> 'Successfully Get Data Customer'
+			));
+		}
+	}
+
+	public function update()
+	{
+		if($post = $this->input->post()){
+
+			$this->load->library('form_validation');
+
+			$this->form_validation->set_rules('name', 'name', 'required');
+			if ($this->form_validation->run() == FALSE)
+			{
+				echo json_encode(array(
+					'data'	=> 	validation_errors(),
+					'message'	=> 'Failed Updated Data Users'
+				));
+			}
+			else
+			{
+				$id = $post['id'];
+				unset($post['id']);
+				if($this->customers->update($post,$id)){
+					echo json_encode(array(
+						'data'	=> 	true,
+						'message'	=> 'Successfull Updated Data Users'
+					));
+				}else{
+					var_dump($this->customers->db->last_query());
+					exit;
+					echo json_encode(array(
+							'data'	=> 	false,
+							'message'	=> 'Failed Updated Data Users')
+					);
+				}
+
+			}
+		}else{
+			echo json_encode(array(
+				'data'	=> 	false,
+				'message'	=> 'Request Error Should Method POst'
+			));
+		}
+
+	}
+
 }

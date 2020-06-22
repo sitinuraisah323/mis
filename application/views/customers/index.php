@@ -65,6 +65,8 @@ $this->load->view('temp/MenuBar.php');
 									<td>Sibling Birth Day</td>
 									<td>Sibling Relation</td>
 									<td>Sibling Job</td>
+									<td>Status</td>
+									<td>Action</td>
 								</tr>
 								</thead>
 								<tbody>
@@ -87,6 +89,10 @@ $this->load->view('temp/MenuBar.php');
 											<td><?php echo $customer->sibling_birth_place.' ,'.$customer->sibling_birth_date;?></td>
 											<td><?php echo $customer->sibling_relation;?></td>
 											<td><?php echo $customer->sibling_job;?></td>
+											<td><?php echo $customer->status == 'PUBLISH' ? 'Aktif' : 'Non Aktif';?></td>
+											<td>
+												<button class="btn btn-edit btn-info" data-id="<?php echo $customer->id;?>">Edit</button>
+											</td>
 										</tr>
 									<?php endforeach;?>
 								<?php endif;?>
@@ -107,7 +113,7 @@ $this->load->view('temp/MenuBar.php');
 
 </div>
 </div>
-<div class="modal" tabindex="-1" role="dialog">
+<div class="modal" id="modal-upload" tabindex="-1" role="dialog">
 	<form class="modal-dialog form-input" role="document" method="post" enctype="multipart/form-data">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -129,6 +135,109 @@ $this->load->view('temp/MenuBar.php');
 		</div>
 	</form>
 </div>
+
+
+<form class="modal form-modal" id="modal-form" tabindex="-2" role="dialog">
+	<div class="modal-dialog"  role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Upload File Customers</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<input type="hidden" name="id">
+					<label for="file">No Cif</label>
+					<input type="text" class="form-control" name="no_cif" required readonly>
+				</div>
+				<div class="form-group">
+					<label for="file">Name</label>
+					<input type="text" class="form-control" name="name" required>
+				</div>
+				<div class="form-group">
+					<label for="file">Mobile</label>
+					<input type="text" class="form-control" name="mobile" >
+				</div>
+				<div class="form-group">
+					<label for="file">Birth Place</label>
+					<input type="text" class="form-control" name="birth_place" >
+				</div>
+				<div class="form-group">
+					<label for="file">Birth Date</label>
+					<input type="date" class="form-control" name="birth_date" >
+				</div>
+				<div class="form-group">
+					<label for="file">Gender</label>
+					<select name="gender" class="form-control" >
+						<option value="">--Select Gender--</option>
+						<?php foreach (array('MALE', 'FEMALE') as $value):?>
+							<option value="<?php echo $value;?>"><?php echo $value;?></option>
+						<?php endforeach;?>
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="file">Marital</label>
+					<select name="gender" class="form-control" >
+						<option value="">--Select Marital--</option>
+						<?php foreach (array('SINGLE', 'MARRIED','DISVORCED') as $value):?>
+							<option value="<?php echo $value;?>"><?php echo $value;?></option>
+						<?php endforeach;?>
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="file">Province</label>
+					<input type="text" class="form-control" name="province" >
+				</div>
+				<div class="form-group">
+					<label for="file">City</label>
+					<input type="text" class="form-control" name="city" >
+				</div>
+				<div class="form-group">
+					<label for="file">Address</label>
+					<input type="text" class="form-control" name="address" >
+				</div>
+				<div class="form-group">
+					<label for="file">JOB</label>
+					<input type="text" class="form-control" name="job" >
+				</div>
+				<div class="form-group">
+					<label for="file">Mother Name</label>
+					<input type="text" class="form-control" name="mother_name" >
+				</div>
+				<div class="form-group">
+					<label for="file">Sibling Name</label>
+					<input type="text" class="form-control" name="sibling_name" >
+				</div>
+				<div class="form-group">
+					<label for="file">Sibling Birth Place</label>
+					<input type="text" class="form-control" name="sibling_birth_place" >
+				</div>
+				<div class="form-group">
+					<label for="file">Sibling Birth Date</label>
+					<input type="date" class="form-control" name="sibling_birth_date" >
+				</div>
+				<div class="form-group">
+					<label for="file">Sibling JOB</label>
+					<input type="text" class="form-control" name="sibling_job" >
+				</div>
+				<div class="form-group">
+					<label for="file">Sibling Relationship</label>
+					<input type="text" class="form-control" name="sibling_relation" >
+				</div>
+				<div class="form-group">
+					<label for="file">Sibling Address</label>
+					<input type="text" class="form-control" name="sibling_address_1" >
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary btn-save">Save changes</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</form>
 <?php
 $this->load->view('temp/Footer.php', array(
 	'js'	=> 'customers/js'
