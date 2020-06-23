@@ -1,8 +1,8 @@
 <?php
 require_once 'Master.php';
-class UnitsdailycashModel extends Master
+class RepaymentModel extends Master
 {
-	public $table = 'units_dailycashs';
+	public $table = 'units_repayments';
 	public $primary_key = 'id';
 
 
@@ -12,7 +12,7 @@ class UnitsdailycashModel extends Master
 		$this->db->join('units as b','b.id=a.id_unit');		
 		$this->db->join('areas as c','c.id=b.id_area');		
 		$this->db->order_by('a.id','desc');		
-		return $this->db->get('units_dailycashs as a')->result();
+		return $this->db->get('units_repayments as a')->result();
 	}
 
 }
