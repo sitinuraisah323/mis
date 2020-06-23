@@ -33,7 +33,7 @@ $this->load->view('temp/MenuBar.php');
                         <i class="kt-font-brand fa fa-align-justify"></i>
                     </span>
                     <h3 class="kt-portlet__head-title">
-                       Data Unit List
+                       Data Unit Target List
                     </h3>
                 </div>
                 <div class="kt-portlet__head-toolbar">

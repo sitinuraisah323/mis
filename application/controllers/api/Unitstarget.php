@@ -22,7 +22,7 @@ class Unitstarget extends ApiController
     public function get_byid()
 	{
 		echo json_encode(array(
-			'data'	=> 	$this->u_target->find($this->input->get("id")),
+			'data'	=> 	$this->u_target->get_byid($this->input->get("id")),
 			'status'	=> true,
 			'message'	=> 'Successfully Get Data Users'
 		));
@@ -32,9 +32,10 @@ class Unitstarget extends ApiController
 	{
 		if($post = $this->input->post()){
 
-            $data['id_area'] = $this->input->post('area');	
-            $data['name'] = $this->input->post('unit');	
-            $data['code'] = '01';	
+            $data['id_unit']    = $this->input->post('unit');	
+            $data['month']      = $this->input->post('month');	
+            $data['year']       = $this->input->post('year');	
+            $data['amount']     = $this->input->post('amount');	
             $db = false;
             $db = $this->u_target->insert($data);
             if($db=true){
@@ -58,9 +59,10 @@ class Unitstarget extends ApiController
 		if($post = $this->input->post()){
 
             $id                 = $this->input->post('id');	
-            $data['id_area']    = $this->input->post('area');	
-            $data['name']       = $this->input->post('unit');	
-            $data['code']       = '01';		
+            $data['id_unit']    = $this->input->post('unit');	
+            $data['month']      = $this->input->post('month');	
+            $data['year']       = $this->input->post('year');	
+            $data['amount']     = $this->input->post('amount');
             $db = false;
             $db = $this->u_target->update($data,$id);
             if($db=true){

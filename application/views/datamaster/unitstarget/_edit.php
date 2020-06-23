@@ -9,31 +9,69 @@
             </div>
             <div class="modal-body form">
                 <form action="#" id="form_edit" class="form-horizontal">
-                    <input type="hidden" id="edit_unit_id" name="id"/>
+                    <input type="hidden" id="edit_unitstarget_id" name="id"/>
                     <div class="form-body">
                         <div class="row"> 
 
-                            <div class="col-md-12">
+                        <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Area</label>
-                                    <select class="form-control select2" name="area" id="edit_area">
+                                    <label>Units</label>
+                                    <select class="form-control select2" name="unit" id="edit_unit">
+                                    <option></option>
                                     <?php 
-                                        if (!empty($areas)){
-                                            foreach($areas as $row){
-                                               echo "<option value=".$row->id.">".$row->area."</option>";
+                                        if (!empty($units)){
+                                            foreach($units as $row){
+                                               echo "<option value=".$row->id.">".$row->name."</option>";
                                             }
                                         }
                                     ?>
                                     </select>
                                 </div>
-                            </div>  
+                            </div> 
 
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Area Name</label>
-                                    <input type="text" class="form-control" id="edit_unit_name" name="unit">	                            		
+                                    <label>Periode</label>
+                                    <div class="row">
+                                    <div class="col-md-6">
+                                    <select class="form-control select2" name="month" id="edit_month">
+                                        <option></option>                                   
+                                       <option value="1">Januari</option>                                      
+                                       <option value="2">Februari</option>                                      
+                                       <option value="3">Maret</option>                                      
+                                       <option value="4">April</option>                                      
+                                       <option value="5">Mei</option>                                      
+                                       <option value="6">Juni</option>                                      
+                                       <option value="7">Juli</option>                                      
+                                       <option value="8">Agustus</option>                                      
+                                       <option value="9">September</option>                                      
+                                       <option value="10">Oktober</option>                                      
+                                       <option value="11">November</option>                                      
+                                       <option value="12">Desember</option>                                      
+                                    </select>                           		
+                                    </div>
+                                    <div class="col-md-6">
+                                    <select class="form-control select2" name="year" id="edit_year">
+                                    <option></option>
+                                    <?php 
+                                        for($i =0; $i <= 22 ;$i++)
+                                        {
+                                            $year = date('Y') - 20 + $i;
+                                            echo '<option value='.$year.'>'.$year.'</option>';
+                                        }
+                                    ?>
+                                    </select>	                            		
+                                    </div>
+                                    </div>                                    
                                 </div>
-                            </div>  
+                            </div> 
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Amount</label>
+                                    <input type="text" class="form-control" id="edit_amount" name="amount">	                            		
+                                </div>
+                            </div>   
                               
                             <div class="col-md-12" >     
                                 <div class="kt-section">

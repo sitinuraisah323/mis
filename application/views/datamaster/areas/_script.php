@@ -8,7 +8,7 @@ var editForm;
 function initDTEvents(){
     $(".btn_delete").on("click",function(){
         var targetId = $(this).data("id");
-        alert(targetId);
+        //alert(targetId);
         swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this",
