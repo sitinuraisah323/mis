@@ -16,9 +16,11 @@ class Units extends ApiController
 		if($post = $this->input->post()){
 			if(is_array($post['query'])){
 				$value = $post['query']['generalSearch'];
-                $this->areas->db
+                $this->units->db
                 ->or_like('area', $value)
-                ->or_like('area',strtoupper($value));					
+                ->or_like('area',strtoupper($value))
+                ->or_like('name', $value)
+                ->or_like('name',strtoupper($value));					
 				$data = $this->units->get_units();
 			}
 		}        
