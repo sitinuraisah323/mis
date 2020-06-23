@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-require_once APPPATH.'controllers/Controller.php';
+require_once APPPATH.'controllers/Middleware/Authenticated.php';
 class Customers extends Controller
 {
 	/**

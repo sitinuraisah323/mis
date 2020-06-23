@@ -114,11 +114,12 @@ class Users extends ApiController
 					'message'	=> 'Wrong Password Or Username'
 				));
 			}
+		}else{
+			echo json_encode(array(
+				'data'	=> 	false,
+				'message'	=> 'Request Error Should Method POst'
+			));
 		}
-		echo json_encode(array(
-			'data'	=> 	false,
-			'message'	=> 'Request Error Should Method POst'
-		));
 	}
 
 	public function delete($id)

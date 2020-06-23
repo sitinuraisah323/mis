@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-require_once APPPATH.'controllers/Controller.php';
+require_once APPPATH.'controllers/Middleware/Authenticated.php';
 class Unitstarget extends Controller
 {
 	/**
@@ -28,5 +28,5 @@ class Unitstarget extends Controller
         $data['units'] = $this->units->all();
 		$this->load->view('datamaster/unitstarget/index',$data);
 	}
-	
+
 }
