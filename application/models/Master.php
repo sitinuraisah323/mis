@@ -16,7 +16,10 @@ class Master extends CI_Model
 		if(!is_null($limit)){
 			$this->db->limit($limit);
 		}
-		return $this->db->get($this->table)->result();
+		return $this->db
+			->select($this->table.'.*')
+			->from($this->table)
+			->get()->result();
 	}
 
 
@@ -37,7 +40,21 @@ class Master extends CI_Model
 		}else{
 			$this->db->where($this->primary_key, $condition);
 		}
-		return $this->db->get($this->table)->row();
+		return $this->db->select($this->table.'.*')->from($this->table)->get()->row();
+	}
+
+	public function insertOrUpdate($data, $condition = array())
+	{
+		if($this->find($condition)){
+			return $this->update($data,$condition);
+		}else{
+			return $this->insert($data);
+		}
+	}
+
+	public function updateOrInsert($data, $condition = array())
+	{
+		return $this->insertOrUpdate($data, $condition);
 	}
 
 	public function findWhere($condition = array())
@@ -45,13 +62,13 @@ class Master extends CI_Model
 		if(is_array($condition)){
 			$this->db->where($condition);
 		}
-		return $this->db->get($this->table)->result();
+		return $this->db->select($this->table.'.*')->from($this->table)->get()->result();
 	}
 
 	public function delete($condition = array())
 	{
 		return $this->db->delete($this->table, $condition);
-		
+
 	}
 
 
