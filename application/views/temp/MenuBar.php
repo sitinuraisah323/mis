@@ -68,7 +68,7 @@
                         <div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--left">
                             <ul class="kt-menu__subnav">
                             <li class="kt-menu__item "  aria-haspopup="true">
-                                <a href="demo2/index.html" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Unit Daily Cash</span></a>
+                                <a href="<?php echo base_url('transaction/unitsdailycash'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Unit Daily Cash</span></a>
                             </li>
                             <li class="kt-menu__item "  aria-haspopup="true">
                                 <a  href="demo2/dashboards/fluid.html" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Unit Regular Pawn</span></a>
