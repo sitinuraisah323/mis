@@ -23,7 +23,15 @@ class Login extends Controller
 	 */
 	public function index()
 	{
+		if($this->session->userdata('logged_in')){
+			redirect(base_url());
+		}
 		$this->load->view('login');
 	}
-	
+
+	public function signout()
+	{
+		$this->session->sess_destroy();
+		redirect('login');
+	}
 }

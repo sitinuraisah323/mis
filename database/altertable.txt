@@ -8,3 +8,19 @@ ALTER TABLE public.customers ALTER COLUMN sibling_birth_place DROP NOT NULL;
 ALTER TABLE public.customers ALTER COLUMN sibling_birth_date DROP NOT NULL;
 ALTER TABLE public.customers ALTER COLUMN sibling_address_1 DROP NOT NULL;
 
+ALTER TABLE public.units_targets ALTER COLUMN amount TYPE float8 USING amount::float8;
+ALTER TABLE public.units_repayments ALTER COLUMN money_loan TYPE float8 USING money_loan::float8;
+ALTER TABLE public.units_repayments ALTER COLUMN periode TYPE float8 USING periode::float8;
+ALTER TABLE public.units_repayments ALTER COLUMN capital_lease TYPE float8 USING capital_lease::float8;
+ALTER TABLE public.units_regularpawns ALTER COLUMN amount TYPE float8 USING amount::float8;
+ALTER TABLE public.units_regularpawns ALTER COLUMN estimation TYPE float8 USING estimation::float8;
+ALTER TABLE public.units_regularpawns ALTER COLUMN "admin" TYPE float8 USING "admin"::float8;
+ALTER TABLE public.units_mortages ALTER COLUMN interest TYPE float8 USING interest::float8;
+ALTER TABLE public.units_mortages ALTER COLUMN estimation TYPE float8 USING estimation::float8;
+ALTER TABLE public.units_mortages ALTER COLUMN amout_loan TYPE float8 USING amout_loan::float8;
+ALTER TABLE public.units_mortages ALTER COLUMN amount_admin TYPE float8 USING amount_admin::float8;
+ALTER TABLE public.units_loaninstallments ALTER COLUMN money_loan TYPE float8 USING money_loan::float8;
+ALTER TABLE public.units_loaninstallments ALTER COLUMN capital_lease TYPE float8 USING capital_lease::float8;
+ALTER TABLE public.units_dailycashs ALTER COLUMN amount TYPE float8 USING amount::float8;
+
+
