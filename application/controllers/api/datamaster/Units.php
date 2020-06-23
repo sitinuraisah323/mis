@@ -12,8 +12,18 @@ class Units extends ApiController
 
 	public function index()
 	{
+        $data = $this->units->get_units();
+		if($post = $this->input->post()){
+			if(is_array($post['query'])){
+				$value = $post['query']['generalSearch'];
+                $this->areas->db
+                ->or_like('area', $value)
+                ->or_like('area',strtoupper($value));					
+				$data = $this->units->get_units();
+			}
+		}        
 		echo json_encode(array(
-            'data'	=> 	$this->units->get_units(),
+            'data'	=> 	$data,
             'status'=>true,
 			'message'	=> 'Successfully Get Data Users'
 		));

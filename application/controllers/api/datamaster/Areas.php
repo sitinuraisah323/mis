@@ -12,10 +12,20 @@ class Areas extends ApiController
 
 	public function index()
 	{
+        $data = $this->areas->all();
+		if($post = $this->input->post()){
+			if(is_array($post['query'])){
+				$value = $post['query']['generalSearch'];
+                $this->areas->db
+                ->or_like('area', $value)
+                ->or_like('area',strtoupper($value));					
+				$data = $this->areas->all();
+			}
+		}        
 		echo json_encode(array(
-            'data'	=> 	$this->areas->all(),
-            'status'=>true,
-			'message'	=> 'Successfully Get Data Users'
+            'data'	 => $data,
+            'status' => true,
+			'message'=> 'Successfully Get Data Users'
 		));
     }
 
