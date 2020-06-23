@@ -24,11 +24,11 @@ License: You must have a valid license purchased only from themeforest(the above
         <!--begin::Fonts -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700">        <!--end::Fonts -->
 
-        
+
                     <!--begin::Page Custom Styles(used by this page) -->
                              <link href="<?php echo base_url(); ?>assets/css/demo2/pages/login/login-4.css" rel="stylesheet" type="text/css" />
                         <!--end::Page Custom Styles -->
-        
+
         <!--begin:: Global Mandatory Vendors -->
 <link href="<?php echo base_url(); ?>assets/vendors/general/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" type="text/css" />
 <!--end:: Global Mandatory Vendors -->
@@ -65,7 +65,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <!--end:: Global Optional Vendors -->
 
 <!--begin::Global Theme Styles(used by all pages) -->
-                    
+
                     <link href="<?php echo base_url(); ?>assets/css/demo2/style.bundle.css" rel="stylesheet" type="text/css" />
                 <!--end::Global Theme Styles -->
 
@@ -80,8 +80,8 @@ License: You must have a valid license purchased only from themeforest(the above
     <body  class="kt-page--loading-enabled kt-page--loading kt-quick-panel--right kt-demo-panel--right kt-offcanvas-panel--right kt-header--fixed kt-header--minimize-topbar kt-header-mobile--fixed kt-subheader--enabled kt-subheader--transparent kt-page--loading"  >
 
                    <!-- begin::Page loader -->
-	
-<!-- end::Page Loader -->        
+
+<!-- end::Page Loader -->
     	<!-- begin:: Page -->
 	<div class="kt-grid kt-grid--ver kt-grid--root kt-page">
 		<div class="kt-grid kt-grid--hor kt-grid--root  kt-login kt-login--v4 kt-login--signin" id="kt_login">
@@ -90,7 +90,7 @@ License: You must have a valid license purchased only from themeforest(the above
 			<div class="kt-login__container">
 				<div class="kt-login__logo">
 					<a href="#">
-						<img src="<?php echo base_url(); ?>assets/media/logos/logo-5.png">  	
+						<img src="<?php echo base_url(); ?>assets/media/logos/logo-5.png">
 					</a>
 				</div>
 				<div class="kt-login__signin">
@@ -176,17 +176,18 @@ License: You must have a valid license purchased only from themeforest(the above
 					&nbsp;&nbsp;
 					<a href="javascript:;" id="kt_login_signup" class="kt-login__account-link">Sign Up!</a>
 				</div> -->
-			</div>	
+			</div>
 		</div>
 	</div>
-</div>	
+</div>
 	</div>
-	
+
 <!-- end:: Page -->
 
 
         <!-- begin::Global Config(global config for global JS sciprts) -->
         <script>
+			var url = '<?php echo base_url();?>';
             var KTAppOptions = {"colors":{"state":{"brand":"#374afb","light":"#ffffff","dark":"#282a3c","primary":"#5867dd","success":"#34bfa3","info":"#36a3f7","warning":"#ffb822","danger":"#fd3995"},"base":{"label":["#c5cbe3","#a1a8c3","#3d4465","#3e4466"],"shape":["#f0f3ff","#d9dffa","#afb4d4","#646c9a"]}}};
         </script>
         <!-- end::Global Config -->
@@ -262,11 +263,11 @@ License: You must have a valid license purchased only from themeforest(the above
 <!--end:: Global Optional Vendors -->
 
 <!--begin::Global Theme Bundle(used by all pages) -->
-    	    	   
+
 		    	   <script src="<?php echo base_url(); ?>assets/js/demo2/scripts.bundle.js" type="text/javascript"></script>
 				<!--end::Global Theme Bundle -->
 
-        
+
                     <!--begin::Page Scripts(used by this page) -->
                             <script src="<?php echo base_url(); ?>assets/js/demo2/pages/login/login-general.js" type="text/javascript"></script>
                         <!--end::Page Scripts -->

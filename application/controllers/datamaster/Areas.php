@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-require_once APPPATH.'controllers/Controller.php';
-class Areas extends Controller
+require_once APPPATH.'controllers/Middleware/Authenticated.php';
+class Areas extends Authenticated
 {
 	/**
 	 * @var string
@@ -26,5 +26,5 @@ class Areas extends Controller
 	{
 		$this->load->view('datamaster/areas/index');
 	}
-	
+
 }
