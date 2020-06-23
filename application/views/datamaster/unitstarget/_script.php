@@ -20,7 +20,7 @@ function initDTEvents(){
                 KTApp.blockPage();
                 $.ajax({
                     type : 'GET',
-                    url : "<?php echo base_url("api/unitstarget/delete"); ?>",
+                    url : "<?php echo base_url("api/datamaster/unitstarget/delete"); ?>",
                     data : {id:targetId},
                     dataType : "json",
                     success : function(data,status){
@@ -46,7 +46,7 @@ function initDTEvents(){
         KTApp.blockPage();
         $.ajax({
             type : 'GET',
-            url : "<?php echo base_url("api/unitstarget/get_byid"); ?>",
+            url : "<?php echo base_url("api/datamaster/unitstarget/get_byid"); ?>",
             data : {id:targetId},
             dataType : "json",
             success : function(response,status){
@@ -76,7 +76,7 @@ function initDataTable(){
             type: 'remote',
             source: {
               read: {
-                url: '<?php echo base_url("api/unitstarget"); ?>',
+                url: '<?php echo base_url("api/datamaster/unitstarget"); ?>',
                 map: function(raw) {
                   // sample data mapping
                   var dataSet = raw;
@@ -285,7 +285,7 @@ function initCreateForm(){
         KTApp.block('#modal_add .modal-content', {});
         $.ajax({
             type : 'POST',
-            url : "<?php echo base_url("api/unitstarget/insert"); ?>",
+            url : "<?php echo base_url("api/datamaster/unitstarget/insert"); ?>",
             data : $('#form_add').serialize(),
             dataType : "json",
             success : function(data,status){
@@ -359,7 +359,7 @@ function initEditForm(){
         KTApp.block('#modal_edit .modal-content', {});
         $.ajax({
             type : 'POST',
-            url : "<?php echo base_url("api/unitstarget/update"); ?>",
+            url : "<?php echo base_url("api/datamaster/unitstarget/update"); ?>",
             data : $('#form_edit').serialize(),
             dataType : "json",
             success : function(data,status){

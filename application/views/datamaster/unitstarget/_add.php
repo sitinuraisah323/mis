@@ -11,7 +11,7 @@
                 <form action="#" id="form_add" class="form-horizontal">
                     <div class="form-body">
                         <div class="row"> 
-                        <div class="col-md-12">
+                            <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Units</label>
                                     <select class="form-control select2" name="unit" id="add_unit">

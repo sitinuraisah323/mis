@@ -10,7 +10,7 @@
 					</a>		 			 
 					<div class="kt-footer__copyright">
 						2020&nbsp;&copy;&nbsp;  
-						<a href="http://keenthemes.com/metronic" target="_blank">Gadai Hartadinata Abasi</a>
+						<a href="http://keenthemes.com/metronic" target="_blank">Gadai Hartadinata Abadi</a>
 					</div>
 				</div>				 
 				<div class="kt-footer__menu">					

@@ -20,7 +20,7 @@ function initDTEvents(){
                 KTApp.blockPage();
                 $.ajax({
                     type : 'GET',
-                    url : "<?php echo base_url("api/units/delete"); ?>",
+                    url : "<?php echo base_url("api/datamaster/units/delete"); ?>",
                     data : {id:targetId},
                     dataType : "json",
                     success : function(data,status){
@@ -46,7 +46,7 @@ function initDTEvents(){
         KTApp.blockPage();
         $.ajax({
             type : 'GET',
-            url : "<?php echo base_url("api/units/get_byid"); ?>",
+            url : "<?php echo base_url("api/datamaster/units/get_byid"); ?>",
             data : {id:targetId},
             dataType : "json",
             success : function(response,status){
@@ -76,7 +76,7 @@ function initDataTable(){
             type: 'remote',
             source: {
               read: {
-                url: '<?php echo base_url("api/units"); ?>',
+                url: '<?php echo base_url("api/datamaster/units"); ?>',
                 map: function(raw) {
                   // sample data mapping
                   var dataSet = raw;
@@ -245,7 +245,7 @@ function initCreateForm(){
         KTApp.block('#modal_add .modal-content', {});
         $.ajax({
             type : 'POST',
-            url : "<?php echo base_url("api/units/insert"); ?>",
+            url : "<?php echo base_url("api/datamaster/units/insert"); ?>",
             data : $('#form_add').serialize(),
             dataType : "json",
             success : function(data,status){
@@ -300,7 +300,7 @@ function initEditForm(){
         KTApp.block('#modal_edit .modal-content', {});
         $.ajax({
             type : 'POST',
-            url : "<?php echo base_url("api/units/update"); ?>",
+            url : "<?php echo base_url("api/datamaster/units/update"); ?>",
             data : $('#form_edit').serialize(),
             dataType : "json",
             success : function(data,status){
