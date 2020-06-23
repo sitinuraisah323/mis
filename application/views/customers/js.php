@@ -25,7 +25,7 @@
 		});
 	});
 
-	$('.btn-edit').on('click', function (e) {
+	$(document).on('click','.btn-edit', function(e){
 		e.preventDefault();
 		$.ajax({
 			url : '<?php echo base_url('api/datamaster/customers/show/');?>'+$(this).data('id'),
@@ -66,5 +66,184 @@
 				location.reload();
 			}
 		});
+	});
+
+
+	function initDataTable(){
+		var option = {
+			data: {
+				type: 'remote',
+				source: {
+					read: {
+						url: '<?php echo base_url("api/datamaster/customers"); ?>',
+						map: function(raw) {
+							// sample data mapping
+							var dataSet = raw;
+							if (typeof raw.data !== 'undefined') {
+								dataSet = raw.data;
+							}
+							return dataSet;
+						},
+					},
+				},
+				serverPaging: true,
+				serverFiltering: true,
+				serverSorting: true,
+				saveState : {cookie: false,webstorage: false},
+			},
+			sortable: true,
+			pagination: true,
+			search: {
+				input: $('#generalSearch'),
+			},
+			columns: [
+				{
+					field: 'no_cif',
+					title: 'NO Cif',
+					sortable: 'asc',
+					width:60,
+					textAlign: 'center',
+				},
+				{
+					field: 'name',
+					title: 'Name',
+					sortable: 'asc',
+					textAlign: 'left',
+				},
+				{
+					field: 'gender',
+					title: 'Gender',
+					sortable: 'asc',
+					textAlign: 'left',
+				},
+				{
+					field: 'marital',
+					title: 'Marital',
+					sortable: 'asc',
+					textAlign: 'left',
+				},
+				{
+					field: 'birth_place',
+					title: 'Birth Place',
+					sortable: 'asc',
+					textAlign: 'left',
+				},
+				{
+					field: 'birth_date',
+					title: 'Birth Date',
+					sortable: 'asc',
+					textAlign: 'left',
+				},
+				{
+					field: 'mobile',
+					title: 'Mobile',
+					sortable: 'asc',
+					textAlign: 'left',
+				},
+				{
+					field: 'province',
+					title: 'Province',
+					sortable: 'asc',
+					textAlign: 'left',
+				},
+				{
+					field: 'city',
+					title: 'City',
+					sortable: 'asc',
+					textAlign: 'left',
+				},
+				{
+					field: 'address',
+					title: 'Address',
+					sortable: 'asc',
+					textAlign: 'left',
+				},
+				{
+					field: 'citizenship',
+					title: 'Citizenship',
+					sortable: 'asc',
+					textAlign: 'left',
+				},
+				{
+					field: 'mother_name',
+					title: 'Name Mother',
+					sortable: 'asc',
+					textAlign: 'left',
+				},
+				{
+					field: 'sibling_name',
+					title: 'Name Sibling',
+					sortable: 'asc',
+					textAlign: 'left',
+				},
+				{
+					field: 'sibling_birth_place',
+					title: 'Birth Date Place',
+					sortable: 'asc',
+					textAlign: 'left',
+				},
+				{
+					field: 'sibling_birth_date',
+					title: 'Birth Date Sibling',
+					sortable: 'asc',
+					textAlign: 'left',
+				},
+				{
+					field: 'sibling_address_1',
+					title: 'Sibling Address',
+					sortable: 'asc',
+					textAlign: 'left',
+				},
+				{
+					field: 'sibling_address_2',
+					title: 'Sibling Address 2',
+					sortable: 'asc',
+					textAlign: 'left',
+				},
+				{
+					field: 'sibling_job',
+					title: 'Sibling Job',
+					sortable: 'asc',
+					textAlign: 'left',
+				},
+				{
+					field: 'sibling_relation',
+					title: 'Sibling Relation',
+					sortable: 'asc',
+					textAlign: 'left',
+				},
+				{
+					field: 'status',
+					title: 'Status',
+					sortable: 'asc',
+					textAlign: 'left',
+				},
+				{
+					field: 'action',
+					title: 'Action',
+					sortable: false,
+					width: 100,
+					overflow: 'visible',
+					textAlign: 'center',
+					autoHide: false,
+					template: function (row) {
+						var result ="";
+						result = result + '<button data-id="' + row.id + '" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-edit" title="Edit" ><i class="flaticon-edit-1" style="cursor:pointer;"></i></button>';
+						return result;
+					}
+				}
+			],
+			layout:{
+				header:true
+			}
+		}
+		datatable = $('#kt_datatable').KTDatatable(option);
+		datatable.on("kt-datatable--on-layout-updated",function(){
+			//initDTEvents();
+		})
+	}
+
+	$(document).ready(function () {
+		initDataTable();
 	});
 </script

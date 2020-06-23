@@ -14,7 +14,6 @@ $this->load->view('temp/MenuBar.php');
         <div class="kt-subheader__main">
             <h3 class="kt-subheader__title"><a href="<?php echo base_url('datamaster/customers');?>">Lists</a></h3>
             <span class="kt-subheader__separator kt-subheader__separator--v"></span>
-            <a class="kt-subheader__desc upload">Upload</a>
         </div>
         <div class="kt-subheader__toolbar">
             <div class="kt-subheader__wrapper">
@@ -24,92 +23,81 @@ $this->load->view('temp/MenuBar.php');
 </div>
 <!-- end:: Content Head -->
 
-<!-- begin:: Content -->
-<div class="kt-container  kt-grid__item kt-grid__item--fluid">
-<!--begin::Row-->
-<div class="row">
-	<div class="col-xl-6">
-		<!--begin::Portlet-->
-		<div class="kt-portlet">
-			<div class="kt-portlet__head">
+	<!-- begin:: Content -->
+	<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
+		<div class="kt-portlet kt-portlet--mobile">
+			<div class="kt-portlet__head kt-portlet__head--lg">
 				<div class="kt-portlet__head-label">
-					<span class="kt-portlet__head-icon kt-hidden">
-						<i class="la la-gear"></i>
-					</span>
+                    <span class="kt-portlet__head-icon">
+                        <i class="kt-font-brand fa fa-align-justify"></i>
+                    </span>
 					<h3 class="kt-portlet__head-title">
-						List Customers
+						Data Customers List
 					</h3>
 				</div>
-			</div>
-			<div class="kt-portlet__body">
-				<div class="tab-pane active" id="kt_widget11_tab1_content">
-					<!--begin::Widget 11-->
-					<div class="kt-widget11">
-						<div class="table-responsive">
-							<table class="table ">
-								<thead>
-								<tr>
-									<td>NO CIF</td>
-									<td>NIK</td>
-									<td>Name</td>
-									<td>Phone</td>
-									<td>Birth Day</td>
-									<td>Gender</td>
-									<td>Marital</td>
-									<td>Province</td>
-									<td>City</td>
-									<td>Address</td>
-									<td>Citizenship</td>
-									<td>Mother</td>
-									<td>Sibling Name</td>
-									<td>Sibling Birth Day</td>
-									<td>Sibling Relation</td>
-									<td>Sibling Job</td>
-									<td>Status</td>
-									<td>Action</td>
-								</tr>
-								</thead>
-								<tbody>
-								<?php if($customers):?>
-									<?php foreach ($customers as $customer):?>
-										<tr>
-											<td><?php echo $customer->no_cif;?></td>
-											<td><?php echo $customer->nik;?></td>
-											<td><?php echo $customer->name;?></td>
-											<td><?php echo $customer->mobile;?></td>
-											<td><?php echo $customer->birth_place.', '.$customer->birth_date;?></td>
-											<td><?php echo $customer->gender;?></td>
-											<td><?php echo $customer->marital;?></td>
-											<td><?php echo $customer->province;?></td>
-											<td><?php echo $customer->city;?></td>
-											<td><?php echo $customer->address;?></td>
-											<td><?php echo $customer->citizenship;?></td>
-											<td><?php echo $customer->mother_name;?></td>
-											<td><?php echo $customer->sibling_name;?></td>
-											<td><?php echo $customer->sibling_birth_place.' ,'.$customer->sibling_birth_date;?></td>
-											<td><?php echo $customer->sibling_relation;?></td>
-											<td><?php echo $customer->sibling_job;?></td>
-											<td><?php echo $customer->status == 'PUBLISH' ? 'Aktif' : 'Non Aktif';?></td>
-											<td>
-												<button class="btn btn-edit btn-info" data-id="<?php echo $customer->id;?>">Edit</button>
-											</td>
-										</tr>
-									<?php endforeach;?>
-								<?php endif;?>
-								</tbody>
-							</table>
-						</div>
+				<div class="kt-portlet__head-toolbar">
+					<div class="kt-portlet__head-wrapper">
+						<button type="button" class="btn btn-brand btn-icon-sm upload" >
+							<i class="flaticon2-plus"></i> Upload
+						</button>
 					</div>
-					<!--end::Widget 11-->
 				</div>
 			</div>
+
+			<div class="kt-portlet__body kt-portlet__body--fit">
+				<div class="col-md-pull-12" >
+					<!--begin: Alerts -->
+					<div class="kt-section">
+						<div class="kt-section__content">
+							<div class="alert alert-success fade show kt-margin-r-20 kt-margin-l-20 kt-margin-t-20" role="alert" id="success_alert" style="display: none">
+								<div class="alert-icon"><i class="flaticon-warning"></i></div>
+								<div class="alert-text" id="success_message"></div>
+								<div class="alert-close">
+									<button type="button" class="close" aria-label="Close" id="success_alert_dismiss">
+										<span aria-hidden="true"><i class="la la-close"></i></span>
+									</button>
+								</div>
+							</div>
+							<div class="alert alert-danger fade show kt-margin-r-20 kt-margin-l-20 kt-margin-t-20" role="alert" id="failed_alert" style="display: none">
+								<div class="alert-icon"><i class="flaticon-warning"></i></div>
+								<div class="alert-text" id="failed_message"></div>
+								<div class="alert-close">
+									<button type="button" class="close" aria-label="Close" id="failed_alert_dismiss">
+										<span aria-hidden="true"><i class="la la-close"></i></span>
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!--end: Alerts -->
+					<!--begin: Search Form -->
+					<div class="kt-form kt-form--label-right kt-margin-t-20 kt-margin-l-20 kt-margin-r-20  kt-margin-b-10">
+						<div class="row align-items-center">
+							<div class="col-xl-8 order-2 order-xl-1">
+								<div class="row align-items-center">
+									<div class="col-md-4 kt-margin-b-20-tablet-and-mobile">
+										<div class="kt-input-icon kt-input-icon--left">
+											<input type="text" class="form-control" placeholder="Search..." id="generalSearch">
+											<span class="kt-input-icon__icon kt-input-icon__icon--left">
+                                            <span><i class="la la-search"></i></span>
+                                        </span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!--end: Search Form -->
+				</div>
+				<?php //print_r($areas); ?>
+				<!--begin: Datatable -->
+				<table class="kt-datatable" id="kt_datatable" width="100%">
+				</table>
+				<!--end: Datatable -->
+			</div>
 		</div>
-		<!--end::Portlet-->
 	</div>
-</div>
-<!--end::Row-->
-</div>
-<!-- end:: Content -->
+	<!-- end:: Content -->
 
 </div>
 </div>

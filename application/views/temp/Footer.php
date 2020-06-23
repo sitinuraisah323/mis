@@ -1,32 +1,32 @@
 <!-- begin:: Footer -->
 <div class="kt-footer  kt-footer--extended  kt-grid__item" id="kt_footer">
-			 	 
+
 		<div class="kt-footer__bottom">
 		<div class="kt-container ">
 			<div class="kt-footer__wrapper">
 				<div class="kt-footer__logo">
 					<a href="demo2/index.html">
 						<img alt="Logo" src="<?php echo base_url(); ?>assets/media/logos/logo-2-sm.png">
-					</a>		 			 
+					</a>
 					<div class="kt-footer__copyright">
-						2020&nbsp;&copy;&nbsp;  
+						2020&nbsp;&copy;&nbsp;
 						<a href="http://keenthemes.com/metronic" target="_blank">Gadai Hartadinata Abasi</a>
 					</div>
-				</div>				 
-				<div class="kt-footer__menu">					
+				</div>
+				<div class="kt-footer__menu">
 					<a href="http://keenthemes.com/metronic" target="_blank">Team IT Dev</a>
-				</div>	
+				</div>
 			</div>
-		</div>	
-	</div> 
+		</div>
+	</div>
 </div>
 <!-- end:: Footer -->			</div>
 		</div>
 	</div>
-	
+
 <!-- end:: Page -->
 
-    
+
     <!-- begin::Scrolltop -->
 <div id="kt_scrolltop" class="kt-scrolltop">
 		<i class="fa fa-arrow-up"></i>
@@ -110,7 +110,7 @@
 <script src="<?php echo base_url(); ?>assets/vendors/general/dompurify/dist/purify.js" type="text/javascript"></script>
 <!--end:: Global Optional Vendors -->
 
-	<!--begin::Global Theme Bundle(used by all pages) -->    	    	   
+	<!--begin::Global Theme Bundle(used by all pages) -->
 	   <script src="<?php echo base_url(); ?>assets/js/demo2/scripts.bundle.js" type="text/javascript"></script>
 	<!--end::Global Theme Bundle -->
 	<!--begin::Page Vendors(used by this page) -->
@@ -119,18 +119,13 @@
 	<!--begin::Page Scripts(used by this page) -->
 	<script src="<?php echo base_url(); ?>assets/js/demo2/pages/crud/datatables/basic/paginations.js" type="text/javascript"></script>
     <!--end::Page Scripts -->
-        
-    </body>
-=======
 <?php if(isset($js)):?>
 	<?php $this->load->view($js);?>
 <?php endif;?>
 <!--begin::Global Theme Bundle(used by all pages) -->
 
-		    	   <script src="<?php echo base_url(); ?>assets/js/demo2/scripts.bundle.js" type="text/javascript"></script>
-				<!--end::Global Theme Bundle -->
+		    <!--end::Global Theme Bundle -->
 
-            </body>
->>>>>>> 03fb4dae608b1c7e3b2959c7a8060f06545482ff
+</body>
     <!-- end::Body -->
 </html>
