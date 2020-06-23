@@ -23,4 +23,12 @@ ALTER TABLE public.units_loaninstallments ALTER COLUMN money_loan TYPE float8 US
 ALTER TABLE public.units_loaninstallments ALTER COLUMN capital_lease TYPE float8 USING capital_lease::float8;
 ALTER TABLE public.units_dailycashs ALTER COLUMN amount TYPE float8 USING amount::float8;
 
+ALTER TABLE public.units_mortages ADD id_unit int NOT NULL DEFAULT 0;
+ALTER TABLE public.units_mortages RENAME COLUMN amout_loan TO amount_loan;
+ALTER TABLE public.units_mortages ALTER COLUMN date_auction DROP NOT NULL;
+ALTER TABLE public.units_mortages ALTER COLUMN deadline DROP NOT NULL;
+ALTER TABLE public.units_mortages ALTER COLUMN date_sbk DROP NOT NULL;
+ALTER TABLE public.units_mortages ALTER COLUMN status_transaction DROP NOT NULL;
+
+
 

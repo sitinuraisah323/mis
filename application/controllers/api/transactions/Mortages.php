@@ -1,37 +1,33 @@
 <?php
 
 require_once APPPATH.'controllers/api/ApiController.php';
-class Customers extends ApiController
+class Mortages extends ApiController
 {
 
 	public function __construct()
 	{
 		parent::__construct();
+		$this->load->model('MortagesModel', 'mortages');
 		$this->load->model('CustomersModel', 'customers');
 	}
 
 	public function index()
 	{
-		$data = $this->customers->all();
+		$this->mortages->db->select('customers.name')->join('customers','customers.id = units_mortages.id_customer');
+		$data = $this->mortages->all();
 		if($post = $this->input->post()){
 			if(is_array($post['query'])){
 				$value = $post['query']['generalSearch'];
-				$this->customers->db
-					->or_like('name', $value)
-					->or_like('city', strtoupper($value))
-					->or_like('province', strtoupper($value))
-					->or_like('mother_name', strtoupper($value))
-					->or_like('sibling_name', strtoupper($value))
-					->or_like('marital', strtoupper($value))
-					->or_like('gender', strtoupper($value))
-					->or_like('city', $value)
-					->or_like('mother_name', $value)
-					->or_like('marital', $value)
-					->or_like('sibling_name', $value)
-					->or_like('gender', $value)
-					->or_like('province', $value)
-					->or_like('name', strtoupper($value));
-				$data = $this->customers->all();
+				$this->mortages->db->select('customers.name')->join('customers','customers.id = units_mortages.id_customer');
+				$this->mortages->db
+					->or_like('no_sbk',$value)
+					->or_like('nic',$value)
+					->or_like('description_1',$value)
+					->or_like('description_2',$value)
+					->or_like('description_3',$value)
+					->or_like('description_4',$value)
+					->or_like('name',$value);
+				$data = $this->mortages->all();
 			}
 		}
 		echo json_encode(array(
@@ -87,13 +83,13 @@ class Customers extends ApiController
 
 	public function upload()
 	{
-		$config['upload_path']          = 'storage/customers/data/';
+		$config['upload_path']          = 'storage/transactions/mortages/';
 		$config['allowed_types']        = '*';
 		$config['max_size']             = 100;
 		$config['max_width']            = 1024;
 		$config['max_height']           = 768;
-		if(!is_dir('storage/customers/data/')){
-			mkdir('storage/customers/data/',0777,true);
+		if(!is_dir('storage/transactions/mortages/')){
+			mkdir('storage/transactions/mortages/',0777,true);
 		}
 
 		$this->load->library('upload', $config);
@@ -115,42 +111,45 @@ class Customers extends ApiController
 
 			$excelreader = new PHPExcel_Reader_Excel2007();
 			$loadexcel = $excelreader->load($path); // Load file yang telah diupload ke folder excel
-			$customers = $loadexcel->getActiveSheet()->toArray(null, true, true ,true);
+			$transactions = $loadexcel->getActiveSheet()->toArray(null, true, true ,true);
 
-			if($customers){
-				foreach ($customers as $key => $customer){
+			if($transactions){
+				foreach ($transactions as $key => $transaction){
 					if($key > 1){
+						$customer = $this->customers->find(array(
+							'no_cif'	=> zero_fill($transaction['B'],5)
+						));
 						$data = array(
-							'no_cif'	=> zero_fill($customer['A'], 5),
-							'name'	=> $customer['B'],
-							'birth_date'	=> date('Y-m-d', strtotime($customer['E'])),
-							'mobile'	=>  "0".$customer['C'],
-							'birth_place'	=>  $customer['F'],
-							'address'	=> $customer['G'],
-							'nik'	=> $customer['I'],
-							'city'	=> $customer['F'],
-							'sibling_name'	=> $customer['N'],
-							'sibling_address_1'	=> $customer['O'],
-							'sibling_address_2'	=> $customer['P'],
-							'sibling_relation'	=> $customer['AB'],
-							'province'	=> $customer['T'],
-							'job'	=> $customer['U'],
-							'mother_name'	=> $customer['V'],
-							'citizenship'	=> $customer['W'],
-							'sibling_birth_date'	=> date('Y-m-d', strtotime($customer['K'])),
-							'sibling_birth_place'	=> $customer['J'],
-							'gender'	=> $customer['Z'] == 'L' ? 'MALE' : 'FEMALE',
+							'no_sbk'	=> zero_fill( $transaction['A'], 5),
+							'nic'	=> $customer->no_cif,
+							'date_sbk'	=> $transaction['D'] ? date('Y-m-d', strtotime($transaction['D'])): null,
+							'deadline'	=> $transaction['E'] ? date('Y-m-d', strtotime($transaction['E'])) : null,
+							'date_auction'	=> $transaction['F'] ? date('Y-m-d', strtotime($transaction['F'])) : null,
+							'estimation'	=> (int) $transaction['G'],
+							'amount_loan'	=> (int) $transaction['H'],
+							'amount_admin'	=> (int) $transaction['I'],
+							'description_1'	=>  $transaction['J'],
+							'description_2'	=>  $transaction['K'],
+							'description_3'	=>  $transaction['L'],
+							'description_4'	=>  $transaction['S'],
+							'capital_lease'	=>  $transaction['T'],
+							'periode'	=>  $transaction['U'],
+							'installment'	=>  $transaction['V'],
+							'status_transaction'	=>  $transaction['W'],
+							'interest'	=>  $transaction['X'],
+							'id_customer'	=> $customer->id,
+							'id_unit'	=> $this->input->post('id_unit'),
 							'user_create'	=> $this->session->userdata('user')->id,
 							'user_update'	=> $this->session->userdata('user')->id,
 						);
-						if($findCustomer = $this->customers->find(array(
-							'nik'	=> $customer['I']
+						if($findTransaction = $this->mortages->find(array(
+							'no_sbk'	=>zero_fill( $transaction['A'], 5),
 						))){
-							if($this->customers->update($data, array(
-								'id'	=>  $findCustomer->id
+							if($this->mortages->update($data, array(
+								'id'	=>  $findTransaction->id
 							)));
 						}else{
-							$this->customers->insert($data);
+							$this->mortages->insert($data);
 						}
 
 					}
@@ -168,7 +167,7 @@ class Customers extends ApiController
 
 	public function show($id)
 	{
-		if($data = $this->customers->find($id)){
+		if($data = $this->mortages->find($id)){
 			echo json_encode(array(
 				'data'	=> $data,
 				'status'	=> true,
@@ -189,7 +188,13 @@ class Customers extends ApiController
 
 			$this->load->library('form_validation');
 
-			$this->form_validation->set_rules('name', 'name', 'required');
+			$this->form_validation->set_rules('estimation', 'Estimation', 'required|numeric');
+			$this->form_validation->set_rules('amount_loan', 'Amount Loan', 'required|numeric');
+			$this->form_validation->set_rules('amount_admin', 'Amount Admin', 'required|numeric');
+			$this->form_validation->set_rules('capital_lease', 'Capital Lease', 'required|numeric');
+			$this->form_validation->set_rules('periode', 'Periode', 'required|numeric');
+			$this->form_validation->set_rules('installment', 'Installment', 'required|numeric');
+			$this->form_validation->set_rules('interest', 'Interest', 'required|numeric');
 			if ($this->form_validation->run() == FALSE)
 			{
 				echo json_encode(array(
@@ -201,13 +206,12 @@ class Customers extends ApiController
 			{
 				$id = $post['id'];
 				unset($post['id']);
-				if($this->customers->update($post,$id)){
+				if($this->mortages->update($post,$id)){
 					echo json_encode(array(
 						'data'	=> 	true,
 						'message'	=> 'Successfull Updated Data Users'
 					));
 				}else{
-					var_dump($this->customers->db->last_query());
 					exit;
 					echo json_encode(array(
 							'data'	=> 	false,
