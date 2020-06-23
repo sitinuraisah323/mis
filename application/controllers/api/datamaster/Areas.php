@@ -21,12 +21,7 @@ class Areas extends ApiController
                 ->or_like('area',strtoupper($value));					
 				$data = $this->areas->all();
 			}
-		}
-		// echo json_encode(array(
-		// 	'data'	=> $data,
-		// 	'message'	=> 'Successfully Get Data Users'
-        // ));
-        
+		}        
 		echo json_encode(array(
             'data'	 => $data,
             'status' => true,
