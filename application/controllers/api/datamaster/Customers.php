@@ -124,7 +124,7 @@ class Customers extends ApiController
 							'no_cif'	=> zero_fill($customer['A'], 4),
 							'name'	=> $customer['B'],
 							'birth_date'	=> date('Y-m-d', strtotime($customer['E'])),
-							'mobile'	=>  $customer['C'],
+							'mobile'	=>  "0".$customer['C'],
 							'birth_place'	=>  $customer['F'],
 							'address'	=> $customer['G'],
 							'nik'	=> $customer['I'],
