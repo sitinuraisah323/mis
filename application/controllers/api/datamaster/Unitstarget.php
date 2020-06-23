@@ -12,10 +12,23 @@ class Unitstarget extends ApiController
 
 	public function index()
 	{
+        $data = $this->u_target->get_unitstarget();
+		if($post = $this->input->post()){
+			if(is_array($post['query'])){
+				$value = $post['query']['generalSearch'];
+                $this->u_target->db
+                ->or_like('area', $value)
+                ->or_like('area',strtoupper($value))
+                ->or_like('name', $value)
+                //->or_like('year', $value)
+                ->or_like('name',strtoupper($value));                					
+				$data = $this->u_target->get_unitstarget();
+			}
+		}   
 		echo json_encode(array(
-            'data'	=> 	$this->u_target->get_unitstarget(),
-            'status'=>true,
-			'message'	=> 'Successfully Get Data Users'
+            'data'	  => $data,
+            'status'  => true,
+			'message' => 'Successfully Get Data Users'
 		));
     }
 
