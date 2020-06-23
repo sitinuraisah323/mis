@@ -3,7 +3,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Add Target</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Add Target Units</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 </button>
             </div>
@@ -14,7 +14,8 @@
                         <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Units</label>
-                                    <select class="form-control select2" name="area" id="add_area">
+                                    <select class="form-control select2" name="unit" id="add_unit">
+                                    <option></option>
                                     <?php 
                                         if (!empty($units)){
                                             foreach($units as $row){
@@ -29,21 +30,44 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Periode</label>
+                                    <div class="row">
                                     <div class="col-md-6">
-                                    <input type="text" class="form-control" id="add_unit" name="unit">	                            		
-
+                                    <select class="form-control select2" name="month" id="add_month">
+                                        <option></option>                                   
+                                       <option value="1">Januari</option>                                      
+                                       <option value="2">Februari</option>                                      
+                                       <option value="3">Maret</option>                                      
+                                       <option value="4">April</option>                                      
+                                       <option value="5">Mei</option>                                      
+                                       <option value="6">Juni</option>                                      
+                                       <option value="7">Juli</option>                                      
+                                       <option value="8">Agustus</option>                                      
+                                       <option value="9">September</option>                                      
+                                       <option value="10">Oktober</option>                                      
+                                       <option value="11">November</option>                                      
+                                       <option value="12">Desember</option>                                      
+                                    </select>                           		
                                     </div>
                                     <div class="col-md-6">
-                                    <input type="text" class="form-control" id="add_unit" name="unit">	                            		
-
+                                    <select class="form-control select2" name="year" id="add_year">
+                                    <option></option>
+                                    <?php 
+                                        for($i =0; $i <= 22 ;$i++)
+                                        {
+                                            $year = date('Y') - 20 + $i;
+                                            echo '<option value='.$year.'>'.$year.'</option>';
+                                        }
+                                    ?>
+                                    </select>	                            		
                                     </div>
+                                    </div>                                    
                                 </div>
                             </div> 
 
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Amount</label>
-                                    <input type="text" class="form-control" id="add_unit" name="unit">	                            		
+                                    <input type="text" class="form-control" id="amount" name="amount">	                            		
                                 </div>
                             </div>    
   

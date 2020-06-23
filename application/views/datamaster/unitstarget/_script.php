@@ -20,7 +20,7 @@ function initDTEvents(){
                 KTApp.blockPage();
                 $.ajax({
                     type : 'GET',
-                    url : "<?php echo base_url("api/units/delete"); ?>",
+                    url : "<?php echo base_url("api/unitstarget/delete"); ?>",
                     data : {id:targetId},
                     dataType : "json",
                     success : function(data,status){
@@ -46,7 +46,7 @@ function initDTEvents(){
         KTApp.blockPage();
         $.ajax({
             type : 'GET',
-            url : "<?php echo base_url("api/units/get_byid"); ?>",
+            url : "<?php echo base_url("api/unitstarget/get_byid"); ?>",
             data : {id:targetId},
             dataType : "json",
             success : function(response,status){
@@ -76,7 +76,7 @@ function initDataTable(){
             type: 'remote',
             source: {
               read: {
-                url: '<?php echo base_url("api/unitstargets"); ?>',
+                url: '<?php echo base_url("api/unitstarget"); ?>',
                 map: function(raw) {
                   // sample data mapping
                   var dataSet = raw;
@@ -122,12 +122,24 @@ function initDataTable(){
                 title: 'Periode',
                 sortable: 'asc',
                 textAlign: 'left',
+                template: function (row) {
+                            var result = "<div class='date-td'>";
+                            var month = moment(row.month).format('MMM');
+                            result = result + '<div>' + month + ' - ' + row.year + '</div> ';
+                            result = result + "</div>";
+                            return result;
+                        }
             }, 
             {
                 field: 'amount',
                 title: 'Amount',
                 sortable: 'asc',
                 textAlign: 'left',
+                template: function (row) {
+                    var result ="";
+                        result = row.amount;
+                    return result;
+                } 
             }, 
             {
                 field: 'status',
@@ -233,20 +245,36 @@ function initCreateForm(){
     var validator = $( "#form_add" ).validate({
         ignore:[],
         rules: {
-            area: {
+            unit: {
                 required: true,
             },
-            unit: {
+            month: {
+                required: true,
+            },
+            year: {
+                required: true,
+            },
+            amount: {
                 required: true,
             }
         },
         invalidHandler: function(event, validator) {   
             KTUtil.scrollTop();
         }
+    });
+
+    $('#add_unit').select2({
+        placeholder: "Please select a Unit",
+        width: '100%'
     });   
 
-    $('#add_area').select2({
-        placeholder: "Please select a Area",
+    $('#add_month').select2({
+        placeholder: "Please select a Month",
+        width: '100%'
+    });
+
+    $('#add_year').select2({
+        placeholder: "Please select a Year",
         width: '100%'
     });
     
@@ -257,7 +285,7 @@ function initCreateForm(){
         KTApp.block('#modal_add .modal-content', {});
         $.ajax({
             type : 'POST',
-            url : "<?php echo base_url("api/units/insert"); ?>",
+            url : "<?php echo base_url("api/unitstarget/insert"); ?>",
             data : $('#form_add').serialize(),
             dataType : "json",
             success : function(data,status){
@@ -292,7 +320,16 @@ function initEditForm(){
     var validator = $( "#form_edit" ).validate({
         ignore:[],
         rules: {
-            area_name: {
+            unit: {
+                required: true,
+            },
+            month: {
+                required: true,
+            },
+            year: {
+                required: true,
+            },
+            amount: {
                 required: true,
             }
         },
@@ -301,10 +338,20 @@ function initEditForm(){
         }
     });  
 
-    $('#edit_area').select2({
-        placeholder: "Please select a Area",
+    $('#edit_unit').select2({
+        placeholder: "Please select a Unit",
         width: '100%'
-    }); 
+    });   
+
+    $('#edit_month').select2({
+        placeholder: "Please select a Month",
+        width: '100%'
+    });
+
+    $('#edit_year').select2({
+        placeholder: "Please select a Year",
+        width: '100%'
+    });
     //events
     $("#btn_edit_submit").on("click",function(){
       var isValid = $( "#form_edit" ).valid();
@@ -312,7 +359,7 @@ function initEditForm(){
         KTApp.block('#modal_edit .modal-content', {});
         $.ajax({
             type : 'POST',
-            url : "<?php echo base_url("api/units/update"); ?>",
+            url : "<?php echo base_url("api/unitstarget/update"); ?>",
             data : $('#form_edit').serialize(),
             dataType : "json",
             success : function(data,status){
@@ -339,10 +386,14 @@ function initEditForm(){
     })
 
     var populateForm = function(groupObject){
-        $("#edit_unit_id").val(groupObject.id);
-        $("#edit_unit_name").val(groupObject.name);
-        $("#edit_area").val(groupObject.id_area);
-        $("#edit_area").trigger('change');
+        $("#edit_unitstarget_id").val(groupObject.id);
+        $("#edit_unit").val(groupObject.id_unit);
+        $("#edit_month").val(groupObject.month);
+        $("#edit_year").val(groupObject.year);
+        $("#edit_amount").val(groupObject.amount);
+        $("#edit_unit").trigger('change');
+        $("#edit_month").trigger('change');
+        $("#edit_year").trigger('change');
     }
     
     return {
