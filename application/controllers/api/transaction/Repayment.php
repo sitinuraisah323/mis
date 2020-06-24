@@ -1,13 +1,13 @@
 <?php
 
 require_once APPPATH.'controllers/api/ApiController.php';
-class Unitsdailycash extends ApiController
+class Repayment extends ApiController
 {
 
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('UnitsdailycashModel', 'unitsdailycash');
+		$this->load->model('RepaymentModel', 'repayment');
 	}
 
 	public function index()
@@ -40,10 +40,10 @@ class Unitsdailycash extends ApiController
 		// ));
 	}
 
-	public function get_unitsdailycash()
+	public function get_repayments()
 	{
 		echo json_encode(array(
-			'data'	=> 	$this->unitsdailycash->get_unitsdailycash(),
+			'data'	=> 	$this->repayment->get_repayments(),
 			'status'	=> true,
 			'message'	=> 'Successfully Get Data Users'
 		));
@@ -55,11 +55,11 @@ class Unitsdailycash extends ApiController
 		$config['allowed_types']        = '*';
 		$config['max_size']             = 100;
 		$config['max_width']            = 1024;
-		$config['max_height']           = 768;
-		if(!is_dir('storage/unitsdailycash/data/')){
-			mkdir('storage/unitsdailycash/data/',0777,true);
+        $config['max_height']           = 768;
+        
+		if(!is_dir('storage/repayment/data/')){
+			mkdir('storage/repayment/data/',0777,true);
 		}
-
 		$this->load->library('upload', $config);
 
 		if ( ! $this->upload->do_upload('file'))
@@ -73,8 +73,6 @@ class Unitsdailycash extends ApiController
 		else
 		{
             $unit       = $this->input->post('unit');
-            $date       = date('Y-m-d',strtotime($this->input->post('datetrans'))); 
-            $cashcode   = $this->input->post('kodetrans');
 
 			$data = $this->upload->data();
 			$path = $config['upload_path'].$data['file_name'];
@@ -83,9 +81,9 @@ class Unitsdailycash extends ApiController
 
 			$excelreader = new PHPExcel_Reader_Excel2007();
 			$loadexcel = $excelreader->load($path); // Load file yang telah diupload ke folder excel
-			$unitsdailycash = $loadexcel->getActiveSheet()->toArray(null, true, true ,true);
+			$repayment = $loadexcel->getActiveSheet()->toArray(null, true, true ,true);
 
-			if($unitsdailycash){
+			if($repayment){
 				// foreach ($unitsdailycash as $key => $udc){
 				// 	if($key > 1){
 				// 		$data = array(
@@ -133,14 +131,14 @@ class Unitsdailycash extends ApiController
 			// }
 		}
 	}
-	
+
 	public function delete()
 	{
 		if($post = $this->input->get()){
 
             $data['id'] = $this->input->get('id');	
             $db = false;
-            $db = $this->unitsdailycash->delete($data);
+            $db = $this->repayment->delete($data);
             if($db=true){
                 echo json_encode(array(
                     'data'	=> 	true,
@@ -156,4 +154,5 @@ class Unitsdailycash extends ApiController
             }
         }	
     }
+
 }

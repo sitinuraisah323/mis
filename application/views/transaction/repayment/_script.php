@@ -21,7 +21,7 @@ function initDTEvents(){
                 KTApp.blockPage();
                 $.ajax({
                     type : 'GET',
-                    url : "<?php echo base_url("api/transaction/unitsdailycash/delete"); ?>",
+                    url : "<?php echo base_url("api/transaction/repayment/delete"); ?>",
                     data : {id:targetId},
                     dataType : "json",
                     success : function(data,status){
@@ -76,7 +76,7 @@ function initDataTable(){
             type: 'remote',
             source: {
               read: {
-                url: '<?php echo base_url("api/transaction/unitsdailycash/get_unitsdailycash"); ?>',
+                url: '<?php echo base_url("api/transaction/repayment/get_repayments"); ?>',
                 map: function(raw) {
                   // sample data mapping
                   var dataSet = raw;
@@ -99,10 +99,10 @@ function initDataTable(){
           },
           columns: [
             {
-                field: 'id',
-                title: 'ID',
+                field: 'no_sbk',
+                title: 'NO. SBK',
                 sortable: 'asc',
-                width:60,
+                //width:60,
                 textAlign: 'center',
             }, 
             {
@@ -110,35 +110,72 @@ function initDataTable(){
                 title: 'Unit',
                 sortable: 'asc',
                 textAlign: 'left',
-            }, 
+            },
             {
-                field: 'cash_code',
-                title: 'Cash Code',
+                field: 'customer',
+                title: 'Nasabah',
                 sortable: 'asc',
-                textAlign: 'center',
+                textAlign: 'left',
             }, 
             {
-                field: 'date',
-                title: 'Transaction',
+                field: 'date_sbk',
+                title: 'Date SBK',
                 sortable: 'asc',
                 textAlign: 'center',
                 template: function (row) {
                             var result = "<div class='date-td'>";
-                            var new_date = moment(row.date).format('MMM DD, YYYY');
+                            var new_date = moment(row.date_sbk).format('MMM DD, YYYY');
                             result = result + '<div>' + new_date + '</div> ';
                             result = result + "</div>";
                             return result;
                         }
             }, 
             {
-                field: 'amount',
+                field: 'date_repayment',
+                title: 'Date Repayment',
+                sortable: 'asc',
+                textAlign: 'center',
+                template: function (row) {
+                            var result = "<div class='date-td'>";
+                            var new_date = moment(row.date_repayment).format('MMM DD, YYYY');
+                            result = result + '<div>' + new_date + '</div> ';
+                            result = result + "</div>";
+                            return result;
+                        }
+            }, 
+            {
+                field: 'money_loan',
                 title: 'Amount',
                 sortable: 'asc',
-                textAlign: 'left',
+                textAlign: 'right',
             },
             {
-                field: 'description',
-                title: 'Description',
+                field: 'capital_lease',
+                title: 'Capital Lease',
+                sortable: 'asc',
+                textAlign: 'right',
+            },
+            {
+                field: 'periode',
+                title: 'Periode',
+                sortable: 'asc',
+                textAlign: 'center',
+            },
+            {
+                field: 'description_1',
+                title: 'Description 1',
+                sortable: 'asc',
+                textAlign: 'left',
+            }, 
+            {
+                field: 'description_2',
+                title: 'Description 2',
+                sortable: 'asc',
+                textAlign: 'left',
+            }, 
+            {
+                field: 'description_3',
+                title: 'Description 3',
                 sortable: 'asc',
                 textAlign: 'left',
             }, 
@@ -248,13 +285,7 @@ function initUploadForm(){
         rules: {
             unit: {
                 required: true,
-            },
-            datetrans: {
-                required: true,
-            },
-            kodetrans: {
-                required: true,
-            },
+            },            
             file: {
                 required: true,
             }
@@ -274,36 +305,36 @@ function initUploadForm(){
     });
     //events
     $("#btn_add_submit").on("click",function(){
-      var isValid = $( "#form_upload" ).valid();
+      var isValid = $("#form_upload").valid();
       if(isValid){
         KTApp.block('#modal_upload .modal-content', {});
-        // $.ajax({
-        //     type : 'POST',
-        //     url : "<?php echo base_url("api/transaction/unitsdailycash/upload"); ?>",
-        //     data : $('#form_upload').serialize(),
-        //     async: true,
-		// 	cache: false,
-		// 	contentType: false,
-		// 	processData: false,
-        //     dataType : "json",
-        //     success : function(data,status){
-        //         KTApp.unblock('#modal_upload .modal-content');
-        //         if(data.status == true){
-        //             datatable.reload();
-        //             $('#modal_upload').modal('hide');
-        //             AlertUtil.showSuccess(data.message,5000);
-        //         }else{
-        //             AlertUtil.showFailedDialogAdd(data.message);
-        //         }                
-        //     },
-        //     error: function (jqXHR, textStatus, errorThrown){
-        //         KTApp.unblock('#modal_upload .modal-content');
-        //         AlertUtil.showFailedDialogAdd("Cannot communicate with server please check your internet connection");
-        //     }
-        // });  
+        //alert('test');
+        $.ajax({
+            type : 'POST',
+            url : "<?php echo base_url("api/transaction/repayment/upload"); ?>",
+            data : $('#form_upload').serialize(),
+            async: true,
+			cache: false,
+			contentType: false,
+			processData: false,
+            dataType : "json",
+            success : function(data,status){
+                KTApp.unblock('#modal_upload .modal-content');
+                if(data.status == true){
+                    datatable.reload();
+                    $('#modal_upload').modal('hide');
+                    AlertUtil.showSuccess(data.message,5000);
+                }else{
+                    AlertUtil.showFailedDialogAdd(data.message);
+                }                
+            },
+            error: function (jqXHR, textStatus, errorThrown){
+                KTApp.unblock('#modal_upload .modal-content');
+                AlertUtil.showFailedDialogAdd("Cannot communicate with server please check your internet connection");
+            }
+        });  
       }
     })
-
     $('#modal_upload').on('hidden.bs.modal', function () {
        validator.resetForm();
     })
