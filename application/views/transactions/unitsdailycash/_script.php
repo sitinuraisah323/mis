@@ -11,17 +11,17 @@ function initDTEvents(){
         var targetId = $(this).data("id");
         //alert(targetId);
         swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this",
+            title: 'Anda Yakin?',
+            text: "Akan menghapus data ini",
             type: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Yes, delete it'
+            confirmButtonText: 'Ya, Hapus'
         }).then(function(result) {
             if (result.value) {
                 KTApp.blockPage();
                 $.ajax({
                     type : 'GET',
-                    url : "<?php echo base_url("api/transaction/unitsdailycash/delete"); ?>",
+                    url : "<?php echo base_url("api/transactions/unitsdailycash/delete"); ?>",
                     data : {id:targetId},
                     dataType : "json",
                     success : function(data,status){
@@ -76,7 +76,7 @@ function initDataTable(){
             type: 'remote',
             source: {
               read: {
-                url: '<?php echo base_url("api/transaction/unitsdailycash/get_unitsdailycash"); ?>',
+                url: '<?php echo base_url("api/transactions/unitsdailycash/get_unitsdailycash"); ?>',
                 map: function(raw) {
                   // sample data mapping
                   var dataSet = raw;
@@ -113,13 +113,13 @@ function initDataTable(){
             }, 
             {
                 field: 'cash_code',
-                title: 'Cash Code',
+                title: 'Kode Kas',
                 sortable: 'asc',
                 textAlign: 'center',
             }, 
             {
                 field: 'date',
-                title: 'Transaction',
+                title: 'Transaksi',
                 sortable: 'asc',
                 textAlign: 'center',
                 template: function (row) {
@@ -132,13 +132,13 @@ function initDataTable(){
             }, 
             {
                 field: 'amount',
-                title: 'Amount',
+                title: 'Jumlah',
                 sortable: 'asc',
                 textAlign: 'left',
             },
             {
                 field: 'description',
-                title: 'Description',
+                title: 'Deskripsi',
                 sortable: 'asc',
                 textAlign: 'left',
             }, 

@@ -27,7 +27,7 @@ class Repayment extends Authenticated
 	public function index()
 	{
         $data['units'] = $this->units->all();
-		$this->load->view('transaction/repayment/index',$data);
+		$this->load->view('transactions/repayment/index',$data);
 	}
 
 	public function upload()
@@ -111,7 +111,7 @@ class Repayment extends Authenticated
 				unlink($path);
 			}
 		}
-		redirect('transaction/repayment');
+		redirect('transactions/repayment');
 	}
 
 

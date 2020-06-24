@@ -12,9 +12,9 @@ $this->load->view('temp/MenuBar.php');
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container ">
         <div class="kt-subheader__main">            
-            <h3 class="kt-subheader__title">Transaction</h3>            
+            <h3 class="kt-subheader__title">Transaksi</h3>            
             <span class="kt-subheader__separator kt-subheader__separator--v"></span>            
-            <span class="kt-subheader__desc">Unit Daily Cash</span>            
+            <span class="kt-subheader__desc">Harian Unit</span>            
         </div>
         <div class="kt-subheader__toolbar">
             <div class="kt-subheader__wrapper">                              
@@ -33,7 +33,7 @@ $this->load->view('temp/MenuBar.php');
                         <i class="kt-font-brand fa fa-align-justify"></i>
                     </span>
                     <h3 class="kt-portlet__head-title">
-                       Data Unit Daily Cash
+                       Data Transaksi Harian Unit
                     </h3>
                 </div>
                 <div class="kt-portlet__head-toolbar">
@@ -104,7 +104,7 @@ $this->load->view('temp/MenuBar.php');
 
 <?php 
 $this->load->view('temp/Footer.php');
-$this->load->view('transaction/unitsdailycash/_upload.php');
+$this->load->view('transactions/unitsdailycash/_upload.php');
 // $this->load->view('datamaster/areas/_edit.php');
-$this->load->view('transaction/unitsdailycash/_script.php');
+$this->load->view('transactions/unitsdailycash/_script.php');
 ?>

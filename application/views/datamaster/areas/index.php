@@ -33,13 +33,13 @@ $this->load->view('temp/MenuBar.php');
                         <i class="kt-font-brand fa fa-align-justify"></i>
                     </span>
                     <h3 class="kt-portlet__head-title">
-                       Data Area List
+                       Data Area
                     </h3>
                 </div>
                 <div class="kt-portlet__head-toolbar">
                     <div class="kt-portlet__head-wrapper">  
                             <button type="button" class="btn btn-brand btn-icon-sm" data-toggle="modal" data-target="#modal_add">
-                                <i class="flaticon2-plus"></i> Add New      
+                                <i class="flaticon2-plus"></i> Buat Baru      
                             </button>                             
                     </div>      
                 </div>

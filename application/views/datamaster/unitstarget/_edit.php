@@ -3,7 +3,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit Area</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Edit Target Unit</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 </button>
             </div>
@@ -15,7 +15,7 @@
 
                         <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Units</label>
+                                    <label>Unit</label>
                                     <select class="form-control select2" name="unit" id="edit_unit">
                                     <option></option>
                                     <?php 
@@ -68,7 +68,7 @@
 
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Amount</label>
+                                    <label>Jumlah</label>
                                     <input type="text" class="form-control" id="edit_amount" name="amount">	                            		
                                 </div>
                             </div>   

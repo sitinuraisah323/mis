@@ -3,7 +3,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Add Area</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Input Area</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 </button>
             </div>
@@ -13,7 +13,7 @@
                         <div class="row">    
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Area Name</label>
+                                    <label>Area</label>
                                     <input type="text" class="form-control" id="add_area" name="area">	                            		
                                 </div>
                             </div>    

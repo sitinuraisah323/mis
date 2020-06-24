@@ -30,7 +30,7 @@
 
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Area Name</label>
+                                    <label>Area</label>
                                     <input type="text" class="form-control" id="edit_unit_name" name="unit">	                            		
                                 </div>
                             </div>  
