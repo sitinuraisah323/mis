@@ -1,7 +1,7 @@
 <script>
 "use strict";
 // Class definition
-var KTMorrisChartsDemo = function() {
+var KTMorrisCharts = function() {
 
     var nasional = function() {
         // BAR CHART
@@ -98,6 +98,6 @@ var KTMorrisChartsDemo = function() {
 }();
 
 jQuery(document).ready(function() {
-    KTMorrisChartsDemo.init();
+    KTMorrisCharts.init();
 });
 </script>
