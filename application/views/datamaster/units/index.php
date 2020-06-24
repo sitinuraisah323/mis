@@ -14,7 +14,7 @@ $this->load->view('temp/MenuBar.php');
         <div class="kt-subheader__main">            
             <h3 class="kt-subheader__title">Data Master</h3>            
             <span class="kt-subheader__separator kt-subheader__separator--v"></span>            
-            <span class="kt-subheader__desc">Units</span>            
+            <span class="kt-subheader__desc">Unit</span>            
         </div>
         <div class="kt-subheader__toolbar">
             <div class="kt-subheader__wrapper">                              
@@ -33,13 +33,13 @@ $this->load->view('temp/MenuBar.php');
                         <i class="kt-font-brand fa fa-align-justify"></i>
                     </span>
                     <h3 class="kt-portlet__head-title">
-                       Data Unit List
+                       Data Unit
                     </h3>
                 </div>
                 <div class="kt-portlet__head-toolbar">
                     <div class="kt-portlet__head-wrapper">  
                             <button type="button" class="btn btn-brand btn-icon-sm" data-toggle="modal" data-target="#modal_add">
-                                <i class="flaticon2-plus"></i> Add New      
+                                <i class="flaticon2-plus"></i> Buat Baru     
                             </button>                             
                     </div>      
                 </div>

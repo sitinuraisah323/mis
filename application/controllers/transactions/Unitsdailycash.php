@@ -26,7 +26,7 @@ class Unitsdailycash extends Authenticated
 	public function index()
 	{
         $data['units'] = $this->units->all();
-		$this->load->view('transaction/unitsdailycash/index',$data);
+		$this->load->view('transactions/unitsdailycash/index',$data);
 	}
 
 	public function upload()
@@ -110,7 +110,7 @@ class Unitsdailycash extends Authenticated
 				unlink($path);
 			}
 		}
-		redirect('transaction/unitsdailycash');
+		redirect('transactions/unitsdailycash');
 	}
 
 }

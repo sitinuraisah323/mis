@@ -10,11 +10,11 @@ function initDTEvents(){
         var targetId = $(this).data("id");
         //alert(targetId);
         swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this",
+            title: 'Anda Yakin?',
+            text: "Akan menghapus data ini",
             type: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Yes, delete it'
+            confirmButtonText: 'Ya, Hapus'
         }).then(function(result) {
             if (result.value) {
                 KTApp.blockPage();

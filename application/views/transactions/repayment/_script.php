@@ -21,7 +21,7 @@ function initDTEvents(){
                 KTApp.blockPage();
                 $.ajax({
                     type : 'GET',
-                    url : "<?php echo base_url("api/transaction/repayment/delete"); ?>",
+                    url : "<?php echo base_url("api/transactions/repayment/delete"); ?>",
                     data : {id:targetId},
                     dataType : "json",
                     success : function(data,status){
@@ -76,7 +76,7 @@ function initDataTable(){
             type: 'remote',
             source: {
               read: {
-                url: '<?php echo base_url("api/transaction/repayment/get_repayments"); ?>',
+                url: '<?php echo base_url("api/transactions/repayment/get_repayments"); ?>',
                 map: function(raw) {
                   // sample data mapping
                   var dataSet = raw;
@@ -119,7 +119,7 @@ function initDataTable(){
             }, 
             {
                 field: 'date_sbk',
-                title: 'Date SBK',
+                title: 'Tanggal SBK',
                 sortable: 'asc',
                 textAlign: 'center',
                 template: function (row) {
@@ -132,7 +132,7 @@ function initDataTable(){
             }, 
             {
                 field: 'date_repayment',
-                title: 'Date Repayment',
+                title: 'Tanggal Pelunasan',
                 sortable: 'asc',
                 textAlign: 'center',
                 template: function (row) {
@@ -145,13 +145,13 @@ function initDataTable(){
             }, 
             {
                 field: 'money_loan',
-                title: 'Amount',
+                title: 'UP',
                 sortable: 'asc',
                 textAlign: 'right',
             },
             {
                 field: 'capital_lease',
-                title: 'Capital Lease',
+                title: 'Sewa',
                 sortable: 'asc',
                 textAlign: 'right',
             },
@@ -163,19 +163,19 @@ function initDataTable(){
             },
             {
                 field: 'description_1',
-                title: 'Description 1',
+                title: 'Deskripsi 1',
                 sortable: 'asc',
                 textAlign: 'left',
             }, 
             {
                 field: 'description_2',
-                title: 'Description 2',
+                title: 'Deskripsi 2',
                 sortable: 'asc',
                 textAlign: 'left',
             }, 
             {
                 field: 'description_3',
-                title: 'Description 3',
+                title: 'Deskripsi 3',
                 sortable: 'asc',
                 textAlign: 'left',
             }, 
@@ -311,7 +311,7 @@ function initUploadForm(){
         //alert('test');
         $.ajax({
             type : 'POST',
-            url : "<?php echo base_url("api/transaction/repayment/upload"); ?>",
+            url : "<?php echo base_url("api/transactions/repayment/upload"); ?>",
             data : $('#form_upload').serialize(),
             async: true,
 			cache: false,
