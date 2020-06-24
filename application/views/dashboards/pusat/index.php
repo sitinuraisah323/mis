@@ -25,12 +25,73 @@ $this->load->view('temp/MenuBar.php');
 <!-- end:: Content Head -->
 
  <!-- begin:: Content -->
+ <div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
+ <div class="row">
+    <div class="col-lg-4">
+        <!--begin::Portlet-->
+        <div class="kt-portlet kt-portlet--tab">
+            <div class="kt-portlet__head">
+                <div class="kt-portlet__head-label">
+                    <span class="kt-portlet__head-icon kt-hidden">
+                        <i class="la la-gear"></i>
+                    </span>
+                    <h3 class="kt-portlet__head-title">
+                        Disburse/Booking Nasional(YTD)
+                    </h3>
+                </div>
+            </div>
+            <div class="kt-portlet__body">
+                <div id="kt_Nasional" style="height:250px;"></div>
+            </div>
+        </div>
+        <!--end::Portlet-->
+    </div>
 
- <!-- end:: Content -->
-	
+    <div class="col-lg-4">
+        <!--begin::Portlet-->
+        <div class="kt-portlet kt-portlet--tab">
+            <div class="kt-portlet__head">
+                <div class="kt-portlet__head-label">
+                    <span class="kt-portlet__head-icon kt-hidden">
+                        <i class="la la-gear"></i>
+                    </span>
+                    <h3 class="kt-portlet__head-title">
+                        Disburse/Booking Bulan June(MTD)
+                    </h3>
+                </div>
+            </div>
+            <div class="kt-portlet__body">
+                <div id="kt_Month" style="height:250px;"></div>
+            </div>
+        </div>
+        <!--end::Portlet-->
+    </div>
+
+    <div class="col-lg-4">
+        <!--begin::Portlet-->
+        <div class="kt-portlet kt-portlet--tab">
+            <div class="kt-portlet__head">
+                <div class="kt-portlet__head-label">
+                    <span class="kt-portlet__head-icon kt-hidden">
+                        <i class="la la-gear"></i>
+                    </span>
+                    <h3 class="kt-portlet__head-title">
+                        Saldo Kas
+                    </h3>
+                </div>
+            </div>
+            <div class="kt-portlet__body">
+                <div id="kt_Saldo" style="height:250px;"></div>
+            </div>
+        </div>
+        <!--end::Portlet-->
+    </div>
+</div>	
 </div>
+<!-- end:: Content -->
 </div>
 
 <?php 
 $this->load->view('temp/Footer.php');
+$this->load->view('dashboards/pusat/_script.php');
 ?>
