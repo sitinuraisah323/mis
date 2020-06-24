@@ -12,6 +12,7 @@ class Customers extends ApiController
 
 	public function index()
 	{
+		$this->customers->db->order_by('name','DESC');
 		$data = $this->customers->all();
 		if($post = $this->input->post()){
 			if(is_array($post['query'])){
@@ -30,7 +31,8 @@ class Customers extends ApiController
 					->or_like('sibling_name', $value)
 					->or_like('gender', $value)
 					->or_like('province', $value)
-					->or_like('name', strtoupper($value));
+					->or_like('name', strtoupper($value))
+					->order_by('name','ASC');
 				$data = $this->customers->all();
 			}
 		}

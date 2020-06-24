@@ -30,5 +30,21 @@ ALTER TABLE public.units_mortages ALTER COLUMN deadline DROP NOT NULL;
 ALTER TABLE public.units_mortages ALTER COLUMN date_sbk DROP NOT NULL;
 ALTER TABLE public.units_mortages ALTER COLUMN status_transaction DROP NOT NULL;
 
+ALTER TABLE public.units_regularpawns ADD description_1 text NULL;
+ALTER TABLE public.units_regularpawns ADD description_2 text NULL;
+ALTER TABLE public.units_regularpawns ADD description_3 varchar NULL;
+ALTER TABLE public.units_regularpawns ADD description_4 text NULL;
+
+ALTER TABLE public.units_regularpawns ADD status_transaction varchar NULL;
+ALTER TABLE public.units_regularpawns ADD capital_lease float8 NULL;
+ALTER TABLE public.units_regularpawns ADD periode int NULL;
+ALTER TABLE public.units_regularpawns ADD installment float8 NULL;
+ALTER TABLE public.units_regularpawns ADD id_unit int NOT NULL;
+
+ALTER TABLE public.units_regularpawns ADD type_item varchar(255) NULL DEFAULT P;
+ALTER TABLE public.units_regularpawns ADD type_bmh varchar NULL;
+
+
+
 
 

@@ -14,7 +14,7 @@ $this->load->view('temp/MenuBar.php');
 		<div class="kt-subheader__main">
 			<h3 class="kt-subheader__title"><a href="<?php echo base_url('transactions/mortages');?>">Transaksi</a></h3>
 			<span class="kt-subheader__separator kt-subheader__separator--v"></span>
-			<span class="kt-subheader__desc">Gadai Cicilan</span>
+			<span class="kt-subheader__desc">Gadai Reguler</span>
 		</div>
 		<div class="kt-subheader__toolbar">
 			<div class="kt-subheader__wrapper">
@@ -33,14 +33,14 @@ $this->load->view('temp/MenuBar.php');
                         <i class="kt-font-brand fa fa-align-justify"></i>
                     </span>
 					<h3 class="kt-portlet__head-title">
-						Data Gadai Cicilan
+						Data Gadai Regular
 					</h3>
 				</div>
 				<div class="kt-portlet__head-toolbar">
 					<div class="kt-portlet__head-wrapper">
-						<span type="button" class="btn btn-brand btn-icon-sm upload" >
+						<button type="button" class="btn btn-brand btn-icon-sm upload" >
 							<i class="flaticon2-plus"></i> Upload
-						</span>
+						</button>
 					</div>
 				</div>
 			</div>
@@ -106,7 +106,7 @@ $this->load->view('temp/MenuBar.php');
 	<form class="modal-dialog form-input" role="document" method="post" enctype="multipart/form-data">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title">Upload File Mortages</h5>
+				<h5 class="modal-title">Upload File Regular Pawns</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
@@ -138,7 +138,7 @@ $this->load->view('temp/MenuBar.php');
 	<div class="modal-dialog"  role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title">Upload File Mortages</h5>
+				<h5 class="modal-title">Upload File Regular Pawn</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
@@ -154,15 +154,15 @@ $this->load->view('temp/MenuBar.php');
 					<input type="date" class="form-control" name="date_sbk" required>
 				</div>
 				<div class="form-group">
-					<label for="file">Tanggal Jatuh Tempo</label>
+					<label for="file">Tempo</label>
 					<input type="date" class="form-control" name="deadline" required>
 				</div>
 				<div class="form-group">
-					<label for="file">Tanggal Lelang</label>
+					<label for="file">Lelang</label>
 					<input type="date" class="form-control" name="date_auction" required>
 				</div>
 				<div class="form-group">
-					<label for="file">Tafsir</label>
+					<label for="file">Tafsiran</label>
 					<input type="text" class="form-control" name="estimation" required>
 				</div>
 				<div class="form-group">
@@ -183,11 +183,11 @@ $this->load->view('temp/MenuBar.php');
 				</div>
 				<div class="form-group">
 					<label for="file">UP</label>
-					<input type="text" class="form-control" name="amount_loan" required>
+					<input type="text" class="form-control" name="amount" required>
 				</div>
 				<div class="form-group">
 					<label for="file">Admin</label>
-					<input type="text" class="form-control" name="amount_admin" required>
+					<input type="text" class="form-control" name="admin" required>
 				</div>
 				<div class="form-group">
 					<label for="file">Sewa Modal</label>
@@ -202,8 +202,12 @@ $this->load->view('temp/MenuBar.php');
 					<input type="text" class="form-control" name="installment" required>
 				</div>
 				<div class="form-group">
-					<label for="file">Bunga</label>
-					<input type="text" class="form-control" name="interest" required>
+					<label for="file">Jenis Barang</label>
+					<select name="type_item" class="form-control">
+						<?php foreach (array('P' => 'Perhiasan','L'	=> 'Latakan') as $value => $item):?>
+							<option value="<?php echo $value;?>"><?php echo $item;?></option>
+						<?php endforeach;?>
+					</select>
 				</div>
 			</div>
 			<div class="modal-footer">
@@ -215,6 +219,6 @@ $this->load->view('temp/MenuBar.php');
 </form>
 <?php
 $this->load->view('temp/Footer.php', array(
-	'js'	=> 'transactions/mortages/js.php'
+	'js'	=> 'transactions/regularpawns/js.php'
 ));
 ?>
