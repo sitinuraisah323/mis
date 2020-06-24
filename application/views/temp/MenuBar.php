@@ -70,8 +70,10 @@
                             <li class="kt-menu__item "  aria-haspopup="true">
                                 <a href="<?php echo base_url('transactions/unitsdailycash'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Harian Unit</span></a>
                             </li>
+							<li class="kt-menu__item "  aria-haspopup="true">
+								<a  href="<?php echo base_url('transactions/regularpawns'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Gadai Reguler</span></a>
+							</li>
                             <li class="kt-menu__item "  aria-haspopup="true">
-                                <a  href="demo2/dashboards/fluid.html" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Gadai Reguler</span></a>
                                 <a  href="<?php echo base_url('transactions/regularpawns') ;?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Unit Regular Pawn</span></a>
                             </li>
                             <li class="kt-menu__item "  aria-haspopup="true">
