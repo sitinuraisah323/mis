@@ -40,10 +40,10 @@ class Repayment extends ApiController
 		// ));
 	}
 
-	public function get_unitsdailycash()
+	public function get_repayments()
 	{
 		echo json_encode(array(
-			'data'	=> 	$this->repayment->get_unitsdailycash(),
+			'data'	=> 	$this->repayment->get_repayments(),
 			'status'	=> true,
 			'message'	=> 'Successfully Get Data Users'
 		));
@@ -131,5 +131,28 @@ class Repayment extends ApiController
 			// }
 		}
 	}
+
+	public function delete()
+	{
+		if($post = $this->input->get()){
+
+            $data['id'] = $this->input->get('id');	
+            $db = false;
+            $db = $this->repayment->delete($data);
+            if($db=true){
+                echo json_encode(array(
+                    'data'	=> 	true,
+                    'status'=>true,
+                    'message'	=> 'Successfull Delete Data Area'
+                ));
+            }else{
+                echo json_encode(array(
+                    'data'	=> 	false,
+                    'status'=>false,
+                    'message'	=> 'Failed Delete Data Area'
+                ));
+            }
+        }	
+    }
 
 }

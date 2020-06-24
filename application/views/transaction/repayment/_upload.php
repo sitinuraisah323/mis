@@ -1,6 +1,6 @@
 <!--begin::Modal-->
 <div class="modal fade" id="modal_upload" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-<form action="#" id="form_upload" class="form-horizontal" method="post" enctype="multipart/form-data">
+<form action="<?php echo base_url('transaction/repayment/upload'); ?>" id="form_upload" class="form-horizontal" method="post" enctype="multipart/form-data">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -53,8 +53,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="btn_add_submit">Submit</button>
-                <!-- <input type="submit" class="btn btn-primary" value="Submit"> -->
+                <!-- <button type="button" class="btn btn-primary" id="btn_add_submit">Submit</button> -->
+                <input type="submit" class="btn btn-primary" value="Submit">
             </div>
         </div>
     </div>

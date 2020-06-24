@@ -133,5 +133,27 @@ class Unitsdailycash extends ApiController
 			// }
 		}
 	}
+	
+	public function delete()
+	{
+		if($post = $this->input->get()){
 
+            $data['id'] = $this->input->get('id');	
+            $db = false;
+            $db = $this->unitsdailycash->delete($data);
+            if($db=true){
+                echo json_encode(array(
+                    'data'	=> 	true,
+                    'status'=>true,
+                    'message'	=> 'Successfull Delete Data Area'
+                ));
+            }else{
+                echo json_encode(array(
+                    'data'	=> 	false,
+                    'status'=>false,
+                    'message'	=> 'Failed Delete Data Area'
+                ));
+            }
+        }	
+    }
 }

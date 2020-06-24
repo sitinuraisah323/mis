@@ -21,7 +21,7 @@ function initDTEvents(){
                 KTApp.blockPage();
                 $.ajax({
                     type : 'GET',
-                    url : "<?php echo base_url("api/datamaster/areas/delete"); ?>",
+                    url : "<?php echo base_url("api/transaction/unitsdailycash/delete"); ?>",
                     data : {id:targetId},
                     dataType : "json",
                     success : function(data,status){
