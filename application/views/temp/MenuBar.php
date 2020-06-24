@@ -80,7 +80,7 @@
                             <a  href="<?php echo base_url('transaction/repayment'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Repayment</span></a>
                             </li>
                             <li class="kt-menu__item "  aria-haspopup="true">
-                            <a  href="demo2/dashboards/aside.html" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Loan Installment</span></a>
+                            <a  href="<?php echo base_url('transactions/loaninstallments')?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Loan Installment</span></a>
                             </li>
                             </ul>
                         </div>

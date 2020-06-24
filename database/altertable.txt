@@ -44,6 +44,19 @@ ALTER TABLE public.units_regularpawns ADD id_unit int NOT NULL;
 ALTER TABLE public.units_regularpawns ADD type_item varchar(255) NULL DEFAULT P;
 ALTER TABLE public.units_regularpawns ADD type_bmh varchar NULL;
 
+ALTER TABLE public.units_loaninstallments ADD id_unit int NOT NULL;
+ALTER TABLE public.units_loaninstallments ADD nic varchar(255) NOT NULL;
+
+ALTER TABLE public.units_loaninstallments RENAME COLUMN money_loan TO amount_loan;
+ALTER TABLE public.units_loaninstallments ALTER COLUMN amount_loan DROP NOT NULL;
+ALTER TABLE public.units_loaninstallments ALTER COLUMN amount_loan SET NOT NULL;
+ALTER TABLE public.units_loaninstallments ALTER COLUMN date_repayment DROP NOT NULL;
+ALTER TABLE public.units_loaninstallments ALTER COLUMN capital_lease DROP NOT NULL;
+ALTER TABLE public.units_loaninstallments ALTER COLUMN capital_lease SET NOT NULL;
+ALTER TABLE public.units_loaninstallments ALTER COLUMN periode DROP NOT NULL;
+
+ALTER TABLE public.units_loaninstallments ADD detail text NULL;
+
 
 
 
