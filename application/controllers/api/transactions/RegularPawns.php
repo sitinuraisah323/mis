@@ -1,38 +1,39 @@
 <?php
 
 require_once APPPATH.'controllers/api/ApiController.php';
-class Mortages extends ApiController
+class RegularPawns extends ApiController
 {
 
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('MortagesModel', 'mortages');
+		$this->load->model('RegularPawnsModel', 'regulars');
 		$this->load->model('CustomersModel', 'customers');
 	}
 
 	public function index()
 	{
-		$this->mortages->db->select('customers.name')->join('customers','customers.id = units_mortages.id_customer');
-		$data = $this->mortages->all();
+		$this->regulars->db->select('customers.name')->join('customers','customers.id = units_regularpawns.id_customer');
+		$data = $this->regulars->all();
 		if($post = $this->input->post()){
 			if(is_array($post['query'])){
 				$value = $post['query']['generalSearch'];
-				$this->mortages->db->select('customers.name')->join('customers','customers.id = units_mortages.id_customer');
-				$this->mortages->db
+				$this->regulars->db->select('customers.name')->join('customers','customers.id = units_regularpawns.id_customer');
+				$this->regulars->db
 					->or_like('no_sbk',$value)
 					->or_like('nic',$value)
 					->or_like('description_1',$value)
 					->or_like('description_2',$value)
 					->or_like('description_3',$value)
 					->or_like('description_4',$value)
-					->or_like('name',$value);
-				$data = $this->mortages->all();
+					->or_like('name',$value)
+					->order_by('name','ASC');
+				$data = $this->regulars->all();
 			}
 		}
 		echo json_encode(array(
 			'data'	=> $data,
-			'message'	=> 'Successfully Get Data Users'
+			'message'	=> 'Successfully Get Data Regular Pawns'
 		));
 	}
 
@@ -83,13 +84,13 @@ class Mortages extends ApiController
 
 	public function upload()
 	{
-		$config['upload_path']          = 'storage/transactions/mortages/';
+		$config['upload_path']          = 'storage/transactions/regular-pawns/';
 		$config['allowed_types']        = '*';
 		$config['max_size']             = 100;
 		$config['max_width']            = 1024;
 		$config['max_height']           = 768;
-		if(!is_dir('storage/transactions/mortages/')){
-			mkdir('storage/transactions/mortages/',0777,true);
+		if(!is_dir('storage/transactions/regular-pawns/')){
+			mkdir('storage/transactions/regular-pawns/',0777,true);
 		}
 
 		$this->load->library('upload', $config);
@@ -119,39 +120,43 @@ class Mortages extends ApiController
 						$customer = $this->customers->find(array(
 							'nik'	=> $transaction['M']
 						));
-						$data = array(
-							'no_sbk'	=> zero_fill( $transaction['A'], 5),
-							'nic'	=> $customer->no_cif,
-							'date_sbk'	=> $transaction['D'] ? date('Y-m-d', strtotime($transaction['D'])): null,
-							'deadline'	=> $transaction['E'] ? date('Y-m-d', strtotime($transaction['E'])) : null,
-							'date_auction'	=> $transaction['F'] ? date('Y-m-d', strtotime($transaction['F'])) : null,
-							'estimation'	=> (int) $transaction['G'],
-							'amount_loan'	=> (int) $transaction['H'],
-							'amount_admin'	=> (int) $transaction['I'],
-							'description_1'	=>  $transaction['J'],
-							'description_2'	=>  $transaction['K'],
-							'description_3'	=>  $transaction['L'],
-							'description_4'	=>  $transaction['S'],
-							'capital_lease'	=>  $transaction['T'],
-							'periode'	=>  $transaction['U'],
-							'installment'	=>  $transaction['V'],
-							'status_transaction'	=>  $transaction['W'],
-							'interest'	=>  $transaction['X'],
-							'id_customer'	=> $customer->id,
-							'id_unit'	=> $this->input->post('id_unit'),
-							'user_create'	=> $this->session->userdata('user')->id,
-							'user_update'	=> $this->session->userdata('user')->id,
-						);
-						if($findTransaction = $this->mortages->find(array(
-							'no_sbk'	=>zero_fill( $transaction['A'], 5),
-						))){
-							if($this->mortages->update($data, array(
-								'id'	=>  $findTransaction->id
-							)));
-						}else{
-							$this->mortages->insert($data);
+						if(!is_null($customer)){
+							$data = array(
+								'no_sbk'	=> zero_fill( $transaction['A'], 5),
+								'nic'	=> $customer->no_cif,
+								'date_sbk'	=> $transaction['D'] ? date('Y-m-d', strtotime($transaction['D'])): null,
+								'deadline'	=> $transaction['E'] ? date('Y-m-d', strtotime($transaction['E'])) : null,
+								'date_auction'	=> $transaction['F'] ? date('Y-m-d', strtotime($transaction['F'])) : null,
+								'estimation'	=> (int) $transaction['G'],
+								'amount'	=> (int) $transaction['H'],
+								'admin'	=> (int) $transaction['I'],
+								'description_1'	=>  $transaction['J'],
+								'description_2'	=>  $transaction['K'],
+								'description_3'	=>  $transaction['L'],
+								'description_4'	=>  $transaction['S'],
+								'type_item'	=> $transaction['Q'],
+								'capital_lease'	=>  $transaction['T'],
+								'periode'	=>  $transaction['U'],
+								'installment'	=>  $transaction['V'],
+								'status_transaction'	=>  $transaction['W'],
+								'id_customer'	=> $customer->id,
+								'type_bmh'	=> $transaction['X'],
+								'id_unit'	=> $this->input->post('id_unit'),
+								'user_create'	=> $this->session->userdata('user')->id,
+								'user_update'	=> $this->session->userdata('user')->id,
+							);
+							if($findTransaction = $this->regulars->find(array(
+								'no_sbk'	=>zero_fill( $transaction['A'], 5),
+								'id_unit'	=> $this->input->post('id_unit')
+							))){
+								if($this->regulars->update($data, array(
+									'id'	=>  $findTransaction->id,
+									'id_unit'	=> $this->input->post('id_unit')
+								)));
+							}else{
+								$this->regulars->insert($data);
+							}
 						}
-
 					}
 				}
 				echo json_encode(array(
@@ -167,17 +172,17 @@ class Mortages extends ApiController
 
 	public function show($id)
 	{
-		if($data = $this->mortages->find($id)){
+		if($data = $this->regulars->find($id)){
 			echo json_encode(array(
 				'data'	=> $data,
 				'status'	=> true,
-				'message'	=> 'Successfully Get Data Customer'
+				'message'	=> 'Successfully Get Data Regular Pawns'
 			));
 		}else{
 			echo json_encode(array(
-				'data'	=> $data,
-				'status'	=> true,
-				'message'	=> 'Successfully Get Data Customer'
+				'data'	=> false,
+				'status'	=> false,
+				'message'	=> 'Successfully Get Data Regular Pawns'
 			));
 		}
 	}
@@ -189,12 +194,11 @@ class Mortages extends ApiController
 			$this->load->library('form_validation');
 
 			$this->form_validation->set_rules('estimation', 'Estimation', 'required|numeric');
-			$this->form_validation->set_rules('amount_loan', 'Amount Loan', 'required|numeric');
-			$this->form_validation->set_rules('amount_admin', 'Amount Admin', 'required|numeric');
+			$this->form_validation->set_rules('amount', 'Amount Loan', 'required|numeric');
+			$this->form_validation->set_rules('admin', 'Amount Admin', 'required|numeric');
 			$this->form_validation->set_rules('capital_lease', 'Capital Lease', 'required|numeric');
 			$this->form_validation->set_rules('periode', 'Periode', 'required|numeric');
 			$this->form_validation->set_rules('installment', 'Installment', 'required|numeric');
-			$this->form_validation->set_rules('interest', 'Interest', 'required|numeric');
 			if ($this->form_validation->run() == FALSE)
 			{
 				echo json_encode(array(
@@ -206,9 +210,10 @@ class Mortages extends ApiController
 			{
 				$id = $post['id'];
 				unset($post['id']);
-				if($this->mortages->update($post,$id)){
+				if($this->regulars->update($post,$id)){
+
 					echo json_encode(array(
-						'data'	=> 	true,
+						'data'	=> 	$this->regulars->db->last_query(),
 						'message'	=> 'Successfull Updated Data Users'
 					));
 				}else{
