@@ -23,23 +23,21 @@ class Dashboards extends Authenticated
 	 */
 	public function index()
 	{
-		echo "index dahsboard";
     }
 
     public function pusat()
 	{
-        echo "pusat";
-        //$this->load->view("dashboards/pusat/index");
+        $this->load->view("dashboards/pusat/index");
     }
 
     public function area()
 	{
-		
+		$this->load->view("dashboards/area/index");
     }
 
     public function units()
 	{
-		
+		$this->load->view("dashboards/units/index");
     }
     
 
