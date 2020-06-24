@@ -71,11 +71,8 @@
                                 <a href="<?php echo base_url('transactions/unitsdailycash'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Harian Unit</span></a>
                             </li>
                             <li class="kt-menu__item "  aria-haspopup="true">
-<<<<<<< HEAD
                                 <a  href="demo2/dashboards/fluid.html" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Gadai Reguler</span></a>
-=======
                                 <a  href="<?php echo base_url('transactions/regularpawns') ;?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Unit Regular Pawn</span></a>
->>>>>>> c53e2e6e67a789108e6aa141104425b4aabc86a4
                             </li>
                             <li class="kt-menu__item "  aria-haspopup="true">
                             <a  href="<?php echo base_url('transactions/mortages');?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Gadai Cicilan</span></a>
