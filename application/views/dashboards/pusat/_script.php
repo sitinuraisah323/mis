@@ -1,7 +1,7 @@
 <script>
 "use strict";
 // Class definition
-var KTMorrisChartsDemo = function() {
+var KTMorrisCharts = function() {
 
     var nasional = function() {
         // BAR CHART
@@ -87,17 +87,46 @@ var KTMorrisChartsDemo = function() {
         });
     }
 
+    var bank = function() {
+        // BAR CHART
+        new Morris.Bar({
+            element: 'kt_Bank',
+            data: [{
+                    y: 'Jabar',
+                    a: 20
+                },
+                {
+                    y: 'Jatim',
+                    a: 60
+                },
+                {
+                    y: 'NTB',
+                    a: 80
+                },
+                {
+                    y: 'NTT',
+                    a: 50
+                }                
+            ],
+            xkey: 'y',
+            ykeys: ['a'],
+            labels: ['Bank '],
+            barColors: ['#2abe81', '#24a5ff']
+        });
+    }
+
     return {
         // public functions
         init: function() {           
             nasional();
             month();
             saldo();
+            bank();
         }
     };
 }();
 
 jQuery(document).ready(function() {
-    KTMorrisChartsDemo.init();
+    KTMorrisCharts.init();
 });
 </script>
