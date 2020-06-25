@@ -9,8 +9,8 @@
                 <div class="kt-header__brand   kt-grid__item" id="kt_header_brand">
                     <div class="kt-header__brand-logo">
                         <a href="demo2/index.html">
-                            <img alt="Logo" src="<?php echo base_url(); ?>assets/media/logos/logo-2.png" class="kt-header__brand-logo-default"/>
-                            <img alt="Logo" src="<?php echo base_url(); ?>assets/media/logos/logo-2-sm.png" class="kt-header__brand-logo-sticky"/>
+                            <img alt="Logo" src="<?php echo base_url(); ?>assets/media/logos/logo-gha.png" class="kt-header__brand-logo-default"/>
+                            <img alt="Logo" src="<?php echo base_url(); ?>assets/media/logos/gha-login.png" class="kt-header__brand-logo-sticky"/>
                         </a>
                     </div>
                     <div class="kt-header__brand-nav">

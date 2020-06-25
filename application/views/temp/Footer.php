@@ -6,7 +6,7 @@
 			<div class="kt-footer__wrapper">
 				<div class="kt-footer__logo">
 					<a href="demo2/index.html">
-						<img alt="Logo" src="<?php echo base_url(); ?>assets/media/logos/logo-2-sm.png">
+						<img alt="Logo" src="<?php echo base_url(); ?>assets/media/logos/gha-sm.png">
 					</a>		 			 
 					<div class="kt-footer__copyright">
 						2020&nbsp;&copy;&nbsp;  
