@@ -19,7 +19,9 @@
 			contentType: false,
 			processData: false,
 			success : function(response) {
-				// location.reload();
+			},
+			complete: function () {
+				window.location.reload();
 			}
 		});
 	});
