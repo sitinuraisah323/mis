@@ -107,61 +107,66 @@ class Mortages extends ApiController
 			$data = $this->upload->data();
 			$path = $config['upload_path'].$data['file_name'];
 
-			include APPPATH.'libraries/PHPExcel.php';
+			$this->data_transaction($this->input->post('id_unit'), $path);
+		}
+	}
 
-			$excelreader = new PHPExcel_Reader_Excel2007();
-			$loadexcel = $excelreader->load($path); // Load file yang telah diupload ke folder excel
-			$transactions = $loadexcel->getActiveSheet()->toArray(null, true, true ,true);
+	public function data_transaction($id_unit, $path)
+	{
+		include APPPATH.'libraries/PHPExcel.php';
 
-			if($transactions){
-				foreach ($transactions as $key => $transaction){
-					if($key > 1){
-						$customer = $this->customers->find(array(
-							'nik'	=> $transaction['M']
-						));
-						$data = array(
-							'no_sbk'	=> zero_fill( $transaction['A'], 5),
-							'nic'	=> $customer->no_cif,
-							'date_sbk'	=> $transaction['D'] ? date('Y-m-d', strtotime($transaction['D'])): null,
-							'deadline'	=> $transaction['E'] ? date('Y-m-d', strtotime($transaction['E'])) : null,
-							'date_auction'	=> $transaction['F'] ? date('Y-m-d', strtotime($transaction['F'])) : null,
-							'estimation'	=> (int) $transaction['G'],
-							'amount_loan'	=> (int) $transaction['H'],
-							'amount_admin'	=> (int) $transaction['I'],
-							'description_1'	=>  $transaction['J'],
-							'description_2'	=>  $transaction['K'],
-							'description_3'	=>  $transaction['L'],
-							'description_4'	=>  $transaction['S'],
-							'capital_lease'	=>  $transaction['T'],
-							'periode'	=>  $transaction['U'],
-							'installment'	=>  $transaction['V'],
-							'status_transaction'	=>  $transaction['W'],
-							'interest'	=>  $transaction['X'],
-							'id_customer'	=> $customer->id,
-							'id_unit'	=> $this->input->post('id_unit'),
-							'user_create'	=> $this->session->userdata('user')->id,
-							'user_update'	=> $this->session->userdata('user')->id,
-						);
-						if($findTransaction = $this->mortages->find(array(
-							'no_sbk'	=>zero_fill( $transaction['A'], 5),
-						))){
-							if($this->mortages->update($data, array(
-								'id'	=>  $findTransaction->id
-							)));
-						}else{
-							$this->mortages->insert($data);
-						}
+		$excelreader = new PHPExcel_Reader_Excel2007();
+		$loadexcel = $excelreader->load($path); // Load file yang telah diupload ke folder excel
+		$transactions = $loadexcel->getActiveSheet()->toArray(null, true, true ,true);
 
+		if($transactions){
+			foreach ($transactions as $key => $transaction){
+				if($key > 1){
+					$customer = $this->customers->find(array(
+						'nik'	=> $transaction['M']
+					));
+					$data = array(
+						'no_sbk'	=> zero_fill( $transaction['A'], 5),
+						'nic'	=> $customer->no_cif,
+						'date_sbk'	=> $transaction['D'] ? date('Y-m-d', strtotime($transaction['D'])): null,
+						'deadline'	=> $transaction['E'] ? date('Y-m-d', strtotime($transaction['E'])) : null,
+						'date_auction'	=> $transaction['F'] ? date('Y-m-d', strtotime($transaction['F'])) : null,
+						'estimation'	=> (int) $transaction['G'],
+						'amount_loan'	=> (int) $transaction['H'],
+						'amount_admin'	=> (int) $transaction['I'],
+						'description_1'	=>  $transaction['J'],
+						'description_2'	=>  $transaction['K'],
+						'description_3'	=>  $transaction['L'],
+						'description_4'	=>  $transaction['S'],
+						'capital_lease'	=>  $transaction['T'],
+						'periode'	=>  $transaction['U'],
+						'installment'	=>  $transaction['V'],
+						'status_transaction'	=>  $transaction['W'],
+						'interest'	=>  $transaction['X'],
+						'id_customer'	=> $customer->id,
+						'id_unit'	=> $id_unit,
+						'user_create'	=> $this->session->userdata('user')->id,
+						'user_update'	=> $this->session->userdata('user')->id,
+					);
+					if($findTransaction = $this->mortages->find(array(
+						'no_sbk'	=>zero_fill( $transaction['A'], 5),
+					))){
+						if($this->mortages->update($data, array(
+							'id'	=>  $findTransaction->id
+						)));
+					}else{
+						$this->mortages->insert($data);
 					}
+
 				}
-				echo json_encode(array(
-					'data'	=> 	true,
-					'message'	=> 'Successfully Updated Upload'
-				));
 			}
-			if(is_file($path)){
-				unlink($path);
-			}
+			echo json_encode(array(
+				'data'	=> 	true,
+				'message'	=> 'Successfully Updated Upload'
+			));
+		}
+		if(is_file($path)){
+			unlink($path);
 		}
 	}
 

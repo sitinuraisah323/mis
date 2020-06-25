@@ -85,6 +85,9 @@
                             <li class="kt-menu__item "  aria-haspopup="true">
                             <a  href="<?php echo base_url('transactions/loaninstallments'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Angsuran Pinjaman Cicilan</span></a>
                             </li>
+							<li class="kt-menu__item "  aria-haspopup="true">
+								<a  href="<?php echo base_url('transactions/extractall'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Upload Semua</span></a>
+							</li>
                             </ul>
                         </div>
                     </li>
