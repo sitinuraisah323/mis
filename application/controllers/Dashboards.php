@@ -28,6 +28,12 @@ class Dashboards extends Authenticated
     public function pusat()
 	{
         $this->load->view("dashboards/pusat/index");
+	}
+	
+	public function performaunit()
+	{
+		echo "test";
+        //$this->load->view("dashboards/pusat/performaunit");
     }
 
     public function area()
