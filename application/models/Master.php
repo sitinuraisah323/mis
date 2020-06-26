@@ -6,9 +6,44 @@ class Master extends CI_Model
 
 	public $primary_key = 'id';
 
+	public $hirarki = false;
+
 	public function insert(array $data)
 	{
 		return $this->db->insert($this->table, $data);
+	}
+
+	public function buildHirarki($id_parent = 0, $dept = 0, $order = 0)
+	{
+		if($parents = $this->findWhere(array('id_parent'=>$id_parent))){
+			foreach ($parents as $parent){
+				$order++;
+				if($parent->id_parent == 0){
+					$dept = 0;
+				}else{
+					$dept++;
+				}
+				$data = array(
+					'dept'	=> $dept,
+					'order'	=> $order
+				);
+				$this->update($data, $parent->id);
+				if($childs = $this->findWhere(array(
+					'id_parent'	=> $parent->id
+				))){
+					$dept = $dept+1;
+					foreach ($childs as $child){
+						$order++;
+						$data = array(
+							'dept'	=> $dept,
+							'order'	=> $order
+						);
+						$this->update($data, $child->id);
+						$this->buildHirarki($child->id, $dept, $order++);
+					}
+				}
+			}
+		}
 	}
 
 	public function all($limit = null)
@@ -67,6 +102,11 @@ class Master extends CI_Model
 
 	public function delete($condition = array())
 	{
+		if(!is_array($condition)){
+			$condition = array(
+				$this->primary_key		=> $condition
+			);
+		}
 		return $this->db->delete($this->table, $condition);
 
 	}
