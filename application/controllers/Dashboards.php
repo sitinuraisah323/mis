@@ -32,8 +32,43 @@ class Dashboards extends Authenticated
 	
 	public function performaunit()
 	{
-		echo "test";
-        //$this->load->view("dashboards/pusat/performaunit");
+        $this->load->view("dashboards/pusat/performaunit");
+	}
+	
+	
+	public function disburse()
+	{
+        $this->load->view("dashboards/pusat/disburse");
+	}
+
+	public function targetbooking()
+	{
+        $this->load->view("dashboards/pusat/targetbooking");
+	}
+	
+	public function targetoutstanding()
+	{
+        $this->load->view("dashboards/pusat/targetoutstanding");
+	}
+	
+	public function pencairan()
+	{
+        $this->load->view("dashboards/pusat/pencairan");
+	}
+	
+	public function pelunasan()
+	{
+        $this->load->view("dashboards/pusat/pelunasan");
+	}
+	
+	public function saldokas()
+	{
+        $this->load->view("dashboards/pusat/saldokas");
+	}
+	
+	public function saldobank()
+	{
+        $this->load->view("dashboards/pusat/saldobank");
     }
 
     public function area()
