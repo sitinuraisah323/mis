@@ -4,7 +4,7 @@ var KTApp = function() {
 
     var initPerformanceUnit = function() {
         $('#kt_aside_menu, #kt_header_menu').on('click', '.kt-menu__link[href="unit"]', function(e) {
-            e.preventDefault();
+            //e.preventDefault();
             // $.ajax({
             //     type: "POST",
             //     url: "<?php //base_url('dashboards/performaunit'); ?>",
@@ -16,9 +16,13 @@ var KTApp = function() {
             //         $('#showresults').append(data);
             //     }
             // });
+            var lbltext = "text";
             var url = "<?php base_url('dashboards/performaunit'); ?>";
-            $.get(url,function(data){
-                $("#showresults").html(data);
+            e.preventDefault();
+            $.get(url,function(data){                
+                $("#showresults").html(lbltext);
+                //$("#showresults").val("");
+                //swal.fire("", "Perfoma Unit");                
             });
         });
     }
