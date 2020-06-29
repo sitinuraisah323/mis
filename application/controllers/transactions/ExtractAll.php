@@ -7,7 +7,7 @@ class ExtractAll extends Authenticated
 	 * @var string
 	 */
 
-	public $menu = 'units_loaninstallments';
+	public $menu = 'ExtractAll';
 
 	/**
 	 * Welcome constructor.

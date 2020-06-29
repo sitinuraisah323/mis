@@ -62,7 +62,7 @@ class Menu extends ApiController
 					'user_update'	=> $this->session->userdata('user')->id,
 				);
 				if($this->menu->insert($data)){
-					$this->menus->buildHirarki();
+					$this->menu->buildHirarki();
 					echo json_encode(array(
 						'data'	=> 	true,
 						'status'	=> true,
@@ -114,7 +114,7 @@ class Menu extends ApiController
 					'id_parent'	=> $post['id_parent'],
 				);
 				if($this->menu->update($data, $id)){
-					$this->menus->buildHirarki();
+					$this->menu->buildHirarki();
 					echo json_encode(array(
 						'data'	=> 	true,
 						'status'	=> true,
@@ -158,7 +158,7 @@ class Menu extends ApiController
 	public function delete($id)
 	{
 		if($this->menu->delete($id)){
-			$this->menus->buildHirarki();
+			$this->menu->buildHirarki();
 			echo json_encode(array(
 				'data'	=> 	true,
 				'status'	=> true,

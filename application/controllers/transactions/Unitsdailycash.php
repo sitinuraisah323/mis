@@ -7,7 +7,7 @@ class Unitsdailycash extends Authenticated
 	 * @var string
 	 */
 
-	public $menu = 'Units Daily Cash';
+	public $menu = 'UnitsDailyCash';
 
 	/**
 	 * Welcome constructor.
@@ -53,7 +53,7 @@ class Unitsdailycash extends Authenticated
 		else
 		{
             $unit       = $this->input->post('unit');
-            $date       = date('Y-m-d',strtotime($this->input->post('datetrans'))); 
+            $date       = date('Y-m-d',strtotime($this->input->post('datetrans')));
             $cashcode   = $this->input->post('kodetrans');
 
 			$data = $this->upload->data();
@@ -77,9 +77,9 @@ class Unitsdailycash extends Authenticated
 									'cash_code'		=> $udc['F'],
 									'date'			=> $datetrans,
 									'amount'		=> $udc['B'],
-									'description'	=> $udc['C'],							
-									'type'			=> null,							
-									'status'		=> "DRAFT"							
+									'description'	=> $udc['C'],
+									'type'			=> null,
+									'status'		=> "DRAFT"
 								);
 								//echo "<pre/>";
 								//print_r($data);
@@ -95,9 +95,9 @@ class Unitsdailycash extends Authenticated
 								}else{
 									$this->unitsdailycash->insert($data);
 								}
-							}							
-						}						
-					    
+							}
+						}
+
 					}
 				}
 				// echo json_encode(array(

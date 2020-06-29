@@ -7,7 +7,7 @@ class Privileges extends Authenticated
 	 * @var string
 	 */
 
-	public $menu = 'Menu';
+	public $menu = 'Privileges';
 
 	/**
 	 * Welcome constructor.

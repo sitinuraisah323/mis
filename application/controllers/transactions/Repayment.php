@@ -7,7 +7,7 @@ class Repayment extends Authenticated
 	 * @var string
 	 */
 
-	public $menu = 'Units Daily Cash';
+	public $menu = 'Repayment';
 
 	/**
 	 * Welcome constructor.
@@ -37,7 +37,7 @@ class Repayment extends Authenticated
 		$config['max_size']             = 100;
 		$config['max_width']            = 1024;
         $config['max_height']           = 768;
-        
+
 		if(!is_dir('storage/repayment/data/')){
 			mkdir('storage/repayment/data/',0777,true);
 		}
@@ -78,7 +78,7 @@ class Repayment extends Authenticated
 							'periode'		=> $repayment['J'],
 							'description_1'	=> $repayment['E'],
 							'description_2'	=> $repayment['F'],
-							'description_3'	=> $repayment['G']							
+							'description_3'	=> $repayment['G']
 						);
 						if($findrepayment = $this->repayments->find(array(
 							'id_unit'		=> $unit,

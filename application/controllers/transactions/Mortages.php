@@ -7,7 +7,7 @@ class Mortages extends Authenticated
 	 * @var string
 	 */
 
-	public $menu = 'Customer';
+	public $menu = 'Mortages';
 
 	/**
 	 * Welcome constructor.

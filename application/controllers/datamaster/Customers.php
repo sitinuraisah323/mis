@@ -7,7 +7,7 @@ class Customers extends Authenticated
 	 * @var string
 	 */
 
-	public $menu = 'Customer';
+	public $menu = 'Customers';
 
 	/**
 	 * Welcome constructor.
