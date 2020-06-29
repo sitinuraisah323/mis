@@ -7,7 +7,7 @@ class Unitstarget extends Authenticated
 	 * @var string
 	 */
 
-	public $menu = 'Units Target';
+	public $menu = 'UnitsTarget';
 
 	/**
 	 * Welcome constructor.

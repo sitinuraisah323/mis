@@ -51,6 +51,9 @@ class Master extends CI_Model
 		if(!is_null($limit)){
 			$this->db->limit($limit);
 		}
+		if($this->hirarki){
+			$this->db->order_by('order','ASC');
+		}
 		return $this->db
 			->select($this->table.'.*')
 			->from($this->table)

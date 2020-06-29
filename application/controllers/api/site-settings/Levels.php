@@ -12,8 +12,16 @@ class Levels extends ApiController
 
 	public function index()
 	{
+		$data = $this->level->all();
+		if($post = $this->input->post()){
+			if(is_array($post['query'])){
+				$value = $post['query']['generalSearch'];
+				$this->level->db->like('level', $value);
+				$data = $this->level->all();
+			}
+		}
 		echo json_encode(array(
-			'data'	=> 	$this->level->all(),
+			'data'	=> 	$data,
 			'message'	=> 'Successfully Get Data Levels'
 		));
 	}
