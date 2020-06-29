@@ -1,49 +1,31 @@
 <?php
 
 require_once APPPATH.'controllers/api/ApiController.php';
-class Menu extends ApiController
+class Privileges extends ApiController
 {
 
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('MenuModel', 'menu');
+		$this->load->model('PrivilegesModel', 'privileges');
 	}
 
 	public function index()
 	{
-		$this->menu->db
-			->select('b.name as parent_name')
-			->join('menus b','b.id = menus.id_parent','left')
-			->order_by('menus.order','ASC');
-		$data = $this->menu->all();
-		if($post = $this->input->post()){
-			if(is_array($post['query'])){
-				$value = $post['query']['generalSearch'];
-				$this->menu->db
-					->select('b.name as parent_name')
-					->join('menus b','b.id = menus.id_parent','left')
-					->or_like('b.name', $value)
-					->or_like('menus.name', $value)
-					->order_by('menus.order','ASC');
-				$data = $this->menu->all();
-			}
-		}
+		$data = $this->privileges->all();
 		echo json_encode(array(
 			'data'	=> 	$data,
-			'message'	=> 'Successfully Get Data Menu'
+			'message'	=> 'Successfully Get Data Privileges'
 		));
 	}
 
 	public function insert()
 	{
 		if($post = $this->input->post()){
-
 			$this->load->library('form_validation');
-
-			$this->form_validation->set_rules('name', 'Nama', 'required');
-			$this->form_validation->set_rules('id_parent', 'Menu Utama', 'required');
-
+			$this->form_validation->set_rules('id_level', 'Level', 'required|numeric');
+			$this->form_validation->set_rules('id_menu', 'Menu', 'required|numeric');
+			$this->form_validation->set_rules('can_access', 'Access', 'required');
 
 			if ($this->form_validation->run() == FALSE)
 			{
@@ -56,23 +38,26 @@ class Menu extends ApiController
 			else
 			{
 				$data = array(
-					'id_parent'	=> $post['id_parent'],
-					'name'	=> $post['name'],
+					'id_level'	=> $post['id_level'],
+					'id_menu'	=> $post['id_menu'],
+					'can_access'	=> $post['can_access'],
 					'user_create'	=> $this->session->userdata('user')->id,
 					'user_update'	=> $this->session->userdata('user')->id,
 				);
-				if($this->menu->insert($data)){
-					$this->menus->buildHirarki();
+				if($this->privileges->insertOrUpdate($data, array(
+					'id_level'	=> $post['id_level'],
+					'id_menu'	=> $post['id_menu'],
+				))){
 					echo json_encode(array(
 						'data'	=> 	true,
 						'status'	=> true,
-						'message'	=> 'Successfull Insert Data Menu'
+						'message'	=> 'Successfull Insert Data Privileges'
 					));
 				}else{
 					echo json_encode(array(
 						'data'	=> 	false,
 						'status'	=> false,
-						'message'	=> 'Failed Insert Data Menu')
+						'message'	=> 'Failed Insert Data Privileges')
 					);
 				}
 
@@ -92,8 +77,9 @@ class Menu extends ApiController
 		if($post = $this->input->post()){
 
 			$this->load->library('form_validation');
-			$this->form_validation->set_rules('name', 'Nama', 'required');
-			$this->form_validation->set_rules('id_parent', 'Menu Utama', 'required');
+			$this->form_validation->set_rules('can_access', 'Access', 'required');
+			$this->form_validation->set_rules('id_level', 'Level', 'required');
+			$this->form_validation->set_rules('id_menu', 'Menu', 'required');
 			$this->form_validation->set_rules('id', 'Id', 'required');
 
 
@@ -103,28 +89,30 @@ class Menu extends ApiController
 				echo json_encode(array(
 					'data'	=> 	false,
 					'status'	=> false,
-					'message'	=> 'Failed Insert Data Level'
+					'message'	=> 'Failed Insert Data Privileges'
 				));
 			}
 			else
 			{
 				$id = $post['id'];
 				$data = array(
-					'name'	=> $post['name'],
-					'id_parent'	=> $post['id_parent'],
+					'id_level'	=> $post['id_level'],
+					'id_menu'	=> $post['id_menu'],
+					'can_access'	=> $post['can_access'],
+					'user_create'	=> $this->session->userdata('user')->id,
+					'user_update'	=> $this->session->userdata('user')->id,
 				);
-				if($this->menu->update($data, $id)){
-					$this->menus->buildHirarki();
+				if($this->privileges->update($data, $id)){
 					echo json_encode(array(
 						'data'	=> 	true,
 						'status'	=> true,
-						'message'	=> 'Successfull Update Data Level'
+						'message'	=> 'Successfull Update Data Privileges'
 					));
 				}else{
 					echo json_encode(array(
 							'data'	=> 	false,
 							'status'	=> false,
-							'message'	=> 'Failed Update Data Level')
+							'message'	=> 'Failed Update Data Privileges')
 					);
 				}
 
@@ -141,11 +129,11 @@ class Menu extends ApiController
 
 	public function show($id)
 	{
-		if($data = $this->menu->find($id)){
+		if($data = $this->privileges->find($id)){
 			echo json_encode(array(
 				'data'	=> 	$data,
 				'status'	=> true,
-				'message'	=> 'Successfully Delete Data Level'
+				'message'	=> 'Successfully Delete Data Privileges'
 			));
 		}else{
 			echo json_encode(array(
@@ -157,12 +145,11 @@ class Menu extends ApiController
 	}
 	public function delete($id)
 	{
-		if($this->menu->delete($id)){
-			$this->menus->buildHirarki();
+		if($this->privileges->delete($id)){
 			echo json_encode(array(
 				'data'	=> 	true,
 				'status'	=> true,
-				'message'	=> 'Successfully Delete Data Level'
+				'message'	=> 'Successfully Delete Data Privileges'
 			));
 		}else{
 			echo json_encode(array(

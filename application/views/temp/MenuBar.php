@@ -32,7 +32,7 @@
                                 <a  href="<?php echo base_url('site-settings/levels');?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Level</span></a>
                             </li>
                             <li class="kt-menu__item "  aria-haspopup="true">
-                                <a  href="demo2/dashboards/fluid.html" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Hak Akses</span></a>
+                                <a  href="<?php echo base_url('site-settings/privileges');?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Hak Akses</span></a>
                             </li>
                             </ul>
                         </div>

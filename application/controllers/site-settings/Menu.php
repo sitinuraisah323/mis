@@ -25,7 +25,6 @@ class Menu extends Authenticated
 	 */
 	public function index()
 	{
-		$this->menus->buildHirarki();
 		$this->load->view('site-settings/menu/index',array(
 			'menus'	=> $this->menus->findWhere(array(
 				'id_parent'	=> 0
