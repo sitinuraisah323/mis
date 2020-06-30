@@ -54,6 +54,9 @@
                             <a  href="<?php echo base_url('datamaster/units'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Unit</span></a>
                             </li>
                             <li class="kt-menu__item "  aria-haspopup="true">
+                            <a  href="<?php echo base_url('datamaster/mapingcategory'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Kategori Transaksi</span></a>
+                            </li>
+                            <li class="kt-menu__item "  aria-haspopup="true">
                             <a  href="<?php echo base_url('datamaster/unitstarget'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Target Unit</span></a>
                             </li>
                             <li class="kt-menu__item "  aria-haspopup="true">
@@ -73,9 +76,6 @@
 							<li class="kt-menu__item "  aria-haspopup="true">
 								<a  href="<?php echo base_url('transactions/regularpawns'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Gadai Reguler</span></a>
 							</li>
-                            <li class="kt-menu__item "  aria-haspopup="true">
-                                <a  href="<?php echo base_url('transactions/regularpawns') ;?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Unit Regular Pawn</span></a>
-                            </li>
                             <li class="kt-menu__item "  aria-haspopup="true">
                             <a  href="<?php echo base_url('transactions/mortages');?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Gadai Cicilan</span></a>
                             </li>

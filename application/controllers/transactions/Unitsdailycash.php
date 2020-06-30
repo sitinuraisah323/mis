@@ -1,4 +1,5 @@
 <?php
+//error_reporting(0);
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once APPPATH.'controllers/Middleware/Authenticated.php';
 class Unitsdailycash extends Authenticated
@@ -18,6 +19,7 @@ class Unitsdailycash extends Authenticated
 		parent::__construct();
 		$this->load->model('UnitsdailycashModel', 'unitsdailycash');
 		$this->load->model('UnitsModel', 'units');
+		$this->load->model('MapingcategoryModel', 'm_category');
 	}
 
 	/**
@@ -54,7 +56,7 @@ class Unitsdailycash extends Authenticated
 		{
             $unit       = $this->input->post('unit');
             $date       = date('Y-m-d',strtotime($this->input->post('datetrans')));
-            $cashcode   = $this->input->post('kodetrans');
+            $cashcode   = 'KT';//$this->input->post('kodetrans');
 
 			$data = $this->upload->data();
 			$path = $config['upload_path'].$data['file_name'];
@@ -68,35 +70,57 @@ class Unitsdailycash extends Authenticated
 			if($unitsdailycash){
 				foreach ($unitsdailycash as $key => $udc){
 					if($key > 1){
-						$datetrans 	= date('Y-m-d', strtotime($udc['E']));
-						$kdkas		= $udc['F'];
-						if($datetrans>=$date && $datetrans<=$date){
+						$datetrans 		= date('Y-m-d', strtotime($udc['E']));
+						$kdkas			= $udc['F'];
+						$amount			= 0;
+						$description	= strtolower($udc['C']);
+						$part			= explode(' ',$description);
+						$numeric		= $part[count($part)-1];
+						if(is_numeric($numeric)){
+							unset($part[count($part)-1]);
+							$char = implode(' ', $part);
+						}else{
+							$char = implode(' ', $part);
+						}
+						if($udc['B']<0){ $amount=abs($udc['B']);}else{$amount=$udc['B'];}	
+							//if($datetrans>=$date && $datetrans<=$date){
 							if($kdkas==$cashcode){
 								$data = array(
 									'id_unit'		=> $unit,
 									'cash_code'		=> $udc['F'],
 									'date'			=> $datetrans,
-									'amount'		=> $udc['B'],
-									'description'	=> $udc['C'],
+									'amount'		=> $amount,
+									'description'	=> $description,									
+									'numeric_desc'	=> $numeric,
+									'char_desc'		=> $char,
+									'status'		=> "DRAFT",
 									'type'			=> null,
-									'status'		=> "DRAFT"
 								);
 								//echo "<pre/>";
 								//print_r($data);
-								if($findudc = $this->unitsdailycash->find(array(
-									'id_unit'		=> $unit,
-									'cash_code'		=> $kdkas,
-									'date'			=> $datetrans,
-									'description' 	=> $udc['C']
-								))){
-									if($this->unitsdailycash->update($data, array(
-										'id'	=>  $findudc->id
-									)));
+
+								$categories = array('category'=> $char);
+								//insert category
+								if($findcategory = $this->m_category->find(array('category' => $char))){
+									if($this->m_category->update($categories, array('id'=>  $findcategory->id)));
 								}else{
-									$this->unitsdailycash->insert($data);
+									$this->m_category->insert($categories);
 								}
+
+								// if($findudc = $this->unitsdailycash->find(array(
+								// 	'id_unit'		=> $unit,
+								// 	'cash_code'		=> $kdkas,
+								// 	'date'			=> $datetrans,
+								// 	'description' 	=> $udc['C']
+								// ))){
+								// 	if($this->unitsdailycash->update($data, array(
+								// 		'id'	=>  $findudc->id
+								// 	)));
+								// }else{
+								// 	$this->unitsdailycash->insert($data);
+								// }
 							}
-						}
+						//}
 
 					}
 				}
@@ -110,7 +134,7 @@ class Unitsdailycash extends Authenticated
 				unlink($path);
 			}
 		}
-		redirect('transactions/unitsdailycash');
+		//redirect('transactions/unitsdailycash');
 	}
 
 }
