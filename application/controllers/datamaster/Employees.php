@@ -1,0 +1,35 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+require_once APPPATH.'controllers/Middleware/Authenticated.php';
+class Employees extends Authenticated
+{
+	/**
+	 * @var string
+	 */
+
+	public $menu = 'employees';
+
+	/**
+	 * Welcome constructor.
+	 */
+
+	public function __construct()
+	{
+		parent::__construct();
+		$this->load->model('EmployeesModel', 'employees');
+		$this->load->model('UnitsModel', 'units');
+		$this->load->model('LevelsModel', 'levels');
+	}
+
+	/**
+	 * Welcome Index()
+	 */
+	public function index()
+	{
+		$this->load->view('datamaster/employees/index', array(
+			'units'	=> $this->units->all(),
+			'levels'	=> $this->levels->all(),
+		));
+	}
+
+}

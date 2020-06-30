@@ -71,6 +71,11 @@ class Master extends CI_Model
 		return $this->db->update($this->table, $data);
 	}
 
+	public function last()
+	{
+		return $this->db->order_by($this->primary_key,'DESC')->get($this->table)->row();
+	}
+
 	public function find($condition = array())
 	{
 		if(is_array($condition)){
