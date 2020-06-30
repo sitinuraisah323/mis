@@ -53,26 +53,6 @@
                     <a  href="javascript:;" class="kt-menu__link kt-menu__toggle"><span class="kt-menu__link-text">Data Master</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
                         <div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--left">
                             <ul class="kt-menu__subnav">
-<<<<<<< HEAD
-                            <li class="kt-menu__item "  aria-haspopup="true">
-                                <a href="demo2/index.html" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Pegawai</span></a>
-                            </li>
-                            <li class="kt-menu__item "  aria-haspopup="true">
-                            <a  href="<?php echo base_url('datamaster/customers');?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Nasabah</span></a>
-                            </li>
-                            <li class="kt-menu__item "  aria-haspopup="true">
-                                <a  href="<?php echo base_url('datamaster/areas'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Area</span></a>
-                            </li>
-                            <li class="kt-menu__item "  aria-haspopup="true">
-                            <a  href="<?php echo base_url('datamaster/units'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Unit</span></a>
-                            </li>
-                            <li class="kt-menu__item "  aria-haspopup="true">
-                            <a  href="<?php echo base_url('datamaster/mapingcategory'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Kategori Transaksi</span></a>
-                            </li>
-                            <li class="kt-menu__item "  aria-haspopup="true">
-                            <a  href="<?php echo base_url('datamaster/unitstarget'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Target Unit</span></a>
-                            </li>
-=======
 							<?php if(read_access('employees')):?>
 								<li class="kt-menu__item "  aria-haspopup="true">
 									<a href="<?php echo base_url('datamaster/employees')?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Pegawai</span></a>
@@ -93,12 +73,16 @@
 									<a  href="<?php echo base_url('datamaster/units'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Unit</span></a>
 								</li>
 							<?php endif;?>
+							<?php if(read_access('mapingcategory')):?>
+								<li class="kt-menu__item "  aria-haspopup="true">
+									<a  href="<?php echo base_url('datamaster/mapingcategory'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Kategory Transaksi</span></a>
+								</li>
+							<?php endif;?>
 							<?php if(read_access('unitstarget')):?>
 								<li class="kt-menu__item "  aria-haspopup="true">
 									<a  href="<?php echo base_url('datamaster/unitstarget'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Target Unit</span></a>
 								</li>
 							<?php endif;?>
->>>>>>> 271f8e9af9f6a82d864169b13d0a7cc5df1fcf01
                             <li class="kt-menu__item "  aria-haspopup="true">
                             <a  href="demo2/dashboards/aside.html" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">STLE</span></a>
                             </li>
@@ -110,26 +94,6 @@
                     <a  href="javascript:;" class="kt-menu__link kt-menu__toggle"><span class="kt-menu__link-text">Transaksi</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
                         <div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--left">
                             <ul class="kt-menu__subnav">
-<<<<<<< HEAD
-                            <li class="kt-menu__item "  aria-haspopup="true">
-                                <a href="<?php echo base_url('transactions/unitsdailycash'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Harian Unit</span></a>
-                            </li>
-							<li class="kt-menu__item "  aria-haspopup="true">
-								<a  href="<?php echo base_url('transactions/regularpawns'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Gadai Reguler</span></a>
-							</li>
-                            <li class="kt-menu__item "  aria-haspopup="true">
-                            <a  href="<?php echo base_url('transactions/mortages');?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Gadai Cicilan</span></a>
-                            </li>
-                            <li class="kt-menu__item "  aria-haspopup="true">
-                            <a  href="<?php echo base_url('transactions/repayment'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Pelunasan</span></a>
-                            </li>
-                            <li class="kt-menu__item "  aria-haspopup="true">
-                            <a  href="<?php echo base_url('transactions/loaninstallments'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Angsuran Pinjaman Cicilan</span></a>
-                            </li>
-							<li class="kt-menu__item "  aria-haspopup="true">
-								<a  href="<?php echo base_url('transactions/extractall'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Upload Semua</span></a>
-							</li>
-=======
 							<?php if(read_access('unitsdailycash')):?>
 								<li class="kt-menu__item "  aria-haspopup="true">
 									<a href="<?php echo base_url('transactions/unitsdailycash'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Harian Unit</span></a>
@@ -160,7 +124,6 @@
 									<a  href="<?php echo base_url('transactions/extractall'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Upload Semua</span></a>
 								</li>
 							<?php endif;?>
->>>>>>> 271f8e9af9f6a82d864169b13d0a7cc5df1fcf01
                             </ul>
                         </div>
                     </li>
