@@ -248,13 +248,7 @@ function initUploadForm(){
         rules: {
             unit: {
                 required: true,
-            },
-            datetrans: {
-                required: true,
-            },
-            kodetrans: {
-                required: true,
-            },
+            },           
             file: {
                 required: true,
             }
@@ -266,10 +260,6 @@ function initUploadForm(){
     
     $('#unit').select2({
         placeholder: "Please select a Unit",
-        width: '100%'
-    });
-    $('#kodetrans').select2({
-        placeholder: "Please select a Transaction Code",
         width: '100%'
     });
     //events

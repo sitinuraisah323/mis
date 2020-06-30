@@ -26,7 +26,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <!-- <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Tanggal Transaksi</label>
                                     <input type="date" class="form-control" name="datetrans" id="datetrans">	                            		
@@ -41,7 +41,7 @@
                                        <option value="SK">SK</option>
                                     </select>	                            		
                                 </div>
-                            </div>     
+                            </div>      -->
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Upload </label>

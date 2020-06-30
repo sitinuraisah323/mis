@@ -66,6 +66,10 @@ ALTER TABLE public.categories ALTER COLUMN date_create DROP NOT NULL;
 ALTER TABLE public.units_dailycashs ADD id_category int NULL;
 ALTER TABLE public.units_dailycashs DROP COLUMN "type";
 
+ALTER TABLE public.categories ADD "source" int NULL;
+ALTER TABLE public.categories ALTER COLUMN "type" DROP DEFAULT;
+
+
 
 
 

@@ -129,6 +129,12 @@ function initDataTable(){
                 }
             }, 
             {
+                field: 'name',
+                title: 'Source',
+                sortable: 'asc',
+                textAlign: 'left',
+            }, 
+            {
                 field: 'status',
                 title: 'Status',
                 sortable: 'asc',

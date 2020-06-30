@@ -12,18 +12,15 @@ class Mapingcategory extends ApiController
 
 	public function index()
 	{
-        $data = $this->m_category->all();
+        $data = $this->m_category->get_category();
 		if($post = $this->input->post()){
 			if(is_array($post['query'])){
 				$value = $post['query']['generalSearch'];
-                $this->units->db
+                $this->m_category->db
                 ->or_like('category', $value)
-                ->or_like('category',strtoupper($value))
                 ->or_like('status', $value)
-                ->or_like('status',strtoupper($value))
-                ->or_like('type', $value)
-                ->or_like('type',strtoupper($value));					
-				$data = $this->m_category->all();
+                ->or_like('status',strtoupper($value));               					
+				$data = $this->m_category->get_category();
 			}
 		}        
 		echo json_encode(array(
