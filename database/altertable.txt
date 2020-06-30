@@ -57,6 +57,21 @@ ALTER TABLE public.units_loaninstallments ALTER COLUMN periode DROP NOT NULL;
 
 ALTER TABLE public.units_loaninstallments ADD detail text NULL;
 
+ALTER TABLE public.categories ALTER COLUMN "type" DROP NOT NULL;
+ALTER TABLE public.categories ALTER COLUMN user_create DROP NOT NULL;
+ALTER TABLE public.categories ALTER COLUMN user_update DROP NOT NULL;
+ALTER TABLE public.categories ALTER COLUMN date_update DROP NOT NULL;
+ALTER TABLE public.categories ALTER COLUMN date_create DROP NOT NULL;
+
+ALTER TABLE public.units_dailycashs ADD id_category int NULL;
+ALTER TABLE public.units_dailycashs DROP COLUMN "type";
+
+ALTER TABLE public.categories ADD "source" int NULL;
+ALTER TABLE public.categories ALTER COLUMN "type" DROP DEFAULT;
+
+
+
+
 
 
 

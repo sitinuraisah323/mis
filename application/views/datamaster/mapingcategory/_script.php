@@ -3,7 +3,6 @@
 var datatable;
 var AlertUtil;
 var createForm;
-var uploadForm;
 var editForm;
 
 function initDTEvents(){
@@ -21,7 +20,7 @@ function initDTEvents(){
                 KTApp.blockPage();
                 $.ajax({
                     type : 'GET',
-                    url : "<?php echo base_url("api/transactions/unitsdailycash/delete"); ?>",
+                    url : "<?php echo base_url("api/datamaster/mapingcategory/delete"); ?>",
                     data : {id:targetId},
                     dataType : "json",
                     success : function(data,status){
@@ -47,7 +46,7 @@ function initDTEvents(){
         KTApp.blockPage();
         $.ajax({
             type : 'GET',
-            url : "<?php echo base_url("api/datamaster/areas/get_byid"); ?>",
+            url : "<?php echo base_url("api/datamaster/mapingcategory/get_byid"); ?>",
             data : {id:targetId},
             dataType : "json",
             success : function(response,status){
@@ -70,13 +69,14 @@ function initDTEvents(){
     });
 }
 
+
 function initDataTable(){
     var option = {
         data: {
             type: 'remote',
             source: {
               read: {
-                url: '<?php echo base_url("api/transactions/unitsdailycash/get_unitsdailycash"); ?>',
+                url: '<?php echo base_url("api/datamaster/mapingcategory"); ?>',
                 map: function(raw) {
                   // sample data mapping
                   var dataSet = raw;
@@ -106,39 +106,31 @@ function initDataTable(){
                 textAlign: 'center',
             }, 
             {
-                field: 'name',
-                title: 'Unit',
+                field: 'category',
+                title: 'Category',
                 sortable: 'asc',
                 textAlign: 'left',
             }, 
             {
-                field: 'cash_code',
-                title: 'Kode Kas',
+                field: 'type',
+                title: 'Type',
                 sortable: 'asc',
-                textAlign: 'center',
-            }, 
-            {
-                field: 'date',
-                title: 'Transaksi',
-                sortable: 'asc',
-                textAlign: 'center',
+                textAlign: 'left',
                 template: function (row) {
-                            var result = "<div class='date-td'>";
-                            var new_date = moment(row.date).format('MMM DD, YYYY');
-                            result = result + '<div>' + new_date + '</div> ';
-                            result = result + "</div>";
-                            return result;
-                        }
+                    var type ="";
+                    if(row.type=="CASH_IN"){
+                        type = '<span class="kt-badge kt-badge--inline kt-badge--success">Penerimaan</span>';
+                    }else if(row.type=="CASH_OUT"){
+                        type = '<span class="kt-badge kt-badge--inline kt-badge--warning">Pengeluaran</span>';
+                    }else{
+                        type = '<span class="kt-badge kt-badge--inline kt-badge--danger">Uncategory</span>';
+                    }                    
+                    return type;
+                }
             }, 
             {
-                field: 'amount',
-                title: 'Jumlah',
-                sortable: 'asc',
-                textAlign: 'left',
-            },
-            {
-                field: 'description',
-                title: 'Deskripsi',
+                field: 'name',
+                title: 'Source',
                 sortable: 'asc',
                 textAlign: 'left',
             }, 
@@ -241,68 +233,6 @@ function initAlert(){
     })
 }
 
-function initUploadForm(){
-    //validator
-    var validator = $( "#form_upload" ).validate({
-        ignore:[],
-        rules: {
-            unit: {
-                required: true,
-            },           
-            file: {
-                required: true,
-            }
-        },
-        invalidHandler: function(event, validator) {   
-            KTUtil.scrollTop();
-        }
-    });   
-    
-    $('#unit').select2({
-        placeholder: "Please select a Unit",
-        width: '100%'
-    });
-    //events
-    $("#btn_add_submit").on("click",function(){
-      var isValid = $( "#form_upload" ).valid();
-      if(isValid){
-        KTApp.block('#modal_upload .modal-content', {});
-        // $.ajax({
-        //     type : 'POST',
-        //     url : "<?php echo base_url("api/transaction/unitsdailycash/upload"); ?>",
-        //     data : $('#form_upload').serialize(),
-        //     async: true,
-		// 	cache: false,
-		// 	contentType: false,
-		// 	processData: false,
-        //     dataType : "json",
-        //     success : function(data,status){
-        //         KTApp.unblock('#modal_upload .modal-content');
-        //         if(data.status == true){
-        //             datatable.reload();
-        //             $('#modal_upload').modal('hide');
-        //             AlertUtil.showSuccess(data.message,5000);
-        //         }else{
-        //             AlertUtil.showFailedDialogAdd(data.message);
-        //         }                
-        //     },
-        //     error: function (jqXHR, textStatus, errorThrown){
-        //         KTApp.unblock('#modal_upload .modal-content');
-        //         AlertUtil.showFailedDialogAdd("Cannot communicate with server please check your internet connection");
-        //     }
-        // });  
-      }
-    })
-
-    $('#modal_upload').on('hidden.bs.modal', function () {
-       validator.resetForm();
-    })
-
-    return {
-        validator:validator
-    }
-}
-
 function initCreateForm(){
     //validator
     var validator = $( "#form_add" ).validate({
@@ -310,12 +240,20 @@ function initCreateForm(){
         rules: {
             area: {
                 required: true,
+            },
+            unit: {
+                required: true,
             }
         },
         invalidHandler: function(event, validator) {   
             KTUtil.scrollTop();
         }
     });   
+
+    $('#add_area').select2({
+        placeholder: "Please select a Area",
+        width: '100%'
+    });
     
     //events
     $("#btn_add_submit").on("click",function(){
@@ -324,7 +262,7 @@ function initCreateForm(){
         KTApp.block('#modal_add .modal-content', {});
         $.ajax({
             type : 'POST',
-            url : "<?php echo base_url("api/datamaster/areas/insert"); ?>",
+            url : "<?php echo base_url("api/datamaster/mapingcategory/insert"); ?>",
             data : $('#form_add').serialize(),
             dataType : "json",
             success : function(data,status){
@@ -359,15 +297,22 @@ function initEditForm(){
     var validator = $( "#form_edit" ).validate({
         ignore:[],
         rules: {
-            area_name: {
+            type: {
+                required: true,
+            },
+            category: {
                 required: true,
             }
         },
         invalidHandler: function(event, validator) {   
             KTUtil.scrollTop();
         }
-    });   
+    });  
 
+    $('#type').select2({
+        placeholder: "Please select a Type",
+        width: '100%'
+    }); 
     //events
     $("#btn_edit_submit").on("click",function(){
       var isValid = $( "#form_edit" ).valid();
@@ -375,7 +320,7 @@ function initEditForm(){
         KTApp.block('#modal_edit .modal-content', {});
         $.ajax({
             type : 'POST',
-            url : "<?php echo base_url("api/datamaster/areas/update"); ?>",
+            url : "<?php echo base_url("api/datamaster/mapingcategory/update"); ?>",
             data : $('#form_edit').serialize(),
             dataType : "json",
             success : function(data,status){
@@ -402,10 +347,10 @@ function initEditForm(){
     })
 
     var populateForm = function(groupObject){
-        $("#edit_area_id").val(groupObject.id);
-        $("#edit_area_name").val(groupObject.area);
-        //$("#edit_group_level").val(groupObject.group_level);
-        //$("#edit_group_level").trigger('change');
+        $("#id").val(groupObject.id);
+        $("#category").val(groupObject.category);
+        $("#type").val(groupObject.type);
+        $("#type").trigger('change');
     }
     
     return {
@@ -416,9 +361,8 @@ function initEditForm(){
 
 jQuery(document).ready(function() { 
     initDataTable();
-    UploadForm = initUploadForm();
-    //createForm = initCreateForm();    
-    //editForm = initEditForm();
+    createForm = initCreateForm();
+    editForm = initEditForm();
     initAlert();
 });
 
