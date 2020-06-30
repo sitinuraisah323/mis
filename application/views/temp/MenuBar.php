@@ -78,6 +78,11 @@
 									<a  href="<?php echo base_url('datamaster/unitstarget'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Target Unit</span></a>
 								</li>
 							<?php endif;?>
+							<?php if(read_access('bookcash')):?>
+								<li class="kt-menu__item "  aria-haspopup="true">
+									<a  href="<?php echo base_url('datamaster/bookcash'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Saldo Unit</span></a>
+								</li>
+							<?php endif;?>
                             <li class="kt-menu__item "  aria-haspopup="true">
                             <a  href="demo2/dashboards/aside.html" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">STLE</span></a>
                             </li>
