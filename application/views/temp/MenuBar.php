@@ -127,8 +127,40 @@
                             </ul>
                         </div>
                     </li>
+					<li class="kt-menu__item  kt-menu__item--submenu kt-menu__item--rel"  data-ktmenu-submenu-toggle="click" aria-haspopup="true">
+                    <a  href="javascript:;" class="kt-menu__link kt-menu__toggle"><span class="kt-menu__link-text">Report</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
+                        <div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--left">
+                            <ul class="kt-menu__subnav">
+							<?php if(read_access('bukukas')):?>
+								<li class="kt-menu__item "  aria-haspopup="true">
+									<a href="<?php echo base_url('report/bukukas'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Buku Kas</span></a>
+								</li>
+							<?php endif;?>						
+                            </ul>
+                        </div>
+                    </li>
                 </ul>
             </div>
+			
+			<div class="kt-header-toolbar">
+       		<!-- <div class="kt-quick-search kt-quick-search--inline kt-quick-search--result-compact" id="kt_quick_search_inline"> -->
+			   <!-- <div class="kt-section__content kt-section__content--solid"> -->
+						<!-- <a href="<? //echo base_url('dailyreport/unitsreport');?>" class="btn btn-brand"><i class="fa fa-envelope"></i> Send</a>&nbsp;
+						<a href="" class="btn btn-success"><i class="fa fa-exclamation-circle"></i> Help</a> -->
+					<!-- </div> -->
+			<!-- </div> -->
+				<div class="kt-header-menu-wrapper" id="kt_header_menu_wrapper">
+            	<div id="kt_header_menu" class="kt-header-menu kt-header-menu-mobile "  >
+                	<ul class="kt-menu__nav ">
+                    	<li class="kt-menu__item  kt-menu__item--submenu kt-menu__item--rel"  data-ktmenu-submenu-toggle="click" aria-haspopup="true">
+                    	<a  href="<?php echo base_url('dailyreport/unitsreport'); ?>" class="btn btn-primary"><i class="fa fa-envelope"></i> Send</a>&nbsp
+                    	<a  href="#"  data-toggle="modal" data-target="#help" class="btn btn-success"><i class="fa fa-exclamation-circle"></i> Help</a>
+                    	</li>
+					</ul>
+				</div>
+				</div>
+			</div>
+
         </div>
         <!-- end: Header Menu -->
 		</div>
