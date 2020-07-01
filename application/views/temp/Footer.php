@@ -1,32 +1,32 @@
 <!-- begin:: Footer -->
 <div class="kt-footer  kt-footer--extended  kt-grid__item" id="kt_footer">
-			 	 
+
 		<div class="kt-footer__bottom">
 		<div class="kt-container ">
 			<div class="kt-footer__wrapper">
 				<div class="kt-footer__logo">
 					<a href="demo2/index.html">
 						<img alt="Logo" src="<?php echo base_url(); ?>assets/media/logos/gha-sm.png">
-					</a>		 			 
+					</a>
 					<div class="kt-footer__copyright">
-						2020&nbsp;&copy;&nbsp;  
+						2020&nbsp;&copy;&nbsp;
 						<a href="http://keenthemes.com/metronic" target="_blank">Gadai Hartadinata Abadi</a>
 					</div>
-				</div>				 
-				<div class="kt-footer__menu">					
+				</div>
+				<div class="kt-footer__menu">
 					<a href="http://keenthemes.com/metronic" target="_blank">Team IT Dev</a>
-				</div>	
+				</div>
 			</div>
-		</div>	
-	</div> 
+		</div>
+	</div>
 </div>
 <!-- end:: Footer -->			</div>
 		</div>
 	</div>
-	
+
 <!-- end:: Page -->
 
-    
+
     <!-- begin::Scrolltop -->
 <div id="kt_scrolltop" class="kt-scrolltop">
 		<i class="fa fa-arrow-up"></i>
@@ -36,6 +36,7 @@
 
         <!-- begin::Global Config(global config for global JS sciprts) -->
         <script>
+			var url = "<?php echo base_url();?>";
             var KTAppOptions = {"colors":{"state":{"brand":"#374afb","light":"#ffffff","dark":"#282a3c","primary":"#5867dd","success":"#34bfa3","info":"#36a3f7","warning":"#ffb822","danger":"#fd3995"},"base":{"label":["#c5cbe3","#a1a8c3","#3d4465","#3e4466"],"shape":["#f0f3ff","#d9dffa","#afb4d4","#646c9a"]}}};
         </script>
         <!-- end::Global Config -->
@@ -110,7 +111,7 @@
 <script src="<?php echo base_url(); ?>assets/vendors/general/dompurify/dist/purify.js" type="text/javascript"></script>
 <!--end:: Global Optional Vendors -->
 
-	<!--begin::Global Theme Bundle(used by all pages) -->    	    	   
+	<!--begin::Global Theme Bundle(used by all pages) -->
 	   <script src="<?php echo base_url(); ?>assets/js/demo2/scripts.bundle.js" type="text/javascript"></script>
 	<!--end::Global Theme Bundle -->
 	<!--begin::Page Vendors(used by this page) -->
@@ -123,7 +124,7 @@
 	 <!--begin::Page Scripts(used by this page) -->
 	 <script src="<?php echo base_url(); ?>assets/js/demo2/pages/custom/inbox/inbox.js" type="text/javascript"></script>
                         <!--end::Page Scripts -->
-    
+
 	<?php if(isset($js)):?>
 		<?php $this->load->view($js);?>
 	<?php endif;?>
@@ -131,62 +132,4 @@
 </html>
 
 <!--begin::Modal-->
-<div class="modal fade" id="help" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Help</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                </button>
-            </div>
-            <div class="modal-body">
-			<div class="kt-portlet__body">
-				<!--begin::Accordion-->
-				<div class="accordion  accordion-toggle-arrow" id="accordionExample4">
-					<div class="card">
-						<div class="card-header" id="headingOne4">
-							<div class="card-title" data-toggle="collapse" data-target="#collapseOne4" aria-expanded="true" aria-controls="collapseOne4">
-								<i class="flaticon2-layers-1"></i> Konversi File
-							</div>
-						</div>
-						<div id="collapseOne4" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample4">
-							<div class="card-body">
-								Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-							</div>
-						</div>
-					</div>
-					<div class="card">
-						<div class="card-header" id="headingTwo4">
-							<div class="card-title collapsed" data-toggle="collapse" data-target="#collapseTwo4" aria-expanded="false" aria-controls="collapseTwo4">
-								<i class="flaticon2-copy"></i> Kompresi File
-							</div>
-						</div>
-						<div id="collapseTwo4" class="collapse" aria-labelledby="headingTwo1" data-parent="#accordionExample4">
-							<div class="card-body">
-								Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-							</div>
-						</div>
-					</div>
-					<div class="card">
-						<div class="card-header" id="headingThree4">
-							<div class="card-title collapsed" data-toggle="collapse" data-target="#collapseThree4" aria-expanded="false" aria-controls="collapseThree4">
-								<i class="flaticon2-bell-alarm-symbol"></i> Kirim Laporan
-							</div>
-						</div>
-						<div id="collapseThree4" class="collapse" aria-labelledby="headingThree1" data-parent="#accordionExample4">
-							<div class="card-body">
-								Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-							</div>
-						</div>
-					</div>
-				</div>
-				<!--end::Accordion-->  
-			</div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
 <!--end::Modal-->

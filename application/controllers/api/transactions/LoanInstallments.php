@@ -122,7 +122,6 @@ class LoanInstallments extends ApiController
 
 	public function data_transaction($id_unit, $path)
 	{
-
 		$excelreader = new PHPExcel_Reader_Excel2007();
 		$loadexcel = $excelreader->load($path); // Load file yang telah diupload ke folder excel
 		$transactions = $loadexcel->getActiveSheet()->toArray(null, true, true ,true);
@@ -296,14 +295,19 @@ class LoanInstallments extends ApiController
 			if ($zip->open($path) === TRUE) {
 				$zip->extractTo($pathExtract);
 				$zip->close();
-				$files = $files = scandir($pathExtract);
+				$files = scandir($pathExtract);
+				if($this->input->post('id_unit')){
+					$idUnit = $this->input->post('id_unit');
+				}else{
+					$idUnit = $this->session->userdata('user')->id;
+				}
 
-				$this->process_transaction($this->input->post('id_unit'),$pathExtract, $files[9]);
+				$this->process_transaction($idUnit,$pathExtract, $files[9]);
 				unset($files[9]);
 
 				foreach ($files as $index => $file){
 					if($index > 1){
-						$this->process_transaction($this->input->post('id_unit'),$pathExtract, $file);
+						$this->process_transaction($idUnit,$pathExtract, $file);
 					}
 				}
 
@@ -335,21 +339,20 @@ class LoanInstallments extends ApiController
 			case 'KS':
 				$this->data_transaction_cash($id_unit, $path.$name);
 			break;
-			case 'MS':
-				$this->data_customer($id_unit, $path.$name);
-			break;
+//			case 'MS':
+//				$this->data_customer($id_unit,$path.$name);
+//			break;
 			case 'LN':
 				$this->data_transaction_repayment($id_unit, $path.$name);
 			break;
 		}
 	}
 
-	public function data_customer($id_unit, $path)
+	public function data_customer($id_path, $path)
 	{
 		$excelreader = new PHPExcel_Reader_Excel2007();
 		$loadexcel = $excelreader->load($path); // Load file yang telah diupload ke folder excel
 		$customers = $loadexcel->getActiveSheet()->toArray(null, true, true ,true);
-
 		if($customers){
 			foreach ($customers as $key => $customer){
 				if($key > 1){
