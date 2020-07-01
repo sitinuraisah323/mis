@@ -7,7 +7,7 @@ class Mapingcategory extends Authenticated
 	 * @var string
 	 */
 
-	public $menu = 'Units';
+	public $menu = 'Mapingcategory';
 
 	/**
 	 * Welcome constructor.
