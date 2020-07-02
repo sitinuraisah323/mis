@@ -34,9 +34,18 @@ class Units extends ApiController
     public function get_byid()
 	{
 		echo json_encode(array(
-			'data'	=> 	$this->units->find($this->input->get("id")),
+			'data'  	=> 	$this->units->find($this->input->get("id")),
 			'status'	=> true,
-			'message'	=> 'Successfully Get Data Users'
+			'message'	=> 'Successfully Get Data Units'
+		));
+    }
+
+    public function get_units_byarea($area)
+	{
+		echo json_encode(array(
+			'data'	    => 	$this->units->get_units_byarea($area),
+			'status'	=> true,
+			'message'	=> 'Successfully Get Data Units'
 		));
     }
 

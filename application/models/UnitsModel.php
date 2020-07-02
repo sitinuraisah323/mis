@@ -14,4 +14,13 @@ class UnitsModel extends Master
 		return $this->db->get('units as a')->result();
 	}
 
+	public function get_units_byarea($area)
+	{
+		$this->db->select('a.id,b.area,a.name');		
+		$this->db->join('areas as b','b.id=a.id_area');		
+		$this->db->where('a.id_area',$area);		
+		$this->db->order_by('a.id','desc');		
+		return $this->db->get('units as a')->result();
+	}
+
 }

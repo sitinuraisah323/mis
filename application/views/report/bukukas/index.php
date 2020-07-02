@@ -100,11 +100,11 @@ $this->load->view('temp/MenuBar.php');
                     <select class="form-control select2" name="unit" id="unit">
                             <option></option>
                             <?php 
-                                if (!empty($units)){
-                                    foreach($units as $row){
-                                       echo "<option value=".$row->id.">".$row->name."</option>";
-                                    }
-                                }
+                                // if (!empty($units)){
+                                //     foreach($units as $row){
+                                //        echo "<option value=".$row->id.">".$row->name."</option>";
+                                //     }
+                                // }
                             ?>
                             </select>
                     </div>
@@ -120,14 +120,14 @@ $this->load->view('temp/MenuBar.php');
 						<table class="table">
 						  	<thead class="thead-light">
 						    	<tr>
-						      		<th>No</th>
+						      		<th class="text-center">No</th>
 						      		<th>Tanggal</th>
-						      		<th>Bulan</th>
-						      		<th>Tahun</th>
+						      		<th class="text-center">Bulan</th>
+						      		<th class="text-center">Tahun</th>
 						      		<th>Uraian</th>
-						      		<th>Penerimaan Kas</th>
-						      		<th>Pengeluaran Kas</th>
-						      		<th>Saldo</th>
+						      		<th class="text-right">Penerimaan Kas</th>
+						      		<th class="text-right">Pengeluaran Kas</th>
+						      		<th class="text-right">Saldo</th>
 						    	</tr>
 						  	</thead>
 						  	<tbody>						    					    	
@@ -144,102 +144,11 @@ $this->load->view('temp/MenuBar.php');
     </div>
     <!-- end:: Content -->
 	<input type="hidden" name="url_get" id="url_get" value="<?php echo base_url('api/report/bukukas/get_transaksi_unit') ?>"/>
+	<input type="hidden" name="url_get_unit" id="url_get_unit" value="<?php echo base_url('api/datamaster/units/get_units_byarea') ?>"/>
 </div>
 </div>
 
 <?php 
 $this->load->view('temp/Footer.php');
-//$this->load->view('transactions/unitsdailycash/_upload.php');
-// $this->load->view('datamaster/areas/_edit.php');
 $this->load->view('report/bukukas/_script.php');
 ?>
-<script>
-function initCariForm(){
-
-    var validator = $("#form_bukukas" ).validate({
-        ignore:[],
-        rules: {
-            area: {
-                required: true,
-            },
-            unit: {
-                required: true,
-            }
-        },
-        invalidHandler: function(event, validator) {   
-            KTUtil.scrollTop();
-        }
-    }); 
-
-    $('#btncari').on('click',function(){ 
-        $('.rowappend').remove();
-        var area = $('#area').val();
-        var unit = $('#unit').val();
-        //alert(area); 
-        //alert(unit); 
-        var url_data = $('#url_get').val() + '/' + area +'/'+ unit;
-        $.get(url_data, function (data, status) {
-        var response = JSON.parse(data);
-        if (status = true) {
-            //console.log(response);
-            var currentSaldo = 0;
-            var TotSaldoIn = 0;
-            var TotSaldoOut = 0;
-            for (var i = 0; i < response.data.length; i++) {
-                var date = moment(response.data[i].date).format('DD-MM-YYYY');
-                var month = moment(response.data[i].date).format('MMMM');
-                var year = moment(response.data[i].date).format('YYYY');
-                var cashin=0;
-                var cashout=0;
-                if(response.data[i].type=='CASH_IN'){cashin= response.data[i].amount; currentSaldo +=  parseInt(response.data[i].amount); TotSaldoIn +=  parseInt(response.data[i].amount);}
-                if(response.data[i].type=='CASH_OUT'){cashout= response.data[i].amount; currentSaldo -=  parseInt(response.data[i].amount); TotSaldoOut +=  parseInt(response.data[i].amount);}
-                var newData = '<tr class="rowappend">';
-                newData +='<td></td>';
-                newData +='<td>'+date+'</td>';
-                newData +='<td>'+month+'</td>';
-                newData +='<td>'+year+'</td>';
-                newData +='<td>'+response.data[i].description+'</td>';
-                newData +='<td>'+cashin+'</td>';
-                newData +='<td>'+cashout+'</td>';
-                newData +='<td>'+currentSaldo+'</td>';
-                newData +='</tr>';
-                $('.kt-section__content table').append(newData);
-            }
-
-            var newData = '<tr class="rowappend">';
-                newData +='<td></td>';
-                newData +='<td></td>';
-                newData +='<td></td>';
-                newData +='<td></td>';
-                newData +='<td></td>';
-                newData +='<td>'+TotSaldoIn+'</td>';
-                newData +='<td>'+TotSaldoOut+'</td>';
-                newData +='<td>'+currentSaldo+'</td>';
-                newData +='</tr>';
-                $('.kt-section__content table').append(newData);
-        }
-        });
-    });
-
-    return {
-        validator:validator
-    }
-
-}
-
-
-
-jQuery(document).ready(function() { 
-    // $('#area').select2({
-    //     placeholder: "Please select a area",
-    //     width: '100%'
-    // });
-    // $('#unit').select2({
-    //     placeholder: "Please select a Unit",
-    //     width: '100%'
-    // });
-
-    //initCariForm();
-
-});
-</script>
