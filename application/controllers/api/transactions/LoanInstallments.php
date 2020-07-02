@@ -131,64 +131,66 @@ class LoanInstallments extends ApiController
 					$customer = $this->customers->find(array(
 						'name'	=> $transaction['B']
 					));
-					$detail = array(
-						'angsuran' => array(
-							1	=> (int) $transaction['L'],
-							2	=> (int) $transaction['M'],
-							3	=> (int) $transaction['N'],
-							4	=> (int) $transaction['O'],
-							5	=> (int) $transaction['P'],
-							6	=> (int) $transaction['Q'],
-							7	=> (int) $transaction['R'],
-							8	=> (int) $transaction['S'],
-							9	=> (int) $transaction['T'],
-							10	=> (int) $transaction['U'],
-							11	=> (int) $transaction['V'],
-							12	=> (int) $transaction['W'],
-						),
-						'wallet_begin'	=>(int) $transaction['X'],
-						'wallet_end'	=>(int) $transaction['Y'],
-						'volo_begin'	=>(int) $transaction['Z'],
-						'volo_end'	=> $transaction['AA'],
-						'sm'	=> array(
-							1	=> (int) $transaction['AB'],
-							2	=> (int) $transaction['AC'],
-							3	=> (int) $transaction['AD'],
-							4	=> (int) $transaction['AE'],
-							5	=> (int) $transaction['AF'],
-							6	=> (int) $transaction['AG'],
-							7	=> (int) $transaction['AH'],
-							8	=> (int) $transaction['AI'],
-							9	=> (int) $transaction['AJ'],
-							10	=> (int) $transaction['AK'],
-							11	=> (int) $transaction['AL'],
-							12	=> (int) $transaction['AM'],
-						),
-						'sm_begin'	=> (int) $transaction['AN'],
-						'sm_end'	=> (int) $transaction['AO'],
-					);
-					$data = array(
-						'no_sbk'	=> zero_fill( $transaction['A'], 5),
-						'nic'	=> $customer->no_cif,
-						'date_sbk'	=> $transaction['C'] ? date('Y-m-d', strtotime($transaction['C'])): null,
-						'amount_loan'	=> (int) $transaction['D'],
-						'description_1'	=>  $transaction['E'],
-						'description_2'	=>  $transaction['F'],
-						'description_3'	=>  $transaction['G'],
-						'capital_lease'	=>  $transaction['H'],
-						'date_repayment'	=>  $transaction['I'],
-						'periode'	=>  $transaction['J'],
-						'id_customer'	=> $customer->id,
-						'id_unit'	=> $id_unit,
-						'user_create'	=> $this->session->userdata('user')->id,
-						'user_update'	=> $this->session->userdata('user')->id,
-						'detail'	=> json_encode($detail)
-					);
+					if($customer){
+						$detail = array(
+							'angsuran' => array(
+								1	=> (int) $transaction['L'],
+								2	=> (int) $transaction['M'],
+								3	=> (int) $transaction['N'],
+								4	=> (int) $transaction['O'],
+								5	=> (int) $transaction['P'],
+								6	=> (int) $transaction['Q'],
+								7	=> (int) $transaction['R'],
+								8	=> (int) $transaction['S'],
+								9	=> (int) $transaction['T'],
+								10	=> (int) $transaction['U'],
+								11	=> (int) $transaction['V'],
+								12	=> (int) $transaction['W'],
+							),
+							'wallet_begin'	=>(int) $transaction['X'],
+							'wallet_end'	=>(int) $transaction['Y'],
+							'volo_begin'	=>(int) $transaction['Z'],
+							'volo_end'	=> $transaction['AA'],
+							'sm'	=> array(
+								1	=> (int) $transaction['AB'],
+								2	=> (int) $transaction['AC'],
+								3	=> (int) $transaction['AD'],
+								4	=> (int) $transaction['AE'],
+								5	=> (int) $transaction['AF'],
+								6	=> (int) $transaction['AG'],
+								7	=> (int) $transaction['AH'],
+								8	=> (int) $transaction['AI'],
+								9	=> (int) $transaction['AJ'],
+								10	=> (int) $transaction['AK'],
+								11	=> (int) $transaction['AL'],
+								12	=> (int) $transaction['AM'],
+							),
+							'sm_begin'	=> (int) $transaction['AN'],
+							'sm_end'	=> (int) $transaction['AO'],
+						);
+						$data = array(
+							'no_sbk'	=> zero_fill( $transaction['A'], 5),
+							'nic'	=> $customer->no_cif,
+							'date_sbk'	=> $transaction['C'] ? date('Y-m-d', strtotime($transaction['C'])): null,
+							'amount_loan'	=> (int) $transaction['D'],
+							'description_1'	=>  $transaction['E'],
+							'description_2'	=>  $transaction['F'],
+							'description_3'	=>  $transaction['G'],
+							'capital_lease'	=>  $transaction['H'],
+							'date_repayment'	=>  $transaction['I'],
+							'periode'	=>  $transaction['J'],
+							'id_customer'	=> $customer->id,
+							'id_unit'	=> $id_unit,
+							'user_create'	=> $this->session->userdata('user')->id,
+							'user_update'	=> $this->session->userdata('user')->id,
+							'detail'	=> json_encode($detail)
+						);
+						$this->installment->insertOrUpdate($data, array(
+							'no_sbk'	=>zero_fill( $transaction['A'], 5),
+							'id_unit'	=> $id_unit,
+						));
+					}
 
-					$this->installment->insertOrUpdate($data, array(
-						'no_sbk'	=>zero_fill( $transaction['A'], 5),
-						'id_unit'	=> $id_unit,
-					));
 				}
 			}
 		}
