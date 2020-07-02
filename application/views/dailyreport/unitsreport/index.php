@@ -1,4 +1,4 @@
-<?php 
+<?php
 $this->load->view('temp/HeadTop.php');
 $this->load->view('temp/HeadBottom.php');
 $this->load->view('temp/HeadMobile.php');
@@ -7,18 +7,18 @@ $this->load->view('temp/MenuBar.php');
 ?>
 
 <div class="kt-body kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-grid--stretch" id="kt_body">
-<div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" id="kt_content">								
+<div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" id="kt_content">
 <!-- begin:: Content Head -->
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container ">
-        <div class="kt-subheader__main">    
-            <button class="kt-subheader__mobile-toggle" id="kt_subheader_mobile_toggle"><span></span></button>        
-            <h3 class="kt-subheader__title">Laporan Harian</h3>            
-            <span class="kt-subheader__separator kt-subheader__separator--v"></span>            
-            <span class="kt-subheader__desc">Inbox</span>            
+        <div class="kt-subheader__main">
+            <button class="kt-subheader__mobile-toggle" id="kt_subheader_mobile_toggle"><span></span></button>
+            <h3 class="kt-subheader__title">Laporan Harian</h3>
+            <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+            <span class="kt-subheader__desc">Inbox</span>
         </div>
         <div class="kt-subheader__toolbar">
-            <div class="kt-subheader__wrapper">                              
+            <div class="kt-subheader__wrapper">
             </div>
         </div>
     </div>
@@ -48,13 +48,13 @@ $this->load->view('temp/MenuBar.php');
                                 <path d="M6,2 L18,2 C18.5522847,2 19,2.44771525 19,3 L19,13 C19,13.5522847 18.5522847,14 18,14 L6,14 C5.44771525,14 5,13.5522847 5,13 L5,3 C5,2.44771525 5.44771525,2 6,2 Z M13.8,4 C13.1562,4 12.4033,4.72985286 12,5.2 C11.5967,4.72985286 10.8438,4 10.2,4 C9.0604,4 8.4,4.88887193 8.4,6.02016349 C8.4,7.27338783 9.6,8.6 12,10 C14.4,8.6 15.6,7.3 15.6,6.1 C15.6,4.96870845 14.9396,4 13.8,4 Z" fill="#000000" opacity="0.3"/>
                                 <path d="M3.79274528,6.57253826 L12,12.5 L20.2072547,6.57253826 C20.4311176,6.4108595 20.7436609,6.46126971 20.9053396,6.68513259 C20.9668779,6.77033951 21,6.87277228 21,6.97787787 L21,17 C21,18.1045695 20.1045695,19 19,19 L5,19 C3.8954305,19 3,18.1045695 3,17 L3,6.97787787 C3,6.70173549 3.22385763,6.47787787 3.5,6.47787787 C3.60510559,6.47787787 3.70753836,6.51099993 3.79274528,6.57253826 Z" fill="#000000"/>
                             </g>
-                        </svg>                        
+                        </svg>
                         <span class="kt-nav__link-text">Inbox</span>
                             <span class="kt-nav__link-badge">
                                 <span class="kt-badge kt-badge--unified-success kt-badge--md kt-badge--rounded kt-badge--boldest">0</span>
                             </span>
                     </a>
-                </li>               
+                </li>
                 <li class="kt-nav__item">
                     <a href="#" class="kt-nav__link" data-action="list" data-type="sent">
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon kt-nav__link-icon">
@@ -63,7 +63,7 @@ $this->load->view('temp/MenuBar.php');
                                 <path d="M8,13.1668961 L20.4470385,11.9999863 L8,10.8330764 L8,5.77181995 C8,5.70108058 8.01501031,5.63114635 8.04403925,5.56663761 C8.15735832,5.31481744 8.45336217,5.20254012 8.70518234,5.31585919 L22.545552,11.5440255 C22.6569791,11.5941677 22.7461882,11.6833768 22.7963304,11.794804 C22.9096495,12.0466241 22.7973722,12.342628 22.545552,12.455947 L8.70518234,18.6841134 C8.64067359,18.7131423 8.57073936,18.7281526 8.5,18.7281526 C8.22385763,18.7281526 8,18.504295 8,18.2281526 L8,13.1668961 Z" fill="#000000"/>
                                 <path d="M4,16 L5,16 C5.55228475,16 6,16.4477153 6,17 C6,17.5522847 5.55228475,18 5,18 L4,18 C3.44771525,18 3,17.5522847 3,17 C3,16.4477153 3.44771525,16 4,16 Z M1,11 L5,11 C5.55228475,11 6,11.4477153 6,12 C6,12.5522847 5.55228475,13 5,13 L1,13 C0.44771525,13 6.76353751e-17,12.5522847 0,12 C-6.76353751e-17,11.4477153 0.44771525,11 1,11 Z M4,6 L5,6 C5.55228475,6 6,6.44771525 6,7 C6,7.55228475 5.55228475,8 5,8 L4,8 C3.44771525,8 3,7.55228475 3,7 C3,6.44771525 3.44771525,6 4,6 Z" fill="#000000" opacity="0.3"/>
                             </g>
-                        </svg>                        
+                        </svg>
                         <span class="kt-nav__link-text">Sent</span>
                             <span class="kt-nav__link-badge">
                                 <span class="kt-badge kt-badge--unified-success kt-badge--md kt-badge--rounded kt-badge--boldest">0</span>
@@ -78,13 +78,13 @@ $this->load->view('temp/MenuBar.php');
                                 <path d="M6,8 L6,20.5 C6,21.3284271 6.67157288,22 7.5,22 L16.5,22 C17.3284271,22 18,21.3284271 18,20.5 L18,8 L6,8 Z" fill="#000000" fill-rule="nonzero"/>
                                 <path d="M14,4.5 L14,4 C14,3.44771525 13.5522847,3 13,3 L11,3 C10.4477153,3 10,3.44771525 10,4 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z" fill="#000000" opacity="0.3"/>
                             </g>
-                        </svg>                        
+                        </svg>
                         <span class="kt-nav__link-text">Trash</span>
                             <span class="kt-nav__link-badge">
                                 <span class="kt-badge kt-badge--unified-success kt-badge--md kt-badge--rounded kt-badge--boldest">0</span>
                             </span>
                     </a>
-                </li>                
+                </li>
             </ul>
         </div>
     </div>
@@ -141,7 +141,7 @@ $this->load->view('temp/MenuBar.php');
                         </button>
                     </div>
 
-                    <div class="kt-inbox__panel">                        
+                    <div class="kt-inbox__panel">
                         <button class="kt-inbox__icon" data-toggle="kt-tooltip" title="Spam">
                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
                                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -150,7 +150,7 @@ $this->load->view('temp/MenuBar.php');
                                     <rect fill="#000000" x="11" y="7" width="2" height="8" rx="1"/>
                                     <rect fill="#000000" x="11" y="16" width="2" height="2" rx="1"/>
                                 </g>
-                            </svg>                        
+                            </svg>
                         </button>
                         <button class="kt-inbox__icon" data-toggle="kt-tooltip" title="Delete">
                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
@@ -159,9 +159,9 @@ $this->load->view('temp/MenuBar.php');
                                     <path d="M6,8 L6,20.5 C6,21.3284271 6.67157288,22 7.5,22 L16.5,22 C17.3284271,22 18,21.3284271 18,20.5 L18,8 L6,8 Z" fill="#000000" fill-rule="nonzero"/>
                                     <path d="M14,4.5 L14,4 C14,3.44771525 13.5522847,3 13,3 L11,3 C10.4477153,3 10,3.44771525 10,4 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z" fill="#000000" opacity="0.3"/>
                                 </g>
-                            </svg>                        
-                        </button>                       
-                        
+                            </svg>
+                        </button>
+
                     </div>
                 </div>
                 <div class="kt-inbox__search">
@@ -176,12 +176,12 @@ $this->load->view('temp/MenuBar.php');
                                         <path d="M14.2928932,16.7071068 C13.9023689,16.3165825 13.9023689,15.6834175 14.2928932,15.2928932 C14.6834175,14.9023689 15.3165825,14.9023689 15.7071068,15.2928932 L19.7071068,19.2928932 C20.0976311,19.6834175 20.0976311,20.3165825 19.7071068,20.7071068 C19.3165825,21.0976311 18.6834175,21.0976311 18.2928932,20.7071068 L14.2928932,16.7071068 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"/>
                                         <path d="M11,16 C13.7614237,16 16,13.7614237 16,11 C16,8.23857625 13.7614237,6 11,6 C8.23857625,6 6,8.23857625 6,11 C6,13.7614237 8.23857625,16 11,16 Z M11,18 C7.13400675,18 4,14.8659932 4,11 C4,7.13400675 7.13400675,4 11,4 C14.8659932,4 18,7.13400675 18,11 C18,14.8659932 14.8659932,18 11,18 Z" fill="#000000" fill-rule="nonzero"/>
                                     </g>
-                                </svg>                            
+                                </svg>
                             </span>
                         </div>
                     </div>
                 </div>
-                <div class="kt-inbox__controls">                  
+                <div class="kt-inbox__controls">
 
                     <button class="kt-inbox__icon" data-toggle="kt-tooltip" title="Previose page">
                         <i class="flaticon2-left-arrow"></i>
@@ -224,7 +224,7 @@ $this->load->view('temp/MenuBar.php');
                             <!--begin::Nav-->
                             <ul class="kt-nav">
                                 <li class="kt-nav__head">
-                                    Panduan Kirim Laporan                                    
+                                    Panduan Kirim Laporan
                                     <span data-toggle="kt-tooltip" data-placement="right" title="Click to learn more...">
                                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon kt-svg-icon--brand kt-svg-icon--md1">
                                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -253,9 +253,9 @@ $this->load->view('temp/MenuBar.php');
                                         <i class="kt-nav__link-icon flaticon2-telegram-logo"></i>
                                         <span class="kt-nav__link-text">Kirim Laporan</span>
                                     </a>
-                                </li>                                                                
+                                </li>
                             </ul>
-                            <!--end::Nav-->                        
+                            <!--end::Nav-->
                             </div>
                     </div>
                 </div>
@@ -269,7 +269,7 @@ $this->load->view('temp/MenuBar.php');
                             <label class="kt-checkbox kt-checkbox--single kt-checkbox--tick kt-checkbox--brand">
                                 <input type="checkbox">
                                 <span></span>
-                            </label>                            
+                            </label>
                         </div>
                         <div class="kt-inbox__sender" data-toggle="view">
                             <span class="kt-media kt-media--sm kt-media--danger" style="background-image: url('<?php echo base_url(); ?>assets/media/users/100_13.jpg')">
@@ -282,7 +282,7 @@ $this->load->view('temp/MenuBar.php');
                         <div class="kt-inbox__message">
                             <span class="kt-inbox__subject">Laporan harian unit topaz - </span>
                             <span class="kt-inbox__summary">Berikut kami kirimkan laporan harian unit topaz tanggal 26-06-2020, atas perhatiannya kami ucapkan terima kasih.</span>
-                        </div>                        
+                        </div>
                     </div>
                     <div class="kt-inbox__datetime" data-toggle="view">
                         8:30 PM
@@ -294,7 +294,7 @@ $this->load->view('temp/MenuBar.php');
                             <label class="kt-checkbox kt-checkbox--single kt-checkbox--tick kt-checkbox--brand">
                                 <input type="checkbox">
                                 <span></span>
-                            </label>                            
+                            </label>
                         </div>
                         <div class="kt-inbox__sender" data-toggle="view">
                             <span class="kt-media kt-media--sm kt-media--danger">
@@ -314,7 +314,7 @@ $this->load->view('temp/MenuBar.php');
                     </div>
                 </div>
 
-                
+
                 <div class="kt-inbox__item kt-inbox__item--unread" data-id="20" data-type="sent">
                     <div class="kt-inbox__info">
                         <div class="kt-inbox__actions">
@@ -756,7 +756,7 @@ $this->load->view('temp/MenuBar.php');
                                         To:
                                     </div>
                                     <div class="kt-inbox__input">
-                                        <input type="text" name="compose_to" value="Chris Muller, Lina Nilson">
+                                        <input type="text" name="compose_to" value="Pusat" readonly>
                                     </div>
                                     <div class="kt-inbox__tools">
                                         <span class="kt-inbox__tool kt-inbox__tool--cc">Cc</span>
@@ -837,7 +837,7 @@ $this->load->view('temp/MenuBar.php');
                     <div class="kt-inbox__foot">
                         <div class="kt-inbox__primary">
                             <div class="btn-group">
-                                <button type="button" class="btn btn-brand btn-bold">
+                                <button type="submit" class="btn btn-brand btn-bold">
                                     Send
                                 </button>
 
@@ -896,7 +896,7 @@ $this->load->view('temp/MenuBar.php');
 <!--End::Inbox-->
 
 <!--Begin:: Inbox Compose-->
-<div class="modal modal-sticky-bottom-right modal-sticky-lg" id="kt_inbox_compose" role="dialog" data-backdrop="false">
+<form class="modal modal-sticky-bottom-right modal-sticky-lg" id="kt_inbox_compose" role="dialog" data-backdrop="false">
     <div class="modal-dialog" role="document">
         <div class="modal-content kt-inbox">
             <div class="kt-inbox__form" id="kt_inbox_compose_form">
@@ -919,7 +919,7 @@ $this->load->view('temp/MenuBar.php');
                                     To:
                                 </div>
                                 <div class="kt-inbox__input">
-                                    <input type="text" name="compose_to" value="Chris Muller, Lina Nilson">
+                                    <input type="text" name="compose_to" value="pusat" readonly>
                                 </div>
                                 <div class="kt-inbox__tools">
                                     <span class="kt-inbox__tool kt-inbox__tool--cc">Cc</span>
@@ -988,7 +988,7 @@ $this->load->view('temp/MenuBar.php');
                 <div class="kt-inbox__foot">
                     <div class="kt-inbox__primary">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-brand btn-bold">
+                            <button type="submit" class="btn btn-brand btn-bold">
                                 Send
                             </button>
 
@@ -1041,15 +1041,17 @@ $this->load->view('temp/MenuBar.php');
             </div>
         </div>
     </div>
-</div>
+</form>
 <!--End:: Inbox Compose-->
 	</div>
-<!-- end:: Content -->	
+<!-- end:: Content -->
 </div>
 </div>
 
-<?php 
-$this->load->view('temp/Footer.php');
+<?php
+$this->load->view('temp/Footer.php', array(
+	'js'	=> 'dailyreport/unitsreport/js'
+));
 //$this->load->view('transactions/unitsdailycash/_upload.php');
 // $this->load->view('datamaster/areas/_edit.php');
 //$this->load->view('report/bukukas/_script.php');

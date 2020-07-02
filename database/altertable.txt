@@ -70,6 +70,10 @@ ALTER TABLE public.categories ADD "source" int NULL;
 ALTER TABLE public.categories ALTER COLUMN "type" DROP DEFAULT;
 
 
+ALTER TABLE mis.users ADD id_unit INT UNSIGNED DEFAULT 0 NOT NULL;
+ALTER TABLE mis.users CHANGE id_unit id_unit INT UNSIGNED DEFAULT 0 NOT NULL AFTER id_level;
+
+
 
 
 
