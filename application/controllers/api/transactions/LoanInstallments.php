@@ -410,39 +410,42 @@ class LoanInstallments extends ApiController
 			foreach ($repayments as $key => $repayment){
 				if($key > 1){
 					$findcustomer = $this->customers->find(array('name'=> $repayment['B']));
-					$data = array(
-						'no_sbk'		=> zero_fill($repayment['A'], 5),
-						'id_unit'		=> $unit,
-						'id_customer'	=> $findcustomer->id,
-						'nic'			=> $findcustomer->no_cif,
-						'date_sbk'		=> date('Y-m-d', strtotime($repayment['C'])),
-						'money_loan'	=> $repayment['D'],
-						'capital_lease'	=> $repayment['H'],
-						'date_repayment'=> date('Y-m-d', strtotime($repayment['I'])),
-						'periode'		=> $repayment['J'],
-						'description_1'	=> $repayment['E'],
-						'description_2'	=> $repayment['F'],
-						'description_3'	=> $repayment['G']
-					);
-					if($findrepayment = $this->repayments->find(array(
-						'id_unit'		=> $unit,
-						'id_customer'	=> $findcustomer->id,
-						'no_sbk'		=> zero_fill($repayment['A'], 5),
-						'date_sbk'		=> date('Y-m-d', strtotime($repayment['C'])),
-						'money_loan'	=> $repayment['D'],
-						'capital_lease'	=> $repayment['H'],
-						'date_repayment'=> date('Y-m-d', strtotime($repayment['I'])),
-						'periode'		=> $repayment['J'],
-						'description_1'	=> $repayment['E'],
-						'description_2'	=> $repayment['F'],
-						'description_3'	=> $repayment['G']
-					))){
-						$this->repayments->update($data, array('id'	=>  $findrepayment->id));
-					}else{
-						//echo "<pre/>";
-						//print_r($data);
-						$this->repayments->insert($data);
+					if($findcustomer){
+						$data = array(
+							'no_sbk'		=> zero_fill($repayment['A'], 5),
+							'id_unit'		=> $unit,
+							'id_customer'	=> $findcustomer->id,
+							'nic'			=> $findcustomer->no_cif,
+							'date_sbk'		=> date('Y-m-d', strtotime($repayment['C'])),
+							'money_loan'	=> $repayment['D'],
+							'capital_lease'	=> $repayment['H'],
+							'date_repayment'=> date('Y-m-d', strtotime($repayment['I'])),
+							'periode'		=> $repayment['J'],
+							'description_1'	=> $repayment['E'],
+							'description_2'	=> $repayment['F'],
+							'description_3'	=> $repayment['G']
+						);
+						if($findrepayment = $this->repayments->find(array(
+							'id_unit'		=> $unit,
+							'id_customer'	=> $findcustomer->id,
+							'no_sbk'		=> zero_fill($repayment['A'], 5),
+							'date_sbk'		=> date('Y-m-d', strtotime($repayment['C'])),
+							'money_loan'	=> $repayment['D'],
+							'capital_lease'	=> $repayment['H'],
+							'date_repayment'=> date('Y-m-d', strtotime($repayment['I'])),
+							'periode'		=> $repayment['J'],
+							'description_1'	=> $repayment['E'],
+							'description_2'	=> $repayment['F'],
+							'description_3'	=> $repayment['G']
+						))){
+							$this->repayments->update($data, array('id'	=>  $findrepayment->id));
+						}else{
+							//echo "<pre/>";
+							//print_r($data);
+							$this->repayments->insert($data);
+						}
 					}
+
 				}
 			}
 		}
