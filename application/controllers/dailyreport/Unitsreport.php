@@ -17,6 +17,7 @@ class Unitsreport extends Authenticated
 	public function __construct()
 	{
 		parent::__construct();
+		$this->load->model('InboxesModel','model');
 	}
 
 	/**
@@ -24,17 +25,41 @@ class Unitsreport extends Authenticated
 	 */
 	public function index()
 	{
-		$this->load->view('dailyreport/unitsreport/index');
+		$this->load->view('dailyreport/unitsreport/send');
     }
 
 	public function send()
 	{
-		$this->load->view('dailyreport/unitsreport/index');
+		$this->load->view('dailyreport/unitsreport/send');
+	}
+
+	public function data()
+	{
+		$this->model->db
+			->select('units.name as unit_name')
+			->join('users','users.id = inboxes.compose_from')
+			->join('units','units.id = users.id_unit')
+			->where('inboxes.status',$this->input->get('page'));
+		if($get = $this->input->get()){
+			if($this->input->get('query')){
+				$this->model->db
+					->or_like('units.name', $get['query'])
+					->or_like('inboxes.compose_subject', $get['query'])
+					->or_like('inboxes.compose_body', $get['query']);
+			}
+			if($get['page'] != 'ALL'){
+				$this->model->db->where('inboxes.compose_from',$this->session->userdata('user')->id);
+			}
+		}
+		$data = $this->model->all();
+		$this->load->view('dailyreport/unitsreport/data',array(
+			'inboxes' => $data
+		));
 	}
 
 	public function trash()
 	{
-		$this->load->view('dailyreport/unitsreport/index');
+		$this->load->view('dailyreport/unitsreport/send');
 	}
 
 

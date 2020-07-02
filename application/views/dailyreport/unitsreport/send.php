@@ -40,7 +40,7 @@ $this->load->view('temp/MenuBar.php');
         <button type="button" class="btn btn-brand  btn-upper btn-bold  kt-inbox__compose" data-toggle="modal" data-target="#kt_inbox_compose">new message</button>
         <div class="kt-inbox__nav">
             <ul class="kt-nav">
-                <li class="kt-nav__item kt-nav__item--active">
+                <li class="kt-nav__item <?php echo $this->uri->segment(3) == '' ? 'kt-nav__item--active' : ''?>">
                     <a href="<?php echo base_url('dailyreport/unitsreport');?>" class="kt-nav__link" data-action="list" data-type="inbox">
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon kt-nav__link-icon">
                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -55,7 +55,7 @@ $this->load->view('temp/MenuBar.php');
                             </span>
                     </a>
                 </li>
-                <li class="kt-nav__item">
+                <li class="kt-nav__item <?php echo $this->uri->segment(3) == 'send' ? 'kt-nav__item--active' : ''?>">
                     <a href="<?php echo base_url('dailyreport/unitsreport/send');?>" class="kt-nav__link" data-action="list" data-type="sent">
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon kt-nav__link-icon">
                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -70,7 +70,7 @@ $this->load->view('temp/MenuBar.php');
                             </span>
                     </a>
                 </li>
-                <li class="kt-nav__item">
+                <li class="kt-nav__item <?php echo $this->uri->segment(3) == 'trash' ? 'kt-nav__item--active' : ''?>">
                     <a href="<?php echo base_url('dailyreport/unitsreport/trash');?>" class="kt-nav__link" data-action="list" data-type="trash">
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon kt-nav__link-icon">
                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -166,7 +166,7 @@ $this->load->view('temp/MenuBar.php');
                 </div>
                 <div class="kt-inbox__search">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search">
+                        <input type="text" class="form-control search" placeholder="Search">
                         <div class="input-group-append">
                             <span class="input-group-text">
                                 <!--<i class="la la-group"></i>-->
@@ -263,120 +263,6 @@ $this->load->view('temp/MenuBar.php');
         </div>
         <div class="kt-portlet__body kt-portlet__body--fit-x">
             <div class="kt-inbox__items" data-type="inbox">
-                <div class="kt-inbox__item kt-inbox__item--unread" data-id="1" data-type="inbox">
-                    <div class="kt-inbox__info">
-                        <div class="kt-inbox__actions">
-                            <label class="kt-checkbox kt-checkbox--single kt-checkbox--tick kt-checkbox--brand">
-                                <input type="checkbox">
-                                <span></span>
-                            </label>
-                        </div>
-                        <div class="kt-inbox__sender" data-toggle="view">
-                            <span class="kt-media kt-media--sm kt-media--danger" style="background-image: url('<?php echo base_url(); ?>assets/media/users/100_13.jpg')">
-                                <span></span>
-                            </span>
-                            <a href="#" class="kt-inbox__author">Topaz</a>
-                        </div>
-                    </div>
-                    <div class="kt-inbox__details" data-toggle="view">
-                        <div class="kt-inbox__message">
-                            <span class="kt-inbox__subject">Laporan harian unit topaz - </span>
-                            <span class="kt-inbox__summary">Berikut kami kirimkan laporan harian unit topaz tanggal 26-06-2020, atas perhatiannya kami ucapkan terima kasih.</span>
-                        </div>
-                    </div>
-                    <div class="kt-inbox__datetime" data-toggle="view">
-                        8:30 PM
-                    </div>
-                </div>
-                <div class="kt-inbox__item kt-inbox__item--unread" data-id="2" data-type="inbox">
-                    <div class="kt-inbox__info">
-                        <div class="kt-inbox__actions">
-                            <label class="kt-checkbox kt-checkbox--single kt-checkbox--tick kt-checkbox--brand">
-                                <input type="checkbox">
-                                <span></span>
-                            </label>
-                        </div>
-                        <div class="kt-inbox__sender" data-toggle="view">
-                            <span class="kt-media kt-media--sm kt-media--danger">
-                                <span>OJ</span>
-                            </span>
-                            <a href="#" class="kt-inbox__author">Kopo Sayati</a>
-                        </div>
-                    </div>
-                    <div class="kt-inbox__details" data-toggle="view">
-                        <div class="kt-inbox__message">
-                        <span class="kt-inbox__subject">Laporan harian unit Kopo Sayati - </span>
-                            <span class="kt-inbox__summary">Berikut kami kirimkan laporan harian unit Kopo Sayati tanggal 25-06-2020, atas perhatiannya kami ucapkan terima kasih.</span>
-                        </div>
-                    </div>
-                    <div class="kt-inbox__datetime" data-toggle="view">
-                        day ago
-                    </div>
-                </div>
-
-
-                <div class="kt-inbox__item kt-inbox__item--unread" data-id="20" data-type="sent">
-                    <div class="kt-inbox__info">
-                        <div class="kt-inbox__actions">
-                            <label class="kt-checkbox kt-checkbox--single kt-checkbox--tick kt-checkbox--brand">
-                                <input type="checkbox">
-                                <span></span>
-                            </label>
-                            <span class="kt-inbox__icon kt-inbox__icon--light" data-toggle="kt-tooltip" data-placement="right" title="Star">
-                                <i class="flaticon-star"></i>
-                            </span>
-                            <span class="kt-inbox__icon kt-inbox__icon--light" data-toggle="kt-tooltip" data-placement="right" title="Mark as important">
-                                <i class="flaticon-add-label-button"></i>
-                            </span>
-                        </div>
-                        <div class="kt-inbox__sender" data-toggle="view">
-                            <span class="kt-media kt-media--sm kt-media--brand" style="background-image: url('./assets/media/users/100_5.jpg')">
-                                <span></span>
-                            </span>
-                            <a href="#" class="kt-inbox__author">Patty Jo Watson</a>
-                        </div>
-                    </div>
-                    <div class="kt-inbox__details" data-toggle="view">
-                        <div class="kt-inbox__message">
-                            <span class="kt-inbox__subject">Welcome, Patty  - </span>
-                            <span class="kt-inbox__summary">Discover interesting ideas and unique perspectives. Read, explore and follow your interests. Get personalized recommendations delivered to you....</span>
-                        </div>
-                    </div>
-                    <div class="kt-inbox__datetime" data-toggle="view">
-                        Mar 1
-                    </div>
-                </div>
-                <div class="kt-inbox__item" data-id="21" data-type="sent">
-                    <div class="kt-inbox__info">
-                        <div class="kt-inbox__actions">
-                            <label class="kt-checkbox kt-checkbox--single kt-checkbox--tick kt-checkbox--brand">
-                                <input type="checkbox">
-                                <span></span>
-                            </label>
-                            <span class="kt-inbox__icon kt-inbox__icon--light" data-toggle="kt-tooltip" data-placement="right" title="Star">
-                                <i class="flaticon-star"></i>
-                            </span>
-                            <span class="kt-inbox__icon kt-inbox__icon--light" data-toggle="kt-tooltip" data-placement="right" title="Mark as important">
-                                <i class="flaticon-add-label-button"></i>
-                            </span>
-                        </div>
-                        <div class="kt-inbox__sender" data-toggle="view">
-                            <span class="kt-media kt-media--sm kt-media--warning">
-                                <span>RW</span>
-                            </span>
-                            <a href="#" class="kt-inbox__author">Roberts O'Neill Wilson</a>
-                        </div>
-                    </div>
-                    <div class="kt-inbox__details" data-toggle="view">
-                        <div class="kt-inbox__message">
-                            <span class="kt-inbox__subject">Optimize with Recommendations, now used by most advertisers - </span>
-                            <span class="kt-inbox__summary">Your weekly report is a good way to track your performance. See what’s working so far and explore new opportunities for improvement....</span>
-                        </div>
-                    </div>
-                    <div class="kt-inbox__datetime" data-toggle="view">
-                        Feb 11
-                    </div>
-                </div>
             </div>
         </div>
     </div>

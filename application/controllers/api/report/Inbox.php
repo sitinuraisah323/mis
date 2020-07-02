@@ -8,6 +8,7 @@ class Inbox extends ApiController
 	{
 		parent::__construct();
 		$this->load->model('InboxesModel', 'model');
+		$this->load->model('InboxesFilesModel', 'files');
 	}
 
 	public function index()
@@ -70,6 +71,15 @@ class Inbox extends ApiController
 					'user_update'	=> $this->session->userdata('user')->id,
 				);
 				if($this->model->insert($data)){
+					$id_inbox = $this->model->last()->id;
+					foreach ($post['files'] as $value){
+						$this->files->insert(array(
+							'id_inbox'	=> $id_inbox,
+							'filename'	=> $value,
+							'user_create'	=> $this->session->userdata('user')->id,
+							'user_update'	=> $this->session->userdata('user')->id,
+						));
+					}
 					echo json_encode(array(
 						'data'	=> 	true,
 						'status'	=> true,
