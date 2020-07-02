@@ -27,5 +27,15 @@ class Unitsreport extends Authenticated
 		$this->load->view('dailyreport/unitsreport/index');
     }
 
+	public function send()
+	{
+		$this->load->view('dailyreport/unitsreport/index');
+	}
+
+	public function trash()
+	{
+		$this->load->view('dailyreport/unitsreport/index');
+	}
+
 
 }

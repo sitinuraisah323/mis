@@ -267,7 +267,12 @@ class LoanInstallments extends ApiController
 
 	public function extractall()
 	{
-		$config['upload_path']          = 'storage/'.$this->input->post('id_unit').'/transactions/'.date('Y-m-d/');
+		if($this->input->post('id_unit')){
+			$idUnit = $this->input->post('id_unit');
+		}else{
+			$idUnit = $this->session->userdata('user')->id_unit;
+		}
+		$config['upload_path']          = 'storage/'.$idUnit.'/transactions/'.date('Y-m-d/');
 		$config['allowed_types']        = '*';
 		if(!is_dir($config['upload_path'])){
 			mkdir($config['upload_path'],0777,true);
@@ -296,12 +301,6 @@ class LoanInstallments extends ApiController
 				$zip->extractTo($pathExtract);
 				$zip->close();
 				$files = scandir($pathExtract);
-				if($this->input->post('id_unit')){
-					$idUnit = $this->input->post('id_unit');
-				}else{
-					$idUnit = $this->session->userdata('user')->id;
-				}
-
 				$this->process_transaction($idUnit,$pathExtract, $files[9]);
 				unset($files[9]);
 
@@ -339,9 +338,9 @@ class LoanInstallments extends ApiController
 			case 'KS':
 				$this->data_transaction_cash($id_unit, $path.$name);
 			break;
-//			case 'MS':
-//				$this->data_customer($id_unit,$path.$name);
-//			break;
+			case 'MS':
+				$this->data_customer($id_unit,$path.$name);
+			break;
 			case 'LN':
 				$this->data_transaction_repayment($id_unit, $path.$name);
 			break;
