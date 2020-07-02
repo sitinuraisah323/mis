@@ -83,11 +83,6 @@
 									<a  href="<?php echo base_url('datamaster/unitstarget'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Target Unit</span></a>
 								</li>
 							<?php endif;?>
-							<?php if(read_access('bookcash')):?>
-								<li class="kt-menu__item "  aria-haspopup="true">
-									<a  href="<?php echo base_url('datamaster/bookcash'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Saldo Unit</span></a>
-								</li>
-							<?php endif;?>
                             <li class="kt-menu__item "  aria-haspopup="true">
                             <a  href="demo2/dashboards/aside.html" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">STLE</span></a>
                             </li>
@@ -148,12 +143,7 @@
             </div>
 			
 			<div class="kt-header-toolbar">
-       		<!-- <div class="kt-quick-search kt-quick-search--inline kt-quick-search--result-compact" id="kt_quick_search_inline"> -->
-			   <!-- <div class="kt-section__content kt-section__content--solid"> -->
-						<!-- <a href="<? //echo base_url('dailyreport/unitsreport');?>" class="btn btn-brand"><i class="fa fa-envelope"></i> Send</a>&nbsp;
-						<a href="" class="btn btn-success"><i class="fa fa-exclamation-circle"></i> Help</a> -->
-					<!-- </div> -->
-			<!-- </div> -->
+ 
 				<div class="kt-header-menu-wrapper" id="kt_header_menu_wrapper">
             	<div id="kt_header_menu" class="kt-header-menu kt-header-menu-mobile "  >
                 	<ul class="kt-menu__nav ">
