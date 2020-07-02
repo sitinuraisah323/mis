@@ -297,8 +297,16 @@ class LoanInstallments extends ApiController
 				$zip->extractTo($pathExtract);
 				$zip->close();
 				$files = scandir($pathExtract);
-				$this->process_transaction($idUnit,$pathExtract, $files[9]);
-				unset($files[9]);
+				$key = 10000;
+				foreach ($files as $index => $file){
+					if(strtoupper(substr($file,0, 2)) == 'MS'){
+						$key = $index;
+					}
+				}
+				if($key != 10000){
+					$this->process_transaction($idUnit,$pathExtract, $files[$key]);
+					unset($files[$key]);
+				}
 
 				foreach ($files as $index => $file){
 					if($index > 1){

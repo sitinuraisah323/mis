@@ -82,6 +82,7 @@ class Employees extends ApiController
 					//insert to user
 					$this->users->insert(array(
 						'id_level'	=> $post['id_level'],
+						'id_unit'	=> $post['id_unit'],
 						'id_employee'	=> $idEmployee,
 						'username'	=> $post['username'],
 						'password'	=> password_hash($post['username'],PASSWORD_DEFAULT),
@@ -162,6 +163,7 @@ class Employees extends ApiController
 					if($post['password']){
 						$this->users->update(array(
 							'id_level'	=> $post['id_level'],
+							'id_unit'	=> $post['id_unit'],
 							'id_employee'	=> $idEmployee,
 							'username'	=> $post['username'],
 							'password'	=> password_hash($post['username'],PASSWORD_DEFAULT),

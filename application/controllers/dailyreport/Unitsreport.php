@@ -25,12 +25,16 @@ class Unitsreport extends Authenticated
 	 */
 	public function index()
 	{
-		$this->load->view('dailyreport/unitsreport/send');
+		$this->load->view('dailyreport/unitsreport/send',array(
+			'statistic'	=> $this->model->statistic()
+		));
     }
 
 	public function send()
 	{
-		$this->load->view('dailyreport/unitsreport/send');
+		$this->load->view('dailyreport/unitsreport/send',array(
+			'statistic'	=> $this->model->statistic()
+		));
 	}
 
 	public function data()
@@ -48,7 +52,7 @@ class Unitsreport extends Authenticated
 					->or_like('inboxes.compose_body', $get['query']);
 			}
 			if($get['page'] != 'ALL'){
-				$this->model->db->where('inboxes.compose_from',$this->session->userdata('user')->id);
+				$this->model->db->where('units.id',$this->session->userdata('user')->id_unit);
 			}
 		}
 		$data = $this->model->all();
@@ -59,7 +63,9 @@ class Unitsreport extends Authenticated
 
 	public function trash()
 	{
-		$this->load->view('dailyreport/unitsreport/send');
+		$this->load->view('dailyreport/unitsreport/send',array(
+			'statistic'	=> $this->model->statistic()
+		));
 	}
 
 

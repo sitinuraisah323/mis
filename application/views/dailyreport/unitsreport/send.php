@@ -51,7 +51,7 @@ $this->load->view('temp/MenuBar.php');
                         </svg>
                         <span class="kt-nav__link-text">Inbox</span>
                             <span class="kt-nav__link-badge">
-                                <span class="kt-badge kt-badge--unified-success kt-badge--md kt-badge--rounded kt-badge--boldest">0</span>
+                                <span class="kt-badge kt-badge--unified-success kt-badge--md kt-badge--rounded kt-badge--boldest"><?php echo $statistic->inbox;?></span>
                             </span>
                     </a>
                 </li>
@@ -66,7 +66,7 @@ $this->load->view('temp/MenuBar.php');
                         </svg>
                         <span class="kt-nav__link-text">Sent</span>
                             <span class="kt-nav__link-badge">
-                                <span class="kt-badge kt-badge--unified-success kt-badge--md kt-badge--rounded kt-badge--boldest">0</span>
+                                <span class="kt-badge kt-badge--unified-success kt-badge--md kt-badge--rounded kt-badge--boldest"><?php echo $statistic->send;?></span>
                             </span>
                     </a>
                 </li>
@@ -81,7 +81,7 @@ $this->load->view('temp/MenuBar.php');
                         </svg>
                         <span class="kt-nav__link-text">Trash</span>
                             <span class="kt-nav__link-badge">
-                                <span class="kt-badge kt-badge--unified-success kt-badge--md kt-badge--rounded kt-badge--boldest">0</span>
+                                <span class="kt-badge kt-badge--unified-success kt-badge--md kt-badge--rounded kt-badge--boldest"><?php echo $statistic->trash;?></span>
                             </span>
                     </a>
                 </li>
