@@ -156,7 +156,7 @@ function initDataTable(){
 				textAlign: 'left',
 			},
 			{
-				field: 'martital',
+				field: 'marital',
 				title: 'Status Kawin',
 				sortable: 'asc',
 				textAlign: 'left',
@@ -325,10 +325,19 @@ function initAlert(){
 		});
 	}
 
+    function getSelect2(){
+        $('#id_unit').select2({ placeholder: "Please select a Unit",width: '100%'});
+        $('#gender').select2({ placeholder: "Please select a Gender",width: '100%'});
+        $('#marital').select2({ placeholder: "Please select a Status",width: '100%'});
+        $('#blood_group').select2({ placeholder: "Please select a Blood Group",width: '100%'});
+        $('#id_level').select2({ placeholder: "Please select a Level",width: '100%'});
+    }
+
 
 
 jQuery(document).ready(function() {
     initDataTable();
+    getSelect2();
     initAlert();
     getMenu();
 });

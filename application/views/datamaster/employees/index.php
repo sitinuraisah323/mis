@@ -103,10 +103,10 @@ $this->load->view('temp/MenuBar.php');
 </div>
 <!--begin::Modal-->
 <div class="modal fade" id="modal_add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog" role="document">
+	<div class="modal-dialog modal-lg" role="document">
 		<form method="post" id="input-form" enctype="multipart/form-data" class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">Input Level</h5>
+				<h5 class="modal-title" id="exampleModalLabel">Input Pegawai</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 				</button>
 			</div>
@@ -116,10 +116,12 @@ $this->load->view('temp/MenuBar.php');
 				<div class="form-horizontal">
 					<div class="form-body">
 						<div class="row">
-							<div class="col-md-12">
-								<div class="form-group">
+							
+							<div class="col-md-6">
+							<div class="form-group">
 									<label>Unit</label>
-									<select  name="id_unit" class="form-control">
+									<select  name="id_unit" class="form-control" id="id_unit">
+									<option></option>
 										<?php foreach ($units as $unit):?>
 											<option value="<?php echo $unit->id;?>"><?php echo $unit->name;?></option>
 										<?php endforeach;?>
@@ -143,19 +145,25 @@ $this->load->view('temp/MenuBar.php');
 								</div>
 								<div class="form-group">
 									<label>Jenis Kelamin</label>
-									<select type="text" name="gender" class="form-control">
+									<select type="text" name="gender" id="gender" class="form-control">
+									<option></option>
 										<?php foreach (array('MALE'=>'Pria', 'FEMALE' => 'Wanita') as $value => $label):?>
 											<option value="<?php echo $value;?>"><?php echo $label;?></option>
 										<?php endforeach;?>
 									</select>
 								</div>
+
 								<div class="form-group">
 									<label>No Hp</label>
 									<input type="text" name="mobile" class="form-control">
 								</div>
+							</div>
+
+							<div class="col-md-6">							
 								<div class="form-group">
 									<label>Status Kawin</label>
-									<select  name="marital" class="form-control">
+									<select  name="marital" id="marital" class="form-control">
+									<option></option>
 										<?php foreach (array('MARRIED'=>'Menikah','SINGLE'=>'Belum Kawin','DIVORCE'=>'BERCERAI') as $value=>$label):?>
 											<option value="<?php echo $value;?>"><?php echo $label;?></option>
 										<?php endforeach;?>
@@ -163,7 +171,8 @@ $this->load->view('temp/MenuBar.php');
 								</div>
 								<div class="form-group">
 									<label>Golongan Darah</label>
-									<select  name="blood_group" class="form-control">
+									<select  name="blood_group" id="blood_group" class="form-control">
+									<option></option>
 										<?php foreach (array('+A','+B','+AB','+O','-A','-B','-AB','-O') as $value=>$label):?>
 											<option value="<?php echo $label;?>"><?php echo $label;?></option>
 										<?php endforeach;?>
@@ -187,14 +196,15 @@ $this->load->view('temp/MenuBar.php');
 								</div>
 								<div class="form-group">
 									<label>Level</label>
-									<select name="id_level" class="form-control">
+									<select name="id_level" id="id_level" class="form-control">
+									<option></option>
 										<?php foreach ($levels as $level):?>
 											<option value="<?php echo $level->id;?>"><?php echo $level->level;?></option>
 										<?php endforeach;?>
 									</select>
 								</div>
-								<hr>
 							</div>
+
 							<div class="col-md-12" >
 								<div class="kt-section">
 									<div class="kt-section__content">
