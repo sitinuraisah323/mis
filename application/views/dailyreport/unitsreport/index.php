@@ -940,6 +940,9 @@ $this->load->view('temp/MenuBar.php');
                                 </div>
                             </div>
                             <div class="kt-inbox__field kt-inbox__field--bcc">
+								<div class="template-append">
+
+								</div>
                                 <div class="kt-inbox__label">
                                     Bcc:
                                 </div>

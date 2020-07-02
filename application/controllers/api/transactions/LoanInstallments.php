@@ -191,10 +191,6 @@ class LoanInstallments extends ApiController
 					));
 				}
 			}
-			echo json_encode(array(
-				'data'	=> 	true,
-				'message'	=> 'Successfully Updated Upload'
-			));
 		}
 		if(is_file($path)){
 			unlink($path);
@@ -310,12 +306,10 @@ class LoanInstallments extends ApiController
 					}
 				}
 
-				echo json_encode(array(
-					'data'	=> 	true,
-					'message'	=> 'Successfully Updated Upload'
-				));
+				echo json_encode($data['file_name']);
 			} else {
 				echo json_encode(array(
+					'status'	=> false,
 					'data'	=> 	false,
 					'message'	=> 'Failed Updated Upload'
 				));

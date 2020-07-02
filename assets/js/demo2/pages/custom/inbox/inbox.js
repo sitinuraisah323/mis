@@ -351,6 +351,7 @@ var KTAppInbox = function() {
             setTimeout(function() {
                 $(thisProgressBar + " .progress-bar, " + thisProgressBar + " .progress").css('opacity', '0');
             }, 300)
+			$('.template-append').html('<input type="hidden" name="files[]" value="'+progress.name+'">');
         });
     }
 
