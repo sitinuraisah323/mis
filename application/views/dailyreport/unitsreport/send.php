@@ -813,6 +813,9 @@ $this->load->view('temp/MenuBar.php');
                                 </div>
                             </div>
                             <div class="kt-inbox__field kt-inbox__field--cc">
+								<div class="template-append">
+
+								</div>
                                 <div class="kt-inbox__label">
                                     Cc:
                                 </div>
