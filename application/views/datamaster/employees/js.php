@@ -5,7 +5,19 @@ var AlertUtil;
 var createForm;
 var editForm;
 
+function InitClear(){
+    $('.modal').on('hidden.bs.modal', function(){
+        $("#id_unit").val([]).trigger("change");
+        $("#gender").val([]).trigger("change");
+        $("#blood_group").val([]).trigger("change");
+        $("#marital").val([]).trigger("change");
+        $("#id_level").val([]).trigger("change");
+        $(this).find('form')[0].reset();        
+    });    
+}
+
 function initDTEvents(){
+    
     $(".btn_delete").on("click",function(){
         var targetId = $(this).data("id");
         //alert(targetId);
@@ -55,17 +67,22 @@ function initDTEvents(){
 					$('#modal_add').find('[name="id"]').val(response.data.id);
 					$('#modal_add').find('[name="fullname"]').val(response.data.fullname);
 					$('#modal_add').find('[name="id_unit"]').val(response.data.id_unit);
+                    $("#id_unit").trigger('change');
 					$('#modal_add').find('[name="nik"]').val(response.data.nik);
 					$('#modal_add').find('[name="birth_place"]').val(response.data.birth_place);
 					$('#modal_add').find('[name="birth_date"]').val(response.data.birth_date);
 					$('#modal_add').find('[name="username"]').val(response.data.username);
 					$('#modal_add').find('[name="gender"]').val(response.data.gender);
+                    $("#gender").trigger('change');
 					$('#modal_add').find('[name="mobile"]').val(response.data.mobile);
 					$('#modal_add').find('[name="marital"]').val(response.data.marital);
+                    $("#marital").trigger('change');
 					$('#modal_add').find('[name="blood_group"]').val(response.data.blood_group);
+                    $("#blood_group").trigger('change');
 					$('#modal_add').find('[name="address"]').val(response.data.address);
 					$('#modal_add').find('[name="position"]').val(response.data.position);
 					$('#modal_add').find('[name="id_level"]').val(response.data.id_level);
+                    $("#id_level").trigger('change');
                     $('#modal_add').modal('show');
                 }else{
                     AlertUtil.showFailed(data.message);
@@ -272,9 +289,10 @@ function initAlert(){
     })
 }
 
-
-    //events
-    $("#input-form").on("submit",function(e){
+function initCreate(){
+     InitClear();
+     //events
+     $("#input-form").on("submit",function(e){
     	e.preventDefault();
     	var id = $('[name="id"]').val();
     	var url;
@@ -283,6 +301,7 @@ function initAlert(){
 		}else{
     		url = "<?php echo base_url("api/datamaster/employees/insert"); ?>";
 		}
+        KTApp.block('#modal_add .modal-content', {});
         $.ajax({
             type : 'POST',
             url : url,
@@ -309,6 +328,9 @@ function initAlert(){
         });
     });
 
+}
+
+   
 	function getMenu(){
 		$.ajax({
 			type : 'POST',
@@ -339,6 +361,7 @@ jQuery(document).ready(function() {
     initDataTable();
     getSelect2();
     initAlert();
+    initCreate();
     getMenu();
 });
 

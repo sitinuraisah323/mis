@@ -14,7 +14,8 @@ class Employees extends ApiController
 	public function index()
 	{
 		$this->employees->db
-			->select('name')
+			->select('name,username,id_level')
+			->join('users','users.id_employee = employees.id')
 			->join('units','units.id = employees.id_unit');
 		$data = $this->employees->all();
 		if($post = $this->input->post()){
