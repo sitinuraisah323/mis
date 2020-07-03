@@ -11,7 +11,7 @@ function initDataTable(){
             type: 'remote',
             source: {
               read: {
-                url: '<?php echo base_url("api/datamaster/employees"); ?>',
+                url: '<?php echo base_url("api/datamaster/employees/get_user"); ?>',
                 map: function(raw) {
                   // sample data mapping
                   var dataSet = raw;

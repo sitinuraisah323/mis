@@ -14,8 +14,7 @@ class Employees extends ApiController
 	public function index()
 	{
 		$this->employees->db
-			->select('name,username,id_level')
-			->join('users','users.id_employee = employees.id')
+			->select('name')
 			->join('units','units.id = employees.id_unit');
 		$data = $this->employees->all();
 		if($post = $this->input->post()){
@@ -24,6 +23,22 @@ class Employees extends ApiController
 				$this->employees->db->join('units','units.id = employees.id_unit');
 				$this->employees->db->like('fullname', $value);
 				$data = $this->employees->all();
+			}
+		}
+		echo json_encode(array(
+			'data'	=> 	$data,
+			'message'	=> 'Successfully Get Data Levels'
+		));
+	}
+
+	public function get_user()
+	{
+		$data = $this->employees->get_user();
+		if($post = $this->input->post()){
+			if(is_array($post['query'])){
+				$value = $post['query']['generalSearch'];
+				$this->employees->db->like('fullname', $value);
+				$data = $this->employees->get_user();
 			}
 		}
 		echo json_encode(array(
