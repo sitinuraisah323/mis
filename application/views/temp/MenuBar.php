@@ -5,6 +5,8 @@
         <div class="kt-header-menu-wrapper" id="kt_header_menu_wrapper">
             <div id="kt_header_menu" class="kt-header-menu kt-header-menu-mobile "  >
                 <ul class="kt-menu__nav ">
+				
+					<?php if(read_access('Dashboard')):?>
                     <li class="kt-menu__item  kt-menu__item--submenu kt-menu__item--rel"  data-ktmenu-submenu-toggle="click" aria-haspopup="true">
                     <a  href="javascript:;" class="kt-menu__link kt-menu__toggle"><span class="kt-menu__link-text">Dashboard</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
                         <div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--left">
@@ -27,6 +29,9 @@
                             </ul>
                         </div>
                     </li>
+					<?php endif;?>
+
+					<?php if(read_access('site-settings')):?>
                     <li class="kt-menu__item  kt-menu__item--submenu kt-menu__item--rel"  data-ktmenu-submenu-toggle="click" aria-haspopup="true">
                     <a  href="javascript:;" class="kt-menu__link kt-menu__toggle"><span class="kt-menu__link-text">Site Setting</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
                         <div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--left">
@@ -49,6 +54,9 @@
                             </ul>
                         </div>
                     </li>
+					<?php endif;?>
+					
+					<?php if(read_access('datamaster')):?>
                     <li class="kt-menu__item  kt-menu__item--submenu kt-menu__item--rel"  data-ktmenu-submenu-toggle="click" aria-haspopup="true">
                     <a  href="javascript:;" class="kt-menu__link kt-menu__toggle"><span class="kt-menu__link-text">Data Master</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
                         <div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--left">
@@ -75,7 +83,7 @@
 							<?php endif;?>
 							<?php if(read_access('mapingcategory')):?>
 								<li class="kt-menu__item "  aria-haspopup="true">
-									<a  href="<?php echo base_url('datamaster/mapingcategory'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Kategory Transaksi</span></a>
+									<a  href="<?php echo base_url('datamaster/mapingcategory'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Kategori Transaksi</span></a>
 								</li>
 							<?php endif;?>
 							<?php if(read_access('unitstarget')):?>
@@ -96,6 +104,9 @@
                             </ul>
                         </div>
                     </li>
+					<?php endif;?>
+
+					<?php if(read_access('transactions')):?>
                     <li class="kt-menu__item  kt-menu__item--submenu kt-menu__item--rel"  data-ktmenu-submenu-toggle="click" aria-haspopup="true">
                     <a  href="javascript:;" class="kt-menu__link kt-menu__toggle"><span class="kt-menu__link-text">Transaksi</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
                         <div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--left">
@@ -133,6 +144,9 @@
                             </ul>
                         </div>
                     </li>
+					<?php endif;?>
+
+					<?php if(read_access('transactions')):?>
 					<li class="kt-menu__item  kt-menu__item--submenu kt-menu__item--rel"  data-ktmenu-submenu-toggle="click" aria-haspopup="true">
                     <a  href="javascript:;" class="kt-menu__link kt-menu__toggle"><span class="kt-menu__link-text">Report</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
                         <div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--left">
@@ -145,6 +159,7 @@
                             </ul>
                         </div>
                     </li>
+					<?php endif;?>
                 </ul>
             </div>
 			
