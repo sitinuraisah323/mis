@@ -135,15 +135,30 @@
 								<li class="kt-menu__item "  aria-haspopup="true">
 									<a href="<?php echo base_url('report/bukukas'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Buku Kas</span></a>
 								</li>
-							<?php endif;?>						
-                            </ul>
+							<?php endif;?>
+							<?php if(read_access('regularpawns')):?>
+								<li class="kt-menu__item "  aria-haspopup="true">
+									<a href="<?php echo base_url('report/regularpawns'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Gadai Reguler</span></a>
+								</li>
+							<?php endif;?>
+							<?php if(read_access('mortages')):?>
+								<li class="kt-menu__item "  aria-haspopup="true">
+									<a href="<?php echo base_url('report/mortages'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Gadai Cicilan</span></a>
+								</li>
+							<?php endif;?>
+							<?php if(read_access('loaninstallments')):?>
+								<li class="kt-menu__item "  aria-haspopup="true">
+									<a href="<?php echo base_url('report/loaninstallments'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Angsuran Pinjaman Cicilan</span></a>
+								</li>
+							<?php endif;?>
+							</ul>
                         </div>
                     </li>
                 </ul>
             </div>
-			
+
 			<div class="kt-header-toolbar">
- 
+
 				<div class="kt-header-menu-wrapper" id="kt_header_menu_wrapper">
             	<div id="kt_header_menu" class="kt-header-menu kt-header-menu-mobile "  >
                 	<ul class="kt-menu__nav ">

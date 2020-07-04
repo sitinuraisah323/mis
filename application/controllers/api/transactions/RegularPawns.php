@@ -234,4 +234,23 @@ class RegularPawns extends ApiController
 
 	}
 
+	public function report()
+	{
+		$this->regulars->db
+			->select('customers.name as customer_name')
+			->join('customers','units_regularpawns.id_customer = customers.id');
+		if($get = $this->input->get()){
+			$this->regulars->db
+				->where('date_sbk >=', $get['dateStart'])
+				->where('date_sbk <=', $get['dateEnd'])
+				->where('id_unit', $get['id_unit']);
+		}
+		$data = $this->regulars->all();
+		echo json_encode(array(
+			'data'	=> $data,
+			'status'	=> true,
+			'message'	=> 'Successfully Get Data Regular Pawns'
+		));
+	}
+
 }

@@ -72,7 +72,8 @@ class Inbox extends ApiController
 				);
 				if($this->model->insert($data)){
 					$id_inbox = $this->model->last()->id;
-					if(in_array('files',$post)){
+					if(key_exists('files',$post)){
+						$this->model->db->trans_begin();
 						foreach ($post['files'] as $value){
 							$this->files->insert(array(
 								'id_inbox'	=> $id_inbox,
@@ -80,6 +81,14 @@ class Inbox extends ApiController
 								'user_create'	=> $this->session->userdata('user')->id,
 								'user_update'	=> $this->session->userdata('user')->id,
 							));
+						}
+						if ($this->model->db->trans_status() === FALSE)
+						{
+							$this->model->db->trans_rollback();
+						}
+						else
+						{
+							$this->model->db->trans_commit();
 						}
 					}
 
@@ -105,6 +114,32 @@ class Inbox extends ApiController
 			));
 		}
 
+	}
+
+	public function delete($id = null)
+	{
+		if($this->input->post('id')){
+			$this->model->deleteBatchSoft('id', $this->input->post('id'));
+			echo json_encode(array(
+				'data'	=> 	true,
+				'status'	=> true,
+				'message'	=> 'Successfull Insert Data Level'
+			));
+
+		}else if($this->model->find($id)){
+			$this->model->delete($id);
+			echo json_encode(array(
+				'data'	=> 	true,
+				'status'	=> true,
+				'message'	=> 'Successfull Insert Data Level'
+			));
+		}else{
+			echo json_encode(array(
+				'data'	=> 	false,
+				'status'	=> 	false,
+				'message'	=> 'Request Error Should Method POst'
+			));
+		}
 	}
 
 
