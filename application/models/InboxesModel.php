@@ -20,7 +20,7 @@ class InboxesModel extends Master
 			->select('units.name as unit_name')
 			->join('users','users.id = inboxes.compose_from')
 			->join('units','units.id = users.id_unit')
-			->where('units.status',"DELETE")
+			->where('inboxes.status',"DELETED")
 			->where('units.id',$this->session->userdata('user')->id_unit);
 		$trash = $this->all();
 
@@ -28,7 +28,7 @@ class InboxesModel extends Master
 			->select('units.name as unit_name')
 			->join('users','users.id = inboxes.compose_from')
 			->join('units','units.id = users.id_unit')
-			->where('units.status',"PUBLISH")
+			->where('inboxes.status',"PUBLISH")
 			->where('units.id',$this->session->userdata('user')->id_unit);
 		$send = $this->all();
 
@@ -36,7 +36,7 @@ class InboxesModel extends Master
 			->select('units.name as unit_name')
 			->join('users','users.id = inboxes.compose_from')
 			->join('units','units.id = users.id_unit')
-			->where('units.status',"PUBLISH")
+			->where('inboxes.status',"PUBLISH")
 			->where('compose_to',$this->session->userdata('user')->id_unit);
 		$inbox = $this->all();
 

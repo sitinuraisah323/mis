@@ -636,4 +636,23 @@ class LoanInstallments extends ApiController
 		}
 	}
 
+	public function report()
+	{
+		$this->mortages->db
+			->select('customers.name as customer_name')
+			->join('customers','units_mortages.id_customer = customers.id');
+		if($get = $this->input->get()){
+			$this->mortages->db
+				->where('date_sbk >=', $get['dateStart'])
+				->where('date_sbk <=', $get['dateEnd'])
+				->where('id_unit', $get['id_unit']);
+		}
+		$data = $this->mortages->all();
+		echo json_encode(array(
+			'data'	=> $data,
+			'status'	=> true,
+			'message'	=> 'Successfully Get Data Regular Pawns'
+		));
+	}
+
 }

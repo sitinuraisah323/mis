@@ -86,6 +86,20 @@ class Master extends CI_Model
 		return $this->db->select($this->table.'.*')->from($this->table)->get()->row();
 	}
 
+	public function deleteBatch($field, $array = array())
+	{
+		$this->db->where_in($field, $array);
+		return $this->db->delete($this->table);
+	}
+
+	public function deleteBatchSoft($field, $array = array())
+	{
+		$this->db->where_in($field, $array);
+		return $this->db->update($this->table, array(
+			'status'	=> 'DELETED'
+		));
+	}
+
 	public function insertOrUpdate($data, $condition = array())
 	{
 		if($this->find($condition)){

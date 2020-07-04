@@ -152,7 +152,7 @@ $this->load->view('temp/MenuBar.php');
                                 </g>
                             </svg>
                         </button>
-                        <button class="kt-inbox__icon" data-toggle="kt-tooltip" title="Delete">
+                        <button class="kt-inbox__icon" id="inbox-delete" data-toggle="kt-tooltip" title="Delete">
                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
                                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                     <rect x="0" y="0" width="24" height="24"/>

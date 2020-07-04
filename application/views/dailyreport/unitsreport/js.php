@@ -40,7 +40,7 @@
 	if("<?php echo $this->uri->segment(3);?>" == 'send'){
 		page = 'PUBLISH';
 	}else if("<?php echo $this->uri->segment(3);?>" == 'trash'){
-		page = 'DELETE';
+		page = 'DELETED';
 	}else{
 		page = 'ALL';
 	}
@@ -53,5 +53,28 @@
 	$(document).ready(function () {
 		console.log(page);
 		initData({page:page});
+	});
+
+	$('#inbox-delete').on('click', function () {
+		var data = [];
+		$('[name="checkbox[]"]').each(function (index, value) {
+			if($(this).is(":checked")){
+				data.push($(this).val());
+			}
+		});
+		if(data.length > 0){
+			$.ajax({
+				type : 'POST',
+				url : "<?php echo base_url("api/report/inbox/delete"); ?>",
+				data : {id:data},
+				dataType : "json",
+				success : function(response,status){
+					$('.search').trigger('change');
+				},
+				error: function (jqXHR, textStatus, errorThrown){
+					console.log(jqXHR);
+				}
+			});
+		}
 	});
 </script>
