@@ -12,6 +12,7 @@ class LoanInstallments extends ApiController
 		$this->load->model('MortagesModel', 'mortages');
 		$this->load->model('RegularPawnsModel', 'regulars');
 		$this->load->model('UnitsdailycashModel', 'unitsdailycash');
+		$this->load->model('MapingcategoryModel', 'm_category');
 		$this->load->model('RepaymentModel', 'repayments');
 		include APPPATH.'libraries/PHPExcel.php';
 
@@ -459,41 +460,62 @@ class LoanInstallments extends ApiController
 		$excelreader = new PHPExcel_Reader_Excel2007();
 		$loadexcel = $excelreader->load($path); // Load file yang telah diupload ke folder excel
 		$unitsdailycash = $loadexcel->getActiveSheet()->toArray(null, true, true ,true);
+
 		$date = date('Y-m-d');
-		$cashcode = 'KS';
+		$cashcode = 'KT';
 		$unit = $id_unit;
 		if($unitsdailycash){
 			foreach ($unitsdailycash as $key => $udc){
 				if($key > 1){
-					$datetrans 	= date('Y-m-d', strtotime($udc['E']));
-					$kdkas		= $udc['F'];
-					if($datetrans>=$date && $datetrans<=$date){
-						if($kdkas==$cashcode){
-							$data = array(
-								'id_unit'		=> $unit,
-								'cash_code'		=> $udc['F'],
+
+					$datetrans 		= date('Y-m-d', strtotime($udc['E']));
+					$kdkas			= $udc['F'];
+					//get description
+					$description	= strtolower($udc['C']);
+					$part			= explode(' ',$description);
+					$numeric		= $part[count($part)-1];
+					if(is_numeric($numeric)){
+						unset($part[count($part)-1]);
+						$char = implode(' ', $part);
+					}else{
+						$char = implode(' ', $part);
+					}					
+					//change value to positive
+					$amount			= 0;
+					if($udc['B']<0){ $amount=abs($udc['B']);}else{$amount=$udc['B'];}
+
+					if($kdkas==$cashcode){
+						//category
+						$categories = array('category'=> $char,'source' => $unit);
+						$findcategory = $this->m_category->find(array('category' => $char));
+						if(is_null($findcategory)){
+							$this->m_category->insert($categories);
+						}						
+
+						//transaksi
+						$data = array(
+							'id_unit'		=> $unit,
+							'cash_code'		=> $udc['F'],
+							'date'			=> $datetrans,
+							'amount'		=> $amount,
+							'description'	=> $description,									
+							//'numeric_desc'	=> $numeric,
+							//'char_desc'		=> $char,
+							'status'		=> "DRAFT",
+							'id_category'	=>  $findcategory->id,
+						);								
+						$findtransaction = $this->unitsdailycash->find(array(
+								'id_unit'		=> $unit,										
 								'date'			=> $datetrans,
-								'amount'		=> $udc['B'],
-								'description'	=> $udc['C'],
-								'type'			=> null,
-								'status'		=> "DRAFT"
-							);
-							//echo "<pre/>";
-							//print_r($data);
-							if($findudc = $this->unitsdailycash->find(array(
-								'id_unit'		=> $unit,
-								'cash_code'		=> $kdkas,
-								'date'			=> $datetrans,
-								'description' 	=> $udc['C']
-							))){
-								if($this->unitsdailycash->update($data, array(
-									'id'	=>  $findudc->id
-								)));
-							}else{
-								$this->unitsdailycash->insert($data);
-							}
+								'amount' 		=> $amount,
+								'description' 	=> $description
+						));
+						if(is_null($findtransaction)){
+							$this->unitsdailycash->insert($data);
 						}
-					}
+						//echo 'test';
+					//exit();
+					}	
 
 				}
 			}

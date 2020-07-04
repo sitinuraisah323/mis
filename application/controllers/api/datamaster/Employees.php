@@ -31,6 +31,22 @@ class Employees extends ApiController
 		));
 	}
 
+	public function get_user()
+	{
+		$data = $this->employees->get_user();
+		if($post = $this->input->post()){
+			if(is_array($post['query'])){
+				$value = $post['query']['generalSearch'];
+				$this->employees->db->like('fullname', $value);
+				$data = $this->employees->get_user();
+			}
+		}
+		echo json_encode(array(
+			'data'	=> 	$data,
+			'message'	=> 'Successfully Get Data Levels'
+		));
+	}
+
 	public function insert()
 	{
 		if($post = $this->input->post()){
