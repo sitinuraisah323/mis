@@ -4,7 +4,7 @@ var cariForm;
 
 function convertToRupiah(angka)
 {
-	var rupiah = '';		
+	var rupiah = '';
 	var angkarev = angka.toString().split('').reverse().join('');
 	for(var i = 0; i < angkarev.length; i++) if(i%3 == 0) rupiah += angkarev.substr(i,3)+'.';
 	return rupiah.split('',rupiah.length-1).reverse().join('');
@@ -96,68 +96,64 @@ function initCariForm(){
                 required: true,
             }
         },
-        invalidHandler: function(event, validator) {   
+        invalidHandler: function(event, validator) {
             KTUtil.scrollTop();
         }
-    });   
+    });
 
     $('#area').select2({ placeholder: "Please select a area", width: '100%' });
     $('#unit').select2({ placeholder: "Please select a Unit", width: '100%' });
 
     //events
-    $('#btncari').on('click',function(){ 
+    $('#btncari').on('click',function(){
         $('.rowappend').remove();
         var area = $('#area').val();
         var unit = $('#unit').val();
-        var dateStart = $('[name="date-start"]').val();
+		var dateStart = $('[name="date-start"]').val();
 		var dateEnd = $('[name="date-end"]').val();
-        var url_data = $('#url_get').val() + '/' + unit +'/'+ dateStart + '/'+dateEnd;        
-        var isValid = $("#form_bukukas").valid();
-        if(isValid){
         KTApp.block('#form_bukukas .kt-portlet__body', {});
-        $.get(url_data, function (data, status) {
-            var response = JSON.parse(data);
-            if (status = true) {
-                var currentSaldo = 0;
-                var TotSaldoIn = 0;
-                var TotSaldoOut = 0;
-                var no = 0;
-                for (var i = 0; i < response.data.length; i++) {
-                    no++;
-                    var date = moment(response.data[i].date).format('DD-MM-YYYY');
-                    var month = moment(response.data[i].date).format('MMMM');
-                    var year = moment(response.data[i].date).format('YYYY');
-                    var cashin=0;
-                    var cashout=0;
-                    if(response.data[i].type_category=='CASH_IN'){cashin= response.data[i].amount; currentSaldo +=  parseInt(response.data[i].amount); TotSaldoIn +=  parseInt(response.data[i].amount);}
-                    if(response.data[i].type_category=='CASH_OUT'){cashout= response.data[i].amount; currentSaldo -=  parseInt(response.data[i].amount); TotSaldoOut +=  parseInt(response.data[i].amount);}
-                    var newData = '<tr class="rowappend">';
-                    newData +='<td class="text-center">'+no+'</td>';
-                    newData +='<td>'+date+'</td>';
-                    newData +='<td class="text-center">'+month+'</td>';
-                    newData +='<td class="text-center">'+year+'</td>';
-                    newData +='<td>'+response.data[i].description+'</td>';
-                    newData +='<td class="text-right">'+convertToRupiah(cashin)+'</td>';
-                    newData +='<td class="text-right">'+convertToRupiah(cashout)+'</td>';
-                    newData +='<td class="text-right">'+convertToRupiah(currentSaldo)+'</td>';
-                    newData +='</tr>';
-                    $('.kt-section__content table').append(newData);
-                }
-
-                var newData = '<tr class="rowappend">';
-                    newData +='<td colspan="5" class="text-right"><b>Total</b></td>';                    
-                    newData +='<td class="text-right"><b>'+convertToRupiah(TotSaldoIn)+'</b></td>';
-                    newData +='<td class="text-right"><b>'+convertToRupiah(TotSaldoOut)+'</b></td>';
-                    newData +='<td class="text-right"><b>'+convertToRupiah(currentSaldo)+'</b></td>';
-                    newData +='</tr>';
-                    $('.kt-section__content table').append(newData);
-            }
-            KTApp.unblock('#form_bukukas .kt-portlet__body');
-
-        });  
-        }
+		$.ajax({
+			type : 'GET',
+			url : "<?php echo base_url("api/transactions/repayment/report"); ?>",
+			dataType : "json",
+			data:{id_unit:unit,dateStart:dateStart,dateEnd:dateEnd},
+			success : function(response,status){
+				KTApp.unblockPage();
+				if(response.status == true){
+					var template = '';
+					var no = 1;
+					var amount = 0;
+					$.each(response.data, function (index, data) {
+						template += "<tr class='rowappend'>";
+						template += "<td>"+no+"</td>";
+						template += "<td>"+ moment(data.date_sbk).format('DD-MM-YYYY')+"</td>";
+						template += "<td>"+ moment(data.date_repayment).format('DD-MM-YYYY')+"</td>";
+						template += "<td>"+data.customer_name+"</td>";
+						template += "<td class='text-right'>"+convertToRupiah(data.capital_lease)+"</td>";						
+						template += "<td class='text-center'>"+data.periode+"</td>";
+						template += "<td class='text-right'>"+convertToRupiah(data.money_loan)+"</td>";
+                        template += "<td>"+data.description_1+"</td>";
+						template += '</tr>';
+						no++;
+						amount += parseInt(data.money_loan);
+					});
+					template += "<tr class='rowappend'>";
+					template += "<td colspan='6' class='text-right'>Total</td>";
+					template += "<td class='text-right'>"+convertToRupiah(amount)+"</td>";
+					template += "<td class='text-right'></td>";
+					template += '</tr>';
+					$('.kt-section__content table').append(template);
+				}
+			},
+			error: function (jqXHR, textStatus, errorThrown){
+				KTApp.unblockPage();
+			},
+			complete:function () {
+				KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+			}
+		});
     })
-    
+
     return {
         validator:validator
     }
@@ -167,10 +163,10 @@ function initGetUnit(){
     $("#area").on('change',function(){
         var area = $('#area').val();
         var units =  document.getElementById('unit');
-        var url_data = $('#url_get_unit').val() + '/' + area;        
+        var url_data = $('#url_get_unit').val() + '/' + area;
         $.get(url_data, function (data, status) {
             var response = JSON.parse(data);
-            if (status) {              
+            if (status) {
                 $("#unit").empty();
                 for (var i = 0; i < response.data.length; i++) {
                     var opt = document.createElement("option");
@@ -179,13 +175,13 @@ function initGetUnit(){
                     units.appendChild(opt);
                 }
             }
-        }); 
+        });
     });
 }
 
-jQuery(document).ready(function() {     
-    initCariForm();  
-    initGetUnit(); 
+jQuery(document).ready(function() {
+    initCariForm();
+    initGetUnit();
 });
 
 </script>

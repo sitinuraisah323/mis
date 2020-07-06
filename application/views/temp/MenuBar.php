@@ -146,7 +146,7 @@
                     </li>
 					<?php endif;?>
 
-					<?php if(read_access('transactions')):?>
+					<?php if(read_access('report')):?>
 					<li class="kt-menu__item  kt-menu__item--submenu kt-menu__item--rel"  data-ktmenu-submenu-toggle="click" aria-haspopup="true">
                     <a  href="javascript:;" class="kt-menu__link kt-menu__toggle"><span class="kt-menu__link-text">Report</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
                         <div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--left">
@@ -164,6 +164,11 @@
 							<?php if(read_access('mortages')):?>
 								<li class="kt-menu__item "  aria-haspopup="true">
 									<a href="<?php echo base_url('report/mortages'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Gadai Cicilan</span></a>
+								</li>
+							<?php endif;?>
+							<?php if(read_access('repayment')):?>
+								<li class="kt-menu__item "  aria-haspopup="true">
+									<a href="<?php echo base_url('report/repayment'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Gadai Cicilan</span></a>
 								</li>
 							<?php endif;?>
 							<?php if(read_access('loaninstallments')):?>

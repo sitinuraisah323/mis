@@ -155,5 +155,26 @@ class Unitsdailycash extends ApiController
                 ));
             }
         }	
-    }
+	}
+	
+	public function report()
+	{
+		$this->unitsdailycash->db
+				->select('')
+				->select('categories.type as type_category')
+				->join('categories','units_dailycashs.id_category = categories.id');
+		if($get = $this->input->get()){
+			$this->unitsdailycash->db
+				->where('date >=', $get['dateStart'])
+				->where('date <=', $get['dateEnd'])
+				->where('id_unit', $get['id_unit']);
+		}
+		$data = $this->unitsdailycash->all();
+		echo json_encode(array(
+			'data'	=> $data,
+			'status'	=> true,
+			'message'	=> 'Successfully Get Data Regular Pawns'
+		));
+	}
+
 }

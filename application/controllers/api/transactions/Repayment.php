@@ -153,6 +153,25 @@ class Repayment extends ApiController
                 ));
             }
         }	
-    }
+	}
+	
+	public function report()
+	{
+		$this->repayment->db
+			->select('customers.name as customer_name')
+			->join('customers','units_repayments.id_customer = customers.id');
+		if($get = $this->input->get()){
+			$this->repayment->db
+				->where('date_sbk >=', $get['dateStart'])
+				->where('date_sbk <=', $get['dateEnd'])
+				->where('id_unit', $get['id_unit']);
+		}
+		$data = $this->repayment->all();
+		echo json_encode(array(
+			'data'	=> $data,
+			'status'	=> true,
+			'message'	=> 'Successfully Get Data Regular Pawns'
+		));
+	}
 
 }

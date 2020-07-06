@@ -2,7 +2,7 @@
 //error_reporting(0);
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once APPPATH.'controllers/Middleware/Authenticated.php';
-class Bukukas extends Authenticated
+class Repayment extends Authenticated
 {
 	/**
 	 * @var string
@@ -30,9 +30,7 @@ class Bukukas extends Authenticated
 	{
         $data['units'] = $this->units->all();
         $data['areas'] = $this->areas->all();
-		$this->load->view('report/bukukas/index',$data);
+		$this->load->view('report/repayment/index',$data);
 	}
-
-	
 	
 }
