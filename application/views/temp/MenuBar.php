@@ -86,6 +86,11 @@
 									<a  href="<?php echo base_url('datamaster/mapingcategory'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Kategori Transaksi</span></a>
 								</li>
 							<?php endif;?>
+							<?php if(read_access('mappingcase')):?>
+								<li class="kt-menu__item "  aria-haspopup="true">
+									<a  href="<?php echo base_url('datamaster/mappingcase'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Nomer Perkiraan</span></a>
+								</li>
+							<?php endif;?>
 							<?php if(read_access('unitstarget')):?>
 								<li class="kt-menu__item "  aria-haspopup="true">
 									<a  href="<?php echo base_url('datamaster/unitstarget'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Target Unit</span></a>

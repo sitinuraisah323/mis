@@ -48,3 +48,17 @@ CREATE TABLE `inboxes_files` (
   `id_inbox` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1
+
+
+CREATE TABLE mis.mapping_case (
+	id INT(11) auto_increment NOT NULL,
+	no_perk INT(11) NOT NULL,
+	na_perk VARCHAR(255) NOT NULL,
+	`type` VARCHAR(255) NOT NULL,
+	CONSTRAINT mapping_case_pk PRIMARY KEY (id)
+)
+ENGINE=InnoDB
+DEFAULT CHARSET=latin1
+COLLATE=latin1_swedish_ci;
+
+ALTER TABLE mis.mapping_case MODIFY COLUMN `type` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL;
