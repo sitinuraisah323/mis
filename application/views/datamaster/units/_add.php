@@ -28,6 +28,13 @@
 
                             <div class="col-md-12">
                                 <div class="form-group">
+                                    <label>Kode Unit</label>
+                                    <input type="text" class="form-control" id="code_unit" name="code_unit">	                            		
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group">
                                     <label>Unit</label>
                                     <input type="text" class="form-control" id="add_unit" name="unit">	                            		
                                 </div>

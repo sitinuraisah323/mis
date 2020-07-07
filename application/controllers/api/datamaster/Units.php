@@ -53,9 +53,9 @@ class Units extends ApiController
 	{
 		if($post = $this->input->post()){
 
-            $data['id_area'] = $this->input->post('area');	
-            $data['name'] = $this->input->post('unit');	
-            $data['code'] = '01';	
+            $data['id_area']    = $this->input->post('area');	
+            $data['name']       = $this->input->post('unit');	
+            $data['code']       = $this->input->post('code_unit');	
             $db = false;
             $db = $this->units->insert($data);
             if($db=true){
@@ -81,7 +81,7 @@ class Units extends ApiController
             $id                 = $this->input->post('id');	
             $data['id_area']    = $this->input->post('area');	
             $data['name']       = $this->input->post('unit');	
-            $data['code']       = '01';		
+            $data['code']       = $this->input->post('code_unit');		
             $db = false;
             $db = $this->units->update($data,$id);
             if($db=true){

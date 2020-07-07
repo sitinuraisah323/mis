@@ -112,6 +112,12 @@ function initDataTable(){
                 textAlign: 'left',
             }, 
             {
+                field: 'code',
+                title: 'Code',
+                sortable: 'asc',
+                textAlign: 'left',
+            }, 
+            {
                 field: 'name',
                 title: 'Unit',
                 sortable: 'asc',
@@ -329,6 +335,7 @@ function initEditForm(){
     var populateForm = function(groupObject){
         $("#edit_unit_id").val(groupObject.id);
         $("#edit_unit_name").val(groupObject.name);
+        $("#edit_code_unit").val(groupObject.code);
         $("#edit_area").val(groupObject.id_area);
         $("#edit_area").trigger('change');
     }
