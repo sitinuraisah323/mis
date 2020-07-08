@@ -66,12 +66,19 @@
                                 </div>
                             </div> 
 
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Jumlah</label>
-                                    <input type="text" class="form-control" id="edit_amount" name="amount">	                            		
+                                    <label>Booking</label>
+                                    <input type="text" class="form-control" id="edit_booking" name="booking">	                            		
                                 </div>
-                            </div>   
+                            </div> 
+
+                             <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Outstanding</label>
+                                    <input type="text" class="form-control" id="edit_outstanding" name="outstanding">	                            		
+                                </div>
+                            </div>  
                               
                             <div class="col-md-12" >     
                                 <div class="kt-section">

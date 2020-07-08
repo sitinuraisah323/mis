@@ -38,9 +38,9 @@ $this->load->view('temp/MenuBar.php');
                 </div>
                 <div class="kt-portlet__head-toolbar">
                     <div class="kt-portlet__head-wrapper">  
-                            <!-- <button type="button" class="btn btn-brand btn-icon-sm" data-toggle="modal" data-target="#modal_add">
-                                <i class="flaticon2-plus"></i> Buat Baru     
-                            </button>-->
+                            <button type="button" class="btn btn-brand btn-icon-sm" data-toggle="modal" data-target="#modal_upload">
+                                <i class="flaticon2-plus"></i> Upload      
+                            </button>  
                     </div>      
                 </div>
             </div>
@@ -105,6 +105,7 @@ $this->load->view('temp/MenuBar.php');
 
 <?php 
 $this->load->view('temp/Footer.php');
+$this->load->view('datamaster/mappingcase/_upload.php');
 $this->load->view('datamaster/mappingcase/_edit.php');
 $this->load->view('datamaster/mappingcase/_script.php');
 ?>

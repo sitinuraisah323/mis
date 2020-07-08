@@ -38,9 +38,15 @@ $this->load->view('temp/MenuBar.php');
                 </div>
                 <div class="kt-portlet__head-toolbar">
                     <div class="kt-portlet__head-wrapper">  
-                            <button type="button" class="btn btn-brand btn-icon-sm" data-toggle="modal" data-target="#modal_add">
+                            <!-- <button type="button" class="btn btn-brand btn-icon-sm" data-toggle="modal" data-target="#modal_add">
                                 <i class="flaticon2-plus"></i> Buat Baru     
-                            </button>                             
+                            </button>    -->
+                            <button type="button" class="btn btn-brand btn-icon-sm" data-toggle="modal" data-target="#modal_upload">
+                                <i class="flaticon2-plus"></i> Upload      
+                            </button> &nbsp  
+                            <button type="button" class="btn btn-brand btn-icon-sm" data-toggle="modal" data-target="#modal_upload">
+                                <i class="flaticon2-plus"></i> Download      
+                            </button>                            
                     </div>      
                 </div>
             </div>
@@ -105,6 +111,7 @@ $this->load->view('temp/MenuBar.php');
 
 <?php 
 $this->load->view('temp/Footer.php');
+$this->load->view('datamaster/unitstarget/_upload.php');
 $this->load->view('datamaster/unitstarget/_add.php');
 $this->load->view('datamaster/unitstarget/_edit.php');
 $this->load->view('datamaster/unitstarget/_script.php');

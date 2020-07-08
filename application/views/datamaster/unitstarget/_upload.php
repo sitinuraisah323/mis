@@ -1,17 +1,47 @@
 <!--begin::Modal-->
 <div class="modal fade" id="modal_upload" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-<form action="<?php echo base_url('datamaster/mappingcase/upload') ?>" id="form_upload" class="form-horizontal" method="post" enctype="multipart/form-data">
+<form action="<?php echo base_url('datamaster/unitstarget/upload') ?>" id="form_upload" class="form-horizontal" method="post" enctype="multipart/form-data">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Upload Mapping Case</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Upload Transaksi Harian Kas</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 </button>
             </div>
             <div class="modal-body form">
                     <div class="form-body">
-                        <div class="row">                            
-                           
+                        <div class="row"> 
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Unit</label>
+                                    <select class="form-control select2" name="unit" id="unit">
+                                    <option></option>
+                                    <?php 
+                                        if (!empty($units)){
+                                            foreach($units as $row){
+                                               echo "<option value=".$row->id.">".$row->name."</option>";
+                                            }
+                                        }
+                                    ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Tanggal Transaksi</label>
+                                    <input type="date" class="form-control" name="datetrans" id="datetrans">	                            		
+                                </div>
+                            </div> 
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Kode Kas </label>
+                                    <select class="form-control select2" name="kodetrans" id="kodetrans">
+                                    <option></option>
+                                       <option value="KT">KT</option>
+                                       <option value="SK">SK</option>
+                                    </select>	                            		
+                                </div>
+                            </div>      -->
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Upload </label>
