@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once APPPATH.'controllers/Middleware/Authenticated.php';
-class LoanInstallments extends Authenticated
+class Loaninstallments extends Authenticated
 {
 	/**
 	 * @var string

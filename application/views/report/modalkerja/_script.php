@@ -77,7 +77,7 @@ function initAlert(){
     })
 }
 
-function initCariForm(){
+function initCariModalKerjaPusatForm(){
     //validator
     var validator = $("#form_bukukas").validate({
         ignore:[],
@@ -107,46 +107,120 @@ function initCariForm(){
         KTApp.block('#form_bukukas .kt-portlet__body', {});
 		$.ajax({
 			type : 'GET',
-			url : "<?php echo base_url("api/transactions/unitsdailycash/report"); ?>",
+			url : "<?php echo base_url("api/transactions/unitsdailycash/modal_kerja_pusat"); ?>",
 			dataType : "json",
 			data:{id_unit:unit,dateStart:dateStart,dateEnd:dateEnd},
 			success : function(response,status){
 				KTApp.unblockPage();
 				if(response.status == true){
 					var template = '';
-                    var currentSaldo = 0;
-                    var TotSaldoIn = 0;
-                    var TotSaldoOut = 0;
+                    var total=0;
                     var no = 0;
 					$.each(response.data, function (index, data) {
-                        no++;
+                    no++;
                     var date = moment(data.date).format('DD-MM-YYYY');
                     var month = moment(data.date).format('MMMM');
                     var year = moment(data.date).format('YYYY');
-                    var cashin=0;
-                    var cashout=0;
-                    if(data.type=='CASH_IN'){cashin= data.amount; currentSaldo +=  parseInt(data.amount); TotSaldoIn +=  parseInt(data.amount);}
-                    if(data.type=='CASH_OUT'){cashout= data.amount; currentSaldo -=  parseInt(data.amount); TotSaldoOut +=  parseInt(data.amount);}
-                    
-                    template += '<tr class="rowappend">';
+
+                    var date = moment(data.date).format('DD-MM-YYYY');
+                    var month = moment(data.date).format('MMMM');
+                    var year = moment(data.date).format('YYYY');
+
+                    template +='<tr class="rowappend">';
                     template +='<td class="text-center">'+no+'</td>';
                     template +='<td>'+date+'</td>';
                     template +='<td class="text-center">'+month+'</td>';
                     template +='<td class="text-center">'+year+'</td>';
                     template +='<td>'+data.description+'</td>';
-                    template +='<td class="text-right">'+convertToRupiah(cashin)+'</td>';
-                    template +='<td class="text-right">'+convertToRupiah(cashout)+'</td>';
-                    template +='<td class="text-right">'+convertToRupiah(currentSaldo)+'</td>';
+                    template +='<td class="text-right">'+convertToRupiah(data.amount)+'</td>';
                     template +='</tr>';
+                    total +=  parseInt(data.amount);
 					});
-
                     template += '<tr class="rowappend">';
                     template +='<td colspan="5" class="text-right"><b>Total</b></td>';                    
-                    template +='<td class="text-right"><b>'+convertToRupiah(TotSaldoIn)+'</b></td>';
-                    template +='<td class="text-right"><b>'+convertToRupiah(TotSaldoOut)+'</b></td>';
-                    template +='<td class="text-right"><b>'+convertToRupiah(currentSaldo)+'</b></td>';
+                    template +='<td class="text-right"><b>'+convertToRupiah(total)+'</b></td>';
                     template +='</tr>';
-					$('.kt-section__content #tblbukukas').append(template);
+					$('.kt-section__content #tblmodalkerjapusat').append(template);
+				}
+			},
+			error: function (jqXHR, textStatus, errorThrown){
+				KTApp.unblockPage();
+			},
+			complete:function () {
+				KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+			}
+		});
+    })
+    
+    return {
+        validator:validator
+    }
+}
+
+function initCariModalKerjaMutasiUnitForm(){
+    //validator
+    var validator = $("#form_bukukas").validate({
+        ignore:[],
+        rules: {
+            area: {
+                required: true,
+            },
+            unit: {
+                required: true,
+            }
+        },
+        invalidHandler: function(event, validator) {   
+            KTUtil.scrollTop();
+        }
+    });   
+
+    $('#area').select2({ placeholder: "Please select a area", width: '100%' });
+    $('#unit').select2({ placeholder: "Please select a Unit", width: '100%' });
+
+    //events
+    $('#btncariMutasiUnit').on('click',function(){
+        $('.rowappend').remove();
+        var area = $('#area').val();
+        var unit = $('#unit').val();
+		var dateStart = $('[name="date-start"]').val();
+		var dateEnd = $('[name="date-end"]').val();
+        KTApp.block('#form_bukukas .kt-portlet__body', {});
+		$.ajax({
+			type : 'GET',
+			url : "<?php echo base_url("api/transactions/unitsdailycash/modal_kerja_mutasi_unit"); ?>",
+			dataType : "json",
+			data:{id_unit:unit,dateStart:dateStart,dateEnd:dateEnd},
+			success : function(response,status){
+				KTApp.unblockPage();
+				if(response.status == true){
+					var template = '';
+                    var total = 0;
+                    var no = 0;
+					$.each(response.data, function (index, data) {
+                    no++;
+                    var date = moment(data.date).format('DD-MM-YYYY');
+                    var month = moment(data.date).format('MMMM');
+                    var year = moment(data.date).format('YYYY');
+
+                    var date = moment(data.date).format('DD-MM-YYYY');
+                    var month = moment(data.date).format('MMMM');
+                    var year = moment(data.date).format('YYYY');
+
+                    template +='<tr class="rowappend">';
+                    template +='<td class="text-center">'+no+'</td>';
+                    template +='<td>'+date+'</td>';
+                    template +='<td class="text-center">'+month+'</td>';
+                    template +='<td class="text-center">'+year+'</td>';
+                    template +='<td>'+data.description+'</td>';
+                    template +='<td class="text-right">'+convertToRupiah(data.amount)+'</td>';
+                    template +='</tr>';
+                    total +=  parseInt(data.amount);
+					});
+                    template += '<tr class="rowappend">';
+                    template +='<td colspan="5" class="text-right"><b>Total</b></td>';                    
+                    template +='<td class="text-right"><b>'+convertToRupiah(total)+'</b></td>';
+                    template +='</tr>';
+					$('.kt-section__content #tblmodalkerjamutasiunit').append(template);
 				}
 			},
 			error: function (jqXHR, textStatus, errorThrown){
@@ -184,7 +258,8 @@ function initGetUnit(){
 }
 
 jQuery(document).ready(function() {     
-    initCariForm();  
+    initCariModalKerjaPusatForm();  
+    initCariModalKerjaMutasiUnitForm();
     initGetUnit(); 
 });
 

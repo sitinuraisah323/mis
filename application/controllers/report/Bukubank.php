@@ -1,13 +1,14 @@
 <?php
+//error_reporting(0);
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once APPPATH.'controllers/Middleware/Authenticated.php';
-class Regularpawns extends Authenticated
+class Bukubank extends Authenticated
 {
 	/**
 	 * @var string
 	 */
 
-	public $menu = 'RegularPawns';
+	public $menu = 'Bukubank';
 
 	/**
 	 * Welcome constructor.
@@ -16,8 +17,7 @@ class Regularpawns extends Authenticated
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('RegularPawnsModel', 'regulars');
-		$this->load->model('UnitsModel', 'units');
+		$this->load->model('AreasModel', 'areas');
 	}
 
 	/**
@@ -25,8 +25,10 @@ class Regularpawns extends Authenticated
 	 */
 	public function index()
 	{
-		$this->load->view('transactions/regularpawns/index',array(
-			'units'	=> $this->units->all()
-		));
+        $data['areas'] = $this->areas->all();
+		$this->load->view('report/bukubank/index',$data);
 	}
+
+	
+	
 }

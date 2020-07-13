@@ -1,6 +1,6 @@
 <?php
 require_once 'Master.php';
-class LoanInstallmentsModel extends Master
+class LoaninstallmentsModel extends Master
 {
 	public $table = 'units_loaninstallments';
 

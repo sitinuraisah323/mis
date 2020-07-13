@@ -3,6 +3,7 @@
 var datatable;
 var AlertUtil;
 var createForm;
+var uploadForm;
 var editForm;
 
 function initDTEvents(){
@@ -10,17 +11,17 @@ function initDTEvents(){
         var targetId = $(this).data("id");
         //alert(targetId);
         swal.fire({
-            title: 'Anda Yakin?',
-            text: "Akan menghapus data ini",
+            title: 'Are you sure?',
+            text: "You won't be able to revert this",
             type: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Ya, Hapus'
+            confirmButtonText: 'Yes, delete it'
         }).then(function(result) {
             if (result.value) {
                 KTApp.blockPage();
                 $.ajax({
                     type : 'GET',
-                    url : "<?php echo base_url("api/datamaster/mappingcase/delete"); ?>",
+                    url : "<?php echo base_url("api/transactions/repaymentmortage/delete"); ?>",
                     data : {id:targetId},
                     dataType : "json",
                     success : function(data,status){
@@ -46,7 +47,7 @@ function initDTEvents(){
         KTApp.blockPage();
         $.ajax({
             type : 'GET',
-            url : "<?php echo base_url("api/datamaster/mappingcase/get_byid"); ?>",
+            url : "<?php echo base_url("api/datamaster/areas/get_byid"); ?>",
             data : {id:targetId},
             dataType : "json",
             success : function(response,status){
@@ -69,14 +70,13 @@ function initDTEvents(){
     });
 }
 
-
 function initDataTable(){
     var option = {
         data: {
             type: 'remote',
             source: {
               read: {
-                url: '<?php echo base_url("api/datamaster/mappingcase"); ?>',
+                url: '<?php echo base_url("api/transactions/repaymentmortage"); ?>',
                 map: function(raw) {
                   // sample data mapping
                   var dataSet = raw;
@@ -99,70 +99,61 @@ function initDataTable(){
           },
           columns: [
             {
-                field: 'id',
-                title: 'ID',
+                field: 'no_sbk',
+                title: 'NO. SBK',
                 sortable: 'asc',
-                width:60,
+                //width:60,
                 textAlign: 'center',
             }, 
             {
-                field: 'no_perk',
-                title: 'No. Perkiraan',
-                sortable: 'asc',
-                textAlign: 'left',
-            }, 
-            {
-                field: 'na_perk',
-                title: 'Perkiraan',
-                sortable: 'asc',
-                textAlign: 'left',
-            }, 
-            {
-                field: 'type',
-                title: 'Type',
-                sortable: 'asc',
-                textAlign: 'left',
-                template: function (row) {
-                    var type ="";
-                    if(row.type=="CASH_IN"){
-                        type = '<span class="kt-badge kt-badge--inline kt-badge--success">Penerimaan</span>';
-                    }else if(row.type=="CASH_OUT"){
-                        type = '<span class="kt-badge kt-badge--inline kt-badge--warning">Pengeluaran</span>';
-                    }else{
-                        type = '<span class="kt-badge kt-badge--inline kt-badge--danger">Uncategory</span>';
-                    }                    
-                    return type;
-                }
-            },             
-            {
-                field: 'status',
-                title: 'Verified',
+                field: 'date_kredit',
+                title: 'Tanggal Kredit',
                 sortable: 'asc',
                 textAlign: 'center',
                 template: function (row) {
-                    var status ="";
-                    if(row.status=="1"){
-                        status = '<i class="fa fa-check-circle"></i>';
-                    }else{
-                        status = '<i class="fa fa-times-circle"></i>';
-                    }                    
-                    return status;
-                }
+                            var result = "<div class='date-td'>";
+                            var new_date = moment(row.date_kredit).format('MMM DD, YYYY');
+                            result = result + '<div>' + new_date + '</div> ';
+                            result = result + "</div>";
+                            return result;
+                        }
             }, 
             {
-                field: 'action',
-                title: 'Action',
-                sortable: false,
-                width: 100,
-                overflow: 'visible',
+                field: 'date_installment',
+                title: 'Tanggal Angsuran',
+                sortable: 'asc',
                 textAlign: 'center',
-                autoHide: false,
                 template: function (row) {
-                    var result ="";
-                        result = result + '<span data-id="' + row.id + '" href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md btn_edit" title="Edit" ><i class="flaticon-edit-1" style="cursor:pointer;"></i></span>';
-                        result = result + '<span data-id="' + row.id + '" href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md btn_delete" title="Delete" ><i class="flaticon2-trash" style="cursor:pointer;"></i></span>';
-                    return result;
-                }                        
+                            var result = "<div class='date-td'>";
+                            var new_date = moment(row.date_installment).format('MMM DD, YYYY');
+                            result = result + '<div>' + new_date + '</div> ';
+                            result = result + "</div>";
+                            return result;
+                        }
+            }, 
+            {
+                field: 'amount',
+                title: 'Amount',
+                sortable: 'asc',
+                textAlign: 'right',
+            },
+            {
+                field: 'capital_lease',
+                title: 'Sewa',
+                sortable: 'asc',
+                textAlign: 'right',
+            },
+            {
+                field: 'fine',
+                title: 'Denda',
+                sortable: 'asc',
+                textAlign: 'center',
+            },
+            {
+                field: 'saldo',
+                title: 'Saldo',
+                sortable: 'asc',
+                textAlign: 'left',
             }
           ],
           layout:{
@@ -242,15 +233,15 @@ function initAlert(){
     })
 }
 
-function initCreateForm(){
+function initUploadForm(){
     //validator
-    var validator = $( "#form_add" ).validate({
+    var validator = $( "#form_upload" ).validate({
         ignore:[],
         rules: {
-            area: {
-                required: true,
-            },
             unit: {
+                required: true,
+            },            
+            file: {
                 required: true,
             }
         },
@@ -258,11 +249,69 @@ function initCreateForm(){
             KTUtil.scrollTop();
         }
     });   
-
-    $('#add_area').select2({
-        placeholder: "Please select a Area",
+    
+    $('#unit').select2({
+        placeholder: "Please select a Unit",
         width: '100%'
     });
+    $('#kodetrans').select2({
+        placeholder: "Please select a Transaction Code",
+        width: '100%'
+    });
+    //events
+    $("#btn_add_submit").on("click",function(){
+      var isValid = $("#form_upload").valid();
+      if(isValid){
+        KTApp.block('#modal_upload .modal-content', {});
+        //alert('test');
+        $.ajax({
+            type : 'POST',
+            url : "<?php echo base_url("api/transactions/repayment/upload"); ?>",
+            data : $('#form_upload').serialize(),
+            async: true,
+			cache: false,
+			contentType: false,
+			processData: false,
+            dataType : "json",
+            success : function(data,status){
+                KTApp.unblock('#modal_upload .modal-content');
+                if(data.status == true){
+                    datatable.reload();
+                    $('#modal_upload').modal('hide');
+                    AlertUtil.showSuccess(data.message,5000);
+                }else{
+                    AlertUtil.showFailedDialogAdd(data.message);
+                }                
+            },
+            error: function (jqXHR, textStatus, errorThrown){
+                KTApp.unblock('#modal_upload .modal-content');
+                AlertUtil.showFailedDialogAdd("Cannot communicate with server please check your internet connection");
+            }
+        });  
+      }
+    })
+    $('#modal_upload').on('hidden.bs.modal', function () {
+       validator.resetForm();
+    })
+
+    return {
+        validator:validator
+    }
+}
+
+function initCreateForm(){
+    //validator
+    var validator = $( "#form_add" ).validate({
+        ignore:[],
+        rules: {
+            area: {
+                required: true,
+            }
+        },
+        invalidHandler: function(event, validator) {   
+            KTUtil.scrollTop();
+        }
+    });   
     
     //events
     $("#btn_add_submit").on("click",function(){
@@ -271,7 +320,7 @@ function initCreateForm(){
         KTApp.block('#modal_add .modal-content', {});
         $.ajax({
             type : 'POST',
-            url : "<?php echo base_url("api/datamaster/mapingcategory/insert"); ?>",
+            url : "<?php echo base_url("api/datamaster/areas/insert"); ?>",
             data : $('#form_add').serialize(),
             dataType : "json",
             success : function(data,status){
@@ -306,26 +355,15 @@ function initEditForm(){
     var validator = $( "#form_edit" ).validate({
         ignore:[],
         rules: {
-            type: {
-                required: true,
-            },
-            category: {
+            area_name: {
                 required: true,
             }
         },
         invalidHandler: function(event, validator) {   
             KTUtil.scrollTop();
         }
-    });  
+    });   
 
-    $('#type').select2({
-        placeholder: "Please select a Type",
-        width: '100%'
-    }); 
-    $('#status').select2({
-        placeholder: "Please select a Type",
-        width: '100%'
-    }); 
     //events
     $("#btn_edit_submit").on("click",function(){
       var isValid = $( "#form_edit" ).valid();
@@ -333,7 +371,7 @@ function initEditForm(){
         KTApp.block('#modal_edit .modal-content', {});
         $.ajax({
             type : 'POST',
-            url : "<?php echo base_url("api/datamaster/mappingcase/update"); ?>",
+            url : "<?php echo base_url("api/datamaster/areas/update"); ?>",
             data : $('#form_edit').serialize(),
             dataType : "json",
             success : function(data,status){
@@ -360,13 +398,10 @@ function initEditForm(){
     })
 
     var populateForm = function(groupObject){
-        $("#id").val(groupObject.id);
-        $("#no_perk").val(groupObject.no_perk);
-        $("#perkiraan").val(groupObject.na_perk);
-        $("#type").val(groupObject.type);
-        $("#type").trigger('change');
-        $("#status").val(groupObject.status);
-        $("#status").trigger('change');
+        $("#edit_area_id").val(groupObject.id);
+        $("#edit_area_name").val(groupObject.area);
+        //$("#edit_group_level").val(groupObject.group_level);
+        //$("#edit_group_level").trigger('change');
     }
     
     return {
@@ -377,8 +412,9 @@ function initEditForm(){
 
 jQuery(document).ready(function() { 
     initDataTable();
-    //createForm = initCreateForm();
-    editForm = initEditForm();
+    UploadForm = initUploadForm();
+    //createForm = initCreateForm();    
+    //editForm = initEditForm();
     initAlert();
 });
 

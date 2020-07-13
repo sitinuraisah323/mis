@@ -1,6 +1,6 @@
 <?php
 require_once 'Master.php';
-class RegularPawnsModel extends Master
+class RegularpawnsModel extends Master
 {
 	public $table = 'units_regularpawns';
 

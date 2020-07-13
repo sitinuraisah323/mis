@@ -36,6 +36,17 @@
                                     <option value="CASH_OUT">Pengurangan</option>
                                     </select>
                                 </div>
+                            </div> 
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Status</label>
+                                    <select class="form-control select2" name="status" id="status">
+                                    <option></option>
+                                    <option value="0">Unverified</option>
+                                    <option value="1">Verified</option>
+                                    </select>
+                                </div>
                             </div>                                
                               
                             <div class="col-md-12" >     

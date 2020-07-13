@@ -101,14 +101,15 @@ function initCariForm(){
         }
     });
 
-    $('#area').select2({ placeholder: "Please select a area", width: '100%' });
-    $('#unit').select2({ placeholder: "Please select a Unit", width: '100%' });
-
+    $('#area').select2({ placeholder: "Select area", width: '100%' });
+    $('#unit').select2({ placeholder: "Select Unit", width: '100%' });
+    $('#status').select2({ placeholder: "Select a status", width: '100%' });
     //events
     $('#btncari').on('click',function(){
         $('.rowappend').remove();
         var area = $('#area').val();
         var unit = $('#unit').val();
+        var statusrpt = $('#status').val();
 		var dateStart = $('[name="date-start"]').val();
 		var dateEnd = $('[name="date-end"]').val();
         KTApp.block('#form_bukukas .kt-portlet__body', {});
@@ -116,7 +117,7 @@ function initCariForm(){
 			type : 'GET',
 			url : "<?php echo base_url("api/transactions/regularpawns/report"); ?>",
 			dataType : "json",
-			data:{id_unit:unit,dateStart:dateStart,dateEnd:dateEnd},
+			data:{id_unit:unit,statusrpt:statusrpt,dateStart:dateStart,dateEnd:dateEnd},
 			success : function(response,status){
 				KTApp.unblockPage();
 				if(response.status == true){
@@ -124,25 +125,33 @@ function initCariForm(){
 					var no = 1;
 					var amount = 0;
 					var admin = 0;
+                    var status="";
 					$.each(response.data, function (index, data) {
 						template += "<tr class='rowappend'>";
-						template += "<td>"+no+"</td>";
-						template += "<td>"+data.date_sbk+"</td>";
-						template += "<td>"+data.deadline+"</td>";
+						template += "<td class='text-center'>"+no+"</td>";
+						template += "<td class='text-center'>"+data.no_sbk+"</td>";
+						template += "<td class='text-center'>"+moment(data.date_sbk).format('DD-MM-YYYY')+"</td>";
+                        template += "<td class='text-center'>"+moment(data.deadline).format('DD-MM-YYYY')+"</td>";
+                        if(data.date_repayment!=null){ var DateRepayment = moment(data.date_repayment).format('DD-MM-YYYY');}else{ var DateRepayment = "-";}
+						template += "<td class='text-center'>"+DateRepayment+"</td>";
 						template += "<td>"+data.customer_name+"</td>";
-						template += "<td>"+data.capital_lease+"</td>";
-						template += "<td class='text-right'>"+data.estimation+"</td>";
-						template += "<td class='text-right'>"+data.admin+"</td>";
-						template += "<td class='text-right'>"+data.amount+"</td>";
+						template += "<td class='text-center'>"+data.capital_lease+"</td>";
+						template += "<td class='text-right'>"+convertToRupiah(data.estimation)+"</td>";
+						template += "<td class='text-right'>"+convertToRupiah(data.admin)+"</td>";
+						template += "<td class='text-right'>"+convertToRupiah(data.amount)+"</td>";
+                        if(data.status_transaction=="L"){ status="Lunas";}
+                        else if(data.status_transaction=="N"){ status="Belum Lunas";}
+						template += "<td class='text-center'>"+status+"</td>";
 						template += '</tr>';
 						no++;
 						amount += parseInt(data.amount);
 						admin += parseInt(data.admin);
 					});
 					template += "<tr class='rowappend'>";
-					template += "<td colspan='6' class='text-right'>Total</td>";
-					template += "<td class='text-right'>"+admin+"</td>";
-					template += "<td class='text-right'>"+amount+"</td>";
+					template += "<td colspan='8' class='text-right'>Total</td>";
+					template += "<td class='text-right'>"+convertToRupiah(admin)+"</td>";
+					template += "<td class='text-right'>"+convertToRupiah(amount)+"</td>";
+					template += "<td class='text-right'></td>";
 					template += '</tr>';
 					$('.kt-section__content table').append(template);
 				}

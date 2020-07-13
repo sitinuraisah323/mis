@@ -18,9 +18,9 @@ class Mappingcase extends ApiController
 				$value = $post['query']['generalSearch'];
                 $this->m_case->db
                 ->or_like('no_perk', $value)
+                ->or_like('no_perk',strtoupper($value))
                 ->or_like('na_perk', $value)
-                ->or_like('status', $value)
-                ->or_like('status',strtoupper($value));               					
+                ->or_like('na_perk',strtoupper($value));              					
 				$data = $this->m_case->all();
 			}
 		}        
@@ -73,6 +73,7 @@ class Mappingcase extends ApiController
             $data['no_perk'] = $this->input->post('no_perk');	
             $data['na_perk'] = $this->input->post('perkiraan');	
             $data['type']    = $this->input->post('type');	
+            $data['status']    = $this->input->post('status');	
             $db = false;
             $db = $this->m_case->update($data,$id);
             if($db=true){

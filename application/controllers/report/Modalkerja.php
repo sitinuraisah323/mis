@@ -2,7 +2,7 @@
 //error_reporting(0);
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once APPPATH.'controllers/Middleware/Authenticated.php';
-class Regularpawns extends Authenticated
+class Modalkerja extends Authenticated
 {
 	/**
 	 * @var string
@@ -28,27 +28,23 @@ class Regularpawns extends Authenticated
 	 */
 	public function index()
 	{
+        
+    }
+    
+    public function pusat()
+	{
         $data['units'] = $this->units->all();
         $data['areas'] = $this->areas->all();
-		$this->load->view('report/regularpawns/index',$data);
+		$this->load->view('report/modalkerja/pusat',$data);
+    }
+    
+    public function antarunit()
+	{
+        $data['units'] = $this->units->all();
+        $data['areas'] = $this->areas->all();
+		$this->load->view('report/modalkerja/antarunit',$data);
 	}
 
-	public function pencairan()
-	{
-        $data['areas'] = $this->areas->all();
-		$this->load->view('report/regularpawns/pencairan',$data);
-    }
 	
-	public function pelunasan()
-	{
-        $data['areas'] = $this->areas->all();
-		$this->load->view('report/regularpawns/pelunasan',$data);
-	}
 	
-	public function perpanjangan()
-	{
-        $data['areas'] = $this->areas->all();
-		$this->load->view('report/regularpawns/perpanjangan',$data);
-    }
-
 }

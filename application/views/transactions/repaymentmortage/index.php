@@ -12,9 +12,9 @@ $this->load->view('temp/MenuBar.php');
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container ">
         <div class="kt-subheader__main">            
-            <h3 class="kt-subheader__title">Report</h3>            
+            <h3 class="kt-subheader__title">Transaksi</h3>            
             <span class="kt-subheader__separator kt-subheader__separator--v"></span>            
-            <span class="kt-subheader__desc">Buku Kas</span>            
+            <span class="kt-subheader__desc">Pelunasan Gadai Cicilan</span>            
         </div>
         <div class="kt-subheader__toolbar">
             <div class="kt-subheader__wrapper">                              
@@ -33,12 +33,14 @@ $this->load->view('temp/MenuBar.php');
                         <i class="kt-font-brand fa fa-align-justify"></i>
                     </span>
                     <h3 class="kt-portlet__head-title">
-                       Data Buku Kas
+                       Data Pelunasan Gadai Cicilan
                     </h3>
                 </div>
                 <div class="kt-portlet__head-toolbar">
                     <div class="kt-portlet__head-wrapper">  
-                           
+                            <button type="button" class="btn btn-brand btn-icon-sm" data-toggle="modal" data-target="#modal_upload">
+                                <i class="flaticon2-plus"></i> Upload      
+                            </button>                             
                     </div>      
                 </div>
             </div>
@@ -68,86 +70,40 @@ $this->load->view('temp/MenuBar.php');
                         </div>                   
                     </div>                   
                 </div>        
-                <!--end: Alerts -->          
+                <!--end: Alerts -->           
+                <!--begin: Search Form -->
+                <div class="kt-form kt-form--label-right kt-margin-t-20 kt-margin-l-20 kt-margin-r-20  kt-margin-b-10">
+                    <div class="row align-items-center">
+                        <div class="col-xl-8 order-2 order-xl-1">
+                            <div class="row align-items-center">                
+                                <div class="col-md-4 kt-margin-b-20-tablet-and-mobile">
+                                    <div class="kt-input-icon kt-input-icon--left">
+                                        <input type="text" class="form-control" placeholder="Search..." id="generalSearch">
+                                        <span class="kt-input-icon__icon kt-input-icon__icon--left">
+                                            <span><i class="la la-search"></i></span>
+                                        </span>
+                                    </div>
+                                </div>                
+                            </div>
+                        </div>      
+                    </div>
+                </div>      
+                <!--end: Search Form -->
             </div>
-
             <!--begin: Datatable -->        
-            <!-- <table class="kt-datatable" id="kt_datatable" width="100%">
-            </table> -->
+            <table class="kt-datatable" id="kt_datatable" width="100%">
+            </table>
             <!--end: Datatable -->
-
-            <form id="form_bukukas" class="form-horizontal">
-            <div class="kt-portlet__body">
-            <div class="col-md-12" > 
-
-                <div class="form-group row">
-                    <label class="col-lg-1 col-form-label">Area</label>
-                    <div class="col-lg-2">
-                        <select class="form-control select2" name="area" id="area">
-                            <option></option>
-                            <?php 
-                                if (!empty($areas)){
-                                    foreach($areas as $row){
-                                       echo "<option value=".$row->id.">".$row->area."</option>";
-                                    }
-                                }
-                            ?>
-                        </select>
-                    </div>
-
-                    <label class="col-lg-1 col-form-label">Unit</label>
-                    <div class="col-lg-2">
-                    <select class="form-control select2" name="unit" id="unit">
-                            <option></option>
-                            </select>
-                    </div>
-                    <label class="col-lg-1 col-form-label">Tanggal</label>
-					<div class="col-lg-2">
-						<input type="date" class="form-control" name="date-start" value="<?php echo date('Y-m-d');?>">
-					</div>
-					<div class="col-lg-2">
-						<input type="date" class="form-control" name="date-end" value="<?php echo date('Y-m-d');?>">
-					</div>
-                    <div class="col-lg-1">
-                        <button type="button" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>
-                    </div>
-				</div>	               
-
-            </div>
-
-            <div class="col-md-12">
-                <div class="kt-section__content">
-						<table class="table" id="tblbukukas">
-						  	<thead class="thead-light">
-						    	<tr>
-						      		<th class="text-center">No</th>
-						      		<th>Tanggal</th>
-						      		<th class="text-center">Bulan</th>
-						      		<th class="text-center">Tahun</th>
-						      		<th>Uraian</th>
-						      		<th class="text-right">Penerimaan Kas</th>
-						      		<th class="text-right">Pengeluaran Kas</th>
-						      		<th class="text-right">Saldo</th>
-						    	</tr>
-						  	</thead>
-						  	<tbody>						    					    	
-						  	</tbody>
-						</table>
-				</div>
-            </div>
-
-            </div>
-            </form>
-
         </div>
         </div>
     </div>
     <!-- end:: Content -->
-	<input type="hidden" name="url_get_unit" id="url_get_unit" value="<?php echo base_url('api/datamaster/units/get_units_byarea') ?>"/>
+	
 </div>
 </div>
 
 <?php 
 $this->load->view('temp/Footer.php');
-$this->load->view('report/bukukas/_script.php');
+$this->load->view('transactions/repaymentmortage/_upload.php');
+$this->load->view('transactions/repaymentmortage/_script.php');
 ?>

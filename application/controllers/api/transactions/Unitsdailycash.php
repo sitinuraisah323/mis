@@ -159,12 +159,105 @@ class Unitsdailycash extends ApiController
 	
 	public function report()
 	{
-		$this->unitsdailycash->db
-				->select('')
-				->select('categories.type as type_category')
-				->join('categories','units_dailycashs.id_category = categories.id');
+		$this->unitsdailycash->all();
 		if($get = $this->input->get()){
 			$this->unitsdailycash->db
+				->where('date >=', $get['dateStart'])
+				->where('date <=', $get['dateEnd'])
+				->where('id_unit', $get['id_unit']);
+		}
+		$data = $this->unitsdailycash->all();
+		echo json_encode(array(
+			'data'	  => $data,
+			'status'  => true,
+			'message' => 'Successfully Get Data Regular Pawns'
+		));
+	}
+
+	public function bukubank()
+	{
+		$this->unitsdailycash->all();
+		if($get = $this->input->get()){
+			$this->unitsdailycash->db
+				->where('SUBSTRING(no_perk,1,5) =','11100')
+				->where('date >=', $get['dateStart'])
+				->where('date <=', $get['dateEnd'])
+				->where('id_unit', $get['id_unit']);
+		}
+		$data = $this->unitsdailycash->all();
+		echo json_encode(array(
+			'data'	  => $data,
+			'status'  => true,
+			'message' => 'Successfully Get Data Regular Pawns'
+		));
+	}
+
+	public function modal_kerja_pusat()
+	{
+		$this->unitsdailycash->all();
+		if($get = $this->input->get()){
+			$this->unitsdailycash->db
+				->where('no_perk =', '1110000')
+				->where('date >=', $get['dateStart'])
+				->where('date <=', $get['dateEnd'])
+				->where('id_unit', $get['id_unit']);
+		}
+		$data = $this->unitsdailycash->all();
+		echo json_encode(array(
+			'data'	=> $data,
+			'status'	=> true,
+			'message'	=> 'Successfully Get Data Regular Pawns'
+		));
+	}
+
+	public function modal_kerja_mutasi_unit()
+	{
+		$ignore = array('1110000');
+		$this->unitsdailycash->all();
+		if($get = $this->input->get()){
+			$this->unitsdailycash->db
+				->where('SUBSTRING(no_perk,1,5) =','11100')
+				->where('type =', 'CASH_IN')
+				->where('date >=', $get['dateStart'])
+				->where('date <=', $get['dateEnd'])
+				->where('id_unit', $get['id_unit'])
+				->where_not_in('no_perk', $ignore);
+		}
+		$data = $this->unitsdailycash->all();
+		echo json_encode(array(
+			'data'	=> $data,
+			'status'	=> true,
+			'message'	=> 'Successfully get data modal kerja mutasi antar unit'
+		));
+	}
+
+	public function pendapatan()
+	{
+		$cashin = $ids = array('4120101', '6180301', '4110101', '6180102', '6170101');
+		$this->unitsdailycash->all();
+		if($get = $this->input->get()){
+			$this->unitsdailycash->db
+				->where('type =', 'CASH_IN')
+				->where_in('no_perk', $cashin)
+				->where('date >=', $get['dateStart'])
+				->where('date <=', $get['dateEnd'])
+				->where('id_unit', $get['id_unit']);
+		}
+		$data = $this->unitsdailycash->all();
+		echo json_encode(array(
+			'data'	=> $data,
+			'status'	=> true,
+			'message'	=> 'Successfully Get Data Regular Pawns'
+		));
+	}
+
+	public function pengeluaran()
+	{
+		$this->unitsdailycash->all();
+		if($get = $this->input->get()){
+			$this->unitsdailycash->db
+				->where('SUBSTRING(no_perk,1,2) =','51')
+				->where('type =', 'CASH_OUT')
 				->where('date >=', $get['dateStart'])
 				->where('date <=', $get['dateEnd'])
 				->where('id_unit', $get['id_unit']);
