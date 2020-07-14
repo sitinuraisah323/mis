@@ -7,7 +7,7 @@ class Loaninstallments extends Authenticated
 	 * @var string
 	 */
 
-	public $menu = 'LoanInstallments';
+	public $menu = 'Loaninstallments';
 
 	/**
 	 * Welcome constructor.

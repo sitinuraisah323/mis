@@ -1,4 +1,5 @@
 <script type="text/javascript">
+	var segments = 'api/transactions/loaninstallments/extractall';
 	$('#kt_inbox_compose').on('submit', function (e) {
 		e.preventDefault();
 		var dataNew = {};

@@ -42,7 +42,34 @@ $this->load->view('temp/MenuBar.php');
 				</div>
 			</div>
 			<div class="kt-portlet__body">
-				Welcome	Page
+				<table>
+					<tr>
+						<th>Unit</th>
+						<th>Noa Ost Kemarin</th>
+						<th>Up Ost Kemarin</th>
+						<th>Noa Ost Hari ini</th>
+						<th>Up Ost Hari ini</th>
+						<th>Noa Pelunasan hari ini</th>
+						<th>Up Pelunasan Hari ini</th>
+						<th>Total Noa</th>
+						<th>Total Up</th>
+						<th>Ticket</th>
+					</tr>
+					<?php foreach ($units as $unit):?>
+						<tr>
+							<td><?php echo $unit->name;?></td>
+							<td><?php echo $unit->ost_yesterday->noa;?></td>
+							<td><?php echo $unit->ost_yesterday->up;?></td>
+							<td><?php echo $unit->credit_today->noa;?></td>
+							<td><?php echo $unit->credit_today->up;?></td>
+							<td><?php echo $unit->repayment_today->noa;?></td>
+							<td><?php echo $unit->repayment_today->up;?></td>
+							<td><?php echo $unit->total_outstanding->noa;?></td>
+							<td><?php echo $unit->total_outstanding->up;?></td>
+							<td><?php echo $unit->total_outstanding->tiket;?></td>
+						</tr>
+					<?php endforeach;?>
+				</table>
 			</div>
 		</div>
 		<!--end::Portlet-->

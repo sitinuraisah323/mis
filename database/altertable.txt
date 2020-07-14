@@ -76,6 +76,27 @@ ALTER TABLE mis.users CHANGE id_unit id_unit INT UNSIGNED DEFAULT 0 NOT NULL AFT
 ALTER TABLE mis.units_targets CHANGE amount amount_booking float DEFAULT 0 NOT NULL;
 
 
+ALTER TABLE mis.units_regularpawns ADD permit ENUM('OJK','NON-OJK') DEFAULT 'NON-OJK' NULL;
+ALTER TABLE mis.units_regularpawns CHANGE permit permit ENUM('OJK','NON-OJK') DEFAULT 'NON-OJK' NULL AFTER description_4;
+
+ALTER TABLE mis.units_dailycashs ADD permit ENUM('OJK','NON-OJK') DEFAULT 'NON-OJK' NULL;
+ALTER TABLE mis.units_dailycashs CHANGE permit permit ENUM('OJK','NON-OJK') DEFAULT 'NON-OJK' NULL AFTER id_category;
+
+
+ALTER TABLE mis.units_loaninstallments ADD permit ENUM('OJK','NON-OJK') DEFAULT 'NON-OJK' NULL;
+ALTER TABLE mis.units_loaninstallments CHANGE permit permit ENUM('OJK','NON-OJK') DEFAULT 'NON-OJK' NULL AFTER description_4;
+
+ALTER TABLE mis.units_mortages ADD permit ENUM('OJK','NON-OJK') DEFAULT 'NON-OJK' NULL;
+ALTER TABLE mis.units_mortages CHANGE permit permit ENUM('OJK','NON-OJK') DEFAULT 'NON-OJK' NULL AFTER interest;
+
+ALTER TABLE mis.units_repayments ADD permit ENUM('OJK','NON-OJK') DEFAULT 'NON-OJK' NULL;
+ALTER TABLE mis.units_repayments CHANGE permit permit ENUM('OJK','NON-OJK') DEFAULT 'NON-OJK' NULL AFTER description_4;
+
+ALTER TABLE mis.units_repayments_mortage ADD permit ENUM('JOK','NON-OJK') DEFAULT 'NON-OJK' NULL;
+
+
+
+
 
 
 

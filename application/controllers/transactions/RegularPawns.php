@@ -7,7 +7,7 @@ class Regularpawns extends Authenticated
 	 * @var string
 	 */
 
-	public $menu = 'RegularPawns';
+	public $menu = 'Regularpawns';
 
 	/**
 	 * Welcome constructor.
