@@ -122,7 +122,7 @@ class Loaninstallments extends ApiController
 		}
 	}
 
-	public function data_transaction($id_unit, $path)
+	public function data_transaction($id_unit, $path, $jok = 'NON-OJK')
 	{
 		$excelreader = new PHPExcel_Reader_Excel2007();
 		$loadexcel = $excelreader->load($path); // Load file yang telah diupload ke folder excel
@@ -175,6 +175,7 @@ class Loaninstallments extends ApiController
 							'nic'	=> $customer->no_cif,
 							'date_sbk'	=> $transaction['C'] ? date('Y-m-d', strtotime($transaction['C'])): null,
 							'amount_loan'	=> (int) $transaction['D'],
+							'permit'		=> $jok,
 							'description_1'	=>  $transaction['E'],
 							'description_2'	=>  $transaction['F'],
 							'description_3'	=>  $transaction['G'],
@@ -265,7 +266,12 @@ class Loaninstallments extends ApiController
 
 	}
 
-	public function extractall()
+	public function extractallojk()
+	{
+		$this->extractall('OJK');
+	}
+
+	public function extractall($jok = 'NON-OJK')
 	{
 		if($this->input->post('id_unit')){
 			$idUnit = $this->input->post('id_unit');
@@ -308,13 +314,13 @@ class Loaninstallments extends ApiController
 					}
 				}
 				if($key != 10000){
-					$this->process_transaction($idUnit,$pathExtract, $files[$key]);
+					$this->process_transaction($idUnit,$pathExtract, $files[$key], $jok);
 					unset($files[$key]);
 				}
 
 				foreach ($files as $index => $file){
 					if($index > 1){
-						$this->process_transaction($idUnit,$pathExtract, $file);
+						$this->process_transaction($idUnit,$pathExtract, $file, $jok);
 					}
 				}
 
@@ -329,29 +335,29 @@ class Loaninstallments extends ApiController
 		}
 	}
 
-	public function process_transaction($id_unit, $path, $name)
+	public function process_transaction($id_unit, $path, $name, $jok)
 	{
 		switch(substr($name,0, 2)){
 			case 'MS':
 				$this->data_customer($id_unit,$path.$name);
 				break;	
 			case 'KS':
-				$this->data_transaction_cash($id_unit, $path.$name);
+				$this->data_transaction_cash($id_unit, $path.$name, $jok);
 				break;		
 			case 'PC':
-				$this->data_transaction_mortages($id_unit, $path.$name);
+				$this->data_transaction_mortages($id_unit, $path.$name, $jok);
 				break;
 			case 'KR':
-				$this->data_transaction_repayment_mortages($id_unit, $path.$name);
+				$this->data_transaction_repayment_mortages($id_unit, $path.$name, $jok);
 				break;
 			case 'PN':
-				$this->data_transaction_regular($id_unit, $path.$name);
+				$this->data_transaction_regular($id_unit, $path.$name, $jok);
 				break;
 				case 'LN':
-				$this->data_transaction_repayment($id_unit, $path.$name);
+				$this->data_transaction_repayment($id_unit, $path.$name, $jok);
 				break;			
 			case 'AN':
-				$this->data_transaction($id_unit, $path.$name);
+				$this->data_transaction($id_unit, $path.$name, $jok);
 				break;			
 		}
 	}
@@ -405,7 +411,7 @@ class Loaninstallments extends ApiController
 		}
 	}
 
-	public function data_transaction_cash($id_unit, $path)
+	public function data_transaction_cash($id_unit, $path, $jok = 'NON-OJK')
 	{
 		$excelreader = new PHPExcel_Reader_Excel2007();
 		$loadexcel = $excelreader->load($path); // Load file yang telah diupload ke folder excel
@@ -452,7 +458,8 @@ class Loaninstallments extends ApiController
 							'description'	=> $description,									
 							'status'		=> "DRAFT",
 							//'id_category'	=> $findcategory->id,
-							'type'			=> $type
+							'type'			=> $type,
+							'permit'		=> $jok
 						);								
 						$findtransaction = $this->unitsdailycash->find(array(
 								'id_unit'		=> $unit,										
@@ -474,7 +481,7 @@ class Loaninstallments extends ApiController
 		}
 	}
 
-	public function data_transaction_regular($id_unit, $path)
+	public function data_transaction_regular($id_unit, $path, $jok = 'NON-JOK')
 	{
 		$excelreader = new PHPExcel_Reader_Excel2007();
 		$loadexcel = $excelreader->load($path); // Load file yang telah diupload ke folder excel
@@ -492,6 +499,7 @@ class Loaninstallments extends ApiController
 						$data = array(
 							'no_sbk'	=> zero_fill( $transaction['A'], 5),
 							'nic'	=> $customer->no_cif,
+							'permit'	=> $jok,
 							'date_sbk'	=> $transaction['D'] ? date('Y-m-d', strtotime($transaction['D'])): null,
 							'deadline'	=> $transaction['E'] ? date('Y-m-d', strtotime($transaction['E'])) : null,
 							'date_auction'	=> $transaction['F'] ? date('Y-m-d', strtotime($transaction['F'])) : null,
@@ -533,7 +541,7 @@ class Loaninstallments extends ApiController
 		}
 	}
 
-	public function data_transaction_repayment($id_unit, $path)
+	public function data_transaction_repayment($id_unit, $path, $jok = 'NON-OJK')
 	{
 		$excelreader = new PHPExcel_Reader_Excel2007();
 		$loadexcel = $excelreader->load($path); // Load file yang telah diupload ke folder excel
@@ -556,7 +564,8 @@ class Loaninstallments extends ApiController
 							'periode'		=> $repayment['J'],
 							'description_1'	=> $repayment['E'],
 							'description_2'	=> $repayment['F'],
-							'description_3'	=> $repayment['G']
+							'description_3'	=> $repayment['G'],
+							'permit'		=> $jok
 						);
 						if($findrepayment = $this->repayments->find(array(
 							'id_unit'		=> $unit,
@@ -587,7 +596,7 @@ class Loaninstallments extends ApiController
 		}
 	}
 
-	public function data_transaction_mortages($id_unit, $path)
+	public function data_transaction_mortages($id_unit, $path, $jok = 'NON-OJK')
 	{
 
 		$excelreader = new PHPExcel_Reader_Excel2007();
@@ -622,6 +631,7 @@ class Loaninstallments extends ApiController
 						'interest'	=>  $transaction['X'],
 						'id_customer'	=> $customer->id,
 						'id_unit'	=> $id_unit,
+						'permit'	=> $jok,
 						'user_create'	=> $this->session->userdata('user')->id,
 						'user_update'	=> $this->session->userdata('user')->id,
 					);
@@ -643,7 +653,7 @@ class Loaninstallments extends ApiController
 		}
 	}
 
-	public function data_transaction_repayment_mortages($id_unit, $path)
+	public function data_transaction_repayment_mortages($id_unit, $path, $jok = 'NON-OJK')
 	{
 		$excelreader = new PHPExcel_Reader_Excel2007();
 		$loadexcel = $excelreader->load($path); // Load file yang telah diupload ke folder excel
@@ -661,7 +671,8 @@ class Loaninstallments extends ApiController
 						'amount'			=> $repmortage['I'],
 						'capital_lease'		=> $repmortage['K'],
 						'fine'				=> $repmortage['L'],
-						'saldo'				=> $repmortage['M']
+						'saldo'				=> $repmortage['M'],
+						'permit'			=> $jok
 					);
 					if($findrepaymentmortage = $this->repaymentmortage->find(array(
 						'id_unit'		=> $unit,

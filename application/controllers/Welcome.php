@@ -52,8 +52,10 @@ class Welcome extends Authenticated
 				'noa'	=> $unit->dpd_today->noa + $unit->dpd_yesterday->noa - $unit->dpd_repayment_today->noa,
 				'ost'	=> $unit->dpd_today->ost + $unit->dpd_yesterday->ost - $unit->dpd_repayment_today->ost,
 			);
-			$unit->persentage = $unit->total_dpd->ost > 0 ? $unit->total_dpd->ost / $unit->total_dpd->noa : 0;
+			$unit->percentage = $unit->total_dpd->ost > 0 ? $unit->total_dpd->ost / $unit->total_dpd->noa : 0;
 		}
+		var_dump($units);
+		exit;
 		return $units;
 	}
 

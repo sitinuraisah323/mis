@@ -80,8 +80,8 @@ $this->load->view('temp/MenuBar.php');
             <div class="kt-portlet__body">
             <div class="col-md-12" >
                 <div class="form-group row">
-                    <label class="col-form-label">Area</label>
                     <div class="col-lg-2">
+						<label class="col-form-label">Area</label>
                         <select class="form-control select2" name="area" id="area">
                             <option></option>
                             <?php
@@ -93,15 +93,14 @@ $this->load->view('temp/MenuBar.php');
                             ?>
                         </select>
                     </div>
-
-                    <label class="col-form-label">Unit</label>
                     <div class="col-lg-2">
+						<label class="col-form-label">Unit</label>
 						<select class="form-control select2" name="id_unit" id="unit">
 							<option></option>
 						</select>
                     </div>
-                    <label class="col-form-label">Status</label>
                     <div class="col-lg-2">
+						<label class="col-form-label">Status</label>
                         <select class="form-control select2" name="status" id="status">
                             <option></option>                                                         
                             <option value="0">All</option>
@@ -110,11 +109,20 @@ $this->load->view('temp/MenuBar.php');
                             <option value="3">Perpanjangan</option>                            
                         </select>
                     </div>
-					<label class="col-form-label">Tanggal</label>
 					<div class="col-lg-2">
+						<label class="col-form-label">Ijin</label>
+						<select class="form-control" name="permit" id="permit">
+							<?php foreach (array('OJK' =>'OJK','NON-OJK' => 'Non OJK') as $value => $item):?>
+								<option value="<?php echo $value;?>"><?php echo $item;?></option>
+							<?php endforeach;?>
+						</select>
+					</div>
+					<div class="col-lg-2">
+						<label class="col-form-label">Tanggal</label>
 						<input type="date" class="form-control" name="date-start" value="<?php echo date('Y-m-d');?>">
 					</div>
 					<div class="col-lg-2">
+						<label class="col-form-label">Sampai</label>
 						<input type="date" class="form-control" name="date-end" value="<?php echo date('Y-m-d');?>">
 					</div>
 					<button type="button" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>

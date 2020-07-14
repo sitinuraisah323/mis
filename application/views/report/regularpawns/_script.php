@@ -112,12 +112,13 @@ function initCariForm(){
         var statusrpt = $('#status').val();
 		var dateStart = $('[name="date-start"]').val();
 		var dateEnd = $('[name="date-end"]').val();
+		var permit = $('[name="permit"]').val();
         KTApp.block('#form_bukukas .kt-portlet__body', {});
 		$.ajax({
 			type : 'GET',
 			url : "<?php echo base_url("api/transactions/regularpawns/report"); ?>",
 			dataType : "json",
-			data:{id_unit:unit,statusrpt:statusrpt,dateStart:dateStart,dateEnd:dateEnd},
+			data:{id_unit:unit,statusrpt:statusrpt,dateStart:dateStart,dateEnd:dateEnd,permit:permit},
 			success : function(response,status){
 				KTApp.unblockPage();
 				if(response.status == true){

@@ -322,7 +322,7 @@ var KTAppInbox = function() {
         previewNode.remove();
 
         var myDropzone = new Dropzone(id, { // Make the whole body a dropzone
-            url: url+'api/transactions/loaninstallments/extractall', // Set the url for your upload script location
+            url: url+segments, // Set the url for your upload script location
             parallelUploads: 20,
             maxFilesize: 2, // Max filesize in MB
             previewTemplate: previewTemplate,

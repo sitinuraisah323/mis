@@ -252,6 +252,11 @@ class Regularpawns extends ApiController
 				->where('units_regularpawns.date_sbk <=', $get['dateEnd'])
 				->where_in('units_regularpawns.status_transaction ', $status)
 				->where('units_regularpawns.id_unit', $get['id_unit']);
+			if($permit = $get['permit']){
+				$this->regulars->db->where('units_regularpawns.permit', $permit);
+			}
+
+
 		}
 		$data = $this->regulars->all();
 		echo json_encode(array(
