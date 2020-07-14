@@ -81,7 +81,7 @@ $this->load->view('temp/MenuBar.php');
             <div class="col-md-12" > 
 
                 <div class="form-group row">
-                    <label class="col-lg-1 col-form-label">Area</label>
+                    <label class="col-form-label">Area</label>
                     <div class="col-lg-2">
                         <select class="form-control select2" name="area" id="area">
                             <option></option>
@@ -95,13 +95,25 @@ $this->load->view('temp/MenuBar.php');
                         </select>
                     </div>
 
-                    <label class="col-lg-1 col-form-label">Unit</label>
+                    <label class="col-form-label">Unit</label>
                     <div class="col-lg-2">
                     <select class="form-control select2" name="unit" id="unit">
                             <option></option>
                             </select>
                     </div>
-                    <label class="col-lg-1 col-form-label">Tanggal</label>
+                    <label class="col-form-label">Kategori</label>
+                    <div class="col-lg-2">
+                    <select class="form-control select2" name="category" id="category">
+                            <option></option>
+                            <option value="all">All</option>
+                            <?php 
+                            foreach ($pengeluaran as $row) {
+                                echo '<option value="'.$row->no_perk.'">'.$row->na_perk.'<option>';
+                            }
+                            ?>
+                            </select>
+                    </div>
+                    <label class="col-form-label">Tanggal</label>
 					<div class="col-lg-2">
 						<input type="date" class="form-control" name="date-start" value="<?php echo date('Y-m-d');?>">
 					</div>

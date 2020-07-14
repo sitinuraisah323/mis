@@ -85,8 +85,11 @@ class Unitsdailycash extends Authenticated
 							$char = implode(' ', $part);
 						}
 						//change value to positive
+						//$amount			= 0;
+						//if($udc['B']<0){ $amount=abs($udc['B']);}else{$amount=$udc['B'];}	
+						//change value to positive
 						$amount			= 0;
-						if($udc['B']<0){ $amount=abs($udc['B']);}else{$amount=$udc['B'];}	
+						if($udc['B']<0){ $amount=abs($udc['B']); $type="CASH_IN";}else{$amount=$udc['B']; $type="CASH_OUT";}
 
 							if($kdkas==$cashcode){													
 								
@@ -98,26 +101,42 @@ class Unitsdailycash extends Authenticated
 								}
 
 								//transaksi
+								// $data = array(
+								// 	'id_unit'		=> $unit,
+								// 	'cash_code'		=> $udc['F'],
+								// 	'date'			=> $datetrans,
+								// 	'amount'		=> $amount,
+								// 	'description'	=> $description,									
+								// 	//'numeric_desc'	=> $numeric,
+								// 	//'char_desc'		=> $char,
+								// 	'status'		=> "DRAFT",
+								// 	'id_category'	=>  $findcategory->id,
+								// );	
 								$data = array(
 									'id_unit'		=> $unit,
+									'no_perk'		=> $udc['A'],
 									'cash_code'		=> $udc['F'],
 									'date'			=> $datetrans,
 									'amount'		=> $amount,
 									'description'	=> $description,									
-									//'numeric_desc'	=> $numeric,
-									//'char_desc'		=> $char,
 									'status'		=> "DRAFT",
-									'id_category'	=>  $findcategory->id,
-								);								
+									//'id_category'	=> $findcategory->id,
+									'type'			=> $type
+								);									
 								$findtransaction = $this->unitsdailycash->find(array(
 										'id_unit'		=> $unit,										
 										'date'			=> $datetrans,
 										'amount' 		=> $amount,
 										'description' 	=> $description
 								));
+								echo "<pre/>";print_r($data);
 								if(!$findtransaction){
 									//echo "<pre/>";//print_r($data);
 									$this->unitsdailycash->insert($data);
+								}else{
+									if($this->unitsdailycash->update($data, array(
+										'id'	=> $findtransaction->id
+									)));
 								}
 							}
 					}
@@ -132,7 +151,7 @@ class Unitsdailycash extends Authenticated
 				unlink($path);
 			}
 		}
-		redirect('transactions/unitsdailycash');
+		//redirect('transactions/unitsdailycash');
 	}
 
 }
