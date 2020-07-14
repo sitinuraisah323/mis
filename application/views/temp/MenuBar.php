@@ -168,9 +168,27 @@
 									<span class="kt-menu__link-text">Users</span>
 								</a>
 							</li>
-							<?php endif;?>						
-							
-                            </ul>
+							<?php endif;?>
+
+							<?php if(read_access('bookcash')):?>
+								<li class="kt-menu__item "  aria-haspopup="true">
+									<a  href="<?php echo base_url('datamaster/fractionofmoney'); ?>" class="kt-menu__link ">
+										<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>
+										<span class="kt-menu__link-text">Pecahan Uang</span>
+									</a>
+								</li>
+							<?php endif;?>
+
+							<?php if(read_access('bookcash')):?>
+								<li class="kt-menu__item "  aria-haspopup="true">
+									<a  href="<?php echo base_url('datamaster/bookcash'); ?>" class="kt-menu__link ">
+										<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>
+										<span class="kt-menu__link-text">buku kas</span>
+									</a>
+								</li>
+							<?php endif;?>
+
+							</ul>
                         </div>
                     </li>
 					<?php endif;?>
