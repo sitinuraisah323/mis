@@ -5,6 +5,15 @@ var AlertUtil;
 var createForm;
 var editForm;
 
+
+// function convertToRupiah(angka)
+// {
+// 	var rupiah = '';		
+// 	var angkarev = angka.toString().split('').reverse().join('');
+// 	for(var i = 0; i < angkarev.length; i++) if(i%3 == 0) rupiah += angkarev.substr(i,3)+'.';
+// 	return rupiah.split('',rupiah.length-1).reverse().join('');
+// }
+
 function initDTEvents(){
     $(".btn_delete").on("click",function(){
         var targetId = $(this).data("id");
@@ -131,13 +140,25 @@ function initDataTable(){
                         }
             }, 
             {
-                field: 'amount',
-                title: 'Amount',
+                field: 'amount_booking',
+                title: 'Booking',
                 sortable: 'asc',
-                textAlign: 'left',
+                textAlign: 'right',
                 template: function (row) {
                     var result ="";
-                        result = row.amount;
+                        result = row.amount_booking;
+                    return result;
+                } 
+            },
+            {
+                field: 'amount_outstanding',
+                title: 'Outstanding',
+                sortable: 'asc',
+                textAlign: 'right',
+                template: function (row) {
+                    var result ="";
+                        result = row.amount_outstanding;
+                        
                     return result;
                 } 
             }, 
@@ -145,7 +166,7 @@ function initDataTable(){
                 field: 'status',
                 title: 'Status',
                 sortable: 'asc',
-                textAlign: 'left',
+                textAlign: 'center',
             }, 
             {
                 field: 'action',
@@ -390,7 +411,8 @@ function initEditForm(){
         $("#edit_unit").val(groupObject.id_unit);
         $("#edit_month").val(groupObject.month);
         $("#edit_year").val(groupObject.year);
-        $("#edit_amount").val(groupObject.amount);
+        $("#edit_booking").val(groupObject.amount_booking);
+        $("#edit_outstanding").val(groupObject.amount_outstanding);
         $("#edit_unit").trigger('change');
         $("#edit_month").trigger('change');
         $("#edit_year").trigger('change');
@@ -403,10 +425,15 @@ function initEditForm(){
 }
 
 jQuery(document).ready(function() { 
+    
     initDataTable();
-    createForm = initCreateForm();
+    //createForm = initCreateForm();
     editForm = initEditForm();
     initAlert();
+    $('#unit').select2({
+        placeholder: "Please select a Unit",
+        width: '100%'
+    });   
 });
 
 </script>

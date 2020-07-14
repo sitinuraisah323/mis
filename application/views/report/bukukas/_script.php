@@ -10,13 +10,6 @@ function convertToRupiah(angka)
 	return rupiah.split('',rupiah.length-1).reverse().join('');
 }
 
-// function convertToRupiah(angka){
-//    var reverse = angka.toString().split('').reverse().join(''),
-//    ribuan = reverse.match(/\d{1,3}/g);
-//    ribuan = ribuan.join('.').split('').reverse().join('');
-//    return ribuan;
-//  }
-
 function initAlert(){
     AlertUtil = {
         showSuccess : function(message,timeout){
@@ -105,57 +98,64 @@ function initCariForm(){
     $('#unit').select2({ placeholder: "Please select a Unit", width: '100%' });
 
     //events
-    $('#btncari').on('click',function(){ 
+    $('#btncari').on('click',function(){
         $('.rowappend').remove();
         var area = $('#area').val();
         var unit = $('#unit').val();
-        var dateStart = $('[name="date-start"]').val();
+		var dateStart = $('[name="date-start"]').val();
 		var dateEnd = $('[name="date-end"]').val();
-        var url_data = $('#url_get').val() + '/' + unit +'/'+ dateStart + '/'+dateEnd;        
-        var isValid = $("#form_bukukas").valid();
-        if(isValid){
         KTApp.block('#form_bukukas .kt-portlet__body', {});
-        $.get(url_data, function (data, status) {
-            var response = JSON.parse(data);
-            if (status = true) {
-                var currentSaldo = 0;
-                var TotSaldoIn = 0;
-                var TotSaldoOut = 0;
-                var no = 0;
-                for (var i = 0; i < response.data.length; i++) {
-                    no++;
-                    var date = moment(response.data[i].date).format('DD-MM-YYYY');
-                    var month = moment(response.data[i].date).format('MMMM');
-                    var year = moment(response.data[i].date).format('YYYY');
+		$.ajax({
+			type : 'GET',
+			url : "<?php echo base_url("api/transactions/unitsdailycash/report"); ?>",
+			dataType : "json",
+			data:{id_unit:unit,dateStart:dateStart,dateEnd:dateEnd},
+			success : function(response,status){
+				KTApp.unblockPage();
+				if(response.status == true){
+					var template = '';
+                    var currentSaldo = 0;
+                    var TotSaldoIn = 0;
+                    var TotSaldoOut = 0;
+                    var no = 0;
+					$.each(response.data, function (index, data) {
+                        no++;
+                    var date = moment(data.date).format('DD-MM-YYYY');
+                    var month = moment(data.date).format('MMMM');
+                    var year = moment(data.date).format('YYYY');
                     var cashin=0;
                     var cashout=0;
-                    if(response.data[i].type_category=='CASH_IN'){cashin= response.data[i].amount; currentSaldo +=  parseInt(response.data[i].amount); TotSaldoIn +=  parseInt(response.data[i].amount);}
-                    if(response.data[i].type_category=='CASH_OUT'){cashout= response.data[i].amount; currentSaldo -=  parseInt(response.data[i].amount); TotSaldoOut +=  parseInt(response.data[i].amount);}
-                    var newData = '<tr class="rowappend">';
-                    newData +='<td class="text-center">'+no+'</td>';
-                    newData +='<td>'+date+'</td>';
-                    newData +='<td class="text-center">'+month+'</td>';
-                    newData +='<td class="text-center">'+year+'</td>';
-                    newData +='<td>'+response.data[i].description+'</td>';
-                    newData +='<td class="text-right">'+convertToRupiah(cashin)+'</td>';
-                    newData +='<td class="text-right">'+convertToRupiah(cashout)+'</td>';
-                    newData +='<td class="text-right">'+convertToRupiah(currentSaldo)+'</td>';
-                    newData +='</tr>';
-                    $('.kt-section__content table').append(newData);
-                }
+                    if(data.type=='CASH_IN'){cashin= data.amount; currentSaldo +=  parseInt(data.amount); TotSaldoIn +=  parseInt(data.amount);}
+                    if(data.type=='CASH_OUT'){cashout= data.amount; currentSaldo -=  parseInt(data.amount); TotSaldoOut +=  parseInt(data.amount);}
+                    
+                    template += '<tr class="rowappend">';
+                    template +='<td class="text-center">'+no+'</td>';
+                    template +='<td>'+date+'</td>';
+                    template +='<td class="text-center">'+month+'</td>';
+                    template +='<td class="text-center">'+year+'</td>';
+                    template +='<td>'+data.description+'</td>';
+                    template +='<td class="text-right">'+convertToRupiah(cashin)+'</td>';
+                    template +='<td class="text-right">'+convertToRupiah(cashout)+'</td>';
+                    template +='<td class="text-right">'+convertToRupiah(currentSaldo)+'</td>';
+                    template +='</tr>';
+					});
 
-                var newData = '<tr class="rowappend">';
-                    newData +='<td colspan="5" class="text-right"><b>Total</b></td>';                    
-                    newData +='<td class="text-right"><b>'+convertToRupiah(TotSaldoIn)+'</b></td>';
-                    newData +='<td class="text-right"><b>'+convertToRupiah(TotSaldoOut)+'</b></td>';
-                    newData +='<td class="text-right"><b>'+convertToRupiah(currentSaldo)+'</b></td>';
-                    newData +='</tr>';
-                    $('.kt-section__content table').append(newData);
-            }
-            KTApp.unblock('#form_bukukas .kt-portlet__body');
-
-        });  
-        }
+                    template += '<tr class="rowappend">';
+                    template +='<td colspan="5" class="text-right"><b>Total</b></td>';                    
+                    template +='<td class="text-right"><b>'+convertToRupiah(TotSaldoIn)+'</b></td>';
+                    template +='<td class="text-right"><b>'+convertToRupiah(TotSaldoOut)+'</b></td>';
+                    template +='<td class="text-right"><b>'+convertToRupiah(currentSaldo)+'</b></td>';
+                    template +='</tr>';
+					$('.kt-section__content #tblbukukas').append(template);
+				}
+			},
+			error: function (jqXHR, textStatus, errorThrown){
+				KTApp.unblockPage();
+			},
+			complete:function () {
+				KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+			}
+		});
     })
     
     return {

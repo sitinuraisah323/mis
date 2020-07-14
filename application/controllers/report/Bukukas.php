@@ -17,10 +17,7 @@ class Bukukas extends Authenticated
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('UnitsdailycashModel', 'unitsdailycash');
-		$this->load->model('UnitsModel', 'units');
 		$this->load->model('AreasModel', 'areas');
-		$this->load->model('MapingcategoryModel', 'm_category');
 	}
 
 	/**
@@ -28,7 +25,6 @@ class Bukukas extends Authenticated
 	 */
 	public function index()
 	{
-        $data['units'] = $this->units->all();
         $data['areas'] = $this->areas->all();
 		$this->load->view('report/bukukas/index',$data);
 	}

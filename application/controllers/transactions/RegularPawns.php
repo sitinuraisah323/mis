@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once APPPATH.'controllers/Middleware/Authenticated.php';
-class RegularPawns extends Authenticated
+class Regularpawns extends Authenticated
 {
 	/**
 	 * @var string

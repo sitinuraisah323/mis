@@ -45,10 +45,11 @@ class Unitstarget extends ApiController
 	{
 		if($post = $this->input->post()){
 
-            $data['id_unit']    = $this->input->post('unit');	
-            $data['month']      = $this->input->post('month');	
-            $data['year']       = $this->input->post('year');	
-            $data['amount']     = $this->input->post('amount');	
+            $data['id_unit']            = $this->input->post('unit');	
+            $data['month']              = $this->input->post('month');	
+            $data['year']               = $this->input->post('year');	
+            $data['amount_booking']     = $this->input->post('booking');	
+            $data['amount_outstanding'] = $this->input->post('outstanding');	
             $db = false;
             $db = $this->u_target->insert($data);
             if($db=true){
@@ -72,10 +73,11 @@ class Unitstarget extends ApiController
 		if($post = $this->input->post()){
 
             $id                 = $this->input->post('id');	
-            $data['id_unit']    = $this->input->post('unit');	
-            $data['month']      = $this->input->post('month');	
-            $data['year']       = $this->input->post('year');	
-            $data['amount']     = $this->input->post('amount');
+            $data['id_unit']            = $this->input->post('unit');	
+            $data['month']              = $this->input->post('month');	
+            $data['year']               = $this->input->post('year');	
+            $data['amount_booking']     = $this->input->post('booking');	
+            $data['amount_outstanding'] = $this->input->post('outstanding');
             $db = false;
             $db = $this->u_target->update($data,$id);
             if($db=true){

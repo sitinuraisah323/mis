@@ -10,13 +10,6 @@ function convertToRupiah(angka)
 	return rupiah.split('',rupiah.length-1).reverse().join('');
 }
 
-// function convertToRupiah(angka){
-//    var reverse = angka.toString().split('').reverse().join(''),
-//    ribuan = reverse.match(/\d{1,3}/g);
-//    ribuan = ribuan.join('.').split('').reverse().join('');
-//    return ribuan;
-//  }
-
 function initAlert(){
     AlertUtil = {
         showSuccess : function(message,timeout){
@@ -101,14 +94,15 @@ function initCariForm(){
         }
     });
 
-    $('#area').select2({ placeholder: "Please select a area", width: '100%' });
-    $('#unit').select2({ placeholder: "Please select a Unit", width: '100%' });
-
+    $('#area').select2({ placeholder: "Select a area", width: '100%' });
+    $('#unit').select2({ placeholder: "Select a Unit", width: '100%' });
+    $('#status').select2({ placeholder: "Select a status", width: '100%' });
     //events
     $('#btncari').on('click',function(){
         $('.rowappend').remove();
         var area = $('#area').val();
         var unit = $('#unit').val();
+        var statusrpt = $('#status').val();
 		var dateStart = $('[name="date-start"]').val();
 		var dateEnd = $('[name="date-end"]').val();
         KTApp.block('#form_bukukas .kt-portlet__body', {});
@@ -116,7 +110,7 @@ function initCariForm(){
 			type : 'GET',
 			url : "<?php echo base_url("api/transactions/mortages/report"); ?>",
 			dataType : "json",
-			data:{id_unit:unit,dateStart:dateStart,dateEnd:dateEnd},
+			data:{id_unit:unit,statusrpt:statusrpt,dateStart:dateStart,dateEnd:dateEnd},
 			success : function(response,status){
 				KTApp.unblockPage();
 				if(response.status == true){
@@ -126,25 +120,28 @@ function initCariForm(){
 					var admin = 0;
 					$.each(response.data, function (index, data) {
 						template += "<tr class='rowappend'>";
-						template += "<td>"+no+"</td>";
-						template += "<td>"+data.date_sbk+"</td>";
-						template += "<td>"+data.deadline+"</td>";
+						template += "<td class='text-center'>"+no+"</td>";
+						template += "<td class='text-center'><a href='#' class='viewcicilan' data-toggle='modal' data-target='#modal_cicilan' data-id="+data.no_sbk+" data-unit="+data.id_unit+">"+data.no_sbk+"</a></td>";
+						template += "<td class='text-center'>"+moment(data.date_sbk).format('DD-MM-YYYY')+"</td>";
+						template += "<td class='text-center'>"+moment(data.deadline).format('DD-MM-YYYY')+"</td>";
 						template += "<td>"+data.customer_name+"</td>";
-						template += "<td>"+data.capital_lease+"</td>";
-						template += "<td class='text-right'>"+data.estimation+"</td>";
-						template += "<td class='text-right'>"+data.amount_admin+"</td>";
-						template += "<td class='text-right'>"+data.amount_loan+"</td>";
+						template += "<td class='text-center'>"+data.capital_lease+"</td>";
+						template += "<td class='text-right'>"+convertToRupiah(data.estimation)+"</td>";
+						template += "<td class='text-right'>"+convertToRupiah(data.amount_admin)+"</td>";
+						template += "<td class='text-right'>"+convertToRupiah(data.amount_loan)+"</td>";
+						template += "<td class='text-right'></td>";
 						template += '</tr>';
 						no++;
 						amount += parseInt(data.amount_loan);
 						admin += parseInt(data.amount_admin);
 					});
 					template += "<tr class='rowappend'>";
-					template += "<td colspan='6' class='text-right'>Total</td>";
-					template += "<td class='text-right'>"+admin+"</td>";
-					template += "<td class='text-right'>"+amount+"</td>";
+					template += "<td colspan='7' class='text-right'>Total</td>";
+					template += "<td class='text-right'>"+convertToRupiah(admin)+"</td>";
+					template += "<td class='text-right'>"+convertToRupiah(amount)+"</td>";
+					template += "<td class='text-right'></td>";
 					template += '</tr>';
-					$('.kt-section__content table').append(template);
+					$('.kt-section__content #tblcicilan').append(template);
 				}
 			},
 			error: function (jqXHR, textStatus, errorThrown){
@@ -181,9 +178,55 @@ function initGetUnit(){
     });
 }
 
+function popView(el){
+    $('.rowappend_mdl').remove();
+    var nosbk = $(el).attr('data-id');
+    var unit = $(el).attr('data-unit');
+    //alert(unit);
+    KTApp.block('#form_bukukas .kt-portlet__body', {});
+    $.ajax({
+			type : 'GET',
+			url : "<?php echo base_url("api/transactions/repaymentmortage/get_byid"); ?>",
+			dataType : "json",
+			data:{nosbk:nosbk,unit:unit},
+			success : function(response,status){
+				KTApp.unblockPage();
+				if(response.status == true){
+					var template = '';
+					var no = 1;
+					$.each(response.data, function (index, data) {
+						template += "<tr class='rowappend_mdl'>";
+						template += "<td class='text-center'>"+no+"</td>";
+                        template += "<td class='text-center'>"+data.no_sbk+"</td>";
+						template += "<td class='text-center'>"+moment(data.date_kredit).format('DD-MM-YYYY')+"</td>";
+                        if(data.date_installment ==null || data.date_installment =="1970-01-01"){ var datePayment="-"; }else{ var datePayment = moment(data.date_installment).format('DD-MM-YYYY');}
+						template += "<td class='text-center'>"+datePayment+"</td>";
+						template += "<td class='text-right'>"+convertToRupiah(data.amount)+"</td>";
+                        template += "<td class='text-right'>"+convertToRupiah(data.capital_lease)+"</td>";
+						template += "<td class='text-right'>"+convertToRupiah(data.saldo)+"</td>";
+						template += '</tr>';
+						no++;
+					});
+					$('.kt-portlet__body #mdl_vwcicilan').append(template);
+				}
+			},
+			error: function (jqXHR, textStatus, errorThrown){
+				KTApp.unblockPage();
+			},
+			complete:function () {
+				KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+			}
+		});
+}
+
 jQuery(document).ready(function() {
     initCariForm();
     initGetUnit();
+
+    $(document).on("click", ".viewcicilan", function () {
+                var el = $(this);
+                popView(el);
+    });
 });
 
 </script>

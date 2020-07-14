@@ -117,7 +117,7 @@ $this->load->view('temp/MenuBar.php');
 
             <div class="col-md-12">
                 <div class="kt-section__content">
-						<table class="table">
+						<table class="table" id="tblbukukas">
 						  	<thead class="thead-light">
 						    	<tr>
 						      		<th class="text-center">No</th>
@@ -143,7 +143,6 @@ $this->load->view('temp/MenuBar.php');
         </div>
     </div>
     <!-- end:: Content -->
-	<input type="hidden" name="url_get" id="url_get" value="<?php echo base_url('api/transactions/unitsdailycash/report') ?>"/>
 	<input type="hidden" name="url_get_unit" id="url_get_unit" value="<?php echo base_url('api/datamaster/units/get_units_byarea') ?>"/>
 </div>
 </div>

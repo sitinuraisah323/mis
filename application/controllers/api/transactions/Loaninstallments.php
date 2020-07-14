@@ -7,11 +7,12 @@ class Loaninstallments extends ApiController
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('LoanInstallmentsModel', 'installment');
+		$this->load->model('LoaninstallmentsModel', 'installment');
 		$this->load->model('CustomersModel', 'customers');
 		$this->load->model('MortagesModel', 'mortages');
-		$this->load->model('RegularPawnsModel', 'regulars');
+		$this->load->model('RegularpawnsModel', 'regulars');
 		$this->load->model('UnitsdailycashModel', 'unitsdailycash');
+		$this->load->model('RepaymentmortageModel', 'repaymentmortage');
 		$this->load->model('MapingcategoryModel', 'm_category');
 		$this->load->model('RepaymentModel', 'repayments');
 		include APPPATH.'libraries/PHPExcel.php';
@@ -331,24 +332,27 @@ class Loaninstallments extends ApiController
 	public function process_transaction($id_unit, $path, $name)
 	{
 		switch(substr($name,0, 2)){
-			case 'AN':
-				$this->data_transaction($id_unit, $path.$name);
-				break;
+			case 'MS':
+				$this->data_customer($id_unit,$path.$name);
+				break;	
+			case 'KS':
+				$this->data_transaction_cash($id_unit, $path.$name);
+				break;		
 			case 'PC':
 				$this->data_transaction_mortages($id_unit, $path.$name);
+				break;
+			case 'KR':
+				$this->data_transaction_repayment_mortages($id_unit, $path.$name);
 				break;
 			case 'PN':
 				$this->data_transaction_regular($id_unit, $path.$name);
 				break;
-			case 'KS':
-				$this->data_transaction_cash($id_unit, $path.$name);
-			break;
-			case 'MS':
-				$this->data_customer($id_unit,$path.$name);
-			break;
-			case 'LN':
+				case 'LN':
 				$this->data_transaction_repayment($id_unit, $path.$name);
-			break;
+				break;			
+			case 'AN':
+				$this->data_transaction($id_unit, $path.$name);
+				break;			
 		}
 	}
 
@@ -393,6 +397,134 @@ class Loaninstallments extends ApiController
 						$this->customers->insert($data);
 					}
 
+				}
+			}
+		}
+		if(is_file($path)){
+			unlink($path);
+		}
+	}
+
+	public function data_transaction_cash($id_unit, $path)
+	{
+		$excelreader = new PHPExcel_Reader_Excel2007();
+		$loadexcel = $excelreader->load($path); // Load file yang telah diupload ke folder excel
+		$unitsdailycash = $loadexcel->getActiveSheet()->toArray(null, true, true ,true);
+
+		$date = date('Y-m-d');
+		$cashcode = 'KT';
+		$unit = $id_unit;
+		if($unitsdailycash){
+			foreach ($unitsdailycash as $key => $udc){
+				if($key > 1){
+
+					$datetrans 		= date('Y-m-d', strtotime($udc['E']));
+					$kdkas			= $udc['F'];
+					//get description
+					$description	= strtolower($udc['C']);
+					$part			= explode(' ',$description);
+					$numeric		= $part[count($part)-1];
+					if(is_numeric($numeric)){
+						unset($part[count($part)-1]);
+						$char = implode(' ', $part);
+					}else{
+						$char = implode(' ', $part);
+					}					
+					//change value to positive
+					$amount			= 0;
+					if($udc['B']<0){ $amount=abs($udc['B']); $type="CASH_IN";}else{$amount=$udc['B']; $type="CASH_OUT";}
+
+					if($kdkas==$cashcode){
+						//category
+						$categories = array('category'=> $char,'source' => $unit);
+						$findcategory = $this->m_category->find(array('category' => $char));
+						if(is_null($findcategory)){
+							$this->m_category->insert($categories);
+						}						
+
+						//transaksi
+						$data = array(
+							'id_unit'		=> $unit,
+							'no_perk'		=> $udc['A'],
+							'cash_code'		=> $udc['F'],
+							'date'			=> $datetrans,
+							'amount'		=> $amount,
+							'description'	=> $description,									
+							'status'		=> "DRAFT",
+							//'id_category'	=> $findcategory->id,
+							'type'			=> $type
+						);								
+						$findtransaction = $this->unitsdailycash->find(array(
+								'id_unit'		=> $unit,										
+								'no_perk'		=> $udc['A'],
+								'date'			=> $datetrans,
+								'amount' 		=> $amount,
+								'description' 	=> $description
+						));
+						if(is_null($findtransaction)){
+							$this->unitsdailycash->insert($data);
+						}
+					}	
+
+				}
+			}
+		}
+		if(is_file($path)){
+			unlink($path);
+		}
+	}
+
+	public function data_transaction_regular($id_unit, $path)
+	{
+		$excelreader = new PHPExcel_Reader_Excel2007();
+		$loadexcel = $excelreader->load($path); // Load file yang telah diupload ke folder excel
+		$transactions = $loadexcel->getActiveSheet()->toArray(null, true, true ,true);
+
+		if($transactions){
+			foreach ($transactions as $key => $transaction){
+				if($key > 1){
+					$customer = $this->customers->find(array(
+						'nik'	=> $transaction['M']
+					));
+					$status = null;
+					if( $transaction['W']=="X"){$status="L";}else{$status="N";}
+					if(!is_null($customer)){
+						$data = array(
+							'no_sbk'	=> zero_fill( $transaction['A'], 5),
+							'nic'	=> $customer->no_cif,
+							'date_sbk'	=> $transaction['D'] ? date('Y-m-d', strtotime($transaction['D'])): null,
+							'deadline'	=> $transaction['E'] ? date('Y-m-d', strtotime($transaction['E'])) : null,
+							'date_auction'	=> $transaction['F'] ? date('Y-m-d', strtotime($transaction['F'])) : null,
+							'estimation'	=> (int) $transaction['G'],
+							'amount'	=> (int) $transaction['H'],
+							'admin'	=> (int) $transaction['I'],
+							'description_1'	=>  $transaction['J'],
+							'description_2'	=>  $transaction['K'],
+							'description_3'	=>  $transaction['L'],
+							'description_4'	=>  $transaction['S'],
+							'type_item'	=> $transaction['Q'],
+							'capital_lease'	=>  $transaction['T'],
+							'periode'	=>  $transaction['U'],
+							'installment'	=>  $transaction['V'],
+							'status_transaction'	=>  $status,
+							'id_customer'	=> $customer->id,
+							'type_bmh'	=> $transaction['X'],
+							'id_unit'	=> $id_unit,
+							'user_create'	=> $this->session->userdata('user')->id,
+							'user_update'	=> $this->session->userdata('user')->id,
+						);
+						if($findTransaction = $this->regulars->find(array(
+							'no_sbk'	=>zero_fill( $transaction['A'], 5),
+							'id_unit'	=> $id_unit
+						))){
+							if($this->regulars->update($data, array(
+								'id'	=>  $findTransaction->id,
+								'id_unit'	=> $id_unit
+							)));
+						}else{
+							$this->regulars->insert($data);
+						}
+					}
 				}
 			}
 		}
@@ -455,133 +587,6 @@ class Loaninstallments extends ApiController
 		}
 	}
 
-	public function data_transaction_cash($id_unit, $path)
-	{
-		$excelreader = new PHPExcel_Reader_Excel2007();
-		$loadexcel = $excelreader->load($path); // Load file yang telah diupload ke folder excel
-		$unitsdailycash = $loadexcel->getActiveSheet()->toArray(null, true, true ,true);
-
-		$date = date('Y-m-d');
-		$cashcode = 'KT';
-		$unit = $id_unit;
-		if($unitsdailycash){
-			foreach ($unitsdailycash as $key => $udc){
-				if($key > 1){
-
-					$datetrans 		= date('Y-m-d', strtotime($udc['E']));
-					$kdkas			= $udc['F'];
-					//get description
-					$description	= strtolower($udc['C']);
-					$part			= explode(' ',$description);
-					$numeric		= $part[count($part)-1];
-					if(is_numeric($numeric)){
-						unset($part[count($part)-1]);
-						$char = implode(' ', $part);
-					}else{
-						$char = implode(' ', $part);
-					}					
-					//change value to positive
-					$amount			= 0;
-					if($udc['B']<0){ $amount=abs($udc['B']);}else{$amount=$udc['B'];}
-
-					if($kdkas==$cashcode){
-						//category
-						$categories = array('category'=> $char,'source' => $unit);
-						$findcategory = $this->m_category->find(array('category' => $char));
-						if(is_null($findcategory)){
-							$this->m_category->insert($categories);
-						}						
-
-						//transaksi
-						$data = array(
-							'id_unit'		=> $unit,
-							'cash_code'		=> $udc['F'],
-							'date'			=> $datetrans,
-							'amount'		=> $amount,
-							'description'	=> $description,									
-							//'numeric_desc'	=> $numeric,
-							//'char_desc'		=> $char,
-							'status'		=> "DRAFT",
-							'id_category'	=>  $findcategory->id,
-						);								
-						$findtransaction = $this->unitsdailycash->find(array(
-								'id_unit'		=> $unit,										
-								'date'			=> $datetrans,
-								'amount' 		=> $amount,
-								'description' 	=> $description
-						));
-						if(is_null($findtransaction)){
-							$this->unitsdailycash->insert($data);
-						}
-						//echo 'test';
-					//exit();
-					}	
-
-				}
-			}
-		}
-		if(is_file($path)){
-			unlink($path);
-		}
-	}
-
-	public function data_transaction_regular($id_unit, $path)
-	{
-		$excelreader = new PHPExcel_Reader_Excel2007();
-		$loadexcel = $excelreader->load($path); // Load file yang telah diupload ke folder excel
-		$transactions = $loadexcel->getActiveSheet()->toArray(null, true, true ,true);
-
-		if($transactions){
-			foreach ($transactions as $key => $transaction){
-				if($key > 1){
-					$customer = $this->customers->find(array(
-						'nik'	=> $transaction['M']
-					));
-					if(!is_null($customer)){
-						$data = array(
-							'no_sbk'	=> zero_fill( $transaction['A'], 5),
-							'nic'	=> $customer->no_cif,
-							'date_sbk'	=> $transaction['D'] ? date('Y-m-d', strtotime($transaction['D'])): null,
-							'deadline'	=> $transaction['E'] ? date('Y-m-d', strtotime($transaction['E'])) : null,
-							'date_auction'	=> $transaction['F'] ? date('Y-m-d', strtotime($transaction['F'])) : null,
-							'estimation'	=> (int) $transaction['G'],
-							'amount'	=> (int) $transaction['H'],
-							'admin'	=> (int) $transaction['I'],
-							'description_1'	=>  $transaction['J'],
-							'description_2'	=>  $transaction['K'],
-							'description_3'	=>  $transaction['L'],
-							'description_4'	=>  $transaction['S'],
-							'type_item'	=> $transaction['Q'],
-							'capital_lease'	=>  $transaction['T'],
-							'periode'	=>  $transaction['U'],
-							'installment'	=>  $transaction['V'],
-							'status_transaction'	=>  $transaction['W'],
-							'id_customer'	=> $customer->id,
-							'type_bmh'	=> $transaction['X'],
-							'id_unit'	=> $id_unit,
-							'user_create'	=> $this->session->userdata('user')->id,
-							'user_update'	=> $this->session->userdata('user')->id,
-						);
-						if($findTransaction = $this->regulars->find(array(
-							'no_sbk'	=>zero_fill( $transaction['A'], 5),
-							'id_unit'	=> $id_unit
-						))){
-							if($this->regulars->update($data, array(
-								'id'	=>  $findTransaction->id,
-								'id_unit'	=> $id_unit
-							)));
-						}else{
-							$this->regulars->insert($data);
-						}
-					}
-				}
-			}
-		}
-		if(is_file($path)){
-			unlink($path);
-		}
-	}
-
 	public function data_transaction_mortages($id_unit, $path)
 	{
 
@@ -595,6 +600,8 @@ class Loaninstallments extends ApiController
 					$customer = $this->customers->find(array(
 						'nik'	=> $transaction['M']
 					));
+					$status = null;
+					if( $transaction['W']=="X"){$status="L";}else{$status="N";}
 					$data = array(
 						'no_sbk'	=> zero_fill( $transaction['A'], 5),
 						'nic'	=> $customer->no_cif,
@@ -611,7 +618,7 @@ class Loaninstallments extends ApiController
 						'capital_lease'	=>  $transaction['T'],
 						'periode'	=>  $transaction['U'],
 						'installment'	=>  $transaction['V'],
-						'status_transaction'	=>  $transaction['W'],
+						'status_transaction'	=>  $status,
 						'interest'	=>  $transaction['X'],
 						'id_customer'	=> $customer->id,
 						'id_unit'	=> $id_unit,
@@ -628,6 +635,45 @@ class Loaninstallments extends ApiController
 						$this->mortages->insert($data);
 					}
 
+				}
+			}
+		}
+		if(is_file($path)){
+			unlink($path);
+		}
+	}
+
+	public function data_transaction_repayment_mortages($id_unit, $path)
+	{
+		$excelreader = new PHPExcel_Reader_Excel2007();
+		$loadexcel = $excelreader->load($path); // Load file yang telah diupload ke folder excel
+		$repaymentmortage = $loadexcel->getActiveSheet()->toArray(null, true, true ,true);
+		$unit = $id_unit;
+		if($repaymentmortage){
+			foreach ($repaymentmortage as $key => $repmortage){
+				if($key > 1){
+					//$findcustomer = $this->customers->find(array('name'=> $repayment['B']));
+					$data = array(
+						'no_sbk'			=> zero_fill($repmortage['B'], 5),
+						'id_unit'			=> $unit,
+						'date_kredit'		=> date('Y-m-d', strtotime($repmortage['C'])),
+						'date_installment'	=> date('Y-m-d', strtotime($repmortage['P'])),
+						'amount'			=> $repmortage['I'],
+						'capital_lease'		=> $repmortage['K'],
+						'fine'				=> $repmortage['L'],
+						'saldo'				=> $repmortage['M']
+					);
+					if($findrepaymentmortage = $this->repaymentmortage->find(array(
+						'id_unit'		=> $unit,
+						'no_sbk'		=> zero_fill($repmortage['B'], 5),
+						'date_kredit'	=> date('Y-m-d', strtotime($repmortage['C'])),
+						'amount'		=> $repmortage['I'],
+						'capital_lease'	=> $repmortage['K']
+					))){
+						if($this->repaymentmortage->update($data, array('id'	=>  $findrepaymentmortage->id)));
+					}else{
+						$this->repaymentmortage->insert($data);
+					}
 				}
 			}
 		}

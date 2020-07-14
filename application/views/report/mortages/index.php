@@ -80,7 +80,7 @@ $this->load->view('temp/MenuBar.php');
             <div class="kt-portlet__body">
             <div class="col-md-12" >
                 <div class="form-group row">
-                    <label class="col-lg-1 col-form-label">Area</label>
+                    <label class="col-form-label">Area</label>
                     <div class="col-lg-2">
                         <select class="form-control select2" name="area" id="area">
                             <option></option>
@@ -94,13 +94,23 @@ $this->load->view('temp/MenuBar.php');
                         </select>
                     </div>
 
-                    <label class="col-lg-1 col-form-label">Unit</label>
+                    <label class="col-form-label">Unit</label>
                     <div class="col-lg-2">
 						<select class="form-control select2" name="id_unit" id="unit">
 							<option></option>
 						</select>
                     </div>
-					<label class="col-lg-1 col-form-label">Tanggal</label>
+                    <label class="col-form-label">Status</label>
+                    <div class="col-lg-2">
+                        <select class="form-control select2" name="status" id="status">
+                            <option></option>                                                         
+                            <option value="0">All</option>
+                            <option value="1">Pencairan</option>
+                            <option value="2">Pelunasan</option>
+                            <option value="3">Perpanjangan</option>                            
+                        </select>
+                    </div>
+					<label class="col-form-label">Tanggal</label>
 					<div class="col-lg-2">
 						<input type="date" class="form-control" name="date-start" value="<?php echo date('Y-m-d');?>">
 					</div>
@@ -114,17 +124,19 @@ $this->load->view('temp/MenuBar.php');
 
             <div class="col-md-12">
                 <div class="kt-section__content">
-						<table class="table">
+						<table class="table" id="tblcicilan">
 						  	<thead class="thead-light">
 						    	<tr>
-						      		<th class="text-center">No</th>
-									<th>Tanggal SBK</th>
-									<th>Tanggal Tempo</th>
+						      		<th class='text-center'>No</th>
+									<th class='text-center'>No. SBK</th>
+									<th class='text-center'>Tanggal SBK</th>
+									<th class='text-center'>Tanggal Tempo</th>
 						      		<th>Nasabah</th>
-									<th>Sewa Harga</th>
-									<th>Tafsiran</th>
-									<th>Admin</th>
-									<th>UP</th>
+									<th class='text-center'>Sewa Modal</th>
+									<th class='text-right'>Tafsiran</th>
+									<th class='text-right'>Admin</th>
+									<th class='text-right'>UP</th>
+									<th class='text-center'>Cicilan(x)</th>
 									<th></th>
 						    	</tr>
 						  	</thead>
@@ -148,5 +160,6 @@ $this->load->view('temp/MenuBar.php');
 
 <?php
 $this->load->view('temp/Footer.php');
+$this->load->view('report/mortages/_vw_cicilan.php');
 $this->load->view('report/mortages/_script.php');
 ?>

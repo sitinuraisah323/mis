@@ -32,7 +32,7 @@ class Repayment extends Authenticated
 
 	public function upload()
 	{
-		$config['upload_path']          = 'storage/unitsdailycash/data/';
+		$config['upload_path']          = 'storage/repayment/data/';
 		$config['allowed_types']        = '*';
 		$config['max_size']             = 100;
 		$config['max_width']            = 1024;

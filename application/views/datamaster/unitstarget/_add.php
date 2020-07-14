@@ -64,12 +64,19 @@
                                 </div>
                             </div> 
 
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Jumlah</label>
-                                    <input type="text" class="form-control" id="amount" name="amount">	                            		
+                                    <label>Booking</label>
+                                    <input type="text" class="form-control" id="booking" name="booking">	                            		
                                 </div>
-                            </div>    
+                            </div> 
+
+                             <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Outstanding</label>
+                                    <input type="text" class="form-control" id="outstanding" name="outstanding">	                            		
+                                </div>
+                            </div>   
   
                             <div class="col-md-12" >     
                                 <div class="kt-section">
