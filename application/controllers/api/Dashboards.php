@@ -9,6 +9,7 @@ class Dashboards extends ApiController
 		parent::__construct();
 		$this->load->model('RegularPawnsModel', 'regular');
 		$this->load->model('UnitsModel', 'units');
+		$this->load->model('RepaymentModel','repayments');
 	}
 
 	public function outstanding()

@@ -16,4 +16,13 @@ class RepaymentModel extends Master
 		return $this->db->get('units_repayments as a')->result();
 	}
 
+	public function getUpByDate($idUnit, $date)
+	{
+		return (int) $this->db->select('sum(money_loan) as up')
+			->from($this->table)
+			->where('id_unit', $idUnit)
+			->where('date_sbk', $date)
+			->get()->row()->up;
+	}
+
 }
