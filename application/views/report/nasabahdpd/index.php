@@ -99,16 +99,6 @@ $this->load->view('temp/MenuBar.php');
 							<option></option>
 						</select>
                     </div>
-                    <div class="col-lg-2">
-						<label class="col-form-label">Status</label>
-                        <select class="form-control select2" name="status" id="status">
-                            <option value=""></option>
-                            <option value="0">All</option>
-                            <option value="1">Pencairan</option>
-                            <option value="2">Pelunasan</option>
-                            <option value="3">Perpanjangan</option>
-                        </select>
-                    </div>
 					<div class="col-lg-2">
 						<label class="col-form-label">Ijin</label>
 						<select class="form-control" name="permit">
