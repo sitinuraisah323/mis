@@ -111,7 +111,7 @@ class Dashboards extends ApiController
 			$date = date('Y-m-d');
 		}
 		$begin = new DateTime( $date );
-		$end = new DateTime( $date );
+		$end = new DateTime($date);
 		$end = $end->modify( '-6 day' );
 		$interval = new DateInterval('P1D');
 		$daterange = new DatePeriod($end, $interval ,$begin);
@@ -126,6 +126,50 @@ class Dashboards extends ApiController
 			->join('areas','areas.id = units.id_area')
 			->get('units')->result();
 		foreach ($units as $unit){
+			$dates = array();
+			foreach($daterange as $date){
+				$dates[] =  $this->regular->getUpByDate($unit->id, $date->format('Y-m-d'));
+			}
+			$unit->dates = $dates;
+			$result[] = $unit;
+		}
+		$this->sendMessage($result, 'Get Data Outstanding');
+	}
+
+	public function pelunasan()
+	{
+		if($area = $this->input->get('area')){
+			$this->units->db->where('id_area', $area);
+		}
+		if($code = $this->input->get('code')){
+			$this->units->db->where('code', $code);
+		}
+		if($this->input->get('date')){
+			$date = $this->input->get('date');
+		}else{
+			$date = date('Y-m-d');
+		}
+		$begin = new DateTime( $date );
+		$end = new DateTime($date);
+		$end = $end->modify( '-6 day' );
+		$interval = new DateInterval('P1D');
+		$daterange = new DatePeriod($end, $interval ,$begin);
+
+		$dates = array();
+		foreach($daterange as $date){
+			$dates[] =  $date->format('Y-m-d');
+		}
+
+		$result[] = array('no' => 'No','unit'=> 'Unit','area'=>'Area','dates'=>$dates);
+		$units = $this->units->db->select('units.id, units.name, areas.area as area')
+			->join('areas','areas.id = units.id_area')
+			->get('units')->result();
+		foreach ($units as $unit){
+			$dates = array();
+			foreach($daterange as $date){
+				$dates[] =  $this->repayments->getUpByDate($unit->id, $date->format('Y-m-d'));
+			}
+			$unit->dates = $dates;
 			$result[] = $unit;
 		}
 		$this->sendMessage($result, 'Get Data Outstanding');

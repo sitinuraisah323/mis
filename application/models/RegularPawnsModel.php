@@ -73,6 +73,14 @@ class RegularpawnsModel extends Master
 		);
 	}
 
+	public function getUpByDate($idUnit, $date)
+	{
+		return (int) $this->db->select('sum(amount) as sum')->from($this->table)
+			->where('id_unit', $idUnit)
+			->where('date_sbk', $date)
+			->get()->row()->sum;
+	}
+
 	public function getTotalDisburse($idUnit, $year = null, $month = null)
 	{
 		if(!is_null($year)){
