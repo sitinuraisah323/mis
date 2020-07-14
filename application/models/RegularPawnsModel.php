@@ -73,12 +73,25 @@ class RegularpawnsModel extends Master
 		);
 	}
 
-	public function getTotalDisburse($idUnit)
+	public function getTotalDisburse($idUnit, $year = null, $month = null)
 	{
+		if(!is_null($year)){
+			$this->db->where('YEAR(date_sbk)',$year);
+		}
+		if(!is_null($month)){
+			$this->db->where('MONTH(date_sbk)',$month);
+		}
 		$dataMortage = $this->db->select('sum(amount_loan) as up, count(*) as noa')->from('units_mortages')
 			->where('id_unit', $idUnit)->get()->row();
 		$noaMortages = (int)$dataMortage->noa;
 		$upMortages = (int)$dataMortage->up;
+
+		if(!is_null($year)){
+			$this->db->where('YEAR(date_sbk)',$year);
+		}
+		if(!is_null($month)){
+			$this->db->where('MONTH(date_sbk)',$month);
+		}
 
 		$dataRegular = $this->db->select('sum(amount) as up, count(*) as noa')->from('units_regularpawns')
 			->where('id_unit', $idUnit)->get()->row();

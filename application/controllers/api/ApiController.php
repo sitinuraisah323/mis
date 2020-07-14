@@ -10,7 +10,7 @@ class ApiController extends CI_Controller {
 		parent::__construct();
 	}
 
-	public function sendMessage($data, $message, $status)
+	public function sendMessage($data, $message, $status = true)
 	{
 		echo json_encode(array(
 			'data'	=> $data,
