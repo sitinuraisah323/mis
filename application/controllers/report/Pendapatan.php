@@ -31,23 +31,4 @@ class Pendapatan extends Authenticated
 		$this->load->view('report/pendapatan/index',$data);
 	}	
 	
-	public function get_pendapatan(){
-		$this->m_casing->db
-		->where('type =','CASH_IN');
-		$data =$this->m_casing->all();
-		$arr=array();
-		foreach ($data as $value) {
-			//echo $value->no_perk;
-			//$arr=$value->no_perk;
-			array_push($arr, $value->no_perk);
-		}
-		print_r($arr);
-	    //$data = $this->m_casing->where('type=','CASH_IN');
-		// echo json_encode(array(
-		// 	'data'	=> $data,
-		// 	'status'	=> true,
-		// 	'message'	=> 'Successfully Get Data Regular Pawns'
-		// ));
-	}
-	
 }

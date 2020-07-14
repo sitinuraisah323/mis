@@ -106,10 +106,6 @@ $this->load->view('temp/MenuBar.php');
                     <select class="form-control select2" name="category" id="category">
                             <option></option>
                             <option value="all">All</option>
-                            <!-- <option value="4120101">Admin</option>
-                            <option value="4110101">Sewa Modal</option>
-                            <option value="6180301">Denda Cicilan</option>
-                            <option value="6180102">Denda BTE</option> -->
                             <?php 
                             foreach ($pendapatan as $row) {
                                 echo '<option value="'.$row->no_perk.'">'.$row->na_perk.'<option>';
