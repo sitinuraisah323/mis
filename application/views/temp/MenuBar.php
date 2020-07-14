@@ -337,10 +337,18 @@
 													<span class="kt-menu__link-text">Buku Bank</span>
 											</a>
 										</li>	
-										<?php endif;?>									
+										<?php endif;?>					
 									</ul>
 								</div>
 							</li>
+							<?php if(read_access('mutasiunits')):?>
+										<li class="kt-menu__item "  aria-haspopup="true">
+											<a  href="<?php echo base_url('report/dpd'); ?>" class="kt-menu__link ">
+												<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>
+												<span class="kt-menu__link-text">Nasabah DPD</span>
+											</a>
+										</li>
+										<?php endif;?>
 							</ul>
                         </div>
                     </li>
