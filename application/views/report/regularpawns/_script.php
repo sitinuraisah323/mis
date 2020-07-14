@@ -141,7 +141,7 @@ function initCariForm(){
 						template += "<td class='text-right'>"+convertToRupiah(data.admin)+"</td>";
 						template += "<td class='text-right'>"+convertToRupiah(data.amount)+"</td>";
                         if(data.status_transaction=="L"){ status="Lunas";}
-                        else if(data.status_transaction=="N"){ status="Belum Lunas";}
+                        else if(data.status_transaction=="N"){ status="Aktif";}
 						template += "<td class='text-center'>"+status+"</td>";
 						template += '</tr>';
 						no++;

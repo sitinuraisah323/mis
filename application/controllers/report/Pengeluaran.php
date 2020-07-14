@@ -18,6 +18,7 @@ class Pengeluaran extends Authenticated
 	{
 		parent::__construct();
 		$this->load->model('AreasModel', 'areas');
+		$this->load->model('MappingcaseModel', 'm_casing');
 	}
 
 	/**
@@ -25,7 +26,8 @@ class Pengeluaran extends Authenticated
 	 */
 	public function index()
 	{
-        $data['areas'] = $this->areas->all();
+		$data['areas'] = $this->areas->all();
+		$data['pengeluaran']=$this->m_casing->get_list_pengeluaran();
 		$this->load->view('report/pengeluaran/index',$data);
     }	
 	

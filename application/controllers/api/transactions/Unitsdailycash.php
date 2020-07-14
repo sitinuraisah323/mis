@@ -8,6 +8,7 @@ class Unitsdailycash extends ApiController
 	{
 		parent::__construct();
 		$this->load->model('UnitsdailycashModel', 'unitsdailycash');
+		$this->load->model('MappingcaseModel', 'm_casing');
 	}
 
 	public function index()
@@ -233,12 +234,21 @@ class Unitsdailycash extends ApiController
 
 	public function pendapatan()
 	{
-		$cashin = $ids = array('4120101', '6180301', '4110101', '6180102', '6170101');
 		$this->unitsdailycash->all();
 		if($get = $this->input->get()){
+			$category =null;
+			if($get['category']=='all'){
+				$data = $this->m_casing->get_list_pendapatan();
+				$category=array();
+				foreach ($data as $value) {
+					array_push($category, $value->no_perk);
+				}
+			}else{
+				$category=array($get['category']);
+			}
 			$this->unitsdailycash->db
 				->where('type =', 'CASH_IN')
-				->where_in('no_perk', $cashin)
+				->where_in('no_perk', $category)
 				->where('date >=', $get['dateStart'])
 				->where('date <=', $get['dateEnd'])
 				->where('id_unit', $get['id_unit']);
@@ -255,9 +265,19 @@ class Unitsdailycash extends ApiController
 	{
 		$this->unitsdailycash->all();
 		if($get = $this->input->get()){
+			$category =null;
+			if($get['category']=='all'){
+				$data = $this->m_casing->get_list_pengeluaran();
+				$category=array();
+				foreach ($data as $value) {
+					array_push($category, $value->no_perk);
+				}
+			}else{
+				$category=array($get['category']);
+			}
 			$this->unitsdailycash->db
-				->where('SUBSTRING(no_perk,1,2) =','51')
 				->where('type =', 'CASH_OUT')
+				->where_in('no_perk', $category)
 				->where('date >=', $get['dateStart'])
 				->where('date <=', $get['dateEnd'])
 				->where('id_unit', $get['id_unit']);
