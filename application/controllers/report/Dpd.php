@@ -2,13 +2,13 @@
 //error_reporting(0);
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once APPPATH.'controllers/Middleware/Authenticated.php';
-class Pendapatan extends Authenticated
+class Dpd extends Authenticated
 {
 	/**
 	 * @var string
 	 */
 
-	public $menu = 'Pendapatan';
+	public $menu = 'Bukukas';
 
 	/**
 	 * Welcome constructor.
@@ -17,8 +17,10 @@ class Pendapatan extends Authenticated
 	public function __construct()
 	{
 		parent::__construct();
+		$this->load->model('UnitsdailycashModel', 'unitsdailycash');
+		$this->load->model('UnitsModel', 'units');
 		$this->load->model('AreasModel', 'areas');
-		$this->load->model('MappingcaseModel', 'm_casing');
+		$this->load->model('MapingcategoryModel', 'm_category');
 	}
 
 	/**
@@ -26,9 +28,8 @@ class Pendapatan extends Authenticated
 	 */
 	public function index()
 	{
+        $data['units'] = $this->units->all();
         $data['areas'] = $this->areas->all();
-		$data['pendapatan']=$this->m_casing->get_list_pendapatan();
-		$this->load->view('report/pendapatan/index',$data);
-	}	
-	
+		$this->load->view('report/nasabahdpd/index',$data);
+	}
 }
