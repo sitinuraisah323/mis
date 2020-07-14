@@ -7,7 +7,7 @@ class FractionOfMoney extends Authenticated
 	 * @var string
 	 */
 
-	public $menu = 'FractionOfMoney';
+	public $menu = 'Fractionofmoney';
 
 	/**
 	 * Welcome constructor.
