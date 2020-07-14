@@ -266,4 +266,38 @@ class Regularpawns extends ApiController
 		));
 	}
 
+	public function reportdpd()
+	{
+		$this->regulars->db
+			->select("customers.name as customer_name
+			")
+			->join('customers','units_regularpawns.id_customer = customers.id')
+			->select('units_repayments.date_repayment as date_repayment')
+			->join('units_repayments','units_regularpawns.no_sbk = units_repayments.no_sbk','left')
+			->where('deadline >',date('Y-m-d'))
+		;
+		if($get = $this->input->get()){
+			$status =null;
+			if($get['statusrpt']=="0"){$status=["N","L"];}
+			if($get['statusrpt']=="1"){$status=["N"];}
+			if($get['statusrpt']=="2"){$status=["L"];}
+			if($get['statusrpt']=="3"){$status=[""];}
+			$this->regulars->db
+				->where('units_regularpawns.date_sbk >=', $get['dateStart'])
+				->where('units_regularpawns.date_sbk <=', $get['dateEnd'])
+				->where_in('units_regularpawns.status_transaction ', $status)
+				->where('units_regularpawns.id_unit', $get['id_unit']);
+			if($permit = $get['permit']){
+				$this->regulars->db->where('units_regularpawns.permit', $permit);
+			}
+
+
+		}
+		$data = $this->regulars->all();
+		echo json_encode(array(
+			'data'	=> $data,
+			'status'	=> true,
+			'message'	=> 'Successfully Get Data Regular Pawns'
+		));
+	}
 }

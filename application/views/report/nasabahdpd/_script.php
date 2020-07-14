@@ -116,7 +116,7 @@ function initCariForm(){
         KTApp.block('#form_bukukas .kt-portlet__body', {});
 		$.ajax({
 			type : 'GET',
-			url : "<?php echo base_url("api/transactions/regularpawns/report"); ?>",
+			url : "<?php echo base_url("api/transactions/regularpawns/reportdpd"); ?>",
 			dataType : "json",
 			data:{id_unit:unit,statusrpt:statusrpt,dateStart:dateStart,dateEnd:dateEnd,permit:permit},
 			success : function(response,status){
@@ -142,7 +142,7 @@ function initCariForm(){
 						template += "<td class='text-right'>"+convertToRupiah(data.amount)+"</td>";
                         if(data.status_transaction=="L"){ status="Lunas";}
                         else if(data.status_transaction=="N"){ status="Aktif";}
-						template += "<td class='text-center'>"+status+"</td>";
+						template += "<td class='text-center'>"+parseInt(date_between(data.deadline,"<?php echo date('Y/m/d');?>'"))+"</td>";
 						template += '</tr>';
 						no++;
 						amount += parseInt(data.amount);
