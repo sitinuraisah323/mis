@@ -126,8 +126,14 @@ function initCariForm(){
 					var no = 1;
 					var amount = 0;
 					var admin = 0;
+					var totalDPD = 0;
+					var totalDenda = 0;
+					var totalPelunasan = 0;
+					var totalTafsiran = 0;
                     var status="";
+
 					$.each(response.data, function (index, data) {
+						var dpd = parseInt(date_between(data.deadline,"<?php echo date('Y/m/d');?>'"));
 						template += "<tr class='rowappend'>";
 						template += "<td class='text-center'>"+no+"</td>";
 						template += "<td class='text-center'>"+data.no_sbk+"</td>";
@@ -142,17 +148,29 @@ function initCariForm(){
 						template += "<td class='text-right'>"+convertToRupiah(data.amount)+"</td>";
                         if(data.status_transaction=="L"){ status="Lunas";}
                         else if(data.status_transaction=="N"){ status="Aktif";}
-						template += "<td class='text-center'>"+parseInt(date_between(data.deadline,"<?php echo date('Y/m/d');?>'"))+"</td>";
+						template += "<td class='text-center'>"+dpd+"</td>";
 						template += "<td class='text-right'>"+convertToRupiah(data.tafsiran_sewa)+"</td>";
+						template += "<td class='text-right'>"+convertToRupiah(calculateDenda(data.amount, dpd))+"</td>";
+						var up = parseInt(calculateDenda(data.amount, dpd));
+						var calcup = up + parseInt(data.tafsiran_sewa) +parseInt(data.amount);
+						template += "<td class='text-right'>"+convertToRupiah(calcup)+"</td>";
 						template += '</tr>';
 						no++;
+						totalDenda += calculateDenda(data.amount, dpd);
 						amount += parseInt(data.amount);
 						admin += parseInt(data.admin);
+						totalTafsiran += parseInt(data.tafsiran_sewa);
+						totalPelunasan += parseInt(calcup);
+						totalDPD += parseInt(date_between(data.deadline,"<?php echo date('Y/m/d');?>'"));
 					});
 					template += "<tr class='rowappend'>";
 					template += "<td colspan='8' class='text-right'>Total</td>";
 					template += "<td class='text-right'>"+convertToRupiah(admin)+"</td>";
 					template += "<td class='text-right'>"+convertToRupiah(amount)+"</td>";
+					template += "<td class='text-right'>"+totalDPD+"</td>";
+					template += "<td class='text-right'>"+convertToRupiah(totalTafsiran)+"</td>";
+					template += "<td class='text-right'>"+convertToRupiah(totalDenda)+"</td>";
+					template += "<td class='text-right'>"+convertToRupiah(totalPelunasan)+"</td>";
 					template += "<td class='text-right'></td>";
 					template += '</tr>';
 					$('.kt-section__content table').append(template);

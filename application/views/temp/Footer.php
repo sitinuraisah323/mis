@@ -52,6 +52,27 @@
 //To display the final no. of days (result)
 				return Difference_In_Days;
 			}
+
+			function calculateDenda(up, dpd) {
+				var sumDay = parseInt(dpd - 15);
+				if(sumDay > 0){
+					var rate;
+					if(parseInt(up) < 10000000){
+						rate = 0.0583/100;
+					}else{
+						rate = 0.0433/100;
+					}
+					var calculate = Math.round(sumDay * rate * up);
+					var modusCalculate = calculate % 500;
+					if(modusCalculate > 0){
+						var round = 500;
+					}else{
+						var round = 0;
+					}
+					return calculate - modusCalculate + round;
+				}
+				return 0;
+			}
         </script>
         <!-- end::Global Config -->
 
