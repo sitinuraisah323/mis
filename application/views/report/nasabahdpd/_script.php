@@ -143,6 +143,7 @@ function initCariForm(){
                         if(data.status_transaction=="L"){ status="Lunas";}
                         else if(data.status_transaction=="N"){ status="Aktif";}
 						template += "<td class='text-center'>"+parseInt(date_between(data.deadline,"<?php echo date('Y/m/d');?>'"))+"</td>";
+						template += "<td class='text-right'>"+convertToRupiah(data.tafsiran_sewa)+"</td>";
 						template += '</tr>';
 						no++;
 						amount += parseInt(data.amount);

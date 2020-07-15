@@ -269,13 +269,12 @@ class Regularpawns extends ApiController
 	public function reportdpd()
 	{
 		$this->regulars->db
-			->select("customers.name as customer_name
+			->select("customers.name as customer_name, ROUND(units_regularpawns.capital_lease * 4 * amount) as tafsiran_sewa
 			")
 			->join('customers','units_regularpawns.id_customer = customers.id')
 			->select('units_repayments.date_repayment as date_repayment')
 			->join('units_repayments','units_regularpawns.no_sbk = units_repayments.no_sbk','left')
-			->where('deadline >',date('Y-m-d'))
-		;
+			->where('deadline <',date('Y-m-d'));
 		if($get = $this->input->get()){
 			$this->regulars->db
 				->where('units_regularpawns.date_sbk >=', $get['dateStart'])

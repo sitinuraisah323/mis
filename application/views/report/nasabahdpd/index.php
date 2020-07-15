@@ -137,6 +137,7 @@ $this->load->view('temp/MenuBar.php');
 									<th class='text-right'>Admin</th>
 									<th class='text-right'>UP</th>
 									<th class='text-center'>DPD</th>
+									<th class='text-center'>Sewa Modal (4 Bulan)</th>
 									<th></th>
 						    	</tr>
 						  	</thead>
