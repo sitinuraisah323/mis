@@ -10,24 +10,23 @@ class RegularpawnsModel extends Master
 	{
 		$noaRegular = $this->db->select('count(*) as noa')->from($this->table)
 			->where('id_unit', $idUnit)
-			->where('status_transaction', null)
+			->where('status_transaction', 'N')
 			->where('date_sbk <', $today)->get()->row();
 
 		$upRegular = $this->db->select('sum(amount) as up')->from($this->table)
 			->where('id_unit', $idUnit)
-			->where('status_transaction', null)
+			->where('status_transaction', 'N')
 			->where('date_sbk <', $today)->get()->row();
 
 		$noaMortages = $this->db->select('count(*) as noa')->from('units_mortages')
 			->where('id_unit', $idUnit)
-			->where('status_transaction', null)
+			->where('status_transaction', 'N')
 			->where('date_sbk <', $today)->get()->row();
 
 		$upaMortages = $this->db->select('sum(amount_loan) as up')->from('units_mortages')
 			->where('id_unit', $idUnit)
-			->where('status_transaction', null)
+			->where('status_transaction', 'N')
 			->where('date_sbk <', $today)->get()->row();
-
 		return (object)array(
 			'noa' => $noaMortages->noa + $noaRegular->noa,
 			'up' => $upRegular->up + $upaMortages->up
@@ -38,22 +37,22 @@ class RegularpawnsModel extends Master
 	{
 		$noaRegular = $this->db->select('count(*) as noa')->from($this->table)
 			->where('id_unit', $idUnit)
-			->where('status_transaction', null)
+			->where('status_transaction', 'N')
 			->where('date_sbk', $today)->get()->row();
 
 		$upRegular = $this->db->select('sum(amount) as up')->from($this->table)
 			->where('id_unit', $idUnit)
-			->where('status_transaction', null)
+			->where('status_transaction', 'N')
 			->where('date_sbk', $today)->get()->row();
 
 		$noaMortages = $this->db->select('count(*) as noa')->from('units_mortages')
 			->where('id_unit', $idUnit)
-			->where('status_transaction', null)
+			->where('status_transaction', 'N')
 			->where('date_sbk', $today)->get()->row();
 
 		$upaMortages = $this->db->select('sum(amount_loan) as up')->from('units_mortages')
 			->where('id_unit', $idUnit)
-			->where('status_transaction', null)
+			->where('status_transaction', 'N')
 			->where('date_sbk', $today)->get()->row();
 
 		return (object)array(
@@ -117,8 +116,9 @@ class RegularpawnsModel extends Master
 	{
 		$data = $this->db->select('sum(amount) as ost, count(*) as noa')
 			->from($this->table)
-			->where('status_transaction', null)
+			->where('status_transaction', 'N')
 			->where('deadline <', $date)
+			->where('id_unit', $idUnit)
 			->get()->row();
 		return (object)array(
 			'noa' => (int)$data->noa,
@@ -130,7 +130,8 @@ class RegularpawnsModel extends Master
 	{
 		$data = $this->db->select('sum(amount) as ost, count(*) as noa')
 			->from($this->table)
-			->where('status_transaction', null)
+			->where('status_transaction', 'N')
+			->where('id_unit', $idUnit)
 			->where('deadline', $date)
 			->get()->row();
 		return (object)array(
@@ -147,7 +148,7 @@ class RegularpawnsModel extends Master
 			->join('units_repayments','units_repayments.no_sbk = '.$this->table.'.no_sbk')
 			->where('units_repayments.id_unit', $idUnit)
 			->where($this->table.'.id_unit', $idUnit)
-			->where($this->table.'.status_transaction', null)
+			->where($this->table.'.status_transaction', 'N')
 			->where('units_repayments.date_repayment', $date)
 			->get()->row();
 		return (object)array(

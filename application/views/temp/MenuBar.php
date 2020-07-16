@@ -11,6 +11,15 @@
                     <a  href="javascript:;" class="kt-menu__link kt-menu__toggle"><span class="kt-menu__link-text">Dashboard</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
                         <div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--left">
                             <ul class="kt-menu__subnav">
+								<li class="kt-menu__item "  aria-haspopup="true">
+									<a href="<?php echo base_url('dashboards'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Outstanding</span></a>
+								</li>
+								<li class="kt-menu__item "  aria-haspopup="true">
+									<a href="<?php echo base_url('dashboards/pelunasan'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Pelunasan</span></a>
+								</li>
+								<li class="kt-menu__item "  aria-haspopup="true">
+									<a href="<?php echo base_url('dashboards/pencairan'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Pencairan</span></a>
+								</li>
 							<?php if(read_access('pusat')):?>
 								<li class="kt-menu__item "  aria-haspopup="true">
 									<a href="<?php echo base_url('dashboards/pusat'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Dashboard Pusat</span></a>
