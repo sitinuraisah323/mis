@@ -21,7 +21,7 @@ class RepaymentModel extends Master
 		return (int) $this->db->select('sum(money_loan) as up')
 			->from($this->table)
 			->where('id_unit', $idUnit)
-			->where('date_sbk', $date)
+			->where('date_repayment', $date)
 			->get()->row()->up;
 	}
 

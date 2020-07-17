@@ -10,6 +10,7 @@ class Loaninstallments extends ApiController
 		$this->load->model('LoaninstallmentsModel', 'installment');
 		$this->load->model('CustomersModel', 'customers');
 		$this->load->model('MortagesModel', 'mortages');
+		$this->load->model('UnitsModel', 'units');
 		$this->load->model('RegularpawnsModel', 'regulars');
 		$this->load->model('UnitsdailycashModel', 'unitsdailycash');
 		$this->load->model('RepaymentmortageModel', 'repaymentmortage');
@@ -337,7 +338,12 @@ class Loaninstallments extends ApiController
 
 	public function process_transaction($id_unit, $path, $name, $jok)
 	{
+		$code = (int) substr($name,2, 2);
+		$id_unit = $this->units->find(array(
+			'code'	=> zero_fill($code,3)
+		))->id;
 		switch(substr($name,0, 2)){
+
 			case 'MS':
 				$this->data_customer($id_unit,$path.$name);
 				break;	

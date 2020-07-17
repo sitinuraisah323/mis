@@ -65,7 +65,7 @@ class RegularpawnsModel extends Master
 	{
 		$data = $this->db->select('sum(money_loan) as up, count(*) as noa')->from('units_repayments')
 			->where('id_unit', $idUnit)
-			->where('date_sbk', $today)->get()->row();
+			->where('date_repayment', $today)->get()->row();
 		return (object)array(
 			'noa' => (int)$data->noa,
 			'up' => (int)$data->up,
@@ -108,7 +108,7 @@ class RegularpawnsModel extends Master
 		return (object)array(
 			'noa' => (int)$noaMortages + $noaRegular,
 			'credit' => (int)$upMortages + $upRegular,
-			'tiket' => (int)$upMortages + $upRegular > 0 ? $upMortages + $upRegular / $noaMortages + $noaRegular : 0,
+			'tiket' => (int)$upMortages + $upRegular > 0 ? ($upMortages + $upRegular) / ($noaMortages + $noaRegular) : 0,
 		);
 	}
 
