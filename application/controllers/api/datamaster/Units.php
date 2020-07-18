@@ -49,6 +49,34 @@ class Units extends ApiController
 		));
     }
 
+    public function get_customers_gr_byunit()
+	{
+        if($get = $this->input->get()){
+            if($unit = $get['unit']){
+                echo json_encode(array(
+                    'data'	    => 	$this->units->get_customers_gadaireguler_byunit($unit),
+                    'status'	=> true,
+                    'message'	=> 'Successfully Get Data Customers'
+                ));
+            }
+        }		
+    }
+
+    public function get_customers_gc_byunit()
+	{
+        if($get = $this->input->get()){
+            if($unit = $get['unit']){
+                echo json_encode(array(
+                    'data'	    => 	$this->units->get_customers_gadaicicilan_byunit($unit),
+                    'status'	=> true,
+                    'message'	=> 'Successfully Get Data Customers'
+                ));
+            }
+        }		
+    }
+
+    
+
 	public function insert()
 	{
 		if($post = $this->input->post()){

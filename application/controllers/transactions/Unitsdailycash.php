@@ -73,6 +73,11 @@ class Unitsdailycash extends Authenticated
 
 						$datetrans 		= date('Y-m-d', strtotime($udc['E']));
 						$kdkas			= $udc['F'];
+						$codetrans		= substr($udc['D'],0,5);
+
+						$str = $udc['D'];
+						$connumber = preg_replace('/\D/', '', $str);
+						//echo $str;
 
 						//get description
 						$description	= strtolower($udc['C']);
@@ -83,6 +88,12 @@ class Unitsdailycash extends Authenticated
 							$char = implode(' ', $part);
 						}else{
 							$char = implode(' ', $part);
+						}
+
+						if($numeric!="00"){
+							$numeric=$numeric;
+						}else{
+							$numeric=$connumber;
 						}
 						//change value to positive
 						//$amount			= 0;
@@ -101,43 +112,45 @@ class Unitsdailycash extends Authenticated
 								}
 
 								//transaksi
-								// $data = array(
-								// 	'id_unit'		=> $unit,
-								// 	'cash_code'		=> $udc['F'],
-								// 	'date'			=> $datetrans,
-								// 	'amount'		=> $amount,
-								// 	'description'	=> $description,									
-								// 	//'numeric_desc'	=> $numeric,
-								// 	//'char_desc'		=> $char,
-								// 	'status'		=> "DRAFT",
-								// 	'id_category'	=>  $findcategory->id,
-								// );	
 								$data = array(
 									'id_unit'		=> $unit,
 									'no_perk'		=> $udc['A'],
+									'code_trans'	=> $numeric,
 									'cash_code'		=> $udc['F'],
 									'date'			=> $datetrans,
 									'amount'		=> $amount,
 									'description'	=> $description,									
+									'numeric_desc'	=> $numeric,
+									'char_desc'		=> $char,
 									'status'		=> "DRAFT",
-									//'id_category'	=> $findcategory->id,
-									'type'			=> $type
-								);									
-								$findtransaction = $this->unitsdailycash->find(array(
-										'id_unit'		=> $unit,										
-										'date'			=> $datetrans,
-										'amount' 		=> $amount,
-										'description' 	=> $description
-								));
+									'id_category'	=>  $findcategory->id,
+								);	
+								// $data = array(
+								// 	'id_unit'		=> $unit,
+								// 	'no_perk'		=> $udc['A'],
+								// 	'cash_code'		=> $udc['F'],
+								// 	'date'			=> $datetrans,
+								// 	'amount'		=> $amount,
+								// 	'description'	=> $description,									
+								// 	'status'		=> "DRAFT",
+								// 	//'id_category'	=> $findcategory->id,
+								// 	'type'			=> $type
+								// );									
+								// $findtransaction = $this->unitsdailycash->find(array(
+								// 		'id_unit'		=> $unit,										
+								// 		'date'			=> $datetrans,
+								// 		'amount' 		=> $amount,
+								// 		'description' 	=> $description
+								// ));
 								echo "<pre/>";print_r($data);
-								if(!$findtransaction){
-									//echo "<pre/>";//print_r($data);
-									$this->unitsdailycash->insert($data);
-								}else{
-									if($this->unitsdailycash->update($data, array(
-										'id'	=> $findtransaction->id
-									)));
-								}
+								// if(!$findtransaction){
+								// 	//echo "<pre/>";//print_r($data);
+								// 	$this->unitsdailycash->insert($data);
+								// }else{
+								// 	if($this->unitsdailycash->update($data, array(
+								// 		'id'	=> $findtransaction->id
+								// 	)));
+								// }
 							}
 					}
 				}

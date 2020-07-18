@@ -237,14 +237,15 @@ class Mortages extends ApiController
 	public function report()
 	{
 		$this->mortages->db
-			->select('customers.name as customer_name')
+			->select('customers.name as customer_name,customers.nik as nik, (select count(id) from units_repayments_mortage where units_repayments_mortage.no_sbk =units_mortages.no_sbk and units_repayments_mortage.id_unit =units_mortages.id_unit  ) as cicilan')
 			->join('customers','units_mortages.id_customer = customers.id');
 		if($get = $this->input->get()){
 			$status =null;
+			$nasabah = $get['nasabah'];
 			if($get['statusrpt']=="0"){$status=["N","L"];}
 			if($get['statusrpt']=="1"){$status=["N"];}
 			if($get['statusrpt']=="2"){$status=["L"];}
-			if($get['statusrpt']=="3"){$status=[""];}
+			if($get['statusrpt']=="3"){$status=[""];} 
 			$this->mortages->db
 				->where('units_mortages.date_sbk >=', $get['dateStart'])
 				->where('units_mortages.date_sbk <=', $get['dateEnd'])
@@ -252,6 +253,9 @@ class Mortages extends ApiController
 				->where('units_mortages.id_unit', $get['id_unit']);
 			if($permit = $get['permit']){
 				$this->mortages->db->where('permit', $permit);
+			}
+			if($nasabah != "all"){
+				$this->mortages->db->where('customers.nik', $nasabah);
 			}
 		}
 		$data = $this->mortages->all();

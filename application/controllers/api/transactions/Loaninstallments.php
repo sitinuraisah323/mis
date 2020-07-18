@@ -430,12 +430,23 @@ class Loaninstallments extends ApiController
 					$description	= strtolower($udc['C']);
 					$part			= explode(' ',$description);
 					$numeric		= $part[count($part)-1];
+
+					$str = $udc['D'];
+					$connumber = preg_replace('/\D/', '', $str);
+
+					$codetrans 	    = null;
 					if(is_numeric($numeric)){
 						unset($part[count($part)-1]);
 						$char = implode(' ', $part);
 					}else{
 						$char = implode(' ', $part);
-					}					
+					}			
+					
+					if($numeric!="00"){
+						$numeric=$numeric;
+					}else{
+						$numeric=$connumber;
+					}
 					//change value to positive
 					$amount			= 0;
 					if($udc['B']<0){ $amount=abs($udc['B']); $type="CASH_IN";}else{$amount=$udc['B']; $type="CASH_OUT";}
@@ -452,6 +463,7 @@ class Loaninstallments extends ApiController
 						$data = array(
 							'id_unit'		=> $unit,
 							'no_perk'		=> $udc['A'],
+							'code_trans'	=> $numeric,
 							'cash_code'		=> $udc['F'],
 							'date'			=> $datetrans,
 							'amount'		=> $amount,
@@ -459,7 +471,9 @@ class Loaninstallments extends ApiController
 							'status'		=> "DRAFT",
 							//'id_category'	=> $findcategory->id,
 							'type'			=> $type,
-							'permit'		=> $jok
+							'permit'		=> $jok,
+							'user_create'	=> $this->session->userdata('user')->id,
+							'user_update'	=> $this->session->userdata('user')->id,
 						);								
 						$findtransaction = $this->unitsdailycash->find(array(
 								'id_unit'		=> $unit,										

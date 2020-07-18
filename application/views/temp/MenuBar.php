@@ -252,7 +252,16 @@
 							</li>
 							<?php endif;?>
 
-							<li class="kt-menu__item  kt-menu__item--submenu"  data-ktmenu-submenu-toggle="hover" aria-haspopup="true">
+							<?php if(read_access('mortages')):?>
+							<li class="kt-menu__item "  aria-haspopup="true">
+								<a  href="<?php echo base_url('report/modalkerja'); ?>" class="kt-menu__link ">
+									<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>
+									<span class="kt-menu__link-text">Modal Kerja</span>
+								</a>
+							</li>
+							<?php endif;?>
+
+							<!-- <li class="kt-menu__item  kt-menu__item--submenu"  data-ktmenu-submenu-toggle="hover" aria-haspopup="true">
 								<a  href="javascript:;" class="kt-menu__link kt-menu__toggle">
 									<span class="kt-menu__link-icon">
 									<i class="fa fa-copy"><span></span></i>
@@ -276,10 +285,18 @@
 													<span class="kt-menu__link-text">Mutasi Antar Unit</span>
 											</a>
 										</li>	
-										<?php endif;?>									
+										<?php endif;?>	
+										<?php if(read_access('antarunit')):?>
+										<li class="kt-menu__item "  aria-haspopup="true">
+											<a  href="<?php echo base_url('report/modalkerja/saldo'); ?>" class="kt-menu__link ">
+												<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+													<span class="kt-menu__link-text">Saldo</span>
+											</a>
+										</li>	
+										<?php endif;?>								
 									</ul>
 								</div>
-							</li>
+							</li> -->
 
 							<li class="kt-menu__item  kt-menu__item--submenu"  data-ktmenu-submenu-toggle="hover" aria-haspopup="true">
 								<a  href="javascript:;" class="kt-menu__link kt-menu__toggle">
@@ -342,13 +359,21 @@
 								</div>
 							</li>
 							<?php if(read_access('mutasiunits')):?>
-										<li class="kt-menu__item "  aria-haspopup="true">
-											<a  href="<?php echo base_url('report/dpd'); ?>" class="kt-menu__link ">
-												<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>
-												<span class="kt-menu__link-text">Nasabah DPD</span>
-											</a>
-										</li>
-										<?php endif;?>
+							<li class="kt-menu__item "  aria-haspopup="true">
+								<a  href="<?php echo base_url('report/dpd'); ?>" class="kt-menu__link ">
+									<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>
+									<span class="kt-menu__link-text">Nasabah DPD</span>
+								</a>
+							</li>
+							<?php endif;?>
+							<?php if(read_access('mutasiunits')):?>
+							<li class="kt-menu__item "  aria-haspopup="true">
+								<a  href="<?php echo base_url('report/targetunit'); ?>" class="kt-menu__link ">
+									<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>
+									<span class="kt-menu__link-text">Target Units</span>
+								</a>
+							</li>
+							<?php endif;?>
 							</ul>
                         </div>
                     </li>
@@ -363,8 +388,8 @@
                 	<ul class="kt-menu__nav ">
                     	<li class="kt-menu__item  kt-menu__item--submenu kt-menu__item--rel"  data-ktmenu-submenu-toggle="click" aria-haspopup="true">
 							<a  href="<?php echo base_url('dailyreport/unitsreport'); ?>" class="btn btn-primary"><i class="fa fa-envelope"></i> Non OJK</a>&nbsp
-							<a  href="<?php echo base_url('dailyreport/unitsreportojk'); ?>" class="btn btn-primary"><i class="fa fa-envelope"></i> OJK</a>&nbsp
-                    	<a  href="#"  data-toggle="modal" data-target="#help" class="btn btn-success"><i class="fa fa-exclamation-circle"></i> Help</a>
+							<a  href="<?php echo base_url('dailyreport/unitsreportojk'); ?>" class="btn btn-success"><i class="fa fa-check-double"></i> OJK</a>&nbsp
+                    	<a  href="#"  data-toggle="modal" data-target="#help" class="btn btn-warning"><i class="fa fa-exclamation-circle"></i> Help</a>
                     	</li>
 					</ul>
 				</div>

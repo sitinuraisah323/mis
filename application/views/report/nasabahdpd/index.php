@@ -109,7 +109,7 @@ $this->load->view('temp/MenuBar.php');
                             <option value="3">Perpanjangan</option>
                         </select>
                     </div>
-					<div class="col-lg-2">
+					<div class="col-lg-1">
 						<label class="col-form-label">Ijin</label>
 						<select class="form-control" name="permit">
 							<option value="">Select Ijin</option>
@@ -126,7 +126,12 @@ $this->load->view('temp/MenuBar.php');
 						<label class="col-form-label">Sampai</label>
 						<input type="date" class="form-control" name="date-end" value="<?php echo date('Y-m-d');?>">
 					</div>
-					<button type="button" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>
+                    <div class="col-lg-1">
+                        <label class="col-form-label">&nbsp</label>
+                        <div class="position-relative">
+                        <button type="button" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>   
 				</div>
 
             </div>

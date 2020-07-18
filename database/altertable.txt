@@ -94,6 +94,12 @@ ALTER TABLE mis.units_repayments CHANGE permit permit ENUM('OJK','NON-OJK') DEFA
 
 ALTER TABLE mis.units_repayments_mortage ADD permit ENUM('JOK','NON-OJK') DEFAULT 'NON-OJK' NULL;
 
+ALTER TABLE mis.units_dailycashs ADD category INT NULL;
+ALTER TABLE mis.units_dailycashs ADD no_sbk varchar(100) NULL;
+
+ALTER TABLE mis.units_dailycashs CHANGE no_sbk code_trans varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL;
+
+
 
 
 

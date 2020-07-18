@@ -96,7 +96,7 @@ $this->load->view('temp/MenuBar.php');
                     <div class="col-lg-2">
 						<label class="col-form-label">Unit</label>
 						<select class="form-control select2" name="id_unit" id="unit">
-							<option></option>
+							<option value="">All</option>
 						</select>
                     </div>
                     <div class="col-lg-2">
@@ -126,7 +126,19 @@ $this->load->view('temp/MenuBar.php');
 						<label class="col-form-label">Sampai</label>
 						<input type="date" class="form-control" name="date-end" value="<?php echo date('Y-m-d');?>">
 					</div>
-					<button type="button" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>
+                    <div class="col-lg-2">
+						<label class="col-form-label">Nasabah</label>
+                        <select class="form-control select2" name="nasabah" id="nasabah">
+							<option value=""></option>
+                            <option value="all">All</option>
+						</select>
+                    </div>
+                    <div class="col-lg-2">
+                        <label class="col-form-label">&nbsp</label>
+                        <div class="position-relative">
+                        <button type="button" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>                  
 				</div>
 
             </div>
@@ -147,6 +159,7 @@ $this->load->view('temp/MenuBar.php');
 									<th class='text-right'>Admin</th>
 									<th class='text-right'>UP</th>
 									<th class='text-center'>Status</th>
+									<th class='text-center'>Description</th>
 									<th></th>
 						    	</tr>
 						  	</thead>
