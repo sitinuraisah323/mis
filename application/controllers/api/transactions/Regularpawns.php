@@ -268,4 +268,44 @@ class Regularpawns extends ApiController
 		));
 	}
 
+	public function reportdpd()
+	{
+		$this->regulars->db
+			->select("customers.name as customer_name, ROUND(units_regularpawns.capital_lease * 4 * amount) as tafsiran_sewa,
+				CASE WHEN amount <=1000000 THEN 9000
+				WHEN amount <= 2500000 THEN 20000
+				WHEN amount <= 5000000 THEN 27000
+				WHEN amount <= 10000000 THEN 37000
+				WHEN amount <= 15000000 THEN 72000
+				WHEN amount <= 20000000 THEN 82000
+				WHEN amount <= 25000000 THEN 102000
+				WHEN amount <= 50000000 THEN 122000
+				WHEN amount <= 75000000 THEN 137000
+				ELSE '152000'
+				END AS new_admin
+				
+				")
+			->join('customers','units_regularpawns.id_customer = customers.id')
+			->select('units_repayments.date_repayment as date_repayment')
+			->join('units_repayments','units_regularpawns.no_sbk = units_repayments.no_sbk','left')
+			->where('deadline <',date('Y-m-d'));
+		if($get = $this->input->get()){
+			$this->regulars->db
+				->where('units_regularpawns.date_sbk >=', $get['dateStart'])
+				->where('units_regularpawns.date_sbk <=', $get['dateEnd'])
+				->where('units_regularpawns.status_transaction ', 'N')
+				->where('units_regularpawns.id_unit', $get['id_unit']);
+			if($permit = $get['permit']){
+				$this->regulars->db->where('units_regularpawns.permit', $permit);
+			}
+
+
+		}
+		$data = $this->regulars->all();
+		echo json_encode(array(
+			'data'	=> $data,
+			'status'	=> true,
+			'message'	=> 'Successfully Get Data Regular Pawns'
+		));
+	}
 }

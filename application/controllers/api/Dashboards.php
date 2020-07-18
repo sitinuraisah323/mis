@@ -9,6 +9,7 @@ class Dashboards extends ApiController
 		parent::__construct();
 		$this->load->model('RegularPawnsModel', 'regular');
 		$this->load->model('UnitsModel', 'units');
+		$this->load->model('RepaymentModel','repayments');
 	}
 
 	public function outstanding()
@@ -24,7 +25,9 @@ class Dashboards extends ApiController
 		}else{
 			$date = date('Y-m-d');
 		}
-		$units = $this->units->db->select('units.id, units.name')->get('units')->result();
+		$units = $this->units->db->select('units.id, units.name, area')
+			->join('areas','areas.id = units.id_area')
+			->get('units')->result();
 		foreach ($units as $unit){
 			$unit->ost_yesterday = $this->regular->getOstYesterday($unit->id, $date);
 			$unit->credit_today = $this->regular->getCreditToday($unit->id, $date);
@@ -44,7 +47,7 @@ class Dashboards extends ApiController
 				'noa'	=> $unit->dpd_today->noa + $unit->dpd_yesterday->noa - $unit->dpd_repayment_today->noa,
 				'ost'	=> $unit->dpd_today->ost + $unit->dpd_yesterday->ost - $unit->dpd_repayment_today->ost,
 			);
-			$unit->percentage = $unit->total_dpd->ost > 0 ? $unit->total_dpd->ost / $unit->total_dpd->noa : 0;
+			$unit->percentage = ($unit->total_dpd->ost > 0) && ($unit->total_outstanding->up > 0) ? round($unit->total_dpd->ost / $unit->total_outstanding->up, 2) : 0;
 		}
 		$this->sendMessage($units, 'Get Data Outstanding');
 	}

@@ -108,73 +108,45 @@ function initCariForm(){
     $('#btncari').on('click',function(){
         $('.rowappend').remove();
         var area = $('#area').val();
-        var unit = $('#unit').val();
-        var statusrpt = $('#status').val();
 		var dateStart = $('[name="date-start"]').val();
-		var dateEnd = $('[name="date-end"]').val();
-		var permit = $('[name="permit"]').val();
         KTApp.block('#form_bukukas .kt-portlet__body', {});
 		$.ajax({
 			type : 'GET',
-			url : "<?php echo base_url("api/transactions/regularpawns/reportdpd"); ?>",
+			url : "<?php echo base_url("api/dashboards/pelunasan"); ?>",
 			dataType : "json",
-			data:{id_unit:unit,dateStart:dateStart,dateEnd:dateEnd,permit:permit},
+			data:{area:area,date:dateStart},
 			success : function(response,status){
 				KTApp.unblockPage();
-				if(response.status == true){
-					var template = '';
-					var no = 1;
-					var amount = 0;
-					var admin = 0;
-					var totalDPD = 0;
-					var totalDenda = 0;
-					var totalPelunasan = 0;
-					var totalTafsiran = 0;
-                    var status="";
+				var body = '';
+				var head = '';
+				var int = 0;
+				$.each(response.data, function (index, data) {
+					if(index > 0){
+						body += '<tr>';
+						body += '<td>'+int+'</td>'
+						body += '<td>'+data.name+'</td>'
+						body += '<td>'+data.area+'</td>'
+						$.each(data.dates, function (index, date) {
+							body += '<td>'+date+'</td>';
+						});
+						body += '</tr>';
+					}else{
+						head += '<tr>';
+						head += '<td>'+data.no+'</td>'
+						head += '<td>'+data.unit+'</td>'
+						head += '<td>'+data.area+'</td>'
+						$.each(data.dates, function (index, date) {
+							head += '<td>'+date+'</td>';
+						})
+						head += '</tr>';
+					}
+					int++;
+				});
+				$('.table').find('tbody').find('tr').remove();
+				$('.table').find('thead').find('tr').remove();
+				$('.table').find('thead').html(head);
+				$('.table').find('tbody').html(body);
 
-					$.each(response.data, function (index, data) {
-						var dpd = parseInt(date_between(data.deadline,"<?php echo date('Y/m/d');?>'"));
-						template += "<tr class='rowappend'>";
-						template += "<td class='text-center'>"+no+"</td>";
-						template += "<td class='text-center'>"+data.no_sbk+"</td>";
-						template += "<td class='text-center'>"+moment(data.date_sbk).format('DD-MM-YYYY')+"</td>";
-                        template += "<td class='text-center'>"+moment(data.deadline).format('DD-MM-YYYY')+"</td>";
-                        if(data.date_repayment!=null){ var DateRepayment = moment(data.date_repayment).format('DD-MM-YYYY');}else{ var DateRepayment = "-";}
-						template += "<td class='text-center'>"+DateRepayment+"</td>";
-						template += "<td>"+data.customer_name+"</td>";
-						template += "<td class='text-center'>"+data.capital_lease+"</td>";
-						template += "<td class='text-right'>"+convertToRupiah(data.estimation)+"</td>";
-						template += "<td class='text-right'>"+convertToRupiah(data.admin)+"</td>";
-						template += "<td class='text-right'>"+convertToRupiah(data.amount)+"</td>";
-                        if(data.status_transaction=="L"){ status="Lunas";}
-                        else if(data.status_transaction=="N"){ status="Aktif";}
-						template += "<td class='text-center'>"+dpd+"</td>";
-						template += "<td class='text-right'>"+convertToRupiah(data.tafsiran_sewa)+"</td>";
-						template += "<td class='text-right'>"+convertToRupiah(calculateDenda(data.amount, dpd))+"</td>";
-						var up = parseInt(calculateDenda(data.amount, dpd));
-						var calcup = up + parseInt(data.tafsiran_sewa) +parseInt(data.amount);
-						template += "<td class='text-right'>"+convertToRupiah(calcup)+"</td>";
-						template += '</tr>';
-						no++;
-						totalDenda += calculateDenda(data.amount, dpd);
-						amount += parseInt(data.amount);
-						admin += parseInt(data.admin);
-						totalTafsiran += parseInt(data.tafsiran_sewa);
-						totalPelunasan += parseInt(calcup);
-						totalDPD += parseInt(date_between(data.deadline,"<?php echo date('Y/m/d');?>'"));
-					});
-					template += "<tr class='rowappend'>";
-					template += "<td colspan='8' class='text-right'>Total</td>";
-					template += "<td class='text-right'>"+convertToRupiah(admin)+"</td>";
-					template += "<td class='text-right'>"+convertToRupiah(amount)+"</td>";
-					template += "<td class='text-right'>"+totalDPD+"</td>";
-					template += "<td class='text-right'>"+convertToRupiah(totalTafsiran)+"</td>";
-					template += "<td class='text-right'>"+convertToRupiah(totalDenda)+"</td>";
-					template += "<td class='text-right'>"+convertToRupiah(totalPelunasan)+"</td>";
-					template += "<td class='text-right'></td>";
-					template += '</tr>';
-					$('.kt-section__content table').append(template);
-				}
 			},
 			error: function (jqXHR, textStatus, errorThrown){
 				KTApp.unblockPage();

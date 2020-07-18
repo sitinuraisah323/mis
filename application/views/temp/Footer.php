@@ -39,6 +39,40 @@
 			var url = "<?php echo base_url();?>";
 			var segments;
             var KTAppOptions = {"colors":{"state":{"brand":"#374afb","light":"#ffffff","dark":"#282a3c","primary":"#5867dd","success":"#34bfa3","info":"#36a3f7","warning":"#ffb822","danger":"#fd3995"},"base":{"label":["#c5cbe3","#a1a8c3","#3d4465","#3e4466"],"shape":["#f0f3ff","#d9dffa","#afb4d4","#646c9a"]}}};
+       		function date_between(dateStart, dateEnd) {
+				var date1 = new Date(dateStart);
+				var date2 = new Date(dateEnd);
+
+// To calculate the time difference of two dates
+				var Difference_In_Time = date2.getTime() - date1.getTime();
+
+// To calculate the no. of days between two dates
+				var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+
+//To display the final no. of days (result)
+				return Difference_In_Days;
+			}
+
+			function calculateDenda(up, dpd) {
+				var sumDay = parseInt(dpd - 15);
+				if(sumDay > 0){
+					var rate;
+					if(parseInt(up) < 10000000){
+						rate = 0.0583/100;
+					}else{
+						rate = 0.0433/100;
+					}
+					var calculate = Math.round(sumDay * rate * up);
+					var modusCalculate = calculate % 500;
+					if(modusCalculate > 0){
+						var round = 500;
+					}else{
+						var round = 0;
+					}
+					return calculate - modusCalculate + round;
+				}
+				return 0;
+			}
         </script>
         <!-- end::Global Config -->
 

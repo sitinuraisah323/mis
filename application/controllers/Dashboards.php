@@ -16,6 +16,7 @@ class Dashboards extends Authenticated
 	public function __construct()
 	{
 		parent::__construct();
+		$this->load->model('AreasModel','areas');
 	}
 
 	/**
@@ -23,6 +24,9 @@ class Dashboards extends Authenticated
 	 */
 	public function index()
 	{
+		$this->load->view("dashboard/index",array(
+			'areas'	=> $this->areas->all()
+		));
     }
 
     public function pusat()
@@ -53,12 +57,16 @@ class Dashboards extends Authenticated
 	
 	public function pencairan()
 	{
-        $this->load->view("dashboards/pusat/pencairan");
+        $this->load->view("dashboard/pencairan/index",array(
+        	'areas'	=> $this->areas->all()
+		));
 	}
 	
 	public function pelunasan()
 	{
-        $this->load->view("dashboards/pusat/pelunasan");
+        $this->load->view("dashboard/pelunasan/index",array(
+        	'areas'	=> $this->areas->all()
+		));
 	}
 	
 	public function saldokas()
