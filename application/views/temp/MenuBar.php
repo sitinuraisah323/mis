@@ -20,6 +20,12 @@
 								<li class="kt-menu__item "  aria-haspopup="true">
 									<a href="<?php echo base_url('dashboards/pencairan'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Pencairan</span></a>
 								</li>
+								<li class="kt-menu__item "  aria-haspopup="true">
+									<a href="<?php echo base_url('dashboards/pendapatan'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Pendapatan</span></a>
+								</li>
+								<li class="kt-menu__item "  aria-haspopup="true">
+									<a href="<?php echo base_url('dashboards/pelunasan'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Pelunasan</span></a>
+								</li>
 							<?php if(read_access('pusat')):?>
 								<li class="kt-menu__item "  aria-haspopup="true">
 									<a href="<?php echo base_url('dashboards/pusat'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Dashboard Pusat</span></a>

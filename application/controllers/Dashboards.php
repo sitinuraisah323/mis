@@ -68,6 +68,20 @@ class Dashboards extends Authenticated
         	'areas'	=> $this->areas->all()
 		));
 	}
+
+	public function pendapatan()
+	{
+        $this->load->view("dashboard/pendapatan/index",array(
+        	'areas'	=> $this->areas->all()
+		));
+	}
+
+	public function pengeluaran()
+	{
+        $this->load->view("dashboard/pengeluaran/index",array(
+        	'areas'	=> $this->areas->all()
+		));
+	}
 	
 	public function saldokas()
 	{
