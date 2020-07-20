@@ -457,14 +457,7 @@ class Loaninstallments extends ApiController
 					$amount			= 0;
 					if($udc['B']<0){ $amount=abs($udc['B']); $type="CASH_IN";}else{$amount=$udc['B']; $type="CASH_OUT";}
 
-					if($kdkas==$cashcode){
-						//category
-						$categories = array('category'=> $char,'source' => $unit);
-						$findcategory = $this->m_category->find(array('category' => $char));
-						if(is_null($findcategory)){
-							$this->m_category->insert($categories);
-						}						
-
+					if($kdkas==$cashcode){				
 						//transaksi
 						$data = array(
 							'id_unit'		=> $unit,
@@ -475,24 +468,47 @@ class Loaninstallments extends ApiController
 							'amount'		=> $amount,
 							'description'	=> $description,									
 							'status'		=> "DRAFT",
-							//'id_category'	=> $findcategory->id,
 							'type'			=> $type,
 							'permit'		=> $jok,
 							'user_create'	=> $this->session->userdata('user')->id,
 							'user_update'	=> $this->session->userdata('user')->id,
-						);								
-						$findtransaction = $this->unitsdailycash->find(array(
-								'id_unit'		=> $unit,										
-								'no_perk'		=> $udc['A'],
-								'date'			=> $datetrans,
-								'amount' 		=> $amount,
-								'description' 	=> $description
-						));
-						if(is_null($findtransaction)){
+						);				
+						if($findtransaction = $this->unitsdailycash->find(array(
+							'id_unit'		=> $unit,										
+							'no_perk'		=> $udc['A'],
+							'cash_code'		=> $udc['F'],
+							'date'			=> $datetrans,
+							'amount' 		=> $amount,
+							'description' 	=> $description,
+							'type'			=> $type,
+							'permit'		=> $jok
+						))){
+							if($this->unitsdailycash->update($data, array(
+								'id'		=>  $findtransaction->id,
+								'id_unit'	=> $id_unit
+							)));
+						}else{
 							$this->unitsdailycash->insert($data);
 						}
-					}	
 
+						// $findtransaction = $this->unitsdailycash->find(array(
+						// 		'id_unit'		=> $unit,										
+						// 		'no_perk'		=> $udc['A'],
+						// 		'cash_code'		=> $udc['F'],
+						// 		'date'			=> $datetrans,
+						// 		'amount' 		=> $amount,
+						// 		'description' 	=> $description,
+						// 		'type'			=> $type,
+						// 		'permit'		=> $jok
+						// ));
+						// if(is_null($findtransaction)){
+						// 	//insert
+						// 	$this->unitsdailycash->insert($data);
+						// }else{
+						// 	//update
+
+						// }
+					}
 				}
 			}
 		}
@@ -598,12 +614,11 @@ class Loaninstallments extends ApiController
 							'periode'		=> $repayment['J'],
 							'description_1'	=> $repayment['E'],
 							'description_2'	=> $repayment['F'],
-							'description_3'	=> $repayment['G']
+							'description_3'	=> $repayment['G'],
+							'permit'		=> $jok
 						))){
 							$this->repayments->update($data, array('id'	=>  $findrepayment->id));
 						}else{
-							//echo "<pre/>";
-							//print_r($data);
 							$this->repayments->insert($data);
 						}
 					}
@@ -699,7 +714,8 @@ class Loaninstallments extends ApiController
 						'no_sbk'		=> zero_fill($repmortage['B'], 5),
 						'date_kredit'	=> date('Y-m-d', strtotime($repmortage['C'])),
 						'amount'		=> $repmortage['I'],
-						'capital_lease'	=> $repmortage['K']
+						'capital_lease'	=> $repmortage['K'],
+						'permit'		=> $jok
 					))){
 						if($this->repaymentmortage->update($data, array('id'	=>  $findrepaymentmortage->id)));
 					}else{

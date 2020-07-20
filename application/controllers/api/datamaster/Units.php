@@ -20,6 +20,7 @@ class Units extends ApiController
                 ->or_like('area', $value)
                 ->or_like('area',strtoupper($value))
                 ->or_like('name', $value)
+                ->or_like('code', $value)
                 ->or_like('name',strtoupper($value));					
 				$data = $this->units->get_units();
 			}

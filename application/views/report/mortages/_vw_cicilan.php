@@ -8,7 +8,7 @@
                 </button>
             </div>
             <div class="modal-body">
-			<div class="kt-portlet__body"> 
+			<div class="kt-portlet__body">               
                 <table class="table" id="mdl_vwcicilan">
                     <thead class="thead-light">
                         <tr>
