@@ -119,4 +119,71 @@ class Unitstarget extends ApiController
         }	
     }
 
+    public function report(){        
+        $this->u_target->db
+              ->select('units.name as unit')
+              ->join('units','units_targets.id_unit=units.id')
+              ->select('areas.area')
+              ->join('areas','units.id_area=areas.id');
+		if($get = $this->input->get()){	
+            $month = date('m',strtotime($get['dateStart']));		
+            $year  = date('Y',strtotime($get['dateStart']));	
+
+			$this->u_target->db
+				->where('month', $month)
+				->where('year', $year)
+				->where('id_unit', $get['id_unit']);
+		}
+		$data = $this->u_target->all();
+		echo json_encode(array(
+			'data'	    => $data,
+			'status'	=> true,
+			'message'	=> 'Successfully Get Data Regular Pawns'
+		));
+
+    }
+
+    public function get_booking()
+    {      
+        if($get = $this->input->get()){	
+            $unit   =  $get['id_unit'];
+            $month  =  date('m',strtotime($get['dateStart']));
+            $year   =  date('Y',strtotime($get['dateStart']));
+            $stardate = $year."-".$month."-01";
+            $enddate  = date("Y-m-t", strtotime($stardate));
+            $targets = $this->u_target->db
+            ->select('units_targets.id, units_targets.id_unit,month,year,units_targets.amount_booking,units_targets.amount_outstanding')
+            ->select('units.name as unit')
+            ->join('units','units_targets.id_unit=units.id')
+            ->select('areas.area as area')
+            ->join('areas','units.id_area=areas.id')
+            ->where('id_unit',$unit)
+            ->where('month',$month)
+            ->where('year',$year)
+            ->get('units_targets')->row();
+            
+            $booking_reguler =   $this->u_target->get_sum_targetbooking_requler($stardate,$enddate,$unit);   
+            $booking_cicilan =   $this->u_target->get_sum_targetbooking_cicilan($stardate,$enddate,$unit);
+            $outs_reguler =   $this->u_target->get_sum_targetoutstanding_requler($stardate,$enddate,$unit);   
+            $outs_cicilan =   $this->u_target->get_sum_targetoutstanding_cicilan($stardate,$enddate,$unit);
+           // if($get['target']=='Booking'){ 
+                $amount = $booking_reguler->up + $booking_cicilan->up;
+            // }else if($get['target']=='Outstanding'){ 
+            //     $amount = $outs_reguler->up + $outs_cicilan->up;
+            // }
+        }        
+             
+        $data[] = array( "id"=>$targets->id,
+                       "id_unit"=>$targets->id_unit,
+                       "unit"=>$targets->unit,
+                       "area"=>$targets->area,
+                       "month"=>$targets->month,
+                       "year"=>$targets->year,
+                       "amount_booking"=>$targets->amount_booking,
+                       "amount_outstanding"=>$targets->amount_outstanding,
+                       "amount"=>$amount
+                    );                    
+        $this->sendMessage($data, 'Get Data Outstanding');
+    }
+
 }

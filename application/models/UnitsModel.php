@@ -23,4 +23,24 @@ class UnitsModel extends Master
 		return $this->db->get('units as a')->result();
 	}
 
+	public function get_customers_gadaireguler_byunit($unit)
+	{
+		$this->db->distinct();
+		$this->db->select('b.nik,b.name');		
+		$this->db->join('customers as b','b.id=a.id_customer');		
+		$this->db->where('a.id_unit',$unit);		
+		$this->db->order_by('b.name','asc');		
+		return $this->db->get('units_regularpawns as a')->result();
+	}
+
+	public function get_customers_gadaicicilan_byunit($unit)
+	{
+		$this->db->distinct();
+		$this->db->select('b.nik,b.name');		
+		$this->db->join('customers as b','b.id=a.id_customer');		
+		$this->db->where('a.id_unit',$unit);		
+		$this->db->order_by('b.name','asc');		
+		return $this->db->get('units_mortages as a')->result();
+	}
+
 }

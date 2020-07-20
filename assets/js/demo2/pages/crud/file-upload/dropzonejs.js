@@ -8,8 +8,8 @@ var KTDropzoneDemo = function () {
         $('#kt_dropzone_1').dropzone({
             url: "https://keenthemes.com/scripts/void.php", // Set the url for your upload script location
             paramName: "file", // The name that will be used to transfer the file
-            maxFiles: 1,
-            maxFilesize: 5, // MB
+            maxFiles: 10,
+            maxFilesize: 10, // MB
             addRemoveLinks: true,
             accept: function(file, done) {
                 if (file.name == "justinbieber.jpg") {
@@ -139,7 +139,7 @@ var KTDropzoneDemo = function () {
          var myDropzone5 = new Dropzone(id, { // Make the whole body a dropzone
              url: "https://keenthemes.com/scripts/void.php", // Set the url for your upload script location
              parallelUploads: 20,
-             maxFilesize: 1, // Max filesize in MB
+             maxFilesize: 20, // Max filesize in MB
              previewTemplate: previewTemplate,
              previewsContainer: id + " .dropzone-items", // Define the container to display the previews
              clickable: id + " .dropzone-select" // Define the element that should be used as click trigger to select files.

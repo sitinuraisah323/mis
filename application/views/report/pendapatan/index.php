@@ -81,8 +81,8 @@ $this->load->view('temp/MenuBar.php');
             <div class="col-md-12" > 
 
                 <div class="form-group row">
-                    <label class="col-form-label">Area</label>
-                    <div class="col-lg-2">
+                <div class="col-lg-2">
+                    <label class="col-form-label">Area</label>                   
                         <select class="form-control select2" name="area" id="area">
                             <option></option>
                             <?php 
@@ -94,15 +94,15 @@ $this->load->view('temp/MenuBar.php');
                             ?>
                         </select>
                     </div>
-
-                    <label class="col-form-label">Unit</label>
+                    
                     <div class="col-lg-2">
+                    <label class="col-form-label">Unit</label>                    
                     <select class="form-control select2" name="unit" id="unit">
                             <option></option>
                             </select>
                     </div>
-                    <label class="col-form-label">Kategori</label>
                     <div class="col-lg-2">
+                    <label class="col-form-label">Kategori</label>                   
                     <select class="form-control select2" name="category" id="category">
                             <option></option>
                             <option value="all">All</option>
@@ -113,15 +113,19 @@ $this->load->view('temp/MenuBar.php');
                             ?>
                             </select>
                     </div>
-                    <label class="col-form-label">Tanggal</label>
-					<div class="col-lg-2">
+                    <div class="col-lg-2">
+                    <label class="col-form-label">Tanggal</label>					
 						<input type="date" class="form-control" name="date-start" value="<?php echo date('Y-m-d');?>">
 					</div>
 					<div class="col-lg-2">
+                    <label class="col-form-label">Sampai</label>
 						<input type="date" class="form-control" name="date-end" value="<?php echo date('Y-m-d');?>">
 					</div>
                     <div class="col-lg-1">
+                        <label class="col-form-label">&nbsp</label>
+                        <div class="position-relative">
                         <button type="button" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>
+                        </div>
                     </div>
 				</div>	               
 

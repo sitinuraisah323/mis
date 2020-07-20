@@ -94,14 +94,16 @@ function initCariModalKerjaPusatForm(){
         }
     });   
 
-    $('#area').select2({ placeholder: "Please select a area", width: '100%' });
-    $('#unit').select2({ placeholder: "Please select a Unit", width: '100%' });
+    $('#area').select2({ placeholder: "Select a area", width: '100%' });
+    $('#unit').select2({ placeholder: "Select a Unit", width: '100%' });
+    $('#categori').select2({ placeholder: "Select a Category", width: '100%' });
 
     //events
     $('#btncari').on('click',function(){
         $('.rowappend').remove();
         var area = $('#area').val();
         var unit = $('#unit').val();
+        var category = $('#categori').val();
 		var dateStart = $('[name="date-start"]').val();
 		var dateEnd = $('[name="date-end"]').val();
         KTApp.block('#form_bukukas .kt-portlet__body', {});
@@ -109,7 +111,7 @@ function initCariModalKerjaPusatForm(){
 			type : 'GET',
 			url : "<?php echo base_url("api/transactions/unitsdailycash/modal_kerja_pusat"); ?>",
 			dataType : "json",
-			data:{id_unit:unit,dateStart:dateStart,dateEnd:dateEnd},
+			data:{id_unit:unit,category:category,dateStart:dateStart,dateEnd:dateEnd},
 			success : function(response,status){
 				KTApp.unblockPage();
 				if(response.status == true){
@@ -174,8 +176,9 @@ function initCariModalKerjaMutasiUnitForm(){
         }
     });   
 
-    $('#area').select2({ placeholder: "Please select a area", width: '100%' });
-    $('#unit').select2({ placeholder: "Please select a Unit", width: '100%' });
+    $('#area').select2({ placeholder: "Select a Area", width: '100%' });
+    $('#unit').select2({ placeholder: "Select a Unit", width: '100%' });
+    $('#category').select2({ placeholder: "select a category", width: '100%' });
 
     //events
     $('#btncariMutasiUnit').on('click',function(){

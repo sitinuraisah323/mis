@@ -14,7 +14,7 @@ $this->load->view('temp/MenuBar.php');
         <div class="kt-subheader__main">            
             <h3 class="kt-subheader__title">Report</h3>            
             <span class="kt-subheader__separator kt-subheader__separator--v"></span>            
-            <span class="kt-subheader__desc">Modal Kerja Kantor Pusat</span>            
+            <span class="kt-subheader__desc">Modal Kerja</span>            
         </div>
         <div class="kt-subheader__toolbar">
             <div class="kt-subheader__wrapper">                              
@@ -33,7 +33,7 @@ $this->load->view('temp/MenuBar.php');
                         <i class="kt-font-brand fa fa-align-justify"></i>
                     </span>
                     <h3 class="kt-portlet__head-title">
-                       Data Modal Kerja Kantor Pusat
+                       Data Modal Kerja
                     </h3>
                 </div>
                 <div class="kt-portlet__head-toolbar">
@@ -81,8 +81,8 @@ $this->load->view('temp/MenuBar.php');
             <div class="col-md-12" > 
 
                 <div class="form-group row">
-                    <label class="col-lg-1 col-form-label">Area</label>
-                    <div class="col-lg-2">
+                <div class="col-lg-2">
+                    <label class="col-form-label">Area</label>                    
                         <select class="form-control select2" name="area" id="area">
                             <option></option>
                             <?php 
@@ -94,23 +94,42 @@ $this->load->view('temp/MenuBar.php');
                             ?>
                         </select>
                     </div>
-
-                    <label class="col-lg-1 col-form-label">Unit</label>
                     <div class="col-lg-2">
+                    <label class="col-form-label">Unit</label>                  
                     <select class="form-control select2" name="unit" id="unit">
                             <option></option>
                             </select>
                     </div>
-                    <label class="col-lg-1 col-form-label">Tanggal</label>
-					<div class="col-lg-2">
+                    <div class="col-lg-2">
+						<label class="col-form-label">kategori</label>
+                        <select class="form-control select2" name="categori" id="categori">
+                            <option></option>                                                         
+                            <option value="0">Kantor Pusat</option>
+                            <option value="1">Antar Unit</option>
+                        </select>
+                    </div>
+					<div class="col-lg-1">
+						<label class="col-form-label">Ijin</label>
+						<select class="form-control" name="permit" id="permit">
+							<?php foreach (array('OJK' =>'OJK','NON-OJK' => 'Non OJK') as $value => $item):?>
+								<option value="<?php echo $value;?>"><?php echo $item;?></option>
+							<?php endforeach;?>
+						</select>
+					</div>
+                    <div class="col-lg-2">
+                    <label class="col-form-label">Tanggal</label>					
 						<input type="date" class="form-control" name="date-start" value="<?php echo date('Y-m-d');?>">
 					</div>
 					<div class="col-lg-2">
+                        <label class="col-form-label">Sampai</label>
 						<input type="date" class="form-control" name="date-end" value="<?php echo date('Y-m-d');?>">
 					</div>
                     <div class="col-lg-1">
+                        <label class="col-form-label">&nbsp</label>
+                        <div class="position-relative">
                         <button type="button" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>
-                    </div>
+                        </div>
+                    </div>                     
 				</div>	               
 
             </div>

@@ -96,12 +96,14 @@ function initCariForm(){
 
     $('#area').select2({ placeholder: "Select a area", width: '100%' });
     $('#unit').select2({ placeholder: "Select a Unit", width: '100%' });
-    $('#status').select2({ placeholder: "Select a status", width: '100%' });
+    $('#status').select2({ placeholder: "Select a Status", width: '100%' });
+    $('#nasabah').select2({ placeholder: "Select a Customers", width: '100%' });
     //events
     $('#btncari').on('click',function(){
         $('.rowappend').remove();
         var area = $('#area').val();
         var unit = $('#unit').val();
+        var nasabah = $('#nasabah').val();
         var statusrpt = $('#status').val();
 		var dateStart = $('[name="date-start"]').val();
 		var dateEnd = $('[name="date-end"]').val();
@@ -111,7 +113,7 @@ function initCariForm(){
 			type : 'GET',
 			url : "<?php echo base_url("api/transactions/mortages/report"); ?>",
 			dataType : "json",
-			data:{id_unit:unit,statusrpt:statusrpt,dateStart:dateStart,dateEnd:dateEnd, permit:permit},
+			data:{id_unit:unit,statusrpt:statusrpt,nasabah:nasabah,dateStart:dateStart,dateEnd:dateEnd,permit:permit},
 			success : function(response,status){
 				KTApp.unblockPage();
 				if(response.status == true){
@@ -119,10 +121,11 @@ function initCariForm(){
 					var no = 1;
 					var amount = 0;
 					var admin = 0;
+					var status = "";
 					$.each(response.data, function (index, data) {
 						template += "<tr class='rowappend'>";
 						template += "<td class='text-center'>"+no+"</td>";
-						template += "<td class='text-center'><a href='#' class='viewcicilan' data-toggle='modal' data-target='#modal_cicilan' data-id="+data.no_sbk+" data-unit="+data.id_unit+">"+data.no_sbk+"</a></td>";
+						template += "<td class='text-center'><a href='#' class='viewcicilan' data-toggle='modal' data-target='#modal_cicilan' data-id="+data.no_sbk+" data-unit="+data.id_unit+" data-up="+data.amount_loan+">"+data.no_sbk+"</a></td>";
 						template += "<td class='text-center'>"+moment(data.date_sbk).format('DD-MM-YYYY')+"</td>";
 						template += "<td class='text-center'>"+moment(data.deadline).format('DD-MM-YYYY')+"</td>";
 						template += "<td>"+data.customer_name+"</td>";
@@ -130,7 +133,15 @@ function initCariForm(){
 						template += "<td class='text-right'>"+convertToRupiah(data.estimation)+"</td>";
 						template += "<td class='text-right'>"+convertToRupiah(data.amount_admin)+"</td>";
 						template += "<td class='text-right'>"+convertToRupiah(data.amount_loan)+"</td>";
-						template += "<td class='text-right'></td>";
+                        if(data.status_transaction=="L"){ status="Lunas";}else if(data.status_transaction=="N"){status="Aktif";}
+						template += "<td class='text-center'>"+status+"</td>";
+                        template += "<td class='text-center'>"+data.cicilan+"</td>";
+                        template += "<td class='text-right'>";
+                        if(data.description_1!=null){template += "- " + data.description_1;}
+                        if(data.description_2!=null){template += "<br>- " + data.description_2;}
+                        if(data.description_3!=null){template += "<br>- " + data.description_3;}
+                        if(data.description_4!=null){template += "<br>- " + data.description_4;}
+                        template +="</td>";
 						template += '</tr>';
 						no++;
 						amount += parseInt(data.amount_loan);
@@ -140,6 +151,8 @@ function initCariForm(){
 					template += "<td colspan='7' class='text-right'>Total</td>";
 					template += "<td class='text-right'>"+convertToRupiah(admin)+"</td>";
 					template += "<td class='text-right'>"+convertToRupiah(amount)+"</td>";
+					template += "<td class='text-right'></td>";
+					template += "<td class='text-right'></td>";
 					template += "<td class='text-right'></td>";
 					template += '</tr>';
 					$('.kt-section__content #tblcicilan').append(template);
@@ -179,10 +192,51 @@ function initGetUnit(){
     });
 }
 
+function initGetNasabah(){
+    $("#unit").on('change',function(){
+        var area = $('#area').val();
+        var unit = $('#unit').val(); 
+        var customers =  document.getElementById('nasabah');     
+        //alert(unit);
+        $.ajax({
+			type : 'GET',
+			url : "<?php echo base_url("api/datamaster/units/get_customers_gc_byunit"); ?>",
+			dataType : "json",
+			data:{unit:unit},
+			success : function(response,status){
+				KTApp.unblockPage();
+				if(response.status == true){
+                    $("#nasabah").empty();
+                    var option = document.createElement("option");
+                    option.value = "all";
+                    option.text = "All";
+                    customers.appendChild(option);
+					$.each(response.data, function (index, data) {
+                        //console.log(data);
+                        var opt = document.createElement("option");
+                        opt.value = data.nik;
+                        opt.text = data.name;
+                        customers.appendChild(opt);
+					});
+					
+				}
+			},
+			error: function (jqXHR, textStatus, errorThrown){
+				KTApp.unblockPage();
+			},
+			complete:function () {
+				KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+			}
+		});
+       
+    });
+}
+
 function popView(el){
     $('.rowappend_mdl').remove();
     var nosbk = $(el).attr('data-id');
     var unit = $(el).attr('data-unit');
+    var up = $(el).attr('data-up');
     //alert(unit);
     KTApp.block('#form_bukukas .kt-portlet__body', {});
     $.ajax({
@@ -195,16 +249,20 @@ function popView(el){
 				if(response.status == true){
 					var template = '';
 					var no = 1;
+					var saldo = up;
+					var cicilan = 0;
 					$.each(response.data, function (index, data) {
+                        if(data.date_installment =="1970-01-01"){ cicilan=saldo; }else{ cicilan=data.amount;}
+                        saldo -= cicilan;
 						template += "<tr class='rowappend_mdl'>";
 						template += "<td class='text-center'>"+no+"</td>";
                         template += "<td class='text-center'>"+data.no_sbk+"</td>";
 						template += "<td class='text-center'>"+moment(data.date_kredit).format('DD-MM-YYYY')+"</td>";
-                        if(data.date_installment ==null || data.date_installment =="1970-01-01"){ var datePayment="-"; }else{ var datePayment = moment(data.date_installment).format('DD-MM-YYYY');}
+                        if(data.date_installment ==null || data.date_installment =="1970-01-01"){ var datePayment=" Pelunasan"; }else{ var datePayment = moment(data.date_installment).format('DD-MM-YYYY');}
 						template += "<td class='text-center'>"+datePayment+"</td>";
-						template += "<td class='text-right'>"+convertToRupiah(data.amount)+"</td>";
-                        template += "<td class='text-right'>"+convertToRupiah(data.capital_lease)+"</td>";
-						template += "<td class='text-right'>"+convertToRupiah(data.saldo)+"</td>";
+						template += "<td class='text-right'>"+convertToRupiah(cicilan)+"</td>";
+                        template += "<td class='text-right'>"+convertToRupiah(data.sewa_modal)+"</td>";
+						template += "<td class='text-right'>"+convertToRupiah(saldo)+"</td>";
 						template += '</tr>';
 						no++;
 					});
@@ -223,6 +281,7 @@ function popView(el){
 jQuery(document).ready(function() {
     initCariForm();
     initGetUnit();
+    initGetNasabah();
 
     $(document).on("click", ".viewcicilan", function () {
                 var el = $(this);

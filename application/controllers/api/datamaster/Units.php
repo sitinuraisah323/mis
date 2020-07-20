@@ -20,6 +20,7 @@ class Units extends ApiController
                 ->or_like('area', $value)
                 ->or_like('area',strtoupper($value))
                 ->or_like('name', $value)
+                ->or_like('code', $value)
                 ->or_like('name',strtoupper($value));					
 				$data = $this->units->get_units();
 			}
@@ -48,6 +49,34 @@ class Units extends ApiController
 			'message'	=> 'Successfully Get Data Units'
 		));
     }
+
+    public function get_customers_gr_byunit()
+	{
+        if($get = $this->input->get()){
+            if($unit = $get['unit']){
+                echo json_encode(array(
+                    'data'	    => 	$this->units->get_customers_gadaireguler_byunit($unit),
+                    'status'	=> true,
+                    'message'	=> 'Successfully Get Data Customers'
+                ));
+            }
+        }		
+    }
+
+    public function get_customers_gc_byunit()
+	{
+        if($get = $this->input->get()){
+            if($unit = $get['unit']){
+                echo json_encode(array(
+                    'data'	    => 	$this->units->get_customers_gadaicicilan_byunit($unit),
+                    'status'	=> true,
+                    'message'	=> 'Successfully Get Data Customers'
+                ));
+            }
+        }		
+    }
+
+    
 
 	public function insert()
 	{

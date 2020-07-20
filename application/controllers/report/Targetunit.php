@@ -2,13 +2,13 @@
 //error_reporting(0);
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once APPPATH.'controllers/Middleware/Authenticated.php';
-class Modalkerja extends Authenticated
+class Targetunit extends Authenticated
 {
 	/**
 	 * @var string
 	 */
 
-	public $menu = 'Bukukas';
+	public $menu = 'Targetunit';
 
 	/**
 	 * Welcome constructor.
@@ -29,24 +29,7 @@ class Modalkerja extends Authenticated
 	public function index()
 	{
         $data['areas'] = $this->areas->all();
-		$this->load->view('report/modalkerja/pusat',$data);
-
-    }
-    
-    public function pusat()
-	{
-        $data['units'] = $this->units->all();
-        $data['areas'] = $this->areas->all();
-		$this->load->view('report/modalkerja/pusat',$data);
-    }
-    
-    public function antarunit()
-	{
-        $data['units'] = $this->units->all();
-        $data['areas'] = $this->areas->all();
-		$this->load->view('report/modalkerja/antarunit',$data);
+		$this->load->view('report/targetunit/index',$data);
 	}
 
-	
-	
 }

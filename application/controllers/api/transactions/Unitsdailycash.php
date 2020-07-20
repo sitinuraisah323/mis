@@ -195,13 +195,23 @@ class Unitsdailycash extends ApiController
 
 	public function modal_kerja_pusat()
 	{
+		$ignore = array('1110000');
 		$this->unitsdailycash->all();
 		if($get = $this->input->get()){
-			$this->unitsdailycash->db
-				->where('no_perk =', '1110000')
+			$category = $get['category'];
+			$this->unitsdailycash->db				
 				->where('date >=', $get['dateStart'])
 				->where('date <=', $get['dateEnd'])
 				->where('id_unit', $get['id_unit']);
+				if($category=='0'){
+					$this->unitsdailycash->db->where('no_perk', '1110000');
+				}
+				if($category=='1'){
+					$this->unitsdailycash->db
+					->where('SUBSTRING(no_perk,1,5) =','11100')
+					->where('type =', 'CASH_IN')
+					->where_not_in('no_perk', $ignore);
+				}
 		}
 		$data = $this->unitsdailycash->all();
 		echo json_encode(array(

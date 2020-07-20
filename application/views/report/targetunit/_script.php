@@ -10,6 +10,13 @@ function convertToRupiah(angka)
 	return rupiah.split('',rupiah.length-1).reverse().join('');
 }
 
+// function convertToRupiah(angka){
+//    var reverse = angka.toString().split('').reverse().join(''),
+//    ribuan = reverse.match(/\d{1,3}/g);
+//    ribuan = ribuan.join('.').split('').reverse().join('');
+//    return ribuan;
+//  }
+
 function initAlert(){
     AlertUtil = {
         showSuccess : function(message,timeout){
@@ -94,69 +101,58 @@ function initCariForm(){
         }
     });
 
-    $('#area').select2({ placeholder: "Select Area", width: '100%' });
+    $('#area').select2({ placeholder: "Select area", width: '100%' });
     $('#unit').select2({ placeholder: "Select Unit", width: '100%' });
-    $('#status').select2({ placeholder: "Select a Status", width: '100%' });
-    $('#nasabah').select2({ placeholder: "Select a Nasabah", width: '100%' });
+    $('#target').select2({ placeholder: "Select a Target", width: '100%' });
+    $('#permit').select2({ placeholder: "Select a Ijin", width: '100%' });
     //events
     $('#btncari').on('click',function(){
         $('.rowappend').remove();
         var area = $('#area').val();
         var unit = $('#unit').val();
-        var nasabah = $('#nasabah').val();
-        var statusrpt = $('#status').val();
+        var target = $('#target').val();
 		var dateStart = $('[name="date-start"]').val();
-		var dateEnd = $('[name="date-end"]').val();
+		//var dateEnd = $('[name="date-end"]').val();
 		var permit = $('[name="permit"]').val();
         KTApp.block('#form_bukukas .kt-portlet__body', {});
 		$.ajax({
 			type : 'GET',
-			url : "<?php echo base_url("api/transactions/regularpawns/report"); ?>",
+			url : "<?php echo base_url("api/datamaster/unitstarget/get_booking"); ?>",
 			dataType : "json",
-			data:{id_unit:unit,statusrpt:statusrpt,nasabah:nasabah,dateStart:dateStart,dateEnd:dateEnd,permit:permit},
+			data:{id_unit:unit,target:target,permit:permit,dateStart:dateStart},
 			success : function(response,status){
 				KTApp.unblockPage();
 				if(response.status == true){
 					var template = '';
 					var no = 1;
 					var amount = 0;
-					var admin = 0;
+					var PercentRealisasi = 0;
+					var PercentSelisih = 0;
+					var Selisih = 0;
                     var status="";
+                    console.log(response.id);
 					$.each(response.data, function (index, data) {
 						template += "<tr class='rowappend'>";
-						template += "<td class='text-center'>"+no+"</td>";
-						template += "<td class='text-center'>"+data.no_sbk+"</td>";
-						template += "<td class='text-center'>"+moment(data.date_sbk).format('DD-MM-YYYY')+"</td>";
-                        template += "<td class='text-center'>"+moment(data.deadline).format('DD-MM-YYYY')+"</td>";
-                        if(data.date_repayment!=null){ var DateRepayment = moment(data.date_repayment).format('DD-MM-YYYY');}else{ var DateRepayment = "-";}
-						template += "<td class='text-center'>"+DateRepayment+"</td>";
-						template += "<td>"+data.customer_name+"</td>";
-						template += "<td class='text-center'>"+data.capital_lease+"</td>";
-						template += "<td class='text-right'>"+convertToRupiah(data.estimation)+"</td>";
-						template += "<td class='text-right'>"+convertToRupiah(data.admin)+"</td>";
-						template += "<td class='text-right'>"+convertToRupiah(data.amount)+"</td>";
-                        if(data.status_transaction=="L"){ status="Lunas";}
-                        else if(data.status_transaction=="N"){ status="Aktif";}
-                        template += "<td class='text-center'>"+status+"</td>";
-                        template += "<td class='text-right'>";
-                        if(data.description_1!=null){template += "- " + data.description_1;}
-                        if(data.description_2!=null){template += "<br>- " + data.description_2;}
-                        if(data.description_3!=null){template += "<br>- " + data.description_3;}
-                        if(data.description_4!=null){template += "<br>- " + data.description_4;}
-                        template +="</td>";
+						template += "<td>"+no+"</td>";
+						template += "<td>"+data.area+"</td>";
+						template += "<td>"+data.unit+"</td>";                        
+                        if(target=="Booking"){ tar_amount = data.amount_booking;}else if(target=="Outstanding"){tar_amount = data.amount_outstanding;}
+                        PercentRealisasi = (data.amount/tar_amount)*100;
+                        Selisih = tar_amount - data.amount;
+                        PercentSelisih = (Selisih/tar_amount)*100;
+                        if(PercentRealisasi < 100){status="<span class='kt-widget4__number kt-font-danger kt-font-bold'> Dibawah Target</span>";}
+                        else if(PercentRealisasi > 100){status="<span class='kt-widget4__number kt-font-primary kt-font-bold'> Melebihi Target</span>";}
+                        else if(PercentRealisasi == 100){status="<span class='kt-widget4__number kt-font-success kt-font-bold'> Sesuai Target</span>";}
+						template += "<td class='text-right'>"+convertToRupiah(tar_amount)+"</td>";
+                        template += "<td class='text-right'>"+convertToRupiah(data.amount)+"</td>";
+						template += "<td class='text-center'>"+PercentRealisasi.toFixed(2)+"</td>";
+						template += "<td class='text-right'>"+convertToRupiah(Selisih) +"</td>";
+						template += "<td class='text-center'>"+PercentSelisih.toFixed(2)+"</td>";
+						template += "<td class='text-left'>"+status+"</td>";
 						template += '</tr>';
 						no++;
-						amount += parseInt(data.amount);
-						admin += parseInt(data.admin);
 					});
-					template += "<tr class='rowappend'>";
-					template += "<td colspan='8' class='text-right'>Total</td>";
-					template += "<td class='text-right'>"+convertToRupiah(admin)+"</td>";
-					template += "<td class='text-right'>"+convertToRupiah(amount)+"</td>";
-					template += "<td class='text-right'></td>";
-					template += "<td class='text-right'></td>";
-					template += '</tr>';
-					$('.kt-section__content table').append(template);
+					$('.kt-section__content #tblmodalkerjapusat').append(template);
 				}
 			},
 			error: function (jqXHR, textStatus, errorThrown){
@@ -193,50 +189,9 @@ function initGetUnit(){
     });
 }
 
-function initGetNasabah(){
-    $("#unit").on('change',function(){
-        var area = $('#area').val();
-        var unit = $('#unit').val(); 
-        var customers =  document.getElementById('nasabah');     
-        //alert(unit);
-        $.ajax({
-			type : 'GET',
-			url : "<?php echo base_url("api/datamaster/units/get_customers_gr_byunit"); ?>",
-			dataType : "json",
-			data:{unit:unit},
-			success : function(response,status){
-				KTApp.unblockPage();
-				if(response.status == true){
-                    $("#nasabah").empty();
-                    var option = document.createElement("option");
-                    option.value = "all";
-                    option.text = "All";
-                    customers.appendChild(option);
-					$.each(response.data, function (index, data) {
-                        //console.log(data);
-                        var opt = document.createElement("option");
-                        opt.value = data.nik;
-                        opt.text = data.name;
-                        customers.appendChild(opt);
-					});
-					
-				}
-			},
-			error: function (jqXHR, textStatus, errorThrown){
-				KTApp.unblockPage();
-			},
-			complete:function () {
-				KTApp.unblock('#form_bukukas .kt-portlet__body', {});
-			}
-		});
-       
-    });
-}
-
 jQuery(document).ready(function() {
     initCariForm();
     initGetUnit();
-    initGetNasabah();
 });
 
 </script>
