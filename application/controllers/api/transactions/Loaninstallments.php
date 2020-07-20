@@ -20,6 +20,49 @@ class Loaninstallments extends ApiController
 
 	}
 
+	public function calculation()
+	{
+		if($this->input->get('date')){
+			$date = $this->input->get('date');
+		}else{
+			$date = date('Y-m-d');
+		}
+		if($this->input->get('ojk')){
+			$ojk = $this->input->get('ojk');
+		}else{
+			$ojk = 'OJK';
+		}
+		$scan = scandir('storage/');
+		if(is_array($scan)){
+			foreach ($scan as $index => $value){
+				if($index > 1){
+					$idUnit = $value;
+					$pathTransaction = 'storage/'.$idUnit.'/transactions/'.$date.'/extract-all/'.$date.'/';
+					if(is_dir($pathTransaction)){
+						$scanFile = scandir($pathTransaction);
+						foreach ($scanFile as $key => $file){
+							if($key > 1){
+								if(strtoupper(substr($file,0, 2)) == 'MS'){
+									if($key){
+										$this->process_transaction($idUnit,$pathTransaction, $scanFile[$key], $ojk);
+										unset($scanFile[$key]);
+									}
+								}
+							}
+						}
+
+						foreach ($scanFile as $key => $file){
+							if($index > 1){
+								$this->process_transaction($idUnit,$pathTransaction, $file, $ojk);
+							}
+						}
+					}
+				}
+			}
+		}
+		return $this->sendMessage(true,'Successfully Calculate Transaction');
+	}
+
 	public function index()
 	{
 		$this->installment->db->select('customers.name')->join('customers','customers.id = units_loaninstallments.id_customer');
@@ -307,14 +350,16 @@ class Loaninstallments extends ApiController
 			if ($zip->open($path) === TRUE) {
 				$zip->extractTo($pathExtract);
 				$zip->close();
+				echo json_encode($data['file_name']);
+				exit;
 				$files = scandir($pathExtract);
-				$key = 10000;
+				$key = false;
 				foreach ($files as $index => $file){
 					if(strtoupper(substr($file,0, 2)) == 'MS'){
 						$key = $index;
 					}
 				}
-				if($key != 10000){
+				if($key){
 					$this->process_transaction($idUnit,$pathExtract, $files[$key], $jok);
 					unset($files[$key]);
 				}
