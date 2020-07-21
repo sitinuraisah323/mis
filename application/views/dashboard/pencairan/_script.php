@@ -127,7 +127,7 @@ function initCariForm(){
 						body += '<td>'+data.name+'</td>'
 						body += '<td>'+data.area+'</td>'
 						$.each(data.dates, function (index, date) {
-							body += '<td>'+date+'</td>';
+							body += '<td class="text-right">'+convertToRupiah(date)+'</td>';
 						});
 						body += '</tr>';
 					}else{
@@ -136,7 +136,7 @@ function initCariForm(){
 						head += '<td>'+data.unit+'</td>'
 						head += '<td>'+data.area+'</td>'
 						$.each(data.dates, function (index, date) {
-							head += '<td>'+date+'</td>';
+							head += '<td class="text-right">'+date+'</td>';
 						})
 						head += '</tr>';
 					}

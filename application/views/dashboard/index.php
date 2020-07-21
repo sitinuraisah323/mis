@@ -14,7 +14,7 @@ $this->load->view('temp/MenuBar.php');
 			<div class="kt-subheader__main">
 				<h3 class="kt-subheader__title">Dashboard</h3>
 				<span class="kt-subheader__separator kt-subheader__separator--v"></span>
-				<span class="kt-subheader__desc">Outstanding</span>
+				<span class="kt-subheader__desc">Executive Summary</span>
 			</div>
 			<div class="kt-subheader__toolbar">
 				<div class="kt-subheader__wrapper">
@@ -33,7 +33,7 @@ $this->load->view('temp/MenuBar.php');
 							<i class="kt-font-brand fa fa-align-justify"></i>
 						</span>
 						<h3 class="kt-portlet__head-title">
-						   Data Outstanding
+						   Executive Summary
 						</h3>
 					</div>
 					<div class="kt-portlet__head-toolbar">
@@ -93,66 +93,45 @@ $this->load->view('temp/MenuBar.php');
 								?>
 							</select>
 						</div>
+
+                        <label class="col-form-label">Transaksi</label>
+						<div class="col-lg-2">
+							<select class="form-control select2" name="transaksi" id="transaksi">
+								<option></option>
+								<?php foreach(array(
+                                    'OUTSTANDING'   => 'Outstanding',
+                                    'PENCAIRAN'   => 'Pencairan',
+                                    'PELUNASAN'   => 'Pelunasan',
+                                    'PENDAPATAN'   => 'Pendapatan',
+                                    'PENGELUARAN'   => 'Pengeluaran',
+                                    'SALDOKAS'   => 'Saldo Kas',
+                                ) as $value => $show):?>	
+                                <option value="<?php echo $value;?>"><?php echo $show;?></option>
+                                <?php endforeach?>
+									
+							</select>
+						</div>
+
 						<label class="col-form-label">Tanggal</label>
 						<div class="col-lg-2">
 							<input type="date" class="form-control" name="date-start" value="<?php echo date('Y-m-d');?>">
 						</div>
 						<button type="button" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>
 					</div>
+                <hr/>
 
+                    <div class="col-md-12">
+                        <!-- <div class="kt-portlet__body"> -->
+                            <!--Begin::Tab Content-->
+                            <div class="kt-widget11">
+                                <div id="graph" style="height:500px;"></div>
+                            </div>
+                        <!-- </div> -->
+                    </div>
 				</div>
 				</form>
 
-				<div class="col-md-12">
-					<div class="kt-section__content">
-							<table class="table">
-								<thead class="thead-light">
-									<tr>
-										<td rowspan="2">No</td>
-										<td rowspan="2">Unit</td>
-										<td rowspan="2">Area</td>
-										<td rowspan="2">Tanggal Open</td>
-										<td rowspan="2">Tanggal Ijin Ojk</td>
-										<td colspan="2">Ost Kemarin</td>
-										<td colspan="2">Kredit Hari Ini</td>
-										<td colspan="2">Pelunasan & Cicilan Hari Ini</td>
-										<td colspan="3">Total Outstanding</td>
-										<td colspan="3">Total Disburse</td>
-										<td colspan="2">Dpd Kemarin</td>
-										<td colspan="2">Dpd Hari Ini</td>
-										<td colspan="2">Pelunasan DPD Hari Ini</td>
-										<td colspan="2">Total DPD</td>
-										<td>%</td>
-									</tr>
-									<tr>
-										<td>Noa</td>
-										<td>Ost</td>
-										<td>Noa</td>
-										<td>Ost</td>
-										<td>Noa</td>
-										<td>Kredit</td>
-										<td>Noa</td>
-										<td>Ost</td>
-										<td>Ticket Size</td>
-										<td>Noa</td>
-										<td>Ost</td>
-										<td>Ticket Size</td>
-										<td>Noa</td>
-										<td>Ost</td>
-										<td>Noa</td>
-										<td>Ost</td>
-										<td>Noa</td>
-										<td>Ost</td>
-										<td>Noa</td>
-										<td>Ost</td>
-										<td></td>
-									</tr>
-								</thead>
-								<tbody>
-								</tbody>
-							</table>
-					</div>
-				</div>
+				
 
 				</div>
 

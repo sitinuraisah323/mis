@@ -27,6 +27,20 @@ class Dashboards extends Authenticated
 		$this->load->view("dashboard/index",array(
 			'areas'	=> $this->areas->all()
 		));
+	}
+
+	public function outstanding()
+	{
+		$this->load->view("dashboard/outstanding/index.php",array(
+			'areas'	=> $this->areas->all()
+		));
+    }
+	
+	public function dpd()
+	{
+		$this->load->view("dashboard/dpd/index.php",array(
+			'areas'	=> $this->areas->all()
+		));
     }
 
     public function pusat()
@@ -65,6 +79,20 @@ class Dashboards extends Authenticated
 	public function pelunasan()
 	{
         $this->load->view("dashboard/pelunasan/index",array(
+        	'areas'	=> $this->areas->all()
+		));
+	}
+
+	public function pendapatan()
+	{
+        $this->load->view("dashboard/pendapatan/index",array(
+        	'areas'	=> $this->areas->all()
+		));
+	}
+
+	public function pengeluaran()
+	{
+        $this->load->view("dashboard/pengeluaran/index",array(
         	'areas'	=> $this->areas->all()
 		));
 	}

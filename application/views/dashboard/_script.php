@@ -10,13 +10,6 @@ function convertToRupiah(angka)
 	return rupiah.split('',rupiah.length-1).reverse().join('');
 }
 
-// function convertToRupiah(angka){
-//    var reverse = angka.toString().split('').reverse().join(''),
-//    ribuan = reverse.match(/\d{1,3}/g);
-//    ribuan = ribuan.join('.').split('').reverse().join('');
-//    return ribuan;
-//  }
-
 function initAlert(){
     AlertUtil = {
         showSuccess : function(message,timeout){
@@ -103,95 +96,134 @@ function initCariForm(){
 
     $('#area').select2({ placeholder: "Select area", width: '100%' });
     $('#unit').select2({ placeholder: "Select Unit", width: '100%' });
-    $('#status').select2({ placeholder: "Select a status", width: '100%' });
+    $('#transaksi').select2({ placeholder: "Select a transaksi", width: '100%' });
+    
     //events
     $('#btncari').on('click',function(){
         $('.rowappend').remove();
         var area = $('#area').val();
+        var transaksi = $('#transaksi').val();
 		var dateStart = $('[name="date-start"]').val();
         KTApp.block('#form_bukukas .kt-portlet__body', {});
-		$.ajax({
-			type : 'GET',
-			url : "<?php echo base_url("api/dashboards/outstanding"); ?>",
-			dataType : "json",
-			data:{area:area,date:dateStart},
-			success : function(response,status){
-				KTApp.unblockPage();
-				var html = '';
-				var int = 1;
-				$.each(response.data, function (index, data) {
-					html += '<tr>'
-					html += '<td>'+ int +'</td>';
-					html += '<td>'+ data.name +'</td>';
-					html += '<td>'+ data.area +'</td>';
-					html += '<td> </td>';
-					html += '<td> </td>';
-					html += '<td>'+data.ost_yesterday.noa+'</td>';
-					html += '<td>'+data.ost_yesterday.up+'</td>';
-					html += '<td>'+data.credit_today.noa+'</td>';
-					html += '<td>'+data.credit_today.up+'</td>';
-					html += '<td>'+data.repayment_today.noa+'</td>';
-					html += '<td>'+data.repayment_today.up+'</td>';
-					html += '<td>'+data.total_outstanding.noa+'</td>';
-					html += '<td>'+data.total_outstanding.up+'</td>';
-					html += '<td>'+data.total_outstanding.tiket+'</td>';
-					html += '<td>'+data.total_disburse.noa+'</td>';
-					html += '<td>'+data.total_disburse.credit+'</td>';
-					html += '<td>'+data.total_disburse.tiket+'</td>';
-					html += '<td>'+data.dpd_yesterday.noa+'</td>';
-					html += '<td>'+data.dpd_yesterday.ost+'</td>';
-					html += '<td>'+data.dpd_today.noa+'</td>';
-					html += '<td>'+data.dpd_today.ost+'</td>';
-					html += '<td>'+data.dpd_repayment_today.noa+'</td>';
-					html += '<td>'+data.dpd_repayment_today.ost+'</td>';
-					html += '<td>'+data.total_dpd.noa+'</td>';
-					html += '<td>'+data.total_dpd.ost+'</td>';
-					html += '<td>'+data.percentage+'</td>';
-					html += '</tr>'
-					int++;
-				});
-				$('.table').find('tbody').find('tr').remove();
-				$('.table').find('tbody').html(html);
-				console.log(html)
-
-			},
-			error: function (jqXHR, textStatus, errorThrown){
-				KTApp.unblockPage();
-			},
-			complete:function () {
-				KTApp.unblock('#form_bukukas .kt-portlet__body', {});
-			}
-		});
+        //alert(transaksi);
+        if(transaksi=="OUTSTANDING"){
+            outstanding();
+        }else if(transaksi=="PENCAIRAN"){
+            pencairan();
+        }else if(transaksi=="PELUNASAN"){
+            pelunasan();
+        }else{
+            notfound();
+        }        
     })
-
     return {
         validator:validator
     }
 }
 
-function initGetUnit(){
-    $("#area").on('change',function(){
-        var area = $('#area').val();
-        var units =  document.getElementById('unit');
-        var url_data = $('#url_get_unit').val() + '/' + area;
-        $.get(url_data, function (data, status) {
-            var response = JSON.parse(data);
-            if (status) {
-                $("#unit").empty();
-                for (var i = 0; i < response.data.length; i++) {
-                    var opt = document.createElement("option");
-                    opt.value = response.data[i].id;
-                    opt.text = response.data[i].name;
-                    units.appendChild(opt);
-                }
-            }
-        });
-    });
+ function outstanding() {
+    $('#graph').empty();
+    var data = [{
+        y: 'Fatal',
+        a: 10,                    
+    },
+    {
+        y: 'High',
+        a: 50,
+    },
+    {
+        y: 'Medium',
+        a: 30,
+    },{
+        y: 'Low',
+        a: 40
+    }],
+    //config manager
+    config = {
+            data: data,
+            xkey: 'y',
+            ykeys: ['a'],
+            labels: ['Values'],
+            lineColors: ['#6e4ff5', '#f6aa33'],
+            resize: true,
+            xLabelAngle: '80',
+            xLabelMargin: '10',
+            parseTime: false,
+            gridTextSize: '10',
+            gridTextColor: '#5cb85c',
+            verticalGrid: true,
+            hideHover: 'auto',
+            barColors: ['#3578FC','#FF0000', '#FFD500']
+            // barColors: function (row, series, type) {
+            //     if (row.label == "Low") return "#3578FC";
+            //     else if (row.label == "Medium") return "#FFD500";
+            //     else if (row.label == "High") return "#FF0000";
+            //     else if (row.label == "Fatal") return "#000000";
+            // }
+        };
+    //config element name
+    config.element = 'graph';
+    new Morris.Bar(config);
+    KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+}
+
+function pencairan() {
+    $('#graph').empty();
+    var data = [{
+        y: 'Fatal',
+        a: 10,                    
+    },
+    {
+        y: 'High',
+        a: 50,
+    },
+    {
+        y: 'Medium',
+        a: 30,
+    },{
+        y: 'Low',
+        a: 40
+    }],
+    //config manager
+    config = {
+            data: data,
+            xkey: 'y',
+            ykeys: ['a'],
+            labels: ['Values'],
+            lineColors: ['#6e4ff5', '#f6aa33'],
+            resize: true,
+            xLabelAngle: '80',
+            xLabelMargin: '10',
+            parseTime: false,
+            gridTextSize: '10',
+            gridTextColor: '#5cb85c',
+            verticalGrid: true,
+            hideHover: 'auto',
+            barColors: ['#3578FC','#FF0000', '#FFD500']
+            // barColors: function (row, series, type) {
+            //     if (row.label == "Low") return "#3578FC";
+            //     else if (row.label == "Medium") return "#FFD500";
+            //     else if (row.label == "High") return "#FF0000";
+            //     else if (row.label == "Fatal") return "#000000";
+            // }
+        };
+    //config element name
+    config.element = 'graph';
+    new Morris.Bar(config);
+    KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+}
+
+function notfound(){
+    $("#graph").empty();
+    var div = document.getElementById('graph');
+    div.innerHTML += '<div class="alert alert-success" role="alert"><strong>Well done! </strong> &nbsp&nbsp Graph not found</div>';
+    // var label = "Not Found";
+    // $("#graph").appendChild(label);
+    KTApp.unblock('#form_bukukas .kt-portlet__body', {});
 }
 
 jQuery(document).ready(function() {
     initCariForm();
-    initGetUnit();
 });
 
 </script>
