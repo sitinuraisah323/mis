@@ -106,7 +106,6 @@ $this->load->view('temp/MenuBar.php');
                 <div class="kt-section__content">
 						<table class="table">
 						  	<thead class="thead-light">
-
 						  	</thead>
 						  	<tbody>
 						  	</tbody>

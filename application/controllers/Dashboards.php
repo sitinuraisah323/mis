@@ -27,6 +27,20 @@ class Dashboards extends Authenticated
 		$this->load->view("dashboard/index",array(
 			'areas'	=> $this->areas->all()
 		));
+	}
+
+	public function outstanding()
+	{
+		$this->load->view("dashboard/outstanding/index.php",array(
+			'areas'	=> $this->areas->all()
+		));
+    }
+	
+	public function dpd()
+	{
+		$this->load->view("dashboard/dpd/index.php",array(
+			'areas'	=> $this->areas->all()
+		));
     }
 
     public function pusat()

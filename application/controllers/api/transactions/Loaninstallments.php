@@ -41,7 +41,7 @@ class Loaninstallments extends ApiController
 					if(is_dir($pathTransaction)){
 						$scanFile = scandir($pathTransaction);
 						foreach ($scanFile as $key => $file){
-							if($key > 1){
+							if($key > 2){
 								if(strtoupper(substr($file,0, 2)) == 'MS'){
 									if($key){
 										$this->process_transaction($idUnit,$pathTransaction, $scanFile[$key], $ojk);
@@ -50,9 +50,10 @@ class Loaninstallments extends ApiController
 								}
 							}
 						}
+				
 
 						foreach ($scanFile as $key => $file){
-							if($index > 1){
+							if($key > 1){
 								$this->process_transaction($idUnit,$pathTransaction, $file, $ojk);
 							}
 						}
@@ -384,9 +385,13 @@ class Loaninstallments extends ApiController
 	public function process_transaction($id_unit, $path, $name, $jok)
 	{
 		$code = (int) substr($name,2, 2);
-		$id_unit = $this->units->find(array(
+	
+		$unit = $this->units->find(array(
 			'code'	=> zero_fill($code,3)
-		))->id;
+		));
+		if($unit){
+			$id_unit = $unit->id;
+		}
 		switch(substr($name,0, 2)){
 
 			case 'MS':

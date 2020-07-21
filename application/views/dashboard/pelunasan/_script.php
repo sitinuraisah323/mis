@@ -10,13 +10,6 @@ function convertToRupiah(angka)
 	return rupiah.split('',rupiah.length-1).reverse().join('');
 }
 
-// function convertToRupiah(angka){
-//    var reverse = angka.toString().split('').reverse().join(''),
-//    ribuan = reverse.match(/\d{1,3}/g);
-//    ribuan = ribuan.join('.').split('').reverse().join('');
-//    return ribuan;
-//  }
-
 function initAlert(){
     AlertUtil = {
         showSuccess : function(message,timeout){
@@ -127,7 +120,7 @@ function initCariForm(){
 						body += '<td>'+data.name+'</td>'
 						body += '<td>'+data.area+'</td>'
 						$.each(data.dates, function (index, date) {
-							body += '<td>'+date+'</td>';
+							body += '<td class="text-right">'+convertToRupiah(date)+'</td>';
 						});
 						body += '</tr>';
 					}else{
@@ -136,7 +129,7 @@ function initCariForm(){
 						head += '<td>'+data.unit+'</td>'
 						head += '<td>'+data.area+'</td>'
 						$.each(data.dates, function (index, date) {
-							head += '<td>'+date+'</td>';
+							head += '<td class="text-right">'+date+'</td>';
 						})
 						head += '</tr>';
 					}
