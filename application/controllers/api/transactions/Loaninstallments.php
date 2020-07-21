@@ -172,6 +172,8 @@ class Loaninstallments extends ApiController
 		$loadexcel = $excelreader->load($path); // Load file yang telah diupload ke folder excel
 		$transactions = $loadexcel->getActiveSheet()->toArray(null, true, true ,true);
 		if($transactions){
+			$batchInsert = array();
+			$batchUpdate = array();
 			foreach ($transactions as $key => $transaction){
 				if($key > 1){
 					$customer = $this->customers->find(array(
@@ -232,13 +234,24 @@ class Loaninstallments extends ApiController
 							'user_update'	=> $this->session->userdata('user')->id,
 							'detail'	=> json_encode($detail)
 						);
-						$this->installment->insertOrUpdate($data, array(
+						if($installment = $this->installment->find( array(
 							'no_sbk'	=>zero_fill( $transaction['A'], 5),
 							'id_unit'	=> $id_unit,
-						));
+						))){
+							$data['id'] = $installment->id;
+							$batchUpdate[] = $data;
+						}else{
+							$batchInsert[] = $data;
+						}
 					}
 
 				}
+			}
+			if(count($batchInsert)){
+				$this->repayments->db->insert_batch('units_loaninstallments', $batchInsert);
+			}
+			if(count($batchUpdate)){
+				$this->repayments->db->update_batch('units_loaninstallments', $batchUpdate, 'id');
 			}
 		}
 		if(is_file($path)){
@@ -266,7 +279,6 @@ class Loaninstallments extends ApiController
 	public function update()
 	{
 		if($post = $this->input->post()){
-
 			$this->load->library('form_validation');
 
 			$this->form_validation->set_rules('estimation', 'Estimation', 'required|numeric');
@@ -384,11 +396,13 @@ class Loaninstallments extends ApiController
 	public function process_transaction($id_unit, $path, $name, $jok)
 	{
 		$code = (int) substr($name,2, 2);
-		$id_unit = $this->units->find(array(
+		$unit = $this->units->find(array(
 			'code'	=> zero_fill($code,3)
-		))->id;
+		));
+		if($unit){
+			$id_unit = $unit->id;
+		}
 		switch(substr($name,0, 2)){
-
 			case 'MS':
 				$this->data_customer($id_unit,$path.$name);
 				break;	
@@ -419,6 +433,8 @@ class Loaninstallments extends ApiController
 		$loadexcel = $excelreader->load($path); // Load file yang telah diupload ke folder excel
 		$customers = $loadexcel->getActiveSheet()->toArray(null, true, true ,true);
 		if($customers){
+			$batchInsert = array();
+			$batchUpdate = array();
 			foreach ($customers as $key => $customer){
 				if($key > 1){
 					$data = array(
@@ -447,14 +463,19 @@ class Loaninstallments extends ApiController
 					if($findCustomer = $this->customers->find(array(
 						'nik'	=> $customer['I']
 					))){
-						if($this->customers->update($data, array(
-							'id'	=>  $findCustomer->id
-						)));
+						$data['id'] = $findCustomer->id;
+						$batchUpdate[] = $data;
 					}else{
-						$this->customers->insert($data);
+						$batchInsert[] = $data;
 					}
 
 				}
+			}
+			if(count($batchInsert)){
+				$this->repayments->db->insert_batch('customers', $batchInsert);
+			}
+			if(count($batchUpdate)){
+				$this->repayments->db->update_batch('customers', $batchUpdate,'id');
 			}
 		}
 		if(is_file($path)){
@@ -472,9 +493,10 @@ class Loaninstallments extends ApiController
 		$cashcode = 'KT';
 		$unit = $id_unit;
 		if($unitsdailycash){
+			$batchInsert = array();
+			$batchUpdate = array();
 			foreach ($unitsdailycash as $key => $udc){
 				if($key > 1){
-
 					$datetrans 		= date('Y-m-d', strtotime($udc['E']));
 					$kdkas			= $udc['F'];
 					//get description
@@ -528,12 +550,10 @@ class Loaninstallments extends ApiController
 							'type'			=> $type,
 							'permit'		=> $jok
 						))){
-							if($this->unitsdailycash->update($data, array(
-								'id'		=>  $findtransaction->id,
-								'id_unit'	=> $id_unit
-							)));
+							$data['id'] = $findtransaction->id;
+							$batchUpdate[] = $data;
 						}else{
-							$this->unitsdailycash->insert($data);
+							$batchInsert[] = $data;
 						}
 
 						// $findtransaction = $this->unitsdailycash->find(array(
@@ -556,6 +576,13 @@ class Loaninstallments extends ApiController
 					}
 				}
 			}
+
+			if(count($batchInsert)){
+				$this->repayments->db->insert_batch('units_dailycashs', $batchInsert);
+			}
+			if(count($batchUpdate)){
+				$this->repayments->db->update_batch('units_dailycashs', $batchUpdate,'id');
+			}
 		}
 		if(is_file($path)){
 			unlink($path);
@@ -569,6 +596,8 @@ class Loaninstallments extends ApiController
 		$transactions = $loadexcel->getActiveSheet()->toArray(null, true, true ,true);
 
 		if($transactions){
+			$batchUpdate = array();
+			$batchInsert = array();
 			foreach ($transactions as $key => $transaction){
 				if($key > 1){
 					$customer = $this->customers->find(array(
@@ -606,15 +635,20 @@ class Loaninstallments extends ApiController
 							'no_sbk'	=>zero_fill( $transaction['A'], 5),
 							'id_unit'	=> $id_unit
 						))){
-							if($this->regulars->update($data, array(
-								'id'	=>  $findTransaction->id,
-								'id_unit'	=> $id_unit
-							)));
+							$data['id'] = $findTransaction->id;
+							$batchUpdate[] = $data;
 						}else{
-							$this->regulars->insert($data);
+							$batchInsert[] 	= $data;
 						}
 					}
 				}
+			}
+
+			if(count($batchInsert)){
+				$this->repayments->db->insert_batch('units_regularpawns', $batchInsert);
+			}
+			if(count($batchUpdate)){
+				$this->repayments->db->update_batch('units_regularpawns', $batchUpdate, 'id');
 			}
 		}
 		if(is_file($path)){
@@ -629,6 +663,8 @@ class Loaninstallments extends ApiController
 		$repayments = $loadexcel->getActiveSheet()->toArray(null, true, true ,true);
 		$unit = $id_unit;
 		if($repayments){
+			$bathInsert = array();
+			$bathUpdate = array();
 			foreach ($repayments as $key => $repayment){
 				if($key > 1){
 					$findcustomer = $this->customers->find(array('name'=> $repayment['B']));
@@ -662,14 +698,23 @@ class Loaninstallments extends ApiController
 							'description_3'	=> $repayment['G'],
 							'permit'		=> $jok
 						))){
-							$this->repayments->update($data, array('id'	=>  $findrepayment->id));
-						}else{
-							$this->repayments->insert($data);
+							$data['id']	= $data;
+							$bathUpdate[] = $data;
+					}else{
+							$bathInsert[] = $data;
 						}
 					}
 
 				}
 			}
+			if(count($bathInsert)){
+				$this->repayments->db->insert_batch('units_repayments', $bathInsert);
+			}
+			if(count($bathUpdate)){
+				$this->repayments->db->update_batch('units_repayments', $bathUpdate, 'id');
+			}
+
+
 		}
 		if(is_file($path)){
 			unlink($path);
@@ -684,6 +729,8 @@ class Loaninstallments extends ApiController
 		$transactions = $loadexcel->getActiveSheet()->toArray(null, true, true ,true);
 
 		if($transactions){
+			$bathInsert = array();
+			$bathUpdate = array();
 			foreach ($transactions as $key => $transaction){
 				if($key > 1){
 					$customer = $this->customers->find(array(
@@ -718,14 +765,20 @@ class Loaninstallments extends ApiController
 					if($findTransaction = $this->mortages->find(array(
 						'no_sbk'	=>zero_fill( $transaction['A'], 5),
 					))){
-						if($this->mortages->update($data, array(
-							'id'	=>  $findTransaction->id
-						)));
+						$data['id'] = $findTransaction->id;
+						$bathUpdate[] = $data;
 					}else{
-						$this->mortages->insert($data);
+						$bathInsert[] = $data;
 					}
 
 				}
+			}
+
+			if(count($bathInsert)){
+				$this->repayments->db->insert_batch('units_mortages', $bathInsert);
+			}
+			if(count($bathUpdate)){
+				$this->repayments->db->update_batch('units_mortages', $bathUpdate, 'id');
 			}
 		}
 		if(is_file($path)){
@@ -740,6 +793,8 @@ class Loaninstallments extends ApiController
 		$repaymentmortage = $loadexcel->getActiveSheet()->toArray(null, true, true ,true);
 		$unit = $id_unit;
 		if($repaymentmortage){
+			$bathInsert = array();
+			$bathUpdate = array();
 			foreach ($repaymentmortage as $key => $repmortage){
 				if($key > 1){
 					//$findcustomer = $this->customers->find(array('name'=> $repayment['B']));
@@ -762,12 +817,21 @@ class Loaninstallments extends ApiController
 						'capital_lease'	=> $repmortage['K'],
 						'permit'		=> $jok
 					))){
-						if($this->repaymentmortage->update($data, array('id'	=>  $findrepaymentmortage->id)));
+						$data['id'] = $findrepaymentmortage->id;
+						$bathUpdate[]	= $data;
 					}else{
-						$this->repaymentmortage->insert($data);
+						$bathInsert[] = $data;
 					}
 				}
 			}
+
+			if(count($bathInsert)){
+				$this->repayments->db->insert_batch('units_repayments_mortage', $bathInsert);
+			}
+			if(count($bathUpdate)){
+				$this->repayments->db->update_batch('units_repayments_mortage', $bathUpdate, 'id');
+			}
+
 		}
 		if(is_file($path)){
 			unlink($path);

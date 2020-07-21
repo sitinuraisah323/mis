@@ -55,6 +55,30 @@ $this->load->view('temp/MenuBar.php');
 </div>
 	<script type="text/javascript">
 		var url = '<?php echo base_url();?>';
+		var items = [
+			{
+				name: "testing"
+			},
+			{
+				name:"yuhu"
+			},
+			{
+				name:"yuhu1234"
+			},
+			{
+				name:"yuhu gus"
+			}
+		];
+		var query = 'yuhu';
+
+		console.log(search(items, query));
+
+		function search(array, query) {
+			var filters = array.filter(function (item) {
+				return item.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
+			})
+			return filters;
+		}
 	</script>
 <?php
 $this->load->view('temp/Footer.php');
