@@ -113,6 +113,7 @@ class Dashboards extends ApiController
 		}else{
 			$date = date('Y-m-d');
 		}
+		$now = $date;
 		$begin = new DateTime( $date );
 		$end = new DateTime($date);
 		$end = $end->modify( '-6 day' );
@@ -133,10 +134,55 @@ class Dashboards extends ApiController
 			foreach($daterange as $date){
 				$dates[] =  $this->regular->getUpByDate($unit->id, $date->format('Y-m-d'));
 			}
+			$dataNow =  $this->regular->getUpByDate($unit->id, $now);
+			$date[] =$dataNow;
 			$unit->dates = $dates;
 			$result[] = $unit;
 		}
 		$this->sendMessage($result, 'Get Data Outstanding');
+	}
+	public function pencairandashboard()
+	{
+		if($area = $this->input->get('area')){
+			$this->units->db->where('id_area', $area);
+		}
+		if($code = $this->input->get('code')){
+			$this->units->db->where('code', $code);
+		}
+		if($this->input->get('date')){
+			$date = $this->input->get('date');
+		}else{
+			$date = date('Y-m-d');
+		}
+		$units = $this->units->db->select('units.id, units.name, areas.area as area')
+			->join('areas','areas.id = units.id_area')
+			->get('units')->result();
+		foreach ($units as $unit){
+			$unit->amount = $this->regular->getUpByDate($unit->id, $date);
+		}
+		$this->sendMessage($units, 'Get Data Outstanding');
+	}
+
+	public function pelunasandashboard()
+	{
+		if($area = $this->input->get('area')){
+			$this->units->db->where('id_area', $area);
+		}
+		if($code = $this->input->get('code')){
+			$this->units->db->where('code', $code);
+		}
+		if($this->input->get('date')){
+			$date = $this->input->get('date');
+		}else{
+			$date = date('Y-m-d');
+		}
+		$units = $this->units->db->select('units.id, units.name, areas.area as area')
+			->join('areas','areas.id = units.id_area')
+			->get('units')->result();
+		foreach ($units as $unit){
+			$unit->amount = $this->repayments->getUpByDate($unit->id, $date);
+		}
+		$this->sendMessage($units, 'Get Data Outstanding');
 	}
 
 	public function pelunasan()
@@ -177,4 +223,88 @@ class Dashboards extends ApiController
 		}
 		$this->sendMessage($result, 'Get Data Outstanding');
 	}
+
+	public function pendapatan()
+	{
+		if($this->input->get('date')){
+			$date = $this->input->get('date');
+		}else{
+			$date = date('Y-m-d');
+		}
+		if($this->input->get('area')){
+			$area = $this->input->get('area');
+			$this->units->db->where('id_area', $area);
+		}
+
+		if($this->input->get('code')){
+			$code = $this->input->get('code');
+			$this->units->db->where('code', $code);
+		}
+
+		$this->units->db->select('units.name, sum(amount) as amount')
+			->join('units','units.id = units_dailycashs.id_unit')
+			->from('units_dailycashs')
+			->where('date', $date)
+			->where('type','CASH_IN')
+			->group_by('units.name')
+			->order_by('amount','desc');
+		$data = $this->units->db->get()->result();
+		return $this->sendMessage($data,'Successfully get Pendapatan');
+	}
+
+	public function pengeluaran()
+	{
+		if($this->input->get('date')){
+			$date = $this->input->get('date');
+		}else{
+			$date = date('Y-m-d');
+		}
+		if($this->input->get('area')){
+			$area = $this->input->get('area');
+			$this->units->db->where('id_area', $area);
+		}
+
+		if($this->input->get('code')){
+			$code = $this->input->get('code');
+			$this->units->db->where('code', $code);
+		}
+
+		$this->units->db->select('units.name, sum(amount) as amount')
+			->join('units','units.id = units_dailycashs.id_unit')
+			->from('units_dailycashs')
+			->where('date', $date)
+			->where('type','CASH_OUT')
+			->group_by('units.name')
+			->order_by('amount','desc');
+		$data = $this->units->db->get()->result();
+		return $this->sendMessage($data,'Successfully get Pendapatan');
+	}
+
+	public function saldo()
+	{
+		if($this->input->get('date')){
+			$date = $this->input->get('date');
+		}else{
+			$date = date('Y-m-d');
+		}
+		if($this->input->get('area')){
+			$area = $this->input->get('area');
+			$this->units->db->where('id_area', $area);
+		}
+
+		if($this->input->get('code')){
+			$code = $this->input->get('code');
+			$this->units->db->where('code', $code);
+		}
+
+		$this->units->db->select('units.name, (sum(CASE WHEN type = "CASH_IN" THEN `amount` ELSE 0 END) - sum(CASE WHEN type = "CASH_OUT" THEN `amount` ELSE 0 END)) as amount')
+			->join('units','units.id = units_dailycashs.id_unit')
+			->from('units_dailycashs')
+			->where('date', $date)
+			->group_by('units.name')
+			->order_by('amount','desc');
+		$data = $this->units->db->get()->result();
+		return $this->sendMessage($data,'Successfully get Pendapatan');
+	}
+
 }

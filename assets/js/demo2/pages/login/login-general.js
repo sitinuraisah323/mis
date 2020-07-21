@@ -100,7 +100,7 @@ var KTLoginGeneral = function() {
                 success: function(response, status, xhr, $form) {
                 	// similate 2s delay
 					if(response.data){
-						location.href = url+'dashboards/pusat';
+						location.href = url+'dashboards';
 					}else{
 						setTimeout(function() {
 							btn.removeClass('kt-spinner kt-spinner--right kt-spinner--sm kt-spinner--light').attr('disabled', false);
