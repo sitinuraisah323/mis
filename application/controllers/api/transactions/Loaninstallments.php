@@ -698,7 +698,7 @@ class Loaninstallments extends ApiController
 							'description_3'	=> $repayment['G'],
 							'permit'		=> $jok
 						))){
-							$data['id']	= $data;
+							$data['id']	= $findrepayment->id;
 							$bathUpdate[] = $data;
 					}else{
 							$bathInsert[] = $data;

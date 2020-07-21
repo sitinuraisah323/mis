@@ -324,7 +324,7 @@ var KTAppInbox = function() {
         var myDropzone = new Dropzone(id, { // Make the whole body a dropzone
             url: url+segments, // Set the url for your upload script location
             parallelUploads: 20,
-            maxFilesize: 2, // Max filesize in MB
+            maxFilesize: 25, // Max filesize in MB
             previewTemplate: previewTemplate,
             previewsContainer: id + " .dropzone-items", // Define the container to display the previews
             clickable: id + "_select" // Define the element that should be used as click trigger to select files.

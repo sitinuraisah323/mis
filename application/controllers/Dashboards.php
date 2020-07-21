@@ -29,6 +29,13 @@ class Dashboards extends Authenticated
 		));
 	}
 
+	public function live()
+	{
+		$this->load->view("dashboard/dashboard",array(
+			'areas'	=> $this->areas->all()
+		));
+	}
+
 	public function outstanding()
 	{
 		$this->load->view("dashboard/outstanding/index.php",array(
