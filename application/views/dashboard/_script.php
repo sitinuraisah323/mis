@@ -100,7 +100,7 @@ function initCariForm(){
     
     //events
     $('#btncari').on('click',function(){
-        $('.rowappend').remove();
+        $('svg').remove();
         var area = $('#area').val();
         var transaksi = $('#transaksi').val();
 		var dateStart = $('[name="date-start"]').val();
@@ -112,7 +112,14 @@ function initCariForm(){
             pencairan();
         }else if(transaksi=="PELUNASAN"){
             pelunasan();
-        }else{
+        }else if(transaksi == 'SALDOKAS'){
+        	saldo()
+		}else if(transaksi == 'PENGELUARAN'){
+			pengeluaran()
+		}else if(transaksi == 'PENDAPATAN'){
+			pendapatan()
+		}
+		else{
             notfound();
         }        
     })
@@ -122,97 +129,336 @@ function initCariForm(){
 }
 
  function outstanding() {
+	$('svg').remove();
     $('#graph').empty();
-    var data = [{
-        y: 'Fatal',
-        a: 10,                    
-    },
-    {
-        y: 'High',
-        a: 50,
-    },
-    {
-        y: 'Medium',
-        a: 30,
-    },{
-        y: 'Low',
-        a: 40
-    }],
-    //config manager
-    config = {
-            data: data,
-            xkey: 'y',
-            ykeys: ['a'],
-            labels: ['Values'],
-            lineColors: ['#6e4ff5', '#f6aa33'],
-            resize: true,
-            xLabelAngle: '80',
-            xLabelMargin: '10',
-            parseTime: false,
-            gridTextSize: '10',
-            gridTextColor: '#5cb85c',
-            verticalGrid: true,
-            hideHover: 'auto',
-            barColors: ['#3578FC','#FF0000', '#FFD500']
-            // barColors: function (row, series, type) {
-            //     if (row.label == "Low") return "#3578FC";
-            //     else if (row.label == "Medium") return "#FFD500";
-            //     else if (row.label == "High") return "#FF0000";
-            //     else if (row.label == "Fatal") return "#000000";
-            // }
-        };
-    //config element name
-    config.element = 'graph';
-    new Morris.Bar(config);
-    KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+    var transaction = [];
+    $.ajax({
+		url:"<?php echo base_url('api/dashboards/outstanding');?>",
+		type:"GET",
+		dataType:"JSON",
+		data:{
+			area:$('[name="area"]').val(),
+			date:$('[name="date"]').val(),
+		},
+		success:function (response) {
+			$.each(response.data, function (index,unit) {
+				console.log(unit);
+				transaction.push({
+					y:unit.name,
+					a:unit.total_outstanding.up
+				})
+			});
+		},
+		complete:function () {
+			console.log(transaction);
+			var data = transaction,
+					//config manager
+					config = {
+						data: data,
+						xkey: 'y',
+						ykeys: ['a'],
+						labels: ['Values'],
+						lineColors: ['#6e4ff5', '#f6aa33'],
+						resize: true,
+						xLabelAngle: '80',
+						xLabelMargin: '10',
+						parseTime: false,
+						gridTextSize: '10',
+						gridTextColor: '#5cb85c',
+						verticalGrid: true,
+						hideHover: 'auto',
+						barColors: ['#3578FC','#FF0000', '#FFD500']
+						// barColors: function (row, series, type) {
+						//     if (row.label == "Low") return "#3578FC";
+						//     else if (row.label == "Medium") return "#FFD500";
+						//     else if (row.label == "High") return "#FF0000";
+						//     else if (row.label == "Fatal") return "#000000";
+						// }
+					};
+			//config element name
+			config.element = 'graph';
+			new Morris.Bar(config);
+			KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+		},
+	});
+
 }
 
 function pencairan() {
+	$('svg').remove();
     $('#graph').empty();
-    var data = [{
-        y: 'Fatal',
-        a: 10,                    
-    },
-    {
-        y: 'High',
-        a: 50,
-    },
-    {
-        y: 'Medium',
-        a: 30,
-    },{
-        y: 'Low',
-        a: 40
-    }],
-    //config manager
-    config = {
-            data: data,
-            xkey: 'y',
-            ykeys: ['a'],
-            labels: ['Values'],
-            lineColors: ['#6e4ff5', '#f6aa33'],
-            resize: true,
-            xLabelAngle: '80',
-            xLabelMargin: '10',
-            parseTime: false,
-            gridTextSize: '10',
-            gridTextColor: '#5cb85c',
-            verticalGrid: true,
-            hideHover: 'auto',
-            barColors: ['#3578FC','#FF0000', '#FFD500']
-            // barColors: function (row, series, type) {
-            //     if (row.label == "Low") return "#3578FC";
-            //     else if (row.label == "Medium") return "#FFD500";
-            //     else if (row.label == "High") return "#FF0000";
-            //     else if (row.label == "Fatal") return "#000000";
-            // }
-        };
-    //config element name
-    config.element = 'graph';
-    new Morris.Bar(config);
-    KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+	var transaction = [];
+	$.ajax({
+		url:"<?php echo base_url('api/dashboards/pencairandashboard');?>",
+		type:"GET",
+		dataType:"JSON",
+		data:{
+			area:$('[name="area"]').val(),
+			date:$('[name="date"]').val(),
+		},
+		success:function (response) {
+			$.each(response.data, function (index,unit) {
+				transaction.push({
+					y:unit.name,
+					a:unit.amount
+				})
+			});
+		},
+		complete:function () {
+			console.log(transaction);
+			var data = transaction,
+					//config manager
+					config = {
+						data: data,
+						xkey: 'y',
+						ykeys: ['a'],
+						labels: ['Values'],
+						lineColors: ['#6e4ff5', '#f6aa33'],
+						resize: true,
+						xLabelAngle: '80',
+						xLabelMargin: '10',
+						parseTime: false,
+						gridTextSize: '10',
+						gridTextColor: '#5cb85c',
+						verticalGrid: true,
+						hideHover: 'auto',
+						barColors: ['#3578FC','#FF0000', '#FFD500']
+						// barColors: function (row, series, type) {
+						//     if (row.label == "Low") return "#3578FC";
+						//     else if (row.label == "Medium") return "#FFD500";
+						//     else if (row.label == "High") return "#FF0000";
+						//     else if (row.label == "Fatal") return "#000000";
+						// }
+					};
+			//config element name
+			config.element = 'graph';
+			new Morris.Bar(config);
+			KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+		},
+	});
+
 }
 
+
+function pelunasan() {
+	$('svg').remove();
+	$('#graph').empty();
+	var transaction = [];
+	$.ajax({
+		url:"<?php echo base_url('api/dashboards/pelunasandashboard');?>",
+		type:"GET",
+		dataType:"JSON",
+		data:{
+			area:$('[name="area"]').val(),
+			date:$('[name="date"]').val(),
+		},
+		success:function (response) {
+			$.each(response.data, function (index,unit) {
+				transaction.push({
+					y:unit.name,
+					a:unit.amount
+				})
+			});
+		},
+		complete:function () {
+			var data = transaction,
+					//config manager
+					config = {
+						data: data,
+						xkey: 'y',
+						ykeys: ['a'],
+						labels: ['Values'],
+						lineColors: ['#6e4ff5', '#f6aa33'],
+						resize: true,
+						xLabelAngle: '80',
+						xLabelMargin: '10',
+						parseTime: false,
+						gridTextSize: '10',
+						gridTextColor: '#5cb85c',
+						verticalGrid: true,
+						hideHover: 'auto',
+						barColors: ['#3578FC','#FF0000', '#FFD500']
+						// barColors: function (row, series, type) {
+						//     if (row.label == "Low") return "#3578FC";
+						//     else if (row.label == "Medium") return "#FFD500";
+						//     else if (row.label == "High") return "#FF0000";
+						//     else if (row.label == "Fatal") return "#000000";
+						// }
+					};
+			//config element name
+			config.element = 'graph';
+			new Morris.Bar(config);
+			KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+		},
+	});
+
+}
+
+
+function pendapatan() {
+	$('svg').remove();
+	$('#graph').empty();
+	var transaction = [];
+	$.ajax({
+		url:"<?php echo base_url('api/dashboards/pendapatan');?>",
+		type:"GET",
+		dataType:"JSON",
+		data:{
+			area:$('[name="area"]').val(),
+			date:$('[name="date"]').val(),
+		},
+		success:function (response) {
+			$.each(response.data, function (index,unit) {
+				transaction.push({
+					y:unit.name,
+					a:unit.amount
+				})
+			});
+		},
+		complete:function () {
+			var data = transaction,
+					//config manager
+					config = {
+						data: data,
+						xkey: 'y',
+						ykeys: ['a'],
+						labels: ['Values'],
+						lineColors: ['#6e4ff5', '#f6aa33'],
+						resize: true,
+						xLabelAngle: '80',
+						xLabelMargin: '10',
+						parseTime: false,
+						gridTextSize: '10',
+						gridTextColor: '#5cb85c',
+						verticalGrid: true,
+						hideHover: 'auto',
+						barColors: ['#3578FC','#FF0000', '#FFD500']
+						// barColors: function (row, series, type) {
+						//     if (row.label == "Low") return "#3578FC";
+						//     else if (row.label == "Medium") return "#FFD500";
+						//     else if (row.label == "High") return "#FF0000";
+						//     else if (row.label == "Fatal") return "#000000";
+						// }
+					};
+			//config element name
+			config.element = 'graph';
+			new Morris.Bar(config);
+			KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+		},
+	});
+
+}
+
+
+function pengeluaran() {
+	$('svg').remove();
+	$('#graph').empty();
+	var transaction = [];
+	$.ajax({
+		url:"<?php echo base_url('api/dashboards/pengeluaran');?>",
+		type:"GET",
+		dataType:"JSON",
+		data:{
+			area:$('[name="area"]').val(),
+			date:$('[name="date"]').val(),
+		},
+		success:function (response) {
+			$.each(response.data, function (index,unit) {
+				transaction.push({
+					y:unit.name,
+					a:unit.amount
+				})
+			});
+		},
+		complete:function () {
+			var data = transaction,
+					//config manager
+					config = {
+						data: data,
+						xkey: 'y',
+						ykeys: ['a'],
+						labels: ['Values'],
+						lineColors: ['#6e4ff5', '#f6aa33'],
+						resize: true,
+						xLabelAngle: '80',
+						xLabelMargin: '10',
+						parseTime: false,
+						gridTextSize: '10',
+						gridTextColor: '#5cb85c',
+						verticalGrid: true,
+						hideHover: 'auto',
+						barColors: ['#3578FC','#FF0000', '#FFD500']
+						// barColors: function (row, series, type) {
+						//     if (row.label == "Low") return "#3578FC";
+						//     else if (row.label == "Medium") return "#FFD500";
+						//     else if (row.label == "High") return "#FF0000";
+						//     else if (row.label == "Fatal") return "#000000";
+						// }
+					};
+			//config element name
+			config.element = 'graph';
+			new Morris.Bar(config);
+			KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+		},
+	});
+
+}
+
+
+
+function saldo() {
+	$('svg').remove();
+	$('#graph').empty();
+	var transaction = [];
+	$.ajax({
+		url:"<?php echo base_url('api/dashboards/saldo');?>",
+		type:"GET",
+		dataType:"JSON",
+		data:{
+			area:$('[name="area"]').val(),
+			date:$('[name="date"]').val(),
+		},
+		success:function (response) {
+			$.each(response.data, function (index,unit) {
+				transaction.push({
+					y:unit.name,
+					a:unit.amount
+				})
+			});
+		},
+		complete:function () {
+			var data = transaction,
+					//config manager
+					config = {
+						data: data,
+						xkey: 'y',
+						ykeys: ['a'],
+						labels: ['Values'],
+						lineColors: ['#6e4ff5', '#f6aa33'],
+						resize: true,
+						xLabelAngle: '80',
+						xLabelMargin: '10',
+						parseTime: false,
+						gridTextSize: '10',
+						gridTextColor: '#5cb85c',
+						verticalGrid: true,
+						hideHover: 'auto',
+						barColors: ['#3578FC','#FF0000', '#FFD500']
+						// barColors: function (row, series, type) {
+						//     if (row.label == "Low") return "#3578FC";
+						//     else if (row.label == "Medium") return "#FFD500";
+						//     else if (row.label == "High") return "#FF0000";
+						//     else if (row.label == "Fatal") return "#000000";
+						// }
+					};
+			//config element name
+			config.element = 'graph';
+			new Morris.Bar(config);
+			KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+		},
+	});
+
+}
 function notfound(){
     $("#graph").empty();
     var div = document.getElementById('graph');

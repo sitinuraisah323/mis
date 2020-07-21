@@ -114,7 +114,7 @@ $this->load->view('temp/MenuBar.php');
 
 						<label class="col-form-label">Tanggal</label>
 						<div class="col-lg-2">
-							<input type="date" class="form-control" name="date-start" value="<?php echo date('Y-m-d');?>">
+							<input type="date" class="form-control" name="date" value="<?php echo date('Y-m-d');?>">
 						</div>
 						<button type="button" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>
 					</div>
