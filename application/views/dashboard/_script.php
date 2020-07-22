@@ -354,7 +354,6 @@ function pendapatan() {
 			KTApp.unblock('#form_pendapatan .kt-widget14', {});
 		},
 	});
-
 }
 
 
@@ -414,19 +413,19 @@ function pengeluaran() {
 
 }
 
-
-
 function saldo() {
 	$('svg').remove();
-	$('#graph').empty();
+	$('#graphSaldo').empty();
 	var transaction = [];
+	var currdate = '2020-07-20';
+	KTApp.block('#form_saldo .kt-widget14', {});
 	$.ajax({
 		url:"<?php echo base_url('api/dashboards/saldo');?>",
 		type:"GET",
 		dataType:"JSON",
 		data:{
-			area:$('[name="area"]').val(),
-			date:$('[name="date"]').val(),
+			area:'',
+			date:currdate,
 		},
 		success:function (response) {
 			$.each(response.data, function (index,unit) {
@@ -462,9 +461,121 @@ function saldo() {
 						// }
 					};
 			//config element name
-			config.element = 'graph';
+			config.element = 'graphSaldo';
 			new Morris.Bar(config);
-			KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+			KTApp.unblock('#form_saldo .kt-widget14', {});
+		},
+	});
+
+}
+
+function dpd() {
+	$('svg').remove();
+	$('#graphDPD').empty();
+	var transaction = [];
+	var currdate = '2020-07-20';
+	KTApp.block('#form_dpd .kt-widget14', {});
+	$.ajax({
+		url:"<?php echo base_url('api/dashboards/dpd');?>",
+		type:"GET",
+		dataType:"JSON",
+		data:{
+			area:'',
+			date:currdate,
+		},
+		success:function (response) {
+			$.each(response.data, function (index,unit) {
+				transaction.push({
+					y:unit.name,
+					a:unit.up
+				})
+			});
+		},
+		complete:function () {
+			var data = transaction,
+					//config manager
+					config = {
+						data: data,
+						xkey: 'y',
+						ykeys: ['a'],
+						labels: ['Values'],
+						lineColors: ['#6e4ff5', '#f6aa33'],
+						resize: true,
+						xLabelAngle: '80',
+						xLabelMargin: '10',
+						parseTime: false,
+						gridTextSize: '10',
+						gridTextColor: '#5cb85c',
+						verticalGrid: true,
+						hideHover: 'auto',
+						barColors: ['#3578FC','#FF0000', '#FFD500']
+						// barColors: function (row, series, type) {
+						//     if (row.label == "Low") return "#3578FC";
+						//     else if (row.label == "Medium") return "#FFD500";
+						//     else if (row.label == "High") return "#FF0000";
+						//     else if (row.label == "Fatal") return "#000000";
+						// }
+					};
+			//config element name
+			config.element = 'graphDPD';
+			new Morris.Bar(config);
+			KTApp.unblock('#form_dpd .kt-widget14', {});
+		},
+	});
+
+}
+
+function disburse() {
+	$('svg').remove();
+	$('#graphDisburse').empty();
+	var transaction = [];
+	var currdate = '20';
+	KTApp.block('#form_disburse .kt-widget14', {});
+	$.ajax({
+		url:"<?php echo base_url('api/dashboards/disburse');?>",
+		type:"GET",
+		dataType:"JSON",
+		data:{
+			area:'',
+			date:currdate,
+		},
+		success:function (response) {
+			$.each(response.data, function (index,unit) {
+				transaction.push({
+					y:unit.name,
+					a:unit.amount
+				})
+			});
+		},
+		complete:function () {
+			var data = transaction,
+					//config manager
+					config = {
+						data: data,
+						xkey: 'y',
+						ykeys: ['a'],
+						labels: ['Values'],
+						lineColors: ['#6e4ff5', '#f6aa33'],
+						resize: true,
+						xLabelAngle: '80',
+						xLabelMargin: '10',
+						parseTime: false,
+						gridTextSize: '10',
+						gridTextColor: '#5cb85c',
+						verticalGrid: true,
+						hideHover: 'auto',
+						barColors: ['#3578FC','#FF0000', '#FFD500']
+						// barColors: function (row, series, type) {
+						//     if (row.label == "Low") return "#3578FC";
+						//     else if (row.label == "Medium") return "#FFD500";
+						//     else if (row.label == "High") return "#FF0000";
+						//     else if (row.label == "Fatal") return "#000000";
+						// }
+					};
+			//config element name
+			config.element = 'graphDisburse';
+			new Morris.Bar(config);
+			KTApp.unblock('#form_disburse .kt-widget14', {});
 		},
 	});
 
@@ -481,8 +592,11 @@ function notfound(){
 
 jQuery(document).ready(function() {
     //initCariForm();
+	disburse();
 	outstanding();
 	pencairan();
+	dpd();
+	saldo();
 	pelunasan();
 	pendapatan();
 	pengeluaran();
