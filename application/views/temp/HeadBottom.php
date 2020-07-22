@@ -4,7 +4,7 @@
 
         <!--begin::Layout Skins(used by all pages) -->
                 <!--end::Layout Skins -->
-        <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/media/logos/favicon.ico" />
+        <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/media/logos/gha-sm.png" />
     </head>
     <!-- end::Head -->
 

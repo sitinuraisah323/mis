@@ -130,15 +130,17 @@ function initCariForm(){
 
  function outstanding() {
 	$('svg').remove();
-    $('#graph').empty();
+    $('#graphOutstanding').empty();
+	var currdate = '2020-07-20';
     var transaction = [];
+	KTApp.block('#form_outstanding .kt-widget14', {});
     $.ajax({
 		url:"<?php echo base_url('api/dashboards/outstanding');?>",
 		type:"GET",
 		dataType:"JSON",
 		data:{
 			area:$('[name="area"]').val(),
-			date:$('[name="date"]').val(),
+			date:currdate,
 		},
 		success:function (response) {
 			$.each(response.data, function (index,unit) {
@@ -176,9 +178,9 @@ function initCariForm(){
 						// }
 					};
 			//config element name
-			config.element = 'graph';
+			config.element = 'graphOutstanding';
 			new Morris.Bar(config);
-			KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+			KTApp.unblock('#form_outstanding .kt-widget14', {});
 		},
 	});
 
@@ -186,15 +188,17 @@ function initCariForm(){
 
 function pencairan() {
 	$('svg').remove();
-    $('#graph').empty();
+    $('#graphPencairan').empty();
+	var currdate = '2020-07-20';
 	var transaction = [];
+	KTApp.block('#form_pencairan .kt-widget14', {});
 	$.ajax({
 		url:"<?php echo base_url('api/dashboards/pencairandashboard');?>",
 		type:"GET",
 		dataType:"JSON",
 		data:{
-			area:$('[name="area"]').val(),
-			date:$('[name="date"]').val(),
+			area:'',
+			date:currdate,
 		},
 		success:function (response) {
 			$.each(response.data, function (index,unit) {
@@ -231,9 +235,9 @@ function pencairan() {
 						// }
 					};
 			//config element name
-			config.element = 'graph';
+			config.element = 'graphPencairan';
 			new Morris.Bar(config);
-			KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+			KTApp.unblock('#form_pencairan .kt-widget14', {});
 		},
 	});
 
@@ -242,15 +246,17 @@ function pencairan() {
 
 function pelunasan() {
 	$('svg').remove();
-	$('#graph').empty();
+	$('#graphPelunasan').empty();
+	var currdate = '2020-07-20';
 	var transaction = [];
+	KTApp.block('#form_pelunasan .kt-widget14', {});
 	$.ajax({
 		url:"<?php echo base_url('api/dashboards/pelunasandashboard');?>",
 		type:"GET",
 		dataType:"JSON",
 		data:{
-			area:$('[name="area"]').val(),
-			date:$('[name="date"]').val(),
+			area:'',
+			date:currdate,
 		},
 		success:function (response) {
 			$.each(response.data, function (index,unit) {
@@ -286,9 +292,9 @@ function pelunasan() {
 						// }
 					};
 			//config element name
-			config.element = 'graph';
+			config.element = 'graphPelunasan';
 			new Morris.Bar(config);
-			KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+			KTApp.unblock('#form_pelunasan .kt-widget14', {});
 		},
 	});
 
@@ -297,15 +303,17 @@ function pelunasan() {
 
 function pendapatan() {
 	$('svg').remove();
-	$('#graph').empty();
+	$('#graphPendapatan').empty();
+	var currdate = '2020-07-20';
+	KTApp.block('#form_pendapatan .kt-widget14', {});
 	var transaction = [];
 	$.ajax({
 		url:"<?php echo base_url('api/dashboards/pendapatan');?>",
 		type:"GET",
 		dataType:"JSON",
 		data:{
-			area:$('[name="area"]').val(),
-			date:$('[name="date"]').val(),
+			area:'',
+			date:currdate,
 		},
 		success:function (response) {
 			$.each(response.data, function (index,unit) {
@@ -341,26 +349,27 @@ function pendapatan() {
 						// }
 					};
 			//config element name
-			config.element = 'graph';
+			config.element = 'graphPendapatan';
 			new Morris.Bar(config);
-			KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+			KTApp.unblock('#form_pendapatan .kt-widget14', {});
 		},
 	});
-
 }
 
 
 function pengeluaran() {
 	$('svg').remove();
-	$('#graph').empty();
+	$('#graphPengeluaran').empty();
+	var currdate = '2020-07-20';
 	var transaction = [];
+	KTApp.block('#form_pengeluaran .kt-widget14', {});
 	$.ajax({
 		url:"<?php echo base_url('api/dashboards/pengeluaran');?>",
 		type:"GET",
 		dataType:"JSON",
 		data:{
-			area:$('[name="area"]').val(),
-			date:$('[name="date"]').val(),
+			area:'',
+			date:currdate,
 		},
 		success:function (response) {
 			$.each(response.data, function (index,unit) {
@@ -396,27 +405,27 @@ function pengeluaran() {
 						// }
 					};
 			//config element name
-			config.element = 'graph';
+			config.element = 'graphPengeluaran';
 			new Morris.Bar(config);
-			KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+			KTApp.unblock('#form_pengeluaran .kt-widget14', {});
 		},
 	});
 
 }
 
-
-
 function saldo() {
 	$('svg').remove();
-	$('#graph').empty();
+	$('#graphSaldo').empty();
 	var transaction = [];
+	var currdate = '2020-07-20';
+	KTApp.block('#form_saldo .kt-widget14', {});
 	$.ajax({
 		url:"<?php echo base_url('api/dashboards/saldo');?>",
 		type:"GET",
 		dataType:"JSON",
 		data:{
-			area:$('[name="area"]').val(),
-			date:$('[name="date"]').val(),
+			area:'',
+			date:currdate,
 		},
 		success:function (response) {
 			$.each(response.data, function (index,unit) {
@@ -452,13 +461,126 @@ function saldo() {
 						// }
 					};
 			//config element name
-			config.element = 'graph';
+			config.element = 'graphSaldo';
 			new Morris.Bar(config);
-			KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+			KTApp.unblock('#form_saldo .kt-widget14', {});
 		},
 	});
 
 }
+
+function dpd() {
+	$('svg').remove();
+	$('#graphDPD').empty();
+	var transaction = [];
+	var currdate = '2020-07-20';
+	KTApp.block('#form_dpd .kt-widget14', {});
+	$.ajax({
+		url:"<?php echo base_url('api/dashboards/dpd');?>",
+		type:"GET",
+		dataType:"JSON",
+		data:{
+			area:'',
+			date:currdate,
+		},
+		success:function (response) {
+			$.each(response.data, function (index,unit) {
+				transaction.push({
+					y:unit.name,
+					a:unit.up
+				})
+			});
+		},
+		complete:function () {
+			var data = transaction,
+					//config manager
+					config = {
+						data: data,
+						xkey: 'y',
+						ykeys: ['a'],
+						labels: ['Values'],
+						lineColors: ['#6e4ff5', '#f6aa33'],
+						resize: true,
+						xLabelAngle: '80',
+						xLabelMargin: '10',
+						parseTime: false,
+						gridTextSize: '10',
+						gridTextColor: '#5cb85c',
+						verticalGrid: true,
+						hideHover: 'auto',
+						barColors: ['#3578FC','#FF0000', '#FFD500']
+						// barColors: function (row, series, type) {
+						//     if (row.label == "Low") return "#3578FC";
+						//     else if (row.label == "Medium") return "#FFD500";
+						//     else if (row.label == "High") return "#FF0000";
+						//     else if (row.label == "Fatal") return "#000000";
+						// }
+					};
+			//config element name
+			config.element = 'graphDPD';
+			new Morris.Bar(config);
+			KTApp.unblock('#form_dpd .kt-widget14', {});
+		},
+	});
+
+}
+
+function disburse() {
+	$('svg').remove();
+	$('#graphDisburse').empty();
+	var transaction = [];
+	var currdate = '20';
+	KTApp.block('#form_disburse .kt-widget14', {});
+	$.ajax({
+		url:"<?php echo base_url('api/dashboards/disburse');?>",
+		type:"GET",
+		dataType:"JSON",
+		data:{
+			area:'',
+			date:currdate,
+		},
+		success:function (response) {
+			$.each(response.data, function (index,unit) {
+				transaction.push({
+					y:unit.name,
+					a:unit.amount
+				})
+			});
+		},
+		complete:function () {
+			var data = transaction,
+					//config manager
+					config = {
+						data: data,
+						xkey: 'y',
+						ykeys: ['a'],
+						labels: ['Values'],
+						lineColors: ['#6e4ff5', '#f6aa33'],
+						resize: true,
+						xLabelAngle: '80',
+						xLabelMargin: '10',
+						parseTime: false,
+						gridTextSize: '10',
+						gridTextColor: '#5cb85c',
+						verticalGrid: true,
+						hideHover: 'auto',
+						barColors: ['#3578FC','#FF0000', '#FFD500']
+						// barColors: function (row, series, type) {
+						//     if (row.label == "Low") return "#3578FC";
+						//     else if (row.label == "Medium") return "#FFD500";
+						//     else if (row.label == "High") return "#FF0000";
+						//     else if (row.label == "Fatal") return "#000000";
+						// }
+					};
+			//config element name
+			config.element = 'graphDisburse';
+			new Morris.Bar(config);
+			KTApp.unblock('#form_disburse .kt-widget14', {});
+		},
+	});
+
+}
+
 function notfound(){
     $("#graph").empty();
     var div = document.getElementById('graph');
@@ -469,7 +591,15 @@ function notfound(){
 }
 
 jQuery(document).ready(function() {
-    initCariForm();
+    //initCariForm();
+	disburse();
+	outstanding();
+	pencairan();
+	dpd();
+	saldo();
+	pelunasan();
+	pendapatan();
+	pengeluaran();
 });
 
 </script>
