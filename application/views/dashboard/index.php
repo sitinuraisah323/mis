@@ -39,7 +39,7 @@ $this->load->view('temp/MenuBar.php');
                     <div class="kt-widget14">
                         <div class="kt-widget14__header kt-margin-b-30">
                             <h3 class="kt-widget14__title">
-                                Booking Nasional             
+                            <i class="fa fa-chart-bar"></i> Booking Nasional             
                             </h3>
                             <span class="kt-widget14__desc">
                                 Graph performance each unit of nasional booking
@@ -62,7 +62,7 @@ $this->load->view('temp/MenuBar.php');
                     <div class="kt-widget14">
                         <div class="kt-widget14__header kt-margin-b-30">
                             <h3 class="kt-widget14__title">
-                                Outstanding Nasional             
+                            <i class="fa fa-chart-bar"></i> Outstanding Nasional             
                             </h3>
                             <span class="kt-widget14__desc">
 							Graph performance each unit of nasional outstanding
@@ -91,7 +91,7 @@ $this->load->view('temp/MenuBar.php');
                     <div class="kt-widget14">
                         <div class="kt-widget14__header kt-margin-b-30">
                             <h3 class="kt-widget14__title">
-                                Day Past Due(DPD) Nasional             
+                            <i class="fa fa-chart-bar"></i> Day Past Due(DPD) Nasional             
                             </h3>
                             <span class="kt-widget14__desc">
 							Graph performance each unit of nasional day past due(DPD)
@@ -112,7 +112,7 @@ $this->load->view('temp/MenuBar.php');
                         <div class="kt-widget14">
                             <div class="kt-widget14__header kt-margin-b-30">
                                 <h3 class="kt-widget14__title">
-                                    Saldo Kas Nasional             
+                                <i class="fa fa-chart-bar"></i> Saldo Kas Nasional             
                                 </h3>
                                 <span class="kt-widget14__desc">
                                 Graph performance each unit of nasional saldo
@@ -138,7 +138,7 @@ $this->load->view('temp/MenuBar.php');
                     <div class="kt-widget14">
                         <div class="kt-widget14__header kt-margin-b-30">
                             <h3 class="kt-widget14__title">
-                                Pencairan Nasional             
+                            <i class="fa fa-chart-bar"></i> Pencairan Nasional             
                             </h3>
                             <span class="kt-widget14__desc">
 							Graph performance each unit of nasional pencairan
@@ -159,7 +159,7 @@ $this->load->view('temp/MenuBar.php');
                     <div class="kt-widget14">
                         <div class="kt-widget14__header kt-margin-b-30">
                             <h3 class="kt-widget14__title">
-                                Pelunasan Nasional             
+                            <i class="fa fa-chart-bar"></i> Pelunasan Nasional             
                             </h3>
                             <span class="kt-widget14__desc">
 							Graph performance each unit of nasional payment
@@ -185,7 +185,7 @@ $this->load->view('temp/MenuBar.php');
                     <div class="kt-widget14">
                         <div class="kt-widget14__header kt-margin-b-30">
                             <h3 class="kt-widget14__title">
-                                Pengeluaran Nasional             
+                            <i class="fa fa-chart-bar"></i> Pengeluaran Nasional             
                             </h3>
                             <span class="kt-widget14__desc">
 							Graph performance each unit of nasional cash out
@@ -206,7 +206,7 @@ $this->load->view('temp/MenuBar.php');
                     <div class="kt-widget14">
                         <div class="kt-widget14__header kt-margin-b-30">
                             <h3 class="kt-widget14__title">
-                                Pendapatan Nasional             
+                            <i class="fa fa-chart-bar"></i>  Pendapatan Nasional             
                             </h3>
                             <span class="kt-widget14__desc">
                             Graph performance each unit of nasional cash in
