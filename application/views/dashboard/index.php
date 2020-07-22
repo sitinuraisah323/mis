@@ -14,10 +14,15 @@ $this->load->view('temp/MenuBar.php');
 			<div class="kt-subheader__main">
 				<h3 class="kt-subheader__title">Dashboard</h3>
 				<span class="kt-subheader__separator kt-subheader__separator--v"></span>
-				<span class="kt-subheader__desc">Executive Summary</span>
+				<span class="kt-subheader__desc">GHA</span>
 			</div>
 			<div class="kt-subheader__toolbar">
 				<div class="kt-subheader__wrapper">
+				<div href="" class="btn kt-subheader__btn-daterange" id="kt_dashboard_daterangepicker" data-toggle="kt-tooltip" title="Dashboard Overview" data-placement="left">
+                        <span class="kt-subheader__btn-daterange-title" id="kt_dashboard_daterangepicker_title">Today</span>&nbsp;
+                        <span class="kt-subheader__btn-daterange-date" id="kt_dashboard_daterangepicker_date"><?php echo date('M'); ?> <?php echo date('d'); ?></span>
+                        <i class="flaticon2-calendar-1"></i>
+                </div>
 				</div>
 			</div>
 		</div>
@@ -25,122 +30,198 @@ $this->load->view('temp/MenuBar.php');
 	<!-- end:: Content Head -->
 
 	 <!-- begin:: Content -->
-	 <div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
-			<div class="kt-portlet kt-portlet--mobile">
-				<div class="kt-portlet__head kt-portlet__head--lg">
-					<div class="kt-portlet__head-label">
-						<span class="kt-portlet__head-icon">
-							<i class="kt-font-brand fa fa-align-justify"></i>
-						</span>
-						<h3 class="kt-portlet__head-title">
-						   Executive Summary
-						</h3>
-					</div>
-					<div class="kt-portlet__head-toolbar">
-						<div class="kt-portlet__head-wrapper">
-
-						</div>
-					</div>
-				</div>
-
-			<div class="kt-portlet__body kt-portlet__body--fit">
-				<div class="col-md-pull-12" >
-					<!--begin: Alerts -->
-					<div class="kt-section">
-						<div class="kt-section__content">
-							<div class="alert alert-success fade show kt-margin-r-20 kt-margin-l-20 kt-margin-t-20" role="alert" id="success_alert" style="display: none">
-								<div class="alert-icon"><i class="flaticon-warning"></i></div>
-								<div class="alert-text" id="success_message"></div>
-								<div class="alert-close">
-									<button type="button" class="close" aria-label="Close" id="success_alert_dismiss">
-										<span aria-hidden="true"><i class="la la-close"></i></span>
-									</button>
-								</div>
-							</div>
-							 <div class="alert alert-danger fade show kt-margin-r-20 kt-margin-l-20 kt-margin-t-20" role="alert" id="failed_alert" style="display: none">
-								<div class="alert-icon"><i class="flaticon-warning"></i></div>
-								<div class="alert-text" id="failed_message"></div>
-								<div class="alert-close">
-									<button type="button" class="close" aria-label="Close" id="failed_alert_dismiss">
-										<span aria-hidden="true"><i class="la la-close"></i></span>
-									</button>
-								</div>
-							</div>
-						</div>
-					</div>
-					<!--end: Alerts -->
-				</div>
-
-				<!--begin: Datatable -->
-				<!-- <table class="kt-datatable" id="kt_datatable" width="100%">
-				</table> -->
-				<!--end: Datatable -->
-
-				<form id="form_bukukas" class="form-horizontal">
-				<div class="kt-portlet__body">
-				<div class="col-md-12" >
-					<div class="form-group row">
-						<label class="col-form-label">Area</label>
-						<div class="col-lg-2">
-							<select class="form-control select2" name="area" id="area">
-								<option></option>
-								<?php
-									if (!empty($areas)){
-										foreach($areas as $row){
-										   echo "<option value=".$row->id.">".$row->area."</option>";
-										}
-									}
-								?>
-							</select>
-						</div>
-
-                        <label class="col-form-label">Transaksi</label>
-						<div class="col-lg-2">
-							<select class="form-control select2" name="transaksi" id="transaksi">
-								<option></option>
-								<?php foreach(array(
-                                    'OUTSTANDING'   => 'Outstanding',
-                                    'PENCAIRAN'   => 'Pencairan',
-                                    'PELUNASAN'   => 'Pelunasan',
-                                    'PENDAPATAN'   => 'Pendapatan',
-                                    'PENGELUARAN'   => 'Pengeluaran',
-                                    'SALDOKAS'   => 'Saldo Kas',
-                                ) as $value => $show):?>	
-                                <option value="<?php echo $value;?>"><?php echo $show;?></option>
-                                <?php endforeach?>
-									
-							</select>
-						</div>
-
-						<label class="col-form-label">Tanggal</label>
-						<div class="col-lg-2">
-							<input type="date" class="form-control" name="date" value="<?php echo date('Y-m-d');?>">
-						</div>
-						<button type="button" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>
-					</div>
-                <hr/>
-
-                    <div class="col-md-12">
-                        <!-- <div class="kt-portlet__body"> -->
-                            <!--Begin::Tab Content-->
-                            <div class="kt-widget11">
-                                <div id="graph" style="height:500px;"></div>
-                            </div>
-                        <!-- </div> -->
+     <div class="kt-container  kt-grid__item kt-grid__item--fluid">
+        <div class="row">
+            <div class="col-xl-6 col-lg-6">
+                <!--begin:: Widgets-->
+                <div class="kt-portlet kt-portlet--height-fluid">
+                    <div class="kt-widget14">
+                        <div class="kt-widget14__header kt-margin-b-30">
+                            <h3 class="kt-widget14__title">
+                                Booking Nasional             
+                            </h3>
+                            <span class="kt-widget14__desc">
+                                Graph performance each unit of nasional booking
+                            </span>
+                        </div>
+                        <div class="kt-widget14__chart" style="height:120px;">
+                            <canvas  id="kt_chart_daily_sales"></canvas>
+                        </div>
                     </div>
-				</div>
-				</form>
+                </div>	        
+                <!--end:: Widgets-->    
+            </div>
+			<div class="col-xl-6 col-lg-6">
+                <!--begin:: Widgets-->
+                <div class="kt-portlet kt-portlet--height-fluid">
+                    <div class="kt-widget14">
+                        <div class="kt-widget14__header kt-margin-b-30">
+                            <h3 class="kt-widget14__title">
+                                Outstanding Nasional             
+                            </h3>
+                            <span class="kt-widget14__desc">
+							Graph performance each unit of nasional outstanding
+                            </span>
+                        </div>
+                        <div class="kt-widget14__chart" style="height:120px;">
+                            <canvas  id="kt_chart_daily_sales"></canvas>
+                        </div>
+                    </div>
+                </div>	        
+                <!--end:: Widgets-->    
+            </div>
+        </div>
+    </div>
 
-				
+    <div class="kt-container  kt-grid__item kt-grid__item--fluid">
+        <div class="row">
+            <div class="col-xl-6 col-lg-6">
+                <!--begin:: Widgets-->
+                <div class="kt-portlet kt-portlet--height-fluid">
+                    <div class="kt-widget14">
+                        <div class="kt-widget14__header kt-margin-b-30">
+                            <h3 class="kt-widget14__title">
+                                DPD Nasional             
+                            </h3>
+                            <span class="kt-widget14__desc">
+							Graph performance each unit of nasional DPD
+                            </span>
+                        </div>
+                        <div class="kt-widget14__chart" style="height:120px;">
+                            <canvas  id="kt_chart_daily_sales"></canvas>
+                        </div>
+                    </div>
+                </div>	        
+                <!--end:: Widgets-->    
+            </div>
+			<div class="col-xl-6 col-lg-6">
+                <!--begin:: Widgets-->
+                <div class="kt-portlet kt-portlet--height-fluid">
+                    <div class="kt-widget14">
+                        <div class="kt-widget14__header kt-margin-b-30">
+                            <h3 class="kt-widget14__title">
+                                Saldo Kas Nasional             
+                            </h3>
+                            <span class="kt-widget14__desc">
+							Graph performance each unit of nasional saldo
+                            </span>
+                        </div>
+                        <div class="kt-widget14__chart" style="height:120px;">
+                            <canvas  id="kt_chart_daily_sales"></canvas>
+                        </div>
+                    </div>
+                </div>	        
+                <!--end:: Widgets-->    
+            </div>
+        </div>
+    </div>
 
-				</div>
+    <div class="kt-container  kt-grid__item kt-grid__item--fluid">
+        <div class="row">
+            <div class="col-xl-6 col-lg-6">
+                <!--begin:: Widgets-->
+                <div class="kt-portlet kt-portlet--height-fluid">
+                    <div class="kt-widget14">
+                        <div class="kt-widget14__header kt-margin-b-30">
+                            <h3 class="kt-widget14__title">
+                                Pencairan Nasional             
+                            </h3>
+                            <span class="kt-widget14__desc">
+							Graph performance each unit of nasional pencairan
+                            </span>
+                        </div>
+                        <div class="kt-widget14__chart" style="height:120px;">
+                            <canvas  id="kt_chart_daily_sales"></canvas>
+                        </div>
+                    </div>
+                </div>	        
+                <!--end:: Widgets-->    
+            </div>
+			<div class="col-xl-6 col-lg-6">
+                <!--begin:: Widgets-->
+                <div class="kt-portlet kt-portlet--height-fluid">
+                    <div class="kt-widget14">
+                        <div class="kt-widget14__header kt-margin-b-30">
+                            <h3 class="kt-widget14__title">
+                                Pelunasan Nasional             
+                            </h3>
+                            <span class="kt-widget14__desc">
+							Graph performance each unit of nasional payment
+                            </span>
+                        </div>
+                        <div class="kt-widget14__chart" style="height:120px;">
+                            <canvas  id="kt_chart_daily_sales"></canvas>
+                        </div>
+                    </div>
+                </div>	        
+                <!--end:: Widgets-->    
+            </div>
+        </div>
+    </div>
 
-			</div>
-			</div>
-		</div>
-		<!-- end:: Content -->
-		<input type="hidden" name="url_get" id="url_get" value="<?php echo base_url('api/report/bukukas/get_transaksi_unit') ?>"/>
-		<input type="hidden" name="url_get_unit" id="url_get_unit" value="<?php echo base_url('api/datamaster/units/get_units_byarea') ?>"/>
+    <!-- <div class="kt-container  kt-grid__item kt-grid__item--fluid">
+        <div class="row">
+           
+        </div>
+    </div> -->
+
+    <div class="kt-container  kt-grid__item kt-grid__item--fluid">
+        <div class="row">
+            <div class="col-xl-6 col-lg-6">
+                <!--begin:: Widgets-->
+                <div class="kt-portlet kt-portlet--height-fluid">
+                    <div class="kt-widget14">
+                        <div class="kt-widget14__header kt-margin-b-30">
+                            <h3 class="kt-widget14__title">
+                                Pengeluaran Nasional             
+                            </h3>
+                            <span class="kt-widget14__desc">
+							Graph performance each unit of nasional cash out
+                            </span>
+                        </div>
+                        <div class="kt-widget14__chart" style="height:120px;">
+                            <canvas  id="kt_chart_daily_sales"></canvas>
+                        </div>
+                    </div>
+                </div>	        
+                <!--end:: Widgets-->    
+            </div>
+			<div class="col-xl-6 col-lg-6">
+                <!--begin:: Widgets-->
+                <div class="kt-portlet kt-portlet--height-fluid">
+                    <div class="kt-widget14">
+                        <div class="kt-widget14__header kt-margin-b-30">
+                            <h3 class="kt-widget14__title">
+                                Pendapatan Nasional             
+                            </h3>
+                            <span class="kt-widget14__desc">
+                            Graph performance each unit of nasional cash in
+                            </span>
+                        </div>
+                        <div class="kt-widget14__chart" style="height:120px;">
+                            <canvas  id="kt_chart_daily_sales"></canvas>
+                        </div>
+                    </div>
+                </div>	        
+                <!--end:: Widgets-->    
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="kt-container  kt-grid__item kt-grid__item--fluid">
+        <div class="row">
+            
+        </div>
+    </div> -->
+
+    <!-- <div class="kt-container  kt-grid__item kt-grid__item--fluid">
+        <div class="row">
+            
+        </div>
+    </div> -->
+
+	<!-- end:: Content -->
+
 	</div>
 </div>
 
