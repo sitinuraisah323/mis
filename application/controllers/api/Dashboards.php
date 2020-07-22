@@ -135,8 +135,6 @@ class Dashboards extends ApiController
 			foreach($daterange as $date){
 				$dates[] =  $this->regular->getUpByDate($unit->id, $date->format('Y-m-d'));
 			}
-			$dataNow =  $this->regular->getUpByDate($unit->id, $now);
-			$date[] =$dataNow;
 			$unit->dates = $dates;
 			$result[] = $unit;
 		}
@@ -320,6 +318,69 @@ class Dashboards extends ApiController
 			->order_by('amount','desc');
 		$data = $this->units->db->get()->result();
 		return $this->sendMessage($data,'Successfully get Pendapatan');
+	}
+
+	public function dpd()
+	{
+		if($this->input->get('date_end')){
+			$date_end = $this->input->get('date_end');
+		}else{
+			$date_end = date('Y-m-d');
+		}
+		if($this->input->get('area')){
+			$area = $this->input->get('area');
+			$this->units->db->where('id_area', $area);
+		}
+
+		if($this->input->get('code')){
+			$code = $this->input->get('code');
+			$this->units->db->where('code', $code);
+		}
+
+		$this->units->db->select('name,sum(amount) as up')
+			->join('units','units.id = units_regularpawns.id_unit')
+			->join('areas','areas.id = units.id_area')
+			->from('units_regularpawns')
+			->where('deadline <',date('Y-m-d'))
+			->where('units_regularpawns.date_sbk <=', $date_end)
+			->where('units_regularpawns.status_transaction','N')
+			->group_by('units.name')
+			->order_by('up','desc');
+		$data = $this->units->db->get()->result();
+		return $this->sendMessage($data,'Successfully get Pendapatan');
+	}
+
+	public function disburse()
+	{
+		if($area = $this->input->get('area')){
+			$this->units->db->where('id_area', $area);
+		}
+		if($code = $this->input->get('code')){
+			$this->units->db->where('code', $code);
+		}
+		if($this->input->get('year')){
+			$year = $this->input->get('year');
+		}else{
+			$year = date('Y');
+		}
+
+		if($this->input->get('month')){
+			$month = $this->input->get('month');
+		}else{
+			$month = date('n');
+		}
+
+		if($this->input->get('date')){
+			$date = $this->input->get('date');
+		}else{
+			$date = date('d');
+		}
+
+		$units = $this->units->db->select('units.id, units.name')->get('units')->result();
+		foreach ($units as $unit){
+			$unit->amount = $this->regular->getTotalDisburse($unit->id, $year, $month, $date)->credit;
+		}
+		$this->sendMessage($units, 'Get Data Outstanding');
 	}
 
 }
