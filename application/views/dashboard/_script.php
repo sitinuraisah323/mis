@@ -1,6 +1,13 @@
 <script>
 //globals
 var cariForm;
+<?php 
+$date =  date('Y-m-d');
+//$currdate =date("Y-m-t", strtotime($date));
+$lastdate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
+?>
+var currdate = "<?php echo $lastdate;?>";
+var currmonth = "<?php echo date('m'); ?>";
 
 function convertToRupiah(angka)
 {
@@ -131,7 +138,7 @@ function initCariForm(){
  function outstanding() {
 	$('svg').remove();
     $('#graphOutstanding').empty();
-	var currdate = '2020-07-20';
+	//var currdate = '2020-07-20';
     var transaction = [];
 	KTApp.block('#form_outstanding .kt-widget14', {});
     $.ajax({
@@ -189,7 +196,7 @@ function initCariForm(){
 function pencairan() {
 	$('svg').remove();
     $('#graphPencairan').empty();
-	var currdate = '2020-07-20';
+	//var currdate = '2020-07-20';
 	var transaction = [];
 	KTApp.block('#form_pencairan .kt-widget14', {});
 	$.ajax({
@@ -247,7 +254,7 @@ function pencairan() {
 function pelunasan() {
 	$('svg').remove();
 	$('#graphPelunasan').empty();
-	var currdate = '2020-07-20';
+	//var currdate = '2020-07-20';
 	var transaction = [];
 	KTApp.block('#form_pelunasan .kt-widget14', {});
 	$.ajax({
@@ -304,7 +311,7 @@ function pelunasan() {
 function pendapatan() {
 	$('svg').remove();
 	$('#graphPendapatan').empty();
-	var currdate = '2020-07-20';
+	//var currdate = '2020-07-20';
 	KTApp.block('#form_pendapatan .kt-widget14', {});
 	var transaction = [];
 	$.ajax({
@@ -360,7 +367,7 @@ function pendapatan() {
 function pengeluaran() {
 	$('svg').remove();
 	$('#graphPengeluaran').empty();
-	var currdate = '2020-07-20';
+	//var currdate = '2020-07-20';
 	var transaction = [];
 	KTApp.block('#form_pengeluaran .kt-widget14', {});
 	$.ajax({
@@ -417,7 +424,7 @@ function saldo() {
 	$('svg').remove();
 	$('#graphSaldo').empty();
 	var transaction = [];
-	var currdate = '2020-07-20';
+	//var currdate = '2020-07-20';
 	KTApp.block('#form_saldo .kt-widget14', {});
 	$.ajax({
 		url:"<?php echo base_url('api/dashboards/saldo');?>",
@@ -529,7 +536,7 @@ function disburse() {
 	$('svg').remove();
 	$('#graphDisburse').empty();
 	var transaction = [];
-	var currdate = '20';
+	//var currdate = '20';
 	KTApp.block('#form_disburse .kt-widget14', {});
 	$.ajax({
 		url:"<?php echo base_url('api/dashboards/disburse');?>",
@@ -537,7 +544,7 @@ function disburse() {
 		dataType:"JSON",
 		data:{
 			area:'',
-			date:currdate,
+			date:currmonth,
 		},
 		success:function (response) {
 			$.each(response.data, function (index,unit) {

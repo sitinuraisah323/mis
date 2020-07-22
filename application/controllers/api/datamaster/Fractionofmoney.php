@@ -14,9 +14,9 @@ class Fractionofmoney extends ApiController
 	{
 		$data = $this->model->all();
 		if($post = $this->input->post()){
-			if($post['type']){
-				$this->model->db->like('level', $post['type']);
-			}
+			// if($post['type']){
+			// 	$this->model->db->like('level', $post['type']);
+			// }
 			if(is_array($post['query'])){
 				$value = $post['query']['generalSearch'];
 			}
