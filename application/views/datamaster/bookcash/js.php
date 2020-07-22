@@ -117,6 +117,12 @@ function initDataTable(){
                 sortable: 'asc',
                 textAlign: 'left',
             },
+			  {
+				  field: 'total',
+				  title: 'Total',
+				  sortable: 'asc',
+				  textAlign: 'left',
+			  },
             {
                 field: 'action',
                 title: 'Action',
