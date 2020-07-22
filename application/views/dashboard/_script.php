@@ -130,15 +130,17 @@ function initCariForm(){
 
  function outstanding() {
 	$('svg').remove();
-    $('#graph').empty();
+    $('#graphOutstanding').empty();
+	var currdate = '2020-07-20';
     var transaction = [];
+	KTApp.block('#form_outstanding .kt-widget14', {});
     $.ajax({
 		url:"<?php echo base_url('api/dashboards/outstanding');?>",
 		type:"GET",
 		dataType:"JSON",
 		data:{
 			area:$('[name="area"]').val(),
-			date:$('[name="date"]').val(),
+			date:currdate,
 		},
 		success:function (response) {
 			$.each(response.data, function (index,unit) {
@@ -176,9 +178,9 @@ function initCariForm(){
 						// }
 					};
 			//config element name
-			config.element = 'graph';
+			config.element = 'graphOutstanding';
 			new Morris.Bar(config);
-			KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+			KTApp.unblock('#form_outstanding .kt-widget14', {});
 		},
 	});
 
@@ -186,15 +188,17 @@ function initCariForm(){
 
 function pencairan() {
 	$('svg').remove();
-    $('#graph').empty();
+    $('#graphPencairan').empty();
+	var currdate = '2020-07-20';
 	var transaction = [];
+	KTApp.block('#form_pencairan .kt-widget14', {});
 	$.ajax({
 		url:"<?php echo base_url('api/dashboards/pencairandashboard');?>",
 		type:"GET",
 		dataType:"JSON",
 		data:{
-			area:$('[name="area"]').val(),
-			date:$('[name="date"]').val(),
+			area:'',
+			date:currdate,
 		},
 		success:function (response) {
 			$.each(response.data, function (index,unit) {
@@ -231,9 +235,9 @@ function pencairan() {
 						// }
 					};
 			//config element name
-			config.element = 'graph';
+			config.element = 'graphPencairan';
 			new Morris.Bar(config);
-			KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+			KTApp.unblock('#form_pencairan .kt-widget14', {});
 		},
 	});
 
@@ -242,15 +246,17 @@ function pencairan() {
 
 function pelunasan() {
 	$('svg').remove();
-	$('#graph').empty();
+	$('#graphPelunasan').empty();
+	var currdate = '2020-07-20';
 	var transaction = [];
+	KTApp.block('#form_pelunasan .kt-widget14', {});
 	$.ajax({
 		url:"<?php echo base_url('api/dashboards/pelunasandashboard');?>",
 		type:"GET",
 		dataType:"JSON",
 		data:{
-			area:$('[name="area"]').val(),
-			date:$('[name="date"]').val(),
+			area:'',
+			date:currdate,
 		},
 		success:function (response) {
 			$.each(response.data, function (index,unit) {
@@ -286,9 +292,9 @@ function pelunasan() {
 						// }
 					};
 			//config element name
-			config.element = 'graph';
+			config.element = 'graphPelunasan';
 			new Morris.Bar(config);
-			KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+			KTApp.unblock('#form_pelunasan .kt-widget14', {});
 		},
 	});
 
@@ -297,15 +303,17 @@ function pelunasan() {
 
 function pendapatan() {
 	$('svg').remove();
-	$('#graph').empty();
+	$('#graphPendapatan').empty();
+	var currdate = '2020-07-20';
+	KTApp.block('#form_pendapatan .kt-widget14', {});
 	var transaction = [];
 	$.ajax({
 		url:"<?php echo base_url('api/dashboards/pendapatan');?>",
 		type:"GET",
 		dataType:"JSON",
 		data:{
-			area:$('[name="area"]').val(),
-			date:$('[name="date"]').val(),
+			area:'',
+			date:currdate,
 		},
 		success:function (response) {
 			$.each(response.data, function (index,unit) {
@@ -341,9 +349,9 @@ function pendapatan() {
 						// }
 					};
 			//config element name
-			config.element = 'graph';
+			config.element = 'graphPendapatan';
 			new Morris.Bar(config);
-			KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+			KTApp.unblock('#form_pendapatan .kt-widget14', {});
 		},
 	});
 
@@ -352,15 +360,17 @@ function pendapatan() {
 
 function pengeluaran() {
 	$('svg').remove();
-	$('#graph').empty();
+	$('#graphPengeluaran').empty();
+	var currdate = '2020-07-20';
 	var transaction = [];
+	KTApp.block('#form_pengeluaran .kt-widget14', {});
 	$.ajax({
 		url:"<?php echo base_url('api/dashboards/pengeluaran');?>",
 		type:"GET",
 		dataType:"JSON",
 		data:{
-			area:$('[name="area"]').val(),
-			date:$('[name="date"]').val(),
+			area:'',
+			date:currdate,
 		},
 		success:function (response) {
 			$.each(response.data, function (index,unit) {
@@ -396,9 +406,9 @@ function pengeluaran() {
 						// }
 					};
 			//config element name
-			config.element = 'graph';
+			config.element = 'graphPengeluaran';
 			new Morris.Bar(config);
-			KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+			KTApp.unblock('#form_pengeluaran .kt-widget14', {});
 		},
 	});
 
@@ -459,6 +469,7 @@ function saldo() {
 	});
 
 }
+
 function notfound(){
     $("#graph").empty();
     var div = document.getElementById('graph');
@@ -469,7 +480,12 @@ function notfound(){
 }
 
 jQuery(document).ready(function() {
-    initCariForm();
+    //initCariForm();
+	outstanding();
+	pencairan();
+	pelunasan();
+	pendapatan();
+	pengeluaran();
 });
 
 </script>

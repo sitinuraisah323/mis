@@ -10,6 +10,7 @@ class Dashboards extends ApiController
 		$this->load->model('RegularPawnsModel', 'regular');
 		$this->load->model('UnitsModel', 'units');
 		$this->load->model('RepaymentModel','repayments');
+		$this->load->model('MappingcaseModel', 'm_casing');
 	}
 
 	public function outstanding()
@@ -226,6 +227,12 @@ class Dashboards extends ApiController
 
 	public function pendapatan()
 	{
+		$listperk = $this->m_casing->get_list_pendapatan();
+		$category=array();
+		foreach ($listperk as $value) {
+			array_push($category, $value->no_perk);
+		}
+
 		if($this->input->get('date')){
 			$date = $this->input->get('date');
 		}else{
@@ -245,7 +252,8 @@ class Dashboards extends ApiController
 			->join('units','units.id = units_dailycashs.id_unit')
 			->from('units_dailycashs')
 			->where('date', $date)
-			->where('type','CASH_IN')
+			->where('type','CASH_IN')	
+			->where_in('no_perk', $category)
 			->group_by('units.name')
 			->order_by('amount','desc');
 		$data = $this->units->db->get()->result();
@@ -254,6 +262,12 @@ class Dashboards extends ApiController
 
 	public function pengeluaran()
 	{
+		$listperk = $this->m_casing->get_list_pengeluaran();
+		$category=array();
+		foreach ($listperk as $value) {
+			array_push($category, $value->no_perk);
+		}
+		
 		if($this->input->get('date')){
 			$date = $this->input->get('date');
 		}else{
@@ -268,12 +282,13 @@ class Dashboards extends ApiController
 			$code = $this->input->get('code');
 			$this->units->db->where('code', $code);
 		}
-
+		
 		$this->units->db->select('units.name, sum(amount) as amount')
 			->join('units','units.id = units_dailycashs.id_unit')
 			->from('units_dailycashs')
 			->where('date', $date)
 			->where('type','CASH_OUT')
+			->where_in('no_perk', $category)
 			->group_by('units.name')
 			->order_by('amount','desc');
 		$data = $this->units->db->get()->result();

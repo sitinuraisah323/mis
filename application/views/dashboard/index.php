@@ -44,16 +44,18 @@ $this->load->view('temp/MenuBar.php');
                                 Graph performance each unit of nasional booking
                             </span>
                         </div>
-                        <div class="kt-widget14__chart" style="height:120px;">
+                        <div class="kt-widget14__chart" style="height:250px;">
                             <canvas  id="kt_chart_daily_sales"></canvas>
                         </div>
                     </div>
                 </div>	        
                 <!--end:: Widgets-->    
             </div>
+
 			<div class="col-xl-6 col-lg-6">
                 <!--begin:: Widgets-->
-                <div class="kt-portlet kt-portlet--height-fluid">
+                <form id="form_outstanding" class="form-horizontal">
+                <div class="kt-portlet kt-portlet--height-fluid">                
                     <div class="kt-widget14">
                         <div class="kt-widget14__header kt-margin-b-30">
                             <h3 class="kt-widget14__title">
@@ -62,16 +64,20 @@ $this->load->view('temp/MenuBar.php');
                             <span class="kt-widget14__desc">
 							Graph performance each unit of nasional outstanding
                             </span>
+
                         </div>
-                        <div class="kt-widget14__chart" style="height:120px;">
-                            <canvas  id="kt_chart_daily_sales"></canvas>
+                        <div class="kt-widget11">
+                            <!-- <div class="kt-spinner kt-spinner--sm kt-spinner--brand"></div> -->
+                            <div id="graphOutstanding" style="height:300px;"></div>                           
                         </div>
                     </div>
                 </div>	        
+                </form>	        
                 <!--end:: Widgets-->    
             </div>
+
         </div>
-    </div>
+     </div>
 
     <div class="kt-container  kt-grid__item kt-grid__item--fluid">
         <div class="row">
@@ -120,6 +126,7 @@ $this->load->view('temp/MenuBar.php');
         <div class="row">
             <div class="col-xl-6 col-lg-6">
                 <!--begin:: Widgets-->
+                <form id="form_pencairan" class="form-horizontal">
                 <div class="kt-portlet kt-portlet--height-fluid">
                     <div class="kt-widget14">
                         <div class="kt-widget14__header kt-margin-b-30">
@@ -129,16 +136,18 @@ $this->load->view('temp/MenuBar.php');
                             <span class="kt-widget14__desc">
 							Graph performance each unit of nasional pencairan
                             </span>
-                        </div>
-                        <div class="kt-widget14__chart" style="height:120px;">
-                            <canvas  id="kt_chart_daily_sales"></canvas>
-                        </div>
+                        </div>                        
+                        <div class="kt-widget11">
+                            <div id="graphPencairan" style="height:300px;"></div>                           
+                        </div>                        
                     </div>
-                </div>	        
+                </div>	   
+                </form>     
                 <!--end:: Widgets-->    
             </div>
 			<div class="col-xl-6 col-lg-6">
                 <!--begin:: Widgets-->
+                <form id="form_pelunasan" class="form-horizontal">
                 <div class="kt-portlet kt-portlet--height-fluid">
                     <div class="kt-widget14">
                         <div class="kt-widget14__header kt-margin-b-30">
@@ -149,26 +158,22 @@ $this->load->view('temp/MenuBar.php');
 							Graph performance each unit of nasional payment
                             </span>
                         </div>
-                        <div class="kt-widget14__chart" style="height:120px;">
-                            <canvas  id="kt_chart_daily_sales"></canvas>
-                        </div>
+                        <div class="kt-widget11">
+                            <div id="graphPelunasan" style="height:300px;"></div>                           
+                        </div>   
                     </div>
                 </div>	        
+                </form>	        
                 <!--end:: Widgets-->    
             </div>
         </div>
     </div>
 
-    <!-- <div class="kt-container  kt-grid__item kt-grid__item--fluid">
-        <div class="row">
-           
-        </div>
-    </div> -->
-
     <div class="kt-container  kt-grid__item kt-grid__item--fluid">
         <div class="row">
             <div class="col-xl-6 col-lg-6">
                 <!--begin:: Widgets-->
+                <form id="form_pengeluaran" class="form-horizontal">
                 <div class="kt-portlet kt-portlet--height-fluid">
                     <div class="kt-widget14">
                         <div class="kt-widget14__header kt-margin-b-30">
@@ -179,15 +184,17 @@ $this->load->view('temp/MenuBar.php');
 							Graph performance each unit of nasional cash out
                             </span>
                         </div>
-                        <div class="kt-widget14__chart" style="height:120px;">
-                            <canvas  id="kt_chart_daily_sales"></canvas>
+                        <div class="kt-widget11">
+                            <div id="graphPengeluaran" style="height:300px;"></div>                           
                         </div>
                     </div>
                 </div>	        
+                </form>	        
                 <!--end:: Widgets-->    
             </div>
 			<div class="col-xl-6 col-lg-6">
                 <!--begin:: Widgets-->
+                <form id="form_pendapatan" class="form-horizontal">
                 <div class="kt-portlet kt-portlet--height-fluid">
                     <div class="kt-widget14">
                         <div class="kt-widget14__header kt-margin-b-30">
@@ -198,27 +205,16 @@ $this->load->view('temp/MenuBar.php');
                             Graph performance each unit of nasional cash in
                             </span>
                         </div>
-                        <div class="kt-widget14__chart" style="height:120px;">
-                            <canvas  id="kt_chart_daily_sales"></canvas>
+                        <div class="kt-widget11">
+                            <div id="graphPendapatan" style="height:300px;"></div>                           
                         </div>
                     </div>
                 </div>	        
+                </form>	        
                 <!--end:: Widgets-->    
             </div>
         </div>
     </div>
-
-    <!-- <div class="kt-container  kt-grid__item kt-grid__item--fluid">
-        <div class="row">
-            
-        </div>
-    </div> -->
-
-    <!-- <div class="kt-container  kt-grid__item kt-grid__item--fluid">
-        <div class="row">
-            
-        </div>
-    </div> -->
 
 	<!-- end:: Content -->
 
