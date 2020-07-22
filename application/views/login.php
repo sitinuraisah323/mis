@@ -72,7 +72,7 @@ License: You must have a valid license purchased only from themeforest(the above
         <!--begin::Layout Skins(used by all pages) -->
                 <!--end::Layout Skins -->
 
-        <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/media/logos/favicon.ico" />
+        <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/media/logos/gha-sm.png" />
     </head>
     <!-- end::Head -->
 
@@ -95,7 +95,7 @@ License: You must have a valid license purchased only from themeforest(the above
 				</div>
 				<div class="kt-login__signin">
 					<div class="kt-login__head">
-						<h3 class="kt-login__title">Sign In To MIS</h3>
+						<h3 class="kt-login__title">Sign In To GHAnet</h3>
 					</div>
 					<form class="kt-form" action="">
 						<div class="input-group">

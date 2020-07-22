@@ -16,7 +16,7 @@ License: You must have a valid license purchased only from themeforest(the above
     <head><!--begin::Base Path (base relative path for assets of this page) -->
         <base href=".<?php echo base_url(); ?>.<?php echo base_url(); ?>.<?php echo base_url(); ?>"><!--end::Base Path -->
         <meta charset="utf-8"/>
-        <title>GHA | MIS</title>
+        <title>GHAnet | GHA</title>
         <meta name="description" content="Buttons examples">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 

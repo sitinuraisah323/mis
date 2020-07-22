@@ -34,7 +34,7 @@ $this->load->view('temp/MenuBar.php');
                     <div class="kt-portlet__head">
                         <div class="kt-portlet__head-label">
                             <h3 class="kt-portlet__head-title">
-                                Filtering Summary
+                                Filtering Executive Summary
                             </h3>
                         </div>
                         <div class="kt-portlet__head-toolbar">
