@@ -6,9 +6,24 @@ class UsersModel extends Master
 
 	public $primary_key = 'id';
 
+	public function find($condition = array())
+	{
+		if(is_array($condition)){
+			foreach ($condition as $item => $value){
+				$this->db->or_where($item, $value);
+			}
+		}else{
+			$this->db->where($this->primary_key, $condition);
+		}
+		return $this->db->select($this->table.'.*')->from($this->table)->get()->row();
+	}
+
 	public function login_verify($username, $password)
 	{
-		if($user = $this->find(array('username'=>$username))){
+		$this->db
+			->select('levels.level')
+			->join('levels','levels.id = users.id_level');
+		if($user = $this->find(array('username'=>$username,'email'=>$username))){
 			if(password_verify($password,$user->password)){
 				$privileges = array();
 				$levels_privileges = $this->db

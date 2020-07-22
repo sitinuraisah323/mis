@@ -16,6 +16,9 @@ class Bookcash extends ApiController
 		$this->model->db
 			->select('units.name as unit_name')
 			->join('units','units.id = units_cash_book.id_unit');
+		if($this->session->userdata('user')->level != 'administrator'){
+			$this->model->db->where('units.id', $this->session->userdata('user')->id_unit);
+		}
 		$data = $this->model->all();
 		if($post = $this->input->post()){
 			if(is_array($post['query'])){
@@ -52,6 +55,7 @@ class Bookcash extends ApiController
 			else
 			{
 				$data = array(
+					'total'	=> $post['total'],
 					'id_unit'	=> $post['id_unit'],
 					'timestamp'	=> date('Y-m-d H:i:s'),
 					'user_create'	=> $this->session->userdata('user')->id,
@@ -115,6 +119,7 @@ class Bookcash extends ApiController
 			{
 				$id = $post['id'];
 				$data = array(
+					'total'	=> $post['total'],
 					'id_unit'	=> $post['id_unit'],
 					'timestamp'	=> date('Y-m-d H:i:s'),
 					'user_create'	=> $this->session->userdata('user')->id,

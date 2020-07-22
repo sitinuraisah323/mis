@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once APPPATH.'controllers/Middleware/Authenticated.php';
-class BookCash extends Authenticated
+class Bookcash extends Authenticated
 {
 	/**
 	 * @var string
@@ -32,10 +32,13 @@ class BookCash extends Authenticated
 
 	public function form($id = null)
 	{
+		$this->fraction->db
+			->order_by('type','ASC')
+			->order_by('amount','DESC');
 		$this->load->view('datamaster/bookcash/form', array(
+			'fractions'	=> $this->fraction->all(),
 			'units'	=> $this->units->all(),
 			'id'	=> $id,
-			'fractions'	=> $this->fraction->all(),
 		));
 	}
 

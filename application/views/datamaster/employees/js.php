@@ -81,6 +81,7 @@ function initDTEvents(){
                     $("#blood_group").trigger('change');
 					$('#modal_add').find('[name="address"]').val(response.data.address);
 					$('#modal_add').find('[name="position"]').val(response.data.position);
+					$('#modal_add').find('[name="email"]').val(response.data.email);
 					$('#modal_add').find('[name="id_level"]').val(response.data.id_level);
                     $("#id_level").trigger('change');
                     $('#modal_add').modal('show');

@@ -117,6 +117,14 @@ $this->load->view('temp/MenuBar.php');
 						<div class="row">
 							<div class="col-md-12">
 								<div class="form-group">
+									<label>Uang</label>
+									<select name="type" id="type" class="form-control">
+										<?php foreach (array('KERTAS'=>'Kertas', 'Logam'=>'Logam') as $value => $item):?>
+											<option value="<?php echo $value;?>"><?php echo $item;?></option>
+										<?php endforeach;?>
+									</select>
+								</div>
+								<div class="form-group">
 									<label>Mata Uang</label>
 									<input type="text" class="form-control" name="currency">
 								</div>

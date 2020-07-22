@@ -41,10 +41,12 @@ $this->load->view('temp/MenuBar.php');
         <div class="kt-portlet__body kt-portlet__body--fit">
             <!--begin: Datatable -->
 			<form class="kt-form">
+				<input type="hidden" value="<?php echo $id;?>" name="id">
+
 				<div class="kt-portlet__body">
+					<?php if($this->session->userdata('user')->level == 'administrator'):?>
 					<div class="form-group">
 						<label>Unit</label>
-						<input type="hidden" value="<?php echo $id;?>" name="id">
 						<select class="custom-select form-control" name="id_unit">
 							<option value="">Pilih Unit</option>
 							<?php foreach ($units as $unit):?>
@@ -52,9 +54,12 @@ $this->load->view('temp/MenuBar.php');
 							<?php endforeach;?>
 						</select>
 					</div>
+					<?php else:?>
+						<input type="hidden" value="<?php echo $this->session->userdata('user')->id_unit;?>" name="id_unit"></input>
+					<?php endif;?>
 					<?php foreach ($fractions as $fraction):?>
 						<div class="form-group">
-							<label><?php echo $fraction->read.' '.$fraction->amount;?><span class="sum-amount"></span></label>
+							<label><?php echo  $fraction->type.' :'. $fraction->read.' '.$fraction->amount;?><span class="sum-amount"></span></label>
 							<input type="number" class="custom-control form-control summary" name="fraction[<?php echo $fraction->id;?>][summary]">
 							<input type="hidden" name="fraction[<?php echo $fraction->id;?>][id_fraction_of_money]" value="<?php echo $fraction->id;?>">
 							<input type="hidden" name="fraction[<?php echo $fraction->id;?>][amount]" class="amount" value="<?php echo $fraction->amount;?>">
@@ -62,7 +67,7 @@ $this->load->view('temp/MenuBar.php');
 					<?php endforeach;?>
 					<div class="form-group">
 						<label>Total</label>
-						<input type="number" class="custom-control form-control total" readonly>
+						<input type="number" name="total" class="custom-control form-control total" readonly>
 					</div>
 					<div class="col-md-12" >
 						<div class="kt-section">

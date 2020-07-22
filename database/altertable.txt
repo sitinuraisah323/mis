@@ -101,8 +101,10 @@ ALTER TABLE mis.units_dailycashs CHANGE no_sbk code_trans varchar(100) CHARACTER
 
 
 
-
-
+ALTER TABLE mis.fraction_of_money ADD `type` ENUM('KERTAS','LOGAM') DEFAULT 'KERTAS' NOT NULL;
+ALTER TABLE mis.fraction_of_money CHANGE `type` `type` ENUM('KERTAS','LOGAM') DEFAULT 'KERTAS' NOT NULL AFTER currency;
+ALTER TABLE mis.units_cash_book ADD total FLOAT(10) DEFAULT 0 NOT NULL;
+ALTER TABLE mis.units_cash_book CHANGE total total FLOAT(10) DEFAULT 0 NOT NULL AFTER id_unit;
 
 
 

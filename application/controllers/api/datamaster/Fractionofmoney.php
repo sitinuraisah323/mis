@@ -14,11 +14,13 @@ class Fractionofmoney extends ApiController
 	{
 		$data = $this->model->all();
 		if($post = $this->input->post()){
+			if($post['type']){
+				$this->model->db->like('level', $post['type']);
+			}
 			if(is_array($post['query'])){
 				$value = $post['query']['generalSearch'];
-				$this->model->db->like('level', $value);
-				$data = $this->model->all();
 			}
+			$data = $this->model->all();
 		}
 		echo json_encode(array(
 			'data'	=> 	$data,
@@ -48,6 +50,7 @@ class Fractionofmoney extends ApiController
 			else
 			{
 				$data = array(
+					'type'	=> $post['type'],
 					'currency'	=> $post['currency'],
 					'amount'	=> $post['amount'],
 					'read'	=> $post['read'],
@@ -101,6 +104,7 @@ class Fractionofmoney extends ApiController
 			{
 				$id = $post['id'];
 				$data = array(
+					'type'	=> $post['type'],
 					'currency'	=> $post['currency'],
 					'amount'	=> $post['amount'],
 					'read'	=> $post['read'],

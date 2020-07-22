@@ -56,6 +56,7 @@ function initDTEvents(){
 					$('#modal_add').find('[name="currency"]').val(response.data.currency);
 					$('#modal_add').find('[name="read"]').val(response.data.read);
 					$('#modal_add').find('[name="amount"]').val(response.data.amount);
+					$('#modal_add').find('[name="type"]').val(response.data.type);
                     $('#modal_add').modal('show');
                 }else{
                     AlertUtil.showFailed(data.message);
@@ -106,6 +107,12 @@ function initDataTable(){
                 width:60,
                 textAlign: 'center',
             },
+			  {
+				  field: 'type',
+				  title: 'Uang',
+				  sortable: 'asc',
+				  textAlign: 'left',
+			  },
             {
                 field: 'currency',
                 title: 'Mata Uang',
