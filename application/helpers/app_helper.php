@@ -5,10 +5,15 @@ function zero_fill($number, $width){
 
 function read_access($menu = null){
 	if($privileges = $_SESSION['privileges']) {
-		if (array_key_exists($menu, $privileges)) {
-			$privilege = $privileges[$menu];
-			if ($privilege == 'DENIED') {
-				return false;
+		if($segments = explode('/',$menu)){
+			foreach ($segments as $index => $segment){
+				if(key_exists($index,$privileges)){
+					if(key_exists($segment, $privileges[$index])){
+						if($privileges[$index][strtolower($segment)] == 'DENIED'){
+							return false;
+						}
+					}
+				}
 			}
 		}
 	}
@@ -16,12 +21,17 @@ function read_access($menu = null){
 }
 
 
-function write_access($menu){
+function write_access($menu = null){
 	if($privileges = $_SESSION['privileges']) {
-		if (array_key_exists($menu, $privileges)) {
-			$privilege = $privileges[$menu];
-			if ($privilege != 'WRITE') {
-				return false;
+		if($segments = explode('/',$menu)){
+			foreach ($segments as $index => $segment){
+				if(key_exists($index,$privileges)){
+					if(key_exists(strtolower($segment), $privileges[$index])){
+						if($privileges[$index][strtolower($segment)] != 'WRITE'){
+							return false;
+						}
+					}
+				}
 			}
 		}
 	}

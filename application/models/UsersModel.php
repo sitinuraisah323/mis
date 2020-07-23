@@ -21,20 +21,22 @@ class UsersModel extends Master
 	public function login_verify($username, $password)
 	{
 		$this->db
-			->select('levels.level')
-			->join('levels','levels.id = users.id_level');
+			->select('levels.level,units.id_area')
+			->join('levels','levels.id = users.id_level')
+			->join('units','units.id = users.id_unit');
 		if($user = $this->find(array('username'=>$username,'email'=>$username))){
 			if(password_verify($password,$user->password)){
 				$privileges = array();
 				$levels_privileges = $this->db
-					->select('can_access, name')
+					->select('can_access, name, dept')
 					->join('menus','menus.id = levels_privileges.id_menu')
 					->where('id_level', $user->id_level)
 					->get('levels_privileges')->result();
 				if($levels_privileges){
 					foreach ($levels_privileges as $privilege){
-						$privileges[strtolower($privilege->name)] = $privilege->can_access;
+						$privileges[$privilege->dept][strtolower($privilege->name)] = $privilege->can_access;
 					}
+
 				}
 				$this->session->set_userdata(array(
 					'logged_in'	=> true,
