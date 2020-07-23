@@ -31,6 +31,9 @@ License: You must have a valid license purchased only from themeforest(the above
          <!--begin::Page Custom Styles(used by this page) -->
          <link href="<?php echo base_url(); ?>assets/css/demo2/pages/inbox/inbox.css" rel="stylesheet" type="text/css" />
                         <!--end::Page Custom Styles -->
+                        <!--begin::Page Custom Styles(used by this page) -->
+                        <link href="<?php echo base_url(); ?>assets/css/demo2/pages/invoices/invoice-2.css" rel="stylesheet" type="text/css" />
+                        <!--end::Page Custom Styles -->
         
         <!--begin:: Global Mandatory Vendors -->
             <link href="<?php echo base_url(); ?>assets/vendors/general/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" type="text/css" />
