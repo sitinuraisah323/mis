@@ -22,6 +22,8 @@ class Dashboards extends ApiController
 		}
 		if($code = $this->input->get('code')){
 			$this->units->db->where('code', $code);
+		}else if($this->session->userdata('user')->level == 'unit'){
+			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
 		}
 		if($this->input->get('date')){
 			$date = $this->input->get('date');
@@ -112,6 +114,8 @@ class Dashboards extends ApiController
 		}
 		if($code = $this->input->get('code')){
 			$this->units->db->where('code', $code);
+		}else if($this->session->userdata('user')->level == 'unit'){
+			$this->units->db->where('id_unit', $this->session->userdata('user')->id_unit);
 		}
 		if($this->input->get('date')){
 			$date = $this->input->get('date');
@@ -153,6 +157,8 @@ class Dashboards extends ApiController
 		}
 		if($code = $this->input->get('code')){
 			$this->units->db->where('code', $code);
+		}else if($this->session->userdata('user')->level == 'unit'){
+			$this->units->db->where('id_unit', $this->session->userdata('user')->id_unit);
 		}
 		if($this->input->get('date')){
 			$date = $this->input->get('date');
@@ -177,6 +183,8 @@ class Dashboards extends ApiController
 		}
 		if($code = $this->input->get('code')){
 			$this->units->db->where('code', $code);
+		}else if($this->session->userdata('user')->level == 'unit'){
+			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
 		}
 		if($this->input->get('date')){
 			$date = $this->input->get('date');
@@ -252,6 +260,8 @@ class Dashboards extends ApiController
 		if($this->input->get('code')){
 			$code = $this->input->get('code');
 			$this->units->db->where('code', $code);
+		}else if($this->session->userdata('user')->level == 'unit'){
+			$this->units->db->where('id_unit', $this->session->userdata('user')->id_unit);
 		}
 
 		$this->units->db->select('units.name, sum(amount) as amount')
@@ -289,6 +299,8 @@ class Dashboards extends ApiController
 		if($this->input->get('code')){
 			$code = $this->input->get('code');
 			$this->units->db->where('code', $code);
+		}else if($this->session->userdata('user')->level == 'unit'){
+			$this->units->db->where('id_unit', $this->session->userdata('user')->id_unit);
 		}
 		
 		$this->units->db->select('units.name, sum(amount) as amount')
@@ -320,6 +332,8 @@ class Dashboards extends ApiController
 		if($this->input->get('code')){
 			$code = $this->input->get('code');
 			$this->units->db->where('code', $code);
+		}else if($this->session->userdata('user')->level == 'unit'){
+			$this->units->db->where('id_unit', $this->session->userdata('user')->id_unit);
 		}
 
 		$this->units->db->select('units.name, (sum(CASE WHEN type = "CASH_IN" THEN `amount` ELSE 0 END) - sum(CASE WHEN type = "CASH_OUT" THEN `amount` ELSE 0 END)) as amount')
@@ -349,6 +363,8 @@ class Dashboards extends ApiController
 		if($this->input->get('code')){
 			$code = $this->input->get('code');
 			$this->units->db->where('code', $code);
+		}else if($this->session->userdata('user')->level == 'unit'){
+			$this->units->db->where('id_unit', $this->session->userdata('user')->id_unit);
 		}
 
 		$this->units->db->select('name,sum(amount) as up')
@@ -373,6 +389,8 @@ class Dashboards extends ApiController
 		}
 		if($code = $this->input->get('code')){
 			$this->units->db->where('code', $code);
+		}else if($this->session->userdata('user')->level == 'unit'){
+			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
 		}
 		if($this->input->get('year')){
 			$year = $this->input->get('year');
