@@ -17,7 +17,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <base href=".<?php echo base_url(); ?>.<?php echo base_url(); ?>.<?php echo base_url(); ?>.<?php echo base_url(); ?>"><!--end::Base Path -->
         <meta charset="utf-8"/>
 
-        <title>MIS | Login</title>
+        <title>GHAnet | Login</title>
         <meta name="description" content="Login page example">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -85,7 +85,7 @@ License: You must have a valid license purchased only from themeforest(the above
     	<!-- begin:: Page -->
 	<div class="kt-grid kt-grid--ver kt-grid--root kt-page">
 		<div class="kt-grid kt-grid--hor kt-grid--root  kt-login kt-login--v4 kt-login--signin" id="kt_login">
-	<div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" style="background-image: url(<?php echo base_url(); ?>assets/media/bg/bg-2.jpg);">
+	<div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" style="background-image: url(<?php echo base_url(); ?>assets/media/bg/bg-7.jpg);">
 		<div class="kt-grid__item kt-grid__item--fluid kt-login__wrapper">
 			<div class="kt-login__container">
 				<div class="kt-login__logo">

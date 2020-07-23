@@ -12,9 +12,9 @@ $this->load->view('temp/MenuBar.php');
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">Laporan</h3>
+            <h3 class="kt-subheader__title">Transaksi</h3>
             <span class="kt-subheader__separator kt-subheader__separator--v"></span>
-            <span class="kt-subheader__desc">Buku Kas</span>
+            <span class="kt-subheader__desc">Saldo Unit</span>
         </div>
         <div class="kt-subheader__toolbar">
             <div class="kt-subheader__wrapper">
@@ -33,14 +33,17 @@ $this->load->view('temp/MenuBar.php');
                         <i class="kt-font-brand fa fa-align-justify"></i>
                     </span>
                     <h3 class="kt-portlet__head-title">
-                       Data Buku Kash
+                       Data Saldo Unit
                     </h3>
                 </div>
                 <div class="kt-portlet__head-toolbar">
                     <div class="kt-portlet__head-wrapper">
-                            <a class="btn btn-brand btn-icon-sm" href="<?php echo base_url('datamaster/bookcash/form');?>">
+                            <!-- <a class="btn btn-brand btn-icon-sm" href="<?php echo base_url('datamaster/bookcash/form');?>">
                                 <i class="flaticon2-plus"></i> Buat Baru
-                            </a>
+                            </a> -->
+                            <button type="button" class="btn btn-brand btn-icon-sm" data-toggle="modal" data-target="#modal_add">
+                                <i class="flaticon2-plus"></i> Buat Baru      
+                            </button>  
                     </div>
                 </div>
             </div>
@@ -101,33 +104,11 @@ $this->load->view('temp/MenuBar.php');
 
 </div>
 </div>
-<!--begin::Modal-->
-<div class="modal fade" id="modal_add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog" role="document">
-		<form method="post" id="input-form" enctype="multipart/form-data" class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel"></h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-				</button>
-			</div>
-			<div class="modal-body form">
-				<div class="form-horizontal">
-					<div class="form-body">
-						<div class="row">
-							<div class="col-md-12 append">
-
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</form>
-	</div>
-</div>
-<!--end::Modal-->
 
 <?php
 $this->load->view('temp/Footer.php', array(
-	'js'	=> 'datamaster/bookcash/js'
+	'js'	=> 'datamaster/bookcash/js',
+	'add'	=> 'datamaster/bookcash/_add'
 ));
+$this->load->view('datamaster/bookcash/_add.php');
 ?>

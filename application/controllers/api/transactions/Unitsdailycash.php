@@ -160,7 +160,7 @@ class Unitsdailycash extends ApiController
 	
 	public function report()
 	{
-		$this->unitsdailycash->all();
+		//$this->unitsdailycash->all();
 		if($get = $this->input->get()){
 			$this->unitsdailycash->db
 				->where('date >=', $get['dateStart'])
