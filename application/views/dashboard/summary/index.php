@@ -47,19 +47,23 @@ $this->load->view('temp/MenuBar.php');
                         <div class="kt-portlet__content">
                             <div class="col-md-12" >
                                 <div class="form-group row">
-                                    <label class="col-form-label">Area</label>
-                                    <div class="col-lg-2">
-                                        <select class="form-control select2" name="area" id="area">
-                                            <option></option>
-                                            <?php
-                                                if (!empty($areas)){
-                                                    foreach($areas as $row){
-                                                    echo "<option value=".$row->id.">".$row->area."</option>";
-                                                    }
-                                                }
-                                            ?>
-                                        </select>
-                                    </div>
+									<?php if($this->session->userdata('user')->level == 'area'):?>
+										<input type="hidden" name="area" value="<?php echo $this->session->userdata('user')->id_area;?>">
+									<?php else:?>
+										<label class="col-form-label">Area</label>
+										<div class="col-lg-2">
+											<select class="form-control select2" name="area" id="area">
+												<option></option>
+												<?php
+													if (!empty($areas)){
+														foreach($areas as $row){
+														echo "<option value=".$row->id.">".$row->area."</option>";
+														}
+													}
+												?>
+											</select>
+										</div>
+									<?php endif;?>
 
                                     <label class="col-form-label">Transaksi</label>
                                     <div class="col-lg-2">

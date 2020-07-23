@@ -17,6 +17,8 @@ class Dashboards extends ApiController
 	{
 		if($area = $this->input->get('area')){
 			$this->units->db->where('id_area', $area);
+		}else if($this->session->userdata('user')->level == 'area'){
+			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
 		}
 		if($code = $this->input->get('code')){
 			$this->units->db->where('code', $code);
@@ -105,6 +107,8 @@ class Dashboards extends ApiController
 	{
 		if($area = $this->input->get('area')){
 			$this->units->db->where('id_area', $area);
+		}else if($this->session->userdata('user')->level == 'area'){
+			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
 		}
 		if($code = $this->input->get('code')){
 			$this->units->db->where('code', $code);
@@ -144,6 +148,8 @@ class Dashboards extends ApiController
 	{
 		if($area = $this->input->get('area')){
 			$this->units->db->where('id_area', $area);
+		}else if($this->session->userdata('user')->level == 'area'){
+			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
 		}
 		if($code = $this->input->get('code')){
 			$this->units->db->where('code', $code);
@@ -166,6 +172,8 @@ class Dashboards extends ApiController
 	{
 		if($area = $this->input->get('area')){
 			$this->units->db->where('id_area', $area);
+		}else if($this->session->userdata('user')->level == 'area'){
+			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
 		}
 		if($code = $this->input->get('code')){
 			$this->units->db->where('code', $code);
@@ -274,6 +282,8 @@ class Dashboards extends ApiController
 		if($this->input->get('area')){
 			$area = $this->input->get('area');
 			$this->units->db->where('id_area', $area);
+		}else if($this->session->userdata('user')->level == 'area'){
+			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
 		}
 
 		if($this->input->get('code')){
@@ -303,6 +313,8 @@ class Dashboards extends ApiController
 		if($this->input->get('area')){
 			$area = $this->input->get('area');
 			$this->units->db->where('id_area', $area);
+		}else if($this->session->userdata('user')->level == 'area'){
+			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
 		}
 
 		if($this->input->get('code')){
@@ -330,6 +342,8 @@ class Dashboards extends ApiController
 		if($this->input->get('area')){
 			$area = $this->input->get('area');
 			$this->units->db->where('id_area', $area);
+		}else if($this->session->userdata('user')->level == 'area'){
+			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
 		}
 
 		if($this->input->get('code')){
@@ -354,6 +368,8 @@ class Dashboards extends ApiController
 	{
 		if($area = $this->input->get('area')){
 			$this->units->db->where('id_area', $area);
+		}else if($this->session->userdata('user')->level == 'area'){
+			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
 		}
 		if($code = $this->input->get('code')){
 			$this->units->db->where('code', $code);

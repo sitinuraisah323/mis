@@ -11,10 +11,15 @@ class Authenticated extends Controller
 			redirect(base_url('login'));
 		}
 		if($privileges = $session['privileges']){
-			if(array_key_exists($this->uri->segment(2),$privileges)){
-				$privilege = $privileges[$this->uri->segment(2)];
-				if($privilege === 'DENIED'){
-					redirect(base_url('denied'));
+			if($segments =$this->uri->segment_array()){
+				foreach ($segments as $index => $segment){
+					if(key_exists($index-1,$privileges)){
+						if(key_exists($segment, $privileges[$index-1])){
+							if($privileges[$index-1][$segment] == 'DENIED'){
+								redirect(base_url('denied'));
+							}
+						}
+					}
 				}
 			}
 		}
