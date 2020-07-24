@@ -191,6 +191,37 @@ class Bookcash extends ApiController
 			));
 		}
 	}
+
+	public function get_type_money_kertas()
+	{
+		$this->money->db
+		    ->select('fraction_of_money.type as type')
+		    ->join('fraction_of_money','fraction_of_money.id=units_cash_book_money.id_fraction_of_money')
+			->where('fraction_of_money.type', 'KERTAS');
+		
+		$data = $this->money->all();
+		echo json_encode(array(
+			'data'	  => $data,
+			'status'  => true,
+			'message' => 'Successfully Get Data Regular Pawns'
+		));
+	}
+
+	public function get_type_money_logam()
+	{
+		$this->money->db
+		    ->select('fraction_of_money.type as type')
+		    ->join('fraction_of_money','fraction_of_money.id=units_cash_book_money.id_fraction_of_money')
+			->where('fraction_of_money.type', 'LOGAM');
+		
+		$data = $this->money->all();
+		echo json_encode(array(
+			'data'	  => $data,
+			'status'  => true,
+			'message' => 'Successfully Get Data Regular Pawns'
+		));
+	}
+
 	public function delete($id)
 	{
 		if($this->model->delete($id)){
