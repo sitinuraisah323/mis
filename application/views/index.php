@@ -73,12 +73,7 @@ $this->load->view('temp/MenuBar.php');
 
 		console.log(search(items, query));
 
-		function search(array, query) {
-			var filters = array.filter(function (item) {
-				return item.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
-			})
-			return filters;
-		}
+	
 	</script>
 <?php
 $this->load->view('temp/Footer.php');

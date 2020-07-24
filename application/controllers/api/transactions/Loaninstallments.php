@@ -50,9 +50,8 @@ class Loaninstallments extends ApiController
 								}
 							}
 						}
-
-						foreach ($scanFile as $key => $file){
-							if($index > 1){
+						foreach ($scanFile as $i => $file){
+							if($i > 1){
 								$this->process_transaction($idUnit,$pathTransaction, $file, $ojk);
 							}
 						}
@@ -174,6 +173,7 @@ class Loaninstallments extends ApiController
 		if($transactions){
 			$batchInsert = array();
 			$batchUpdate = array();
+
 			foreach ($transactions as $key => $transaction){
 				if($key > 1){
 					$customer = $this->customers->find(array(
@@ -305,7 +305,6 @@ class Loaninstallments extends ApiController
 						'message'	=> 'Successfull Updated Data Users'
 					));
 				}else{
-					exit;
 					echo json_encode(array(
 							'data'	=> 	false,
 							'message'	=> 'Failed Updated Data Users')
@@ -401,29 +400,29 @@ class Loaninstallments extends ApiController
 		));
 		if($unit){
 			$id_unit = $unit->id;
-		}
-		switch(substr($name,0, 2)){
-			case 'MS':
-				$this->data_customer($id_unit,$path.$name);
-				break;	
-			case 'KS':
-				$this->data_transaction_cash($id_unit, $path.$name, $jok);
-				break;		
-			case 'PC':
-				$this->data_transaction_mortages($id_unit, $path.$name, $jok);
-				break;
-			case 'KR':
-				$this->data_transaction_repayment_mortages($id_unit, $path.$name, $jok);
-				break;
-			case 'PN':
-				$this->data_transaction_regular($id_unit, $path.$name, $jok);
-				break;
+			switch(substr($name,0, 2)){
+				case 'MS':
+					$this->data_customer($id_unit,$path.$name);
+					break;
+				case 'KS':
+					$this->data_transaction_cash($id_unit, $path.$name, $jok);
+					break;
+				case 'PC':
+					$this->data_transaction_mortages($id_unit, $path.$name, $jok);
+					break;
+				case 'KR':
+					$this->data_transaction_repayment_mortages($id_unit, $path.$name, $jok);
+					break;
+				case 'PN':
+					$this->data_transaction_regular($id_unit, $path.$name, $jok);
+					break;
 				case 'LN':
-				$this->data_transaction_repayment($id_unit, $path.$name, $jok);
-				break;			
-			case 'AN':
-				$this->data_transaction($id_unit, $path.$name, $jok);
-				break;			
+					$this->data_transaction_repayment($id_unit, $path.$name, $jok);
+					break;
+				case 'AN':
+					$this->data_transaction($id_unit, $path.$name, $jok);
+					break;
+			}
 		}
 	}
 
@@ -468,7 +467,6 @@ class Loaninstallments extends ApiController
 					}else{
 						$batchInsert[] = $data;
 					}
-
 				}
 			}
 			if(count($batchInsert)){
