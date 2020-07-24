@@ -5,8 +5,10 @@ var cariForm;
 $date =  date('Y-m-d');
 //$currdate =date("Y-m-t", strtotime($date));
 $lastdate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
+$nextlastdate = date('Y-m-d', strtotime('-2 days', strtotime($date)));
 ?>
 var currdate = "<?php echo $lastdate;?>";
+var lastdate = "<?php echo $nextlastdate;?>";
 var currmonth = "<?php echo date('m'); ?>";
 
 function convertToRupiah(angka)
@@ -140,7 +142,11 @@ function initCariForm(){
     $('#graphOutstanding').empty();
 	//var currdate = '2020-07-20';
     var transaction = [];
+    var total = 0;
 	KTApp.block('#form_outstanding .kt-widget14', {});
+	 var today = 0;
+	 var yesterday = 0;
+
     $.ajax({
 		url:"<?php echo base_url('api/dashboards/outstanding');?>",
 		type:"GET",
@@ -151,14 +157,19 @@ function initCariForm(){
 		},
 		success:function (response) {
 			$.each(response.data, function (index,unit) {
-				console.log(unit);
 				transaction.push({
 					y:unit.name,
 					a:unit.total_outstanding.up
-				})
+				});
+				today += unit.total_outstanding.up;
+				yesterday += unit.ost_yesterday.up;
 			});
 		},
 		complete:function () {
+			$('#form_outstanding').find('.total-today').text('Rp. '+convertToRupiah(today));
+			$('#form_outstanding').find('.total-yesterday').text('Rp. '+convertToRupiah(yesterday));
+			$('#form_outstanding').find('.date-today').text(currdate);
+			$('#form_outstanding').find('.date-yesterday').text(lastdate);
 			console.log(transaction);
 			var data = transaction,
 					//config manager
@@ -190,7 +201,6 @@ function initCariForm(){
 			KTApp.unblock('#form_outstanding .kt-widget14', {});
 		},
 	});
-
 }
 
 function pencairan() {
@@ -480,7 +490,6 @@ function dpd() {
 	$('svg').remove();
 	$('#graphDPD').empty();
 	var transaction = [];
-	var currdate = '2020-07-20';
 	KTApp.block('#form_dpd .kt-widget14', {});
 	$.ajax({
 		url:"<?php echo base_url('api/dashboards/dpd');?>",
@@ -536,25 +545,32 @@ function disburse() {
 	$('svg').remove();
 	$('#graphDisburse').empty();
 	var transaction = [];
+	var dateToday = "<?php echo  date('d', strtotime('-1 days', strtotime($date)));?>";
+	var dateYesterday = "<?php echo  date('d', strtotime('-1 days', strtotime($date)))?>";
 	//var currdate = '20';
+	var totalYesterday = 0;
+	var totalToday = 0;
 	KTApp.block('#form_disburse .kt-widget14', {});
 	$.ajax({
-		url:"<?php echo base_url('api/dashboards/disburse');?>",
-		type:"GET",
-		dataType:"JSON",
-		data:{
-			area:'',
-			date:currmonth,
+		url: "<?php echo base_url('api/dashboards/disburse');?>",
+		type: "GET",
+		dataType: "JSON",
+		data: {
+			area: '',
+			date: dateToday,
 		},
-		success:function (response) {
-			$.each(response.data, function (index,unit) {
+		success: function (response) {
+			$.each(response.data, function (index, unit) {
+				totalToday += unit.amount;
 				transaction.push({
-					y:unit.name,
-					a:unit.amount
+					y: unit.name,
+					a: unit.amount
 				})
 			});
 		},
-		complete:function () {
+		complete: function () {
+			$('#form_disburse').find('.total-today').text(totalToday);
+			$('#form_disburse').find('.date-today').text(lastdate);
 			var data = transaction,
 					//config manager
 					config = {
@@ -571,7 +587,7 @@ function disburse() {
 						gridTextColor: '#5cb85c',
 						verticalGrid: true,
 						hideHover: 'auto',
-						barColors: ['#3578FC','#FF0000', '#FFD500']
+						barColors: ['#3578FC', '#FF0000', '#FFD500']
 						// barColors: function (row, series, type) {
 						//     if (row.label == "Low") return "#3578FC";
 						//     else if (row.label == "Medium") return "#FFD500";
@@ -583,7 +599,30 @@ function disburse() {
 			config.element = 'graphDisburse';
 			new Morris.Bar(config);
 			KTApp.unblock('#form_disburse .kt-widget14', {});
+		}
+	});
+	$.ajax({
+		url:"<?php echo base_url('api/dashboards/disburse');?>",
+		type:"GET",
+		dataType:"JSON",
+		data:{
+			area:'',
+			date:dateYesterday,
 		},
+		success:function (response) {
+			$.each(response.data, function (index,unit) {
+				totalYesterday += unit.amount;
+				transaction.push({
+					y:unit.name,
+					a:unit.amount
+				})
+			});
+		},
+		complete:function () {
+			$('#form_disburse').find('.total-yesterday').text(totalYesterday);
+			$('#form_disburse').find('.date-yesterday').text(lastdate);
+		},
+
 	});
 
 }

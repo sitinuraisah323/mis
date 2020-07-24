@@ -38,12 +38,25 @@ $this->load->view('temp/MenuBar.php');
                 <div class="kt-portlet kt-portlet--height-fluid">
                     <div class="kt-widget14">
                         <div class="kt-widget14__header kt-margin-b-30">
-                            <h3 class="kt-widget14__title">
-                            <i class="fa fa-chart-bar"></i> Booking Nasional             
-                            </h3>
-                            <span class="kt-widget14__desc">
-                                Graph performance each unit of nasional booking
-                            </span>
+							<div class="row">
+								<div class="col-md-6">
+									<h3 class="kt-widget14__title">
+										<i class="fa fa-chart-bar"></i> Booking Nasional
+									</h3>
+									<span class="kt-widget14__desc">
+                           		     Graph performance each unit of nasional booking
+                            		</span>
+								</div>
+								<div class="col-md-6">
+									<span class="kt-widget14__desc">
+										Total Booking <span class="date-today"></span> <span class="total-today"></span>
+									</span>
+									<hr>
+									<span class="kt-widget14__desc">
+										Total Booking <span class="date-yesterday"></span> <span class="total-yesterday"></span>
+									</span>
+								</div>
+							</div>
                         </div>
                         <div class="kt-widget11">
                             <!-- <div class="kt-spinner kt-spinner--sm kt-spinner--brand"></div> -->
@@ -61,13 +74,25 @@ $this->load->view('temp/MenuBar.php');
                 <div class="kt-portlet kt-portlet--height-fluid">                
                     <div class="kt-widget14">
                         <div class="kt-widget14__header kt-margin-b-30">
-                            <h3 class="kt-widget14__title">
-                            <i class="fa fa-chart-bar"></i> Outstanding Nasional             
-                            </h3>
-                            <span class="kt-widget14__desc">
-							Graph performance each unit of nasional outstanding
-                            </span>
-
+							<div class="row">
+								<div class="col-md-6">
+									<h3 class="kt-widget14__title">
+										<i class="fa fa-chart-bar"></i> Outstanding Nasional
+									</h3>
+									<span class="kt-widget14__desc">
+										Graph performance each unit of nasional outstanding
+									</span>
+								</div>
+								<div class="col-md-6">
+									<span class="kt-widget14__desc">
+										Os Nasional Tanggal <span class="date-today"></span> <span class="total-today"></span>
+									</span>
+									<hr>
+									<span class="kt-widget14__desc">
+										Os Nasional Tanggal <span class="date-yesterday"></span> <span class="total-yesterday"></span>
+									</span>
+								</div>
+							</div>
                         </div>
                         <div class="kt-widget11">
                             <!-- <div class="kt-spinner kt-spinner--sm kt-spinner--brand"></div> -->

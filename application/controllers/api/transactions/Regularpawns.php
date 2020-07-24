@@ -237,10 +237,8 @@ class Regularpawns extends ApiController
 	public function report()
 	{
 		$this->regulars->db
-			->select('customers.name as customer_name,customers.nik as nik')
-			->join('customers','units_regularpawns.id_customer = customers.id')
-			->select('units_repayments.date_repayment as date_repayment')
-			->join('units_repayments','units_regularpawns.no_sbk = units_repayments.no_sbk','left');
+			->select('customers.name as customer_name,customers.nik as nik, (select date_repayment from units_repayments where units_repayments.no_sbk = units_regularpawns.no_sbk and units_repayments.id_unit = units_repayments.id_unit limit 1 ) as date_repayment')
+			->join('customers','units_regularpawns.id_customer = customers.id');
 		if($get = $this->input->get()){
 			$status =null;
 			$nasabah = $get['nasabah'];
