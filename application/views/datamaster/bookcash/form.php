@@ -12,9 +12,9 @@ $this->load->view('temp/MenuBar.php');
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">Laporan</h3>
+            <h3 class="kt-subheader__title">Transaksi</h3>
             <span class="kt-subheader__separator kt-subheader__separator--v"></span>
-            <span class="kt-subheader__desc">Buku Kas</span>
+            <span class="kt-subheader__desc">Saldo Kas</span>
         </div>
         <div class="kt-subheader__toolbar">
             <div class="kt-subheader__wrapper">
@@ -24,79 +24,109 @@ $this->load->view('temp/MenuBar.php');
 </div>
 <!-- end:: Content Head -->
 
- <!-- begin:: Content -->
- <div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
-        <div class="kt-portlet kt-portlet--mobile">
-            <div class="kt-portlet__head kt-portlet__head--lg">
-                <div class="kt-portlet__head-label">
-                    <span class="kt-portlet__head-icon">
-                        <i class="kt-font-brand fa fa-align-justify"></i>
-                    </span>
-                    <h3 class="kt-portlet__head-title">
-                       Form Buku Kash
-                    </h3>
-                </div>
-            </div>
-
-        <div class="kt-portlet__body kt-portlet__body--fit">
-            <!--begin: Datatable -->
-			<form class="kt-form">
-				<input type="hidden" value="<?php echo $id;?>" name="id">
-
-				<div class="kt-portlet__body">
-					<?php if($this->session->userdata('user')->level == 'administrator'):?>
-					<div class="form-group">
-						<label>Unit</label>
-						<select class="custom-select form-control" name="id_unit">
-							<option value="">Pilih Unit</option>
-							<?php foreach ($units as $unit):?>
-								<option value="<?php echo $unit->id;?>"><?php echo $unit->name;?></option>
-							<?php endforeach;?>
-						</select>
-					</div>
-					<?php else:?>
-						<input type="hidden" value="<?php echo $this->session->userdata('user')->id_unit;?>" name="id_unit"></input>
-					<?php endif;?>
-					<?php foreach ($fractions as $fraction):?>
-						<div class="form-group">
-							<label><?php echo  $fraction->type.' :'. $fraction->read.' '.$fraction->amount;?><span class="sum-amount"></span></label>
-							<input type="number" class="custom-control form-control summary" name="fraction[<?php echo $fraction->id;?>][summary]">
-							<input type="hidden" name="fraction[<?php echo $fraction->id;?>][id_fraction_of_money]" value="<?php echo $fraction->id;?>">
-							<input type="hidden" name="fraction[<?php echo $fraction->id;?>][amount]" class="amount" value="<?php echo $fraction->amount;?>">
-						</div>
-					<?php endforeach;?>
-					<div class="form-group">
-						<label>Total</label>
-						<input type="number" name="total" class="custom-control form-control total" readonly>
-					</div>
-					<div class="col-md-12" >
-						<div class="kt-section">
-							<div class="kt-section__content">
-								<div class="alert alert-danger fade show" role="alert" id="failed_alert_add" style="display: none;">
-									<div class="alert-text" id="failed_message_add"></div>
-									<div class="alert-close">
-										<button type="button" class="close" aria-label="Close" id="failed_alert_dismiss_add">
-											<span aria-hidden="true"><i class="la la-close"></i></span>
-										</button>
-									</div>
-								</div>
+<!-- begin:: Content -->
+<div class="kt-container  kt-grid__item kt-grid__item--fluid">
+		<div class="kt-portlet">
+	<div class="kt-portlet__body kt-portlet__body--fit">
+		<div class="kt-invoice-2">
+				
+			<div class="kt-invoice__body">
+                <div class="kt-invoice__container">
+					
+					<div class="col-md-6" > 
+						<div class="form-group row">
+							<label class="col-lg-4 col-form-label">Unit</label>
+							<div class="col-lg-8">
+								<input type="text" class="form-control" id="code_unit" name="code_unit">					
+							</div>
+							<label class="col-lg-4 col-form-label">Kasir</label>
+							<div class="col-lg-8">
+								<input type="text" class="form-control" id="code_unit" name="code_unit">					
 							</div>
 						</div>
 					</div>
-				</div>
-				<div class="kt-portlet__foot">
-					<div class="kt-form__actions">
-						<button type="submit" class="btn btn-primary">Submit</button>
-						<button type="reset" class="btn btn-secondary">Cancel</button>
+					<hr/> 
+					<div class="col-md-6" > 
+						<div class="form-group row">
+							<label class="col-lg-4 col-form-label">Tanggal</label>
+							<div class="col-lg-8">
+								<input type="text" class="form-control" id="code_unit" name="code_unit">					
+							</div>							
+						</div>
+					</div>					
+
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Saldo</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Saldo Awal</td>
+                                    <td></td>
+                                    <td class="kt-font-danger kt-font-lg"><input type="text" class="form-control" id="code_unit" name="code_unit"></td>
+                                </tr>
+                                <tr>
+                                    <td>Penerimaan</td>
+                                    <td><input type="text" class="form-control" id="code_unit" name="code_unit"></td>
+                                    <td class="kt-font-danger kt-font-lg"></td>
+                                </tr>
+                                <tr>
+                                    <td>Pengeluaran</td>
+                                    <td><input type="text" class="form-control" id="code_unit" name="code_unit"></td>
+                                    <td class="kt-font-danger kt-font-lg"></td>
+                                </tr>
+								<tr>
+                                    <td>Saldo Akhir</td>
+                                    <td></td>
+                                    <td class="kt-font-danger kt-font-lg"><input type="text" class="form-control" id="code_unit" name="code_unit"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+			</div>
+
+			<div class="kt-invoice__footer">
+				<div class="kt-invoice__container">
+					<div class="table-responsive">
+						<table class="table">
+							<thead>
+								<tr>
+									<th>BANK</th>
+									<th>ACC.NO.</th>
+									<th>DUE DATE</th>
+									<th>TOTAL AMOUNT</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>BARCLAYS UK</td>
+									<td>12345678909</td>
+									<td>Jan 07, 2018</td>
+									<td class="kt-font-danger kt-font-xl kt-font-boldest">20,600.00</td>
+								</tr>
+							</tbody>
+						</table>
 					</div>
 				</div>
-			</form>
-            <!--end: Datatable -->
+			</div>
 
-        </div>
-        </div>
-    </div>
-    <!-- end:: Content -->
+			<div class="kt-invoice__actions">
+                <div class="kt-invoice__container">
+                    <button type="button" class="btn btn-label-brand btn-bold" onclick="window.print();">Download Invoice</button>
+                    <button type="button" class="btn btn-brand btn-bold" onclick="window.print();">Print Invoice</button>
+                </div>
+            </div>
+		</div>
+	</div>
+</div>	</div>
+<!-- end:: Content -->
 
 <?php
 $this->load->view('temp/Footer.php', array(
