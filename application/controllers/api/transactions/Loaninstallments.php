@@ -179,6 +179,12 @@ class Loaninstallments extends ApiController
 					$customer = $this->customers->find(array(
 						'name'	=> $transaction['B']
 					));
+					if(!$customer){
+						$customer =  (object) array(
+							'id'	=> 0,
+							'no_cif'	=> 0,
+						);
+					}
 					if($customer){
 						$detail = array(
 							'angsuran' => array(
@@ -601,6 +607,12 @@ class Loaninstallments extends ApiController
 					$customer = $this->customers->find(array(
 						'nik'	=> $transaction['M']
 					));
+					if(is_null($customer)){
+						$customer =  (object) array(
+							'id'	=> 0,
+							'no_cif'	=> 0,
+						);
+					}
 					$status = null;
 					if( $transaction['W']=="X"){$status="L";}else{$status="N";}
 					if(!is_null($customer)){
@@ -666,6 +678,12 @@ class Loaninstallments extends ApiController
 			foreach ($repayments as $key => $repayment){
 				if($key > 1){
 					$findcustomer = $this->customers->find(array('name'=> $repayment['B']));
+					if(is_null($findcustomer)){
+						$findcustomer = (object) array(
+							'id'	=> 0,
+							'no_cif'	=> 0,
+						);
+					}
 					if($findcustomer){
 						$data = array(
 							'no_sbk'		=> zero_fill($repayment['A'], 5),
@@ -684,17 +702,7 @@ class Loaninstallments extends ApiController
 						);
 						if($findrepayment = $this->repayments->find(array(
 							'id_unit'		=> $unit,
-							'id_customer'	=> $findcustomer->id,
 							'no_sbk'		=> zero_fill($repayment['A'], 5),
-							'date_sbk'		=> date('Y-m-d', strtotime($repayment['C'])),
-							'money_loan'	=> $repayment['D'],
-							'capital_lease'	=> $repayment['H'],
-							'date_repayment'=> date('Y-m-d', strtotime($repayment['I'])),
-							'periode'		=> $repayment['J'],
-							'description_1'	=> $repayment['E'],
-							'description_2'	=> $repayment['F'],
-							'description_3'	=> $repayment['G'],
-							'permit'		=> $jok
 						))){
 							$data['id']	= $findrepayment->id;
 							$bathUpdate[] = $data;
@@ -734,6 +742,12 @@ class Loaninstallments extends ApiController
 					$customer = $this->customers->find(array(
 						'nik'	=> $transaction['M']
 					));
+					if(!$customer){
+						$customer = (object) array(
+							'id'	=> 0,
+							'no_cif'	=> 0,
+						);
+					}
 					$status = null;
 					if( $transaction['W']=="X"){$status="L";}else{$status="N";}
 					$data = array(
@@ -762,6 +776,7 @@ class Loaninstallments extends ApiController
 					);
 					if($findTransaction = $this->mortages->find(array(
 						'no_sbk'	=>zero_fill( $transaction['A'], 5),
+						'id_unit'	=> $id_unit,
 					))){
 						$data['id'] = $findTransaction->id;
 						$bathUpdate[] = $data;
@@ -810,10 +825,6 @@ class Loaninstallments extends ApiController
 					if($findrepaymentmortage = $this->repaymentmortage->find(array(
 						'id_unit'		=> $unit,
 						'no_sbk'		=> zero_fill($repmortage['B'], 5),
-						'date_kredit'	=> date('Y-m-d', strtotime($repmortage['C'])),
-						'amount'		=> $repmortage['I'],
-						'capital_lease'	=> $repmortage['K'],
-						'permit'		=> $jok
 					))){
 						$data['id'] = $findrepaymentmortage->id;
 						$bathUpdate[]	= $data;

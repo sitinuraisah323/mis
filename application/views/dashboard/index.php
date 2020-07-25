@@ -85,11 +85,11 @@ $this->load->view('temp/MenuBar.php');
 								</div>
 								<div class="col-md-6">
 									<span class="kt-widget14__desc">
-										Os Nasional Tanggal <span class="date-today"></span> <span class="total-today"></span>
+										Os Nasional <span class="date-today"></span> <span class="total-today"></span>
 									</span>
 									<hr>
 									<span class="kt-widget14__desc">
-										Os Nasional Tanggal <span class="date-yesterday"></span> <span class="total-yesterday"></span>
+										Os Nasional <span class="date-yesterday"></span> <span class="total-yesterday"></span>
 									</span>
 								</div>
 							</div>
