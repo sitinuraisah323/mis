@@ -38,12 +38,12 @@ $this->load->view('temp/MenuBar.php');
                 </div>
                 <div class="kt-portlet__head-toolbar">
                     <div class="kt-portlet__head-wrapper">
-                            <a class="btn btn-brand btn-icon-sm" href="<?php echo base_url('datamaster/bookcash/form');?>">
+                            <!-- <a class="btn btn-brand btn-icon-sm" href="<?php echo base_url('datamaster/bookcash/form');?>">
                                 <i class="flaticon2-plus"></i> Buat Baru
-                            </a>
-                            <!-- <button type="button" class="btn btn-brand btn-icon-sm" data-toggle="modal" data-target="#modal_add">
+                            </a> -->
+                            <button type="button" class="btn btn-brand btn-icon-sm add" data-toggle="modal" data-target="#modal_add">
                                 <i class="flaticon2-plus"></i> Buat Baru      
-                            </button>   -->
+                            </button>  
                     </div>
                 </div>
             </div>
@@ -109,4 +109,5 @@ $this->load->view('temp/MenuBar.php');
 $this->load->view('temp/Footer.php', array(
 	'js'	=> 'datamaster/bookcash/js'
 ));
+$this->load->view('datamaster/bookcash/_add.php');
 ?>

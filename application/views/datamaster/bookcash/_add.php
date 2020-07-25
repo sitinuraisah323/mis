@@ -3,21 +3,98 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Transaksi Saldo Harian</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Saldo Unit</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 </button>
             </div>
-            <div class="modal-body form">
-                <form action="#" id="form_add" class="form-horizontal">
-                    <div class="form-body">
+            <div class="modal-body">
+            <div class="kt-portlet__body">  
                         <div class="row"> 
-                           
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label>Area</label>
-                                    <input type="text" class="form-control" id="add_area" name="area">	                            		
+                            <div class="col-md-6">   
+                                <div class="form-group row">                          
+                                    <!-- <label class="col-lg-4 col-form-label">Unit</label>
+                                    <div class="col-lg-8">
+                                        <input type="text" class="form-control form-control-sm" id="unit" name="unit">
+                                    </div> -->
+                                    <label class="col-lg-4 col-form-label">Kasir</label>
+                                    <div class="col-lg-8">
+                                        <input type="text" class="form-control form-control-sm" id="kasir" name="kasir">
+                                    </div>
+                                    <label class="col-lg-4 col-form-label">Tanggal</label>
+                                    <div class="col-lg-8">
+                                        <input type="date" class="form-control form-control-sm" id="date" name="date">
+                                    </div>
                                 </div>
-                            </div>    
+                            </div>  
+
+                            <div class="col-md-6">   
+                                <div class="form-group row">                          
+                                    <label class="col-lg-4 col-form-label">Saldo Awal</label>
+                                    <div class="col-lg-8">
+                                        <input type="text" class="form-control form-control-sm" id="saldoawal" name="saldoawal" onkeyup="hitung()">
+                                    </div>
+                                    <label class="col-lg-4 col-form-label">Penerimaan</label>
+                                    <div class="col-lg-4">
+                                        <input type="text" class="form-control form-control-sm" id="penerimaan" name="penerimaan" onkeyup="hitung()">
+                                    </div>
+                                    <div class="col-lg-4"></div>
+                                    <label class="col-lg-4 col-form-label">Pengeluaran</label>
+                                    <div class="col-lg-4">
+                                        <input type="text" class="form-control form-control-sm" id="pengeluaran" name="pengeluaran" onkeyup="hitung()">
+                                    </div>
+                                    <div class="col-lg-4"></div>
+                                    <label class="col-lg-4 col-form-label">Total Mutasi</label>
+                                    <div class="col-lg-8">
+                                        <input type="text" class="form-control form-control-sm" id="totmutasi" name="totmutasi" readonly>
+                                    </div>
+                                    <label class="col-lg-4 col-form-label">Saldo Akhir</label>
+                                    <div class="col-lg-8">
+                                        <input type="text" class="form-control form-control-sm" id="saldoakhir" name="saldoakhir" readonly>
+                                    </div>
+                                </div>
+                            </div> 
+
+                            <div class="col-md-12">    
+                                <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>                     
+                            </div> 
+
+                            <div class="col-md-6">    
+                                <b>Uang Kertas dan Plastik</b>  
+                                <table class="table" id="kertas">
+                                <tr>
+                                <th>Pecahan</th>
+                                <th>Jumlah</th>
+                                <th>Total</th>
+                                </tr>                                                            
+                                </table>                  
+                            </div> 
+
+                            <div class="col-md-6">    
+                                <b>Uang Logam</b>  
+                                <table class="table" id="logam">
+                                <tr>
+                                <th>Pecahan</th>
+                                <th>Jumlah</th>
+                                <th>Total</th>
+                                </tr>                                                               
+                                </table>                   
+                            </div>   
+
+                            <div class="col-md-12">    
+                                <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
+                                <div class="form-group row">                          
+                                    <label class="col-lg-2 col-form-label">Total</label>
+                                    <div class="col-lg-4">
+                                        <input type="text" class="form-control form-control-sm" id="total" name="total">
+                                    </div>
+                                    <label class="col-lg-2 col-form-label">Selisih</label>
+                                    <div class="col-lg-4">
+                                        <input type="text" class="form-control form-control-sm" id="selisih" name="selisih">
+                                    </div>                                    
+                                </div>    
+
+                            </div>
+
   
                             <div class="col-md-12" >     
                                 <div class="kt-section">
@@ -32,10 +109,10 @@
                                         </div>                   
                                     </div>                   
                                 </div>            
-                            </div>                             
+                            </div> 
+
                         </div>
-                    </div>
-                </form>
+            </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

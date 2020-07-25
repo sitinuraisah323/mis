@@ -27,6 +27,10 @@ $this->load->view('temp/MenuBar.php');
 <!-- begin:: Content -->
 <div class="kt-container  kt-grid__item kt-grid__item--fluid">
 		<div class="kt-portlet">
+		<span style="" class="kt-badge title-badge-form  kt-badge--primary kt-badge--inline kt-badge--pill">
+                    Hospitalization Care
+                </span>
+				
 	<div class="kt-portlet__body kt-portlet__body--fit">
 		<div class="kt-invoice-2">
 				
@@ -69,22 +73,22 @@ $this->load->view('temp/MenuBar.php');
                                 <tr>
                                     <td>Saldo Awal</td>
                                     <td></td>
-                                    <td class="kt-font-danger kt-font-lg"><input type="text" class="form-control" id="code_unit" name="code_unit"></td>
+                                    <td class="kt-font-danger kt-font-lg"><input type="text" class="form-control form-control-xs" id="code_unit" name="code_unit"></td>
                                 </tr>
                                 <tr>
                                     <td>Penerimaan</td>
-                                    <td><input type="text" class="form-control" id="code_unit" name="code_unit"></td>
+                                    <td><input type="text" class="form-control form-control-sm" id="code_unit" name="code_unit"></td>
                                     <td class="kt-font-danger kt-font-lg"></td>
                                 </tr>
                                 <tr>
                                     <td>Pengeluaran</td>
-                                    <td><input type="text" class="form-control" id="code_unit" name="code_unit"></td>
+                                    <td><input type="text" class="form-control form-control-xs" id="code_unit" name="code_unit"></td>
                                     <td class="kt-font-danger kt-font-lg"></td>
                                 </tr>
 								<tr>
                                     <td>Saldo Akhir</td>
                                     <td></td>
-                                    <td class="kt-font-danger kt-font-lg"><input type="text" class="form-control" id="code_unit" name="code_unit"></td>
+                                    <td class="kt-font-danger kt-font-lg"><input type="text" class="form-control input-sm" id="code_unit" name="code_unit"></td>
                                 </tr>
                             </tbody>
                         </table>

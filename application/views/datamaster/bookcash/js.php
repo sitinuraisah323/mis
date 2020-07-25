@@ -218,45 +218,162 @@ function initAlert(){
 }
 
 
-    //events
-    $("#input-form").on("submit",function(e){
-    	e.preventDefault();
-    	var id = $('[name="id"]').val();
-    	var url;
-    	if(id){
-    		url = "<?php echo base_url("api/datamaster/bookcash/update"); ?>";
-		}else{
-    		url = "<?php echo base_url("api/datamaster/bookcash/insert"); ?>";
-		}
-        $.ajax({
-            type : 'POST',
-            url : url,
-            data : $(this).serialize(),
-            dataType : "json",
-            success : function(data,status){
-				$('#modal_add').find('[name="id"]').val("");
-				$('#modal_add').find('[name="level"]').val("");
-                KTApp.unblock('#modal_add .modal-content');
-                if(data.status == true){
-                    datatable.reload();
-                    $('#modal_add').modal('hide');
-                    AlertUtil.showSuccess(data.message,5000);
-                }else{
-                    AlertUtil.showFailedDialogAdd(data.message);
-                }
-            },
-            error: function (jqXHR, textStatus, errorThrown){
-                KTApp.unblock('#modal_add .modal-content');
-                AlertUtil.showFailedDialogAdd("Cannot communicate with server please check your internet connection");
+//events
+$("#input-form").on("submit",function(e){
+    e.preventDefault();
+    var id = $('[name="id"]').val();
+    var url;
+    if(id){
+        url = "<?php echo base_url("api/datamaster/bookcash/update"); ?>";
+    }else{
+        url = "<?php echo base_url("api/datamaster/bookcash/insert"); ?>";
+    }
+    $.ajax({
+        type : 'POST',
+        url : url,
+        data : $(this).serialize(),
+        dataType : "json",
+        success : function(data,status){
+            $('#modal_add').find('[name="id"]').val("");
+            $('#modal_add').find('[name="level"]').val("");
+            KTApp.unblock('#modal_add .modal-content');
+            if(data.status == true){
+                datatable.reload();
+                $('#modal_add').modal('hide');
+                AlertUtil.showSuccess(data.message,5000);
+            }else{
+                AlertUtil.showFailedDialogAdd(data.message);
             }
-        });
+        },
+        error: function (jqXHR, textStatus, errorThrown){
+            KTApp.unblock('#modal_add .modal-content');
+            AlertUtil.showFailedDialogAdd("Cannot communicate with server please check your internet connection");
+        }
     });
+});
+
+function popAdd(el){
+    $('.rowappend_kertas').remove();
+    $('.rowappend_logam').remove();
+    //KTApp.block('#modal_add .kt-portlet__body', {});
+    $.ajax({
+			type : 'GET',
+			url : "<?php echo base_url("api/datamaster/Bookcash/get_type_money_kertas"); ?>",
+			dataType : "json",
+			//data:{nosbk:nosbk,unit:unit},
+			success : function(response,status){
+				KTApp.unblockPage();
+				if(response.status == true){
+					var template = '';
+					var no = 1;
+					//var saldo = up;
+					//var cicilan = 0;
+					$.each(response.data, function (index, data) {
+						template += "<tr class='rowappend_kertas'>";
+						template += "<td><input type='text' class='form-control form-control-sm pecahan' id='k_pecahan_"+no+"' name='k_pecahan[]' value="+data.amount+" readonly></td>";
+                        template += "<td><input type='text' class='form-control form-control-sm jumlah' id='k_jumlah_"+no+"' name='k_jumlah[]'></td>";
+						template += "<td><input type='text' class='form-control form-control-sm total' id='k_total_"+no+"' name='k_total[]' readonly></td>";
+						template += '</tr>';
+						no++;
+					});
+					$('#kertas').append(template);
+				}
+			},
+			error: function (jqXHR, textStatus, errorThrown){
+				KTApp.unblockPage();
+			},
+			complete:function () {
+				//KTApp.unblock('#modal_add .kt-portlet__body', {});
+			}
+		});
+
+        $.ajax({
+			type : 'GET',
+			url : "<?php echo base_url("api/datamaster/Bookcash/get_type_money_logam"); ?>",
+			dataType : "json",
+			//data:{nosbk:nosbk,unit:unit},
+			success : function(response,status){
+				KTApp.unblockPage();
+				if(response.status == true){
+					var template = '';
+					var no = 1;
+					//var saldo = up;
+					//var cicilan = 0;
+					$.each(response.data, function (index, data) {
+						template += "<tr class='rowappend_logam'>";
+						template += "<td><input type='text' class='form-control form-control-sm pecahan' id='l_pecahan_"+no+"' name='l_pecahan[]' value="+data.amount+" readonly></td>";
+                        template += "<td><input type='text' class='form-control form-control-sm jumlah' id='l_jumlah_"+no+"' name='l_jumlah[]'></td>";
+						template += "<td><input type='text' class='form-control form-control-sm total' id='l_total_"+no+"' name='l_total[]' readonly></td>";
+						template += '</tr>';
+						no++;
+					});
+					$('#logam').append(template);
+				}
+			},
+			error: function (jqXHR, textStatus, errorThrown){
+				KTApp.unblockPage();
+			},
+			complete:function () {
+				//KTApp.unblock('#modal_add .kt-portlet__body', {});
+			}
+		});
+}
+
+function hitung(){
+    //alert('test');
+    var saldoawal   = $("#saldoawal").val();
+    var penerimaan  = $("#penerimaan").val();
+    var pengeluaran = $("#pengeluaran").val();
+    var mutasi      = parseInt(penerimaan) - parseInt(pengeluaran);
+    var saldoakhir  = parseInt(saldoawal) - parseInt(mutasi);
+    document.getElementById("totmutasi").value = mutasi;
+    document.getElementById("saldoakhir").value = saldoakhir;
+}
+
+// function hitungkertas(){
+//     //alert('test');
+//     var i=1;
+//     for (i <= 8; i++;) {
+//         var kpi = $("#k_pecahan_"+i+"").val(); 
+//         var kji = $("#k_jumlah_"+i+"").val(); 
+//         var tot_i = parseInt(kpi) * parseInt(kji);
+//         $("#k_total_"+i+"").val(tot_i);
+//     }
+// }
 
 
 
 jQuery(document).ready(function() {
     initDataTable();
     initAlert();
+    $(document).on("click", ".add", function () {
+        var el = $(this);
+        popAdd(el);
+    });
 });
 
+$(document).on('change', '.jumlah', function(){
+    var thisElement = $(this);
+    var pecahan = thisElement.parents('tr').find('.pecahan').val();
+    var jumlah = thisElement.parents('tr').find('.jumlah').val();
+    thisElement.parents('tr').find('.total').val(parseInt(pecahan) * parseInt(jumlah));
+    calculateSum();
+    //var total = thisElement.parents('tr').find('.total').val();;
+    // var tot =0;
+    // tot +=total;
+    // alert(tot);
+});
+function calculateSum(){
+    var total = 0;
+    var selisih = 0;
+    var saldoakhir = $('[name="saldoakhir"]').val();
+    $('.total').each(function(index, value){
+        if($(this).val() > 0){
+            total += parseInt($(this).val());
+        }
+    });
+    selisih = parseInt(saldoakhir) - parseInt(total);
+    $('[name="total"]').val(total);
+    $('[name="selisih"]').val(selisih);
+}
 </script>
