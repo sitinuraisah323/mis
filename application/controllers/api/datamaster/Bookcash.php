@@ -9,6 +9,8 @@ class Bookcash extends ApiController
 		parent::__construct();
 		$this->load->model('BookCashModel', 'model');
 		$this->load->model('BookCashModelModel', 'money');
+		$this->load->model('FractionOfMoneyModel', 'fraction');
+		
 	}
 
 	public function index()
@@ -41,8 +43,13 @@ class Bookcash extends ApiController
 		if($post = $this->input->post()){
 			$this->load->library('form_validation');
 
-			$this->form_validation->set_rules('id_unit', 'Unit', 'required');
-
+			$this->form_validation->set_rules('kasir', 'kasir', 'required');
+			$this->form_validation->set_rules('date', 'date', 'required');
+			$this->form_validation->set_rules('saldoawal', 'saldoawal', 'required');
+			$this->form_validation->set_rules('saldoakhir', 'saldoakhir', 'required');
+			$this->form_validation->set_rules('penerimaan', 'penerimaan', 'required');
+			$this->form_validation->set_rules('pengeluaran', 'pengeluaran', 'required');
+			$this->form_validation->set_rules('totmutasi', 'totmutasi', 'required');
 
 			if ($this->form_validation->run() == FALSE)
 			{
@@ -55,37 +62,55 @@ class Bookcash extends ApiController
 			else
 			{
 				$data = array(
-					'total'	=> $post['total'],
-					'id_unit'	=> $post['id_unit'],
-					'timestamp'	=> date('Y-m-d H:i:s'),
+					'id_unit'				=> $post['id_unit'],
+					'date'					=> $post['date'],
+					'kasir'					=> $post['kasir'],
+					'amount_balance_first'	=> $post['saldoawal'],
+					'amount_in'				=> $post['penerimaan'],
+					'amount_out'			=> $post['pengeluaran'],
+					'amount_balance_final'	=> $post['saldoakhir'],
+					'amount_mutation'		=> $post['totmutasi'],
+					'total'					=> $post['total'],
+					'amount_gap'			=> $post['selisih'],
+					'timestamp'		=> date('Y-m-d H:i:s'),
 					'user_create'	=> $this->session->userdata('user')->id,
 					'user_update'	=> $this->session->userdata('user')->id,
 				);
+				
 				if($this->model->insert($data)){
-					$idUnitCashBook = $this->model->last()->id;
-					foreach ($post['fraction'] as $fraction){
-						$this->money->insert(array(
-							'id_unit_cash_book'	=> $idUnitCashBook,
-							'id_fraction_of_money'	=> $fraction['id_fraction_of_money'],
-							'amount'	=> $fraction['amount'],
-							'summary'	=> $fraction['summary'],
-							'user_create'	=> $this->session->userdata('user')->id,
-							'user_update'	=> $this->session->userdata('user')->id,
-						));
+					$idUnitCashBook = $this->model->last()->id;				
+
+					$kertas_pecahan = $post['k_pecahan'];
+					for ($i=0; $i < count($kertas_pecahan); $i++) {
+						$kertas['id_unit_cash_book'] 	= $idUnitCashBook;
+						$kertas['id_fraction_of_money'] = $post['k_fraction'][$i];
+						$kertas['amount'] 				= $kertas_pecahan[$i];
+						$kertas['summary'] 				= $post['k_jumlah'][$i];
+						$this->money->insert($kertas);
 					}
+
+					$logam_pecahan = $post['l_pecahan'];
+					for ($j=0; $j < count($logam_pecahan); $j++) {
+						$logam['id_unit_cash_book'] 	= $idUnitCashBook;
+						$logam['id_fraction_of_money'] 	= $post['l_fraction'][$j];
+						$logam['amount'] 				= $logam_pecahan[$j];
+						$logam['summary'] 				= $post['l_jumlah'][$j];
+						$this->money->insert($logam);
+					}
+
 					echo json_encode(array(
-						'data'	=> 	true,
-						'status'	=> true,
-						'message'	=> 'Successfull Insert Data Menu'
+								'data'	=> 	true,
+								'status'	=> true,
+								'message'	=> 'Successfull Insert Data Saldo'
 					));
+
 				}else{
 					echo json_encode(array(
-						'data'	=> 	false,
-						'status'	=> false,
-						'message'	=> 'Failed Insert Data Menu')
-					);
-				}
-
+							'data'	=> 	false,
+							'status'	=> false,
+							'message'	=> 'Failed Insert Data Menu')
+						);
+				}			
 			}
 		}else{
 			echo json_encode(array(
@@ -194,12 +219,8 @@ class Bookcash extends ApiController
 
 	public function get_type_money_kertas()
 	{
-		$this->money->db
-		    ->select('fraction_of_money.type as type')
-		    ->join('fraction_of_money','fraction_of_money.id=units_cash_book_money.id_fraction_of_money')
-			->where('fraction_of_money.type', 'KERTAS');
-		
-		$data = $this->money->all();
+		$this->fraction->db->where('type', 'KERTAS');		
+		$data = $this->fraction->all();
 		echo json_encode(array(
 			'data'	  => $data,
 			'status'  => true,
@@ -209,12 +230,8 @@ class Bookcash extends ApiController
 
 	public function get_type_money_logam()
 	{
-		$this->money->db
-		    ->select('fraction_of_money.type as type')
-		    ->join('fraction_of_money','fraction_of_money.id=units_cash_book_money.id_fraction_of_money')
-			->where('fraction_of_money.type', 'LOGAM');
-		
-		$data = $this->money->all();
+		$this->fraction->db->where('type', 'LOGAM');		
+		$data = $this->fraction->all();
 		echo json_encode(array(
 			'data'	  => $data,
 			'status'  => true,

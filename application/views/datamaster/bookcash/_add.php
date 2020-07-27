@@ -7,15 +7,27 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 </button>
             </div>
-            <div class="modal-body">
-            <div class="kt-portlet__body">  
+            <div class="modal-body form">
+                <form action="#" id="form_add" class="form-horizontal">
+                    <div class="form-body">
                         <div class="row"> 
                             <div class="col-md-6">   
-                                <div class="form-group row">                          
-                                    <!-- <label class="col-lg-4 col-form-label">Unit</label>
+                                <div class="form-group row">  
+
+                                <?php if($this->session->userdata('user')->level == 'administrator'):?>                                
+                                    <label class="col-lg-4 col-form-label">Units</label>
                                     <div class="col-lg-8">
-                                        <input type="text" class="form-control form-control-sm" id="unit" name="unit">
-                                    </div> -->
+                                        <select class="form-control form-control-sm select2" name="id_unit" id="id_unit">
+                                            <option value="">Pilih Unit</option>
+                                            <?php foreach ($units as $unit):?>
+                                                <option value="<?php echo $unit->id;?>"><?php echo $unit->name;?></option>
+                                            <?php endforeach;?>
+                                        </select>
+                                        <br/><br/>
+                                    </div>                                 
+                                <?php else:?>
+                                    <input type="hidden" class="form-control form-control-sm" name="id_unit" value="<?php echo $this->session->userdata('user')->id_unit;?>">
+                                <?php endif;?>                                    
                                     <label class="col-lg-4 col-form-label">Kasir</label>
                                     <div class="col-lg-8">
                                         <input type="text" class="form-control form-control-sm" id="kasir" name="kasir">
@@ -95,11 +107,10 @@
 
                             </div>
 
-  
                             <div class="col-md-12" >     
                                 <div class="kt-section">
                                     <div class="kt-section__content">
-                                         <div class="alert alert-danger fade show" role="alert" id="failed_alert_add" style="display: none;">
+                                            <div class="alert alert-danger fade show" role="alert" id="failed_alert_add" style="display: none;">
                                             <div class="alert-text" id="failed_message_add"></div>
                                             <div class="alert-close">
                                                 <button type="button" class="close" aria-label="Close" id="failed_alert_dismiss_add">
@@ -110,14 +121,31 @@
                                     </div>                   
                                 </div>            
                             </div> 
-
                         </div>
+
+                        <div class="col-md-12" >     
+                            <div class="kt-section">
+                                <div class="kt-section__content">
+                                        <div class="alert alert-danger fade show" role="alert" id="failed_alert_add" style="display: none;">
+                                        <div class="alert-text" id="failed_message_add"></div>
+                                        <div class="alert-close">
+                                            <button type="button" class="close" aria-label="Close" id="failed_alert_dismiss_add">
+                                                <span aria-hidden="true"><i class="la la-close"></i></span>
+                                            </button>
+                                        </div>
+                                    </div>                   
+                                </div>                   
+                            </div>            
+                        </div>
+                    </div>
+                </form>
             </div>
-            </div>
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" id="btn_add_submit">Submit</button>
             </div>
+           
         </div>
     </div>
 </div>

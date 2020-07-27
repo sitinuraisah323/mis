@@ -434,6 +434,10 @@ function saldo() {
 	$('svg').remove();
 	$('#graphSaldo').empty();
 	var transaction = [];
+	var dateToday = "<?php echo  date('yyy-m-d', strtotime('-1 days', strtotime($date)));?>";
+	var dateYesterday = "<?php echo  date('yyy-m-d', strtotime('-1 days', strtotime($date)))?>";
+	var totalYesterday = 0;
+	var totalToday = 0;
 	//var currdate = '2020-07-20';
 	KTApp.block('#form_saldo .kt-widget14', {});
 	$.ajax({
@@ -442,7 +446,7 @@ function saldo() {
 		dataType:"JSON",
 		data:{
 			area:'',
-			date:currdate,
+			date:dateToday,
 		},
 		success:function (response) {
 			$.each(response.data, function (index,unit) {
@@ -450,9 +454,12 @@ function saldo() {
 					y:unit.name,
 					a:unit.amount
 				})
+				totalToday +=parseInt(unit.amount);
 			});
 		},
 		complete:function () {
+			$('#form_saldo').find('.total-today').text('Rp. '+convertToRupiah(totalToday));
+			$('#form_saldo').find('.date-today').text(dateToday);
 			var data = transaction,
 					//config manager
 					config = {
@@ -490,6 +497,10 @@ function dpd() {
 	$('svg').remove();
 	$('#graphDPD').empty();
 	var transaction = [];
+	var dateToday = "<?php echo  date('d', strtotime('-1 days', strtotime($date)));?>";
+	var dateYesterday = "<?php echo  date('d', strtotime('-2 days', strtotime($date)))?>";
+	var totalYesterday = 0;
+	var totalToday = 0;
 	KTApp.block('#form_dpd .kt-widget14', {});
 	$.ajax({
 		url:"<?php echo base_url('api/dashboards/dpd');?>",
@@ -497,17 +508,20 @@ function dpd() {
 		dataType:"JSON",
 		data:{
 			area:'',
-			date:currdate,
+			date:dateToday,
 		},
 		success:function (response) {
-			$.each(response.data, function (index,unit) {
+			$.each(response.data, function (index,unit) {				
 				transaction.push({
 					y:unit.name,
 					a:unit.up
 				})
+				totalToday +=parseInt(unit.up);
 			});
 		},
 		complete:function () {
+			$('#form_dpd').find('.total-today').text('Rp. '+convertToRupiah(totalToday));
+			$('#form_dpd').find('.date-today').text(currdate);	
 			var data = transaction,
 					//config manager
 					config = {
@@ -539,6 +553,29 @@ function dpd() {
 		},
 	});
 
+	$.ajax({
+		url:"<?php echo base_url('api/dashboards/dpd');?>",
+		type:"GET",
+		dataType:"JSON",
+		data:{
+			area:'',
+			date:dateYesterday,
+		},
+		success:function (response) {
+			$.each(response.data, function (index,unit) {				
+				transaction.push({
+					y:unit.name,
+					a:unit.up
+				})
+				totalYesterday +=parseInt(unit.up);
+			});
+		},
+		complete:function () {
+			$('#form_dpd').find('.total-yesterday').text('Rp. '+convertToRupiah(totalYesterday));
+			$('#form_dpd').find('.date-yesterday').text(lastdate);
+		},
+	});
+
 }
 
 function disburse() {
@@ -566,11 +603,12 @@ function disburse() {
 					y: unit.name,
 					a: unit.amount
 				})
+				
 			});
 		},
 		complete: function () {
-			$('#form_disburse').find('.total-today').text(totalToday);
-			$('#form_disburse').find('.date-today').text(lastdate);
+			$('#form_disburse').find('.total-today').text('Rp. '+convertToRupiah(totalToday));
+			$('#form_disburse').find('.date-today').text(currdate);			
 			var data = transaction,
 					//config manager
 					config = {
@@ -619,7 +657,7 @@ function disburse() {
 			});
 		},
 		complete:function () {
-			$('#form_disburse').find('.total-yesterday').text(totalYesterday);
+			$('#form_disburse').find('.total-yesterday').text('Rp. '+convertToRupiah(totalYesterday));
 			$('#form_disburse').find('.date-yesterday').text(lastdate);
 		},
 

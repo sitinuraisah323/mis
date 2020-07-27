@@ -27,7 +27,9 @@ class Bookcash extends Authenticated
 	 */
 	public function index()
 	{
-		$this->load->view('datamaster/bookcash/index');
+		$this->load->view('datamaster/bookcash/index',array(
+			'units'	=> $this->units->all(),
+		));
 	}
 
 	public function form($id = null)

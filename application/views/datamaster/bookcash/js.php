@@ -5,6 +5,14 @@ var AlertUtil;
 var createForm;
 var editForm;
 
+function convertToRupiah(angka)
+{
+	var rupiah = '';		
+	var angkarev = angka.toString().split('').reverse().join('');
+	for(var i = 0; i < angkarev.length; i++) if(i%3 == 0) rupiah += angkarev.substr(i,3)+'.';
+	return rupiah.split('',rupiah.length-1).reverse().join('');
+}
+
 function initDTEvents(){
     $(".btn_delete").on("click",function(){
         var targetId = $(this).data("id");
@@ -112,17 +120,65 @@ function initDataTable(){
                 textAlign: 'left',
             },
             {
-                field: 'timestamp',
-                title: 'Tanggal Diinput',
+                field: 'date',
+                title: 'Tanggal',
                 sortable: 'asc',
                 textAlign: 'left',
             },
-			  {
-				  field: 'total',
-				  title: 'Total',
-				  sortable: 'asc',
-				  textAlign: 'left',
-			  },
+            {
+                field: 'kasir',
+                title: 'Kasir',
+                sortable: 'asc',
+                textAlign: 'left',
+            },
+            {
+                field: 'amount_balance_first',
+                title: 'Saldo Awal',
+                sortable: 'asc',
+                textAlign: 'left',
+                template: function (row) {
+                    var result = "<div class='date-td'>";
+                    result =convertToRupiah(row.amount_balance_first);
+                    result = result + "</div>";
+                    return result;
+                }
+            },
+            {
+                field: 'amount_in',
+                title: 'Penerimaan',
+                sortable: 'asc',
+                textAlign: 'left',
+                template: function (row) {
+                    var result = "<div class='date-td'>";
+                    result =convertToRupiah(row.amount_balance_first);
+                    result = result + "</div>";
+                    return result;
+                }
+            },
+            {
+                field: 'amount_out',
+                title: 'Pengeluaran',
+                sortable: 'asc',
+                textAlign: 'left',
+                template: function (row) {
+                    var result = "<div class='date-td'>";
+                    result =convertToRupiah(row.amount_out);
+                    result = result + "</div>";
+                    return result;
+                }
+            },
+            {
+                field: 'amount_balance_final',
+                title: 'Saldo Akhir',
+                sortable: 'asc',
+                textAlign: 'left',
+                template: function (row) {
+                    var result = "<div class='date-td'>";
+                    result =convertToRupiah(row.amount_balance_final);
+                    result = result + "</div>";
+                    return result;
+                }
+            },
             {
                 field: 'action',
                 title: 'Action',
@@ -134,7 +190,7 @@ function initDataTable(){
                 template: function (row) {
                     var result ="";
 						result = result + '<span data-id="' + row.id + '" href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md btn_edit" title="View" ><i class="flaticon-eye" style="cursor:pointer;"></i></span>';
-						result = result + '<a data-id="' + row.id + '" href="<?php echo base_url('datamaster/bookcash/form/');?>'+row.id+'" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Edit" ><i class="flaticon-edit-1" style="cursor:pointer;"></i></a>';
+						//result = result + '<a data-id="' + row.id + '" href="<?php //echo base_url('datamaster/bookcash/form/');?>'+row.id+'" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Edit" ><i class="flaticon-edit-1" style="cursor:pointer;"></i></a>';
                         result = result + '<span data-id="' + row.id + '" href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md btn_delete" title="Delete" ><i class="flaticon2-trash" style="cursor:pointer;"></i></span>';
                     return result;
                 }
@@ -217,25 +273,51 @@ function initAlert(){
     })
 }
 
+function initCariForm(){
+
+    // var validator = $("#form_add").validate({
+    //     ignore:[],
+    //     rules: {
+    //         kasir: {
+    //             kasir: true,
+    //         },
+    //         date: {
+    //             date: true,
+    //         },
+    //         saldoawal: {
+    //             saldoawal: true,
+    //         },
+    //         penerimaan: {
+    //             penerimaan: true,
+    //         },
+    //         pengeluaran: {
+    //             pengeluaran: true,
+    //         }, 
+    //         saldoakhir: {
+    //             saldoakhir: true,
+    //         }
+    //     },
+    //     invalidHandler: function(event, validator) {
+    //         KTUtil.scrollTop();
+    //     }
+    // });
+
+    $('#id_unit').select2({
+        placeholder: "Please select a Unit",
+        width: '100%'
+    }); 
 
 //events
-$("#input-form").on("submit",function(e){
-    e.preventDefault();
-    var id = $('[name="id"]').val();
-    var url;
-    if(id){
-        url = "<?php echo base_url("api/datamaster/bookcash/update"); ?>";
-    }else{
-        url = "<?php echo base_url("api/datamaster/bookcash/insert"); ?>";
-    }
+$('#btn_add_submit').on('click',function(){
+    var isValid = $( "#form_add" ).valid();
+      if(isValid){
+        KTApp.block('#modal_add .modal-content', {});
     $.ajax({
         type : 'POST',
-        url : url,
-        data : $(this).serialize(),
+        url : "<?php echo base_url("api/datamaster/bookcash/insert"); ?>",
+        data : $('#form_add').serialize(),
         dataType : "json",
         success : function(data,status){
-            $('#modal_add').find('[name="id"]').val("");
-            $('#modal_add').find('[name="level"]').val("");
             KTApp.unblock('#modal_add .modal-content');
             if(data.status == true){
                 datatable.reload();
@@ -250,7 +332,16 @@ $("#input-form").on("submit",function(e){
             AlertUtil.showFailedDialogAdd("Cannot communicate with server please check your internet connection");
         }
     });
-});
+      }
+})
+
+// $('#modal_add').on('hidden.bs.modal', function () {
+//        validator.resetForm();
+//     })
+// return {
+//         validator:validator
+//     }
+}
 
 function popAdd(el){
     $('.rowappend_kertas').remove();
@@ -270,7 +361,7 @@ function popAdd(el){
 					//var cicilan = 0;
 					$.each(response.data, function (index, data) {
 						template += "<tr class='rowappend_kertas'>";
-						template += "<td><input type='text' class='form-control form-control-sm pecahan' id='k_pecahan_"+no+"' name='k_pecahan[]' value="+data.amount+" readonly></td>";
+						template += "<td><input type='text' class='form-control form-control-sm pecahan' id='k_pecahan_"+no+"' name='k_pecahan[]' value="+data.amount+" readonly><input type='hidden' class='form-control form-control-sm pecahan' id='k_fraction_"+no+"' name='k_fraction[]' value="+data.id+" readonly></td>";
                         template += "<td><input type='text' class='form-control form-control-sm jumlah' id='k_jumlah_"+no+"' name='k_jumlah[]'></td>";
 						template += "<td><input type='text' class='form-control form-control-sm total' id='k_total_"+no+"' name='k_total[]' readonly></td>";
 						template += '</tr>';
@@ -301,7 +392,7 @@ function popAdd(el){
 					//var cicilan = 0;
 					$.each(response.data, function (index, data) {
 						template += "<tr class='rowappend_logam'>";
-						template += "<td><input type='text' class='form-control form-control-sm pecahan' id='l_pecahan_"+no+"' name='l_pecahan[]' value="+data.amount+" readonly></td>";
+						template += "<td><input type='text' class='form-control form-control-sm pecahan' id='l_pecahan_"+no+"' name='l_pecahan[]' value="+data.amount+" readonly><input type='hidden' class='form-control form-control-sm pecahan' id='l_fraction_"+no+"' name='l_fraction[]' value="+data.id+" readonly></td>";
                         template += "<td><input type='text' class='form-control form-control-sm jumlah' id='l_jumlah_"+no+"' name='l_jumlah[]'></td>";
 						template += "<td><input type='text' class='form-control form-control-sm total' id='l_total_"+no+"' name='l_total[]' readonly></td>";
 						template += '</tr>';
@@ -320,32 +411,25 @@ function popAdd(el){
 }
 
 function hitung(){
-    //alert('test');
     var saldoawal   = $("#saldoawal").val();
     var penerimaan  = $("#penerimaan").val();
     var pengeluaran = $("#pengeluaran").val();
     var mutasi      = parseInt(penerimaan) - parseInt(pengeluaran);
     var saldoakhir  = parseInt(saldoawal) - parseInt(mutasi);
-    document.getElementById("totmutasi").value = mutasi;
-    document.getElementById("saldoakhir").value = saldoakhir;
+    if(!isNaN(mutasi)){
+        $('[name="totmutasi"]').val(mutasi);
+    }
+    if(!isNaN(saldoakhir)){
+        $('[name="saldoakhir"]').val(saldoakhir);
+    }
 }
-
-// function hitungkertas(){
-//     //alert('test');
-//     var i=1;
-//     for (i <= 8; i++;) {
-//         var kpi = $("#k_pecahan_"+i+"").val(); 
-//         var kji = $("#k_jumlah_"+i+"").val(); 
-//         var tot_i = parseInt(kpi) * parseInt(kji);
-//         $("#k_total_"+i+"").val(tot_i);
-//     }
-// }
-
 
 
 jQuery(document).ready(function() {
     initDataTable();
     initAlert();
+    initCariForm();
+
     $(document).on("click", ".add", function () {
         var el = $(this);
         popAdd(el);
@@ -358,11 +442,8 @@ $(document).on('change', '.jumlah', function(){
     var jumlah = thisElement.parents('tr').find('.jumlah').val();
     thisElement.parents('tr').find('.total').val(parseInt(pecahan) * parseInt(jumlah));
     calculateSum();
-    //var total = thisElement.parents('tr').find('.total').val();;
-    // var tot =0;
-    // tot +=total;
-    // alert(tot);
 });
+
 function calculateSum(){
     var total = 0;
     var selisih = 0;
