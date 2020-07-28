@@ -170,7 +170,6 @@ function initCariForm(){
 			$('#form_outstanding').find('.total-yesterday').text('Rp. '+convertToRupiah(yesterday));
 			$('#form_outstanding').find('.date-today').text(currdate);
 			$('#form_outstanding').find('.date-yesterday').text(lastdate);
-			console.log(transaction);
 			var data = transaction,
 					//config manager
 					config = {
@@ -206,6 +205,32 @@ function initCariForm(){
 function pencairan() {
 	$('svg').remove();
     $('#graphPencairan').empty();
+	var totalCurr = 0;
+	var totalLast = 0;
+
+	$.ajax({
+		url:"<?php echo base_url('api/dashboards/pencairandashboard');?>",
+		type:"GET",
+		dataType:"JSON",
+		data:{
+			area:'',
+			date:lastdate,
+		},
+		success:function (response) {
+			$.each(response.data, function (index,unit) {
+				transaction.push({
+					y:unit.name,
+					a:unit.amount
+				});
+				totalLast += parseInt(unit.amount);
+			});
+		},
+		complete:function () {
+			$('#form_pencairan').find('.date-yesterday').text(lastdate);
+			$('#form_pencairan').find('.total-yesterday').text(totalLast);
+		},
+	});
+
 	//var currdate = '2020-07-20';
 	var transaction = [];
 	KTApp.block('#form_pencairan .kt-widget14', {});
@@ -222,11 +247,13 @@ function pencairan() {
 				transaction.push({
 					y:unit.name,
 					a:unit.amount
-				})
+				});
+				totalCurr += unit.amount;
 			});
 		},
 		complete:function () {
-			console.log(transaction);
+			$('#form_pencairan').find('.date-today').text(currdate);
+			$('#form_pencairan').find('.total-today').text(totalCurr);
 			var data = transaction,
 					//config manager
 					config = {
@@ -265,7 +292,34 @@ function pelunasan() {
 	$('svg').remove();
 	$('#graphPelunasan').empty();
 	//var currdate = '2020-07-20';
+	var totalCurr = 0;
+	var totalLast = 0;
 	var transaction = [];
+	$.ajax({
+		url:"<?php echo base_url('api/dashboards/pelunasandashboard');?>",
+		type:"GET",
+		dataType:"JSON",
+		data:{
+			area:'',
+			date:lastdate,
+		},
+		success:function (response) {
+			$.each(response.data, function (index,unit) {
+				transaction.push({
+					y:unit.name,
+					a:unit.amount
+				});
+				totalLast += parseInt(unit.amount);
+			});
+		},
+		complete:function () {
+			$('#form_pelunasan').find('.total-yesterday').text('Rp.'+totalLast);
+			$('#form_pelunasan').find('.date-yesterday').text(lastdate);
+		},
+	});
+
+
+
 	KTApp.block('#form_pelunasan .kt-widget14', {});
 	$.ajax({
 		url:"<?php echo base_url('api/dashboards/pelunasandashboard');?>",
@@ -280,10 +334,13 @@ function pelunasan() {
 				transaction.push({
 					y:unit.name,
 					a:unit.amount
-				})
+				});
+				totalCurr += parseInt(unit.amount);
 			});
 		},
 		complete:function () {
+			$('#form_pelunasan').find('.total-today').text('Rp.'+totalCurr);
+			$('#form_pelunasan').find('.date-today').text(currdate);
 			var data = transaction,
 					//config manager
 					config = {
@@ -322,6 +379,7 @@ function pendapatan() {
 	$('svg').remove();
 	$('#graphPendapatan').empty();
 	//var currdate = '2020-07-20';
+	var total = 0;
 	KTApp.block('#form_pendapatan .kt-widget14', {});
 	var transaction = [];
 	$.ajax({
@@ -330,17 +388,20 @@ function pendapatan() {
 		dataType:"JSON",
 		data:{
 			area:'',
-			date:currdate,
+			month:currmonth,
 		},
 		success:function (response) {
 			$.each(response.data, function (index,unit) {
 				transaction.push({
 					y:unit.name,
 					a:unit.amount
-				})
+				});
+				total += parseInt(unit.amount);
 			});
 		},
 		complete:function () {
+			$('#form_pendapatan').find('.date-today').text(currdate);
+			$('#form_pendapatan').find('.date-today').text('Rp.'+total);
 			var data = transaction,
 					//config manager
 					config = {
@@ -377,6 +438,7 @@ function pendapatan() {
 function pengeluaran() {
 	$('svg').remove();
 	$('#graphPengeluaran').empty();
+	var total = 0;
 	//var currdate = '2020-07-20';
 	var transaction = [];
 	KTApp.block('#form_pengeluaran .kt-widget14', {});
@@ -386,7 +448,7 @@ function pengeluaran() {
 		dataType:"JSON",
 		data:{
 			area:'',
-			date:currdate,
+			month:currmonth,
 		},
 		success:function (response) {
 			$.each(response.data, function (index,unit) {
@@ -394,9 +456,12 @@ function pengeluaran() {
 					y:unit.name,
 					a:unit.amount
 				})
+				total += parseInt(unit.amount);
 			});
 		},
 		complete:function () {
+			$('#form_pengeluaran').find('.date-today').text(currdate);
+			$('#form_pengeluaran').find('.total-today').text('Rp.'+total);
 			var data = transaction,
 					//config manager
 					config = {
@@ -434,6 +499,8 @@ function saldo() {
 	$('svg').remove();
 	$('#graphSaldo').empty();
 	var transaction = [];
+	var totalCurr = 0;
+	var totalLast = 0;
 	//var currdate = '2020-07-20';
 	KTApp.block('#form_saldo .kt-widget14', {});
 	$.ajax({
@@ -442,17 +509,20 @@ function saldo() {
 		dataType:"JSON",
 		data:{
 			area:'',
-			date:currdate,
+			month:currmonth,
 		},
 		success:function (response) {
 			$.each(response.data, function (index,unit) {
 				transaction.push({
 					y:unit.name,
 					a:unit.amount
-				})
+				});
+				totalCurr += parseInt(unit.amount);
 			});
 		},
 		complete:function () {
+			$('#form_saldo').find('.total-today').text('Rp. '+convertToRupiah(totalCurr));
+			$('#form_saldo').find('.date-today').text(currdate);
 			var data = transaction,
 					//config manager
 					config = {
@@ -490,6 +560,7 @@ function dpd() {
 	$('svg').remove();
 	$('#graphDPD').empty();
 	var transaction = [];
+	var total = 0;
 	KTApp.block('#form_dpd .kt-widget14', {});
 	$.ajax({
 		url:"<?php echo base_url('api/dashboards/dpd');?>",
@@ -504,10 +575,13 @@ function dpd() {
 				transaction.push({
 					y:unit.name,
 					a:unit.up
-				})
+				});
+				total += parseInt(unit.up);
 			});
 		},
 		complete:function () {
+			$('#form_dpd').find('.date-today').text(currdate);
+			$('#form_dpd').find('.total-today').text('Rp.'+total);
 			var data = transaction,
 					//config manager
 					config = {
@@ -546,7 +620,7 @@ function disburse() {
 	$('#graphDisburse').empty();
 	var transaction = [];
 	var dateToday = "<?php echo  date('d', strtotime('-1 days', strtotime($date)));?>";
-	var dateYesterday = "<?php echo  date('d', strtotime('-1 days', strtotime($date)))?>";
+	var dateYesterday = "<?php echo  date('d', strtotime('-2 days', strtotime($date)))?>";
 	//var currdate = '20';
 	var totalYesterday = 0;
 	var totalToday = 0;
@@ -564,13 +638,14 @@ function disburse() {
 				totalToday += unit.amount;
 				transaction.push({
 					y: unit.name,
-					a: unit.amount
+					a: unit.amount,
+					area:unit.id_area
 				})
 			});
 		},
 		complete: function () {
 			$('#form_disburse').find('.total-today').text(totalToday);
-			$('#form_disburse').find('.date-today').text(lastdate);
+			$('#form_disburse').find('.date-today').text(currdate);
 			var data = transaction,
 					//config manager
 					config = {
@@ -587,12 +662,13 @@ function disburse() {
 						gridTextColor: '#5cb85c',
 						verticalGrid: true,
 						hideHover: 'auto',
-						barColors: ['#3578FC', '#FF0000', '#FFD500']
+						barColors: ['#3578FC', '#FF0000', '#FFD500'],
 						// barColors: function (row, series, type) {
-						//     if (row.label == "Low") return "#3578FC";
-						//     else if (row.label == "Medium") return "#FFD500";
-						//     else if (row.label == "High") return "#FF0000";
-						//     else if (row.label == "Fatal") return "#000000";
+						//     if (data[no].area == 1) return "#e2f53b";
+						//     else if (data[no].area == 2) return "#FFD500";
+						//     else if (data[no].area == 3) return "#FF0000";
+						//     else if (data[no].area == 4) return "#000000";
+						// 	else  return '#2370b8';
 						// }
 					};
 			//config element name

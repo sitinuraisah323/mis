@@ -80,7 +80,7 @@ class Employees extends ApiController
 				$data = array(
 					'marital'	=> $post['marital'],
 					'nik'	=> $post['nik'],
-					'id_unit'	=> $post['id_unit'],
+					'id_unit'	=> array_key_exists("id_unit",$post) ? $post['id_unit'] : '',
 					'fullname'	=> $post['fullname'],
 					'birth_place'	=> $post['birth_place'],
 					'birth_date'	=> $post['birth_date'],
@@ -97,8 +97,8 @@ class Employees extends ApiController
 					//insert to user
 					$this->users->insert(array(
 						'id_level'	=> $post['id_level'],
-						'id_unit'	=> $post['id_unit'],
-						'id_area'	=> $post['id_area'],
+						'id_unit'	=> array_key_exists("id_unit",$post) ? $post['id_unit'] : '',
+						'id_area'	=> array_key_exists("id_area",$post) ? $post['id_area'] : '',
 						'id_employee'	=> $idEmployee,
 						'username'	=> $post['username'],
 						'email'	=> $post['email'],
@@ -159,7 +159,7 @@ class Employees extends ApiController
 			{
 				$id = $post['id'];
 				$data = array(
-					'id_unit'	=> $post['id_unit'],
+					'id_unit'	=>  array_key_exists("id_unit",$post) ? $post['id_unit'] : '',
 					'fullname'	=> $post['fullname'],
 					'nik'	=> $post['nik'],
 					'birth_place'	=> $post['birth_place'],
@@ -179,10 +179,10 @@ class Employees extends ApiController
 					if($post['password']){
 						$this->users->update(array(
 							'id_level'	=> $post['id_level'],
-							'id_unit'	=> $post['id_unit'],
+							'id_unit'	=>  array_key_exists("id_unit",$post) ? $post['id_unit'] : '',
 							'id_employee'	=> $idEmployee,
 							'username'	=> $post['username'],
-							'id_area'	=> $post['id_area'],
+							'id_area'	=>  array_key_exists("id_area",$post) ? $post['id_area'] : '',
 							'email'	=> $post['email'],
 							'password'	=> password_hash($post['password'],PASSWORD_DEFAULT),
 							'user_create'	=> $this->session->userdata('user')->id,

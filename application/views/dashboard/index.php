@@ -111,16 +111,28 @@ $this->load->view('temp/MenuBar.php');
         <div class="row">
             <div class="col-xl-6 col-lg-6">
                 <!--begin:: Widgets-->
-                <form id="form_saldo" class="form-horizontal">
+                <form id="form_dpd" class="form-horizontal">
                 <div class="kt-portlet kt-portlet--height-fluid">
                     <div class="kt-widget14">
                         <div class="kt-widget14__header kt-margin-b-30">
-                            <h3 class="kt-widget14__title">
-                            <i class="fa fa-chart-bar"></i> Day Past Due(DPD) Nasional             
-                            </h3>
-                            <span class="kt-widget14__desc">
-							Graph performance each unit of nasional day past due(DPD)
-                            </span>
+                        <div class="row">
+                            <div class="col-md-6">
+                                    <h3 class="kt-widget14__title">
+                                    <i class="fa fa-chart-bar"></i> Day Past Due(DPD) Nasional             
+                                    </h3>
+                                    <span class="kt-widget14__desc">
+                                    Graph performance each unit of nasional day past due(DPD)
+                                    </span>
+                                </div>
+                            <div class="col-md-6">
+                                    <span class="kt-widget14__desc">
+										DPD Nasional <span class="date-today"></span> <span class="total-today"></span>
+									</span>
+									<hr>
+                            </div>
+                        </div>
+                          
+                        
                         </div>
                         <div class="kt-widget11">
                                 <div id="graphDPD" style="height:300px;"></div>                           
@@ -136,12 +148,23 @@ $this->load->view('temp/MenuBar.php');
                     <div class="kt-portlet kt-portlet--height-fluid">
                         <div class="kt-widget14">
                             <div class="kt-widget14__header kt-margin-b-30">
-                                <h3 class="kt-widget14__title">
-                                <i class="fa fa-chart-bar"></i> Saldo Kas Nasional             
-                                </h3>
-                                <span class="kt-widget14__desc">
-                                Graph performance each unit of nasional saldo
-                                </span>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h3 class="kt-widget14__title">
+                                    <i class="fa fa-chart-bar"></i> Saldo Kas Nasional             
+                                    </h3>
+                                    <span class="kt-widget14__desc">
+                                    Graph performance each unit of nasional saldo
+                                    </span>
+                                </div>
+                                <div class="col-md-6">
+									<span class="kt-widget14__desc">
+										Total Saldo <span class="date-today"></span> <span class="total-today"></span>
+									</span>
+									<hr>
+								</div>
+                            </div>
+                               
                             </div>
                             <div class="kt-widget11">
                                 <div id="graphSaldo" style="height:300px;"></div>                           
@@ -161,13 +184,26 @@ $this->load->view('temp/MenuBar.php');
                 <form id="form_pencairan" class="form-horizontal">
                 <div class="kt-portlet kt-portlet--height-fluid">
                     <div class="kt-widget14">
-                        <div class="kt-widget14__header kt-margin-b-30">
-                            <h3 class="kt-widget14__title">
-                            <i class="fa fa-chart-bar"></i> Pencairan Nasional             
-                            </h3>
-                            <span class="kt-widget14__desc">
-							Graph performance each unit of nasional pencairan
-                            </span>
+                        <div class="kt-widget14__header kt-margin-b-30">                           
+                            <div class="row">
+                                <div class="col-md-6">
+                                   <h3 class="kt-widget14__title">
+                                        <i class="fa fa-chart-bar"></i> Pencairan Gadai Reguler             
+                                    </h3>
+                                    <span class="kt-widget14__desc">
+                                        Graph performance each unit of nasional pencairan Gadai Reguler
+                                    </span>
+                                </div>
+                                 <div class="col-md-6">
+									<span class="kt-widget14__desc">
+										Gadai Reguler <span class="date-today"></span> <span class="total-today"></span>
+									</span>
+									<hr>
+									<span class="kt-widget14__desc">
+                                        Gadai Reguler <span class="date-yesterday"></span> <span class="total-yesterday"></span>
+									</span>
+								</div>
+                            </div>
                         </div>                        
                         <div class="kt-widget11">
                             <div id="graphPencairan" style="height:300px;"></div>                           
@@ -183,12 +219,25 @@ $this->load->view('temp/MenuBar.php');
                 <div class="kt-portlet kt-portlet--height-fluid">
                     <div class="kt-widget14">
                         <div class="kt-widget14__header kt-margin-b-30">
-                            <h3 class="kt-widget14__title">
-                            <i class="fa fa-chart-bar"></i> Pelunasan Nasional             
-                            </h3>
-                            <span class="kt-widget14__desc">
-							Graph performance each unit of nasional payment
-                            </span>
+                            <div class="row">
+                                <div class="col-md-6">
+                                <h3 class="kt-widget14__title">
+                                   <i class="fa fa-chart-bar"></i> Pelunasan             
+                                </h3>
+                                <span class="kt-widget14__desc">
+                                   Graph performance each unit of Pelunasan
+                                </span>
+                                </div>
+                                <div class="col-md-6">
+									<span class="kt-widget14__desc">
+										Pelunasan <span class="date-today"></span> <span class="total-today"></span>
+									</span>
+									<hr>
+									<span class="kt-widget14__desc">
+                                        Pelunasan <span class="date-yesterday"></span> <span class="total-yesterday"></span>
+									</span>
+								</div>
+                            </div>
                         </div>
                         <div class="kt-widget11">
                             <div id="graphPelunasan" style="height:300px;"></div>                           
@@ -208,14 +257,24 @@ $this->load->view('temp/MenuBar.php');
                 <form id="form_pengeluaran" class="form-horizontal">
                 <div class="kt-portlet kt-portlet--height-fluid">
                     <div class="kt-widget14">
-                        <div class="kt-widget14__header kt-margin-b-30">
-                            <h3 class="kt-widget14__title">
-                            <i class="fa fa-chart-bar"></i> Pengeluaran Nasional             
-                            </h3>
-                            <span class="kt-widget14__desc">
-							Graph performance each unit of nasional cash out
-                            </span>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="kt-widget14__header kt-margin-b-30">
+                                <h3 class="kt-widget14__title">
+                                <i class="fa fa-chart-bar"></i> Pengeluaran             
+                                </h3>
+                                <span class="kt-widget14__desc">
+                                Graph performance each unit of cash out
+                                </span>
+                            </div>                       
                         </div>
+                        <div class="col-md-6">
+                            <span class="kt-widget14__desc">
+                                Pengeluaran <span class="date-today"></span> <span class="total-today"></span>
+                            </span>
+                            <hr>
+                        </div>
+                    </div>
                         <div class="kt-widget11">
                             <div id="graphPengeluaran" style="height:300px;"></div>                           
                         </div>
@@ -228,17 +287,27 @@ $this->load->view('temp/MenuBar.php');
                 <!--begin:: Widgets-->
                 <form id="form_pendapatan" class="form-horizontal">
                 <div class="kt-portlet kt-portlet--height-fluid">
-                    <div class="kt-widget14">
-                        <div class="kt-widget14__header kt-margin-b-30">
-                            <h3 class="kt-widget14__title">
-                            <i class="fa fa-chart-bar"></i>  Pendapatan Nasional             
-                            </h3>
-                            <span class="kt-widget14__desc">
-                            Graph performance each unit of nasional cash in
-                            </span>
-                        </div>
-                        <div class="kt-widget11">
-                            <div id="graphPendapatan" style="height:300px;"></div>                           
+                    <div class="kt-widget14">                    
+                        <div class="row">
+                            <div class="col-md-6">                                
+                                <div class="kt-widget14__header kt-margin-b-30">
+                                    <h3 class="kt-widget14__title">
+                                         <i class="fa fa-chart-bar"></i>  Pendapatan             
+                                    </h3>
+                                    <span class="kt-widget14__desc">
+                                         Graph performance each unit of cash in
+                                    </span>
+                                </div>
+                            <div class="kt-widget11">
+                                <div id="graphPendapatan" style="height:300px;"></div>                           
+                            </div>
+                            </div>
+                            <div class="col-md-6">
+                                <span class="kt-widget14__desc">
+                                    Pendapatan <span class="date-today"></span> <span class="total-today"></span>
+                                </span>
+                                <hr>
+                           </div>
                         </div>
                     </div>
                 </div>	        

@@ -113,6 +113,8 @@ ALTER TABLE mis.users CHANGE id_area id_area INT(10) DEFAULT 0 NULL AFTER id_lev
 ALTER TABLE mis.users MODIFY COLUMN id_unit int(10) DEFAULT 0 NULL;
 ALTER TABLE mis.users CHANGE id_unit id_unit int(10) DEFAULT 0 NULL AFTER id_employee;
 
+ALTER TABLE mis.employees MODIFY COLUMN id_unit int(10) unsigned DEFAULT 0 NULL;
+
 
 
 

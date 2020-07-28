@@ -191,6 +191,9 @@ class Dashboards extends ApiController
 		}else{
 			$date = date('Y-m-d');
 		}
+		if($this->input->get('month')){
+			$date = $this->input->get('month');
+		}
 		$units = $this->units->db->select('units.id, units.name, areas.area as area')
 			->join('areas','areas.id = units.id_area')
 			->get('units')->result();
@@ -247,11 +250,7 @@ class Dashboards extends ApiController
 			array_push($category, $value->no_perk);
 		}
 
-		if($this->input->get('date')){
-			$date = $this->input->get('date');
-		}else{
-			$date = date('Y-m-d');
-		}
+		
 		if($this->input->get('area')){
 			$area = $this->input->get('area');
 			$this->units->db->where('id_area', $area);
@@ -264,10 +263,19 @@ class Dashboards extends ApiController
 			$this->units->db->where('id_unit', $this->session->userdata('user')->id_unit);
 		}
 
+		if($this->input->get('date')){
+			$date = $this->input->get('date');
+			$this->units->db->where('date', $date);
+		}
+
+		if($this->input->get('month')){
+			$month = $this->input->get('month');
+			$this->units->db->where('MONTH(date)', $month);
+		}
+
 		$this->units->db->select('units.name, sum(amount) as amount')
 			->join('units','units.id = units_dailycashs.id_unit')
 			->from('units_dailycashs')
-			->where('date', $date)
 			->where('type','CASH_IN')	
 			->where_in('no_perk', $category)
 			->group_by('units.name')
@@ -284,11 +292,6 @@ class Dashboards extends ApiController
 			array_push($category, $value->no_perk);
 		}
 		
-		if($this->input->get('date')){
-			$date = $this->input->get('date');
-		}else{
-			$date = date('Y-m-d');
-		}
 		if($this->input->get('area')){
 			$area = $this->input->get('area');
 			$this->units->db->where('id_area', $area);
@@ -302,11 +305,20 @@ class Dashboards extends ApiController
 		}else if($this->session->userdata('user')->level == 'unit'){
 			$this->units->db->where('id_unit', $this->session->userdata('user')->id_unit);
 		}
+
+		if($this->input->get('date')){
+			$date = $this->input->get('date');
+			$this->units->db->where('date', $date);
+		}
+
+		if($this->input->get('month')){
+			$month = $this->input->get('month');
+			$this->units->db->where('MONTH(date)', $month);
+		}
 		
 		$this->units->db->select('units.name, sum(amount) as amount')
 			->join('units','units.id = units_dailycashs.id_unit')
 			->from('units_dailycashs')
-			->where('date', $date)
 			->where('type','CASH_OUT')
 			->where_in('no_perk', $category)
 			->group_by('units.name')
@@ -336,10 +348,18 @@ class Dashboards extends ApiController
 			$this->units->db->where('id_unit', $this->session->userdata('user')->id_unit);
 		}
 
+		if($this->input->get('date')){
+			$date = $this->input->get('date');
+			$this->units->db->where('date', $date);
+		}
+		if($this->input->get('month')){
+			$month = $this->input->get('month');
+			$this->units->db->where('MONTH(date)', $month);
+		}
+
 		$this->units->db->select('units.name, (sum(CASE WHEN type = "CASH_IN" THEN `amount` ELSE 0 END) - sum(CASE WHEN type = "CASH_OUT" THEN `amount` ELSE 0 END)) as amount')
 			->join('units','units.id = units_dailycashs.id_unit')
 			->from('units_dailycashs')
-			->where('date', $date)
 			->group_by('units.name')
 			->order_by('amount','desc');
 		$data = $this->units->db->get()->result();
@@ -410,7 +430,7 @@ class Dashboards extends ApiController
 			$date = date('d');
 		}
 
-		$units = $this->units->db->select('units.id, units.name')->get('units')->result();
+		$units = $this->units->db->select('units.id, units.name, units.id_area')->get('units')->result();
 		foreach ($units as $unit){
 			$unit->amount = $this->regular->getTotalDisburse($unit->id, $year, $month, $date)->credit;
 		}
