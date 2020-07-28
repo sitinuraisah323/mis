@@ -172,6 +172,10 @@ function initGetUnit(){
             var response = JSON.parse(data);
             if (status) {              
                 $("#unit").empty();
+                var option = document.createElement("option");
+                    option.value = "all";
+                    option.text = "All";
+                    units.appendChild(option);
                 for (var i = 0; i < response.data.length; i++) {
                     var opt = document.createElement("option");
                     opt.value = response.data[i].id;

@@ -30,5 +30,10 @@ class Mortages extends Authenticated
 		));
 	}
 
+	public function cicilan()
+	{
+		$this->load->view('transactions/mortages/cicilan');
+	}
+
 
 }

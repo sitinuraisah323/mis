@@ -137,6 +137,8 @@ $this->load->view('temp/MenuBar.php');
                         <label class="col-form-label">&nbsp</label>
                         <div class="position-relative">
                         <button type="button" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>
+                        <button type="submit" class="btn btn-success btn-icon" name="btnexport" id="btnexport" onclick="export_xls()"><i class="fa fa-file-excel"></i></button>
+                        <!-- <a href="<?php //echo base_url("report/regularpawns/export"); ?>" class="btn btn-success btn-icon" target="_blank"><i class="fa fa-file-excel"></i></a> -->
                         </div>
                     </div>                  
 				</div>

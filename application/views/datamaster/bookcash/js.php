@@ -189,7 +189,7 @@ function initDataTable(){
                 autoHide: false,
                 template: function (row) {
                     var result ="";
-						result = result + '<span data-id="' + row.id + '" href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md btn_edit" title="View" ><i class="flaticon-eye" style="cursor:pointer;"></i></span>';
+						//result = result + '<span data-id="' + row.id + '" href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md btn_edit" title="View" ><i class="flaticon-eye" style="cursor:pointer;"></i></span>';
 						//result = result + '<a data-id="' + row.id + '" href="<?php //echo base_url('datamaster/bookcash/form/');?>'+row.id+'" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Edit" ><i class="flaticon-edit-1" style="cursor:pointer;"></i></a>';
                         result = result + '<span data-id="' + row.id + '" href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md btn_delete" title="Delete" ><i class="flaticon2-trash" style="cursor:pointer;"></i></span>';
                     return result;

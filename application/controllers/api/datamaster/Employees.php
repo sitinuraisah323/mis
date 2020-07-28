@@ -102,7 +102,7 @@ class Employees extends ApiController
 						'id_employee'	=> $idEmployee,
 						'username'	=> $post['username'],
 						'email'	=> $post['email'],
-						'password'	=> password_hash($post['username'],PASSWORD_DEFAULT),
+						'password'	=> password_hash($post['password'],PASSWORD_DEFAULT),
 						'user_create'	=> $this->session->userdata('user')->id,
 						'user_update'	=> $this->session->userdata('user')->id,
 					));
@@ -184,7 +184,7 @@ class Employees extends ApiController
 							'id_employee'	=> $idEmployee,
 							'username'	=> $post['username'],
 							'email'	=> $post['email'],
-							'password'	=> password_hash($post['username'],PASSWORD_DEFAULT),
+							'password'	=> password_hash($post['password'],PASSWORD_DEFAULT),
 							'user_create'	=> $this->session->userdata('user')->id,
 							'user_update'	=> $this->session->userdata('user')->id,
 						), array(
