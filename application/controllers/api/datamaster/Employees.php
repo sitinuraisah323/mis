@@ -54,7 +54,6 @@ class Employees extends ApiController
 			$this->load->library('form_validation');
 
 			$this->form_validation->set_rules('id_level', 'Level', 'required|numeric');
-			$this->form_validation->set_rules('id_unit', 'Unit', 'required|numeric');
 			$this->form_validation->set_rules('fullname', 'Nama', 'required');
 			$this->form_validation->set_rules('nik', 'Nik', 'required|is_unique[employees.nik]');
 			$this->form_validation->set_rules('birth_place', 'Tempat Lahir', 'required');
@@ -99,6 +98,7 @@ class Employees extends ApiController
 					$this->users->insert(array(
 						'id_level'	=> $post['id_level'],
 						'id_unit'	=> $post['id_unit'],
+						'id_area'	=> $post['id_area'],
 						'id_employee'	=> $idEmployee,
 						'username'	=> $post['username'],
 						'email'	=> $post['email'],
@@ -137,7 +137,6 @@ class Employees extends ApiController
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('nik', 'Nik', 'required');
 			$this->form_validation->set_rules('id_level', 'Level', 'required|numeric');
-			$this->form_validation->set_rules('id_unit', 'Unit', 'required|numeric');
 			$this->form_validation->set_rules('fullname', 'Nama', 'required');
 			$this->form_validation->set_rules('birth_place', 'Tempat Lahir', 'required');
 			$this->form_validation->set_rules('birth_date', 'Tanggal Lahir', 'required');
@@ -183,6 +182,7 @@ class Employees extends ApiController
 							'id_unit'	=> $post['id_unit'],
 							'id_employee'	=> $idEmployee,
 							'username'	=> $post['username'],
+							'id_area'	=> $post['id_area'],
 							'email'	=> $post['email'],
 							'password'	=> password_hash($post['password'],PASSWORD_DEFAULT),
 							'user_create'	=> $this->session->userdata('user')->id,
@@ -219,7 +219,7 @@ class Employees extends ApiController
 	public function show($id)
 	{
 		$this->employees->db
-			->select('username, id_level')
+			->select('username, id_level, email, id_area')
 			->join('users','users.id_employee = employees.id');
 		if($data = $this->employees->find(array(
 			'employees.id'	=> $id

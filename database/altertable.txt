@@ -108,6 +108,10 @@ ALTER TABLE mis.units_cash_book CHANGE total total FLOAT(10) DEFAULT 0 NOT NULL 
 
 
 
+ALTER TABLE mis.users ADD id_area INT(10) DEFAULT 0 NULL;
+ALTER TABLE mis.users CHANGE id_area id_area INT(10) DEFAULT 0 NULL AFTER id_level;
+ALTER TABLE mis.users MODIFY COLUMN id_unit int(10) DEFAULT 0 NULL;
+ALTER TABLE mis.users CHANGE id_unit id_unit int(10) DEFAULT 0 NULL AFTER id_employee;
 
 
 

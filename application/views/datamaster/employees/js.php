@@ -73,6 +73,7 @@ function initDTEvents(){
 					$('#modal_add').find('[name="birth_date"]').val(response.data.birth_date);
 					$('#modal_add').find('[name="username"]').val(response.data.username);
 					$('#modal_add').find('[name="gender"]').val(response.data.gender);
+					$('#modal_add').find('[name="email"]').val(response.data.email);
                     $("#gender").trigger('change');
 					$('#modal_add').find('[name="mobile"]').val(response.data.mobile);
 					$('#modal_add').find('[name="marital"]').val(response.data.marital);
@@ -355,6 +356,34 @@ function initCreate(){
         $('#blood_group').select2({ placeholder: "Please select a Blood Group",width: '100%'});
         $('#id_level').select2({ placeholder: "Please select a Level",width: '100%'});
     }
+
+    $('[name="id_level"]').on('change', function(){
+        if($(this).find(':selected').text() == 'area'){
+            $('[name="id_area"]').parents('.form-group').removeClass('d-none');            
+            $('[name="id_unit"]').val('').parents('.form-group').addClass('d-none');   
+        }else if($(this).find(':selected').text() == 'unit'){
+            $('[name="id_area"]').parents('.form-group').removeClass('d-none');
+            $('[name="id_unit"]').val('').parents('.form-group').addClass('d-none');            
+        }else{
+            $('[name="id_unit"]').val('').parents('.form-group').addClass('d-none');
+            $('[name="id_area"]').val('').parents('.form-group').addClass('d-none');
+        }
+    });
+    var options = '';
+
+    $(document).on('change', '[name="id_area"]', function(){
+        var id_area = $(this).val();
+        if($('[name="id_level"]').find(':selected').text() == 'unit'){
+            $('[name="id_unit"]').append(options);
+            $.each($('[name="id_unit"]').find('option'), function(index, element){
+                if(id_area != $(this).data('area')){
+                    options += '<option value="'+$(this).val()+'" data-area="'+$(this).data('area')+'">'+$(this).text()+'</option>';
+                    $(this).remove();
+                }
+            });
+            $('[name="id_unit"]').parents('.form-group').removeClass('d-none');
+        };
+    });
 
 
 
