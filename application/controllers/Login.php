@@ -23,6 +23,7 @@ class Login extends Controller
 	 */
 	public function index()
 	{
+		// var_dump(password_hash('admin', PASSWORD_DEFAULT));
 		if($this->session->userdata('logged_in')){
 			redirect(base_url());
 		}

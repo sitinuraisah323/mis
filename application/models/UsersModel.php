@@ -22,8 +22,8 @@ class UsersModel extends Master
 	{
 		$this->db
 			->select('levels.level,units.id_area')
-			->join('levels','levels.id = users.id_level')
-			->join('units','units.id = users.id_unit');
+			->join('levels','levels.id = users.id_level','left')
+			->join('units','units.id = users.id_unit','left');
 		if($user = $this->find(array('username'=>$username,'email'=>$username))){
 			if(password_verify($password,$user->password)){
 				$privileges = array();

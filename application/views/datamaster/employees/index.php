@@ -118,12 +118,30 @@ $this->load->view('temp/MenuBar.php');
 						<div class="row">
 							
 							<div class="col-md-6">
-							<div class="form-group">
+								<div class="form-group">
+									<label>Level</label>
+									<select name="id_level" id="id_level" class="form-control">
+										<option value=""></option>
+										<?php foreach ($levels as $level):?>
+											<option value="<?php echo $level->id;?>"><?php echo $level->level;?></option>
+										<?php endforeach;?>
+									</select>
+								</div>
+								<div class="form-group d-none">
+									<label>Area</label>
+									<select  name="id_area" class="form-control" id="area">
+									<option  value=""></option>
+										<?php foreach ($areas as $area):?>
+											<option value="<?php echo $area->id;?>"><?php echo $area->area;?></option>
+										<?php endforeach;?>
+									</select>
+								</div>
+								<div class="form-group d-none">
 									<label>Unit</label>
 									<select  name="id_unit" class="form-control" id="id_unit">
-									<option></option>
+									<option  value=""></option>
 										<?php foreach ($units as $unit):?>
-											<option value="<?php echo $unit->id;?>"><?php echo $unit->name;?></option>
+											<option value="<?php echo $unit->id;?>" data-area="<?php echo $unit->id_area;?>"><?php echo $unit->name;?></option>
 										<?php endforeach;?>
 									</select>
 								</div>
@@ -197,15 +215,6 @@ $this->load->view('temp/MenuBar.php');
 								<div class="form-group">
 									<label>Password</label>
 									<input type="password" name="password" class="form-control">
-								</div>
-								<div class="form-group">
-									<label>Level</label>
-									<select name="id_level" id="id_level" class="form-control">
-									<option></option>
-										<?php foreach ($levels as $level):?>
-											<option value="<?php echo $level->id;?>"><?php echo $level->level;?></option>
-										<?php endforeach;?>
-									</select>
 								</div>
 							</div>
 
