@@ -669,8 +669,6 @@ function notfound(){
     $("#graph").empty();
     var div = document.getElementById('graph');
     div.innerHTML += '<div class="alert alert-success" role="alert"><strong>Well done! </strong> &nbsp&nbsp Graph not found</div>';
-    // var label = "Not Found";
-    // $("#graph").appendChild(label);
     KTApp.unblock('#form_bukukas .kt-portlet__body', {});
 }
 

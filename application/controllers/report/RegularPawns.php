@@ -54,46 +54,7 @@ class Regularpawns extends Authenticated
 	}
 	
 	public function export()
-	{
-		// $this->load->helper('app');
-        // //$data['areas'] = $this->areas->all();
-		// //$this->load->view('report/regularpawns/perpanjangan',$data);
-		// $this->regulars->db
-		// 	->select('customers.name as customer_name,customers.nik as nik, (select date_repayment from units_repayments where units_repayments.no_sbk = units_regularpawns.no_sbk and units_repayments.id_unit = units_repayments.id_unit limit 1 ) as date_repayment')
-		// 	->join('customers','units_regularpawns.id_customer = customers.id')
-		// 	->select('units.name as unit_name,units.code as code')
-		// 	->join('units','units_regularpawns.id_unit = units.id');
-		// if($post = $this->input->post()){
-		// 	$status =null;
-		// 	$nasabah = $post['nasabah'];
-		// 	if($post['statusrpt']=="0"){$status=["N","L"];}
-		// 	if($post['statusrpt']=="1"){$status=["N"];}
-		// 	if($post['statusrpt']=="2"){$status=["L"];}
-		// 	if($post['statusrpt']=="3"){$status=[""];}
-		// 	$this->regulars->db
-		// 		->where('units_regularpawns.date_sbk >=', $post['dateStart'])
-		// 		->where('units_regularpawns.date_sbk <=', $post['dateEnd'])
-		// 		->where_in('units_regularpawns.status_transaction ', $status)
-		// 		->where('units_regularpawns.id_unit', $post['id_unit']);
-		// 		if($permit = $post['permit']){
-		// 			$this->regulars->db->where('units_regularpawns.permit', $permit);
-		// 		}
-		// 		if($nasabah!="all"){
-		// 			$this->regulars->db->where('customers.nik', $nasabah);
-		// 		}
-		// }
-		// $data = $this->regulars->all();
-		// $no=0;
-		// $arr = array();
-        // foreach ($data as $row) {
-		// 	$no++;
-        //     $arr[] = array($row->id,$row->code);
-		//  }		 	
-		 					 
-        // $filed = array('id','');
-        // //do export
-		// export_csv($arr); 
-		
+	{		
 		//load our new PHPExcel library
 		$this->load->library('PHPExcel');
 
@@ -176,12 +137,53 @@ class Regularpawns extends Authenticated
 		}
 
 		//Redirect output to a client’s WBE browser (Excel5)
-		$filename ="Gadai_Cicilan_".date('Y-m-d H:i:s');
+		$filename ="Gadai_Reguler_".date('Y-m-d H:i:s');
 		header('Content-Type: application/vnd.ms-excel');
 		header('Content-Disposition: attachment;filename="'.$filename.'.xls"');
 		header('Cache-Control: max-age=0');
 		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 		$objWriter->save('php://output');
+
+	}
+	
+	public function export_csv()
+	{
+		$this->load->helper('app');
+		$this->regulars->db
+			->select('customers.name as customer_name,customers.nik as nik, (select date_repayment from units_repayments where units_repayments.no_sbk = units_regularpawns.no_sbk and units_repayments.id_unit = units_repayments.id_unit limit 1 ) as date_repayment')
+			->join('customers','units_regularpawns.id_customer = customers.id')
+			->select('units.name as unit_name,units.code as code')
+			->join('units','units_regularpawns.id_unit = units.id');
+		if($post = $this->input->post()){
+			$status =null;
+			$nasabah = $post['nasabah'];
+			if($post['statusrpt']=="0"){$status=["N","L"];}
+			if($post['statusrpt']=="1"){$status=["N"];}
+			if($post['statusrpt']=="2"){$status=["L"];}
+			if($post['statusrpt']=="3"){$status=[""];}
+			$this->regulars->db
+				->where('units_regularpawns.date_sbk >=', $post['dateStart'])
+				->where('units_regularpawns.date_sbk <=', $post['dateEnd'])
+				->where_in('units_regularpawns.status_transaction ', $status)
+				->where('units_regularpawns.id_unit', $post['id_unit']);
+				if($permit = $post['permit']){
+					$this->regulars->db->where('units_regularpawns.permit', $permit);
+				}
+				if($nasabah!="all"){
+					$this->regulars->db->where('customers.nik', $nasabah);
+				}
+		}
+		$data = $this->regulars->all();
+		$no=0;
+		$arr = array();
+        foreach ($data as $row) {
+			$no++;
+            $arr[] = array($row->id,$row->code);
+		 }		 	
+		 					 
+        $field = array('id','code');
+        //do export
+		export_csv($arr,$field); 
 
     }
 

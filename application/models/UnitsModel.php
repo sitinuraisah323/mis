@@ -23,6 +23,16 @@ class UnitsModel extends Master
 		return $this->db->get('units as a')->result();
 	}
 
+	public function get_units_cicilan_byarea($area)
+	{
+		$this->db->select('DISTINCT(units.id),areas.id,units.name');		
+		$this->db->join('units ','units_mortages.id_unit=units.id');		
+		$this->db->join('areas ','units.id_area=areas.id');		
+		$this->db->where('areas.id',$area);		
+		$this->db->order_by('units.id','desc');		
+		return $this->db->get('units_mortages')->result();
+	}
+
 	public function get_customers_gadaireguler_byunit($unit)
 	{
 		$this->db->distinct();
@@ -36,11 +46,12 @@ class UnitsModel extends Master
 	public function get_customers_gadaicicilan_byunit($unit)
 	{
 		$this->db->distinct();
-		$this->db->select('b.nik,b.name');		
+		$this->db->select('a.id_customer,b.nik,b.name');		
 		$this->db->join('customers as b','b.id=a.id_customer');		
 		$this->db->where('a.id_unit',$unit);		
 		$this->db->order_by('b.name','asc');		
 		return $this->db->get('units_mortages as a')->result();
 	}
+
 
 }
