@@ -115,7 +115,7 @@ class Dashboards extends ApiController
 		if($code = $this->input->get('code')){
 			$this->units->db->where('code', $code);
 		}else if($this->session->userdata('user')->level == 'unit'){
-			$this->units->db->where('id_unit', $this->session->userdata('user')->id_unit);
+			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
 		}
 		if($this->input->get('date')){
 			$date = $this->input->get('date');
@@ -210,6 +210,9 @@ class Dashboards extends ApiController
 		}
 		if($code = $this->input->get('code')){
 			$this->units->db->where('code', $code);
+		}
+		if($id_unit = $this->input->get('id_unit')){
+			$this->units->db->where('units.id', $id_unit);
 		}
 		if($this->input->get('date')){
 			$date = $this->input->get('date');

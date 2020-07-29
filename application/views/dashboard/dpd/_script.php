@@ -100,14 +100,15 @@ function initCariForm(){
     //events
     $('#btncari').on('click',function(){
         $('.rowappend').remove();
-        var area = $('#area').val();
+        var area = $('[name="area"]').val();
+        var id_unit = $('[name="id_unit"]').val();
 		var dateStart = $('[name="date-start"]').val();
         KTApp.block('#form_bukukas .kt-portlet__body', {});
 		$.ajax({
 			type : 'GET',
 			url : "<?php echo base_url("api/dashboards/outstanding"); ?>",
 			dataType : "json",
-			data:{area:area,date:dateStart},
+			data:{area:area,date:dateStart,id_unit:id_unit},
 			success : function(response,status){
 				KTApp.unblockPage();
 				var html = '';

@@ -4,6 +4,8 @@ class RegularpawnsModel extends Master
 {
 	public $table = 'units_regularpawns';
 
+	public $level = true;
+
 	public $primary_key = 'id';
 
 	public function getOstYesterday($idUnit, $today)

@@ -15,16 +15,15 @@ class Employees extends ApiController
 	{
 		$this->employees->db
 			->select('name')
-			->join('units','units.id = employees.id_unit');
-		$data = $this->employees->all();
+			->join('units','units.id = employees.id_unit','left');
 		if($post = $this->input->post()){
 			if(is_array($post['query'])){
 				$value = $post['query']['generalSearch'];
-				$this->employees->db->join('units','units.id = employees.id_unit');
 				$this->employees->db->like('fullname', $value);
-				$data = $this->employees->all();
 			}
 		}
+		
+		$data = $this->employees->all();
 		echo json_encode(array(
 			'data'	=> 	$data,
 			'message'	=> 'Successfully Get Data Levels'
