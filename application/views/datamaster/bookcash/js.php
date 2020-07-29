@@ -414,8 +414,8 @@ function hitung(){
     var saldoawal   = $("#saldoawal").val();
     var penerimaan  = $("#penerimaan").val();
     var pengeluaran = $("#pengeluaran").val();
-    var mutasi      = parseInt(penerimaan) - parseInt(pengeluaran);
-    var saldoakhir  = parseInt(saldoawal) - parseInt(mutasi);
+    var mutasi      = (parseInt(saldoawal) + parseInt(penerimaan)) - parseInt(pengeluaran);
+    var saldoakhir  = mutasi;
     if(!isNaN(mutasi)){
         $('[name="totmutasi"]').val(mutasi);
     }

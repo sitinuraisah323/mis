@@ -242,7 +242,7 @@ class Bookcash extends ApiController
 	public function delete($id)
 	{
 		if($this->model->delete($id)){
-			$this->model->buildHirarki();
+			//$this->model->buildHirarki();
 			echo json_encode(array(
 				'data'	=> 	true,
 				'status'	=> true,
@@ -255,6 +255,22 @@ class Bookcash extends ApiController
 				'message'	=> 'Request Error Should Method Post'
 			));
 		}
+	}
+
+	public function report()
+	{
+		if($get = $this->input->get()){			
+			$this->model->db				
+				->where('date >=', $get['dateStart'])
+				->where('date <=', $get['dateEnd'])
+				->where('id_unit', $get['id_unit']);
+		}
+		$data = $this->model->all();
+		echo json_encode(array(
+			'data'	=> $data,
+			'status'	=> true,
+			'message'	=> 'Successfully Get Data Regular Pawns'
+		));
 	}
 
 
