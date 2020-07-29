@@ -120,7 +120,10 @@ function initCariForm(){
 					var template = '';
 					var no = 1;
 					var amount = 0;
-					var admin = 0;
+                    var admin = 0;
+                    var totcicilan = 0;
+                    var jumcicilan=0;
+                    var saldocicilan=0;
 					var status = "";
 					$.each(response.data, function (index, data) {
 						template += "<tr class='rowappend'>";
@@ -134,8 +137,11 @@ function initCariForm(){
 						template += "<td class='text-right'>"+convertToRupiah(data.amount_admin)+"</td>";
 						template += "<td class='text-right'>"+convertToRupiah(data.amount_loan)+"</td>";
                         if(data.status_transaction=="L"){ status="Lunas";}else if(data.status_transaction=="N"){status="Aktif";}
-						template += "<td class='text-center'>"+status+"</td>";
                         template += "<td class='text-center'>"+data.cicilan+"</td>";
+                        if(data.status_transaction=="L"){ saldocicilan="0";}else if(data.status_transaction=="N"){jumcicilan= parseInt(data.cicilan) * parseInt(data.installment); saldocicilan=parseInt(data.amount_loan)-parseInt(jumcicilan);}
+
+                        template += "<td class='text-right'>"+convertToRupiah(saldocicilan)+"</td>";
+                        template += "<td class='text-center'>"+status+"</td>";
                         template += "<td class='text-right'>";
                         if(data.description_1!=null){template += "- " + data.description_1;}
                         if(data.description_2!=null){template += "<br>- " + data.description_2;}
@@ -144,14 +150,16 @@ function initCariForm(){
                         template +="</td>";
 						template += '</tr>';
 						no++;
-						amount += parseInt(data.amount_loan);
-						admin += parseInt(data.amount_admin);
+						amount      += parseInt(data.amount_loan);
+                        admin       += parseInt(data.amount_admin);
+                        totcicilan  +=parseInt(saldocicilan);
 					});
 					template += "<tr class='rowappend'>";
 					template += "<td colspan='7' class='text-right'>Total</td>";
 					template += "<td class='text-right'>"+convertToRupiah(admin)+"</td>";
 					template += "<td class='text-right'>"+convertToRupiah(amount)+"</td>";
 					template += "<td class='text-right'></td>";
+					template += "<td class='text-right'>"+convertToRupiah(totcicilan)+"</td>";
 					template += "<td class='text-right'></td>";
 					template += "<td class='text-right'></td>";
 					template += '</tr>';

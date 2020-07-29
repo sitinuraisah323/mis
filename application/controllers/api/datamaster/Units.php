@@ -50,6 +50,15 @@ class Units extends ApiController
 		));
     }
 
+    public function get_units_cicilan_byarea($area)
+	{
+		echo json_encode(array(
+			'data'	    => 	$this->units->get_units_cicilan_byarea($area),
+			'status'	=> true,
+			'message'	=> 'Successfully Get Data Units'
+		));
+    }    
+
     public function get_customers_gr_byunit()
 	{
         if($get = $this->input->get()){
@@ -74,9 +83,7 @@ class Units extends ApiController
                 ));
             }
         }		
-    }
-
-    
+    }    
 
 	public function insert()
 	{

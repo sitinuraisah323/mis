@@ -76,7 +76,7 @@ $this->load->view('temp/MenuBar.php');
             </table> -->
             <!--end: Datatable -->
 
-            <form id="form_bukukas" class="form-horizontal">
+            <form id="form_bukukas" class="form-horizontal" method="post" action="<?php echo base_url("report/mortages/export"); ?>">
             <div class="kt-portlet__body">
             <div class="col-md-12" >
                 <div class="form-group row">
@@ -136,6 +136,7 @@ $this->load->view('temp/MenuBar.php');
                         <label class="col-form-label">&nbsp</label>
                         <div class="position-relative">
                         <button type="button" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>
+                        <button type="submit" class="btn btn-danger btn-icon" name="btnexport_csv" id="btnexport_csv"><i class="fa fa-file-excel"></i></button>
                         </div>
                     </div> 
 				</div>
@@ -156,8 +157,9 @@ $this->load->view('temp/MenuBar.php');
 									<th class='text-right'>Tafsiran</th>
 									<th class='text-right'>Admin</th>
 									<th class='text-right'>UP</th>
-									<th class='text-center'>Status</th>
 									<th class='text-center'>Cicilan(x)</th>
+									<th class='text-right'>Saldo</th>
+                                    <th class='text-center'>Status</th>
 									<th class='text-center'>Description</th>
 									<th></th>
 						    	</tr>
@@ -176,7 +178,7 @@ $this->load->view('temp/MenuBar.php');
     </div>
     <!-- end:: Content -->
 	<input type="hidden" name="url_get" id="url_get" value="<?php echo base_url('api/report/bukukas/get_transaksi_unit') ?>"/>
-	<input type="hidden" name="url_get_unit" id="url_get_unit" value="<?php echo base_url('api/datamaster/units/get_units_byarea') ?>"/>
+	<input type="hidden" name="url_get_unit" id="url_get_unit" value="<?php echo base_url('api/datamaster/units/get_units_cicilan_byarea') ?>"/>
 </div>
 </div>
 
