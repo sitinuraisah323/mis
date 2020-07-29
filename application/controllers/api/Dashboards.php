@@ -440,4 +440,31 @@ class Dashboards extends ApiController
 		$this->sendMessage($units, 'Get Data Outstanding');
 	}
 
+	public function newoutstanding()
+	{
+		if($area = $this->input->get('area')){
+			$this->units->db->where('id_area', $area);
+		}else if($this->session->userdata('user')->level == 'area'){
+			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
+		}
+		if($code = $this->input->get('code')){
+			$this->units->db->where('code', $code);
+		}else if($this->session->userdata('user')->level == 'unit'){
+			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
+		}
+		if($this->input->get('date')){
+			$date = $this->input->get('date');
+		}else{
+			$date = date('Y-m-d');
+		}
+		$units = $this->units->db->select('units.id, units.name, area')
+			->join('areas','areas.id = units.id_area')
+			->get('units')->result();
+		foreach ($units as $unit){
+			 $unit->up = $this->regular->getOstYesterday_($unit->id, $date)->up;
+			
+		}
+		$this->sendMessage($units, 'Get Data Outstanding');
+	}
+
 }

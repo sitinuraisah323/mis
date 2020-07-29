@@ -148,7 +148,7 @@ function initCariForm(){
 	 var yesterday = 0;
 
     $.ajax({
-		url:"<?php echo base_url('api/dashboards/outstanding');?>",
+		url:"<?php echo base_url('api/dashboards/newoutstanding');?>",
 		type:"GET",
 		dataType:"JSON",
 		data:{
@@ -159,10 +159,10 @@ function initCariForm(){
 			$.each(response.data, function (index,unit) {
 				transaction.push({
 					y:unit.name,
-					a:unit.total_outstanding.up
+					a:unit.up
 				});
-				today += unit.total_outstanding.up;
-				yesterday += unit.ost_yesterday.up;
+				today += parseInt(unit.up);
+				yesterday += parseInt(unit.up);
 			});
 		},
 		complete:function () {
