@@ -169,5 +169,40 @@ class RegularpawnsModel extends Master
 		);
 	}
 
+	public function getOstYesterday_($idUnit, $today)
+	{
+		$noaRegular = $this->db->select('count(*) as noa')->from($this->table)
+			->where('id_unit', $idUnit)
+			->where('status_transaction', 'N')
+			->where('date_sbk <=', $today)->get()->row();
+
+		$upRegular = $this->db->select('sum(amount) as up')->from($this->table)
+			->where('id_unit', $idUnit)
+			->where('status_transaction', 'N')
+			->where('date_sbk <=', $today)->get()->row();
+		return (object)array(
+			'noa' => (int) $noaRegular->noa,
+			'up' => (int) $upRegular->up
+		);
+	}
+
+	public function getCreditToday_($idUnit, $today)
+	{
+		$noaRegular = $this->db->select('count(*) as noa')->from($this->table)
+			->where('id_unit', $idUnit)
+			->where('status_transaction', 'N')
+			->where('date_sbk', $today)->get()->row();
+
+		$upRegular = $this->db->select('sum(amount) as up')->from($this->table)
+			->where('id_unit', $idUnit)
+			->where('status_transaction', 'N')
+			->where('date_sbk', $today)->get()->row();
+
+		return (object)array(
+			'noa' => $noaRegular->noa,
+			'up' => $upRegular->up
+		);
+	}
+
 
 }

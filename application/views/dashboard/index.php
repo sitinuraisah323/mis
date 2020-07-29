@@ -270,7 +270,7 @@ $this->load->view('temp/MenuBar.php');
                         </div>
                         <div class="col-md-6">
                             <span class="kt-widget14__desc">
-                                Pengeluaran <span class="date-today"></span> <span class="total-today"></span>
+                                Pengeluaran <?php  echo date('F'); ?> <span class="total-today"></span>
                             </span>
                             <hr>
                         </div>
@@ -297,18 +297,18 @@ $this->load->view('temp/MenuBar.php');
                                     <span class="kt-widget14__desc">
                                          Graph performance each unit of cash in
                                     </span>
-                                </div>
-                            <div class="kt-widget11">
-                                <div id="graphPendapatan" style="height:300px;"></div>                           
-                            </div>
+                                </div>                           
                             </div>
                             <div class="col-md-6">
                                 <span class="kt-widget14__desc">
-                                    Pendapatan <span class="date-today"></span> <span class="total-today"></span>
+                                    Pendapatan <?php  echo date('F'); ?> <span class="date-today"></span> <span class="total-today"></span>
                                 </span>
                                 <hr>
-                           </div>
+                           </div>                           
                         </div>
+                        <div class="kt-widget11">
+                                <div id="graphPendapatan" style="height:300px;"></div>                           
+                            </div>
                     </div>
                 </div>	        
                 </form>	        

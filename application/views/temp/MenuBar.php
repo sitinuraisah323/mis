@@ -466,9 +466,9 @@
 									<?php endif;?>
 									<?php if(read_access('report/targetunit')):?>
 										<li class="kt-menu__item "  aria-haspopup="true">
-											<a  href="<?php echo base_url('report/targetunit'); ?>" class="kt-menu__link ">
+											<a  href="<?php echo base_url('report/bapkas'); ?>" class="kt-menu__link ">
 												<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>
-												<span class="kt-menu__link-text">Target Units</span>
+												<span class="kt-menu__link-text">BAP Kas</span>
 											</a>
 										</li>
 									<?php endif;?>
