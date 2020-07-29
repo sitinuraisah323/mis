@@ -13,12 +13,12 @@ class Regularpawns extends ApiController
 
 	public function index()
 	{
-		$this->regulars->db->select('customers.name')->join('customers','customers.id = units_regularpawns.id_customer');
-		$data = $this->regulars->all();
+		$this->regulars->db->select('customers.name, units.name as unit')
+			->join('customers','customers.id = units_regularpawns.id_customer')
+			->join('units','units.id = units_regularpawns.id_unit');
 		if($post = $this->input->post()){
 			if(is_array($post['query'])){
 				$value = $post['query']['generalSearch'];
-				$this->regulars->db->select('customers.name')->join('customers','customers.id = units_regularpawns.id_customer');
 				$this->regulars->db
 					->or_like('no_sbk',$value)
 					->or_like('nic',$value)
@@ -26,11 +26,10 @@ class Regularpawns extends ApiController
 					->or_like('description_2',$value)
 					->or_like('description_3',$value)
 					->or_like('description_4',$value)
-					->or_like('name',$value)
-					->order_by('name','ASC');
-				$data = $this->regulars->all();
+					->or_like('customers.name',$value);
 			}
 		}
+		$data =  $this->regulars->all();
 		echo json_encode(array(
 			'data'	=> $data,
 			'message'	=> 'Successfully Get Data Regular Pawns'

@@ -8,6 +8,8 @@ class Master extends CI_Model
 
 	public $hirarki = false;
 
+	public $level = false;
+
 	public function insert(array $data)
 	{
 		return $this->db->insert($this->table, $data);
@@ -48,6 +50,13 @@ class Master extends CI_Model
 
 	public function all($limit = null)
 	{
+		if($this->level){
+			if($this->session->userdata('user')->level == 'unit'){
+				$this->db->where($this->table.'.id_unit', $this->session->userdata('user')->id_unit);
+			}elseif($this->session->userdata('user')->level == 'area'){
+				$this->db->where('.id_area', $this->session->userdata('user')->id_unit);
+			}
+		}
 		if(!is_null($limit)){
 			$this->db->limit($limit);
 		}

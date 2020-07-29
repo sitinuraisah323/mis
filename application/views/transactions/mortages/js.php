@@ -101,6 +101,13 @@
 					textAlign: 'center',
 				},
 				{
+					field: 'unit',
+					title: 'Unit',
+					sortable: 'asc',
+					width:60,
+					textAlign: 'left',
+				},
+				{
 					field: 'nic',
 					title: 'NO Cif',
 					sortable: 'asc',

@@ -13,12 +13,12 @@ class Mortages extends ApiController
 
 	public function index()
 	{
-		$this->mortages->db->select('customers.name')->join('customers','customers.id = units_mortages.id_customer');
-		$data = $this->mortages->all();
+		$this->mortages->db->select('customers.name, units.name as unit')
+			->join('customers','customers.id = units_mortages.id_customer')
+			->join('units','units.id = units_mortages.id_unit');
 		if($post = $this->input->post()){
 			if(is_array($post['query'])){
 				$value = $post['query']['generalSearch'];
-				$this->mortages->db->select('customers.name')->join('customers','customers.id = units_mortages.id_customer');
 				$this->mortages->db
 					->or_like('no_sbk',$value)
 					->or_like('nic',$value)
@@ -27,9 +27,10 @@ class Mortages extends ApiController
 					->or_like('description_3',$value)
 					->or_like('description_4',$value)
 					->or_like('name',$value);
-				$data = $this->mortages->all();
 			}
 		}
+		
+		$data = $this->mortages->all();
 		echo json_encode(array(
 			'data'	=> $data,
 			'message'	=> 'Successfully Get Data Users'
