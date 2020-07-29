@@ -54,7 +54,7 @@ class Master extends CI_Model
 			if($this->session->userdata('user')->level == 'unit'){
 				$this->db->where($this->table.'.id_unit', $this->session->userdata('user')->id_unit);
 			}elseif($this->session->userdata('user')->level == 'area'){
-				$this->db->where('.id_area', $this->session->userdata('user')->id_unit);
+				$this->db->where('id_area', $this->session->userdata('user')->id_area);
 			}
 		}
 		if(!is_null($limit)){

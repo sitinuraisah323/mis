@@ -21,7 +21,7 @@ class UsersModel extends Master
 	public function login_verify($username, $password)
 	{
 		$this->db
-			->select('levels.level,units.id_area')
+			->select('levels.level')
 			->join('levels','levels.id = users.id_level','left')
 			->join('units','units.id = users.id_unit','left');
 		if($user = $this->find(array('username'=>$username,'email'=>$username))){

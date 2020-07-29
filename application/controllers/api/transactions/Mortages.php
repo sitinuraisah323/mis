@@ -239,7 +239,8 @@ class Mortages extends ApiController
 	{
 		$this->mortages->db
 			->select('customers.name as customer_name,customers.nik as nik, (select count(id) from units_repayments_mortage where units_repayments_mortage.no_sbk =units_mortages.no_sbk and units_repayments_mortage.id_unit =units_mortages.id_unit  ) as cicilan')
-			->join('customers','units_mortages.id_customer = customers.id');
+			->join('customers','units_mortages.id_customer = customers.id')			
+			->join('units','units.id = units_mortages.id_unit');
 		if($get = $this->input->get()){
 			$status =null;
 			$nasabah = $get['nasabah'];

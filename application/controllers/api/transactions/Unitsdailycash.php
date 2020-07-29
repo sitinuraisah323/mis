@@ -170,6 +170,7 @@ class Unitsdailycash extends ApiController
 			}
 			//->where('id_unit', $get['id_unit']);
 		}
+		$this->unitsdailycash->db->join('units','units.id = units_dailycashs.id_unit');
 		$data = $this->unitsdailycash->all();
 		echo json_encode(array(
 			'data'	  => $data,
@@ -180,7 +181,6 @@ class Unitsdailycash extends ApiController
 
 	public function bukubank()
 	{
-		$this->unitsdailycash->all();
 		if($get = $this->input->get()){
 			$this->unitsdailycash->db
 				->where('SUBSTRING(no_perk,1,5) =','11100')
@@ -188,6 +188,7 @@ class Unitsdailycash extends ApiController
 				->where('date <=', $get['dateEnd'])
 				->where('id_unit', $get['id_unit']);
 		}
+		$this->unitsdailycash->db->join('units','units.id = units_dailycashs.id_unit');
 		$data = $this->unitsdailycash->all();
 		echo json_encode(array(
 			'data'	  => $data,
@@ -199,7 +200,6 @@ class Unitsdailycash extends ApiController
 	public function modal_kerja_pusat()
 	{
 		$ignore = array('1110000');
-		$this->unitsdailycash->all();
 		if($get = $this->input->get()){
 			$category = $get['category'];
 			$this->unitsdailycash->db				
@@ -216,6 +216,7 @@ class Unitsdailycash extends ApiController
 					->where_not_in('no_perk', $ignore);
 				}
 		}
+		$this->unitsdailycash->db->join('units','units.id = units_dailycashs.id_unit');
 		$data = $this->unitsdailycash->all();
 		echo json_encode(array(
 			'data'	=> $data,
@@ -247,7 +248,6 @@ class Unitsdailycash extends ApiController
 
 	public function pendapatan()
 	{
-		$this->unitsdailycash->all();
 		if($get = $this->input->get()){
 			$category =null;
 			if($get['category']=='all'){
@@ -266,6 +266,7 @@ class Unitsdailycash extends ApiController
 				->where('date <=', $get['dateEnd'])
 				->where('id_unit', $get['id_unit']);
 		}
+		$this->unitsdailycash->db->join('units','units.id = units_dailycashs.id_unit');
 		$data = $this->unitsdailycash->all();
 		echo json_encode(array(
 			'data'	=> $data,
@@ -276,7 +277,6 @@ class Unitsdailycash extends ApiController
 
 	public function pengeluaran()
 	{
-		$this->unitsdailycash->all();
 		if($get = $this->input->get()){
 			$category =null;
 			if($get['category']=='all'){
@@ -295,6 +295,7 @@ class Unitsdailycash extends ApiController
 				->where('date <=', $get['dateEnd'])
 				->where('id_unit', $get['id_unit']);
 		}
+		$this->unitsdailycash->db->join('units','units.id = units_dailycashs.id_unit');
 		$data = $this->unitsdailycash->all();
 		echo json_encode(array(
 			'data'	=> $data,

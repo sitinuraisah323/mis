@@ -101,8 +101,9 @@ function initCariModalKerjaPusatForm(){
     //events
     $('#btncari').on('click',function(){
         $('.rowappend').remove();
-        var area = $('#area').val();
-        var unit = $('#unit').val();
+        var area = $('[name="area"]').val();
+        var unit = $('[name="id_unit"]').val();
+        console.log(unit);
         var category = $('#categori').val();
 		var dateStart = $('[name="date-start"]').val();
 		var dateEnd = $('[name="date-end"]').val();
@@ -239,31 +240,31 @@ function initCariModalKerjaMutasiUnitForm(){
         validator:validator
     }
 }
-
-function initGetUnit(){
-    $("#area").on('change',function(){
-        var area = $('#area').val();
-        var units =  document.getElementById('unit');
-        var url_data = $('#url_get_unit').val() + '/' + area;        
+$('[name="area"]').on('change',function(){
+        var area = $('[name="area"]').val();
+        var units =  $('[name="id_unit"]');
+        var url_data = $('#url_get_unit').val() + '/' + area;
         $.get(url_data, function (data, status) {
             var response = JSON.parse(data);
-            if (status) {              
+            if (status) {
                 $("#unit").empty();
                 for (var i = 0; i < response.data.length; i++) {
                     var opt = document.createElement("option");
                     opt.value = response.data[i].id;
                     opt.text = response.data[i].name;
-                    units.appendChild(opt);
+                    units.append(opt);
                 }
             }
-        }); 
-    });
-}
+        });
+});
 
 jQuery(document).ready(function() {     
     initCariModalKerjaPusatForm();  
     initCariModalKerjaMutasiUnitForm();
-    initGetUnit(); 
 });
 
+var type = $('[name="area"]').attr('type');
+if(type == 'hidden'){
+    $('[name="area"]').trigger('change');
+}
 </script>

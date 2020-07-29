@@ -81,11 +81,22 @@ $this->load->view('temp/MenuBar.php');
             <div class="col-md-12" > 
 
                 <div class="form-group row">
-                <div class="col-lg-2">
-                    <label class="col-form-label">Area</label>                    
+                <?php if($this->session->userdata('user')->level == 'unit'):?>
+                    <input type="hidden" name="id_unit" value="<?php echo $this->session->userdata('user')->id_unit;?>">
+                <?php elseif($this->session->userdata('user')->level == 'area'):?>
+                    <input type="hidden" name="area" value="<?php echo $this->session->userdata('user')->id_area;?>">
+                    <div class="col-lg-2">
+						<label class="col-form-label">Unit</label>
+						<select class="form-control select2" name="id_unit" id="unit">
+							<option value="">All</option>
+						</select>
+                    </div>
+                <?php else:?>
+                    <div class="col-lg-2">
+						<label class="col-form-label">Area</label>
                         <select class="form-control select2" name="area" id="area">
                             <option></option>
-                            <?php 
+                            <?php
                                 if (!empty($areas)){
                                     foreach($areas as $row){
                                        echo "<option value=".$row->id.">".$row->area."</option>";
@@ -94,13 +105,13 @@ $this->load->view('temp/MenuBar.php');
                             ?>
                         </select>
                     </div>
-                    
                     <div class="col-lg-2">
-                    <label class="col-form-label">Unit</label>                    
-                    <select class="form-control select2" name="unit" id="unit">
-                            <option></option>
-                            </select>
+						<label class="col-form-label">Unit</label>
+						<select class="form-control select2" name="id_unit" id="unit">
+							<option value="">All</option>
+						</select>
                     </div>
+                <?php endif ;?>
                     <div class="col-lg-2">
                     <label class="col-form-label">Kategori</label>                    
                     <select class="form-control select2" name="category" id="category">
