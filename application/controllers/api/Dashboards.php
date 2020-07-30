@@ -461,8 +461,7 @@ class Dashboards extends ApiController
 			->join('areas','areas.id = units.id_area')
 			->get('units')->result();
 		foreach ($units as $unit){
-			 $unit->up = $this->regular->getOstYesterday_($unit->id, $date)->up;
-			
+			 $unit->up = $this->regular->getOstYesterday_($unit->id, $date)->up;			
 		}
 		$this->sendMessage($units, 'Get Data Outstanding');
 	}
