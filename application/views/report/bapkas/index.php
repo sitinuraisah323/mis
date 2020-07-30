@@ -133,6 +133,7 @@ $this->load->view('temp/MenuBar.php');
 									<th class='text-right'>Pengeluaran</th>
 									<th class='text-right'>Saldo Akhir</th>
 									<th class='text-right'>Selisih</th>
+                                    <th class='text-center'>#</th>
 									<th></th>
 						    	</tr>
 						  	</thead>
@@ -157,4 +158,5 @@ $this->load->view('temp/MenuBar.php');
 <?php
 $this->load->view('temp/Footer.php');
 $this->load->view('report/bapkas/_script.php');
+$this->load->view('report/bapkas/_view.php');
 ?>

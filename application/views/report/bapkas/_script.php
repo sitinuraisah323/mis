@@ -123,6 +123,7 @@ function initCariForm(){
 						template += "<td class='text-right'>"+convertToRupiah(data.amount_out)+"</td>";
 						template += "<td class='text-right'>"+convertToRupiah(data.amount_balance_final)+"</td>";
 						template += "<td class='text-right'>"+convertToRupiah(data.amount_gap)+"</td>";
+						template += "<td class='text-center'><span data-id='"+data.id+"' href='' class='btn btn-sm btn-clean btn-icon btn-icon-md viewBtn' title='View Data' data-toggle='modal' data-target='#modal_view'><i class='flaticon-eye' style='cursor:pointer;'></i></span></td>";
 						template += '</tr>';
 						no++;
 					});
@@ -163,9 +164,22 @@ function initGetUnit(){
     });
 }
 
+function popView(el)
+{
+    //$('.rowappend').remove();
+    var id = $(el).attr('data-id');
+    //console.log(id);  
+    
+}
+
 jQuery(document).ready(function() {
     initCariForm();
     initGetUnit();
+
+    $(document).on("click", ".viewBtn", function () {
+                var el = $(this);
+                popView(el);
+    });
 });
 
 </script>
