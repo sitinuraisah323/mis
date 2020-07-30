@@ -273,5 +273,40 @@ class Bookcash extends ApiController
 		));
 	}
 
+	public function getBookCash()
+	{
+		//if($get = $this->input->get()){	
+			$get = $this->input->get();		
+			$data = $this->model->db
+				->from('units_cash_book')
+				->select('units.name,units_cash_book.*')
+				->join('units','units_cash_book.id_unit=units.id')
+				->where('units_cash_book.id', $get['id']);
+		//}
+		//$data = $this->model->all();
+		//$query = $data->get()->row();
+		echo json_encode(array(
+			'data'	=> $data->get()->row(),
+			'status'	=> true,
+			'message'	=> 'Successfully Get Data Regular Pawns'
+		));
+	}
+
+	public function getDetailBookCash()
+	{
+		if($get = $this->input->get()){			
+			$this->money->db
+				->select('fraction_of_money.type')
+				->join('fraction_of_money','units_cash_book_money.id_fraction_of_money=fraction_of_money.id')
+				->where('id_unit_cash_book', $get['id']);
+		}
+		$data = $this->money->all();
+		echo json_encode(array(
+			'data'	=> $data,
+			'status'	=> true,
+			'message'	=> 'Successfully Get Data Regular Pawns'
+		));
+	}
+
 
 }

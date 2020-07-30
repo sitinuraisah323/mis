@@ -76,7 +76,7 @@ $this->load->view('temp/MenuBar.php');
             </table> -->
             <!--end: Datatable -->
 
-            <form id="form_bukukas" class="form-horizontal">
+            <form id="form_bukukas" class="form-horizontal" method="post" action="<?php echo base_url("report/bukukas/export"); ?>">
             <div class="kt-portlet__body">
             <div class="col-md-12" > 
 
@@ -121,6 +121,7 @@ $this->load->view('temp/MenuBar.php');
 					</div>
                     <div class="col-lg-1">
                         <button type="button" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>
+                        <button type="submit" class="btn btn-danger btn-icon" name="btnexport_csv" id="btnexport_csv"><i class="fa fa-file-excel"></i></button>
                     </div>
 				</div>	               
 
