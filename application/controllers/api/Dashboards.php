@@ -466,4 +466,12 @@ class Dashboards extends ApiController
 		$this->sendMessage($units, 'Get Data Outstanding');
 	}
 
+	public function bookcash()
+	{
+		if($date = $this->input->post('date')){
+			$this->regular->db->where('date', $date);
+		}
+		$data = $this->regular->db->get('units_cash_book')->row();
+		return $this->sendMessage($data,'Get Book Cash Daily');
+	}
 }
