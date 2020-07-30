@@ -160,7 +160,6 @@ class Unitsdailycash extends ApiController
 	
 	public function report()
 	{
-		//$this->unitsdailycash->all();
 		if($get = $this->input->get()){
 			$this->unitsdailycash->db
 				->where('date >=', $get['dateStart'])
@@ -168,7 +167,6 @@ class Unitsdailycash extends ApiController
 			if($get['id_unit']!='all'){
 				$this->unitsdailycash->db->where('id_unit', $get['id_unit']);
 			}
-			//->where('id_unit', $get['id_unit']);
 		}
 		$this->unitsdailycash->db->join('units','units.id = units_dailycashs.id_unit');
 		$data = $this->unitsdailycash->all();

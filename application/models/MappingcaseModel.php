@@ -6,7 +6,7 @@ class MappingcaseModel extends Master
 	public $primary_key = 'id';
 
 	public function get_list_pendapatan(){
-		$ignore = array('1120000', '1110000'); 
+		$ignore = array('1120000', '1110000','1140201'); 
 		$this->db->select('no_perk,na_perk');
 		$this->db->where('type','CASH_IN');
 		$this->db->where_not_in('no_perk',$ignore);

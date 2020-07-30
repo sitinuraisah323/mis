@@ -181,9 +181,97 @@ function initGetUnit(){
 
 function popView(el)
 {
-    //$('.rowappend').remove();
+    $('.rowappend_kertas').remove();
+    $('.rowappend_logam').remove();
     var id = $(el).attr('data-id');
     //console.log(id);  
+    $.ajax({
+			type : 'GET',
+			url : "<?php echo base_url("api/datamaster/bookcash/getBookCash"); ?>",
+			dataType : "json",
+			data:{id:id},
+			success : function(response,status){
+				if(response.status == true){
+                    console.log(response.data.name);
+                    $('#units').val(response.data.name);
+                    $('#kasir').val(response.data.name);
+                    $('#date').val(response.data.date);
+                    $('#saldoawal').val(response.data.amount_balance_final);
+                    $('#penerimaan').val(response.data.amount_in);
+                    $('#pengeluaran').val(response.data.amount_out);
+                    $('#mutasi').val(response.data.amount_mutation);
+                    $('#saldoakhir').val(response.data.amount_balance_first);
+                    $('#selisih').val(response.data.amount_gap);                   
+                    
+				}
+			},
+			error: function (jqXHR, textStatus, errorThrown){
+				//KTApp.unblockPage();
+			},
+			complete:function () {
+				//KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+			}
+		});
+
+        $.ajax({
+			type : 'GET',
+			url : "<?php echo base_url("api/datamaster/bookcash/getDetailBookCash"); ?>",
+			dataType : "json",
+			data:{id:id},
+			success : function(response,status){
+				if(response.status == true){
+                    var templateKertas = '';
+                    var templateLogam = '';
+					var no = 1;
+					var k_totpecahan = 0;
+					var l_totpecahan = 0;
+                    var totalkertas = 0;
+                    var totallogam  = 0;
+                    var total  = 0;
+                    $.each(response.data, function (index, data) {
+                        if(data.type=="KERTAS"){
+                            templateKertas += "<tr class='rowappend_kertas'>";
+                            templateKertas += "<td>"+convertToRupiah(data.amount)+"</td>";
+                            templateKertas += "<td>"+data.summary+"</td>";
+                            k_totpecahan = parseInt(data.amount) * parseInt(data.summary);
+                            templateKertas += "<td class='text-right'>"+convertToRupiah(k_totpecahan)+"</td>";
+                            templateKertas += '</tr>';
+                            totalkertas +=k_totpecahan;
+                            no++;
+                        }
+                        if(data.type=="LOGAM"){
+                            templateLogam += "<tr class='rowappend_logam'>";
+                            templateLogam += "<td>"+convertToRupiah(data.amount)+"</td>";
+                            templateLogam += "<td>"+data.summary+"</td>";
+                            l_totpecahan = parseInt(data.amount) * parseInt(data.summary);
+                            templateLogam += "<td class='text-right'>"+convertToRupiah(l_totpecahan)+"</td>";
+                            templateLogam += '</tr>';
+                            totallogam +=l_totpecahan;
+                            no++;
+                        }						
+					});
+                    templateKertas += '<tr class="rowappend_kertas">';
+                    templateKertas +='<td colspan="2" class="text-right"></td>';                    
+                    templateKertas +='<td class="text-right"><b>'+convertToRupiah(totalkertas)+'</b></td>';                    
+                    templateKertas +='</tr>';
+
+                    templateLogam += '<tr class="rowappend_logam">';
+                    templateLogam +='<td colspan="2" class="text-right"></td>';                    
+                    templateLogam +='<td class="text-right"><b>'+convertToRupiah(totallogam)+'</b></td>';                    
+                    templateLogam +='</tr>';
+                    total = parseInt(totalkertas) + parseInt(totallogam);
+					$('#kertas').append(templateKertas);
+					$('#logam').append(templateLogam);
+                    $('#total').val(total);
+				}
+			},
+			error: function (jqXHR, textStatus, errorThrown){
+				//KTApp.unblockPage();
+			},
+			complete:function () {
+				//KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+			}
+		});
     
 }
 
