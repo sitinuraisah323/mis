@@ -319,7 +319,7 @@
 												<span class="kt-menu__link-text">BAP kas</span>
 											</a>
 										</li>
-									<?php endif;?>
+									<?php endif;?>									
 
 								</ul>
 							</div>
@@ -464,11 +464,19 @@
 											</a>
 										</li>
 									<?php endif;?>
-									<?php if(read_access('report/targetunit')):?>
+									<?php if(read_access('report/bapkas')):?>
 										<li class="kt-menu__item "  aria-haspopup="true">
 											<a  href="<?php echo base_url('report/bapkas'); ?>" class="kt-menu__link ">
 												<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>
 												<span class="kt-menu__link-text">BAP Kas</span>
+											</a>
+										</li>
+									<?php endif;?>
+									<?php if(read_access('report/outstanding')):?>
+										<li class="kt-menu__item "  aria-haspopup="true">
+											<a  href="<?php echo base_url('report/outstanding'); ?>" class="kt-menu__link ">
+												<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>
+												<span class="kt-menu__link-text">Outstanding Nasional</span>
 											</a>
 										</li>
 									<?php endif;?>

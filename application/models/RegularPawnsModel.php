@@ -204,5 +204,4 @@ class RegularpawnsModel extends Master
 		);
 	}
 
-
 }
