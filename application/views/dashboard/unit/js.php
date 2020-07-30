@@ -1,6 +1,6 @@
 <script>
 var KTDashboard = function() {
-    var currentDate = "<?php $date = "2020-07-16"; echo $date?>";
+    var currentDate = "<?php $date = date('Y-m-d'); echo $date?>";
     var lastDate = "<?php echo  date('Y-m-d', strtotime($date . " -1 days"));?>";
 
     // Revenue Change.
