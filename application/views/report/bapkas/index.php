@@ -138,6 +138,16 @@ $this->load->view('temp/MenuBar.php');
 						  	</thead>
 						  	<tbody>
 						  	</tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="3" class="text-right">Total</th>
+                                    <th class="saldoawal text-right"></th>
+                                    <th class="penerimaan text-right"></th>
+                                    <th class="pengeluaran text-right"></th>
+                                    <th class="saldoakhir text-right"></th>
+                                    <th class="selisih text-right"></th>
+                                </tr>
+                            </tfoot>
 						</table>
 				</div>
             </div>

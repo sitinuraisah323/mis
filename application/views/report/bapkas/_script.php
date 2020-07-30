@@ -113,6 +113,11 @@ function initCariForm(){
 				if(response.status == true){
 					var template = '';
 					var no = 1;
+                    var amountIn = 0;
+                    var amountOut = 0;
+                    var amountBalanceFinal = 0;
+                    var amountGap = 0;
+                    var amountBalanceFirst = 0;
 					$.each(response.data, function (index, data) {
 						template += "<tr class='rowappend'>";
 						template += "<td class='text-center'>"+no+"</td>";
@@ -125,7 +130,17 @@ function initCariForm(){
 						template += "<td class='text-right'>"+convertToRupiah(data.amount_gap)+"</td>";
 						template += '</tr>';
 						no++;
+                        amountIn += parseInt(data.amount_in);
+                        amountOut += parseInt(data.amount_out);
+                        amountBalanceFinal += parseInt(data.amount_balance_final);
+                        amountGap += parseInt(data.amount_gap);
+                        amountBalanceFirst += parseInt(data.amount_balance_first);
 					});
+                    $('.kt-section__content table').find('tfoot').find('.saldoawal').text(convertToRupiah(amountBalanceFirst));
+                    $('.kt-section__content table').find('tfoot').find('.penerimaan').text(convertToRupiah(amountIn));
+                    $('.kt-section__content table').find('tfoot').find('.pengeluaran').text(convertToRupiah(amountOut));
+                    $('.kt-section__content table').find('tfoot').find('.saldoakhir').text(convertToRupiah(amountBalanceFinal));
+                    $('.kt-section__content table').find('tfoot').find('.selisih').text(convertToRupiah(amountGap));
 					$('.kt-section__content table').append(template);
 				}
 			},
