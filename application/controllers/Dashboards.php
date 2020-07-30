@@ -36,6 +36,11 @@ class Dashboards extends Authenticated
 		));
 	}
 
+	public function unit()
+	{
+		$this->load->view("dashboard/unit/index");
+	}
+
 	public function executivesummary()
 	{
 		$this->load->view("dashboard/summary/index",array(

@@ -106,7 +106,7 @@ class Users extends ApiController
 			if($this->users->login_verify($post['username'],$post['password'])){
 				echo json_encode(array(
 					'data'	=> 	true,
-					'message'	=> 'Successfully Login'
+					'message'	=> $this->session->userdata('user')->level
 				));
 			}else{
 				echo json_encode(array(

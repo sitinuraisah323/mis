@@ -468,10 +468,192 @@ class Dashboards extends ApiController
 
 	public function bookcash()
 	{
-		if($date = $this->input->post('date')){
-			$this->regular->db->where('date', $date);
-		}
-		$data = $this->regular->db->get('units_cash_book')->row();
+		$idUnit = $this->session->userdata('user')->id_unit;
+		$this->regular->db->where('id_unit', $idUnit);		
+		$data = $this->regular->db->order_by('id','DESC')->get('units_cash_book')->row();
+		$data->noa = (int) $this->regular->db
+			->select('count(*) as noa')
+			->from('units_regularpawns')
+			->where('id_unit', $idUnit)
+			->get()->row()->noa;
 		return $this->sendMessage($data,'Get Book Cash Daily');
 	}
+
+	public function unitbooking()
+	{
+		$idUnit = $this->session->userdata('user')->id_unit;
+		$date = $this->input->get('date');
+		if(is_null($date)){
+			$date = date('Y-m-d');
+		}
+		$dateLast = date('Y-m-d', strtotime($date. ' -1 Days'));
+		$today = $this->regular->db
+			->select('count(*) as noa, sum(amount) as up')
+			->from('units_regularpawns')
+			->where('id_unit',$idUnit)
+			->where('date_sbk',$date)
+			->get()->row();
+		$last = $this->regular->db
+			->select('count(*) as noa, sum(amount) as up')
+			->from('units_regularpawns')
+			->where('id_unit',$idUnit)
+			->where('date_sbk',$dateLast)
+			->get()->row();
+		$data = new stdClass();
+		$data->today_noa = (int) $today->noa;
+		$data->today_up = (int) $today->up;
+		$data->last_noa = (int) $last->noa;
+		$data->last_up = (int) $last->up;
+		$data->total_noa = $data->today_noa + $data->last_noa;
+		$data->total_up = $data->today_up + $data->last_up;
+		return $this->sendMessage($data,'Get Unit Booking');
+	}
+	
+	public function unitost()
+	{
+		$idUnit = $this->session->userdata('user')->id_unit;
+		$date = $this->input->get('date');
+		if(is_null($date)){
+			$date = date('Y-m-d');
+		}
+		$dateLast = date('Y-m-d', strtotime($date. ' -1 Days'));
+		$today = $this->regular->db
+			->select('count(*) as noa, sum(amount) as up')
+			->from('units_regularpawns')
+			->where('id_unit',$idUnit)
+			->where('date_sbk',$date)
+			->where('status_transaction',"N")
+			->get()->row();
+		$last = $this->regular->db
+			->select('count(*) as noa, sum(amount) as up')
+			->from('units_regularpawns')
+			->where('id_unit',$idUnit)
+			->where('date_sbk <',$dateLast)			
+			->where('status_transaction',"N")
+			->get()->row();
+		$data = new stdClass();
+		$data->today_noa = (int) $today->noa;
+		$data->today_up = (int) $today->up;
+		$data->last_noa = (int) $last->noa;
+		$data->last_up = (int) $last->up;
+		$data->total_noa = $data->today_noa + $data->last_noa;
+		$data->total_up = $data->today_up + $data->last_up;
+		return $this->sendMessage($data,'Get Unit Booking');
+	}
+
+	public function unitdpd()
+	{
+		$idUnit = $this->session->userdata('user')->id_unit;
+		$date = $this->input->get('date');
+		if(is_null($date)){
+			$date = date('Y-m-d');
+		}
+		$dateLast = date('Y-m-d', strtotime($date. ' -1 Days'));
+		$today = $this->regular->db
+			->select('count(*) as noa, sum(amount) as up')
+			->from('units_regularpawns')
+			->where('id_unit',$idUnit)
+			->where('deadline',$date)
+			->where('status_transaction',"N")
+			->get()->row();
+		$last = $this->regular->db
+			->select('count(*) as noa, sum(amount) as up')
+			->from('units_regularpawns')
+			->where('id_unit',$idUnit)
+			->where('deadline <',$date)			
+			->where('status_transaction',"N")
+			->get()->row();
+		$data = new stdClass();
+		$data->today_noa = (int) $today->noa;
+		$data->today_up = (int) $today->up;
+		$data->last_noa = (int) $last->noa;
+		$data->last_up = (int) $last->up;
+		$data->total_noa = $data->today_noa + $data->last_noa;
+		$data->total_up = $data->today_up + $data->last_up;
+		return $this->sendMessage($data,'Get Unit Booking');
+	}
+
+	public function unitpencairan()
+	{
+		$idUnit = $this->session->userdata('user')->id_unit;
+		$date = $this->input->get('date');
+		if(is_null($date)){
+			$date = date('Y-m-d');
+		}
+		$dateLast = date('Y-m-d', strtotime($date. ' -1 Days'));
+		$today = $this->regular->db
+			->select('count(*) as noa, sum(amount) as up')
+			->from('units_regularpawns')
+			->where('id_unit',$idUnit)
+			->get()->row();
+		$last = $this->regular->db
+			->select('count(*) as noa, sum(amount_loan) as up')
+			->from('units_mortages')
+			->where('id_unit',$idUnit)		
+			->get()->row();
+		$data = new stdClass();
+		$data->reg_noa = (int) $today->noa;
+		$data->reg_up = (int) $today->up;
+		$data->mor_noa = (int) $last->noa;
+		$data->mor_up = (int) $last->up;
+		$data->total_noa = $data->reg_noa + $data->mor_noa;
+		$data->total_up = $data->reg_up + $data->mor_up;
+		return $this->sendMessage($data,'Get Unit Booking');
+	}
+	public function unitpelunasan()
+	{
+		$idUnit = $this->session->userdata('user')->id_unit;
+		$date = $this->input->get('date');
+		if(is_null($date)){
+			$date = date('Y-m-d');
+		}
+		$dateLast = date('Y-m-d', strtotime($date. ' -1 Days'));
+		$today = $this->regular->db
+			->select('count(*) as noa, sum(amount) as up')
+			->from('units_regularpawns')
+			->where('id_unit',$idUnit)
+			->where('status_transaction','L')
+			->get()->row();
+		$last = $this->regular->db
+			->select('count(*) as noa, sum(amount_loan) as up')
+			->from('units_mortages')
+			->where('id_unit',$idUnit)		
+			->where('status_transaction','L')		
+			->get()->row();
+		$data = new stdClass();
+		$data->reg_noa = (int) $today->noa;
+		$data->reg_up = (int) $today->up;
+		$data->mor_noa = (int) $last->noa;
+		$data->mor_up = (int) $last->up;
+		$data->total_noa = $data->reg_noa + $data->mor_noa;
+		$data->total_up = $data->reg_up + $data->mor_up;
+		return $this->sendMessage($data,'Get Unit Booking');
+	}
+	public function unitprofit()
+	{
+		$idUnit = $this->session->userdata('user')->id_unit;
+		$date = $this->input->get('date');
+		if(is_null($date)){
+			$date = date('Y-m-d');
+		}
+		$dateLast = date('Y-m-d', strtotime($date. ' -1 Days'));
+		$today = $this->regular->db
+			->select('sum(amount) as up')
+			->from('units_dailycashs')
+			->where('id_unit',$idUnit)
+			->where('type','CASH_IN')
+			->get()->row();
+		$last = $this->regular->db
+			->select('sum(amount) as up')
+			->from('units_dailycashs')
+			->where('id_unit',$idUnit)		
+			->where('type','CASH_OUT')		
+			->get()->row();
+		$data = new stdClass();
+		$data->cash_in = (int) $today->up;
+		$data->cash_out = (int) $last->up;
+		$data->total_up = $data->cash_in + $data->cash_out;
+		return $this->sendMessage($data,'Get Unit Booking');
+	}
+
 }
