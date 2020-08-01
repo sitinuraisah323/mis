@@ -159,16 +159,17 @@ function initCariForm(){
 			$.each(response.data, function (index,unit) {
 				transaction.push({
 					y:unit.name,
-					a:unit.up
+					a:unit.ost_today.up,
+					b:unit.ost_yesterday.up
 				});
-				today += parseInt(unit.up);
-				yesterday += parseInt(unit.up);
+				today += parseInt(unit.ost_today.up);
+				yesterday += parseInt(unit.ost_yesterday.up);
 			});
 		},
 		complete:function () {
 			$('#form_outstanding').find('.total-today').text('Rp. '+convertToRupiah(today));
-			$('#form_outstanding').find('.total-yesterday').text('Rp. '+convertToRupiah(yesterday));
 			$('#form_outstanding').find('.date-today').text(currdate);
+			$('#form_outstanding').find('.total-yesterday').text('Rp. '+convertToRupiah(yesterday));
 			$('#form_outstanding').find('.date-yesterday').text(lastdate);
 			var data = transaction,
 					//config manager
@@ -227,7 +228,7 @@ function pencairan() {
 		},
 		complete:function () {
 			$('#form_pencairan').find('.date-yesterday').text(lastdate);
-			$('#form_pencairan').find('.total-yesterday').text(totalLast);
+			$('#form_pencairan').find('.total-yesterday').text(convertToRupiah(totalLast));
 		},
 	});
 
@@ -252,8 +253,10 @@ function pencairan() {
 			});
 		},
 		complete:function () {
+			//$('#form_outstanding').find('.total-today').text('Rp. '+convertToRupiah(today));
+
 			$('#form_pencairan').find('.date-today').text(currdate);
-			$('#form_pencairan').find('.total-today').text(totalCurr);
+			$('#form_pencairan').find('.total-today').text(convertToRupiah(totalCurr));
 			var data = transaction,
 					//config manager
 					config = {
@@ -313,7 +316,7 @@ function pelunasan() {
 			});
 		},
 		complete:function () {
-			$('#form_pelunasan').find('.total-yesterday').text('Rp.'+totalLast);
+			$('#form_pelunasan').find('.total-yesterday').text(convertToRupiah(totalLast));
 			$('#form_pelunasan').find('.date-yesterday').text(lastdate);
 		},
 	});
@@ -339,7 +342,7 @@ function pelunasan() {
 			});
 		},
 		complete:function () {
-			$('#form_pelunasan').find('.total-today').text('Rp.'+totalCurr);
+			$('#form_pelunasan').find('.total-today').text(convertToRupiah(totalCurr));
 			$('#form_pelunasan').find('.date-today').text(currdate);
 			var data = transaction,
 					//config manager
@@ -401,7 +404,7 @@ function pendapatan() {
 		},
 		complete:function () {
 			$('#form_pendapatan').find('.date-today').text(currdate);
-			$('#form_pendapatan').find('.date-today').text('Rp.'+total);
+			$('#form_pendapatan').find('.date-today').text(convertToRupiah(total));
 			var data = transaction,
 					//config manager
 					config = {
@@ -461,7 +464,7 @@ function pengeluaran() {
 		},
 		complete:function () {
 			$('#form_pengeluaran').find('.date-today').text(currdate);
-			$('#form_pengeluaran').find('.total-today').text('Rp.'+total);
+			$('#form_pengeluaran').find('.total-today').text(convertToRupiah(total));
 			var data = transaction,
 					//config manager
 					config = {
@@ -521,7 +524,7 @@ function saldo() {
 			});
 		},
 		complete:function () {
-			$('#form_saldo').find('.total-today').text('Rp. '+convertToRupiah(totalCurr));
+			$('#form_saldo').find('.total-today').text(convertToRupiah(totalCurr));
 			$('#form_saldo').find('.date-today').text(currdate);
 			var data = transaction,
 					//config manager
@@ -581,7 +584,7 @@ function dpd() {
 		},
 		complete:function () {
 			$('#form_dpd').find('.date-today').text(currdate);
-			$('#form_dpd').find('.total-today').text('Rp.'+total);
+			$('#form_dpd').find('.total-today').text(convertToRupiah(total));
 			var data = transaction,
 					//config manager
 					config = {
@@ -644,7 +647,7 @@ function disburse() {
 			});
 		},
 		complete: function () {
-			$('#form_disburse').find('.total-today').text(totalToday);
+			$('#form_disburse').find('.total-today').text(convertToRupiah(totalToday));
 			$('#form_disburse').find('.date-today').text(currdate);
 			var data = transaction,
 					//config manager
@@ -695,7 +698,7 @@ function disburse() {
 			});
 		},
 		complete:function () {
-			$('#form_disburse').find('.total-yesterday').text(totalYesterday);
+			$('#form_disburse').find('.total-yesterday').text(convertToRupiah(totalYesterday));
 			$('#form_disburse').find('.date-yesterday').text(lastdate);
 		},
 
