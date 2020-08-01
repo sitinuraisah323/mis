@@ -110,7 +110,8 @@ $this->load->view('temp/MenuBar.php');
 							<option value="">All</option>
 						</select>
                     </div>
-                <?php endif ;?>  <div class="col-lg-2">
+                <?php endif ;?>
+					<div class="col-lg-2">
 						<label class="col-form-label">Status</label>
                         <select class="form-control select2" name="status" id="status">
                             <option value=""></option>
