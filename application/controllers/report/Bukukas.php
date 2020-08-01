@@ -90,8 +90,8 @@ class Bukukas extends Authenticated
 			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no, date('F',strtotime($row->date)));				  	
 			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no, date('Y',strtotime($row->date)));				 
 			$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, $row->description);
-			if($row->type =="CASH_IN"){$cashin= $row->amount; $currentSaldo += $row->amount; $TotSaldoIn +=  $row->amount;}else{$cashin=$cashin;}
-			if($row->type =="CASH_OUT"){$cashout= $row->amount; $currentSaldo -=  $row->amount; $TotSaldoOut +=  $row->amount;}else{$cashout=$cashout;}		 
+			if($row->type =="CASH_IN"){$cashin= $row->amount; $currentSaldo += $row->amount; $TotSaldoIn +=  $row->amount;}else{$cashin=0;}
+			if($row->type =="CASH_OUT"){$cashout= $row->amount; $currentSaldo -=  $row->amount; $TotSaldoOut +=  $row->amount;}else{$cashout=0;}		 
 			$objPHPExcel->getActiveSheet()->setCellValue('G'.$no, $cashin);				 
 			$objPHPExcel->getActiveSheet()->setCellValue('H'.$no, $cashout);				 
 			$objPHPExcel->getActiveSheet()->setCellValue('I'.$no, $currentSaldo);				 

@@ -117,12 +117,22 @@ class Dpd extends Authenticated
 		$status="";
 		$totalDPD=0;
 		$currdate = date('Y-m-d H:i:s');
-		$currdate = new DateTime($currdate); 
+		//$currdate = new DateTime($currdate); 
 
 		foreach ($data as $row) 
 		{
-			$deadline = new DateTime($row->deadline);
-			$interval =  $deadline->diff($currdate);
+			//$deadline = new DateTime($row->deadline);
+			//$interval =  $currdate->diff($deadline);
+			$date1 = $row->deadline;
+			$date2 = $currdate;
+			//var_dump($date1);
+			//var_dump($date2);
+			
+			//$interval = dateDiff($date1,$date2);
+			$dpd =  round(abs(strtotime($date1) - strtotime($date2))/86400);
+			//var_dump($interval);
+		
+
 			//$totalDPD = $currdate->diff($deadline);
 			$objPHPExcel->getActiveSheet()->setCellValue('A'.$no, $row->code);	
 			$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, $row->unit_name);	
@@ -135,8 +145,8 @@ class Dpd extends Authenticated
 			$objPHPExcel->getActiveSheet()->setCellValue('I'.$no, $row->estimation);				 
 			$objPHPExcel->getActiveSheet()->setCellValue('J'.$no, $row->new_admin);				 
 			$objPHPExcel->getActiveSheet()->setCellValue('K'.$no, $row->amount);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('L'.$no, $interval->d);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('M'.$no, $this->calculateDenda($interval->d,$row->amount));				 
+			$objPHPExcel->getActiveSheet()->setCellValue('L'.$no, $dpd);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('M'.$no, $this->calculateDenda($dpd,$row->amount));				 
 			$objPHPExcel->getActiveSheet()->setCellValue('N'.$no, $row->amount);				 
 			$objPHPExcel->getActiveSheet()->setCellValue('O'.$no, $row->amount);				 	 
 			$no++;
@@ -150,6 +160,13 @@ class Dpd extends Authenticated
 		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 		$objWriter->save('php://output');
 
+	}
+
+	function dateDiff($d1, $d2) {
+
+		// Return the number of days between the two dates:    
+		return round(abs(strtotime($d1) - strtotime($d2))/86400);
+	
 	}
 
 	function calculateDenda($up, $dpd) {
@@ -171,6 +188,20 @@ class Dpd extends Authenticated
 			return $calculate - $modusCalculate + $round;
 		}
 		return 0;
+	}
+
+	function date_between($dateStart, $dateEnd) {
+		$date1 = new DateTime($dateStart);
+		$date2 = new DateTime($dateEnd);
+
+		// To calculate the time difference of two dates
+		$Difference_In_Time = $date2 - $date1;
+
+		// To calculate the no. of days between two dates
+		$Difference_In_Days = $Difference_In_Time / (1000 * 3600 * 24);
+
+		//To display the final no. of days (result)
+		return $Difference_In_Days;
 	}
 
 }
