@@ -39,15 +39,22 @@ $this->load->view('temp/MenuBar.php');
                     <div class="kt-widget14">
                         <div class="kt-widget14__header kt-margin-b-30">
 							<div class="row">
-								<div class="col-md-6">
+								<div class="col-md-12">
 									<h3 class="kt-widget14__title">
 										<i class="fa fa-chart-bar"></i> Booking Nasional
+                                        <hr/>
 									</h3>
-									<span class="kt-widget14__desc">
-                           		     Graph performance each unit of nasional booking
-                            		</span>
+                                    <div class="kt-widget14__legends">
+                                        <div class="kt-widget14__legend">
+                                            <span class="kt-widget14__bullet kt-bg-info"></span>
+                                            <span class="kt-widget14__stats"><span class="date-today"></span> : <span class="total-today"></span></span>
+                                            <span class="kt-widget14__bullet kt-bg-warning"></span>
+                                            <span class="kt-widget14__stats"><span class="date-yesterday"></span> : <span class="total-yesterday"></span></span>
+                                        </div>
+                                    </div>
+									
 								</div>
-								<div class="col-md-6">
+								<!-- <div class="col-md-6">
 									<span class="kt-widget14__desc">
 										Total Booking <span class="date-today"></span> <span class="total-today"></span>
 									</span>
@@ -55,7 +62,7 @@ $this->load->view('temp/MenuBar.php');
 									<span class="kt-widget14__desc">
 										Total Booking <span class="date-yesterday"></span> <span class="total-yesterday"></span>
 									</span>
-								</div>
+								</div> -->
 							</div>
                         </div>
                         <div class="kt-widget11">
@@ -75,15 +82,21 @@ $this->load->view('temp/MenuBar.php');
                     <div class="kt-widget14">
                         <div class="kt-widget14__header kt-margin-b-30">
 							<div class="row">
-								<div class="col-md-6">
+								<div class="col-md-12">
 									<h3 class="kt-widget14__title">
 										<i class="fa fa-chart-bar"></i> Outstanding Nasional
-									</h3>
-									<span class="kt-widget14__desc">
-										Graph performance each unit of nasional outstanding
-									</span>
+                                        <hr/>
+									</h3>									
+                                        <div class="kt-widget14__legends">
+                                            <div class="kt-widget14__legend">
+                                                <span class="kt-widget14__bullet kt-bg-info"></span>
+                                                <span class="kt-widget14__stats"><span class="date-today"></span> : <span class="total-today"></span></span>
+                                                <span class="kt-widget14__bullet kt-bg-warning"></span>
+                                                <span class="kt-widget14__stats"><span class="date-yesterday"></span> : <span class="total-yesterday"></span></span>
+                                            </div>
+                                        </div>									
 								</div>
-								<div class="col-md-6">
+								<!-- <div class="col-md-6">
 									<span class="kt-widget14__desc">
 										Os Nasional <span class="date-today"></span> <span class="total-today"></span>
 									</span>
@@ -91,7 +104,7 @@ $this->load->view('temp/MenuBar.php');
 									<span class="kt-widget14__desc">
 										Os Nasional <span class="date-yesterday"></span> <span class="total-yesterday"></span>
 									</span>
-								</div>
+								</div> -->
 							</div>
                         </div>
                         <div class="kt-widget11">
@@ -116,20 +129,24 @@ $this->load->view('temp/MenuBar.php');
                     <div class="kt-widget14">
                         <div class="kt-widget14__header kt-margin-b-30">
                         <div class="row">
-                            <div class="col-md-6">
+                                <div class="col-md-12">
                                     <h3 class="kt-widget14__title">
-                                    <i class="fa fa-chart-bar"></i> Day Past Due(DPD) Nasional             
+                                    <i class="fa fa-chart-bar"></i> Day Past Due(DPD) Nasional  
+                                    <hr/>           
                                     </h3>
-                                    <span class="kt-widget14__desc">
-                                    Graph performance each unit of nasional day past due(DPD)
-                                    </span>
+                                    <div class="kt-widget14__legends">
+                                        <div class="kt-widget14__legend">
+                                            <span class="kt-widget14__bullet kt-bg-info"></span>
+                                            <span class="kt-widget14__stats"><span class="date-today"></span> : <span class="total-today"></span></span>
+                                        </div>
+                                    </div>
                                 </div>
-                            <div class="col-md-6">
-                                    <span class="kt-widget14__desc">
-										DPD Nasional <span class="date-today"></span> <span class="total-today"></span>
-									</span>
-									<hr>
-                            </div>
+                                <!-- <div class="col-md-6">
+                                        <span class="kt-widget14__desc">
+                                            DPD Nasional <span class="date-today"></span> <span class="total-today"></span>
+                                        </span>
+                                        <hr>
+                                </div> -->
                         </div>
                           
                         
@@ -149,20 +166,24 @@ $this->load->view('temp/MenuBar.php');
                         <div class="kt-widget14">
                             <div class="kt-widget14__header kt-margin-b-30">
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <h3 class="kt-widget14__title">
-                                    <i class="fa fa-chart-bar"></i> Saldo Kas Nasional             
+                                    <i class="fa fa-chart-bar"></i> Saldo Kas Nasional  
+                                    <hr/>           
                                     </h3>
-                                    <span class="kt-widget14__desc">
-                                    Graph performance each unit of nasional saldo
-                                    </span>
+                                    <div class="kt-widget14__legends">
+                                        <div class="kt-widget14__legend">
+                                            <span class="kt-widget14__bullet kt-bg-info"></span>
+                                            <span class="kt-widget14__stats"><span class="date-today"></span> : <span class="total-today"></span></span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-md-6">
+                                <!-- <div class="col-md-6">
 									<span class="kt-widget14__desc">
 										Total Saldo <span class="date-today"></span> <span class="total-today"></span>
 									</span>
 									<hr>
-								</div>
+								</div> -->
                             </div>
                                
                             </div>
@@ -186,15 +207,21 @@ $this->load->view('temp/MenuBar.php');
                     <div class="kt-widget14">
                         <div class="kt-widget14__header kt-margin-b-30">                           
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                    <h3 class="kt-widget14__title">
-                                        <i class="fa fa-chart-bar"></i> Pencairan Gadai Reguler             
+                                        <i class="fa fa-chart-bar"></i> Pencairan Gadai Reguler   
+                                        <hr/>          
                                     </h3>
-                                    <span class="kt-widget14__desc">
-                                        Graph performance each unit of nasional pencairan Gadai Reguler
-                                    </span>
+                                        <div class="kt-widget14__legends">
+                                            <div class="kt-widget14__legend">
+                                                <span class="kt-widget14__bullet kt-bg-info"></span>
+                                                <span class="kt-widget14__stats"><span class="date-today"></span> : <span class="total-today"></span></span>
+                                                <span class="kt-widget14__bullet kt-bg-warning"></span>
+                                                <span class="kt-widget14__stats"><span class="date-yesterday"></span> : <span class="total-yesterday"></span></span>
+                                            </div>
+                                        </div>	
                                 </div>
-                                 <div class="col-md-6">
+                                 <!-- <div class="col-md-6">
 									<span class="kt-widget14__desc">
 										Gadai Reguler <span class="date-today"></span> <span class="total-today"></span>
 									</span>
@@ -202,7 +229,7 @@ $this->load->view('temp/MenuBar.php');
 									<span class="kt-widget14__desc">
                                         Gadai Reguler <span class="date-yesterday"></span> <span class="total-yesterday"></span>
 									</span>
-								</div>
+								</div> -->
                             </div>
                         </div>                        
                         <div class="kt-widget11">
@@ -220,15 +247,21 @@ $this->load->view('temp/MenuBar.php');
                     <div class="kt-widget14">
                         <div class="kt-widget14__header kt-margin-b-30">
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                 <h3 class="kt-widget14__title">
-                                   <i class="fa fa-chart-bar"></i> Pelunasan             
+                                   <i class="fa fa-chart-bar"></i> Pelunasan   
+                                   <hr/>          
                                 </h3>
-                                <span class="kt-widget14__desc">
-                                   Graph performance each unit of Pelunasan
-                                </span>
+                                    <div class="kt-widget14__legends">
+                                        <div class="kt-widget14__legend">
+                                            <span class="kt-widget14__bullet kt-bg-info"></span>
+                                            <span class="kt-widget14__stats"><span class="date-today"></span> : <span class="total-today"></span></span>
+                                            <span class="kt-widget14__bullet kt-bg-warning"></span>
+                                            <span class="kt-widget14__stats"><span class="date-yesterday"></span> : <span class="total-yesterday"></span></span>
+                                        </div>
+                                    </div>	
                                 </div>
-                                <div class="col-md-6">
+                                <!-- <div class="col-md-6">
 									<span class="kt-widget14__desc">
 										Pelunasan <span class="date-today"></span> <span class="total-today"></span>
 									</span>
@@ -236,7 +269,7 @@ $this->load->view('temp/MenuBar.php');
 									<span class="kt-widget14__desc">
                                         Pelunasan <span class="date-yesterday"></span> <span class="total-yesterday"></span>
 									</span>
-								</div>
+								</div> -->
                             </div>
                         </div>
                         <div class="kt-widget11">
@@ -258,22 +291,26 @@ $this->load->view('temp/MenuBar.php');
                 <div class="kt-portlet kt-portlet--height-fluid">
                     <div class="kt-widget14">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="kt-widget14__header kt-margin-b-30">
                                 <h3 class="kt-widget14__title">
-                                <i class="fa fa-chart-bar"></i> Pengeluaran             
+                                <i class="fa fa-chart-bar"></i> Pengeluaran 
+                                    <hr/>            
                                 </h3>
-                                <span class="kt-widget14__desc">
-                                Graph performance each unit of cash out
-                                </span>
+                                    <div class="kt-widget14__legends">
+                                        <div class="kt-widget14__legend">
+                                            <span class="kt-widget14__bullet kt-bg-info"></span>
+                                            <span class="kt-widget14__stats"><?php  echo date('F'); ?> : <span class="total-today"></span></span>
+                                        </div>
+                                    </div>	
                             </div>                       
                         </div>
-                        <div class="col-md-6">
+                        <!-- <div class="col-md-6">
                             <span class="kt-widget14__desc">
                                 Pengeluaran <?php  echo date('F'); ?> <span class="total-today"></span>
                             </span>
                             <hr>
-                        </div>
+                        </div> -->
                     </div>
                         <div class="kt-widget11">
                             <div id="graphPengeluaran" style="height:300px;"></div>                           
@@ -289,22 +326,26 @@ $this->load->view('temp/MenuBar.php');
                 <div class="kt-portlet kt-portlet--height-fluid">
                     <div class="kt-widget14">                    
                         <div class="row">
-                            <div class="col-md-6">                                
+                            <div class="col-md-12">                                
                                 <div class="kt-widget14__header kt-margin-b-30">
                                     <h3 class="kt-widget14__title">
-                                         <i class="fa fa-chart-bar"></i>  Pendapatan             
+                                         <i class="fa fa-chart-bar"></i>  Pendapatan  
+                                         <hr/>           
                                     </h3>
-                                    <span class="kt-widget14__desc">
-                                         Graph performance each unit of cash in
-                                    </span>
+                                    <div class="kt-widget14__legends">
+                                        <div class="kt-widget14__legend">
+                                            <span class="kt-widget14__bullet kt-bg-success"></span>
+                                            <span class="kt-widget14__stats"><?php  echo date('F'); ?> : <span class="total-today"></span></span>
+                                        </div>
+                                    </div>
                                 </div>                           
                             </div>
-                            <div class="col-md-6">
+                            <!-- <div class="col-md-6">
                                 <span class="kt-widget14__desc">
-                                    Pendapatan <?php  echo date('F'); ?> <span class="date-today"></span> <span class="total-today"></span>
+                                    Pendapatan <?php  //echo date('F'); ?> <span class="date-today"></span> <span class="total-today"></span>
                                 </span>
                                 <hr>
-                           </div>                           
+                           </div>                            -->
                         </div>
                         <div class="kt-widget11">
                                 <div id="graphPendapatan" style="height:300px;"></div>                           

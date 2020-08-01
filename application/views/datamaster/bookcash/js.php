@@ -13,6 +13,20 @@ function convertToRupiah(angka)
 	return rupiah.split('',rupiah.length-1).reverse().join('');
 }
 
+function formatNumber(n) {
+    var result = "";
+
+    // format number 1000000 to 1,234,567
+    if (n != null) {
+        n = n.toString();
+    } else {
+        n = "0";
+    }
+
+    result = + n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return result;
+}
+
 function initDTEvents(){
     $(".btn_delete").on("click",function(){
         var targetId = $(this).data("id");
