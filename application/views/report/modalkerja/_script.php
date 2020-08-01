@@ -105,14 +105,14 @@ function initCariModalKerjaPusatForm(){
         var unit = $('[name="id_unit"]').val();
         console.log(unit);
         var category = $('#categori').val();
-		var dateStart = $('[name="date-start"]').val();
+		//var dateStart = $('[name="date-start"]').val();
 		var dateEnd = $('[name="date-end"]').val();
         KTApp.block('#form_bukukas .kt-portlet__body', {});
 		$.ajax({
 			type : 'GET',
 			url : "<?php echo base_url("api/transactions/unitsdailycash/modal_kerja_pusat"); ?>",
 			dataType : "json",
-			data:{id_unit:unit,category:category,dateStart:dateStart,dateEnd:dateEnd},
+			data:{id_unit:unit,category:category,dateEnd:dateEnd},
 			success : function(response,status){
 				KTApp.unblockPage();
 				if(response.status == true){

@@ -290,7 +290,7 @@ class Regularpawns extends ApiController
 			->where('deadline <',date('Y-m-d'));
 		if($get = $this->input->get()){
 			$this->regulars->db
-				->where('units_regularpawns.date_sbk >=', $get['dateStart'])
+				//->where('units_regularpawns.date_sbk >=', $get['dateStart'])
 				->where('units_regularpawns.date_sbk <=', $get['dateEnd'])
 				->where('units_regularpawns.status_transaction ', 'N')
 				->where('units_regularpawns.id_unit', $get['id_unit']);

@@ -104,7 +104,7 @@ class Dpd extends Authenticated
 			->join('units','units_regularpawns.id_unit = units.id')
 			->where('deadline <',date('Y-m-d'));
 			$this->regulars->db
-				->where('units_regularpawns.date_sbk >=', $post['date-start'])
+				//->where('units_regularpawns.date_sbk >=', $post['date-start'])
 				->where('units_regularpawns.date_sbk <=', $post['date-end'])
 				->where('units_regularpawns.status_transaction ', 'N')
 				->where('units_regularpawns.id_unit', $post['id_unit']);
@@ -146,9 +146,11 @@ class Dpd extends Authenticated
 			$objPHPExcel->getActiveSheet()->setCellValue('J'.$no, $row->new_admin);				 
 			$objPHPExcel->getActiveSheet()->setCellValue('K'.$no, $row->amount);				 
 			$objPHPExcel->getActiveSheet()->setCellValue('L'.$no, $dpd);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('M'.$no, $this->calculateDenda($dpd,$row->amount));				 
-			$objPHPExcel->getActiveSheet()->setCellValue('N'.$no, $row->amount);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('O'.$no, $row->amount);				 	 
+			$objPHPExcel->getActiveSheet()->setCellValue('M'.$no, $row->tafsiran_sewa );				 
+			$objPHPExcel->getActiveSheet()->setCellValue('N'.$no, $this->calculateDenda($row->amount,$dpd));
+			$up = $this->calculateDenda($row->amount, $dpd);
+			$calcup = $up + $this->calculateDenda($row->amount,$dpd) + $row->amount;				 
+			$objPHPExcel->getActiveSheet()->setCellValue('O'.$no, $calcup);				 	 
 			$no++;
 		}
 
@@ -169,7 +171,7 @@ class Dpd extends Authenticated
 	
 	}
 
-	function calculateDenda($up, $dpd) {
+	function calculateDenda($dpd,$up) {
 		$sumDay = intval($dpd - 15);
 		if($sumDay > 0){
 			$rate=0;

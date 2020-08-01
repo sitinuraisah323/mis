@@ -4,12 +4,19 @@ var cariForm;
 <?php 
 $date =  date('Y-m-d');
 //$currdate =date("Y-m-t", strtotime($date));
-$lastdate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
-$nextlastdate = date('Y-m-d', strtotime('-2 days', strtotime($date)));
+//$lastdate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
+//$nextlastdate = date('Y-m-d', strtotime('-2 days', strtotime($date)));
+$lastdate = date('Y-m-d', (strtotime($date)));
+$nextlastdate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
 ?>
 var currdate = "<?php echo $lastdate;?>";
 var lastdate = "<?php echo $nextlastdate;?>";
+var currday = "<?php echo date('d'); ?>";
 var currmonth = "<?php echo date('m'); ?>";
+var curryears = "<?php echo date('Y'); ?>";
+
+//alert(currdate);
+//alert(lastdate);
 
 function convertToRupiah(angka)
 {
@@ -404,7 +411,7 @@ function pendapatan() {
 		},
 		complete:function () {
 			$('#form_pendapatan').find('.date-today').text(currdate);
-			$('#form_pendapatan').find('.date-today').text(convertToRupiah(total));
+			$('#form_pendapatan').find('.total-today').text(convertToRupiah(total));
 			var data = transaction,
 					//config manager
 					config = {
@@ -622,8 +629,8 @@ function disburse() {
 	$('svg').remove();
 	$('#graphDisburse').empty();
 	var transaction = [];
-	var dateToday = "<?php echo  date('d', strtotime('-1 days', strtotime($date)));?>";
-	var dateYesterday = "<?php echo  date('d', strtotime('-2 days', strtotime($date)))?>";
+	//var dateToday = "<?php //echo  date('d', strtotime('-1 days', strtotime($date)));?>";
+	//var dateYesterday = "<?php //echo  date('d', strtotime('-2 days', strtotime($date)))?>";
 	//var currdate = '20';
 	var totalYesterday = 0;
 	var totalToday = 0;
@@ -634,7 +641,7 @@ function disburse() {
 		dataType: "JSON",
 		data: {
 			area: '',
-			date: dateToday,
+			date: currdate,
 		},
 		success: function (response) {
 			$.each(response.data, function (index, unit) {
@@ -686,7 +693,7 @@ function disburse() {
 		dataType:"JSON",
 		data:{
 			area:'',
-			date:dateYesterday,
+			date:lastdate,
 		},
 		success:function (response) {
 			$.each(response.data, function (index,unit) {

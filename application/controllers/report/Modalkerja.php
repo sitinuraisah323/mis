@@ -85,9 +85,9 @@ class Modalkerja extends Authenticated
 			$this->unitsdailycash->db
 				->select('units.code,units.name as unit_name')
 				->join('units','units_dailycashs.id_unit=units.id')				
-				->where('date >=', $post['date-start'])
+				//->where('date >=', $post['date-start'])
 				->where('date <=', $post['date-end'])
-				->where('id_unit', $post['unit']);
+				->where('id_unit', $post['id_unit']);
 				if($category=='0'){
 					$this->unitsdailycash->db->where('no_perk', '1110000');
 				}

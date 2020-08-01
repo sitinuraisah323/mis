@@ -105,7 +105,7 @@ function initCariForm(){
         var unit = $('[name="id_unit"]').val();
         var nasabah = $('#nasabah').val();
         var statusrpt = $('#status').val();
-		var dateStart = $('[name="date-start"]').val();
+		//var dateStart = $('[name="date-start"]').val();
 		var dateEnd = $('[name="date-end"]').val();
 		var permit = $('[name="permit"]').val();
         KTApp.block('#form_bukukas .kt-portlet__body', {});
@@ -113,7 +113,7 @@ function initCariForm(){
 			type : 'GET',
 			url : "<?php echo base_url("api/transactions/mortages/report"); ?>",
 			dataType : "json",
-			data:{id_unit:unit,statusrpt:statusrpt,nasabah:nasabah,dateStart:dateStart,dateEnd:dateEnd,permit:permit},
+			data:{id_unit:unit,statusrpt:statusrpt,nasabah:nasabah,dateEnd:dateEnd,permit:permit},
 			success : function(response,status){
 				KTApp.unblockPage();
 				if(response.status == true){

@@ -110,7 +110,7 @@ function initCariForm(){
         var area = $('[name="area"]').val();
         var unit = $('[name="id_unit"]').val();
         var statusrpt = $('#status').val();
-		var dateStart = $('[name="date-start"]').val();
+		//var dateStart = $('[name="date-start"]').val();
 		var dateEnd = $('[name="date-end"]').val();
 		var permit = $('[name="permit"]').val();
         KTApp.block('#form_bukukas .kt-portlet__body', {});
@@ -118,7 +118,7 @@ function initCariForm(){
 			type : 'GET',
 			url : "<?php echo base_url("api/transactions/regularpawns/reportdpd"); ?>",
 			dataType : "json",
-			data:{id_unit:unit,dateStart:dateStart,dateEnd:dateEnd,permit:permit},
+			data:{id_unit:unit,dateEnd:dateEnd,permit:permit},
 			success : function(response,status){
 				KTApp.unblockPage();
 				if(response.status == true){

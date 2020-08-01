@@ -77,7 +77,7 @@
 			<img class="kt-hidden" alt="Pic" src="<?php echo base_url(); ?>assets/media/users/300_21.jpg">
 
 			<!--use below badge element instead the user avatar to display username's first letter(remove kt-hidden class to display it) -->
-		    <span class="kt-badge kt-badge--username kt-badge--unified-success kt-badge--lg kt-badge--rounded kt-badge--bold kt-hidden-">A</span>
+		    <span class="kt-badge kt-badge--username kt-badge--unified-success kt-badge--lg kt-badge--rounded kt-badge--bold kt-hidden-"><?php echo strtoupper(substr($this->session->userdata('user')->username,0,1)); ?></span>
 		</div>
 		<div class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim dropdown-menu-xl">
 			<!--begin: Head -->
@@ -85,10 +85,21 @@
         <div class="kt-user-card__avatar">
             <img class="kt-hidden" alt="Pic" src="<?php echo base_url(); ?>assets/media/users/300_25.jpg" />
             <!--use below badge element instead the user avatar to display username's first letter(remove kt-hidden class to display it) -->
-            <span class="kt-badge kt-badge--lg kt-badge--rounded kt-badge--bold kt-font-success">A</span>
+            <span class="kt-badge kt-badge--lg kt-badge--rounded kt-badge--bold kt-font-success"><?php echo strtoupper(substr($this->session->userdata('user')->username,0,1)); ?></span>
         </div>
         <div class="kt-user-card__name">
         <?php echo  $this->session->userdata('user')->username; ?>
+        <?php $level = $this->session->userdata('user')->level;
+            if($level=='administrator'){
+                echo "<br/> Administrator";
+            }else if($level=='pusat'){
+                echo "<br/> Kantor Pusat";
+            }else if($level=='area'){
+                echo "<br/> Area : ".$this->session->userdata('user')->area_name;
+            }else if($level=='unit'){
+                echo "<br/> Unit : ".$this->session->userdata('user')->unit_name;
+            }        
+        ?>
         </div>        
     </div>
 <!--end: Head -->
