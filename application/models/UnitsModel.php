@@ -16,7 +16,7 @@ class UnitsModel extends Master
 
 	public function get_units_byarea($area)
 	{
-		$this->db->select('a.id,b.area,a.name');		
+		$this->db->select('a.id,b.area,a.name, a.code');
 		$this->db->join('areas as b','b.id=a.id_area');		
 		$this->db->where('a.id_area',$area);		
 		$this->db->order_by('a.id','desc');		

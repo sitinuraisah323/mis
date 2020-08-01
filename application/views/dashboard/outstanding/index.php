@@ -84,7 +84,12 @@ $this->load->view('temp/MenuBar.php');
 								<input type="hidden" name="id_unit" value="<?php echo $this->session->userdata('user')->id_unit;?>">
 						<?php elseif($this->session->userdata('user')->level == 'area'):?>
 							<input type="hidden" name="area" value="<?php echo $this->session->userdata('user')->id_area;?>">
-						<?php else:?>        
+							<label class="col-form-label">Unit</label>
+							<div class="col-lg-2">
+								<select class="form-control select2" name="id_unit" id="unit">
+									<option value="">All</option>
+								</select>
+							</div>	<?php else:?>
 							<label class="col-form-label">Area</label>
 							<div class="col-lg-2">
 								<select class="form-control select2" name="area" id="area">
