@@ -4,10 +4,10 @@ var cariForm;
 <?php 
 $date =  date('Y-m-d');
 //$currdate =date("Y-m-t", strtotime($date));
-//$lastdate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
-//$nextlastdate = date('Y-m-d', strtotime('-2 days', strtotime($date)));
-$lastdate = date('Y-m-d', (strtotime($date)));
-$nextlastdate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
+$lastdate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
+$nextlastdate = date('Y-m-d', strtotime('-2 days', strtotime($date)));
+// $lastdate = date('Y-m-d', (strtotime($date)));
+// $nextlastdate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
 ?>
 var currdate = "<?php echo $lastdate;?>";
 var lastdate = "<?php echo $nextlastdate;?>";

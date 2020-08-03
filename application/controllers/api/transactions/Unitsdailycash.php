@@ -262,7 +262,8 @@ class Unitsdailycash extends ApiController
 				->where_in('no_perk', $category)
 				->where('date >=', $get['dateStart'])
 				->where('date <=', $get['dateEnd'])
-				->where('id_unit', $get['id_unit']);
+				->where('id_unit', $get['id_unit'])
+				->order_by('date', 'asc');
 		}
 		$this->unitsdailycash->db->join('units','units.id = units_dailycashs.id_unit');
 		$data = $this->unitsdailycash->all();
@@ -291,7 +292,8 @@ class Unitsdailycash extends ApiController
 				->where_in('no_perk', $category)
 				->where('date >=', $get['dateStart'])
 				->where('date <=', $get['dateEnd'])
-				->where('id_unit', $get['id_unit']);
+				->where('id_unit', $get['id_unit'])
+				->order_by('date', 'asc');
 		}
 		$this->unitsdailycash->db->join('units','units.id = units_dailycashs.id_unit');
 		$data = $this->unitsdailycash->all();

@@ -81,7 +81,8 @@ class Pendapatan extends Authenticated
 				->where_in('no_perk', $category)
 				->where('date >=', $post['date-start'])
 				->where('date <=', $post['date-end'])
-				->where('id_unit', $post['id_unit']);
+				->where('id_unit', $post['id_unit'])
+				->order_by('date', 'asc');
 
 			//$this->unitsdailycash->db->join('units','units.id = units_dailycashs.id_unit');
 			$data = $this->unitsdailycash->all();

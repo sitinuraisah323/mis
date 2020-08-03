@@ -175,6 +175,10 @@ $('[name="area"]').on('change',function(){
             var response = JSON.parse(data);
             if (status) {
                 $("#unit").empty();
+                var opt = document.createElement("option");
+                    opt.value = "all";
+                    opt.text = "All";
+                    units.append(opt);
                 for (var i = 0; i < response.data.length; i++) {
                     var opt = document.createElement("option");
                     opt.value = response.data[i].id;

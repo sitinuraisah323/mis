@@ -116,7 +116,7 @@ $this->load->view('temp/MenuBar.php');
                     <label class="col-form-label">Kategori</label>                    
                     <select class="form-control select2" name="category" id="category">
                             <option></option>
-                            <option value="all">All</option>
+                            <option value="all" selected>All</option>
                             <?php 
                             foreach ($pengeluaran as $row) {
                                 echo '<option value="'.$row->no_perk.'">'.$row->na_perk.'<option>';
@@ -126,7 +126,7 @@ $this->load->view('temp/MenuBar.php');
                     </div>
                     <div class="col-lg-2">
                         <label class="col-form-label">Tanggal</label>					
-						<input type="date" class="form-control" name="date-start" value="<?php echo date('Y-m-d');?>">
+						<input type="date" class="form-control" name="date-start" value="<?php echo date('Y-m-01');?>">
 					</div>
 					<div class="col-lg-2">
                         <label class="col-form-label">Sampai</label>

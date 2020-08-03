@@ -493,8 +493,11 @@
 					<div id="kt_header_menu" class="kt-header-menu kt-header-menu-mobile "  >
 						<ul class="kt-menu__nav ">
 							<li class="kt-menu__item  kt-menu__item--submenu kt-menu__item--rel"  data-ktmenu-submenu-toggle="click" aria-haspopup="true">
+							<?php $level = $this->session->userdata('user')->level;?>
+							<?php if($level=='administrator'){ ?>
 								<a  href="<?php echo base_url('dailyreport/unitsreport'); ?>" class="btn btn-primary"><i class="fa fa-envelope"></i> Non OJK</a>&nbsp
 								<a  href="<?php echo base_url('dailyreport/unitsreportojk'); ?>" class="btn btn-success"><i class="fa fa-check-double"></i> OJK</a>&nbsp
+							<?php } ?>
 								<a  href="#"  data-toggle="modal" data-target="#help" class="btn btn-warning"><i class="fa fa-exclamation-circle"></i> Help</a>
 							</li>
 						</ul>

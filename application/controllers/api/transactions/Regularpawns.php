@@ -247,7 +247,7 @@ class Regularpawns extends ApiController
 			if($get['statusrpt']=="2"){$status=["L"];}
 			if($get['statusrpt']=="3"){$status=[""];}
 			$this->regulars->db
-				->where('units_regularpawns.date_sbk >=', $get['dateStart'])
+				//->where('units_regularpawns.date_sbk >=', $get['dateStart'])
 				->where('units_regularpawns.date_sbk <=', $get['dateEnd'])
 				->where_in('units_regularpawns.status_transaction ', $status)
 				->where('units_regularpawns.id_unit', $get['id_unit']);
@@ -257,6 +257,34 @@ class Regularpawns extends ApiController
 				if($nasabah!="all"){
 					$this->regulars->db->where('customers.nik', $nasabah);
 				}
+		}
+		$data = $this->regulars->all();
+		echo json_encode(array(
+			'data'	=> $data,
+			'status'	=> true,
+			'message'	=> 'Successfully Get Data Regular Pawns'
+		));
+	}
+
+	public function reportcustomers()
+	{
+		$this->regulars->db
+			->select('units.name as unit_name,(select date_repayment from units_repayments where units_repayments.no_sbk = units_regularpawns.no_sbk and units_repayments.id_unit = units_repayments.id_unit limit 1 ) as date_repayment')
+			->join('units','units.id = units_regularpawns.id_unit');
+		if($get = $this->input->get()){
+			$units = $get['id_unit'];
+			$status =null;
+			if($get['statusrpt']=="0"){$status=["N","L"];}
+			if($get['statusrpt']=="1"){$status=["N"];}
+			if($get['statusrpt']=="2"){$status=["L"];}
+			if($get['statusrpt']=="3"){$status=[""];}
+			$this->regulars->db
+				->where_in('units_regularpawns.status_transaction ', $status)
+				->where('units_regularpawns.id_customer', '0')
+				->order_by('units_regularpawns.id_unit', 'asc');
+				// if($units != 'all' || $units != null){
+				// 	$this->regulars->db->where('units_regularpawns.id_unit', $units);
+				// }				
 		}
 		$data = $this->regulars->all();
 		echo json_encode(array(
