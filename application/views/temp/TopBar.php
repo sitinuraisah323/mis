@@ -90,23 +90,28 @@
         <div class="kt-user-card__name">
         <?php echo  $this->session->userdata('user')->username; ?>
         <?php $level = $this->session->userdata('user')->level;
+            $label="";
             if($level=='administrator'){
-                echo "<br/> Administrator";
+                $label = "Administrator";
             }else if($level=='pusat'){
-                echo "<br/> Kantor Pusat";
+                $label = "Kantor Pusat";
             }else if($level=='area'){
-                echo "<br/> Area : ".$this->session->userdata('user')->area_name;
+                $label = "Area : ".$this->session->userdata('user')->area_name;
             }else if($level=='unit'){
-                echo "<br/> Unit : ".$this->session->userdata('user')->unit_name;
+                $label = "Unit : ".$this->session->userdata('user')->unit_name;
             }        
         ?>
+        <div class="kt-user-card__badge">
+            <span class="btn btn-success btn-sm btn-bold btn-font-md"><?php echo $label; ?></span>
+		</div>
+
         </div>        
     </div>
 <!--end: Head -->
 
     <!--begin: Navigation -->
     <div class="kt-notification">
-        <a href="#" class="kt-notification__item">
+        <a href="<?php echo base_url('profile') ?>" class="kt-notification__item">
             <div class="kt-notification__item-icon">
                 <i class="flaticon2-calendar-3 kt-font-success"></i>
             </div>
