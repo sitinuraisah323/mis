@@ -99,7 +99,8 @@ function initCariForm(){
     //events
     $('#btncari').on('click',function(){
         $('.rowappend').remove();
-        var unit = $('#unit').val();
+		var unit = $('[name="id_unit"]').val();
+		var area = $('[name="area"]').val();
 		var dateStart = $('[name="date-start"]').val();
 		var dateEnd = $('[name="date-end"]').val();
         KTApp.block('#form_bukukas .kt-portlet__body', {});
@@ -107,7 +108,7 @@ function initCariForm(){
 			type : 'GET',
 			url : "<?php echo base_url("api/datamaster/bookcash/report"); ?>",
 			dataType : "json",
-			data:{id_unit:unit,dateStart:dateStart,dateEnd:dateEnd},
+			data:{id_unit:unit,dateStart:dateStart,dateEnd:dateEnd, area:area},
 			success : function(response,status){
 				KTApp.unblockPage();
 				if(response.status == true){
@@ -159,15 +160,18 @@ function initCariForm(){
     }
 }
 
-function initGetUnit(){
-    $("#area").on('change',function(){
-        var area = $('#area').val();
+    $('[name="area"]').on('change',function(){
+        var area = $(this).val();
         var units =  document.getElementById('unit');
         var url_data = $('#url_get_unit').val() + '/' + area;
         $.get(url_data, function (data, status) {
             var response = JSON.parse(data);
             if (status) {
                 $("#unit").empty();
+				var opt = document.createElement("option");
+				opt.value = "0";
+				opt.text = "All";
+				units.appendChild(opt);
                 for (var i = 0; i < response.data.length; i++) {
                     var opt = document.createElement("option");
                     opt.value = response.data[i].id;
@@ -177,7 +181,6 @@ function initGetUnit(){
             }
         });
     });
-}
 
 function popView(el)
 {
@@ -285,4 +288,8 @@ jQuery(document).ready(function() {
     });
 });
 
+var type = $('[name="area"]').attr('type');
+if(type == 'hidden'){
+	$('[name="area"]').trigger('change');
+}
 </script>

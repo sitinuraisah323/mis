@@ -111,7 +111,8 @@ $this->load->view('temp/MenuBar.php');
 							<option value="0">All</option>
 						</select>
                     </div>
-                <?php endif ;?>  <label class="col-lg-1 col-form-label">Tanggal</label>
+                <?php endif ;?>
+					<label class="col-lg-1 col-form-label">Tanggal</label>
 					<div class="col-lg-2">
 						<input type="date" class="form-control" name="date-start" value="<?php echo date('Y-m-01');?>">
 					</div>

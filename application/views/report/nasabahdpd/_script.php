@@ -192,7 +192,6 @@ function initCariForm(){
 
 jQuery(document).ready(function() {
     initCariForm();
-    initGetUnit();
 });
 
 $('[name="area"]').on('change',function(){

@@ -99,7 +99,7 @@ function initCariForm(){
     //events
     $('#btncari').on('click',function(){
         $('.rowappend').remove();
-        var area = $('#area').val();
+        var area = $('[name="area"]').val();
 		var date = $('[name="date"]').val();
         KTApp.block('#form_bukukas .kt-portlet__body', {});
 		$.ajax({
@@ -149,9 +149,8 @@ function initCariForm(){
     }
 }
 
-function initGetUnit(){
-    $("#area").on('change',function(){
-        var area = $('#area').val();
+    $('[name="area"]').on('change',function(){
+        var area = $(this).val();
         var units =  document.getElementById('unit');
         var url_data = $('#url_get_unit').val() + '/' + area;
         $.get(url_data, function (data, status) {
@@ -171,11 +170,15 @@ function initGetUnit(){
             }
         });
     });
-}
 
 jQuery(document).ready(function() {
     initCariForm();
-    initGetUnit();
 });
+
+
+var type = $('[name="area"]').attr('type');
+if(type == 'hidden'){
+	$('[name="area"]').trigger('change');
+}
 
 </script>
