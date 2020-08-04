@@ -55,8 +55,8 @@ $this->load->view('temp/MenuBar.php');
                             </div>
                         </div>
                         <div class="kt-widget__info">
-                            <a href="#" class="kt-widget__username">
-                                Matt Peares                                                 
+                            <a href="<?php echo base_url('profile') ?>" class="kt-widget__username">
+                                                                                
                             </a>
                             <span class="kt-widget__desc">
                                 Head of Development
@@ -71,25 +71,25 @@ $this->load->view('temp/MenuBar.php');
                         <div class="kt-widget__item">
                             <div class="kt-widget__contact">
                                 <span class="kt-widget__label">Email:</span>
-                                <a href="#" class="kt-widget__data">matt@fifestudios.com</a>
+                                <a href="#" class="kt-widget__data email"></a>
                             </div>
                             <div class="kt-widget__contact">
                                 <span class="kt-widget__label">Phone:</span>
-                                <a href="#" class="kt-widget__data">44(76)34254578</a>
+                                <a href="#" class="kt-widget__data phone"></a>
                             </div>
                             <div class="kt-widget__contact">
                                 <span class="kt-widget__label">Area:</span>
-                                <span class="kt-widget__data">Melbourne</span>
+                                <span class="kt-widget__data area"></span>
                             </div>
                             <div class="kt-widget__contact">
                                 <span class="kt-widget__label">Unit:</span>
-                                <span class="kt-widget__data">Melbourne</span>
+                                <span class="kt-widget__data unit"></span>
                             </div>
                         </div>
                     </div>
 
                     <div class="kt-widget__footer">
-                        <button type="button" class="btn btn-label-brand btn-lg btn-upper">Change Password</button>
+                        <button type="button" class="btn btn-label-brand btn-lg btn-upper" onclick="changepwd()">Change Password</button>
                     </div>
                 </div>
                 <!--end::Widget -->
@@ -115,30 +115,59 @@ $this->load->view('temp/MenuBar.php');
                         <div class="kt-portlet__body">
                             <div class="kt-section kt-section--first">
                                 <div class="kt-section__body"> 
-                                    <div class="row">                               
-                                        <div class="col-md-6">
+                                
+
+                                    <div class="row">     
+                                        <div class="col-md-12">
+                                             <!--begin: Alerts -->   
+                                             <div class="kt-section">
+                                                <div class="kt-section__content">
+                                                    <div class="alert alert-success fade show kt-margin-r-20 kt-margin-l-20 kt-margin-t-20" role="alert" id="success_alert" style="display: none">
+                                                        <div class="alert-icon"><i class="flaticon-warning"></i></div>
+                                                        <div class="alert-text" id="success_message"></div>
+                                                        <div class="alert-close">
+                                                            <button type="button" class="close" aria-label="Close" id="success_alert_dismiss">
+                                                                <span aria-hidden="true"><i class="la la-close"></i></span>
+                                                            </button>
+                                                        </div>
+                                                    </div>  
+                                                    <div class="alert alert-danger fade show kt-margin-r-20 kt-margin-l-20 kt-margin-t-20" role="alert" id="failed_alert" style="display: none">
+                                                        <div class="alert-icon"><i class="flaticon-warning"></i></div>
+                                                        <div class="alert-text" id="failed_message"></div>
+                                                        <div class="alert-close">
+                                                            <button type="button" class="close" aria-label="Close" id="failed_alert_dismiss">
+                                                                <span aria-hidden="true"><i class="la la-close"></i></span>
+                                                            </button>
+                                                        </div>
+                                                    </div>                   
+                                                </div>                   
+                                            </div>        
+                                            <!--end: Alerts --> 
+                                        </div>                          
+                                        <div class="col-md-6">                                         
+                                        <input class="form-control" type="hidden" value="<?php echo $this->session->userdata('user')->id; ?>" name="id" >
                                             <div class="form-group row">
                                                 <label class="col-xl-3 col-lg-3 col-form-label">NIK</label>
                                                 <div class="col-lg-9 col-xl-6">
-                                                    <input class="form-control" type="text" value="Nick">
+                                                    <input class="form-control" type="text" name="nik" readonly>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label class="col-xl-3 col-lg-3 col-form-label">Nama</label>
                                                 <div class="col-lg-9 col-xl-6">
-                                                    <input class="form-control" type="text" value="Bold">
+                                                    <input class="form-control" type="text" name="fullname" readonly>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label class="col-xl-3 col-lg-3 col-form-label">Area</label>
                                                 <div class="col-lg-9 col-xl-6">
-                                                    <input class="form-control" type="text" value="Loop Inc.">
+                                                    <input class="form-control" type="text" name="areas" readonly>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label class="col-xl-3 col-lg-3 col-form-label">Unit</label>
                                                 <div class="col-lg-9 col-xl-6">
-                                                    <input class="form-control" type="text" value="Loop Inc.">
+                                                    <input class="form-control" type="text" name="units" readonly>
                                                 </div>
                                             </div>                                    
                                         </div>
@@ -149,7 +178,7 @@ $this->load->view('temp/MenuBar.php');
                                                 <div class="col-lg-9 col-xl-6">
                                                     <div class="input-group">
                                                         <div class="input-group-prepend"><span class="input-group-text"><i class="la la-phone"></i></span></div>
-                                                        <input type="text" class="form-control" value="+35278953712" placeholder="Phone" aria-describedby="basic-addon1">
+                                                        <input type="text" class="form-control" name="phones" aria-describedby="basic-addon1" readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -158,15 +187,19 @@ $this->load->view('temp/MenuBar.php');
                                                 <div class="col-lg-9 col-xl-6">
                                                     <div class="input-group">
                                                         <div class="input-group-prepend"><span class="input-group-text"><i class="la la-at"></i></span></div>
-                                                        <input type="text" class="form-control" value="nick.bold@loop.com" placeholder="Email" aria-describedby="basic-addon1">
+                                                        <input type="text" class="form-control" name="emails" aria-describedby="basic-addon1" readonly>
                                                     </div>
                                                 </div>
-                                            </div>                                    
+                                            </div> 
+                                            <div class="form-group row">
+                                                <label class="col-xl-3 col-lg-3 col-form-label">Alamat</label>
+                                                <div class="col-lg-9">
+                                                    <input class="form-control" type="text" name="address">
+                                                    <!-- <textarea name="address" rows="5"></textarea> -->
+                                                </div>
+                                            </div>                                   
                                         </div>
-                                    </div>
-                                   
-                                    
-
+                                    </div>                                 
                                 </div>
                             </div>
                         </div>                        
@@ -186,4 +219,6 @@ $this->load->view('temp/MenuBar.php');
 </div>
 <?php
 $this->load->view('temp/Footer.php');
+$this->load->view('profile/_script.php');
+$this->load->view('profile/_changepwd.php');
 ?>
