@@ -234,59 +234,6 @@ function initGetNasabah(){
     });
 }
 
-// function export_xls(){
-//         //alert('test');
-//         var unit        = $('#unit').val();
-//         var nasabah     = $('#nasabah').val();
-//         var statusrpt   = $('#status').val();
-// 		var dateStart   = $('[name="date-start"]').val();
-// 		var dateEnd     = $('[name="date-end"]').val();
-// 		var permit      = $('[name="permit"]').val();
-//         $.ajax({
-//                 type: "POST",
-//                 url: "<?php //echo site_url("report/regularpawns/export"); ?>",
-//                 cache: false,
-//                 data:{id_unit:unit,statusrpt:statusrpt,nasabah:nasabah,dateStart:dateStart,dateEnd:dateEnd,permit:permit},
-//                 contentType: 'application/json; charset=utf-8',
-//                 success: function(response)
-//                 {
-//                     window.open('<?php //echo site_url('report/regularpawns/export'); ?>','_blank');
-//                 }
-//         });
-// }
-
-// function export_csv(){
-//         //alert('test');
-//         var unit        = $('#unit').val();
-//         var nasabah     = $('#nasabah').val();
-//         var statusrpt   = $('#status').val();
-// 		var dateStart   = $('[name="date-start"]').val();
-// 		var dateEnd     = $('[name="date-end"]').val();
-// 		var permit      = $('[name="permit"]').val();
-
-//         var currdate = new Date();
-//         var date = moment(currdate).format('YYYY-MM-DD H:mm:s');
-//         var filename = "Gadai_Reguler_"+date+".csv";
-//         //var search = $('#generalSearch').val();
-//         $.ajax({
-//             url : "<?php //echo base_url("report/regularpawns/export_csv"); ?>",
-//             type: 'post',
-//             dataType: 'html',
-//             data:{id_unit:unit,statusrpt:statusrpt,nasabah:nasabah,dateStart:dateStart,dateEnd:dateEnd,permit:permit},
-//             success: function(data) {
-//                 console.log(data);
-//                 var downloadLink = document.createElement("a");
-//                 var fileData = ['\ufeff'+data];
-//                 var blobObject = new Blob(fileData,{type: "text/csv;charset=utf-8;"});
-//                 var url = URL.createObjectURL(blobObject);
-//                 downloadLink.href = url;
-//                 downloadLink.download = filename;
-//                 document.body.appendChild(downloadLink);
-//                 downloadLink.click();
-//                 document.body.removeChild(downloadLink);
-//             }
-//         })
-// }
 
 jQuery(document).ready(function() {
     initCariForm();

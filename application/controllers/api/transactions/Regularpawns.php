@@ -250,7 +250,7 @@ class Regularpawns extends ApiController
 				$this->regulars->db->where('id_area', $area);
 			}
 			$this->regulars->db
-				->where('units_regularpawns.date_sbk >=', $get['dateStart'])
+				//->where('units_regularpawns.date_sbk >=', $get['dateStart'])
 				->where('units_regularpawns.date_sbk <=', $get['dateEnd'])
 				->where_in('units_regularpawns.status_transaction ', $status);
 			if($get['id_unit']){
@@ -263,6 +263,40 @@ class Regularpawns extends ApiController
 				if($nasabah!="all" && $nasabah != null){
 					$this->regulars->db->where('customers.nik', $nasabah);
 				}
+		}
+		$data = $this->regulars->all();
+		echo json_encode(array(
+			'data'	=> $data,
+			'status'	=> true,
+			'message'	=> 'Successfully Get Data Regular Pawns'
+		));
+	}
+
+	public function reportcustomers()
+	{
+		$this->regulars->db
+			->select('units.name as unit_name,(select date_repayment from units_repayments where units_repayments.no_sbk = units_regularpawns.no_sbk and units_repayments.id_unit = units_repayments.id_unit limit 1 ) as date_repayment')
+			->join('units','units.id = units_regularpawns.id_unit')
+			->select('areas.id as area_id')
+			->join('areas','areas.id = units.id_area');
+		if($get = $this->input->get()){
+			$units = $get['id_unit'];
+			$area = $get['area'];
+			$status =null;
+			if($get['statusrpt']=="0"){$status=["N","L"];}
+			if($get['statusrpt']=="1"){$status=["N"];}
+			if($get['statusrpt']=="2"){$status=["L"];}
+			if($get['statusrpt']=="3"){$status=[""];}
+			$this->regulars->db
+				->where_in('units_regularpawns.status_transaction ', $status)
+				->where('units_regularpawns.id_customer', '0')
+				->order_by('units_regularpawns.id_unit', 'asc');
+				if($area != 'all'){
+					$this->regulars->db->where('areas.id', $area);
+				}
+				if($units != 'all'){
+					$this->regulars->db->where('units_regularpawns.id_unit', $units);
+				}				
 		}
 		$data = $this->regulars->all();
 		echo json_encode(array(
@@ -296,7 +330,7 @@ class Regularpawns extends ApiController
 			->where('deadline <',date('Y-m-d'));
 		if($get = $this->input->get()){
 			$this->regulars->db
-				->where('units_regularpawns.date_sbk >=', $get['dateStart'])
+				//->where('units_regularpawns.date_sbk >=', $get['dateStart'])
 				->where('units_regularpawns.date_sbk <=', $get['dateEnd'])
 				->where('units_regularpawns.status_transaction ', 'N');
 			if($this->input->get('id_unit')){

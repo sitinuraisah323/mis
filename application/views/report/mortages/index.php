@@ -129,12 +129,12 @@ $this->load->view('temp/MenuBar.php');
 							<?php endforeach;?>
 						</select>
 					</div>
-					<div class="col-lg-2">
+					<!-- <div class="col-lg-2">
 						<label class="col-form-label">Tanggal</label>
 						<input type="date" class="form-control" name="date-start" value="<?php echo date('Y-m-d');?>">
-					</div>
+					</div> -->
 					<div class="col-lg-2">
-						<label class="col-form-label">Sampai</label>
+						<label class="col-form-label">Tanggal</label>
 						<input type="date" class="form-control" name="date-end" value="<?php echo date('Y-m-d');?>">
 					</div>
                     <div class="col-lg-2">

@@ -162,8 +162,9 @@ function initCariForm(){
 
 jQuery(document).ready(function() {     
     initCariForm();  
-    initGetUnit(); 
+    //initGetUnit(); 
 });
+
 $('[name="area"]').on('change',function(){
         var area = $('[name="area"]').val();
         var units =  $('[name="id_unit"]');

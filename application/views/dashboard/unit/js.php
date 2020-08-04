@@ -1,4 +1,15 @@
 <script>
+
+
+function convertToRupiah(angka)
+{
+	var rupiah = '';
+	var angkarev = angka.toString().split('').reverse().join('');
+	for(var i = 0; i < angkarev.length; i++) if(i%3 == 0) rupiah += angkarev.substr(i,3)+'.';
+	return rupiah.split('',rupiah.length-1).reverse().join('');
+}
+
+
 var KTDashboard = function() {
     var currentDate = "<?php $date = date('Y-m-d'); echo $date?>";
     var lastDate = "<?php echo  date('Y-m-d', strtotime($date . " -1 days"));?>";
@@ -37,7 +48,7 @@ var KTDashboard = function() {
                     }
                 ];
                 $('#kt_chart_outstanding').parents('.kt-portlet').find('.kt-widget14__legend').each(function(element){
-                    $(this).find('.kt-widget14__stats').text(data[i].text+' Noa : '+data[i].noa+' Rp.'+' '+data[i].up);
+                    $(this).find('.kt-widget14__stats').text(data[i].text+' Noa : '+data[i].noa+' Rp.'+' '+convertToRupiah(data[i].up));
                     i++;
                 });
             },
@@ -96,7 +107,7 @@ var KTDashboard = function() {
                     }
                 ];
                 $('#kt_chart_booking').parents('.kt-portlet').find('.kt-widget14__legend').each(function(element){
-                    $(this).find('.kt-widget14__stats').text(data[i].text+' Noa : '+data[i].noa+' Rp.'+' '+data[i].up);
+                    $(this).find('.kt-widget14__stats').text(data[i].text+' Noa : '+data[i].noa+' Rp.'+' '+convertToRupiah(data[i].up));
                     i++;
                 });
             },
@@ -155,7 +166,7 @@ var KTDashboard = function() {
                     }
                 ];
             $('#kt_chart_dpd').parents('.kt-portlet').find('.kt-widget14__legend').each(function(element){
-                    $(this).find('.kt-widget14__stats').text(data[i].text+' Noa : '+data[i].noa+' Rp.'+' '+data[i].up);
+                    $(this).find('.kt-widget14__stats').text(data[i].text+' Noa : '+data[i].noa+' Rp.'+' '+convertToRupiah(data[i].up));
                     i++;
                 });
             },
@@ -201,21 +212,21 @@ var KTDashboard = function() {
                     {
                          up:dataBooking.reg_up,
                          noa:dataBooking.reg_noa,
-                         text:'hari ini',
+                         text:'Reguler',
                     },
                     {
                         up:dataBooking.mor_up,
                         noa:dataBooking.mor_noa,
-                        text:'kemarin',
+                        text:'Cicilan',
                     },
                     {
                         up:dataBooking.total_up,
                         noa:dataBooking.total_noa,
-                        text:'total',
+                        text:'Total',
                     }
                 ];
             $('#kt_chart_pencairan').parents('.kt-portlet').find('.kt-widget14__legend').each(function(element){
-                    $(this).find('.kt-widget14__stats').text(data[i].text+' Noa : '+data[i].noa+' Rp.'+' '+data[i].up);
+                    $(this).find('.kt-widget14__stats').text(data[i].text+' Noa : '+data[i].noa+' Rp.'+' '+convertToRupiah(data[i].up));
                     i++;
                 });
             },
@@ -249,7 +260,7 @@ var KTDashboard = function() {
         }
         var dataBooking = [];
         $.ajax({
-            url: "<?php echo base_url('api/dashboards/unitpencairan');?>",
+            url: "<?php echo base_url('api/dashboards/unitpelunasan');?>",
             type:"GET",
             dataType:"JSON",
             data:{date:currentDate},
@@ -260,21 +271,21 @@ var KTDashboard = function() {
                     {
                          up:dataBooking.reg_up,
                          noa:dataBooking.reg_noa,
-                         text:'hari ini',
+                         text:'Reguler',
                     },
                     {
                         up:dataBooking.mor_up,
                         noa:dataBooking.mor_noa,
-                        text:'kemarin',
+                        text:'Cicilan',
                     },
                     {
                         up:dataBooking.total_up,
                         noa:dataBooking.total_noa,
-                        text:'total',
+                        text:'Total',
                     }
                 ];
             $('#kt_chart_pelunasan').parents('.kt-portlet').find('.kt-widget14__legend').each(function(element){
-                    $(this).find('.kt-widget14__stats').text(data[i].text+' Noa : '+data[i].noa+' Rp.'+' '+data[i].up);
+                    $(this).find('.kt-widget14__stats').text(data[i].text+' Noa : '+data[i].noa+' Rp.'+' '+convertToRupiah(data[i].up));
                     i++;
                 });
             },
@@ -330,7 +341,7 @@ var KTDashboard = function() {
                     }
                 ];
             $('#kt_chart_profit').parents('.kt-portlet').find('.kt-widget14__legend').each(function(element){
-                    $(this).find('.kt-widget14__stats').text(' Rp.'+' '+data[i].up);
+                    $(this).find('.kt-widget14__stats').text(convertToRupiah(data[i].up));
                     i++;
                 });
             },

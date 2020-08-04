@@ -297,10 +297,10 @@ $this->load->view('temp/MenuBar.php');
                         <div class="kt-widget14">
                             <div class="kt-widget14__header">
                                 <h3 class="kt-widget14__title">
-                                    Review Profit            
+                                    Review Pendaptan & Pengeluaran            
                                 </h3>
                                 <span class="kt-widget14__desc">
-                                    Profit Pendaptan & Pengeluaran
+                                    Pendaptan & Pengeluaran
                                 </span>
                             </div>	 
                             <div class="kt-widget14__content">	

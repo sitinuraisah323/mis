@@ -91,7 +91,7 @@ class Mortages extends Authenticated
 			if($post['status']=="2"){$status=["L"];}
 			if($post['status']=="3"){$status=[""];} 
 			$this->mortages->db
-				->where('units_mortages.date_sbk >=', $post['date-start'])
+				//->where('units_mortages.date_sbk >=', $post['date-start'])
 				->where('units_mortages.date_sbk <=', $post['date-end'])
 				->where_in('units_mortages.status_transaction ', $status)
 				->where('units_mortages.id_unit', $post['id_unit']);

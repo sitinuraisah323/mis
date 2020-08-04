@@ -38,9 +38,11 @@ $this->load->view('temp/MenuBar.php');
 				</div>
 				<div class="kt-portlet__head-toolbar">
 					<div class="kt-portlet__head-wrapper">
+					<?php if($this->session->userdata('user')->level=='administrator'){ ?>
 						<button type="button" class="btn btn-brand btn-icon-sm upload" >
 							<i class="flaticon2-plus"></i> Upload
 						</button>
+					<?php } ?>
 					</div>
 				</div>
 			</div>
