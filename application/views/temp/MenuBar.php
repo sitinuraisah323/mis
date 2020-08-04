@@ -476,7 +476,7 @@
 										<li class="kt-menu__item "  aria-haspopup="true">
 											<a  href="<?php echo base_url('report/outstanding'); ?>" class="kt-menu__link ">
 												<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>
-												<span class="kt-menu__link-text">Outstanding Nasional</span>
+												<span class="kt-menu__link-text">Outstanding</span>
 											</a>
 										</li>
 									<?php endif;?>
