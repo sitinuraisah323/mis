@@ -225,7 +225,8 @@ function initAlert(){
     		url = "<?php echo base_url("api/site-settings/menu/update"); ?>";
 		}else{
     		url = "<?php echo base_url("api/site-settings/menu/insert"); ?>";
-		}
+        }
+        //$('#id_parent').select2({  placeholder: "Please select a Area", width: '100%'  });
         $.ajax({
             type : 'POST',
             url : url,
@@ -274,6 +275,8 @@ jQuery(document).ready(function() {
     initDataTable();
     initAlert();
     getMenu();
+    $('#id_parent').select2({  placeholder: "Please select a Area", width: '100%'  });
+
 });
 
 </script>

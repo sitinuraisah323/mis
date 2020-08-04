@@ -480,6 +480,14 @@
 											</a>
 										</li>
 									<?php endif;?>
+									<?php if(read_access('report/customermis')):?>
+										<li class="kt-menu__item "  aria-haspopup="true">
+											<a  href="<?php echo base_url('report/customermis'); ?>" class="kt-menu__link ">
+												<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>
+												<span class="kt-menu__link-text">Transaksi Selisih</span>
+											</a>
+										</li>
+									<?php endif;?>
 								</ul>
 							</div>
 						</li>

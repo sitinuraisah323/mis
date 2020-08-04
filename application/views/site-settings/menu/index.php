@@ -118,7 +118,7 @@ $this->load->view('temp/MenuBar.php');
 								<div class="form-group">
 									<label>Parent</label>
 									<select class="form-control" id="id_parent" name="id_parent">
-										<option value="0">--Sebagai Menu Utama--</option>
+										<option value="0">--Select sebagai menu utama--</option>
 									</select>
 								</div>
 								<div class="form-group">
