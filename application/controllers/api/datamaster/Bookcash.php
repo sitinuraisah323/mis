@@ -266,8 +266,10 @@ class Bookcash extends ApiController
 		if($get = $this->input->get()){			
 			$this->model->db				
 				->where('date >=', $get['dateStart'])
-				->where('date <=', $get['dateEnd'])
-				->where('id_unit', $get['id_unit']);
+				->where('date <=', $get['dateEnd']);
+			if($this->input->get('id_unit')){
+				$this->model->db->where('id_unit', $get['id_unit']);
+			}
 		}
 		$data = $this->model->all();
 		echo json_encode(array(

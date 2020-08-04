@@ -88,14 +88,14 @@ $this->load->view('temp/MenuBar.php');
                     <label class="col-form-label">Unit</label>
                     <div class="col-lg-2">
 						<select class="form-control select2" name="id_unit" id="unit">
-							<option value="">All</option>
+							<option value="0">All</option>
 						</select>
                     </div>
                 <?php else:?>
                     <label class="col-form-label">Area</label>
                     <div class="col-lg-2">
                         <select class="form-control select2" name="area" id="area">
-                            <option></option>
+                            <option value="0">All</option>
                             <?php
                                 if (!empty($areas)){
                                     foreach($areas as $row){
@@ -108,10 +108,11 @@ $this->load->view('temp/MenuBar.php');
 					<label class="col-form-label">Unit</label>
                     <div class="col-lg-2">
 						<select class="form-control select2" name="id_unit" id="unit">
-							<option value="">All</option>
+							<option value="0">All</option>
 						</select>
                     </div>
-                <?php endif ;?>  <label class="col-lg-1 col-form-label">Tanggal</label>
+                <?php endif ;?>
+					<label class="col-lg-1 col-form-label">Tanggal</label>
 					<div class="col-lg-2">
 						<input type="date" class="form-control" name="date-start" value="<?php echo date('Y-m-01');?>">
 					</div>

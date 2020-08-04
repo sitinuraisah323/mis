@@ -105,7 +105,7 @@ function initCariForm(){
         var unit = $('[name="id_unit"]').val();
         var nasabah = $('#nasabah').val();
         var statusrpt = $('#status').val();
-		//var dateStart = $('[name="date-start"]').val();
+		var dateStart = $('[name="date-start"]').val();
 		var dateEnd = $('[name="date-end"]').val();
 		var permit = $('[name="permit"]').val();
         KTApp.block('#form_bukukas .kt-portlet__body', {});
@@ -113,7 +113,7 @@ function initCariForm(){
 			type : 'GET',
 			url : "<?php echo base_url("api/transactions/mortages/report"); ?>",
 			dataType : "json",
-			data:{id_unit:unit,statusrpt:statusrpt,nasabah:nasabah,dateEnd:dateEnd,permit:permit},
+			data:{id_unit:unit,area:area,statusrpt:statusrpt,nasabah:nasabah,dateStart:dateStart,dateEnd:dateEnd,permit:permit},
 			success : function(response,status){
 				KTApp.unblockPage();
 				if(response.status == true){
@@ -188,6 +188,10 @@ $('[name="area"]').on('change',function(){
             var response = JSON.parse(data);
             if (status) {
                 $("#unit").empty();
+				var opt = document.createElement("option");
+				opt.value = "0";
+				opt.text = "All"
+				units.append(opt);
                 for (var i = 0; i < response.data.length; i++) {
                     var opt = document.createElement("option");
                     opt.value = response.data[i].id;
@@ -200,7 +204,7 @@ $('[name="area"]').on('change',function(){
 
 function initGetNasabah(){
     $("#unit").on('change',function(){
-        var area = $('#area').val();
+        var area = $('[name="area"]').val();
         var unit = $('#unit').val(); 
         var customers =  document.getElementById('nasabah');     
         //alert(unit);
@@ -208,7 +212,7 @@ function initGetNasabah(){
 			type : 'GET',
 			url : "<?php echo base_url("api/datamaster/units/get_customers_gc_byunit"); ?>",
 			dataType : "json",
-			data:{unit:unit},
+			data:{unit:unit,area:area},
 			success : function(response,status){
 				KTApp.unblockPage();
 				if(response.status == true){
