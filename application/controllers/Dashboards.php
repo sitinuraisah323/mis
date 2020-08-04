@@ -29,12 +29,12 @@ class Dashboards extends Authenticated
 		));
 	}
 
-	public function new()
-	{
-		$this->load->view("dashboard/_index",array(
-			'areas'	=> $this->areas->all()
-		));
-	}
+//	public function new()
+//	{
+//		$this->load->view("dashboard/_index",array(
+//			'areas'	=> $this->areas->all()
+//		));
+//	}
 
 	public function unit()
 	{

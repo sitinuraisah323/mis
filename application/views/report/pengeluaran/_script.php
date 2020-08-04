@@ -111,7 +111,7 @@ function initCariForm(){
 			type : 'GET',
 			url : "<?php echo base_url("api/transactions/unitsdailycash/pengeluaran"); ?>",
 			dataType : "json",
-			data:{id_unit:unit,category:category,dateStart:dateStart,dateEnd:dateEnd},
+			data:{area:area,id_unit:unit,category:category,dateStart:dateStart,dateEnd:dateEnd},
 			success : function(response,status){
 				KTApp.unblockPage();
 				if(response.status == true){
@@ -172,6 +172,10 @@ $('[name="area"]').on('change',function(){
             var response = JSON.parse(data);
             if (status) {
                 $("#unit").empty();
+				var opt = document.createElement("option");
+				opt.value = "0";
+				opt.text = "All";
+				units.append(opt);
                 for (var i = 0; i < response.data.length; i++) {
                     var opt = document.createElement("option");
                     opt.value = response.data[i].id;

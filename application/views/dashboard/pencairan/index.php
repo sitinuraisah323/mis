@@ -87,7 +87,7 @@ $this->load->view('temp/MenuBar.php');
 						<label class="col-form-label">Unit</label>
 						<div class="col-lg-2">
 							<select class="form-control select2" name="id_unit" id="unit">
-								<option value="">All</option>
+								<option value="0">All</option>
 							</select>
 						</div>
 					<?php else:?>
@@ -95,7 +95,7 @@ $this->load->view('temp/MenuBar.php');
 					<label class="col-form-label">Area</label>
                         <div class="col-lg-2">
                             <select class="form-control select2" name="area" id="area">
-                                <option></option>
+                                <option value="0">All</option>
                                 <?php
                                     if (!empty($areas)){
                                         foreach($areas as $row){

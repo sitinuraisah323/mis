@@ -246,15 +246,21 @@ class Regularpawns extends ApiController
 			if($get['statusrpt']=="1"){$status=["N"];}
 			if($get['statusrpt']=="2"){$status=["L"];}
 			if($get['statusrpt']=="3"){$status=[""];}
+			if($area = $this->input->get('area')){
+				$this->regulars->db->where('id_area', $area);
+			}
 			$this->regulars->db
 				->where('units_regularpawns.date_sbk >=', $get['dateStart'])
 				->where('units_regularpawns.date_sbk <=', $get['dateEnd'])
-				->where_in('units_regularpawns.status_transaction ', $status)
-				->where('units_regularpawns.id_unit', $get['id_unit']);
+				->where_in('units_regularpawns.status_transaction ', $status);
+			if($get['id_unit']){
+				$this->regulars->db
+					->where('units_regularpawns.id_unit', $get['id_unit']);
+			}
 				if($permit = $get['permit']){
 					$this->regulars->db->where('units_regularpawns.permit', $permit);
 				}
-				if($nasabah!="all"){
+				if($nasabah!="all" && $nasabah != null){
 					$this->regulars->db->where('customers.nik', $nasabah);
 				}
 		}
@@ -292,8 +298,10 @@ class Regularpawns extends ApiController
 			$this->regulars->db
 				->where('units_regularpawns.date_sbk >=', $get['dateStart'])
 				->where('units_regularpawns.date_sbk <=', $get['dateEnd'])
-				->where('units_regularpawns.status_transaction ', 'N')
-				->where('units_regularpawns.id_unit', $get['id_unit']);
+				->where('units_regularpawns.status_transaction ', 'N');
+			if($this->input->get('id_unit')){
+				$this->regulars->db->where('units_regularpawns.id_unit', $get['id_unit']);
+			}
 			if($permit = $get['permit']){
 				$this->regulars->db->where('units_regularpawns.permit', $permit);
 			}

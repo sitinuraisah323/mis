@@ -164,7 +164,7 @@ class Unitsdailycash extends ApiController
 			$this->unitsdailycash->db
 				->where('date >=', $get['dateStart'])
 				->where('date <=', $get['dateEnd']);
-			if($get['id_unit']!='all'){
+			if($get['id_unit']!='all' && $get['id_unit'] != 0){
 				$this->unitsdailycash->db->where('id_unit', $get['id_unit']);
 			}
 		}
@@ -183,8 +183,10 @@ class Unitsdailycash extends ApiController
 			$this->unitsdailycash->db
 				->where('SUBSTRING(no_perk,1,5) =','11100')
 				->where('date >=', $get['dateStart'])
-				->where('date <=', $get['dateEnd'])
-				->where('id_unit', $get['id_unit']);
+				->where('date <=', $get['dateEnd']);
+			if($this->input->get('id_unit')){
+				$this->unitsdailycash->db->where('id_unit', $get['id_unit']);
+			}
 		}
 		$this->unitsdailycash->db->join('units','units.id = units_dailycashs.id_unit');
 		$data = $this->unitsdailycash->all();
@@ -202,8 +204,10 @@ class Unitsdailycash extends ApiController
 			$category = $get['category'];
 			$this->unitsdailycash->db				
 				->where('date >=', $get['dateStart'])
-				->where('date <=', $get['dateEnd'])
-				->where('id_unit', $get['id_unit']);
+				->where('date <=', $get['dateEnd']);
+			if($this->input->get('id_unit')){
+				$this->unitsdailycash->db->where('id_unit', $get['id_unit']);
+			}
 				if($category=='0'){
 					$this->unitsdailycash->db->where('no_perk', '1110000');
 				}
@@ -261,8 +265,13 @@ class Unitsdailycash extends ApiController
 				->where('type =', 'CASH_IN')
 				->where_in('no_perk', $category)
 				->where('date >=', $get['dateStart'])
-				->where('date <=', $get['dateEnd'])
-				->where('id_unit', $get['id_unit']);
+				->where('date <=', $get['dateEnd']);
+			if($this->input->get('id_unit')){
+				$this->unitsdailycash->db->where('id_unit', $get['id_unit']);
+			}
+			if($this->input->get('area')){
+				$this->unitsdailycash->db->where('id_area', $get['area']);
+			}
 		}
 		$this->unitsdailycash->db->join('units','units.id = units_dailycashs.id_unit');
 		$data = $this->unitsdailycash->all();
@@ -290,8 +299,13 @@ class Unitsdailycash extends ApiController
 				->where('type =', 'CASH_OUT')
 				->where_in('no_perk', $category)
 				->where('date >=', $get['dateStart'])
-				->where('date <=', $get['dateEnd'])
-				->where('id_unit', $get['id_unit']);
+				->where('date <=', $get['dateEnd']);
+			if($this->input->get('id_unit')){
+				$this->unitsdailycash->db->where('id_unit', $get['id_unit']);
+			}
+			if($this->input->get('area')){
+				$this->unitsdailycash->db->where('id_area', $get['area']);
+			}
 		}
 		$this->unitsdailycash->db->join('units','units.id = units_dailycashs.id_unit');
 		$data = $this->unitsdailycash->all();
