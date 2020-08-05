@@ -219,7 +219,9 @@ class Bookcash extends ApiController
 
 	public function get_type_money_kertas()
 	{
-		$this->fraction->db->where('type', 'KERTAS');		
+		$this->fraction->db
+					->where('type', 'KERTAS')
+					->order_by('amount', 'DESC');		
 		$data = $this->fraction->all();
 		echo json_encode(array(
 			'data'	  => $data,
@@ -230,7 +232,9 @@ class Bookcash extends ApiController
 
 	public function get_type_money_logam()
 	{
-		$this->fraction->db->where('type', 'LOGAM');		
+		$this->fraction->db
+		->where('type', 'LOGAM')		
+		->order_by('amount', 'DESC');		
 		$data = $this->fraction->all();
 		echo json_encode(array(
 			'data'	  => $data,

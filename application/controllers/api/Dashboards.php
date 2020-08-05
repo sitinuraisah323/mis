@@ -252,13 +252,14 @@ class Dashboards extends ApiController
 		foreach ($listperk as $value) {
 			array_push($category, $value->no_perk);
 		}
-
 		
 		if($this->input->get('area')){
 			$area = $this->input->get('area');
 			$this->units->db->where('id_area', $area);
+		}else if($this->session->userdata('user')->level == 'area'){
+			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
 		}
-
+		
 		if($this->input->get('code')){
 			$code = $this->input->get('code');
 			$this->units->db->where('code', $code);

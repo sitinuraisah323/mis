@@ -11,7 +11,7 @@ class Loaninstallments extends ApiController
 		$this->load->model('CustomersModel', 'customers');
 		$this->load->model('MortagesModel', 'mortages');
 		$this->load->model('UnitsModel', 'units');
-		$this->load->model('RegularpawnsModel', 'regulars');
+		$this->load->model('RegularPawnsModel', 'regulars');
 		$this->load->model('UnitsdailycashModel', 'unitsdailycash');
 		$this->load->model('RepaymentmortageModel', 'repaymentmortage');
 		$this->load->model('MapingcategoryModel', 'm_category');

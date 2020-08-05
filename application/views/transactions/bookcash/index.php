@@ -107,6 +107,6 @@ $this->load->view('temp/MenuBar.php');
 
 <?php
 $this->load->view('temp/Footer.php');
-$this->load->view('datamaster/bookcash/_add.php');
-$this->load->view('datamaster/bookcash/js.php');
+$this->load->view('transactions/bookcash/_add.php');
+$this->load->view('transactions/bookcash/js.php');
 ?>

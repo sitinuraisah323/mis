@@ -182,7 +182,7 @@ $('[name="area"]').on('change',function(){
                 $("#unit").empty();
 				var opt = document.createElement("option");
 				opt.value = "0";
-				opt.text = "all";
+				opt.text = "All";
 				units.append(opt);
                 for (var i = 0; i < response.data.length; i++) {
                     var opt = document.createElement("option");

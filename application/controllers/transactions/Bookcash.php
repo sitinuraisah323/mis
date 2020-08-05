@@ -27,7 +27,7 @@ class Bookcash extends Authenticated
 	 */
 	public function index()
 	{
-		$this->load->view('datamaster/bookcash/index',array(
+		$this->load->view('transactions/bookcash/index',array(
 			'units'	=> $this->units->all(),
 		));
 	}
@@ -37,7 +37,7 @@ class Bookcash extends Authenticated
 		$this->fraction->db
 			->order_by('type','ASC')
 			->order_by('amount','DESC');
-		$this->load->view('datamaster/bookcash/form', array(
+		$this->load->view('transactions/bookcash/form', array(
 			'fractions'	=> $this->fraction->all(),
 			'units'	=> $this->units->all(),
 			'id'	=> $id,
