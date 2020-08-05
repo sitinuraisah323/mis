@@ -12,7 +12,7 @@ $nextlastdate = date('Y-m-d', strtotime('-2 days', strtotime($date)));
 var currdate = "<?php echo $lastdate;?>";
 var lastdate = "<?php echo $nextlastdate;?>";
 var currday = "<?php echo date('d'); ?>";
-var currmonth = "<?php echo date('m'); ?>";
+var currmonth = "<?php echo date('n'); ?>";
 var curryears = "<?php echo date('Y'); ?>";
 
 //alert(currdate);
@@ -196,10 +196,11 @@ function initCariForm(){
 						hideHover: 'auto',
 						barColors: ['#3578FC','#FF0000', '#FFD500']
 						// barColors: function (row, series, type) {
-						//     if (row.label == "Low") return "#3578FC";
-						//     else if (row.label == "Medium") return "#FFD500";
-						//     else if (row.label == "High") return "#FF0000";
-						//     else if (row.label == "Fatal") return "#000000";
+						// 	console.log("--> "+row.label, series, type);
+						//     //if (data.area == "Jawa Barat"){return "#FFD500";} else{ return "#3578FC"; }
+						//     // else if (row.label == "Medium") return "#FFD500";
+						//     // else if (row.label == "High") return "#FF0000";
+						//     // else if (row.label == "Fatal") return "#000000";
 						// }
 					};
 			//config element name
@@ -633,7 +634,7 @@ function disburse() {
 		dataType: "JSON",
 		data: {
 			area: '',
-			date: currdate,
+			date: currday,currmonth,curryears,
 		},
 		success: function (response) {
 			$.each(response.data, function (index, unit) {

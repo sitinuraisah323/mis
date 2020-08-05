@@ -76,7 +76,7 @@ $this->load->view('temp/MenuBar.php');
 				</table> -->
 				<!--end: Datatable -->
 
-				<form id="form_bukukas" class="form-horizontal">
+				<form id="form_bukukas" class="form-horizontal" method="post" action="<?php echo base_url("dashboards/dpdreport"); ?>">
 				<div class="kt-portlet__body">
 				<div class="col-md-12" >
 					<div class="form-group row">
@@ -115,7 +115,8 @@ $this->load->view('temp/MenuBar.php');
 						<div class="col-lg-2">
 							<input type="date" class="form-control" name="date-start" value="<?php echo date('Y-m-d');?>">
 						</div>
-						<button type="button" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>
+						<button type="button" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>&nbsp
+						<button type="submit" class="btn btn-danger btn-icon" name="btnexport_csv" id="btnexport_csv"><i class="fa fa-file-excel"></i></button>
 					</div>
 
 				</div>

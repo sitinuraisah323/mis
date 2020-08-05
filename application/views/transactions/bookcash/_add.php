@@ -43,7 +43,7 @@
                                 <div class="form-group row">                          
                                     <label class="col-lg-4 col-form-label">Saldo Awal</label>
                                     <div class="col-lg-8">
-                                        <input type="text" class="form-control form-control-sm" id="saldoawal" name="saldoawal" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" onkeyup="hitung()">
+                                        <input type="text" class="form-control form-control-sm" id="saldoawal" name="saldoawal" onkeyup="hitung()">
                                     </div>
                                     <label class="col-lg-4 col-form-label">Penerimaan</label>
                                     <div class="col-lg-4">
