@@ -114,7 +114,7 @@ $this->load->view('temp/MenuBar.php');
 					<?php endif ;?>
 					<div class="col-lg-2">
 						<label class="col-form-label">Tanggal</label>
-						<input type="date" class="form-control" name="date-start" value="<?php echo date('Y-m-d');?>">
+						<input type="date" class="form-control" name="date-start" value="<?php echo date('Y-m-01');?>">
 					</div>
 					<div class="col-lg-2">
 						<label class="col-form-label">Sampai</label>
