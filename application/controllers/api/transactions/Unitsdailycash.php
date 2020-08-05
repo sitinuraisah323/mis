@@ -162,16 +162,49 @@ class Unitsdailycash extends ApiController
 	{
 		if($get = $this->input->get()){
 			$this->unitsdailycash->db
+				->where('date <', $get['dateStart']);
+			if($get['id_unit']!='all' && $get['id_unit'] != 0){
+				$this->unitsdailycash->db->where('id_unit', $get['id_unit']);
+			}
+
+			if($this->input->get('area')){
+				$this->unitsdailycash->db->where('id_area', $get['area']);
+			}
+		}
+		$this->unitsdailycash->db
+			->select('
+			 (sum(CASE WHEN type = "CASH_IN" THEN `amount` ELSE 0 END) - sum(CASE WHEN type = "CASH_OUT" THEN `amount` ELSE 0 END)) as amount
+			 			')
+			->from('units_dailycashs')
+			->join('units','units.id = units_dailycashs.id_unit');
+		$saldo = (int) $this->unitsdailycash->db->get()->row()->amount;
+		$data = (object) array(
+			'id'	=> 0,
+			'id_unit' => $this->input->get('id_unit') ? $this->input->get('id_unit') : 0,
+			'no_perk'	=> 0,
+			'date'	=> $this->input->get('dateStart') ? $this->input->get('dateStart') : date('Y-m-d'),
+			'description'	=> 'saldo awal',
+			'cash_code'	=>  'KT',
+			'type'	=> $saldo > 0 ? 'CASH_IN' : 'CASH_OUT',
+			'amount'	=> abs($saldo)
+		);
+
+		if($get = $this->input->get()){
+			$this->unitsdailycash->db
 				->where('date >=', $get['dateStart'])
 				->where('date <=', $get['dateEnd']);
 			if($get['id_unit']!='all' && $get['id_unit'] != 0){
 				$this->unitsdailycash->db->where('id_unit', $get['id_unit']);
 			}
+			if($this->input->get('area')){
+				$this->unitsdailycash->db->where('id_area', $get['area']);
+			}
 		}
 		$this->unitsdailycash->db->join('units','units.id = units_dailycashs.id_unit');
-		$data = $this->unitsdailycash->all();
+		$getCash = $this->unitsdailycash->all();
+		array_unshift( $getCash, $data);
 		echo json_encode(array(
-			'data'	  => $data,
+			'data'	  => $getCash,
 			'status'  => true,
 			'message' => 'Successfully Get Data Regular Pawns'
 		));

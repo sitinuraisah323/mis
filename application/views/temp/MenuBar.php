@@ -506,6 +506,7 @@
 								<a  href="<?php echo base_url('dailyreport/unitsreport'); ?>" class="btn btn-primary"><i class="fa fa-envelope"></i> Non OJK</a>&nbsp
 								<a  href="<?php echo base_url('dailyreport/unitsreportojk'); ?>" class="btn btn-success"><i class="fa fa-check-double"></i> OJK</a>&nbsp
 							<?php } ?>
+								<a  href="<?php echo base_url('complaints');?>"  class="btn btn-warning"><i class="fa fa-comments"></i></a>&nbsp
 								<a  href="#"  data-toggle="modal" data-target="#help" class="btn btn-warning"><i class="fa fa-exclamation-circle"></i> Help</a>
 							</li>
 						</ul>
