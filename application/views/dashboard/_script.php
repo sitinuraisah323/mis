@@ -627,28 +627,6 @@ function disburse() {
 	var totalYesterday = 0;
 	var totalToday = 0;
 	KTApp.block('#form_disburse .kt-widget14', {});
-
-	// $.ajax({
-	// 	url:"<?php echo base_url('api/dashboards/disburse');?>",
-	// 	type:"GET",
-	// 	dataType:"JSON",
-	// 	data:{
-	// 		area:'',
-	// 		date:lastdate,
-	// 	},
-	// 	success:function (response) {
-	// 		$.each(response.data, function (index,unit) {
-	// 			totalYesterday += unit.amount;
-	// 		});
-	// 	},
-	// 	complete:function () {
-	// 		$('#form_disburse').find('.total-yesterday').text(convertToRupiah(totalYesterday));
-	// 		$('#form_disburse').find('.date-yesterday').text(lastdate);
-	// 	},
-	// });
-
-	// transaction = [];
-
 	$.ajax({
 		url: "<?php echo base_url('api/dashboards/disburse');?>",
 		type: "GET",
@@ -701,6 +679,27 @@ function disburse() {
 			KTApp.unblock('#form_disburse .kt-widget14', {});
 		}
 	});	
+
+	// $.ajax({
+	// 	url:"<?php //echo base_url('api/dashboards/disburse');?>",
+	// 	type:"GET",
+	// 	dataType:"JSON",
+	// 	data:{
+	// 		area:'',
+	// 		date:lastdate,
+	// 	},
+	// 	success:function (response) {
+	// 		$.each(response.data, function (index,unit) {
+	// 			totalYesterday += unit.amount;
+	// 		});
+	// 	},
+	// 	complete:function () {
+	// 		$('#form_disburse').find('.total-yesterday').text(convertToRupiah(totalYesterday));
+	// 		$('#form_disburse').find('.date-yesterday').text(lastdate);
+	// 	},
+	// });
+
+	// transaction = [];
 
 }
 
