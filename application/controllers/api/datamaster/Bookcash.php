@@ -125,6 +125,90 @@ class Bookcash extends ApiController
 	public function update()
 	{
 		if($post = $this->input->post()){
+			$this->load->library('form_validation');
+
+			$this->form_validation->set_rules('e_kasir', 'e_kasir', 'required');
+			$this->form_validation->set_rules('e_date', 'e_date', 'required');
+			$this->form_validation->set_rules('e_saldoawal', 'e_saldoawal', 'required');
+			$this->form_validation->set_rules('e_saldoakhir', 'e_saldoakhir', 'required');
+			$this->form_validation->set_rules('e_penerimaan', 'e_penerimaan', 'required');
+			$this->form_validation->set_rules('e_pengeluaran', 'e_pengeluaran', 'required');
+			$this->form_validation->set_rules('e_totmutasi', 'e_totmutasi', 'required');
+
+			if ($this->form_validation->run() == FALSE)
+			{
+				echo json_encode(array(
+					'data'	=> 	false,
+					'status'	=> false,
+					'message'	=> validation_errors()
+				));
+			}
+			else
+			{
+				$id = $post['id_edit'];
+				$data = array(
+					//'id_unit'				=> $post['id_unit'],
+					'date'					=> $post['e_date'],
+					'kasir'					=> $post['e_kasir'],
+					'amount_balance_first'	=> $post['e_saldoawal'],
+					'amount_in'				=> $post['e_penerimaan'],
+					'amount_out'			=> $post['e_pengeluaran'],
+					'amount_balance_final'	=> $post['e_saldoakhir'],
+					'amount_mutation'		=> $post['e_totmutasi'],
+					'total'					=> $post['e_total'],
+					'amount_gap'			=> $post['e_selisih'],
+					'timestamp'		=> date('Y-m-d H:i:s'),
+					'user_create'	=> $this->session->userdata('user')->id,
+					'user_update'	=> $this->session->userdata('user')->id,
+				);
+				
+				if($this->model->update($data,$id)){
+					$idUnitCashBook = $id;			
+					$kertas_pecahan = $post['e_k_pecahan'];
+					for ($i=0; $i < count($kertas_pecahan); $i++) {
+						$id_update 						= $post['e_k_money'][$i];
+						$kertas['amount'] 				= $kertas_pecahan[$i];
+						$kertas['summary'] 				= $post['e_k_jumlah'][$i];
+						$this->money->update($kertas,$id_update);
+					}
+
+					$logam_pecahan = $post['e_l_pecahan'];
+					for ($j=0; $j < count($logam_pecahan); $j++) {
+						//$logam['id_unit_cash_book'] 	= $idUnitCashBook;
+						//$logam['id_fraction_of_money'] 	= $post['l_fraction'][$j];
+						$id_update 					= $post['e_l_money'][$j];
+						$logam['amount'] 				= $logam_pecahan[$j];
+						$logam['summary'] 				= $post['e_l_jumlah'][$j];
+						$this->money->update($logam,$id_update);
+					}
+
+					echo json_encode(array(
+								'data'	=> 	true,
+								'status'	=> true,
+								'message'	=> 'Successfull Insert Data Saldo'
+					));
+
+				}else{
+					echo json_encode(array(
+							'data'	=> 	false,
+							'status'	=> false,
+							'message'	=> 'Failed Insert Data Menu')
+						);
+				}			
+			}
+		}else{
+			echo json_encode(array(
+				'data'	=> 	false,
+				'status'	=> 	false,
+				'message'	=> 'Request Error Should Method POst'
+			));
+		}
+
+	}
+
+	public function update_x()
+	{
+		if($post = $this->input->post()){
 
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('id_unit', 'Unit', 'required');
@@ -304,7 +388,8 @@ class Bookcash extends ApiController
 			$this->money->db
 				->select('fraction_of_money.type')
 				->join('fraction_of_money','units_cash_book_money.id_fraction_of_money=fraction_of_money.id')
-				->where('id_unit_cash_book', $get['id']);
+				->where('id_unit_cash_book', $get['id'])
+				->order_by('fraction_of_money.amount', 'desc');
 		}
 		$data = $this->money->all();
 		echo json_encode(array(

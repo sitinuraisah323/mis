@@ -197,7 +197,7 @@ function popView(el)
 				if(response.status == true){
                     console.log(response.data.name);
                     $('#units').val(response.data.name);
-                    $('#kasir').val(response.data.name);
+                    $('#kasir').val(response.data.kasir);
                     $('#date').val(response.data.date);
                     $('#saldoawal').val(response.data.amount_balance_final);
                     $('#penerimaan').val(response.data.amount_in);
@@ -280,7 +280,7 @@ function popView(el)
 
 jQuery(document).ready(function() {
     initCariForm();
-    initGetUnit();
+    //initGetUnit();
 
     $(document).on("click", ".viewBtn", function () {
                 var el = $(this);

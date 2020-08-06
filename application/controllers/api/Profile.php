@@ -33,24 +33,47 @@ class Profile extends ApiController
 
         if($post = $this->input->post()){
 
-            $id = $post['userid'];	
-            $data['password'] = password_hash($post['new_pwd'],PASSWORD_DEFAULT);
+            $id             = $post['userid'];	
+            $log_username   = $post['username'];	
+            $log_password   = $post['password'];	
+            $old_pwd        = $post['old_pwd'];	
+            $new_pwd        = $post['new_pwd'];	
+            $confirm_pwd    = $post['confirm_pwd'];
 
+            $data['password'] = password_hash($post['new_pwd'],PASSWORD_DEFAULT);
             $db = false;
-            $db = $this->user->update($data,$id);
-            if($db=true){
-                echo json_encode(array(
-                    'data'	 => true,
-                    'status' => true,
-                    'message'	=> 'Successfull Update Password'
-                ));
+            
+            if(password_verify($old_pwd,$log_password)){
+                if( $new_pwd ==$confirm_pwd){
+                    $db = $this->user->update($data,$id);
+                    if($db=true){
+                        echo json_encode(array(
+                            'data'	 => true,
+                            'status' => true,
+                            'message'	=> 'Successfull Update Password'
+                        ));
+                    }else{
+                        echo json_encode(array(
+                            'data'	=> 	false,
+                            'status'=>false,
+                            'message'	=> 'Failed Update Password'
+                        ));
+                    }                    
+                }else{
+                    echo json_encode(array(
+                        'data'	=> 	false,
+                        'status'=>false,
+                        'message'	=> 'Password Not Match'
+                    ));
+                }
             }else{
                 echo json_encode(array(
-                    'data'	=> 	false,
-                    'status'=>false,
-                    'message'	=> 'Failed Update Password'
+                    'data'	    => 	false,
+                    'status'    =>  false,
+                    'message'	=>  'Your Password Not Found'
                 ));
             }
+            
         }	
     }
 

@@ -69,37 +69,74 @@ function initAlert(){
     })
 }
 
+function clear(){
+    $('#old_pwd').val("");
+    $('#new_pwd').val("");
+    $('#confirm_pwd').val("");
+}
 
 function changepwd(){
     //alert('test');
     $('#modal_changepwd').modal();
+    clear();
     var id = $('[name="id"]').val(); 
     $('#userid').val(id);
 
+    var validator = $( "#form_add" ).validate({
+        ignore:[],
+        rules: {
+            old_pwd: {
+                required: true,
+            },
+            new_pwd: {
+                required: true,
+            },
+            confirm_pwd: {
+                required: true,
+            }
+            
+        },
+        invalidHandler: function(event, validator) {   
+            KTUtil.scrollTop();
+        }
+    });   
+
     //events
     $("#btn_add_submit").on("click",function(){
-        KTApp.block('#modal_changepwd .modal-content', {});
-        $.ajax({
-            type : 'POST',
-            url : "<?php echo base_url("api/profile/update"); ?>",
-            data : $('#form_add').serialize(),
-            dataType : "json",
-            success : function(data,status){
-                KTApp.unblock('#modal_changepwd .modal-content');
-                if(data.status == true){
-                   // datatable.reload();
-                    $('#modal_changepwd').modal('hide');
-                    AlertUtil.showSuccess(data.message,5000);
-                }else{
-                    AlertUtil.showFailedDialogAdd(data.message);
-                }                
-            },
-            error: function (jqXHR, textStatus, errorThrown){
-                KTApp.unblock('#modal_changepwd .modal-content');
-                AlertUtil.showFailedDialogAdd("Cannot communicate with server please check your internet connection");
-            }
-        });  
+        var isValid = $( "#form_add" ).valid();
+        if(isValid){
+            KTApp.block('#modal_changepwd .modal-content', {});
+            $.ajax({
+                type : 'POST',
+                url : "<?php echo base_url("api/profile/update"); ?>",
+                data : $('#form_add').serialize(),
+                dataType : "json",
+                success : function(data,status){
+                    KTApp.unblock('#modal_changepwd .modal-content');
+                    if(data.status == true){
+                    // datatable.reload();
+                        $('#modal_changepwd').modal('hide');
+                        AlertUtil.showSuccess(data.message,5000);
+                    }else{
+                        AlertUtil.showFailedDialogAdd(data.message);
+                    }                
+                },
+                error: function (jqXHR, textStatus, errorThrown){
+                    KTApp.unblock('#modal_changepwd .modal-content');
+                    AlertUtil.showFailedDialogAdd("Cannot communicate with server please check your internet connection");
+                }
+            });  
+        }
     })
+
+    $('#modal_changepwd').on('hidden.bs.modal', function () {
+       validator.resetForm();
+    })
+
+    return {
+        validator:validator
+    }
+
 }
 
 function PersonalInfo(){
@@ -139,6 +176,7 @@ function PersonalInfo(){
 }
 
 jQuery(document).ready(function() {
+    initAlert();
     PersonalInfo();
 });
 
