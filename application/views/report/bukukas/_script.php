@@ -120,9 +120,15 @@ function initCariForm(){
                     var no = 0;
 					$.each(response.data, function (index, data) {
                         no++;
-                    var date = moment(data.date).format('DD-MM-YYYY');
-                    var month = moment(data.date).format('MMMM');
-                    var year = moment(data.date).format('YYYY');
+                        if(index == 0){
+							var date = '';
+							var month = '';
+							var year = '';
+						}else{
+							var date = moment(data.date).format('DD-MM-YYYY');
+							var month = moment(data.date).format('MMMM');
+							var year = moment(data.date).format('YYYY');
+						}
                     var cashin=0;
                     var cashout=0;
                     if(data.type=='CASH_IN'){cashin= data.amount; currentSaldo +=  parseInt(data.amount); TotSaldoIn +=  parseInt(data.amount);}

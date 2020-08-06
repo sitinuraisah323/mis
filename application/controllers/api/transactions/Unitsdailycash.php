@@ -9,6 +9,8 @@ class Unitsdailycash extends ApiController
 		parent::__construct();
 		$this->load->model('UnitsdailycashModel', 'unitsdailycash');
 		$this->load->model('MappingcaseModel', 'm_casing');
+		$this->load->model('UnitsModel', 'units');
+		include APPPATH.'libraries/PHPExcel.php';
 	}
 
 	public function index()
@@ -182,7 +184,7 @@ class Unitsdailycash extends ApiController
 			'id'	=> 0,
 			'id_unit' => $this->input->get('id_unit') ? $this->input->get('id_unit') : 0,
 			'no_perk'	=> 0,
-			'date'	=> $this->input->get('dateStart') ? $this->input->get('dateStart') : date('Y-m-d'),
+			'date'	=> '',
 			'description'	=> 'saldo awal',
 			'cash_code'	=>  'KT',
 			'type'	=> $saldo > 0 ? 'CASH_IN' : 'CASH_OUT',
@@ -347,6 +349,45 @@ class Unitsdailycash extends ApiController
 			'status'	=> true,
 			'message'	=> 'Successfully Get Data Regular Pawns'
 		));
+	}
+
+	public function saldoawalproses()
+	{
+		$path = 'storage/files/cash/'.'saldoawal.xlsx';
+		$excelreader = new PHPExcel_Reader_Excel2007();
+		$loadexcel = $excelreader->load($path); // Load file yang telah diupload ke folder excel
+		$transactions = $loadexcel->getActiveSheet()->toArray(null, true, true ,true);
+		if($transactions){
+			$batchInsert = array();
+			$batchUpdate = array();
+			foreach ($transactions as $key => $transaction){
+				if($key > 1){
+					$unit = $this->units->find(array(
+						'code'	=> $transaction['A']
+					));
+
+					$data = array(
+						'id_unit'	=> $unit->id,
+						'no_perk'	=> $transaction['B'],
+						'date'	=> $transaction['C'],
+						'description'	=> $transaction['D'],
+						'cash_code'	=> 'SA',
+						'amount'	=> $transaction['F'],
+					);
+					$batchInsert[] = $data;
+
+				}
+			}
+			if(count($batchInsert)){
+				$this->unitsdailycash->db->insert_batch('customers', $batchInsert);
+			}
+			if(count($batchUpdate)){
+				$this->unitsdailycash->db->update_batch('customers', $batchUpdate,'id');
+			}
+		}
+		if(is_file($path)){
+			unlink($path);
+		}
 	}
 
 }
