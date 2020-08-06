@@ -1,22 +1,23 @@
 <!--begin::Modal-->
-<div class="modal fade" id="modal_add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="modal_edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">BAP Kas</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Update BAP Kas</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 </button>
             </div>
             <div class="modal-body form">
-                <form action="#" id="form_add" class="form-horizontal">
+                <form action="#" id="form_edit" class="form-horizontal">
                     <div class="form-body">
                         <div class="row"> 
                             <div class="col-md-6">   
                                 <div class="form-group row">  
+                                <input type="hidden" class="form-control form-control-sm" id="id_edit" name="id_edit">
                                 <?php if($this->session->userdata('user')->level == 'administrator'):?>                                
                                     <label class="col-lg-4 col-form-label">Units</label>
                                     <div class="col-lg-8">
-                                        <select class="form-control form-control-sm select2" name="id_unit" id="id_unit">
+                                        <select class="form-control form-control-sm select2" name="e_id_unit" id="e_id_unit">
                                             <option value="">Pilih Unit</option>
                                             <?php foreach ($units as $unit):?>
                                                 <option value="<?php echo $unit->id;?>"><?php echo $unit->name;?></option>
@@ -25,15 +26,15 @@
                                         <br/><br/>
                                     </div>                                 
                                 <?php else:?>
-                                    <input type="hidden" class="form-control form-control-sm" name="id_unit" value="<?php echo $this->session->userdata('user')->id_unit;?>">
+                                    <input type="hidden" class="form-control form-control-sm" name="e_id_unit" value="<?php echo $this->session->userdata('user')->id_unit;?>">
                                 <?php endif;?>                                    
                                     <label class="col-lg-4 col-form-label">Kasir</label>
                                     <div class="col-lg-8">
-                                        <input type="text" class="form-control form-control-sm" id="kasir" name="kasir">
+                                        <input type="text" class="form-control form-control-sm" id="e_kasir" name="e_kasir">
                                     </div>
                                     <label class="col-lg-4 col-form-label">Tanggal</label>
                                     <div class="col-lg-8">
-                                        <input type="date" class="form-control form-control-sm" id="date" name="date">
+                                        <input type="date" class="form-control form-control-sm" id="e_date" name="e_date">
                                     </div>
                                 </div>
                             </div>  
@@ -42,25 +43,25 @@
                                 <div class="form-group row">                          
                                     <label class="col-lg-4 col-form-label">Saldo Awal</label>
                                     <div class="col-lg-8">
-                                        <input type="text" class="form-control form-control-sm" id="saldoawal" name="saldoawal" onkeyup="hitung()">
+                                        <input type="text" class="form-control form-control-sm" id="e_saldoawal" name="e_saldoawal" onkeyup="e_hitung()">
                                     </div>
                                     <label class="col-lg-4 col-form-label">Penerimaan</label>
                                     <div class="col-lg-4">
-                                        <input type="text" class="form-control form-control-sm" id="penerimaan" name="penerimaan" onkeyup="hitung()">
+                                        <input type="text" class="form-control form-control-sm" id="e_penerimaan" name="e_penerimaan" onkeyup="e_hitung()">
                                     </div>
                                     <div class="col-lg-4"></div>
                                     <label class="col-lg-4 col-form-label">Pengeluaran</label>
                                     <div class="col-lg-4">
-                                        <input type="text" class="form-control form-control-sm" id="pengeluaran" name="pengeluaran" onkeyup="hitung()">
+                                        <input type="text" class="form-control form-control-sm" id="e_pengeluaran" name="e_pengeluaran" onkeyup="e_hitung()">
                                     </div>
                                     <div class="col-lg-4"></div>
                                     <label class="col-lg-4 col-form-label">Total Mutasi</label>
                                     <div class="col-lg-8">
-                                        <input type="text" class="form-control form-control-sm" id="totmutasi" name="totmutasi" readonly>
+                                        <input type="text" class="form-control form-control-sm" id="e_totmutasi" name="e_totmutasi" readonly>
                                     </div>
                                     <label class="col-lg-4 col-form-label">Saldo Akhir</label>
                                     <div class="col-lg-8">
-                                        <input type="text" class="form-control form-control-sm" id="saldoakhir" name="saldoakhir" readonly>
+                                        <input type="text" class="form-control form-control-sm" id="e_saldoakhir" name="e_saldoakhir" readonly>
                                     </div>
                                 </div>
                             </div> 
@@ -71,7 +72,7 @@
 
                             <div class="col-md-6">    
                                 <b>Uang Kertas dan Plastik</b>  
-                                <table class="table" id="kertas">
+                                <table class="table" id="e_kertas">
                                 <tr>
                                 <th>Pecahan</th>
                                 <th>Jumlah</th>
@@ -82,7 +83,7 @@
 
                             <div class="col-md-6">    
                                 <b>Uang Logam</b>  
-                                <table class="table" id="logam">
+                                <table class="table" id="e_logam">
                                 <tr>
                                 <th>Pecahan</th>
                                 <th>Jumlah</th>
@@ -96,11 +97,11 @@
                                 <div class="form-group row">                          
                                     <label class="col-lg-2 col-form-label">Total</label>
                                     <div class="col-lg-4">
-                                        <input type="text" class="form-control form-control-sm" id="total" name="total">
+                                        <input type="text" class="form-control form-control-sm" id="e_total" name="e_total">
                                     </div>
                                     <label class="col-lg-2 col-form-label">Selisih</label>
                                     <div class="col-lg-4">
-                                        <input type="text" class="form-control form-control-sm" id="selisih" name="selisih">
+                                        <input type="text" class="form-control form-control-sm" id="e_selisih" name="e_selisih">
                                     </div>                                    
                                 </div>    
 
@@ -109,10 +110,10 @@
                             <div class="col-md-12" >     
                                 <div class="kt-section">
                                     <div class="kt-section__content">
-                                            <div class="alert alert-danger fade show" role="alert" id="failed_alert_add" style="display: none;">
-                                            <div class="alert-text" id="failed_message_add"></div>
+                                            <div class="alert alert-danger fade show" role="alert" id="failed_alert_edit" style="display: none;">
+                                            <div class="alert-text" id="failed_message_edit"></div>
                                             <div class="alert-close">
-                                                <button type="button" class="close" aria-label="Close" id="failed_alert_dismiss_add">
+                                                <button type="button" class="close" aria-label="Close" id="failed_alert_dismiss_edit">
                                                     <span aria-hidden="true"><i class="la la-close"></i></span>
                                                 </button>
                                             </div>
@@ -125,10 +126,10 @@
                         <div class="col-md-12" >     
                             <div class="kt-section">
                                 <div class="kt-section__content">
-                                        <div class="alert alert-danger fade show" role="alert" id="failed_alert_add" style="display: none;">
+                                        <div class="alert alert-danger fade show" role="alert" id="failed_alert_edit" style="display: none;">
                                         <div class="alert-text" id="failed_message_add"></div>
                                         <div class="alert-close">
-                                            <button type="button" class="close" aria-label="Close" id="failed_alert_dismiss_add">
+                                            <button type="button" class="close" aria-label="Close" id="failed_alert_dismiss_edit">
                                                 <span aria-hidden="true"><i class="la la-close"></i></span>
                                             </button>
                                         </div>
@@ -142,7 +143,7 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="btn_add_submit">Submit</button>
+                <button type="button" class="btn btn-primary" id="btn_edit_submit">Update</button>
             </div>
            
         </div>

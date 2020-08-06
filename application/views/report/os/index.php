@@ -88,7 +88,7 @@ $this->load->view('temp/MenuBar.php');
 						<div class="col-lg-2">
 							<label class="col-form-label">Unit</label>
 							<select class="form-control select2" name="id_unit" id="unit">
-								<option value="0">All</option>
+								<option value="all">All</option>
 							</select>
 						</div>
 					<?php else:?>

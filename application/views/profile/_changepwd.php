@@ -12,9 +12,11 @@
                     <div class="form-body">
                         <div class="row"> 
                         <div class="col-md-12">
-                                <input type="hidden" class="form-control" id="userid" name="userid">
+                                <input type="hidden" id="userid" name="userid" value="<?php echo $this->session->userdata('user')->id; ?>">
+                                <input type="hidden" id="username" name="username" value="<?php echo $this->session->userdata('user')->username; ?>">
+                                <input type="hidden" id="password" name="password" value="<?php echo $this->session->userdata('user')->password; ?>">
                                 <div class="form-group">
-                                    <label>Paswword Lama</label>
+                                    <label>Paswword Lama </label>
                                     <input type="password" class="form-control" id="old_pwd" name="old_pwd">
                                 </div>
                             </div>  

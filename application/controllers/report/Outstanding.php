@@ -51,17 +51,34 @@ class Outstanding extends Authenticated
 	
 		$objPHPExcel->setActiveSheetIndex(0);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(25);
-		$objPHPExcel->getActiveSheet()->setCellValue('A1', 'Unit');
+		$objPHPExcel->getActiveSheet()->setCellValue('A1', 'ID Unit');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(25);
-		$objPHPExcel->getActiveSheet()->setCellValue('B1', 'Area');
-		$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->setCellValue('C1', 'Noa');
-        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
-		$objPHPExcel->getActiveSheet()->setCellValue('D1', 'Outstanding');
+		$objPHPExcel->getActiveSheet()->setCellValue('B1', 'Unit');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(25);
+		$objPHPExcel->getActiveSheet()->setCellValue('C1', 'Area');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->setCellValue('D1', 'Noa');
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+		$objPHPExcel->getActiveSheet()->setCellValue('E1', 'Outstanding');
 
 		if($post = $this->input->post()){
-			if($post['area']!='all'){
-				$this->units->db->where('id_area', $post['area']);
+			// if($post['area']!='all'){
+			// 	$this->units->db->where('id_area', $post['area']);
+			// }
+			// if($post['id_unit']!='all'){
+			// 	$this->units->db->where('units.id', $post['id_unit']);
+			// }
+			if($area = $this->input->post('area')){
+				if($area!='all'){
+					$this->units->db->where('id_area', $area);
+				}
+			}else if($this->session->userdata('user')->level == 'area'){
+				$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
+			}
+			if($code = $this->input->post('code')){
+				$this->units->db->where('code', $code);
+			}else if($this->session->userdata('user')->level == 'unit'){
+				$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
 			}
 			if($post['date']){
 				$date = $post['date'];
@@ -79,10 +96,11 @@ class Outstanding extends Authenticated
 		$no=2;
 		foreach ($units as $row) 
 		{
-			$objPHPExcel->getActiveSheet()->setCellValue('A'.$no, $row->name);	
-			$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, $row->area);	
-			$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, $row->noa);				  	
-			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no, $row->up);				  	
+			$objPHPExcel->getActiveSheet()->setCellValue('A'.$no, $row->id);	
+			$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, $row->name);	
+			$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, $row->area);	
+			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no, $row->noa);	
+			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no, $row->up);				  	
 			$no++;
 		}
 
