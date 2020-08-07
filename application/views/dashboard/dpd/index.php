@@ -113,7 +113,7 @@ $this->load->view('temp/MenuBar.php');
 						<?php endif ;?>
 						<label class="col-form-label">Tanggal</label>
 						<div class="col-lg-2">
-							<input type="date" class="form-control" name="date-start" value="<?php echo date('Y-m-d');?>">
+							<input type="date" class="form-control" name="date" value="<?php echo date('Y-m-d');?>">
 						</div>
 						<button type="button" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>&nbsp
 						<button type="submit" class="btn btn-danger btn-icon" name="btnexport_csv" id="btnexport_csv"><i class="fa fa-file-excel"></i></button>

@@ -333,11 +333,6 @@ class Dashboards extends ApiController
 
 	public function saldo()
 	{
-		if($this->input->get('date')){
-			$date = $this->input->get('date');
-		}else{
-			$date = date('Y-m-d');
-		}
 		if($this->input->get('area')){
 			$area = $this->input->get('area');
 			$this->units->db->where('id_area', $area);
@@ -657,6 +652,40 @@ class Dashboards extends ApiController
 		$data->cash_out = (int) $last->up;
 		$data->total_up = $data->cash_in + $data->cash_out;
 		return $this->sendMessage($data,'Get Unit Booking');
+	}
+
+
+	public function saldounit()
+	{
+		if($area = $this->input->get('area')){
+			$this->units->db->where('id_area', $area);
+		}else if($this->session->userdata('user')->level == 'area'){
+			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
+		}
+		if($code = $this->input->get('id_unit')){
+			$this->units->db->where('id_unit', $code);
+		}else if($this->session->userdata('user')->level == 'unit'){
+			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
+		}
+
+		$this->units->db
+			->select('id_unit, name, amount, cut_off')
+			->DISTINCT ('id_unit')
+			->from('units_saldo')
+			->join('units','units.id = units_saldo.id_unit');
+		$getSaldo = $this->units->db->get()->result();
+		foreach ($getSaldo as $get){
+			$this->units->db->select('(sum(CASE WHEN type = "CASH_IN" THEN `amount` ELSE 0 END) - sum(CASE WHEN type = "CASH_OUT" THEN `amount` ELSE 0 END)) as amount')
+				->join('units','units.id = units_dailycashs.id_unit')
+				->from('units_dailycashs')
+				->where('units_dailycashs.date >',$get->cut_off);
+			$data = $this->units->db->get()->row();
+			if($data){
+				$get->amount = $get->amount + $data->amount;
+			}
+		}
+
+		return $this->sendMessage($getSaldo,'Successfully get Pendapatan');
 	}
 
 }
