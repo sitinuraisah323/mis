@@ -107,11 +107,12 @@ function initCariForm(){
         KTApp.block('#form_bukukas .kt-portlet__body', {});
 		$.ajax({
 			type : 'GET',
-			url : "<?php echo base_url("api/transactions/unitsdailycash/report"); ?>",
+			url : "<?php echo base_url("api/transactions/unitsdailycash/reportsaldoawal"); ?>",
 			dataType : "json",
 			data:{id_unit:unit,dateStart:dateStart,dateEnd:dateEnd, area:area},
 			success : function(response,status){
 				KTApp.unblockPage();
+				console.log(response.data);
 				if(response.status == true){
 					var template = '';
                     var currentSaldo = 0;
@@ -119,21 +120,24 @@ function initCariForm(){
                     var TotSaldoOut = 0;
                     var no = 0;
 					$.each(response.data, function (index, data) {
-                        no++;
+						var cashin=0;
+						var cashout=0;
+						if(data.type=='CASH_IN'){cashin= data.amount; currentSaldo +=  parseInt(data.amount); TotSaldoIn +=  parseInt(data.amount);}
+						if(data.type=='CASH_OUT'){cashout= data.amount; currentSaldo -=  parseInt(data.amount); TotSaldoOut +=  parseInt(data.amount);}
+
+						no++;
                         if(index == 0){
 							var date = '';
 							var month = '';
 							var year = '';
+							cashin = 0;
+							cashout = 0;
+							currentSaldo = data.amount;
 						}else{
 							var date = moment(data.date).format('DD-MM-YYYY');
 							var month = moment(data.date).format('MMMM');
 							var year = moment(data.date).format('YYYY');
 						}
-                    var cashin=0;
-                    var cashout=0;
-                    if(data.type=='CASH_IN'){cashin= data.amount; currentSaldo +=  parseInt(data.amount); TotSaldoIn +=  parseInt(data.amount);}
-                    if(data.type=='CASH_OUT'){cashout= data.amount; currentSaldo -=  parseInt(data.amount); TotSaldoOut +=  parseInt(data.amount);}
-                    
                     template += '<tr class="rowappend">';
                     template +='<td class="text-center">'+no+'</td>';
                     template +='<td>'+date+'</td>';

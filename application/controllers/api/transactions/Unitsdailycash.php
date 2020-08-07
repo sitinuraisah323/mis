@@ -10,7 +10,7 @@ class Unitsdailycash extends ApiController
 		$this->load->model('UnitsdailycashModel', 'unitsdailycash');
 		$this->load->model('MappingcaseModel', 'm_casing');
 		$this->load->model('UnitsModel', 'units');
-		include APPPATH.'libraries/PHPExcel.php';
+		$this->load->model('UnitsSaldo', 'saldo');
 	}
 
 	public function index()
@@ -163,12 +163,12 @@ class Unitsdailycash extends ApiController
 	public function report()
 	{
 		if($get = $this->input->get()){
-			$this->unitsdailycash->db
-				->where('date <', $get['dateStart']);
+			if($get['dateStart']){
+				$this->unitsdailycash->db->where('date <', $get['dateStart']);
+			}
 			if($get['id_unit']!='all' && $get['id_unit'] != 0){
 				$this->unitsdailycash->db->where('id_unit', $get['id_unit']);
 			}
-
 			if($this->input->get('area')){
 				$this->unitsdailycash->db->where('id_area', $get['area']);
 			}
@@ -353,7 +353,8 @@ class Unitsdailycash extends ApiController
 
 	public function saldoawalproses()
 	{
-		$path = 'storage/files/cash/'.'saldoawal.xlsx';
+		require_once APPPATH.'libraries/PHPExcel.php';
+		$path = 'storage/files/saldo/saldo.xlsx';
 		$excelreader = new PHPExcel_Reader_Excel2007();
 		$loadexcel = $excelreader->load($path); // Load file yang telah diupload ke folder excel
 		$transactions = $loadexcel->getActiveSheet()->toArray(null, true, true ,true);
@@ -362,32 +363,116 @@ class Unitsdailycash extends ApiController
 			$batchUpdate = array();
 			foreach ($transactions as $key => $transaction){
 				if($key > 1){
-					$unit = $this->units->find(array(
-						'code'	=> $transaction['A']
-					));
-
-					$data = array(
-						'id_unit'	=> $unit->id,
-						'no_perk'	=> $transaction['B'],
-						'date'	=> $transaction['C'],
-						'description'	=> $transaction['D'],
-						'cash_code'	=> 'SA',
-						'amount'	=> $transaction['F'],
-					);
-					$batchInsert[] = $data;
+					if($this->units->find($transaction['A'])){
+						$partAmount =  explode(',',$transaction['E']);
+						$amount = implode('',$partAmount);
+						$data = array(
+							'id_unit'	=> $transaction['A'],
+							'amount'	=> $amount,
+							'cut_off'	=> $transaction['F']
+						);
+						$batchInsert[] = $data;
+					}
 
 				}
 			}
 			if(count($batchInsert)){
-				$this->unitsdailycash->db->insert_batch('customers', $batchInsert);
+				$this->unitsdailycash->db->insert_batch('units_saldo', $batchInsert);
 			}
 			if(count($batchUpdate)){
 				$this->unitsdailycash->db->update_batch('customers', $batchUpdate,'id');
 			}
 		}
-		if(is_file($path)){
-			unlink($path);
+//		if(is_file($path)){
+//			unlink($path);
+//		}
+	}
+
+	public function reportsaldoawal()
+	{
+		$area = $this->input->get('area');
+		$idUnit = $this->input->get('id_unit');
+		$dateStart = $this->input->get('dateStart');
+		$dateEnd = $this->input->get('dateEnd');
+		if($area > 0){
+			$this->saldo->db->where('id_area', $area);
 		}
+		if($idUnit > 0){
+			$this->saldo->db->where('id_unit', $idUnit);
+		}
+		if($dateStart){
+			$this->saldo->db->where('cut_off <=', $dateStart);
+		}
+
+		$this->saldo->db
+			->select('sum(amount) as amount, cut_off')
+			->from('units_saldo')
+			->group_by('cut_off')
+			->join('units','units.id = units_saldo.id_unit');
+		$getSaldo = $this->saldo->db->get()->row();
+		if($getSaldo){
+			$totalsaldoawal = (int) $getSaldo->amount;
+			$date = $getSaldo->cut_off;
+		}else{
+			$totalsaldoawal = 0;
+			$date = '';
+		}
+
+
+		if($area > 0){
+			$this->saldo->db->where('id_area', $area);
+		}
+		if($idUnit > 0){
+			$this->saldo->db->where('id_unit', $idUnit);
+		}
+		if($date){
+			$this->saldo->db->where('date >', $date);
+		}
+
+		if($dateStart){
+			$this->saldo->db->where('date <', $dateStart);
+		}
+
+		$this->unitsdailycash->db
+			->select('
+			 (sum(CASE WHEN type = "CASH_IN" THEN `amount` ELSE 0 END) - sum(CASE WHEN type = "CASH_OUT" THEN `amount` ELSE 0 END)) as amount
+			 			')
+			->from('units_dailycashs')
+			->join('units','units.id = units_dailycashs.id_unit');
+		$saldo = (int) $this->unitsdailycash->db->get()->row()->amount;
+		$total = $saldo + $totalsaldoawal;
+
+
+		$data = (object) array(
+			'id'	=> 0,
+			'id_unit' => $this->input->get('id_unit') ? $this->input->get('id_unit') : 0,
+			'no_perk'	=> 0,
+			'date'	=> '',
+			'description'	=> 'saldo awal',
+			'cash_code'	=>  'KT',
+			'type'	=> $total > 0 ? 'CASH_IN' : 'CASH_OUT',
+			'amount'	=> $total
+		);
+
+		if($get = $this->input->get()){
+			$this->unitsdailycash->db
+				->where('date >=', $get['dateStart'])
+				->where('date <=', $get['dateEnd']);
+			if($get['id_unit']!='all' && $get['id_unit'] != 0){
+				$this->unitsdailycash->db->where('id_unit', $get['id_unit']);
+			}
+			if($this->input->get('area')){
+				$this->unitsdailycash->db->where('id_area', $get['area']);
+			}
+		}
+		$this->unitsdailycash->db->join('units','units.id = units_dailycashs.id_unit');
+		$getCash = $this->unitsdailycash->all();
+		array_unshift( $getCash, $data);
+		echo json_encode(array(
+			'data'	=> 	$getCash,
+			'status'=>true,
+			'message'	=> 'Successfull Delete Data Area'
+		));
 	}
 
 }

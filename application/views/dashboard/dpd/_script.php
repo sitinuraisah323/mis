@@ -102,7 +102,7 @@ function initCariForm(){
         $('.rowappend').remove();
         var area = $('[name="area"]').val();
         var code = $('[name="id_unit"]').val();
-		var dateStart = $('[name="date-start"]').val();
+		var dateStart = $('[name="date"]').val();
         KTApp.block('#form_bukukas .kt-portlet__body', {});
 		$.ajax({
 			type : 'GET',
