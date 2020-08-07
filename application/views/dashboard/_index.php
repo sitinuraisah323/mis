@@ -51,7 +51,7 @@ $this->load->view('temp/MenuBar.php');
                                     <a class="kt-link" href="#">0</a>
                                 </h3>
                                 <div class="kt-iconbox__content">
-                                    Saldo  Unit
+                                    Saldo Hari Ini
                                 </div>
                             </div>
                         </div>
@@ -77,7 +77,7 @@ $this->load->view('temp/MenuBar.php');
                                     <a class="kt-link" href="#">0</a>
                                 </h3>
                                 <div class="kt-iconbox__content">
-                                    Selisih Saldo unit
+                                    Total Selisih Transaksi
                                 </div>
                             </div>
                         </div>
@@ -103,7 +103,7 @@ $this->load->view('temp/MenuBar.php');
                                     <a class="kt-link" href="#">0</a>
                                 </h3>
                                 <div class="kt-iconbox__content">
-                                    NOA
+                                    Total Noa
                                 </div>
                             </div>
                         </div>
@@ -111,196 +111,24 @@ $this->load->view('temp/MenuBar.php');
                     </div>
                 </div>
 
-                <div class="col-xl-4 col-lg-4">
-                    <!--begin:: Widgets-->
+                
+                <div class="col-lg-12">
+                    <!--begin:: Widgets/Daily Sales-->
+                    <form id="form_outstanding" class="form-horizontal">
                     <div class="kt-portlet kt-portlet--height-fluid">
                         <div class="kt-widget14">
-                            <div class="kt-widget14__header">
+                            <div class="kt-widget14__header kt-margin-b-30">
                                 <h3 class="kt-widget14__title">
-                                    Review Booking            
+                                    Outstanding Nasional              
                                 </h3>
                                 <span class="kt-widget14__desc">
-                                    Booking today & yesterday
+                                    <!-- Check out each collumn for more details -->
                                 </span>
-                            </div>	 
-                            <div class="kt-widget14__content">	
-                                <div class="kt-widget14__chart">
-                                    <div id="kt_chart_booking" style="height: 150px; width: 150px;"></div>
-                                </div> 
-                                <div class="kt-widget14__legends">
-                                    <div class="kt-widget14__legend">
-                                        <span class="kt-widget14__bullet kt-bg-danger"></span>
-                                        <span class="kt-widget14__stats">60</span>
-                                    </div>
-                                    <div class="kt-widget14__legend">
-                                        <span class="kt-widget14__bullet kt-bg-brand"></span>
-                                        <span class="kt-widget14__stats">40</span>
-                                    </div>
-                                </div>			
-                            </div> 
+                            </div>
+                                <div id="bar-chart" style="height:250px;"></div>
                         </div>
-                    </div>		
-                    <!--end:: Widgets-->    
-                </div>
-
-                <div class="col-xl-4 col-lg-4">
-                    <!--begin:: Widgets-->
-                    <div class="kt-portlet kt-portlet--height-fluid">
-                        <div class="kt-widget14">
-                            <div class="kt-widget14__header">
-                                <h3 class="kt-widget14__title">
-                                    Review Outstanding            
-                                </h3>
-                                <span class="kt-widget14__desc">
-                                    Outstanding today & yesterday
-                                </span>
-                            </div>	 
-                            <div class="kt-widget14__content">	
-                                <div class="kt-widget14__chart">
-                                    <div id="kt_chart_outstanding" style="height: 150px; width: 150px;"></div>
-                                </div> 
-                                <div class="kt-widget14__legends">
-                                    <div class="kt-widget14__legend">
-                                        <span class="kt-widget14__bullet kt-bg-danger"></span>
-                                        <span class="kt-widget14__stats">80</span>
-                                    </div>
-                                    <div class="kt-widget14__legend">
-                                        <span class="kt-widget14__bullet kt-bg-brand"></span>
-                                        <span class="kt-widget14__stats">20</span>
-                                    </div>
-                                </div>			
-                            </div> 
-                        </div>
-                    </div>		
-                    <!--end:: Widgets-->    
-                </div>
-
-                <div class="col-xl-4 col-lg-4">
-                    <!--begin:: Widgets-->
-                    <div class="kt-portlet kt-portlet--height-fluid">
-                        <div class="kt-widget14">
-                            <div class="kt-widget14__header">
-                                <h3 class="kt-widget14__title">
-                                    Review Day Past Due(DPD)            
-                                </h3>
-                                <span class="kt-widget14__desc">
-                                    Day Past Due(DPD)  today & yesterday
-                                </span>
-                            </div>	 
-                            <div class="kt-widget14__content">	
-                                <div class="kt-widget14__chart">
-                                    <div id="kt_chart_dpd" style="height: 150px; width: 150px;"></div>
-                                </div> 
-                                <div class="kt-widget14__legends">
-                                    <div class="kt-widget14__legend">
-                                        <span class="kt-widget14__bullet kt-bg-danger"></span>
-                                        <span class="kt-widget14__stats">70</span>
-                                    </div>
-                                    <div class="kt-widget14__legend">
-                                        <span class="kt-widget14__bullet kt-bg-brand"></span>
-                                        <span class="kt-widget14__stats">30</span>
-                                    </div>
-                                </div>			
-                            </div> 
-                        </div>
-                    </div>		
-                    <!--end:: Widgets-->    
-                </div>
-
-                <div class="col-xl-4 col-lg-4">
-                    <!--begin:: Widgets-->
-                    <div class="kt-portlet kt-portlet--height-fluid">
-                        <div class="kt-widget14">
-                            <div class="kt-widget14__header">
-                                <h3 class="kt-widget14__title">
-                                    Review Pencairan            
-                                </h3>
-                                <span class="kt-widget14__desc">
-                                    Pencairan Reguler & Cicilan
-                                </span>
-                            </div>	 
-                            <div class="kt-widget14__content">	
-                                <div class="kt-widget14__chart">
-                                    <div id="kt_chart_pencairan" style="height: 150px; width: 150px;"></div>
-                                </div> 
-                                <div class="kt-widget14__legends">
-                                    <div class="kt-widget14__legend">
-                                        <span class="kt-widget14__bullet kt-bg-danger"></span>
-                                        <span class="kt-widget14__stats">70</span>
-                                    </div>
-                                    <div class="kt-widget14__legend">
-                                        <span class="kt-widget14__bullet kt-bg-brand"></span>
-                                        <span class="kt-widget14__stats">30</span>
-                                    </div>
-                                </div>			
-                            </div> 
-                        </div>
-                    </div>		
-                    <!--end:: Widgets-->    
-                </div>
-
-                <div class="col-xl-4 col-lg-4">
-                    <!--begin:: Widgets-->
-                    <div class="kt-portlet kt-portlet--height-fluid">
-                        <div class="kt-widget14">
-                            <div class="kt-widget14__header">
-                                <h3 class="kt-widget14__title">
-                                    Review Pelunasan            
-                                </h3>
-                                <span class="kt-widget14__desc">
-                                    Pelunasan Reguler & Cicilan
-                                </span>
-                            </div>	 
-                            <div class="kt-widget14__content">	
-                                <div class="kt-widget14__chart">
-                                    <div id="kt_chart_pelunasan" style="height: 150px; width: 150px;"></div>
-                                </div> 
-                                <div class="kt-widget14__legends">
-                                    <div class="kt-widget14__legend">
-                                        <span class="kt-widget14__bullet kt-bg-danger"></span>
-                                        <span class="kt-widget14__stats">70</span>
-                                    </div>
-                                    <div class="kt-widget14__legend">
-                                        <span class="kt-widget14__bullet kt-bg-brand"></span>
-                                        <span class="kt-widget14__stats">30</span>
-                                    </div>
-                                </div>			
-                            </div> 
-                        </div>
-                    </div>		
-                    <!--end:: Widgets-->    
-                </div>
-
-                <div class="col-xl-4 col-lg-4">
-                    <!--begin:: Widgets-->
-                    <div class="kt-portlet kt-portlet--height-fluid">
-                        <div class="kt-widget14">
-                            <div class="kt-widget14__header">
-                                <h3 class="kt-widget14__title">
-                                    Review Pendapatan & Pengeluaran            
-                                </h3>
-                                <span class="kt-widget14__desc">
-                                    Pendaptan & Pengeluaran
-                                </span>
-                            </div>	 
-                            <div class="kt-widget14__content">	
-                                <div class="kt-widget14__chart">
-                                    <div id="kt_chart_profit" style="height: 150px; width: 150px;"></div>
-                                </div> 
-                                <div class="kt-widget14__legends">
-                                    <div class="kt-widget14__legend">
-                                        <span class="kt-widget14__bullet kt-bg-danger"></span>
-                                        <span class="kt-widget14__stats">70</span>
-                                    </div>
-                                    <div class="kt-widget14__legend">
-                                        <span class="kt-widget14__bullet kt-bg-brand"></span>
-                                        <span class="kt-widget14__stats">30</span>
-                                    </div>
-                                </div>			
-                            </div> 
-                        </div>
-                    </div>		
-                    <!--end:: Widgets-->    
+                    </div>
+                    </form>
                 </div>
 
             <!-- end:: Content -->

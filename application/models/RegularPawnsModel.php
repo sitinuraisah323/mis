@@ -152,7 +152,6 @@ class RegularpawnsModel extends Master
 		);
 	}
 
-
 	public function getDpdRepaymentToday($idUnit, $date)
 	{
 		$data = $this->db->select('sum(units_regularpawns.amount) as ost, count(*) as noa')
@@ -198,9 +197,21 @@ class RegularpawnsModel extends Master
 			->where('status_transaction', 'N')
 			->where('date_sbk <=', $today)->get()->row();
 
+		$noaMortages = $this->db->select('count(*) as noa')->from('units_mortages')
+			->where('id_unit', $idUnit)
+			->where('status_transaction', 'N')
+			->where('date_sbk <=', $today)->get()->row();
+
+		$upaMortages = $this->db->select('sum(amount_loan) as up')->from('units_mortages')
+			->where('id_unit', $idUnit)
+			->where('status_transaction', 'N')
+			->where('date_sbk <=', $today)->get()->row();
+
 		return (object)array(
 			'noa' => (int)$noaRegular->noa,
-			'up' => (int)$upRegular->up
+			'up' => (int)$upRegular->up,
+			'm_noa' => (int)$noaMortages->noa,
+			'm_up' => (int)$upaMortages->up
 		);
 	}
 

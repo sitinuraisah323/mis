@@ -195,13 +195,6 @@ function initCariForm(){
 						verticalGrid: true,
 						hideHover: 'auto',
 						barColors: ['#3578FC','#FF0000', '#FFD500']
-						// barColors: function (row, series, type) {
-						// 	console.log("--> "+row.label, series, type);
-						//     //if (data.area == "Jawa Barat"){return "#FFD500";} else{ return "#3578FC"; }
-						//     // else if (row.label == "Medium") return "#FFD500";
-						//     // else if (row.label == "High") return "#FF0000";
-						//     // else if (row.label == "Fatal") return "#000000";
-						// }
 					};
 			//config element name
 			config.element = 'graphOutstanding';
@@ -215,7 +208,7 @@ function pencairan() {
 	$('svg').remove();
     $('#graphPencairan').empty();
 	var totalCurr = 0;
-	var totalLast = 0;
+	var totalLastPencairan = 0;
 
 	$.ajax({
 		url:"<?php echo base_url('api/dashboards/pencairandashboard');?>",
@@ -227,12 +220,13 @@ function pencairan() {
 		},
 		success:function (response) {
 			$.each(response.data, function (index,unit) {
-				totalLast += parseInt(unit.amount);
+				totalLastPencairan += unit.amount;
+				//totalLast = 0;
 			});
 		},
 		complete:function () {
 			$('#form_pencairan').find('.date-yesterday').text(lastdate);
-			$('#form_pencairan').find('.total-yesterday').text(convertToRupiah(totalLast));
+			$('#form_pencairan').find('.total-yesterday').text(convertToRupiah(totalLastPencairan));
 		},
 	});
 
@@ -293,7 +287,6 @@ function pencairan() {
 	});
 
 }
-
 
 function pelunasan() {
 	$('svg').remove();
@@ -377,7 +370,6 @@ function pelunasan() {
 
 }
 
-
 function pendapatan() {
 	$('svg').remove();
 	$('#graphPendapatan').empty();
@@ -436,7 +428,6 @@ function pendapatan() {
 		},
 	});
 }
-
 
 function pengeluaran() {
 	$('svg').remove();
