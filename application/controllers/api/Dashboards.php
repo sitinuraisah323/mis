@@ -333,6 +333,11 @@ class Dashboards extends ApiController
 
 	public function saldo()
 	{
+		if($this->input->get('date')){
+			$date = $this->input->get('date');
+		}else{
+			$date = date('Y-m-d');
+		}
 		if($this->input->get('area')){
 			$area = $this->input->get('area');
 			$this->units->db->where('id_area', $area);
@@ -457,9 +462,9 @@ class Dashboards extends ApiController
 			->join('areas','areas.id = units.id_area')
 			->get('units')->result();
 		foreach ($units as $unit){
-			 //$unit->up = $this->regular->getOstToday_($unit->id, $date)->up;			
 			 $unit->ost_yesterday = $this->regular->getOstYesterday_($unit->id, $date);			
-			 $unit->ost_today = $this->regular->getOstToday_($unit->id, $date);			
+			 $unit->ost_today = $this->regular->getOstToday_($unit->id, $date);					 
+			 
 		}
 		$this->sendMessage($units, 'Get Data Outstanding');
 	}
@@ -653,7 +658,6 @@ class Dashboards extends ApiController
 		$data->total_up = $data->cash_in + $data->cash_out;
 		return $this->sendMessage($data,'Get Unit Booking');
 	}
-
 
 	public function saldounit()
 	{

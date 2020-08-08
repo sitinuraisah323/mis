@@ -28,9 +28,14 @@ class Dashboards extends Authenticated
 	 */
 	public function index()
 	{
-		// var_dump($this->session->userdata('user'));
-		// exit;
 		$this->load->view("dashboard/index",array(
+			'areas'	=> $this->areas->all()
+		));
+	}
+
+	public function new()
+	{
+		$this->load->view("dashboard/_index",array(
 			'areas'	=> $this->areas->all()
 		));
 	}
