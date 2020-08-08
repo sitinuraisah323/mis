@@ -498,7 +498,7 @@ function saldo() {
 	//var currdate = '2020-07-20';
 	KTApp.block('#form_saldo .kt-widget14', {});
 	$.ajax({
-		url:"<?php echo base_url('api/dashboards/unitsaldo');?>",
+		url:"<?php echo base_url('api/dashboards/saldounit');?>",
 		type:"GET",
 		dataType:"JSON",
 		data:{
