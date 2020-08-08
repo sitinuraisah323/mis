@@ -21,7 +21,7 @@ class Dashboards extends ApiController
 			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
 		}
 		if($code = $this->input->get('code')){
-			$this->units->db->where('code', $code);
+			$this->units->db->where('code', zero_fill($code, 3));
 		}else if($this->session->userdata('user')->level == 'unit'){
 			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
 		}
@@ -113,7 +113,7 @@ class Dashboards extends ApiController
 			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
 		}
 		if($code = $this->input->get('code')){
-			$this->units->db->where('code', $code);
+			$this->units->db->where('units.id', $code);
 		}else if($this->session->userdata('user')->level == 'unit'){
 			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
 		}
@@ -209,7 +209,7 @@ class Dashboards extends ApiController
 			$this->units->db->where('id_area', $area);
 		}
 		if($code = $this->input->get('code')){
-			$this->units->db->where('code', $code);
+			$this->units->db->where('units.id', $code);
 		}
 		if($id_unit = $this->input->get('id_unit')){
 			$this->units->db->where('units.id', $id_unit);
@@ -678,6 +678,7 @@ class Dashboards extends ApiController
 			$this->units->db->select('(sum(CASE WHEN type = "CASH_IN" THEN `amount` ELSE 0 END) - sum(CASE WHEN type = "CASH_OUT" THEN `amount` ELSE 0 END)) as amount')
 				->join('units','units.id = units_dailycashs.id_unit')
 				->from('units_dailycashs')
+				->where('units.id', $get->id_unit)
 				->where('units_dailycashs.date >',$get->cut_off);
 			$data = $this->units->db->get()->row();
 			if($data){

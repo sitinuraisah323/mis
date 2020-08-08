@@ -107,14 +107,19 @@ class Regularpawns extends Authenticated
 			$this->regulars->db
 				//->where('units_regularpawns.date_sbk >=', $post['date-start'])
 				->where('units_regularpawns.date_sbk <=', $post['date-end'])
-				->where_in('units_regularpawns.status_transaction ', $status)
-				->where('units_regularpawns.id_unit', $post['id_unit']);
-				if($permit = $post['permit']){
-					$this->regulars->db->where('units_regularpawns.permit', $permit);
-				}
-				if($nasabah!="all"){
-					$this->regulars->db->where('customers.nik', $nasabah);
-				}
+				->where_in('units_regularpawns.status_transaction ', $status);
+			if($idUnit = $this->input->get('id_unit')){
+				$this->regulars->db->where('units_regularpawns.id_unit', $post['id_unit']);
+			}
+			if($area = $this->input->get('area')){
+				$this->regulars->db->where('id_area', $area);
+			}
+			if($permit = $post['permit']){
+				$this->regulars->db->where('units_regularpawns.permit', $permit);
+			}
+			if($nasabah!="all" && $nasabah != ''){
+				$this->regulars->db->where('customers.nik', $nasabah);
+			}
 		}
 		$data = $this->regulars->all();
 		$no=2;

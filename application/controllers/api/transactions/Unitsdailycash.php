@@ -456,7 +456,7 @@ class Unitsdailycash extends ApiController
 
 		if($get = $this->input->get()){
 			$this->unitsdailycash->db
-				->where('date >=', $get['dateStart'])
+				->where('date >', $get['dateStart'])
 				->where('date <=', $get['dateEnd']);
 			if($get['id_unit']!='all' && $get['id_unit'] != 0){
 				$this->unitsdailycash->db->where('id_unit', $get['id_unit']);
