@@ -25,7 +25,7 @@
                                         <br/><br/>
                                     </div>                                 
                                 <?php else:?>
-                                    <input type="hidden" class="form-control form-control-sm" name="id_unit" value="<?php echo $this->session->userdata('user')->id_unit;?>">
+                                    <input type="hidden" class="form-control form-control-sm" name="id_unit" id="unitid" value="<?php echo $this->session->userdata('user')->id_unit;?>">
                                 <?php endif;?>                                    
                                     <label class="col-lg-4 col-form-label">Kasir</label>
                                     <div class="col-lg-8">

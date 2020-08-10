@@ -30,7 +30,10 @@ class Regularpawns extends Authenticated
 	 */
 	public function index()
 	{
-        $data['units'] = $this->units->all();
+		//var_dump($this->session->userdata('user')->level);
+		if($this->session->userdata('user')->level=='unit'){
+			$data['customers'] = $this->units->get_customers_gadaireguler_byunit($this->session->userdata('user')->id_unit);
+		}
         $data['areas'] = $this->areas->all();
 		$this->load->view('report/regularpawns/index',$data);
 	}

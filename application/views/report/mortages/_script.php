@@ -242,6 +242,40 @@ function initGetNasabah(){
     });
 }
 
+function initUnitNasabah(){
+        var unit=$('[name="id_unit"]').val();
+        var customers =  document.getElementById('nasabah');     
+        $.ajax({
+			type : 'GET',
+			url : "<?php echo base_url("api/datamaster/units/get_customers_gc_byunit"); ?>",
+			dataType : "json",
+			data:{unit:unit},
+			success : function(response,status){
+				KTApp.unblockPage();
+				if(response.status == true){
+                    $("#nasabah").empty();
+                    var option = document.createElement("option");
+                    option.value = "all";
+                    option.text = "All";
+                    customers.appendChild(option);
+					$.each(response.data, function (index, data) {
+                        //console.log(data);
+                        var opt = document.createElement("option");
+                        opt.value = data.nik;
+                        opt.text = data.name;
+                        customers.appendChild(opt);
+					});					
+				}
+			},
+			error: function (jqXHR, textStatus, errorThrown){
+				KTApp.unblockPage();
+			},
+			complete:function () {
+				KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+			}
+		});
+}
+
 function popView(el){
     $('.rowappend_mdl').remove();
     var nosbk = $(el).attr('data-id');
@@ -296,6 +330,7 @@ if(type == 'hidden'){
 jQuery(document).ready(function() {
     initCariForm();
     initGetNasabah();
+    initUnitNasabah();
 
     $(document).on("click", ".viewcicilan", function () {
                 var el = $(this);

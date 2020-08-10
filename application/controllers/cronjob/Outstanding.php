@@ -27,7 +27,7 @@ class Outstanding extends Authenticated
 	public function index()
 	{
         $currdate =date("Y-m-d");
-        $lastdate = date('Y-m-d', strtotime('-1 days', strtotime($currdate)));
+        $lastdate = date('Y-m-d', strtotime('-2 days', strtotime($currdate)));
         $units = $this->units->db->select('units.id, units.name, area')
 			->join('areas','areas.id = units.id_area')
 			->get('units')->result();
