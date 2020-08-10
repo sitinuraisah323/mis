@@ -11,6 +11,9 @@ class Dashboards extends ApiController
 		$this->load->model('UnitsModel', 'units');
 		$this->load->model('RepaymentModel','repayments');
 		$this->load->model('MappingcaseModel', 'm_casing');
+		$this->load->model('OutstandingModel', 'outstanding');
+
+		
 	}
 
 	public function outstanding()
@@ -76,7 +79,6 @@ class Dashboards extends ApiController
 		}
 		$this->sendMessage($units, 'Get Data Outstanding');
 	}
-
 
 	public function disbursemtd()
 	{
@@ -148,6 +150,7 @@ class Dashboards extends ApiController
 		}
 		$this->sendMessage($result, 'Get Data Outstanding');
 	}
+
 	public function pencairandashboard()
 	{
 		if($area = $this->input->get('area')){
@@ -603,6 +606,7 @@ class Dashboards extends ApiController
 		$data->total_up = $data->reg_up + $data->mor_up;
 		return $this->sendMessage($data,'Get Unit Booking');
 	}
+
 	public function unitpelunasan()
 	{
 		$idUnit = $this->session->userdata('user')->id_unit;
@@ -632,6 +636,7 @@ class Dashboards extends ApiController
 		$data->total_up = $data->reg_up + $data->mor_up;
 		return $this->sendMessage($data,'Get Unit Booking');
 	}
+
 	public function unitprofit()
 	{
 		$idUnit = $this->session->userdata('user')->id_unit;
@@ -691,6 +696,23 @@ class Dashboards extends ApiController
 		}
 
 		return $this->sendMessage($getSaldo,'Successfully get Pendapatan');
+	}
+
+	public function totoutstanding()
+	{
+		if($this->input->get('date')){
+			$date = $this->input->get('date');
+		}else{
+			$date = date('Y-m-d');
+		}
+		
+		$date = date('Y-m-d', strtotime($date));
+		$lastdate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
+		
+		$outsanding['today'] =$this->outstanding->getOs($date)->today; 
+		$outsanding['yesterday'] = $this->outstanding->getOs($lastdate)->yesterday;
+
+		return $this->sendMessage($outsanding,'Successfully get Pendapatan');
 	}
 
 }

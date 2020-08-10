@@ -174,10 +174,10 @@ function initCariForm(){
 			});
 		},
 		complete:function () {
-			$('#form_outstanding').find('.total-today').text('Rp. '+convertToRupiah(today));
-			$('#form_outstanding').find('.date-today').text(currdate);
-			$('#form_outstanding').find('.total-yesterday').text('Rp. '+convertToRupiah(yesterday));
-			$('#form_outstanding').find('.date-yesterday').text(lastdate);
+			// $('#form_outstanding').find('.total-today').text('Rp. '+convertToRupiah(today));
+			// $('#form_outstanding').find('.date-today').text(currdate);
+			// $('#form_outstanding').find('.total-yesterday').text('Rp. '+convertToRupiah(yesterday));
+			// $('#form_outstanding').find('.date-yesterday').text(lastdate);
 			var data = transaction,
 					//config manager
 					config = {
@@ -202,6 +202,35 @@ function initCariForm(){
 			KTApp.unblock('#form_outstanding .kt-widget14', {});
 		},
 	});
+}
+
+function totoutstanding() {
+	var today = 0;
+	var yesterday = 0;
+	$.ajax({
+		url:"<?php echo base_url('api/dashboards/totoutstanding');?>",
+		type:"GET",
+		dataType:"JSON",
+		data:{
+			area:'',
+			date:currdate,
+		},
+		success:function (response) {
+			console.log(response.data.today);
+			// $.each(response.data, function (index,unit) {
+			today = response.data.today;
+			yesterday = response.data.yesterday;
+			// 	//totalLast = 0;
+			// });
+		},
+		complete:function () {
+			$('#form_outstanding').find('.total-today').text('Rp. '+convertToRupiah(today));
+			$('#form_outstanding').find('.date-today').text(currdate);
+			$('#form_outstanding').find('.total-yesterday').text('Rp. '+convertToRupiah(yesterday));
+			$('#form_outstanding').find('.date-yesterday').text(lastdate);
+		},
+	});
+
 }
 
 function pencairan() {
@@ -706,6 +735,7 @@ jQuery(document).ready(function() {
     //initCariForm();
 	disburse();
 	outstanding();
+	totoutstanding();
 	pencairan();
 	dpd();
 	saldo();
