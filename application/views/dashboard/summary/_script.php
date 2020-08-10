@@ -134,7 +134,7 @@ function initCariForm(){
 	//alert('test');
     var transaction = [];
     $.ajax({
-		url:"<?php echo base_url('api/dashboards/outstanding');?>",
+		url:"<?php echo base_url('api/dashboards/newoutstanding');?>",
 		type:"GET",
 		dataType:"JSON",
 		data:{
@@ -146,7 +146,7 @@ function initCariForm(){
 				console.log(unit);
 				transaction.push({
 					y:unit.name,
-					a:unit.total_outstanding.up
+					a:unit.ost_today.up
 				})
 			});
 		},
