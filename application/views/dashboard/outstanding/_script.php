@@ -108,7 +108,7 @@ function initCariForm(){
 			type : 'GET',
 			url : "<?php echo base_url("api/dashboards/outstanding"); ?>",
 			dataType : "json",
-			data:{area:area,date:dateStart,code:code},
+			data:{area:area,date:dateStart,id_unit:code},
 			success : function(response,status){
 				KTApp.unblockPage();
 				var html = '';

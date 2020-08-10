@@ -23,7 +23,9 @@ class Dashboards extends ApiController
 		}else if($this->session->userdata('user')->level == 'area'){
 			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
 		}
-		if($code = $this->input->get('code')){
+		if($id_unit = $this->input->get('id_unit')){
+			$this->units->db->where('units.id', $id_unit);
+		}else if($code = $this->input->get('code')){
 			$this->units->db->where('code', zero_fill($code, 3));
 		}else if($this->session->userdata('user')->level == 'unit'){
 			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
