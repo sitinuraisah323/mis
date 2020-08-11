@@ -86,7 +86,7 @@ class RegularpawnsModel extends Master
 	{
 
 		if(!is_null($date)){
-			$this->db->where('date_sbk <=',implode('-',array($year,$month,$date)));
+			$this->db->where('date_sbk',implode('-',array($year,$month,$date)));
 		}else{
 			if(!is_null($year)){
 				$this->db->where('YEAR(date_sbk)',$year);
@@ -102,7 +102,7 @@ class RegularpawnsModel extends Master
 
 
 		if(!is_null($date)){
-			$this->db->where('date_sbk <=',implode('-',array($year,$month,$date)));
+			$this->db->where('date_sbk',implode('-',array($year,$month,$date)));
 		}else{
 			if(!is_null($year)){
 				$this->db->where('YEAR(date_sbk)',$year);

@@ -118,5 +118,23 @@ ALTER TABLE mis.employees MODIFY COLUMN id_unit int(10) unsigned DEFAULT 0 NULL;
 
 
 
+ALTER TABLE mis.employees ADD last_education varchar(255) NULL;
+ALTER TABLE mis.employees CHANGE last_education last_education varchar(255) NULL AFTER `position`;
+ALTER TABLE mis.employees ADD bpjs_kesehatan VARCHAR(255) NULL;
+ALTER TABLE mis.employees CHANGE bpjs_kesehatan bpjs_kesehatan VARCHAR(255) NULL AFTER last_education;
+ALTER TABLE mis.employees ADD bpjs_tk varchar(255) NULL;
+ALTER TABLE mis.employees CHANGE bpjs_tk bpjs_tk varchar(255) NULL AFTER bpjs_kesehatan;
+ALTER TABLE mis.employees ADD no_employment varchar(100) NULL;
+ALTER TABLE mis.employees CHANGE no_employment no_employment varchar(100) NULL AFTER masa_kerja;
+ALTER TABLE mis.employees ADD join_date DATE NULL;
+ALTER TABLE mis.employees CHANGE join_date join_date DATE NULL AFTER bpjs_tk;
+ALTER TABLE mis.employees ADD no_rek varchar(255) NULL;
+ALTER TABLE mis.employees CHANGE no_rek no_rek varchar(255) NULL AFTER no_employment;
+ALTER TABLE mis.employees ADD masa_kerja varchar(100) NULL;
+ALTER TABLE mis.employees CHANGE masa_kerja masa_kerja varchar(100) NULL AFTER join_date;
+
+
+
+
 
 

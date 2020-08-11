@@ -116,7 +116,6 @@ $this->load->view('temp/MenuBar.php');
 				<div class="form-horizontal">
 					<div class="form-body">
 						<div class="row">
-							
 							<div class="col-md-6">
 								<div class="form-group">
 									<label>Level</label>
@@ -150,7 +149,23 @@ $this->load->view('temp/MenuBar.php');
 									<input type="text" name="nik" class="form-control">
 								</div>
 								<div class="form-group">
-									<label>Nama</label>
+									<label>No Rekening</label>
+									<input type="text" name="no_rek" class="form-control">
+								</div>
+								<div class="form-group">
+									<label>No Karyakawan</label>
+									<input type="text" name="no_employment" class="form-control">
+								</div>
+								<div class="form-group">
+									<label>Join Date</label>
+									<input type="date" name="join_date" class="form-control">
+								</div>
+								<div class="form-group">
+									<label>Masa Kerja</label>
+									<input type="text" name="masa_kerja" class="form-control">
+								</div>
+								<div class="form-group">
+									<label>Nama Lengkap</label>
 									<input type="text" name="fullname" class="form-control">
 								</div>
 								<div class="form-group">
@@ -170,19 +185,30 @@ $this->load->view('temp/MenuBar.php');
 										<?php endforeach;?>
 									</select>
 								</div>
-
 								<div class="form-group">
 									<label>No Hp</label>
 									<input type="text" name="mobile" class="form-control">
 								</div>
 							</div>
 
-							<div class="col-md-6">							
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>Pendidikan Terakhir</label>
+									<input type="text" name="last_education" class="form-control">
+								</div>
+								<div class="form-group">
+									<label>No Bpjs Kesehatan</label>
+									<input type="text" name="bpjs_kesehatan" class="form-control">
+								</div>
+								<div class="form-group">
+									<label>No Bpjs Ketenagakerjaaan</label>
+									<input type="text" name="bpjs_tk" class="form-control">
+								</div>
 								<div class="form-group">
 									<label>Status Kawin</label>
 									<select  name="marital" id="marital" class="form-control">
 									<option></option>
-										<?php foreach (array('MARRIED'=>'Menikah','SINGLE'=>'Belum Kawin','DIVORCE'=>'BERCERAI') as $value=>$label):?>
+										<?php foreach (array('MARRIED'=>'Menikah','SINGLE'=>'Tidak Nikah') as $value=>$label):?>
 											<option value="<?php echo $value;?>"><?php echo $label;?></option>
 										<?php endforeach;?>
 									</select>
@@ -201,7 +227,7 @@ $this->load->view('temp/MenuBar.php');
 									<input type="text" name="address" class="form-control">
 								</div>
 								<div class="form-group">
-									<label>Position</label>
+									<label>Jabatan</label>
 									<input type="text" name="position" class="form-control">
 								</div>
 								<div class="form-group">
