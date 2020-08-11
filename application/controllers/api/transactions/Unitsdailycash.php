@@ -237,8 +237,7 @@ class Unitsdailycash extends ApiController
 		$ignore = array('1110000');
 		if($get = $this->input->get()){
 			$category = $get['category'];
-			$this->unitsdailycash->db				
-				->where('date >=', $get['dateStart'])
+			$this->unitsdailycash->db
 				->where('date <=', $get['dateEnd']);
 			if($this->input->get('id_unit')){
 				$this->unitsdailycash->db->where('id_unit', $get['id_unit']);
@@ -270,7 +269,6 @@ class Unitsdailycash extends ApiController
 			$this->unitsdailycash->db
 				->where('SUBSTRING(no_perk,1,5) =','11100')
 				->where('type =', 'CASH_IN')
-				->where('date >=', $get['dateStart'])
 				->where('date <=', $get['dateEnd'])
 				->where('id_unit', $get['id_unit'])
 				->where_not_in('no_perk', $ignore);

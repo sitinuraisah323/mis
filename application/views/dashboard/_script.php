@@ -11,9 +11,9 @@ $nextlastdate = date('Y-m-d', strtotime('-2 days', strtotime($date)));
 ?>
 var currdate = "<?php echo $lastdate;?>";
 var lastdate = "<?php echo $nextlastdate;?>";
-var currday = "<?php echo date('d'); ?>";
-var currmonth = "<?php echo date('n'); ?>";
-var curryears = "<?php echo date('Y'); ?>";
+var currday = "<?php echo date('d', strtotime(date('Y-m-d').  ' -1 days')); ?>";
+var currmonth =  "<?php echo date('n', strtotime(date('Y-m-d'). ' -1 days')); ?>";
+var curryears =  "<?php echo date('Y', strtotime(date('Y-m-d').'  -1 days')); ?>";
 
 //alert(currdate);
 //alert(lastdate);

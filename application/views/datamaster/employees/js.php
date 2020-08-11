@@ -17,7 +17,6 @@ function InitClear(){
 }
 
 function initDTEvents(){
-    
     $(".btn_delete").on("click",function(){
         var targetId = $(this).data("id");
         //alert(targetId);
@@ -61,7 +60,6 @@ function initDTEvents(){
             dataType : "json",
             success : function(response,status){
                 KTApp.unblockPage();
-                console.log(response.data);
                 if(response.status == true){
                     //populate form
 					$('#modal_add').find('[name="id"]').val(response.data.id);
@@ -80,10 +78,21 @@ function initDTEvents(){
                     $("#marital").trigger('change');
 					$('#modal_add').find('[name="blood_group"]').val(response.data.blood_group);
                     $("#blood_group").trigger('change');
+                    if(response.data.id_area){
+						$('#modal_add').find('[name="id_area"]').val(response.data.id_area);
+						$('[name="id_area"]').trigger('change');
+					}
 					$('#modal_add').find('[name="address"]').val(response.data.address);
 					$('#modal_add').find('[name="position"]').val(response.data.position);
 					$('#modal_add').find('[name="email"]').val(response.data.email);
 					$('#modal_add').find('[name="id_level"]').val(response.data.id_level);
+					$('#modal_add').find('[name="bpjs_kesehatan"]').val(response.data.bpjs_kesehatan);
+					$('#modal_add').find('[name="last_education"]').val(response.data.last_education);
+					$('#modal_add').find('[name="bpjs_tk"]').val(response.data.bpjs_tk);
+					$('#modal_add').find('[name="no_employment"]').val(response.data.no_employment);
+					$('#modal_add').find('[name="join_date"]').val(response.data.join_date);
+					$('#modal_add').find('[name="no_rek"]').val(response.data.no_rek);
+					$('#modal_add').find('[name="masa_kerja"]').val(response.data.masa_kerja);
                     $("#id_level").trigger('change');
                     $('#modal_add').modal('show');
                 }else{
@@ -198,6 +207,48 @@ function initDataTable(){
 				sortable: 'asc',
 				textAlign: 'left',
 			},
+			  {
+				  field: 'masa_kerja',
+				  title: 'Masa Kerja',
+				  sortable: 'asc',
+				  textAlign: 'left',
+			  },
+			  {
+				  field: 'no_rek',
+				  title: 'No Rekening',
+				  sortable: 'asc',
+				  textAlign: 'left',
+			  },
+			  {
+				  field: 'join_date',
+				  title: 'Join Date',
+				  sortable: 'asc',
+				  textAlign: 'left',
+			  },
+			  {
+				  field: 'no_employment',
+				  title: 'No Karyawam',
+				  sortable: 'asc',
+				  textAlign: 'left',
+			  },
+			  {
+				  field: 'bpjs_tk',
+				  title: 'BPJS TK',
+				  sortable: 'asc',
+				  textAlign: 'left',
+			  },
+			  {
+				  field: 'bpjs_kesehatan',
+				  title: 'BPJS Kesehatan',
+				  sortable: 'asc',
+				  textAlign: 'left',
+			  },
+			  {
+				  field: 'last_education',
+				  title: 'Pendidikan Terakhir',
+				  sortable: 'asc',
+				  textAlign: 'left',
+			  },
             {
                 field: 'action',
                 title: 'Action',
