@@ -16,12 +16,14 @@ class OutstandingModel extends Master
 
     public $hirarki = true;
     
-    public function getOs($date)
+    public function getOs($unit,$date)
 	{
 		$today = $this->db->select('sum(os) as up')->from($this->table)
+            ->where('id_unit', $unit)
             ->where('date', $date)->get()->row();
             
 		$yesterday = $this->db->select('sum(os) as up')->from($this->table)
+			->where('id_unit', $unit)
 			->where('date', $date)->get()->row();
 		return (object)array(
 			'today' => (int) $today->up,

@@ -474,6 +474,37 @@ class Dashboards extends ApiController
 		$this->sendMessage($units, 'Get Data Outstanding');
 	}
 
+	public function totoutstanding()
+	{
+		if($area = $this->input->get('area')){
+			$this->units->db->where('id_area', $area);
+		}else if($this->session->userdata('user')->level == 'area'){
+			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
+		}
+		if($code = $this->input->get('code')){
+			$this->units->db->where('code', $code);
+		}else if($this->session->userdata('user')->level == 'unit'){
+			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
+		}
+		
+		if($this->input->get('date')){
+			$date = $this->input->get('date');
+		}else{
+			$date = date('Y-m-d');
+		}
+		
+		$date = date('Y-m-d', strtotime($date));
+		$lastdate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
+		$units = $this->units->db->select('units.id, units.name, area')
+			->join('areas','areas.id = units.id_area')
+			->get('units')->result();
+		foreach ($units as $unit){
+			 $unit->ost_yesterday = $this->outstanding->getOs($unit->id, $lastdate)->yesterday;			
+			 $unit->ost_today = $this->outstanding->getOs($unit->id, $date)->today;				 
+		}
+		$this->sendMessage($units, 'Get Data Outstanding');		
+	}
+
 	public function bookcash()
 	{
 		$idUnit = $this->session->userdata('user')->id_unit;
@@ -698,23 +729,6 @@ class Dashboards extends ApiController
 		}
 
 		return $this->sendMessage($getSaldo,'Successfully get Pendapatan');
-	}
-
-	public function totoutstanding()
-	{
-		if($this->input->get('date')){
-			$date = $this->input->get('date');
-		}else{
-			$date = date('Y-m-d');
-		}
-		
-		$date = date('Y-m-d', strtotime($date));
-		$lastdate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
-		
-		$outsanding['today'] =$this->outstanding->getOs($date)->today; 
-		$outsanding['yesterday'] = $this->outstanding->getOs($lastdate)->yesterday;
-
-		return $this->sendMessage($outsanding,'Successfully get Pendapatan');
 	}
 
 }

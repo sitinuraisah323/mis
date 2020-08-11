@@ -1,5 +1,5 @@
 <?php
-
+date_default_timezone_set("Asia/Bangkok");
 require_once APPPATH.'controllers/Controller.php';
 class Authenticated extends Controller
 {

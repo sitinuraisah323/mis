@@ -18,6 +18,10 @@ var curryears = "<?php echo date('Y'); ?>";
 //alert(currdate);
 //alert(lastdate);
 
+function timer(){
+	
+}
+
 function convertToRupiah(angka)
 {
 	var rupiah = '';
@@ -217,11 +221,11 @@ function totoutstanding() {
 		},
 		success:function (response) {
 			console.log(response.data.today);
-			// $.each(response.data, function (index,unit) {
-			today = response.data.today;
-			yesterday = response.data.yesterday;
+			$.each(response.data, function (index,unit) {
+			today += unit.ost_today;
+			yesterday += unit.ost_yesterday;
 			// 	//totalLast = 0;
-			// });
+			});
 		},
 		complete:function () {
 			$('#form_outstanding').find('.total-today').text('Rp. '+convertToRupiah(today));

@@ -18,11 +18,19 @@ $this->load->view('temp/MenuBar.php');
 			</div>
 			<div class="kt-subheader__toolbar">
 				<div class="kt-subheader__wrapper">
-				<div href="" class="btn kt-subheader__btn-daterange" id="kt_dashboard_daterangepicker" data-toggle="kt-tooltip" title="Dashboard Overview" data-placement="left">
-                        <span class="kt-subheader__btn-daterange-title" id="kt_dashboard_daterangepicker_title">Last Day</span>&nbsp;
-                        <span class="kt-subheader__btn-daterange-date" id="kt_dashboard_daterangepicker_date"><?php echo date('M'); ?> <?php echo date('d', strtotime('-1 days', strtotime(date('Y-m-d')))); ?></span>
+                <?php if( date('H') > '21:00'){ ?>
+                    <div href="" class="btn kt-subheader__btn-daterange" id="kt_dashboard_daterangepicker" data-toggle="kt-tooltip" title="Dashboard Overview" data-placement="left">
+                        <span class="kt-subheader__btn-daterange-title" id="kt_dashboard_daterangepicker_title">To Day</span>&nbsp;
+                        <span class="kt-subheader__btn-daterange-date" id="kt_dashboard_daterangepicker_date"><?php echo date("l \of F d, Y");?></span>
                         <i class="flaticon2-calendar-1"></i>
-                </div>
+                    </div>
+                <?php }else{ ?>
+                    <div href="" class="btn kt-subheader__btn-daterange" id="kt_dashboard_daterangepicker" data-toggle="kt-tooltip" title="Dashboard Overview" data-placement="left">
+                        <span class="kt-subheader__btn-daterange-title" id="kt_dashboard_daterangepicker_title">Last Day</span>&nbsp;
+                        <span class="kt-subheader__btn-daterange-date" id="kt_dashboard_daterangepicker_date"><?php //echo date("l \of F Y H:i:s"); echo date('L M'); ?> <?php echo date('l \of F d, Y', strtotime('-1 days', strtotime(date('Y-m-d')))); ?></span>
+                        <i class="flaticon2-calendar-1"></i>
+                    </div>
+                <?php }?>				
 				</div>
 			</div>
 		</div>
