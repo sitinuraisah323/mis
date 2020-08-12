@@ -80,7 +80,6 @@ function initDTEvents(){
                     $("#blood_group").trigger('change');
                     if(response.data.id_area){
 						$('#modal_add').find('[name="id_area"]').val(response.data.id_area);
-						$('[name="id_area"]').trigger('change');
 					}
 					$('#modal_add').find('[name="address"]').val(response.data.address);
 					$('#modal_add').find('[name="position"]').val(response.data.position);
@@ -100,6 +99,10 @@ function initDTEvents(){
                     $('#modal_add').modal('show');
                 }
             },
+			complete:function(xhr){
+				$('[name="id_area"]').trigger('change');
+				$('[name="id_unit"]').trigger('change');
+			},
             error: function (jqXHR, textStatus, errorThrown){
                 KTApp.unblockPage();
                 AlertUtil.showFailed("Cannot communicate with server please check your internet connection");

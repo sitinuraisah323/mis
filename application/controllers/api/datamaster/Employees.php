@@ -176,7 +176,6 @@ class Employees extends ApiController
 					'blood_group'	=> $post['blood_group'],
 					'address'	=> $post['address'],
 					'position'	=> $post['position'],
-
 					'no_rek'	=> $post['no_rek'],
 					'masa_kerja'	=> $post['masa_kerja'],
 					'join_date'	=> $post['join_date'],
@@ -184,7 +183,6 @@ class Employees extends ApiController
 					'bpjs_tk'	=> $post['bpjs_tk'],
 					'bpjs_kesehatan'	=> $post['bpjs_kesehatan'],
 					'last_education'	=> $post['last_education'],
-
 					'user_create'	=> $this->session->userdata('user')->id,
 					'user_update'	=> $this->session->userdata('user')->id,
 				);

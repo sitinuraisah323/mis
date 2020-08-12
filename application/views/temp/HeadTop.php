@@ -26,7 +26,9 @@ License: You must have a valid license purchased only from themeforest(the above
 
         <!--begin::Page Vendors Styles(used by this page) -->
             <link href="<?php echo base_url(); ?>assets/vendors/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
-        <!--end::Page Vendors Styles -->
+		<link href="<?php echo base_url(); ?>assets/css/demo2/pages/pricing/pricing-1.css" rel="stylesheet" type="text/css" />
+
+		<!--end::Page Vendors Styles -->
 
          <!--begin::Page Custom Styles(used by this page) -->
          <link href="<?php echo base_url(); ?>assets/css/demo2/pages/inbox/inbox.css" rel="stylesheet" type="text/css" />

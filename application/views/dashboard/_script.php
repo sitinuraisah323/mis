@@ -2,7 +2,11 @@
 //globals
 var cariForm;
 <?php 
-$date =  date('Y-m-d');
+$date =  date('Y-m-d');?>
+<?php if(date('H') > "10:00"):?>
+<?php $date = date('Y-m-d', strtotime($date. ' +1 days'));?>
+<?php endif;?>
+<?php
 //$currdate =date("Y-m-t", strtotime($date));
 $lastdate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
 $nextlastdate = date('Y-m-d', strtotime('-2 days', strtotime($date)));
