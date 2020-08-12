@@ -495,6 +495,7 @@ class Loaninstallments extends ApiController
 
 		$date = date('Y-m-d');
 		$cashcode = 'KT';
+		$cashcodeBank = 'KB';
 		$unit = $id_unit;
 		if($unitsdailycash){
 			$batchInsert = array();
@@ -528,7 +529,7 @@ class Loaninstallments extends ApiController
 					$amount			= 0;
 					if($udc['B']<0){ $amount=abs($udc['B']); $type="CASH_IN";}else{$amount=$udc['B']; $type="CASH_OUT";}
 
-					if($kdkas==$cashcode){				
+					if($kdkas==$cashcode || $kdkas==$cashcodeBank){				
 						//transaksi
 						$data = array(
 							'id_unit'		=> $unit,

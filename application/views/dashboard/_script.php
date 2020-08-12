@@ -2,22 +2,24 @@
 //globals
 var cariForm;
 <?php 
-$date =  date('Y-m-d');?>
-<?php if(date('H') > "10:00"):?>
-<?php $date = date('Y-m-d', strtotime($date. ' +1 days'));?>
-<?php endif;?>
-<?php
-//$currdate =date("Y-m-t", strtotime($date));
-$lastdate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
-$nextlastdate = date('Y-m-d', strtotime('-2 days', strtotime($date)));
-// $lastdate = date('Y-m-d', (strtotime($date)));
-// $nextlastdate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
+if(date('H:i') > '20:00'){
+	$date =  date('Y-m-d');
+	$_1lastdate = date('Y-m-d', strtotime($date));
+	$_2lastdate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
+	
+}else{
+	$date =  date('Y-m-d');
+	$_1lastdate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
+	$_2lastdate = date('Y-m-d', strtotime('-2 days', strtotime($date)));
+}
+
 ?>
-var currdate = "<?php echo $lastdate;?>";
-var lastdate = "<?php echo $nextlastdate;?>";
-var currday = "<?php echo date('d', strtotime(date('Y-m-d').  ' -1 days')); ?>";
-var currmonth =  "<?php echo date('n', strtotime(date('Y-m-d'). ' -1 days')); ?>";
-var curryears =  "<?php echo date('Y', strtotime(date('Y-m-d').'  -1 days')); ?>";
+var currdate = "<?php echo $_1lastdate;?>";
+var lastdate = "<?php echo $_2lastdate;?>";
+
+var currday = "<?php echo date('d', strtotime($_1lastdate)); ?>";
+var currmonth =  "<?php echo date('n', strtotime(date('Y-m-d'))); ?>";
+var curryears =  "<?php echo date('Y', strtotime(date('Y-m-d'))); ?>";
 
 //alert(currdate);
 //alert(lastdate);
