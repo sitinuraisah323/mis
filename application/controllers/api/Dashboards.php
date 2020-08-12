@@ -439,7 +439,9 @@ class Dashboards extends ApiController
 			$date = date('d');
 		}
 
-		$units = $this->units->db->select('units.id, units.name, units.id_area')->get('units')->result();
+		$units = $this->units->db->select('units.id, units.name, units.id_area,areas.area')
+								->join('areas','areas.id = units.id_area')
+								->get('units')->result();
 		foreach ($units as $unit){
 			$unit->amount = $this->regular->getTotalDisburse($unit->id, $year, $month, $date)->credit;
 		}
@@ -711,10 +713,11 @@ class Dashboards extends ApiController
 		}
 
 		$this->units->db
-			->select('id_unit, name, amount, cut_off')
+			->select('id_unit, name, amount,areas.area, cut_off')
 			->DISTINCT ('id_unit')
-			->from('units_saldo')
-			->join('units','units.id = units_saldo.id_unit');
+			->from('units_saldo')			
+			->join('units','units.id = units_saldo.id_unit')
+			->join('areas','areas.id = units.id_area');
 		$getSaldo = $this->units->db->get()->result();
 		foreach ($getSaldo as $get){
 			$this->units->db->select('(sum(CASE WHEN type = "CASH_IN" THEN `amount` ELSE 0 END) - sum(CASE WHEN type = "CASH_OUT" THEN `amount` ELSE 0 END)) as amount')

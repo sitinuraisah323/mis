@@ -27,27 +27,24 @@ class Outstanding extends Authenticated
 	public function index()
 	{
         $currdate =date("Y-m-d");
+        $nextdate = date('Y-m-d', strtotime('+1 days', strtotime($currdate)));
         $lastdate = date('Y-m-d', strtotime('-1 days', strtotime($currdate)));
         $units = $this->units->db->select('units.id, units.name, area')
 			->join('areas','areas.id = units.id_area')
 			->get('units')->result();
 		foreach ($units as $unit){
-
-			 $unit->noa = $this->regular->getOstYesterday_($unit->id, $currdate)->noa;			
-             $unit->up = $this->regular->getOstYesterday_($unit->id, $currdate)->up;
+			 $unit->noa = $this->regular->getOstYesterday_($unit->id, $nextdate)->noa;			
+             $unit->up = $this->regular->getOstYesterday_($unit->id, $nextdate)->up;
              $data['id_unit']   = $unit->id;
-             $data['date']      = $lastdate;
+             $data['date']      = $currdate;
              $data['noa']       = $unit->noa;
              $data['os']        = $unit->up;
-
-             $check = $this->db->get_where('units_outstanding',array('id_unit' => $unit->id,'date'=>$lastdate));
+             $check = $this->db->get_where('units_outstanding',array('id_unit' => $unit->id,'date'=>$currdate));
              if($check->num_rows() > 0){
-                $this->db->update('units_outstanding', $data, array('id_unit' => $unit->id,'date'=>$lastdate));
+                $this->db->update('units_outstanding', $data, array('id_unit' => $unit->id,'date'=>$currdate));
              }else{
                 $this->db->insert('units_outstanding', $data);
              }
-             //echo "<pre/>";
-             //print_r($data);			
 		}
         
 	}

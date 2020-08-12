@@ -136,7 +136,6 @@ $this->load->view('temp/MenuBar.php');
 						      		<th class="text-center">No</th>
 									<th class="text-left">Unit</th>
 									<th class='text-left'>Area</th>
-									<th class='text-center'>Noa</th>
 									<th class='text-right'>Pencairan</th>
 									<th></th>
 						    	</tr>

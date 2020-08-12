@@ -14,7 +14,7 @@ $this->load->view('temp/MenuBar.php');
         <div class="kt-subheader__main">
             <h3 class="kt-subheader__title">Report</h3>
             <span class="kt-subheader__separator kt-subheader__separator--v"></span>
-            <span class="kt-subheader__desc">Pelunasan Nasional</span>
+            <span class="kt-subheader__desc">Saldo Nasional</span>
         </div>
         <div class="kt-subheader__toolbar">
             <div class="kt-subheader__wrapper">
@@ -33,7 +33,7 @@ $this->load->view('temp/MenuBar.php');
                         <i class="kt-font-brand fa fa-align-justify"></i>
                     </span>
                     <h3 class="kt-portlet__head-title">
-                       Data Pelunasan Nasional(Gadai Reguler)
+                       Data Saldo Nasional
                     </h3>
                 </div>
                 <div class="kt-portlet__head-toolbar">
@@ -136,7 +136,7 @@ $this->load->view('temp/MenuBar.php');
 						      		<th class="text-center">No</th>
 									<th class="text-left">Unit</th>
 									<th class='text-left'>Area</th>
-									<th class='text-right'>Pelunasan</th>
+									<th class='text-right'>Saldo</th>
 									<th></th>
 						    	</tr>
 						  	</thead>
@@ -160,5 +160,5 @@ $this->load->view('temp/MenuBar.php');
 
 <?php
 $this->load->view('temp/Footer.php');
-$this->load->view('report/pelunasan/_script.php');
+$this->load->view('report/saldokas/_script.php');
 ?>

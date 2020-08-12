@@ -102,12 +102,14 @@ function initCariForm(){
         var area = $('[name="area"]').val();
         var unit = $('[name="unit"]').val();
 		var date = $('[name="date"]').val();
+        var dt = new Date(date);
+		var dmonth = dt.getMonth();
         KTApp.block('#form_bukukas .kt-portlet__body', {});
 		$.ajax({
 			type : 'GET',
-			url : "<?php echo base_url("api/dashboards/pelunasandashboard"); ?>",
+			url : "<?php echo base_url("api/dashboards/saldounit"); ?>",
 			dataType : "json",
-			data:{area:area,unit:unit,date:date},
+			data:{area:area,month:dmonth},
 			success : function(response,status){
 				KTApp.unblockPage();
 				if(response.status == true){

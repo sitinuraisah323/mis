@@ -120,7 +120,6 @@ function initCariForm(){
 						template += "<td class='text-center'>"+no+"</td>";
 						template += "<td class='text-left'>"+data.name+"</td>";
 						template += "<td class='text-left'>"+data.area+"</td>";
-						template += "<td class='text-center'></td>";
 						template += "<td class='text-right'>"+convertToRupiah(data.amount)+"</td>";
 						template += '</tr>';
 						no++;
@@ -129,7 +128,6 @@ function initCariForm(){
 					});
                     template += '<tr class="rowappend">';
                     template +='<td colspan="3" class="text-right"><b>Total</b></td>';                    
-                    template +='<td class="text-center"><b></b></td>';                    
                     template +='<td class="text-right"><b>'+convertToRupiah(total)+'</b></td>';                    
                     template +='</tr>';
 

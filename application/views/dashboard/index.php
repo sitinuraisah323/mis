@@ -18,15 +18,15 @@ $this->load->view('temp/MenuBar.php');
 			</div>
 			<div class="kt-subheader__toolbar">
 				<div class="kt-subheader__wrapper">
-                <?php if( date('H') > '21:00'){ ?>
+                <?php if( date('H:i') > '20:00'){ ?>
                     <div href="" class="btn kt-subheader__btn-daterange" id="kt_dashboard_daterangepicker" data-toggle="kt-tooltip" title="Dashboard Overview" data-placement="left">
-                        <span class="kt-subheader__btn-daterange-title" id="kt_dashboard_daterangepicker_title">To Day</span>&nbsp;
+                        <span class="kt-subheader__btn-daterange-title" id="kt_dashboard_daterangepicker_title">To Day Transaction :</span>&nbsp;
                         <span class="kt-subheader__btn-daterange-date" id="kt_dashboard_daterangepicker_date"><?php echo date("l \of F d, Y");?></span>
                         <i class="flaticon2-calendar-1"></i>
                     </div>
                 <?php }else{ ?>
                     <div href="" class="btn kt-subheader__btn-daterange" id="kt_dashboard_daterangepicker" data-toggle="kt-tooltip" title="Dashboard Overview" data-placement="left">
-                        <span class="kt-subheader__btn-daterange-title" id="kt_dashboard_daterangepicker_title">Last Day</span>&nbsp;
+                        <span class="kt-subheader__btn-daterange-title" id="kt_dashboard_daterangepicker_title">Last Day Transaction : </span>&nbsp;
                         <span class="kt-subheader__btn-daterange-date" id="kt_dashboard_daterangepicker_date"><?php //echo date("l \of F Y H:i:s"); echo date('L M'); ?> <?php echo date('l \of F d, Y', strtotime('-1 days', strtotime(date('Y-m-d')))); ?></span>
                         <i class="flaticon2-calendar-1"></i>
                     </div>
@@ -167,47 +167,7 @@ $this->load->view('temp/MenuBar.php');
                 </form>	        
                 <!--end:: Widgets-->    
             </div>
-			<div class="col-xl-6 col-lg-6">
-                <!--begin:: Widgets-->
-                <form id="form_saldo" class="form-horizontal">
-                    <div class="kt-portlet kt-portlet--height-fluid">
-                        <div class="kt-widget14">
-                            <div class="kt-widget14__header kt-margin-b-30">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <h3 class="kt-widget14__title">
-                                    <i class="fa fa-chart-bar"></i> Saldo Kas Nasional  
-                                    <hr/>           
-                                    </h3>
-                                    <div class="kt-widget14__legends">
-                                        <div class="kt-widget14__legend">
-                                            <span class="kt-widget14__bullet kt-bg-info"></span>
-                                            <span class="kt-widget14__stats"><span class="date-today"></span> : <span class="total-today"></span></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- <div class="col-md-6">
-									<span class="kt-widget14__desc">
-										Total Saldo <span class="date-today"></span> <span class="total-today"></span>
-									</span>
-									<hr>
-								</div> -->
-                            </div>
-                               
-                            </div>
-                            <div class="kt-widget11">
-                                <div id="graphSaldo" style="height:300px;"></div>                           
-                            </div>
-                        </div>
-                    </div>	        
-                </form>	        
-                <!--end:: Widgets-->    
-            </div>
-        </div>
-    </div>
 
-    <div class="kt-container  kt-grid__item kt-grid__item--fluid">
-        <div class="row">
             <div class="col-xl-6 col-lg-6">
                 <!--begin:: Widgets-->
                 <form id="form_pencairan" class="form-horizontal">
@@ -247,7 +207,14 @@ $this->load->view('temp/MenuBar.php');
                 </div>	   
                 </form>     
                 <!--end:: Widgets-->    
-            </div>
+            </div>		
+
+        </div>
+    </div>
+
+    <div class="kt-container  kt-grid__item kt-grid__item--fluid">
+        <div class="row">
+            
 			<div class="col-xl-6 col-lg-6">
                 <!--begin:: Widgets-->
                 <form id="form_pelunasan" class="form-horizontal">
@@ -288,6 +255,44 @@ $this->load->view('temp/MenuBar.php');
                 </form>	        
                 <!--end:: Widgets-->    
             </div>
+
+            <div class="col-xl-6 col-lg-6">
+                <!--begin:: Widgets-->
+                <form id="form_saldo" class="form-horizontal">
+                    <div class="kt-portlet kt-portlet--height-fluid">
+                        <div class="kt-widget14">
+                            <div class="kt-widget14__header kt-margin-b-30">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h3 class="kt-widget14__title">
+                                    <i class="fa fa-chart-bar"></i> Saldo Kas Nasional  
+                                    <hr/>           
+                                    </h3>
+                                    <div class="kt-widget14__legends">
+                                        <div class="kt-widget14__legend">
+                                            <span class="kt-widget14__bullet kt-bg-info"></span>
+                                            <span class="kt-widget14__stats"><span class="date-today"></span> : <span class="total-today"></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <div class="col-md-6">
+									<span class="kt-widget14__desc">
+										Total Saldo <span class="date-today"></span> <span class="total-today"></span>
+									</span>
+									<hr>
+								</div> -->
+                            </div>
+                               
+                            </div>
+                            <div class="kt-widget11">
+                                <div id="graphSaldo" style="height:300px;"></div>                           
+                            </div>
+                        </div>
+                    </div>	        
+                </form>	        
+                <!--end:: Widgets-->    
+            </div>
+            
         </div>
     </div>
 
