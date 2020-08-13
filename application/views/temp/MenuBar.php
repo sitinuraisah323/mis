@@ -496,7 +496,7 @@
 							<?php $level = $this->session->userdata('user')->level;?>
 							<?php if($level=='administrator'){ ?>
 								<a  href="<?php echo base_url('dailyreport/unitsreport'); ?>" class="btn btn-primary"><i class="fa fa-envelope"></i> Non OJK</a>&nbsp
-								<a  href="<?php echo base_url('dailyreport/unitsreportojk'); ?>" class="btn btn-success"><i class="fa fa-check-double"></i> OJK</a>&nbsp
+								<!-- <a  href="<?php //echo base_url('dailyreport/unitsreportojk'); ?>" class="btn btn-success"><i class="fa fa-check-double"></i> OJK</a>&nbsp -->
 							<?php } ?>
 								<a  href="#" data-toggle="modal" data-target="#ticket" class="btn btn-warning" title="Ticket Complain"><i class="fa fa-comments"></i></a>&nbsp
 								<a  href="#"  data-toggle="modal" data-target="#help" class="btn btn-warning"><i class="fa fa-exclamation-circle"></i> Help</a>

@@ -14,15 +14,15 @@
                             <div class="form-group row"> 
                                 <label class="col-lg-2 col-form-label">Unit</label>
                                 <div class="col-lg-10">
-                                    <input type="text" class="form-control form-control-sm" id="v_units" name="v_units" readonly>
+                                    <input type="text" class="form-control form-control-sm" id="v_units" name="v_units" style="background-color:grey; color:white;" readonly>
                                 </div> 
                                 <label class="col-lg-2 col-form-label">Kasir</label>
                                 <div class="col-lg-10">
-                                    <input type="text" class="form-control form-control-sm" id="v_kasir" name="v_kasir" readonly>
+                                    <input type="text" class="form-control form-control-sm" id="v_kasir" name="v_kasir" style="background-color:grey; color:white;" readonly>
                                 </div> 
                                 <label class="col-lg-2 col-form-label">Tanggal</label>
                                 <div class="col-lg-10">
-                                    <input type="text" class="form-control form-control-sm" id="v_date" name="v_date" readonly>
+                                    <input type="text" class="form-control form-control-sm" id="v_date" name="v_date" style="background-color:grey; color:white;" readonly>
                                 </div> 
                             </div>                            
                         </div>
@@ -30,25 +30,25 @@
                             <div class="form-group row"> 
                                 <label class="col-lg-4 col-form-label">Saldo Awal</label>
                                 <div class="col-lg-8">
-                                    <input type="text" class="form-control form-control-sm" id="v_saldoawal" name="v_saldoawal" readonly>
+                                    <input type="text" class="form-control form-control-sm" id="v_saldoawal" name="v_saldoawal" style="background-color:grey; color:white;" readonly>
                                 </div> 
                                 <label class="col-lg-4 col-form-label">Penerimaan</label>
                                 <div class="col-lg-6">
-                                    <input type="text" class="form-control form-control-sm" id="v_penerimaan" name="v_penerimaan" readonly>
+                                    <input type="text" class="form-control form-control-sm" id="v_penerimaan" name="v_penerimaan" style="background-color:grey; color:white;" readonly>
                                 </div> 
                                 <div class="col-lg-2"></div>
                                 <label class="col-lg-4 col-form-label">Pengeluaran</label>
                                 <div class="col-lg-6">
-                                    <input type="text" class="form-control form-control-sm" id="v_pengeluaran" name="v_pengeluaran" readonly>
+                                    <input type="text" class="form-control form-control-sm" id="v_pengeluaran" name="v_pengeluaran" style="background-color:grey; color:white;" readonly>
                                 </div> 
                                 <div class="col-lg-2"></div>
                                 <label class="col-lg-4 col-form-label">Mutasi</label>
                                 <div class="col-lg-8">
-                                    <input type="text" class="form-control form-control-sm" id="v_mutasi" name="v_mutasi" readonly>
+                                    <input type="text" class="form-control form-control-sm" id="v_mutasi" name="v_mutasi" style="background-color:grey; color:white;" readonly>
                                 </div> 
                                 <label class="col-lg-4 col-form-label">Saldo Akhir</label>
                                 <div class="col-lg-8">
-                                    <input type="text" class="form-control form-control-sm" id="v_saldoakhir" name="v_saldoakhir" readonly>
+                                    <input type="text" class="form-control form-control-sm" id="v_saldoakhir" name="v_saldoakhir" style="background-color:grey; color:white;" readonly>
                                 </div> 
                             </div> 
                         </div>
@@ -83,17 +83,25 @@
                             <div class="form-group row"> 
                                 <label class="col-lg-4 col-form-label">Total</label>
                                 <div class="col-lg-8">
-                                    <input type="text" class="form-control form-control-sm" id="v_total" name="v_total" readonly>
+                                    <input type="text" class="form-control form-control-sm" id="v_total" name="v_total" style="background-color:grey; color:white;" readonly>
                                 </div> 
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group row"> 
-                                <label class="col-lg-4 col-form-label">Selisih</label>
-                                <div class="col-lg-8">
-                                    <input type="text" class="form-control form-control-sm" id="v_selisih" name="v_selisih" readonly>
+                                <label class="col-lg-8 col-form-label">Selisih uang fisik dengan daldo akhir</label>
+                                <div class="col-lg-4">
+                                    <input type="text" class="form-control form-control-sm" id="v_selisih" name="v_selisih" style="background-color:grey; color:white;" readonly>
                                 </div> 
                             </div>
+                        </div>
+                        <div class="col-md-12">
+                        <div class="form-group row">                          
+                            <label class="col-lg-2 col-form-label">Note</label>
+                            <div class="col-lg-10">
+                                <input type="text" class="form-control form-control" id="v_note" name="v_note">
+                            </div>                                    
+                        </div>
                         </div>
 
                     </div>                                            

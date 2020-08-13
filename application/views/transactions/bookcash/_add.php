@@ -33,7 +33,7 @@
                                     </div>
                                     <label class="col-lg-4 col-form-label">Tanggal</label>
                                     <div class="col-lg-8">
-                                        <input type="date" class="form-control form-control-sm" id="date" name="date">
+                                        <input type="text" class="form-control form-control-sm" id="date" name="date" value="<?php echo date('d-m-Y'); ?>" style="background-color:grey; color:white;" readonly>
                                     </div>
                                 </div>
                             </div>  
@@ -42,25 +42,26 @@
                                 <div class="form-group row">                          
                                     <label class="col-lg-4 col-form-label">Saldo Awal</label>
                                     <div class="col-lg-8">
-                                        <input type="text" class="form-control form-control-sm" id="saldoawal" name="saldoawal" onkeyup="hitung()">
+                                        <input type="text" class="form-control form-control-sm" id="saldoawal" name="saldoawal">
                                     </div>
                                     <label class="col-lg-4 col-form-label">Penerimaan</label>
                                     <div class="col-lg-4">
-                                        <input type="text" class="form-control form-control-sm" id="penerimaan" name="penerimaan" onkeyup="hitung()">
+                                        <input type="text" class="form-control form-control-sm" id="penerimaan" name="penerimaan">
                                     </div>
                                     <div class="col-lg-4"></div>
                                     <label class="col-lg-4 col-form-label">Pengeluaran</label>
                                     <div class="col-lg-4">
-                                        <input type="text" class="form-control form-control-sm" id="pengeluaran" name="pengeluaran" onkeyup="hitung()">
+                                        <input type="text" class="form-control form-control-sm" id="pengeluaran" name="pengeluaran">
                                     </div>
                                     <div class="col-lg-4"></div>
                                     <label class="col-lg-4 col-form-label">Total Mutasi</label>
                                     <div class="col-lg-8">
-                                        <input type="text" class="form-control form-control-sm" id="totmutasi" name="totmutasi" readonly>
+                                    <input type="text" class="form-control form-control-sm" id="totmutasi" name="totmutasi" style="background-color:grey; color:white;" readonly>
+                                    <input type="hidden" class="form-control form-control-sm" id="mutasi" name="mutasi" style="background-color:grey; color:white;" readonly>
                                     </div>
                                     <label class="col-lg-4 col-form-label">Saldo Akhir</label>
                                     <div class="col-lg-8">
-                                        <input type="text" class="form-control form-control-sm" id="saldoakhir" name="saldoakhir" readonly>
+                                        <input type="text" class="form-control form-control-sm" id="saldoakhir" name="saldoakhir" style="background-color:grey; color:white;" readonly>
                                     </div>
                                 </div>
                             </div> 
@@ -96,14 +97,20 @@
                                 <div class="form-group row">                          
                                     <label class="col-lg-2 col-form-label">Total</label>
                                     <div class="col-lg-4">
-                                        <input type="text" class="form-control form-control-sm" id="total" name="total">
+                                        <input type="text" class="form-control form-control-sm" id="total" name="total" style="background-color:grey; color:white;" readonly>
                                     </div>
-                                    <label class="col-lg-2 col-form-label">Selisih</label>
-                                    <div class="col-lg-4">
-                                        <input type="text" class="form-control form-control-sm" id="selisih" name="selisih">
+                                    <label class="col-lg-4 col-form-label">Selisih uang fisik dengan saldo akhir</label>
+                                    <div class="col-lg-2">
+                                        <input type="text" class="form-control form-control-sm" id="selisih" name="selisih" style="background-color:grey; color:white;" readonly>
+                                    </div>                                    
+                                </div> 
+
+                                 <div class="form-group row">                          
+                                    <label class="col-lg-2 col-form-label">Note</label>
+                                    <div class="col-lg-10">
+                                        <input type="text" class="form-control form-control" id="note" name="note">
                                     </div>                                    
                                 </div>    
-
                             </div>
 
                             <div class="col-md-12" >     
@@ -142,7 +149,7 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="btn_add_submit">Submit</button>
+                <button type="button" class="btn btn-primary" id="btn_add_submit">Kirim</button>
             </div>
            
         </div>

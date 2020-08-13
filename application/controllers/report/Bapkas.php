@@ -71,8 +71,10 @@ class Bapkas extends Authenticated
 			->select('units.code,units.name as unit_name')
 			->join('units','units_cash_book.id_unit = units.id')
             ->where('units_cash_book.date >=', $post['date-start'])
-            ->where('units_cash_book.date <=', $post['date-end'])
-            ->where('units_cash_book.id_unit', $post['id_unit']);
+			->where('units_cash_book.date <=', $post['date-end']);
+			if($post['id_unit']!=0){
+				$this->model->db->where('units_cash_book.id_unit', $post['id_unit']);
+			}
 			$data = $this->model->all();
 		}
 		$no=2;
