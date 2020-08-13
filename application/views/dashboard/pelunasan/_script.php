@@ -114,6 +114,8 @@ function initCariForm(){
 				var body = '';
 				var head = '';
 				var int = 0;
+				var summary = [];
+				var foot = '';
 				$.each(response.data, function (index, data) {
 					if(index > 0){
 						body += '<tr>';
@@ -122,6 +124,11 @@ function initCariForm(){
 						body += '<td>'+data.area+'</td>'
 						$.each(data.dates, function (index, date) {
 							body += '<td class="text-right">'+convertToRupiah(date)+'</td>';
+							if(summary[index]){
+								summary[index] = parseInt(summary[index]) + parseInt(date);
+							}else{
+								summary[index] = parseInt(date);
+							}
 						});
 						body += '</tr>';
 					}else{
@@ -130,16 +137,26 @@ function initCariForm(){
 						head += '<td>'+data.unit+'</td>'
 						head += '<td>'+data.area+'</td>'
 						$.each(data.dates, function (index, date) {
+
 							head += '<td class="text-right">'+date+'</td>';
 						})
 						head += '</tr>';
 					}
 					int++;
 				});
+			    foot += '<tr>';
+				foot += '<td colspan="3" class="text-right">Total</td>'
+				$.each(summary, function (index, date) {
+					foot += '<td class="text-right">'+convertToRupiah(date)+'</td>';
+				});
+				foot += '</tr>';
+
 				$('.table').find('tbody').find('tr').remove();
 				$('.table').find('thead').find('tr').remove();
+				$('.table').find('tfoot').find('tr').remove();
 				$('.table').find('thead').html(head);
 				$('.table').find('tbody').html(body);
+				$('.table').find('tfoot').html(foot);
 
 			},
 			error: function (jqXHR, textStatus, errorThrown){

@@ -61,47 +61,47 @@ function initDTEvents(){
             success : function(response,status){
                 KTApp.unblockPage();
                 if(response.status == true){
-                    //populate form
-					$('#modal_add').find('[name="id"]').val(response.data.id);
-					$('#modal_add').find('[name="fullname"]').val(response.data.fullname);
-					$('#modal_add').find('[name="id_unit"]').val(response.data.id_unit);
-                    $("#id_unit").trigger('change');
-					$('#modal_add').find('[name="nik"]').val(response.data.nik);
-					$('#modal_add').find('[name="birth_place"]').val(response.data.birth_place);
-					$('#modal_add').find('[name="birth_date"]').val(response.data.birth_date);
-					$('#modal_add').find('[name="username"]').val(response.data.username);
-					$('#modal_add').find('[name="gender"]').val(response.data.gender);
-					$('#modal_add').find('[name="email"]').val(response.data.email);
-                    $("#gender").trigger('change');
-					$('#modal_add').find('[name="mobile"]').val(response.data.mobile);
-					$('#modal_add').find('[name="marital"]').val(response.data.marital);
-                    $("#marital").trigger('change');
-					$('#modal_add').find('[name="blood_group"]').val(response.data.blood_group);
-                    $("#blood_group").trigger('change');
-                    if(response.data.id_area){
-						$('#modal_add').find('[name="id_area"]').val(response.data.id_area);
+                	const {id, fullname, id_unit, nik,birth_date, birth_place,
+                	gender, mobile, marital,blood_group, address,position, masa_kerja,
+							no_rek, last_education, bpjs_kesehatan, bpjs_tk,
+							no_employment,join_date
+                	} = response.data;
+                	const modal = $('#modal_add');
+                	if(id_unit){
+						modal.find('[name="id_unit"]').parents('.form-group').removeClass('d-none');
 					}
-					$('#modal_add').find('[name="address"]').val(response.data.address);
-					$('#modal_add').find('[name="position"]').val(response.data.position);
-					$('#modal_add').find('[name="email"]').val(response.data.email);
-					$('#modal_add').find('[name="id_level"]').val(response.data.id_level);
-					$('#modal_add').find('[name="bpjs_kesehatan"]').val(response.data.bpjs_kesehatan);
-					$('#modal_add').find('[name="last_education"]').val(response.data.last_education);
-					$('#modal_add').find('[name="bpjs_tk"]').val(response.data.bpjs_tk);
-					$('#modal_add').find('[name="no_employment"]').val(response.data.no_employment);
-					$('#modal_add').find('[name="join_date"]').val(response.data.join_date);
-					$('#modal_add').find('[name="no_rek"]').val(response.data.no_rek);
-					$('#modal_add').find('[name="masa_kerja"]').val(response.data.masa_kerja);
-                    $("#id_level").trigger('change');
-                    $('#modal_add').modal('show');
+					modal.find('[name="fullname"]').val(fullname);
+					modal.find('[name="id"]').val(id);
+					modal.find('[name="id_unit"]').val(id_unit);
+					modal.find('[name="nik"]').val(nik);
+					modal.find('[name="birth_date"]').val(birth_date);
+					modal.find('[name="birth_place"]').val(birth_place);
+					modal.find('[name="gender"]').val(gender);
+					modal.find('[name="mobile"]').val(mobile);
+					modal.find('[name="marital"]').val(marital);
+					modal.find('[name="blood_group"]').val(blood_group);
+					modal.find('[name="address"]').val(address);
+					modal.find('[name="position"]').val(position);
+					modal.find('[name="masa_kerja"]').val(masa_kerja);
+					modal.find('[name="no_rek"]').val(no_rek);
+					modal.find('[name="last_education"]').val(last_education);
+					modal.find('[name="bpjs_kesehatan"]').val(bpjs_kesehatan);
+					modal.find('[name="bpjs_tk"]').val(bpjs_tk);
+					modal.find('[name="no_employment"]').val(no_employment);
+					modal.find('[name="join_date"]').val(join_date);
+                    modal.modal('show');
                 }else{
                     AlertUtil.showFailed(data.message);
                     $('#modal_add').modal('show');
                 }
             },
 			complete:function(xhr){
-				$('[name="id_area"]').trigger('change');
-				$('[name="id_unit"]').trigger('change');
+				const modal = $('.modal');
+				modal.find('#id_unit').trigger('change');
+				modal.find('#gender').trigger('change');
+				modal.find('#marital').trigger('change');
+				modal.find('#blood_group').trigger('change');
+				modal.find('#id_level').select2('refresh');
 			},
             error: function (jqXHR, textStatus, errorThrown){
                 KTApp.unblockPage();
@@ -366,9 +366,8 @@ function initCreate(){
             success : function(data,status){
 				$('#modal_add').find('[name="id"]').val("");
 				$('#modal_add').find('[name="name"]').val("");
-				$('#modal_add').find('[name="id_parent"]').val("");
-                KTApp.unblock('#modal_add .modal-content');
-                if(data.status == true){
+				 KTApp.unblock('#modal_add .modal-content');
+                if(data.status == 200){
                     datatable.reload();
                     $('#modal_add').modal('hide');
                     AlertUtil.showSuccess(data.message,5000);
@@ -385,7 +384,6 @@ function initCreate(){
     });
 
 }
-
    
 	function getMenu(){
 		$.ajax({
@@ -410,33 +408,18 @@ function initCreate(){
         $('#blood_group').select2({ placeholder: "Please select a Blood Group",width: '100%'});
         $('#id_level').select2({ placeholder: "Please select a Level",width: '100%'});
     }
-
-    $('[name="id_level"]').on('change', function(){
-        if($(this).find(':selected').text() == 'area'){
-            $('[name="id_area"]').parents('.form-group').removeClass('d-none');            
-            $('[name="id_unit"]').val('').parents('.form-group').addClass('d-none');   
-        }else if($(this).find(':selected').text() == 'unit'){
-            $('[name="id_area"]').parents('.form-group').removeClass('d-none');
-            $('[name="id_unit"]').val('').parents('.form-group').addClass('d-none');            
-        }else{
-            $('[name="id_unit"]').val('').parents('.form-group').addClass('d-none');
-            $('[name="id_area"]').val('').parents('.form-group').addClass('d-none');
-        }
-    });
-    var options = '';
+ 	var options = '';
 
     $(document).on('change', '[name="id_area"]', function(){
         var id_area = $(this).val();
-        if($('[name="id_level"]').find(':selected').text() == 'unit'){
-            $('[name="id_unit"]').append(options);
-            $.each($('[name="id_unit"]').find('option'), function(index, element){
-                if(id_area != $(this).data('area')){
-                    options += '<option value="'+$(this).val()+'" data-area="'+$(this).data('area')+'">'+$(this).text()+'</option>';
-                    $(this).remove();
-                }
-            });
-            $('[name="id_unit"]').parents('.form-group').removeClass('d-none');
-        };
+		$('[name="id_unit"]').append(options);
+		$.each($('[name="id_unit"]').find('option'), function(index, element){
+			if(id_area != $(this).data('area')){
+				options += '<option value="'+$(this).val()+'" data-area="'+$(this).data('area')+'">'+$(this).text()+'</option>';
+				$(this).remove();
+			}
+		});
+		$('[name="id_unit"]').parents('.form-group').removeClass('d-none');
     });
 
 

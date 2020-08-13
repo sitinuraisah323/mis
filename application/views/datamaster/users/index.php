@@ -36,13 +36,13 @@ $this->load->view('temp/MenuBar.php');
                        Data Pengguna
                     </h3>
                 </div>
-                <div class="kt-portlet__head-toolbar">
-                    <div class="kt-portlet__head-wrapper">  
-                            <!-- <button type="button" class="btn btn-brand btn-icon-sm" data-toggle="modal" data-target="#modal_add">
-                                <i class="flaticon2-plus"></i> Buat Baru      
-                            </button>                              -->
-                    </div>      
-                </div>
+				<div class="kt-portlet__head-toolbar">
+					<div class="kt-portlet__head-wrapper">
+						<button type="button" class="btn btn-brand btn-icon-sm" data-toggle="modal" data-target="#modal_add">
+							<i class="flaticon2-plus"></i> Buat Baru
+						</button>
+					</div>
+				</div>
             </div>
 
         <div class="kt-portlet__body kt-portlet__body--fit">
@@ -102,6 +102,93 @@ $this->load->view('temp/MenuBar.php');
 </div>
 </div>
 
+
+<!--begin::Modal-->
+<div class="modal fade" id="modal_add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<form method="post" id="input-form" enctype="multipart/form-data" class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Form Pegawai</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				</button>
+			</div>
+
+			<input type="hidden" name="id" value="">
+			<div class="modal-body form">
+				<div class="form-horizontal">
+					<div class="form-body">
+						<div class="form-group">
+							<label>Employee *kosongkan jika tidak terkait dengan karyawan</label>
+							<select name="id_employee" id="id_employee" class="form-control">
+								<option value="0"></option>
+								<?php foreach ($employees as $employee):?>
+									<option value="<?php echo $employee->id;?>"><?php echo $employee->fullname;?></option>
+								<?php endforeach;?>
+							</select>
+						</div>
+						<div class="form-group">
+							<label>Level</label>
+							<select name="id_level" id="id_level" class="form-control">
+								<option value=""></option>
+								<?php foreach ($levels as $level):?>
+									<option value="<?php echo $level->id;?>"><?php echo $level->level;?></option>
+								<?php endforeach;?>
+							</select>
+						</div>
+						<div class="form-group d-none">
+							<label>Area</label>
+							<select  name="id_area" class="form-control" id="area">
+								<option  value=""></option>
+								<?php foreach ($areas as $area):?>
+									<option value="<?php echo $area->id;?>"><?php echo $area->area;?></option>
+								<?php endforeach;?>
+							</select>
+						</div>
+						<div class="form-group d-none">
+							<label>Unit</label>
+							<select  name="id_unit" class="form-control" id="id_unit">
+								<option  value=""></option>
+								<?php foreach ($units as $unit):?>
+									<option value="<?php echo $unit->id;?>" data-area="<?php echo $unit->id_area;?>"><?php echo $unit->name;?></option>
+								<?php endforeach;?>
+							</select>
+						</div>
+
+						<div class="form-group">
+							<label>Username</label>
+							<input type="text" name="username" class="form-control">
+						</div>
+						<div class="form-group">
+							<label>Email</label>
+							<input type="text" name="email" class="form-control">
+						</div>
+						<div class="form-group">
+							<label>Password</label>
+							<input type="password" name="password" class="form-control">
+						</div>
+						<div class="kt-section">
+							<div class="kt-section__content">
+								<div class="alert alert-danger fade show" role="alert" id="failed_alert_add" style="display: none;">
+									<div class="alert-text" id="failed_message_add"></div>
+									<div class="alert-close">
+										<button type="button" class="close" aria-label="Close" id="failed_alert_dismiss_add">
+											<span aria-hidden="true"><i class="la la-close"></i></span>
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button type="submit" class="btn btn-primary" id="btn_add_submit">Submit</button>
+			</div>
+		</form>
+	</div>
+</div>
+<!--end::Modal-->
 <?php 
 $this->load->view('temp/Footer.php');
 //$this->load->view('datamaster/areas/_add.php');

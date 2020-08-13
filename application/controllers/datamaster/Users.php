@@ -16,6 +16,11 @@ class Users extends Authenticated
 	public function __construct()
 	{
 		parent::__construct();
+		$this->load->model('UnitsModel', 'units');
+		$this->load->model('LevelsModel', 'levels');
+		$this->load->model('AreasModel', 'areas');
+		$this->load->model('EmployeesModel', 'employees');
+		$this->load->model('UsersModel', 'users');
 	}
 
 	/**
@@ -23,7 +28,26 @@ class Users extends Authenticated
 	 */
 	public function index()
 	{
-		$this->load->view('datamaster/users/index');
+		$employees = array();
+		$users = $this->users->db
+			->select('id_employee')
+			->from('users')
+			->where('users.id_employee !=',0)
+			->get()->result();
+		if($users){
+			foreach ($users as $user){
+				$employees[] = $user->id_employee;
+			}
+		}
+		$this->employees->db
+			->where_not_in('employees.id', $employees)
+			->order_by('employees.fullname','asc');
+		$this->load->view('datamaster/users/index',array(
+			'employees'	=> $this->employees->all(),
+			'units'	=> $this->units->all(),
+			'levels'	=> $this->levels->all(),
+			'areas'	=> $this->areas->all(),
+		));
 	}
 
 }

@@ -112,9 +112,28 @@ function initCariForm(){
 			success : function(response,status){
 				KTApp.unblockPage();
 				var html = '';
+				var tfoot = '';
 				var int = 1;
+				var dpdYesterdayNoa = 0;
+				var dpdYesterdayUp = 0;
+				var dpdTodayNoa = 0;
+				var dpdTodayUp = 0;
+				var dpdRepaymentNoa = 0;
+				var dpdRepaymentUp = 0;
+				var dpdTotalNoa = 0;
+				var dpdTotalUp = 0;
+				var percentage = 0;
 				$.each(response.data, function (index, data) {
-					html += '<tr>'
+					dpdYesterdayNoa += data.dpd_yesterday.noa;
+					dpdYesterdayUp += data.dpd_yesterday.ost;
+					dpdTodayNoa += data.dpd_today.noa;
+					dpdTodayUp += data.dpd_today.ost;
+					dpdRepaymentNoa += data.dpd_repayment_today.noa;
+					dpdRepaymentUp += data.dpd_repayment_today.ost;
+					dpdTotalNoa += data.total_dpd.noa;
+					dpdTotalUp += data.total_dpd.ost;
+					percentage += data.percentage;
+					html += '<tr>';
 					html += '<td  class="text-center">'+ int +'</td>';
 					html += '<td>'+ data.name +'</td>';
 					html += '<td>'+ data.area +'</td>';
@@ -129,11 +148,26 @@ function initCariForm(){
 					html += '<td  class="text-center">'+data.total_dpd.noa+'</td>';
 					html += '<td  class="text-right">'+convertToRupiah(data.total_dpd.ost)+'</td>';
 					html += '<td  class="text-center">'+data.percentage+'</td>';
-					html += '</tr>'
+					html += '</tr>';
 					int++;
 				});
+
+				tfoot += '<tr>';
+				tfoot += '<td  class="text-right" colspan="5">Total</td>';
+				tfoot += '<td  class="text-center">'+dpdYesterdayNoa+'</td>';
+				tfoot += '<td  class="text-right">'+convertToRupiah(dpdYesterdayUp)+'</td>';
+				tfoot += '<td  class="text-center">'+dpdTodayNoa+'</td>';
+				tfoot += '<td  class="text-right">'+convertToRupiah(dpdTodayUp)+'</td>';
+				tfoot += '<td  class="text-center">'+dpdRepaymentNoa+'</td>';
+				tfoot += '<td  class="text-right">'+convertToRupiah(dpdRepaymentUp)+'</td>';
+				tfoot += '<td  class="text-center">'+dpdTodayNoa+'</td>';
+				tfoot += '<td  class="text-right">'+convertToRupiah(dpdTotalUp)+'</td>';
+				tfoot += '<td  class="text-center">'+percentage+'</td>';
+				tfoot += '</tr>';
+
 				$('.table').find('tbody').find('tr').remove();
 				$('.table').find('tbody').html(html);
+				$('.table').find('tfoot').html(tfoot);
 				console.log(html)
 
 			},
