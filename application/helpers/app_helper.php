@@ -54,3 +54,8 @@ if (! function_exists('export_csv')){
          return $output;
     }
 }
+
+function money($string){
+	$hasil_rupiah = number_format($string,2,',','.');
+	return $hasil_rupiah;
+}

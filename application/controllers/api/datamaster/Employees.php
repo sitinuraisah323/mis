@@ -32,14 +32,17 @@ class Employees extends ApiController
 
 	public function get_user()
 	{
-		$data = $this->employees->get_user();
 		if($post = $this->input->post()){
 			if(is_array($post['query'])){
 				$value = $post['query']['generalSearch'];
-				$this->employees->db->like('fullname', $value);
-				$data = $this->employees->get_user();
+				$this->users->db->like('fullname', $value);
 			}
 		}
+		$this->users->db
+			->select('employees.fullname')
+			->join('employees','employees.id = users.id_employee','left')
+			->order_by('users.id','DESC');
+		$data = $this->users->all();
 		echo json_encode(array(
 			'data'	=> 	$data,
 			'message'	=> 'Successfully Get Data Levels'
@@ -51,8 +54,6 @@ class Employees extends ApiController
 		if($post = $this->input->post()){
 
 			$this->load->library('form_validation');
-
-			$this->form_validation->set_rules('id_level', 'Level', 'required|numeric');
 			$this->form_validation->set_rules('fullname', 'Nama', 'required');
 			$this->form_validation->set_rules('nik', 'Nik', 'required|is_unique[employees.nik]');
 			$this->form_validation->set_rules('birth_place', 'Tempat Lahir', 'required');
@@ -62,9 +63,6 @@ class Employees extends ApiController
 			$this->form_validation->set_rules('blood_group', 'Golongan Darah', 'required');
 			$this->form_validation->set_rules('address', 'Alamat', 'required');
 			$this->form_validation->set_rules('position', 'Jabatan', 'required');
-			$this->form_validation->set_rules('password', 'Password', 'required');
-			$this->form_validation->set_rules('username', 'Username', 'required|is_unique[users.username]');
-
 
 			if ($this->form_validation->run() == FALSE)
 			{
@@ -99,39 +97,15 @@ class Employees extends ApiController
 					'user_update'	=> $this->session->userdata('user')->id,
 				);
 				if($this->employees->insert($data)){
-					$idEmployee = $this->employees->last()->id;
-					//insert to user
-					$this->users->insert(array(
-						'id_level'	=> $post['id_level'],
-						'id_unit'	=> array_key_exists("id_unit",$post) ? $post['id_unit'] : '',
-						'id_area'	=> array_key_exists("id_area",$post) ? $post['id_area'] : '',
-						'id_employee'	=> $idEmployee,
-						'username'	=> $post['username'],
-						'email'	=> $post['email'],
-						'password'	=> password_hash($post['password'],PASSWORD_DEFAULT),
-						'user_create'	=> $this->session->userdata('user')->id,
-						'user_update'	=> $this->session->userdata('user')->id,
-					));
-					echo json_encode(array(
-						'data'	=> 	true,
-						'status'	=> true,
-						'message'	=> 'Successfull Insert Data Level'
-					));
+					$employee = $this->employees->all();
+					return $this->sendMessage($employee, 'Insert Employee Successfully',200);
 				}else{
-					echo json_encode(array(
-						'data'	=> 	false,
-						'status'	=> false,
-						'message'	=> 'Failed Insert Data Level')
-					);
+					return $this->sendMessage(false,'Failed Insert Employee',501);
 				}
 
 			}
 		}else{
-			echo json_encode(array(
-				'data'	=> 	false,
-				'status'	=> 	false,
-				'message'	=> 'Request Error Should Method POst'
-			));
+			return $this->sendMessage(false,'Request Should Post');
 		}
 
 	}
@@ -142,7 +116,6 @@ class Employees extends ApiController
 
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('nik', 'Nik', 'required');
-			$this->form_validation->set_rules('id_level', 'Level', 'required|numeric');
 			$this->form_validation->set_rules('fullname', 'Nama', 'required');
 			$this->form_validation->set_rules('birth_place', 'Tempat Lahir', 'required');
 			$this->form_validation->set_rules('birth_date', 'Tanggal Lahir', 'required');
@@ -150,9 +123,6 @@ class Employees extends ApiController
 			$this->form_validation->set_rules('mobile', 'No Hp', 'required');
 			$this->form_validation->set_rules('blood_group', 'Golongan Darah', 'required');
 			$this->form_validation->set_rules('address', 'Alamat', 'required');
-			$this->form_validation->set_rules('position', 'Jabatan', 'required');
-			$this->form_validation->set_rules('username', 'Username', 'required');
-
 
 			if ($this->form_validation->run() == FALSE)
 			{
@@ -176,7 +146,6 @@ class Employees extends ApiController
 					'blood_group'	=> $post['blood_group'],
 					'address'	=> $post['address'],
 					'position'	=> $post['position'],
-
 					'no_rek'	=> $post['no_rek'],
 					'masa_kerja'	=> $post['masa_kerja'],
 					'join_date'	=> $post['join_date'],
@@ -184,34 +153,11 @@ class Employees extends ApiController
 					'bpjs_tk'	=> $post['bpjs_tk'],
 					'bpjs_kesehatan'	=> $post['bpjs_kesehatan'],
 					'last_education'	=> $post['last_education'],
-
 					'user_create'	=> $this->session->userdata('user')->id,
 					'user_update'	=> $this->session->userdata('user')->id,
 				);
 				if($this->employees->update($data, $id)){
-					$idEmployee = $id;
-					//insert to user
-					if($post['password']){
-						$this->users->update(array(
-							'id_level'	=> $post['id_level'],
-							'id_unit'	=>  array_key_exists("id_unit",$post) ? $post['id_unit'] : '',
-							'id_employee'	=> $idEmployee,
-							'username'	=> $post['username'],
-							'id_area'	=>  array_key_exists("id_area",$post) ? $post['id_area'] : '',
-							'email'	=> $post['email'],
-							'password'	=> password_hash($post['password'],PASSWORD_DEFAULT),
-							'user_create'	=> $this->session->userdata('user')->id,
-							'user_update'	=> $this->session->userdata('user')->id,
-						), array(
-							'id_employee'	=> $idEmployee
-						));
-					}
-
-					echo json_encode(array(
-						'data'	=> 	true,
-						'status'	=> true,
-						'message'	=> 'Successfull Update Data Level'
-					));
+					return $this->sendMessage($this->employees->find($id),'Insert EMployee Successfully',200);
 				}else{
 					echo json_encode(array(
 							'data'	=> 	false,
@@ -233,9 +179,6 @@ class Employees extends ApiController
 
 	public function show($id)
 	{
-		$this->employees->db
-			->select('username, id_level, email, id_area')
-			->join('users','users.id_employee = employees.id');
 		if($data = $this->employees->find(array(
 			'employees.id'	=> $id
 		))){

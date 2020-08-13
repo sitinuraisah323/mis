@@ -5,6 +5,98 @@ var AlertUtil;
 var createForm;
 var editForm;
 
+
+function initDTEvents(){
+	$(".btn_delete").on("click",function(){
+		var targetId = $(this).data("id");
+		//alert(targetId);
+		swal.fire({
+			title: 'Anda Yakin?',
+			text: "Akan menghapus data ini",
+			type: 'warning',
+			showCancelButton: true,
+			confirmButtonText: 'Ya, Hapus'
+		}).then(function(result) {
+			if (result.value) {
+				KTApp.blockPage();
+				$.ajax({
+					type : 'GET',
+					url : "<?php echo base_url("api/users/delete/"); ?>"+targetId,
+					dataType : "json",
+					success : function(data,status){
+						KTApp.unblockPage();
+						if(data.status == true){
+							datatable.reload();
+							AlertUtil.showSuccess(data.message,5000);
+						}else{
+							AlertUtil.showFailed(data.message);
+						}
+					},
+					error: function (jqXHR, textStatus, errorThrown){
+						KTApp.unblockPage();
+						AlertUtil.showFailed("Cannot communicate with server please check your internet connection");
+					}
+				});
+			}
+		});
+	});
+
+	$(".btn_edit").on("click",function(){
+		var targetId = $(this).data("id");
+		KTApp.blockPage();
+		$.ajax({
+			type : 'GET',
+			url : "<?php echo base_url("api/users/show/"); ?>"+targetId,
+			dataType : "json",
+			success : function(response,status){
+				KTApp.unblockPage();
+				if(response.data){
+					const {id, id_unit, id_level,id_area, id_employee, email, username,fullname
+					} = response.data;
+					const modal = $('#modal_add');
+					if(id_employee > 0){
+						modal.find('[name="id_employee"]').append('<option value="'+id_employee+'">'+fullname+'</option>');
+					}
+					modal.find('[name="id"]').val(id);
+					modal.find('[name="id_level"]').val(id_level);
+					modal.find('[name="id_area"]').val(id_area);
+					modal.find('[name="id_employee"]').val(id_employee);
+					modal.find('[name="email"]').val(email);
+					modal.find('[name="username"]').val(username);
+					if(id_level >0){
+						modal.find('[name="id_level"]').trigger('change');
+						modal.find('[name="id_level"]').parents('.form-group').removeClass('d-none');
+					}
+					if(id_area > 0){
+						modal.find('[name="id_area"]').trigger('change');
+						modal.find('[name="id_area"]').parents('.form-group').removeClass('d-none');
+					}
+					if(id_unit > 0){
+						modal.find('[name="id_unit"]').trigger('change');
+						modal.find('[name="id_unit"]').parents('.form-group').removeClass('d-none');
+					}
+					modal.modal('show');
+					modal.find('[name="id_level"]').val(id_level);
+					modal.find('[name="id_area"]').val(id_area);
+					modal.find('[name="id_employee"]').val(id_employee);
+				}else{
+					AlertUtil.showFailed(response.data.message);
+					$('#modal_add').modal('show');
+				}
+			},
+			complete:function(xhr){
+				const modal = $('.modal');
+			},
+			error: function (jqXHR, textStatus, errorThrown){
+				KTApp.unblockPage();
+				AlertUtil.showFailed("Cannot communicate with server please check your internet connection");
+			}
+		});
+	});
+}
+
+
+
 function initDataTable(){
     var option = {
         data: {
@@ -89,7 +181,23 @@ function initDataTable(){
 				title: 'Status',
 				sortable: 'asc',
 				textAlign: 'left',
-			}
+			},
+			  {
+				  field: 'action',
+				  title: 'Action',
+				  sortable: false,
+				  width: 100,
+				  overflow: 'visible',
+				  textAlign: 'center',
+				  autoHide: false,
+				  template: function (row) {
+				  	console.log(row);
+					  var result ="";
+					  result = result + '<span data-id="' + row.id + '" href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md btn_edit" title="Edit" ><i class="flaticon-edit-1" style="cursor:pointer;"></i></span>';
+					  result = result + '<span data-id="' + row.id + '" href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md btn_delete" title="Delete" ><i class="flaticon2-trash" style="cursor:pointer;"></i></span>';
+					  return result;
+				  }
+			  }
           ],
           layout:{
             header:true
@@ -99,6 +207,59 @@ function initDataTable(){
     datatable.on("kt-datatable--on-layout-updated",function(){
         initDTEvents();
     })
+}
+
+function initCreate(){
+	InitClear();
+	//events
+	$("#input-form").on("submit",function(e){
+		e.preventDefault();
+		var id = $('[name="id"]').val();
+		var url;
+		if(id){
+			url = "<?php echo base_url("api/users/update"); ?>";
+		}else{
+			url = "<?php echo base_url("api/users/insert"); ?>";
+		}
+		KTApp.block('#modal_add .modal-content', {});
+		$.ajax({
+			type : 'POST',
+			url : url,
+			data : $(this).serialize(),
+			dataType : "json",
+			success : function(data,status){
+				$('#modal_add').find('[name="id"]').val("");
+				$('#modal_add').find('[name="name"]').val("");
+				KTApp.unblock('#modal_add .modal-content');
+				console.log(data);
+				if(data.status == 200){
+					// datatable.reload();
+					$('#modal_add').modal('hide');
+					AlertUtil.showSuccess(data.message,5000);
+				}else{
+					AlertUtil.showFailedDialogAdd(data.message);
+				}
+				getMenu();
+			},
+			error: function (jqXHR, textStatus, errorThrown){
+				KTApp.unblock('#modal_add .modal-content');
+				AlertUtil.showFailedDialogAdd("Cannot communicate with server please check your internet connection");
+			}
+		});
+	});
+
+}
+
+
+function InitClear(){
+	$('.modal').on('hidden.bs.modal', function(){
+		$("#id_unit").val([]).trigger("change");
+		$("#gender").val([]).trigger("change");
+		$("#blood_group").val([]).trigger("change");
+		$("#marital").val([]).trigger("change");
+		$("#id_level").val([]).trigger("change");
+		$(this).find('form')[0].reset();
+	});
 }
 
 function initAlert(){
@@ -171,6 +332,38 @@ function initAlert(){
 jQuery(document).ready(function() { 
     initDataTable();
     initAlert();
+    initCreate();
 });
+
+
+$('[name="id_level"]').on('change', function(){
+	console.log($(this).find(':selected').text());
+	if($(this).find(':selected').text() == 'area'){
+		$('[name="id_area"]').parents('.form-group').removeClass('d-none');
+		$('[name="id_unit"]').val('').parents('.form-group').addClass('d-none');
+	}else if($(this).find(':selected').text() == 'unit'){
+		$('[name="id_area"]').parents('.form-group').removeClass('d-none');
+		$('[name="id_unit"]').val('').parents('.form-group').addClass('d-none');
+	}else{
+		$('[name="id_unit"]').val('').parents('.form-group').addClass('d-none');
+		$('[name="id_area"]').val('').parents('.form-group').addClass('d-none');
+	}
+});
+var options = '';
+
+$(document).on('change', '[name="id_area"]', function(){
+	var id_area = $(this).val();
+	if($('[name="id_level"]').find(':selected').text() == 'unit'){
+		$('[name="id_unit"]').append(options);
+		$.each($('[name="id_unit"]').find('option'), function(index, element){
+			if(id_area != $(this).data('area')){
+				options += '<option value="'+$(this).val()+'" data-area="'+$(this).data('area')+'">'+$(this).text()+'</option>';
+				$(this).remove();
+			}
+		});
+		$('[name="id_unit"]').parents('.form-group').removeClass('d-none');
+	};
+});
+
 
 </script>

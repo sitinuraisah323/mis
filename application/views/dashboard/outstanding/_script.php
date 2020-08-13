@@ -112,8 +112,33 @@ function initCariForm(){
 			success : function(response,status){
 				KTApp.unblockPage();
 				var html = '';
+				var foot = '';
 				var int = 1;
+				var totalNoaOstYesterday = 0;
+				var totalNoaOstToday = 0;
+				var totalUpOstToday = 0;
+				var totalUpaOstYesterday = 0;
+				var totalRepaymentTodayUp = 0;
+				var totalRepaymentTodayNoa = 0;
+				var totalOstNoa = 0;
+				var totalOstUp = 0;
+				var totalOstTicket = 0;
+				var totalDisbureNoa = 0;
+				var totalDisbureUp = 0;
+				var totalDisbureTicket = 0;
 				$.each(response.data, function (index, data) {
+					totalNoaOstYesterday += parseInt(data.ost_yesterday.noa);
+					totalNoaOstToday += parseInt(data.credit_today.noa);
+				    totalUpOstToday += parseInt(data.credit_today.up);
+					totalUpaOstYesterday += parseInt(data.ost_yesterday.up);
+					totalRepaymentTodayUp += parseInt(data.repayment_today.up);
+					totalRepaymentTodayNoa += parseInt(data.repayment_today.noa);
+					totalOstNoa += parseInt(data.total_outstanding.noa);
+					totalOstUp += parseInt(data.total_outstanding.up);
+					totalOstTicket += parseInt(data.total_outstanding.tiket);
+					totalDisbureNoa += parseInt(data.total_disburse.noa);
+					totalDisbureUp += parseInt(data.total_disburse.credit);
+					totalDisbureTicket += parseInt(data.total_disburse.tiket.toFixed(2));
 					html += '<tr>'
 					html += '<td class="text-center">'+ int +'</td>';
 					html += '<td>'+ data.name +'</td>';
@@ -135,8 +160,30 @@ function initCariForm(){
 					html += '</tr>'
 					int++;
 				});
+
 				$('.table').find('tbody').find('tr').remove();
 				$('.table').find('tbody').html(html);
+
+				foot += '<tr>'
+				foot += '<td class="text-right" colspan="5">Total</td>';
+				foot += '<td class="text-center">'+totalNoaOstYesterday+'</td>';
+				foot += '<td class="text-right">'+convertToRupiah(totalUpaOstYesterday)+'</td>';
+				foot += '<td class="text-center">'+totalNoaOstToday+'</td>';
+				foot += '<td class="text-right">'+convertToRupiah(totalUpOstToday)+'</td>';
+				foot += '<td class="text-center">'+totalRepaymentTodayNoa+'</td>';
+				foot += '<td class="text-right">'+convertToRupiah(totalRepaymentTodayUp)+'</td>';
+				foot += '<td class="text-center">'+totalOstNoa+'</td>';
+				foot += '<td class="text-right">'+convertToRupiah(totalOstUp)+'</td>';
+				foot += '<td class="text-right">'+convertToRupiah(totalOstTicket)+'</td>';
+				foot += '<td class="text-center">'+totalDisbureNoa+'</td>';
+				foot += '<td class="text-right">'+convertToRupiah(totalDisbureUp)+'</td>';
+				foot += '<td class="text-right">'+convertToRupiah(totalDisbureTicket)+'</td>';
+				foot += '</tr>'
+
+				$('.table').find('tfoot').remove('tr');
+				$('.table').find('tfoot').html(foot);
+
+
 				console.log(html)
 
 			},

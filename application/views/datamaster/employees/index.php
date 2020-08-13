@@ -118,15 +118,6 @@ $this->load->view('temp/MenuBar.php');
 						<div class="row">
 							<div class="col-md-6">
 								<div class="form-group">
-									<label>Level</label>
-									<select name="id_level" id="id_level" class="form-control">
-										<option value=""></option>
-										<?php foreach ($levels as $level):?>
-											<option value="<?php echo $level->id;?>"><?php echo $level->level;?></option>
-										<?php endforeach;?>
-									</select>
-								</div>
-								<div class="form-group d-none">
 									<label>Area</label>
 									<select  name="id_area" class="form-control" id="area">
 									<option  value=""></option>
@@ -157,14 +148,6 @@ $this->load->view('temp/MenuBar.php');
 									<input type="text" name="no_employment" class="form-control">
 								</div>
 								<div class="form-group">
-									<label>Join Date</label>
-									<input type="date" name="join_date" class="form-control">
-								</div>
-								<div class="form-group">
-									<label>Masa Kerja</label>
-									<input type="text" name="masa_kerja" class="form-control">
-								</div>
-								<div class="form-group">
 									<label>Nama Lengkap</label>
 									<input type="text" name="fullname" class="form-control">
 								</div>
@@ -192,6 +175,14 @@ $this->load->view('temp/MenuBar.php');
 							</div>
 
 							<div class="col-md-6">
+								<div class="form-group">
+									<label>Join Date</label>
+									<input type="date" name="join_date" class="form-control">
+								</div>
+								<div class="form-group">
+									<label>Masa Kerja</label>
+									<input type="text" name="masa_kerja" class="form-control">
+								</div>
 								<div class="form-group">
 									<label>Pendidikan Terakhir</label>
 									<input type="text" name="last_education" class="form-control">
@@ -229,18 +220,6 @@ $this->load->view('temp/MenuBar.php');
 								<div class="form-group">
 									<label>Jabatan</label>
 									<input type="text" name="position" class="form-control">
-								</div>
-								<div class="form-group">
-									<label>Username</label>
-									<input type="text" name="username" class="form-control">
-								</div>
-								<div class="form-group">
-									<label>Email</label>
-									<input type="text" name="email" class="form-control">
-								</div>
-								<div class="form-group">
-									<label>Password</label>
-									<input type="password" name="password" class="form-control">
 								</div>
 							</div>
 

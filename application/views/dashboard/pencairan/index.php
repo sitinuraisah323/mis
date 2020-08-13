@@ -123,6 +123,7 @@ $this->load->view('temp/MenuBar.php');
 						  	</thead>
 						  	<tbody>
 						  	</tbody>
+							<tfoot></tfoot>
 						</table>
 				</div>
             </div>
