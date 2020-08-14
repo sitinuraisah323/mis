@@ -19,14 +19,6 @@ $this->load->view('temp/MenuBar.php');
 			<div class="row">
 				<div class="col-md-6">
 					<div class="form-group row">
-						<label class="col-md-3">Kode Transaksi</label>
-						<div class="col-md-9">
-							<input type="text" name="code" class="form-control">
-						</div>
-					</div>
-				</div>
-				<div class="col-md-6">
-					<div class="form-group row">
 						<label class="col-md-3">Karyawan</label>
 						<div class="col-md-9">
 							<select class="custom-select form-control" name="id_employee" required>
@@ -40,13 +32,21 @@ $this->load->view('temp/MenuBar.php');
 						</div>
 					</div>
 				</div>
+				<div class="col-md-6">
+					<div class="form-group row">
+						<label class="col-md-3">Kode Transaksi</label>
+						<div class="col-md-9">
+							<input type="text" name="code" class="form-control">
+						</div>
+					</div>
+				</div>
 			</div>
 			<div class="row">
 				<div class="col-md-6">
 					<div class="form-group row">
 						<label class="col-md-3">Date</label>
 						<div class="col-md-9">
-							<input type="date" name="date" class="form-control">
+							<input type="date" name="date" class="form-control" value="<?php echo date('Y-m-d');?>">
 						</div>
 					</div>
 				</div>
@@ -61,6 +61,31 @@ $this->load->view('temp/MenuBar.php');
 							</select>
 						</div>
 					</div>
+					<div class="form-group row d-none">
+						<label class="col-md-3">Tenor</label>
+						<div class="col-md-9">
+							<select name="tenor" class="form-control">
+								<?php foreach (array(1,3,6,9,12,15,18,21,24) as $value):?>
+									<option value="<?php echo $value;?>"><?php echo $value;?></option>
+								<?php endforeach;?>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<table class="table table-bordered d-none simulation">
+						<thead>
+							<tr>
+								<td>No</td>
+								<td>Bulan</td>
+								<td>Jumlah</td>
+							</tr>
+						</thead>
+						<tbody></tbody>
+						<tfoot></tfoot>
+					</table>
 				</div>
 			</div>
 			<div class="row">

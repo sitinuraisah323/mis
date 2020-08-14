@@ -354,7 +354,11 @@ class Bookcash extends ApiController
 			if($this->input->get('id_unit')){
 				$this->model->db->where('id_unit', $get['id_unit']);
 			}
+			if($this->input->get('area')){
+				$this->model->db->where('id_area', $get['area']);
+			}
 		}
+		$this->model->db->join('units','units.id = units_cash_book.id_unit');
 		$data = $this->model->all();
 		echo json_encode(array(
 			'data'	=> $data,

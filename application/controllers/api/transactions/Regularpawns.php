@@ -320,19 +320,18 @@ class Regularpawns extends ApiController
 				WHEN amount <= 50000000 THEN 122000
 				WHEN amount <= 75000000 THEN 137000
 				ELSE '152000'
-				END AS new_admin
-				
+				END AS new_admin				
 				")
 			->join('customers','units_regularpawns.id_customer = customers.id')
 			->join('units','units.id = units_regularpawns.id_unit')
 			->select('units_repayments.date_repayment as date_repayment')
 			->join('units_repayments','units_regularpawns.no_sbk = units_repayments.no_sbk','left')
-			->where('deadline <',date('Y-m-d'));
+			->where('deadline <',$this->input->get('dateEnd') ? $this->input->get('dateEnd') : date('Y-m-d'))
+			->where('units_regularpawns.status_transaction ', 'N');
 		if($get = $this->input->get()){
 			$this->regulars->db
 				//->where('units_regularpawns.date_sbk >=', $get['dateStart'])
-				->where('units_regularpawns.date_sbk <=', $get['dateEnd'])
-				->where('units_regularpawns.status_transaction ', 'N');
+				->where('units_regularpawns.date_sbk <=', $get['dateEnd']);
 			if($this->input->get('id_unit')){
 				$this->regulars->db->where('units_regularpawns.id_unit', $get['id_unit']);
 			}
