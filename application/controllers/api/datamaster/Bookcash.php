@@ -50,6 +50,7 @@ class Bookcash extends ApiController
 			$this->form_validation->set_rules('penerimaan', 'penerimaan', 'required');
 			$this->form_validation->set_rules('pengeluaran', 'pengeluaran', 'required');
 			$this->form_validation->set_rules('totmutasi', 'totmutasi', 'required');
+			$this->form_validation->set_rules('mutasi', 'mutasi', 'required');
 
 			if ($this->form_validation->run() == FALSE)
 			{
@@ -61,55 +62,66 @@ class Bookcash extends ApiController
 			}
 			else
 			{
+				$date =  date('Y-m-d',strtotime($post['date']));
 				$data = array(
 					'id_unit'				=> $post['id_unit'],
-					'date'					=> $post['date'],
+					'date'					=> $date,
 					'kasir'					=> $post['kasir'],
-					'amount_balance_first'	=> $post['saldoawal'],
-					'amount_in'				=> $post['penerimaan'],
-					'amount_out'			=> $post['pengeluaran'],
-					'amount_balance_final'	=> $post['saldoakhir'],
-					'amount_mutation'		=> $post['totmutasi'],
-					'total'					=> $post['total'],
-					'amount_gap'			=> $post['selisih'],
+					'amount_balance_first'	=> $this->convertNumber($post['saldoawal']),
+					'amount_in'				=> $this->convertNumber($post['penerimaan']),
+					'amount_out'			=> $this->convertNumber($post['pengeluaran']),
+					'amount_balance_final'	=> $this->convertNumber($post['saldoakhir']),
+					'amount_mutation'		=> $post['mutasi'],
+					'note'					=> $post['note'],
+					'total'					=> $this->convertNumber($post['total']),
+					'amount_gap'			=> $this->convertNumber($post['selisih']),
 					'timestamp'		=> date('Y-m-d H:i:s'),
 					'user_create'	=> $this->session->userdata('user')->id,
 					'user_update'	=> $this->session->userdata('user')->id,
 				);
 				
-				if($this->model->insert($data)){
-					$idUnitCashBook = $this->model->last()->id;				
-
-					$kertas_pecahan = $post['k_pecahan'];
-					for ($i=0; $i < count($kertas_pecahan); $i++) {
-						$kertas['id_unit_cash_book'] 	= $idUnitCashBook;
-						$kertas['id_fraction_of_money'] = $post['k_fraction'][$i];
-						$kertas['amount'] 				= $kertas_pecahan[$i];
-						$kertas['summary'] 				= $post['k_jumlah'][$i];
-						$this->money->insert($kertas);
-					}
-
-					$logam_pecahan = $post['l_pecahan'];
-					for ($j=0; $j < count($logam_pecahan); $j++) {
-						$logam['id_unit_cash_book'] 	= $idUnitCashBook;
-						$logam['id_fraction_of_money'] 	= $post['l_fraction'][$j];
-						$logam['amount'] 				= $logam_pecahan[$j];
-						$logam['summary'] 				= $post['l_jumlah'][$j];
-						$this->money->insert($logam);
-					}
-
+				$check = $this->db->get_where('units_cash_book',array('id_unit' => $post['id_unit'],'date'=> $date));
+				if($check->num_rows() > 0){
 					echo json_encode(array(
-								'data'	=> 	true,
-								'status'	=> true,
-								'message'	=> 'Successfull Insert Data Saldo'
-					));
-
+						'data'	=> 	false,
+						'status'	=> false,
+						'message'	=> 'Anda sudah input BAP Kas hari ini, silahkan update jika ada perubahan')
+					);
 				}else{
-					echo json_encode(array(
-							'data'	=> 	false,
-							'status'	=> false,
-							'message'	=> 'Failed Insert Data Menu')
-						);
+					if($this->model->insert($data)){
+						$idUnitCashBook = $this->model->last()->id;
+
+						$kertas_pecahan = $post['k_pecahan'];
+						for ($i=0; $i < count($kertas_pecahan); $i++) {
+							$kertas['id_unit_cash_book'] 	= $idUnitCashBook;
+							$kertas['id_fraction_of_money'] = $post['k_fraction'][$i];
+							$kertas['amount'] 				= $kertas_pecahan[$i];
+							$kertas['summary'] 				= $post['k_jumlah'][$i];
+							$this->money->insert($kertas);
+						}
+
+						$logam_pecahan = $post['l_pecahan'];
+						for ($j=0; $j < count($logam_pecahan); $j++) {
+							$logam['id_unit_cash_book'] 	= $idUnitCashBook;
+							$logam['id_fraction_of_money'] 	= $post['l_fraction'][$j];
+							$logam['amount'] 				= $logam_pecahan[$j];
+							$logam['summary'] 				= $post['l_jumlah'][$j];
+							$this->money->insert($logam);
+						}
+
+						echo json_encode(array(
+									'data'	=> 	true,
+									'status'	=> true,
+									'message'	=> 'Successfull Insert Data Saldo'
+						));
+
+					}else{
+						echo json_encode(array(
+								'data'	=> 	false,
+								'status'	=> false,
+								'message'	=> 'Failed Insert Data Menu')
+							);
+					}
 				}			
 			}
 		}else{
@@ -150,13 +162,14 @@ class Bookcash extends ApiController
 					//'id_unit'				=> $post['id_unit'],
 					'date'					=> $post['e_date'],
 					'kasir'					=> $post['e_kasir'],
-					'amount_balance_first'	=> $post['e_saldoawal'],
-					'amount_in'				=> $post['e_penerimaan'],
-					'amount_out'			=> $post['e_pengeluaran'],
-					'amount_balance_final'	=> $post['e_saldoakhir'],
-					'amount_mutation'		=> $post['e_totmutasi'],
-					'total'					=> $post['e_total'],
-					'amount_gap'			=> $post['e_selisih'],
+					'amount_balance_first'	=> $this->convertNumber($post['e_saldoawal']),
+					'amount_in'				=> $this->convertNumber($post['e_penerimaan']),
+					'amount_out'			=> $this->convertNumber($post['e_pengeluaran']),
+					'amount_balance_final'	=> $this->convertNumber($post['e_saldoakhir']),
+					'amount_mutation'		=> $post['e_mutasi'],
+					'note'		=> $post['e_note'],
+					'total'					=> $this->convertNumber($post['e_total']),
+					'amount_gap'			=> $this->convertNumber($post['e_selisih']),
 					'timestamp'		=> date('Y-m-d H:i:s'),
 					'user_create'	=> $this->session->userdata('user')->id,
 					'user_update'	=> $this->session->userdata('user')->id,
@@ -348,7 +361,8 @@ class Bookcash extends ApiController
 	public function report()
 	{
 		if($get = $this->input->get()){			
-			$this->model->db				
+			$this->model->db
+				->select('units.name as unit_name')
 				->where('date >=', $get['dateStart'])
 				->where('date <=', $get['dateEnd']);
 			if($this->input->get('id_unit')){
@@ -403,5 +417,9 @@ class Bookcash extends ApiController
 		));
 	}
 
+	public function convertNumber($angka){
+		$clean = preg_replace('/\D/','',$angka);
+		return $clean;
+	}
 
 }

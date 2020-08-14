@@ -138,7 +138,8 @@ $this->load->view('temp/MenuBar.php');
 						  	<thead class="thead-light">
 						    	<tr>
 						      		<th class="text-center">No</th>
-									<th class="text-center">Kasir</th>
+									<th class="text-left">Units</th>
+									<th class="text-left">Kasir</th>
 									<th class="text-center">Tanggal</th>
 									<th class='text-right'>Saldo Awal</th>
 									<th class='text-right'>Penerimaan</th>
@@ -153,7 +154,7 @@ $this->load->view('temp/MenuBar.php');
 						  	</tbody>
                             <tfoot>
                                 <tr>
-                                    <th colspan="3" class="text-right">Total</th>
+                                    <th colspan="4" class="text-right">Total</th>
                                     <th class="saldoawal text-right"></th>
                                     <th class="penerimaan text-right"></th>
                                     <th class="pengeluaran text-right"></th>

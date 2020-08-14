@@ -122,7 +122,8 @@ function initCariForm(){
 					$.each(response.data, function (index, data) {
 						template += "<tr class='rowappend'>";
 						template += "<td class='text-center'>"+no+"</td>";
-						template += "<td class='text-center'>"+data.kasir+"</td>";
+						template += "<td class='text-left'>"+data.unit_name+"</td>";
+						template += "<td class='text-left'>"+data.kasir+"</td>";
 						template += "<td class='text-center'>"+moment(data.date).format('DD-MM-YYYY')+"</td>";
 						template += "<td class='text-right'>"+convertToRupiah(data.amount_balance_first)+"</td>";
 						template += "<td class='text-right'>"+convertToRupiah(data.amount_in)+"</td>";
@@ -203,7 +204,7 @@ function popView(el)
                     $('#penerimaan').val(response.data.amount_in);
                     $('#pengeluaran').val(response.data.amount_out);
                     $('#mutasi').val(response.data.amount_mutation);
-                    $('#saldoakhir').val(response.data.amount_balance_first);
+                    $('#saldoakhir').val(response.data.amount_balance_final);
                     $('#selisih').val(response.data.amount_gap);                   
                     
 				}

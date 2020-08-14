@@ -5,6 +5,28 @@ var AlertUtil;
 var createForm;
 var editForm;
 
+function formatRupiah(angka){
+    var number_string = angka.replace(/[^,\d]/g, '').toString(),
+    split   		= number_string.split(','),
+    sisa     		= split[0].length % 3,
+    rupiah     		= split[0].substr(0, sisa),
+    ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
+
+    // tambahkan titik jika yang di input sudah menjadi angka ribuan
+    if(ribuan){
+        separator = sisa ? '.' : '';
+        rupiah += separator + ribuan.join('.');
+    }
+    rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+    return rupiah;
+}
+
+function formatNumber(angka){
+    var clean = angka.replace(/\D/g, '');
+    return clean;
+}
+
+
 function convertToRupiah(angka)
 {
 	var rupiah = '';		
@@ -13,19 +35,98 @@ function convertToRupiah(angka)
 	return rupiah.split('',rupiah.length-1).reverse().join('');
 }
 
-function formatNumber(n) {
-    var result = "";
+var saldoawal = document.getElementById('saldoawal');
+var penerimaan = document.getElementById('penerimaan');
+var pengeluaran = document.getElementById('pengeluaran');
+var totmutasi = document.getElementById('totmutasi');
 
-    // format number 1000000 to 1,234,567
-    if (n != null) {
-        n = n.toString();
-    } else {
-        n = "0";
-    }
+saldoawal.addEventListener('keyup', function(e){convertNumber(); hitung(); calculateSum();});
+penerimaan.addEventListener('keyup', function(e){convertNumber(); hitung(); calculateSum(); });
+pengeluaran.addEventListener('keyup', function(e){ convertNumber(); hitung(); calculateSum();});
 
-    result = + n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    return result;
+var esaldoawal = document.getElementById('e_saldoawal');
+var epenerimaan = document.getElementById('e_penerimaan');
+var epengeluaran = document.getElementById('e_pengeluaran');
+var etotmutasi = document.getElementById('e_totmutasi');
+
+esaldoawal.addEventListener('keyup', function(e){convertEditNumber(); e_hitung(); e_calculateSum();});
+epenerimaan.addEventListener('keyup', function(e){convertEditNumber(); e_hitung(); e_calculateSum(); });
+epengeluaran.addEventListener('keyup', function(e){ convertEditNumber(); e_hitung(); e_calculateSum();});
+
+function convertNumber(){
+    var saldoawal = document.getElementById('saldoawal');
+    var penerimaan = document.getElementById('penerimaan');
+    var pengeluaran = document.getElementById('pengeluaran');
+
+    saldoawal.value   = formatRupiah(saldoawal.value);
+    penerimaan.value   = formatRupiah(penerimaan.value);
+    pengeluaran.value  = formatRupiah(pengeluaran.value);
 }
+
+function convertEditNumber(){
+    var saldoawal = document.getElementById('e_saldoawal');
+    var penerimaan = document.getElementById('e_penerimaan');
+    var pengeluaran = document.getElementById('e_pengeluaran');
+
+    saldoawal.value   = formatRupiah(saldoawal.value);
+    penerimaan.value   = formatRupiah(penerimaan.value);
+    pengeluaran.value  = formatRupiah(pengeluaran.value);
+}
+
+function convertView(){   
+    var saldoawal = document.getElementById('v_saldoawal');
+    var penerimaan = document.getElementById('v_penerimaan');
+    var pengeluaran = document.getElementById('v_pengeluaran');
+    var total = document.getElementById('v_total');
+    var selisih = document.getElementById('v_selisih');
+    var saldoakhir = document.getElementById('v_saldoakhir');
+    var mutasi = document.getElementById('v_mutasi');
+
+    saldoawal.value     = formatRupiah(saldoawal.value);
+    penerimaan.value    = formatRupiah(penerimaan.value);
+    pengeluaran.value   = formatRupiah(pengeluaran.value);
+    total.value         = formatRupiah(pengeluaran.value);
+    selisih.value       = formatRupiah(selisih.value);
+    saldoakhir.value       = formatRupiah(saldoakhir.value); 
+    if(parseInt(mutasi.value) >0){ mutasi.value       = formatRupiah(mutasi.value); }   
+    //alert(saldoawal.value);
+}
+
+function convertEdit(){   
+    var saldoawal = document.getElementById('e_saldoawal');
+    var penerimaan = document.getElementById('e_penerimaan');
+    var pengeluaran = document.getElementById('e_pengeluaran');
+    var total = document.getElementById('e_total');
+    var selisih = document.getElementById('e_selisih');
+    var saldoakhir = document.getElementById('e_saldoakhir');
+    var totmutasi = document.getElementById('e_totmutasi');
+    var mutasi = document.getElementById('e_mutasi');
+
+    saldoawal.value     = formatRupiah(saldoawal.value);
+    penerimaan.value    = formatRupiah(penerimaan.value);
+    pengeluaran.value   = formatRupiah(pengeluaran.value);
+    total.value         = formatRupiah(total.value);
+    selisih.value       = formatRupiah(selisih.value);
+    saldoakhir.value       = formatRupiah(saldoakhir.value); 
+    if(parseInt(totmutasi.value) >0){ totmutasi.value       = formatRupiah(totmutasi.value); }   
+    //alert(saldoawal.value);
+}
+
+function ConverPecahanKertas(){
+    //alert('test');
+    //var i;
+    //var k_pecahan = document.getElementById('k_pecahan_1').value;
+    //alert(k_pecahan);
+    //k_pecahan_1.value   = formatRupiah(k_pecahan_1.value);
+    // for(i=1; i <=7; i++){
+    //     var k_pecahan_1 = document.getElementById('k_pecahan_1');
+    //     //k_pecahan_1.value   = "";
+    // }
+    //var thisElement = $(this);
+    //var pecahan = find('.pecahan').val();
+    //alert(pecahan);
+}
+
 
 function initDTEvents(){
     $(".btn_delete").on("click",function(){
@@ -164,7 +265,7 @@ function initDataTable(){
                 textAlign: 'left',
                 template: function (row) {
                     var result = "<div class='date-td'>";
-                    result =convertToRupiah(row.amount_balance_first);
+                    result =convertToRupiah(row.amount_in);
                     result = result + "</div>";
                     return result;
                 }
@@ -404,9 +505,24 @@ $.ajax({
 
 }
 
+function clear(){
+    $('#saldoawal').val("");
+    $('#penerimaan').val("");
+    $('#pengeluaran').val("");
+    $('#totmutasi').val("");
+    $('#mutasi').val("");
+    $('#saldoakhir').val("");
+    $('#total').val("");
+    $('#selisih').val("");
+    $('#kasir').val("");
+    $('#note').val("");
+}
+
 function popAdd(el){
     $('.rowappend_kertas').remove();
     $('.rowappend_logam').remove();
+    clear();
+    //ConverPecahanKertas();
     //KTApp.block('#modal_add .kt-portlet__body', {});
     $.ajax({
 			type : 'GET',
@@ -422,9 +538,9 @@ function popAdd(el){
 					//var cicilan = 0;
 					$.each(response.data, function (index, data) {
 						template += "<tr class='rowappend_kertas'>";
-						template += "<td><input type='text' class='form-control form-control-sm pecahan' id='k_pecahan_"+no+"' name='k_pecahan[]' value="+data.amount+" readonly><input type='hidden' class='form-control form-control-sm pecahan' id='k_fraction_"+no+"' name='k_fraction[]' value="+data.id+" readonly></td>";
+						template += "<td><input type='text' class='form-control form-control-sm pecahan' id='k_pecahan_"+no+"' name='k_pecahan[]' value="+data.amount+" style='background-color:grey; color:white;' readonly><input type='hidden' class='form-control form-control-sm pecahan' id='k_fraction_"+no+"' name='k_fraction[]' value="+data.id+" readonly></td>";
                         template += "<td><input type='text' class='form-control form-control-sm jumlah' id='k_jumlah_"+no+"' name='k_jumlah[]'></td>";
-						template += "<td><input type='text' class='form-control form-control-sm total' id='k_total_"+no+"' name='k_total[]' readonly></td>";
+						template += "<td><input type='text' class='form-control form-control-sm total' id='k_total_"+no+"' name='k_total[]' style='background-color:grey; color:white;' readonly></td>";
 						template += '</tr>';
 						no++;
 					});
@@ -453,9 +569,9 @@ function popAdd(el){
 					//var cicilan = 0;
 					$.each(response.data, function (index, data) {
 						template += "<tr class='rowappend_logam'>";
-						template += "<td><input type='text' class='form-control form-control-sm pecahan' id='l_pecahan_"+no+"' name='l_pecahan[]' value="+data.amount+" readonly><input type='hidden' class='form-control form-control-sm pecahan' id='l_fraction_"+no+"' name='l_fraction[]' value="+data.id+" readonly></td>";
+						template += "<td><input type='text' class='form-control form-control-sm pecahan' id='l_pecahan_"+no+"' name='l_pecahan[]' value="+data.amount+" style='background-color:grey; color:white;' readonly><input type='hidden' class='form-control form-control-sm pecahan' id='l_fraction_"+no+"' name='l_fraction[]' value="+data.id+" readonly></td>";
                         template += "<td><input type='text' class='form-control form-control-sm jumlah' id='l_jumlah_"+no+"' name='l_jumlah[]'></td>";
-						template += "<td><input type='text' class='form-control form-control-sm total' id='l_total_"+no+"' name='l_total[]' readonly></td>";
+						template += "<td><input type='text' class='form-control form-control-sm total' id='l_total_"+no+"' name='l_total[]' style='background-color:grey; color:#F8F9F9;' readonly></td>";
 						template += '</tr>';
 						no++;
 					});
@@ -490,19 +606,21 @@ function popEdit(el)
 			data:{id:id},
 			success : function(response,status){
 				if(response.status == true){
-                    console.log(response.data.name);
+                    console.log(response.data.note);
                     $('#id_edit').val(response.data.id);
                     $('#e_id_unit').val(response.data.id_unit).trigger("change");
                     $('#e_units').val(response.data.name);                    
                     $('#e_kasir').val(response.data.kasir);
                     $('#e_date').val(response.data.date);
-                    $('#e_saldoawal').val(response.data.amount_balance_final);
+                    $('#e_saldoawal').val(response.data.amount_balance_first);
                     $('#e_penerimaan').val(response.data.amount_in);
                     $('#e_pengeluaran').val(response.data.amount_out);
                     $('#e_totmutasi').val(response.data.amount_mutation);
-                    $('#e_saldoakhir').val(response.data.amount_balance_first);
-                    //$('#e_total').val(response.data.total);                    
+                    $('#e_saldoakhir').val(response.data.amount_balance_final);
+                    $('#e_mutasi').val(response.data.amount_mutation);                    
+                    $('#e_total').val(response.data.total);                    
                     $('#e_selisih').val(response.data.amount_gap);                   
+                    $('#e_note').val(response.data.note);                   
                     
 				}
 			},
@@ -510,6 +628,7 @@ function popEdit(el)
 				//KTApp.unblockPage();
 			},
 			complete:function () {
+                convertEdit();
 				//KTApp.unblock('#form_bukukas .kt-portlet__body', {});
 			}
 		});
@@ -579,7 +698,7 @@ function popEdit(el)
 function popView(el)
 {
     $('.rowappend_kertas').remove();
-    $('.rowappend_logam').remove();
+    $('.rowappend_logam').remove();   
     var id = $(el).attr('data-id');
     //console.log(id);  
     $.ajax({
@@ -593,19 +712,20 @@ function popView(el)
                     $('#v_units').val(response.data.name);
                     $('#v_kasir').val(response.data.kasir);
                     $('#v_date').val(response.data.date);
-                    $('#v_saldoawal').val(response.data.amount_balance_final);
+                    $('#v_saldoawal').val(response.data.amount_balance_first);
                     $('#v_penerimaan').val(response.data.amount_in);
                     $('#v_pengeluaran').val(response.data.amount_out);
                     $('#v_mutasi').val(response.data.amount_mutation);
-                    $('#v_saldoakhir').val(response.data.amount_balance_first);
+                    $('#v_saldoakhir').val(response.data.amount_balance_final);
                     $('#v_selisih').val(response.data.amount_gap);                   
-                    
+                    $('#v_note').val(response.data.note);                   
 				}
 			},
 			error: function (jqXHR, textStatus, errorThrown){
 				//KTApp.unblockPage();
 			},
 			complete:function () {
+                convertView();
 				//KTApp.unblock('#form_bukukas .kt-portlet__body', {});
 			}
 		});
@@ -659,7 +779,7 @@ function popView(el)
                     total = parseInt(totalkertas) + parseInt(totallogam);
 					$('#v_kertas').append(templateKertas);
 					$('#v_logam').append(templateLogam);
-                    $('#v_total').val(total);
+                    $('#v_total').val(total);                    
 				}
 			},
 			error: function (jqXHR, textStatus, errorThrown){
@@ -676,28 +796,47 @@ function hitung(){
     var saldoawal   = $("#saldoawal").val();
     var penerimaan  = $("#penerimaan").val();
     var pengeluaran = $("#pengeluaran").val();
-    var mutasi      = (parseInt(saldoawal) + parseInt(penerimaan)) - parseInt(pengeluaran);
-    var saldoakhir  = mutasi;
+    if(saldoawal){saldoawal=formatNumber(saldoawal);}else{saldoawal=0;}
+    if(penerimaan){penerimaan=formatNumber(penerimaan);}else{penerimaan=0;}
+    if(pengeluaran){pengeluaran=formatNumber(pengeluaran);}else{pengeluaran=0;}
+    var mutasi      = (parseInt(penerimaan)) - parseInt(pengeluaran);
+    var saldoakhir  = (parseInt(saldoawal) + parseInt(penerimaan)) - parseInt(pengeluaran);
     if(!isNaN(mutasi)){
         $('[name="totmutasi"]').val(mutasi);
+        $('[name="mutasi"]').val(mutasi);
     }
     if(!isNaN(saldoakhir)){
         $('[name="saldoakhir"]').val(saldoakhir);
     }
+
+    var totmutasi       = document.getElementById('totmutasi');
+    var saldoakhir      = document.getElementById('saldoakhir');
+    if(mutasi>0){ totmutasi.value = formatRupiah(totmutasi.value);}
+    saldoakhir.value    = formatRupiah(saldoakhir.value);
 }
 
 function e_hitung(){
     var saldoawal   = $("#e_saldoawal").val();
     var penerimaan  = $("#e_penerimaan").val();
     var pengeluaran = $("#e_pengeluaran").val();
-    var mutasi      = (parseInt(saldoawal) + parseInt(penerimaan)) - parseInt(pengeluaran);
-    var saldoakhir  = mutasi;
+
+    if(saldoawal){saldoawal=formatNumber(saldoawal);}else{saldoawal=0;}
+    if(penerimaan){penerimaan=formatNumber(penerimaan);}else{penerimaan=0;}
+    if(pengeluaran){pengeluaran=formatNumber(pengeluaran);}else{pengeluaran=0;}
+    var mutasi      = (parseInt(penerimaan)) - parseInt(pengeluaran);
+    var saldoakhir  = (parseInt(saldoawal) + parseInt(penerimaan)) - parseInt(pengeluaran);
     if(!isNaN(mutasi)){
         $('[name="e_totmutasi"]').val(mutasi);
+        $('[name="e_mutasi"]').val(mutasi);
     }
     if(!isNaN(saldoakhir)){
         $('[name="e_saldoakhir"]').val(saldoakhir);
     }
+
+    var totmutasi       = document.getElementById('e_totmutasi');
+    var saldoakhir      = document.getElementById('e_saldoakhir');
+    if(mutasi>0){ totmutasi.value = formatRupiah(totmutasi.value);}
+    saldoakhir.value    = formatRupiah(saldoakhir.value);
 }
 
 jQuery(document).ready(function() {
@@ -720,6 +859,9 @@ jQuery(document).ready(function() {
                 var el = $(this);
                 popView(el);
     });
+
+    // var x = document.getElementById('saldoawal');
+    // x.style.backgroundColor ="red";
 
 });
 
@@ -748,9 +890,15 @@ function calculateSum(){
             total += parseInt($(this).val());
         }
     });
-    selisih = parseInt(saldoakhir) - parseInt(total);
+    selisih = parseInt(formatNumber(saldoakhir)) - parseInt(total);
     $('[name="total"]').val(total);
     $('[name="selisih"]').val(selisih);
+
+    var lbltotal = document.getElementById('total');
+    lbltotal.value   = formatRupiah(lbltotal.value);
+    var lblselisih = document.getElementById('selisih');
+    if(selisih >0){ lblselisih.value   = formatRupiah(lblselisih.value); }
+
 }
 
 function e_calculateSum(){
@@ -762,8 +910,13 @@ function e_calculateSum(){
             total += parseInt($(this).val());
         }
     });
-    selisih = parseInt(saldoakhir) - parseInt(total);
+    selisih = parseInt(formatNumber(saldoakhir)) - parseInt(total);
     $('[name="e_total"]').val(total);
     $('[name="e_selisih"]').val(selisih);
+
+    var lbltotal = document.getElementById('e_total');
+    lbltotal.value   = formatRupiah(lbltotal.value);
+    var lblselisih = document.getElementById('e_selisih');
+    if(selisih >0){ lblselisih.value   = formatRupiah(lblselisih.value); }
 }
 </script>

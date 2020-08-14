@@ -34,7 +34,7 @@
                                     </div>
                                     <label class="col-lg-4 col-form-label">Tanggal</label>
                                     <div class="col-lg-8">
-                                        <input type="date" class="form-control form-control-sm" id="e_date" name="e_date">
+                                        <input type="text" class="form-control form-control-sm" id="e_date" name="e_date" style="background-color:grey; color:white;">
                                     </div>
                                 </div>
                             </div>  
@@ -43,25 +43,26 @@
                                 <div class="form-group row">                          
                                     <label class="col-lg-4 col-form-label">Saldo Awal</label>
                                     <div class="col-lg-8">
-                                        <input type="text" class="form-control form-control-sm" id="e_saldoawal" name="e_saldoawal" onkeyup="e_hitung()">
+                                        <input type="text" class="form-control form-control-sm" id="e_saldoawal" name="e_saldoawal" >
                                     </div>
                                     <label class="col-lg-4 col-form-label">Penerimaan</label>
                                     <div class="col-lg-4">
-                                        <input type="text" class="form-control form-control-sm" id="e_penerimaan" name="e_penerimaan" onkeyup="e_hitung()">
+                                        <input type="text" class="form-control form-control-sm" id="e_penerimaan" name="e_penerimaan">
                                     </div>
                                     <div class="col-lg-4"></div>
                                     <label class="col-lg-4 col-form-label">Pengeluaran</label>
                                     <div class="col-lg-4">
-                                        <input type="text" class="form-control form-control-sm" id="e_pengeluaran" name="e_pengeluaran" onkeyup="e_hitung()">
+                                        <input type="text" class="form-control form-control-sm" id="e_pengeluaran" name="e_pengeluaran">
                                     </div>
                                     <div class="col-lg-4"></div>
                                     <label class="col-lg-4 col-form-label">Total Mutasi</label>
                                     <div class="col-lg-8">
-                                        <input type="text" class="form-control form-control-sm" id="e_totmutasi" name="e_totmutasi" readonly>
+                                        <input type="text" class="form-control form-control-sm" id="e_totmutasi" name="e_totmutasi" style="background-color:grey; color:white;" readonly>
+                                        <input type="hidden" class="form-control form-control-sm" id="e_mutasi" name="e_mutasi" style="background-color:grey; color:white;" readonly>
                                     </div>
                                     <label class="col-lg-4 col-form-label">Saldo Akhir</label>
                                     <div class="col-lg-8">
-                                        <input type="text" class="form-control form-control-sm" id="e_saldoakhir" name="e_saldoakhir" readonly>
+                                        <input type="text" class="form-control form-control-sm" id="e_saldoakhir" name="e_saldoakhir" style="background-color:grey; color:white;" readonly>
                                     </div>
                                 </div>
                             </div> 
@@ -97,15 +98,21 @@
                                 <div class="form-group row">                          
                                     <label class="col-lg-2 col-form-label">Total</label>
                                     <div class="col-lg-4">
-                                        <input type="text" class="form-control form-control-sm" id="e_total" name="e_total">
+                                        <input type="text" class="form-control form-control-sm" id="e_total" name="e_total" style="background-color:grey; color:white;" readonly>
                                     </div>
                                     <label class="col-lg-2 col-form-label">Selisih</label>
                                     <div class="col-lg-4">
-                                        <input type="text" class="form-control form-control-sm" id="e_selisih" name="e_selisih">
+                                        <input type="text" class="form-control form-control-sm" id="e_selisih" name="e_selisih" style="background-color:grey; color:white;" readonly>
                                     </div>                                    
-                                </div>    
-
+                                </div> 
+                                <div class="form-group row">                          
+                                    <label class="col-lg-2 col-form-label">Note</label>
+                                    <div class="col-lg-10">
+                                        <input type="text" class="form-control form-control" id="e_note" name="e_note">
+                                    </div>                                    
+                                </div>  
                             </div>
+                            
 
                             <div class="col-md-12" >     
                                 <div class="kt-section">
