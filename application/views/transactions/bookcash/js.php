@@ -454,7 +454,7 @@ $('#btn_add_submit').on('click',function(){
         },
         error: function (jqXHR, textStatus, errorThrown){
             KTApp.unblock('#modal_add .modal-content');
-            AlertUtil.showFailedDialogAdd("Cannot communicate with server please check your internet connection");
+            AlertUtil.showFailedDialogAdd("server busy please try again later");
         }
     });
       }

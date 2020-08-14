@@ -21,7 +21,6 @@ class Bookcash extends ApiController
 		if($this->session->userdata('user')->level != 'administrator'){
 			$this->model->db->where('units.id', $this->session->userdata('user')->id_unit);
 		}
-		$this->model->db->order_by('id','desc');
 		$data = $this->model->all();
 		if($post = $this->input->post()){
 			if(is_array($post['query'])){
@@ -90,8 +89,8 @@ class Bookcash extends ApiController
 					);
 				}else{
 					if($this->model->insert($data)){
-						$idUnitCashBook = $this->model->last()->id;				
-	
+						$idUnitCashBook = $this->model->last()->id;
+
 						$kertas_pecahan = $post['k_pecahan'];
 						for ($i=0; $i < count($kertas_pecahan); $i++) {
 							$kertas['id_unit_cash_book'] 	= $idUnitCashBook;
@@ -100,7 +99,7 @@ class Bookcash extends ApiController
 							$kertas['summary'] 				= $post['k_jumlah'][$i];
 							$this->money->insert($kertas);
 						}
-	
+
 						$logam_pecahan = $post['l_pecahan'];
 						for ($j=0; $j < count($logam_pecahan); $j++) {
 							$logam['id_unit_cash_book'] 	= $idUnitCashBook;
@@ -109,13 +108,13 @@ class Bookcash extends ApiController
 							$logam['summary'] 				= $post['l_jumlah'][$j];
 							$this->money->insert($logam);
 						}
-	
+
 						echo json_encode(array(
 									'data'	=> 	true,
 									'status'	=> true,
 									'message'	=> 'Successfull Insert Data Saldo'
 						));
-	
+
 					}else{
 						echo json_encode(array(
 								'data'	=> 	false,
@@ -362,16 +361,18 @@ class Bookcash extends ApiController
 	public function report()
 	{
 		if($get = $this->input->get()){			
-			$this->model->db	
+			$this->model->db
 				->select('units.name as unit_name')
-				->join('units','units.id = units_cash_book.id_unit')			
 				->where('date >=', $get['dateStart'])
 				->where('date <=', $get['dateEnd']);
 			if($this->input->get('id_unit')){
 				$this->model->db->where('id_unit', $get['id_unit']);
 			}
-			$this->model->db->order_by('id','desc');
+			if($this->input->get('area')){
+				$this->model->db->where('id_area', $get['area']);
+			}
 		}
+		$this->model->db->join('units','units.id = units_cash_book.id_unit');
 		$data = $this->model->all();
 		echo json_encode(array(
 			'data'	=> $data,
