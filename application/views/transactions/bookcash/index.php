@@ -37,13 +37,11 @@ $this->load->view('temp/MenuBar.php');
                     </h3>
                 </div>
                 <div class="kt-portlet__head-toolbar">
-                    <div class="kt-portlet__head-wrapper">
-                            <!-- <a class="btn btn-brand btn-icon-sm" href="<?php echo base_url('datamaster/bookcash/form');?>">
-                                <i class="flaticon2-plus"></i> Buat Baru
-                            </a> -->
-                            <button type="button" class="btn btn-brand btn-icon-sm add" data-toggle="modal" data-target="#modal_add">
+				  <div class="kt-portlet__head-wrapper">
+					  <span class="mr-5 font-weight-bold">Users : <?php echo $this->session->userdata('user')->username;?></span>
+					  <button type="button" class="btn btn-brand btn-icon-sm add" data-toggle="modal" data-target="#modal_add">
                                 <i class="flaticon2-plus"></i> Buat Baru      
-                            </button>  
+						</button>
                     </div>
                 </div>
             </div>

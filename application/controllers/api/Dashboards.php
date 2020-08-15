@@ -126,7 +126,7 @@ class Dashboards extends ApiController
 		}else{
 			$date = date('Y-m-d');
 		}
-		$now = $date;
+		$date = date('Y-m-d', strtotime($date.' +1 days'));
 		$begin = new DateTime( $date );
 		$end = new DateTime($date);
 		$end = $end->modify( '-6 day' );
@@ -224,6 +224,7 @@ class Dashboards extends ApiController
 		}else{
 			$date = date('Y-m-d');
 		}
+		$date = date('Y-m-d', strtotime($date. ' +1 days'));
 		$begin = new DateTime( $date );
 		$end = new DateTime($date);
 		$end = $end->modify( '-6 day' );

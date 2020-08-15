@@ -224,32 +224,37 @@ function initDataTable(){
             {
                 field: 'id',
                 title: 'ID',
-                sortable: 'asc',
+                sortable: 'desc',
                 width:60,
                 textAlign: 'center',
             },
             {
                 field: 'unit_name',
                 title: 'Nama Unit',
-                sortable: 'asc',
                 textAlign: 'left',
             },
             {
                 field: 'date',
                 title: 'Tanggal',
-                sortable: 'asc',
                 textAlign: 'left',
             },
+			  {
+				  field: 'time',
+				  title: 'Time',
+				  textAlign: 'left',
+				  template:row => {
+				  	date = new Date(row.date_create);
+				  	return `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+			  }
+			  },
             {
                 field: 'kasir',
                 title: 'Kasir',
-                sortable: 'asc',
                 textAlign: 'left',
             },
             {
                 field: 'amount_balance_first',
                 title: 'Saldo Awal',
-                sortable: 'asc',
                 textAlign: 'left',
                 template: function (row) {
                     var result = "<div class='date-td'>";
@@ -261,7 +266,6 @@ function initDataTable(){
             {
                 field: 'amount_in',
                 title: 'Penerimaan',
-                sortable: 'asc',
                 textAlign: 'left',
                 template: function (row) {
                     var result = "<div class='date-td'>";
@@ -273,7 +277,6 @@ function initDataTable(){
             {
                 field: 'amount_out',
                 title: 'Pengeluaran',
-                sortable: 'asc',
                 textAlign: 'left',
                 template: function (row) {
                     var result = "<div class='date-td'>";
@@ -285,7 +288,6 @@ function initDataTable(){
             {
                 field: 'amount_balance_final',
                 title: 'Saldo Akhir',
-                sortable: 'asc',
                 textAlign: 'left',
                 template: function (row) {
                     var result = "<div class='date-td'>";
