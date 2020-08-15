@@ -683,6 +683,7 @@ function disburse() {
 			var data = transaction,
 					//config manager
 					config = {
+						type: 'horizontalBar',
 						data: data,
 						xkey: 'y',
 						ykeys: ['a'],
@@ -735,6 +736,78 @@ function disburse() {
 
 }
 
+// function sample() {
+// 	$('svg').remove();
+// 	$('#graphSample').empty();
+// 	var labeldata = [];
+// 	var transaction = [];
+// 	var totalYesterday = 0;
+// 	var totalToday = 0;
+// 	KTApp.block('#form_sample .kt-widget14', {});
+// 	$.ajax({
+// 		url: "<?php //echo base_url('api/dashboards/disburse');?>",
+// 		type: "GET",
+// 		dataType: "JSON",
+// 		data: {
+// 			area: '',
+// 			date: currday,currmonth,curryears,
+// 		},
+// 		success: function (response) {
+// 			$.each(response.data, function (index, unit) {
+// 				totalToday += unit.amount;
+// 				transaction.push([unit.amount]})
+// 				labeldata.push([unit.name])
+// 			});
+			
+// 		},
+// 		complete: function () {
+// 			$('#form_sample').find('.total-today').text(convertToRupiah(totalToday));
+// 			$('#form_sample').find('.date-today').text(currdate);
+// 			console.log(labeldata);
+// 			var ctx = document.getElementById('myChart').getContext('2d');
+// 			var myChart = new Chart(ctx, {
+// 			type: 'horizontalBar',
+// 			data: {
+// 				labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+// 				datasets: [{
+// 					labels: ['Values'],
+// 					xkey: 'y',
+// 					ykeys: ['a'],
+// 					data: [1200000, 1900000, 300000, 500000, 200000, 300000],
+// 					backgroundColor: [
+// 					'rgba(255, 99, 132, 0.2)',
+// 					'rgba(54, 162, 235, 0.2)',
+// 					'rgba(255, 206, 86, 0.2)',
+// 					'rgba(75, 192, 192, 0.2)',
+// 					'rgba(153, 102, 255, 0.2)',
+// 					'rgba(255, 159, 64, 0.2)'
+// 				],
+// 				borderColor: [
+// 					'rgba(255, 99, 132, 1)',
+// 					'rgba(54, 162, 235, 1)',
+// 					'rgba(255, 206, 86, 1)',
+// 					'rgba(75, 192, 192, 1)',
+// 					'rgba(153, 102, 255, 1)',
+// 					'rgba(255, 159, 64, 1)'
+// 				],
+// 					borderWidth: 1
+// 				}]
+// 			},
+// 				options: {
+// 					scales: {
+// 						yAxes: [{
+// 							ticks: {
+// 								beginAtZero: true
+// 							}
+// 						}]
+// 					}
+// 				}
+// 			});
+// 			KTApp.unblock('#form_sample .kt-widget14', {});
+// 		}
+// 	});	
+// }
+
 function notfound(){
     $("#graph").empty();
     var div = document.getElementById('graph');
@@ -744,6 +817,7 @@ function notfound(){
 
 jQuery(document).ready(function() {
     //initCariForm();
+	//sample();
 	disburse();
 	outstanding();
 	totoutstanding();
