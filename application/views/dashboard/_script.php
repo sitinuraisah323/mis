@@ -191,6 +191,7 @@ function initCariForm(){
 			var data = transaction,
 					//config manager
 					config = {
+						//type: 'horizontalBar',
 						data: data,
 						xkey: 'y',
 						ykeys: ['a'],
