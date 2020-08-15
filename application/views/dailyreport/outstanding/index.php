@@ -1,3 +1,4 @@
+<h3>Outstanding Nasional <?php echo date('d-m-Y'); ?></h3>
 <table class="table" border="1">
             <tr bgcolor="#cccccc">
             <td rowspan="2" align="center"  width="20">No</td>
@@ -89,3 +90,5 @@
                 <td align="right"><?php echo number_format($totalDisbureTicket,0); ?></td>         
             </tr>
            </table>
+
+           <h3><br/>DPD Nasional <?php echo date('d-m-Y'); ?></h3>

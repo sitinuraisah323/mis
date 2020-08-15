@@ -40,9 +40,9 @@ class Outstanding extends Authenticated
 		$view = $this->load->view('dailyreport/outstanding/index.php',['outstanding'=> $this->data()],true);
 		$pdf->writeHTML($view);
 		//download
-		$pdf->Output('GHAnet_'.date('d_m_Y').'.pdf', 'D');
-		//view
 		//$pdf->Output('GHAnet_'.date('d_m_Y').'.pdf', 'D');
+		//view
+		$pdf->Output('GHAnet_Summary_'.date('d_m_Y').'.pdf', 'I');
 	}
 	
 	public function data()
