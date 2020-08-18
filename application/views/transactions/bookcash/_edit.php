@@ -36,6 +36,10 @@
                                     <div class="col-lg-8">
                                         <input type="text" class="form-control form-control-sm" id="e_date" name="e_date" style="background-color:grey; color:white;">
                                     </div>
+                                    <label class="col-lg-4 col-form-label">Sisa OS UP Unit</label>
+                                    <div class="col-lg-8">
+                                        <input type="text" class="form-control form-control-sm" id="e_os_unit" name="e_os_unit">
+                                    </div>
                                 </div>
                             </div>  
 

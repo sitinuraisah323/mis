@@ -10,6 +10,23 @@ function convertToRupiah(angka)
 	return rupiah.split('',rupiah.length-1).reverse().join('');
 }
 
+function formatRupiah(angka){
+    var number_string = angka.replace(/[^,\d]/g, '').toString(),
+    split   		= number_string.split(','),
+    sisa     		= split[0].length % 3,
+    rupiah     		= split[0].substr(0, sisa),
+    ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
+
+    // tambahkan titik jika yang di input sudah menjadi angka ribuan
+    if(ribuan){
+        separator = sisa ? '.' : '';
+        rupiah += separator + ribuan.join('.');
+    }
+    rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+    return rupiah;
+}
+
+
 function initAlert(){
     AlertUtil = {
         showSuccess : function(message,timeout){
@@ -129,6 +146,7 @@ function initCariForm(){
 						template += "<td class='text-right'>"+convertToRupiah(data.amount_in)+"</td>";
 						template += "<td class='text-right'>"+convertToRupiah(data.amount_out)+"</td>";
 						template += "<td class='text-right'>"+convertToRupiah(data.amount_balance_final)+"</td>";
+						template += "<td class='text-right'>"+convertToRupiah(data.os_unit)+"</td>";
 						template += "<td class='text-right'>"+convertToRupiah(data.amount_gap)+"</td>";
 						template += "<td class='text-center'><span data-id='"+data.id+"' href='' class='btn btn-sm btn-clean btn-icon btn-icon-md viewBtn' title='View Data' data-toggle='modal' data-target='#modal_view'><i class='flaticon-eye' style='cursor:pointer;'></i></span></td>";
 						template += '</tr>';
@@ -196,16 +214,18 @@ function popView(el)
 			data:{id:id},
 			success : function(response,status){
 				if(response.status == true){
-                    console.log(response.data.name);
+                    //console.log(response.data.name);
                     $('#units').val(response.data.name);
                     $('#kasir').val(response.data.kasir);
                     $('#date').val(response.data.date);
-                    $('#saldoawal').val(response.data.amount_balance_final);
-                    $('#penerimaan').val(response.data.amount_in);
-                    $('#pengeluaran').val(response.data.amount_out);
-                    $('#mutasi').val(response.data.amount_mutation);
-                    $('#saldoakhir').val(response.data.amount_balance_final);
-                    $('#selisih').val(response.data.amount_gap);                   
+                    $('#saldoawal').val(formatRupiah(response.data.amount_balance_final));
+                    $('#penerimaan').val(formatRupiah(response.data.amount_in));
+                    $('#pengeluaran').val(formatRupiah(response.data.amount_out));
+                    $('#mutasi').val(formatRupiah(response.data.amount_mutation));
+                    $('#saldoakhir').val(formatRupiah(response.data.amount_balance_final));
+                    $('#selisih').val(formatRupiah(response.data.amount_gap));                   
+                    $('#os_unit').val(formatRupiah(response.data.os_unit));                   
+                    $('#note').val(response.data.note);                   
                     
 				}
 			},
@@ -266,7 +286,7 @@ function popView(el)
                     total = parseInt(totalkertas) + parseInt(totallogam);
 					$('#kertas').append(templateKertas);
 					$('#logam').append(templateLogam);
-                    $('#total').val(total);
+                    $('#total').val(convertToRupiah(total));
 				}
 			},
 			error: function (jqXHR, textStatus, errorThrown){
