@@ -1,14 +1,13 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once APPPATH.'controllers/Middleware/Authenticated.php';
-
-class Transactions extends Authenticated
+class LogamMulya extends Authenticated
 {
 	/**
 	 * @var string
 	 */
 
-	public $menu = 'Dashboards';
+	public $menu = 'Units';
 
 	/**
 	 * Welcome constructor.
@@ -19,7 +18,7 @@ class Transactions extends Authenticated
 		parent::__construct();
 		$this->load->model('LmTransactionsModel','model');
 		$this->load->model('LmGramsModel','grams');
-		$this->load->model('AreasModel','area');
+		$this->load->model('AreasModel','areas');
 
 	}
 
@@ -28,10 +27,9 @@ class Transactions extends Authenticated
 	 */
 	public function index()
 	{
-		$this->grams->db->order_by('weight', 'asc');
-		$this->load->view("lm/transactions/index", array(
-			'grams'	=> $this->grams->all(),
-			'areas'	=> $this->area->all()
+		$this->load->view('datamaster/logammulya/index',array(
+			'areas'	=>  $this->areas->all(),
+			'grams'	=> $this->grams->all()
 		));
 	}
 

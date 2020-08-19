@@ -95,6 +95,8 @@
 				success : function(response,status){
 					$('[name="id"]').val(response.data.id);
 					$('[name="id_unit"]').val(response.data.id_unit);
+					$('[name="os"]').val(response.data.os);
+					$('[name="date"]').val(response.data.date);
 					$.each(response.data.detail, function (index, data) {
 						$('[name="fraction['+data.id_fraction_of_money+'][summary]"]').val(data.summary);
 					});

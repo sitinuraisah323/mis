@@ -47,13 +47,20 @@ class Grams extends Authenticated
 
 	public function purchase()
 	{
+		$getCode = $this->grams->db
+			->select('count(*)+1 as no')
+			->from('lm_transactions')
+			->like('code', 'LM/'.date('ym/'))
+			->get()->row();
+		$code = 'LM/'.date('ym/').$getCode->no;
 		$this->employees->db
 			->select('units.name as unit')
 			->order_by('employees.fullname','asc')
 			->join('units','units.id = employees.id_unit');
 		$employees = $this->employees->all();
 		$this->load->view("lm/gram/purchase",array(
-			'employees'	=> $employees
+			'employees'	=> $employees,
+			'code'	=> $code
 		));
 	}
 

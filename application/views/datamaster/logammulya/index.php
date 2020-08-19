@@ -33,7 +33,7 @@ $this->load->view('temp/MenuBar.php');
                         <i class="kt-font-brand fa fa-align-justify"></i>
                     </span>
                     <h3 class="kt-portlet__head-title">
-                       Data Transaksi Lm
+                       Data Logam Mulya
                     </h3>
                 </div>
                 <div class="kt-portlet__head-toolbar">
@@ -129,7 +129,7 @@ $this->load->view('temp/MenuBar.php');
                         <div class="position-relative">
                         <button type="button" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>
                         <!-- <button type="submit" class="btn btn-success btn-icon" name="btnexport" id="btnexport" onclick="export_xls()"><i class="fa fa-file-excel"></i></button> -->
-<!--                        <button type="submit" class="btn btn-danger btn-icon" name="btnexport_csv" id="btnexport_csv"><i class="fa fa-file-excel"></i></button>-->
+                        <button type="submit" class="btn btn-danger btn-icon" name="btnexport_csv" id="btnexport_csv"><i class="fa fa-file-excel"></i></button>
                         </div>
                     </div>                  
 				</div>
@@ -141,21 +141,21 @@ $this->load->view('temp/MenuBar.php');
 						<table class="table">
 						  	<thead class="thead-light">
 						    	<tr>
-									<th rowspan="2">Name Lengkap</th>
-									<th rowspan="2">Unit</th>
-									<th rowspan="2">Jabatan</th>
-									<th rowspan="2">Metode</th>
-									<th colspan="<?php echo count($grams);?>">Order(Gram)</th>
-									<th rowspan="2" class="text-right">Total</th>
-									<th rowspan="2">Status</th>
+									<th class="text-left" rowspan="2">Name Lengkap</th>
+									<th class="text-left" rowspan="2">Unit</th>
+									<th class="text-left" rowspan="2">Jabatan</th>
+									<th class="text-left" rowspan="2">Metode</th>
+									<th class="text-left" colspan="<?php echo count($grams);?>">Order(Gram)</th>
+									<th rowspan="2">Total</th>
+									<th rowspan="2">aksi</th>
 						    	</tr>
 								<tr>
 									<?php foreach ($grams as $gram):?>
-										<th><?php echo $gram->weight.' gram';?></th>
+										<th class="text-left"><?php echo $gram->weight;?></th>
 									<?php endforeach;?>
 								</tr>
 						  	</thead>
-						  	<tbody data-append="item">
+						  	<tbody>
 						  	</tbody>
 						</table>
 				</div>
@@ -175,5 +175,5 @@ $this->load->view('temp/MenuBar.php');
 
 <?php
 $this->load->view('temp/Footer.php');
-$this->load->view('lm/transactions/_script.php');
+$this->load->view('datamaster/logammulya/_script.php');
 ?>

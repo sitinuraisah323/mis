@@ -132,5 +132,18 @@
 		}
 	});
 
+	$('.form-input').on('submit', function (e) {
+		e.preventDefault();
+		const data = $('.form-input').serialize();
+		$.ajax({
+			url:"<?php echo base_url();?>/api/lm/transactions/insert",
+			data:data,
+			type:"POST",
+			success:function(response){
+				location.href = '<?php echo base_url();?>/lm/transactions';
+			}
+		})
+	})
+
 	document.querySelector('[name="tenor"]').addEventListener('change', (new Store()).simulation);
 </script>

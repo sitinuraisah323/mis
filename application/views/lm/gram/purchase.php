@@ -14,7 +14,7 @@ $this->load->view('temp/MenuBar.php');
 		</div>
 	</div>
 	<!--begin::Form-->
-	<form class="kt-form">
+	<form class="kt-form form-input">
 		<div class="kt-portlet__body">
 			<div class="row">
 				<div class="col-md-6">
@@ -22,7 +22,7 @@ $this->load->view('temp/MenuBar.php');
 						<label class="col-md-3">Karyawan</label>
 						<div class="col-md-9">
 							<select class="custom-select form-control" name="id_employee" required>
-								<option ="">Karyawan</option>
+								<option value="">Karyawan</option>
 								<?php if($employees):?>
 									<?php foreach ($employees as $employee):?>
 										<option value="<?php echo $employee->id;?>"><?php echo implode('-', array($employee->fullname, $employee->unit));?></option>
@@ -36,7 +36,7 @@ $this->load->view('temp/MenuBar.php');
 					<div class="form-group row">
 						<label class="col-md-3">Kode Transaksi</label>
 						<div class="col-md-9">
-							<input type="text" name="code" class="form-control">
+							<input type="text" name="code" class="form-control" value="<?php echo $code;?>" readonly>
 						</div>
 					</div>
 				</div>
@@ -134,7 +134,7 @@ $this->load->view('temp/MenuBar.php');
 		</div>
 		<div class="kt-portlet__foot">
 			<div class="kt-form__actions">
-				<button type="reset" class="btn btn-primary">Submit</button>
+				<button type="submit" class="btn btn-primary">Submit</button>
 				<button type="reset" class="btn btn-secondary">Cancel</button>
 			</div>
 		</div>

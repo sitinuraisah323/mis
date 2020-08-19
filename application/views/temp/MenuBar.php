@@ -258,6 +258,12 @@
 											</ul>
 										</div>
 									</li>
+									<li class="kt-menu__item "  aria-haspopup="true">
+										<a  href="<?php echo base_url('datamaster/logammulya'); ?>" class="kt-menu__link ">
+											<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>
+											<span class="kt-menu__link-text">Logam Mulya</span>
+										</a>
+									</li>
 
 									<?php if(read_access('datamaster/users')):?>
 										<li class="kt-menu__item "  aria-haspopup="true">
