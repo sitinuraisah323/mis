@@ -63,9 +63,9 @@ class Outstanding extends Authenticated
 		$pdf->writeHTML($view);
 
 		//download
-		//$pdf->Output('GHAnet_'.date('d_m_Y').'.pdf', 'D');
+		$pdf->Output('GHAnet_Summary_'.date('d_m_Y').'.pdf', 'D');
 		//view
-		$pdf->Output('GHAnet_Summary_'.date('d_m_Y').'.pdf', 'I');
+		//$pdf->Output('GHAnet_Summary_'.date('d_m_Y').'.pdf', 'I');
 	}
 
 	public function test(){
@@ -164,6 +164,9 @@ class Outstanding extends Authenticated
 		}else{
 			$date = date('Y-m-d');
 		}
+
+		// $date = date('Y-m-d');
+		// $date = date('Y-m-d', strtotime('+1 days', strtotime($date)));
 		$units = $this->units->db->select('units.id, units.name, area')
 			->join('areas','areas.id = units.id_area')
 			->get('units')->result();

@@ -328,7 +328,7 @@ function initDataTable(){
                 field: 'action',
                 title: 'Action',
                 sortable: false,
-                width: 100,
+                width: 150,
                 overflow: 'visible',
                 textAlign: 'center',
                 autoHide: false,
@@ -346,6 +346,8 @@ function initDataTable(){
                             <?php } ?>
                         }                        
                         result = result + "<span data-id='"+ row.id +"' href='' class='btn btn-sm btn-clean btn-icon btn-icon-md viewBtn' title='View Data' data-toggle='modal' data-target='#modal_view'><i class='flaticon-eye' style='cursor:pointer;'></i></span>";
+                        //result = result + "<span data-id='"+ row.id +"' href='' class='btn btn-sm btn-clean btn-icon btn-icon-md pdfBtn' title='View Data' data-toggle='modal' data-target='#modal_pdf'><i class='flaticon2-print' style='cursor:pointer;'></i></span>";
+                        result = result + '<a href="<?php echo base_url('transactions/bookcash/preview'); ?>/'+ row.id + '" target="_blank" class="btn btn-sm btn-clean btn-icon btn-icon-md pdfBtn" title="Preview BAP Kas"><i class="flaticon2-print" style="cursor:pointer;"></i></a>';
 
                     return result;
                 }
