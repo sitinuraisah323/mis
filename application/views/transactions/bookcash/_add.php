@@ -35,6 +35,10 @@
                                     <div class="col-lg-8">
                                         <input type="text" class="form-control form-control-sm" id="date" name="date" value="<?php echo date('d-m-Y'); ?>" style="background-color:grey; color:white;" readonly>
                                     </div>
+									<label class="col-lg-4 col-form-label">OS</label>
+									<div class="col-lg-8">
+										<input type="text" class="form-control" id="code_unit" name="os">
+									</div>
                                 </div>
                             </div>  
 

@@ -91,12 +91,6 @@ function initCariForm(){
     $('#status').select2({ placeholder: "Select a Status", width: '100%' });
     $('#nasabah').select2({ placeholder: "Select a Nasabah", width: '100%' });
     //events
-	function buildTenor(tenor,method){
-		if(method !== 'INSTALLMENT'){
-			return method;
-		}
-		return `installment ${tenor}x`
-	}
     $('#btncari').on('click',function(){
         $('.rowappend').remove();
         var area = $('[name="area"]').val();
@@ -114,6 +108,11 @@ function initCariForm(){
 			data:{area:area,id_unit:unit,statusrpt:statusrpt,nasabah:nasabah,dateStart:dateStart,dateEnd:dateEnd,permit:permit},
 			success : function(response,status){
 				var html = '';
+				const logs = [
+					{item:"APPROVED",value:"Approved"},
+					{item:"DECLINED",value:"Declined"},
+					{item:"ON_PROGRESS",value:"On Progress"}
+				];
 				response.data.forEach(data=>{
 					const { name, unit, position,grams, last_log, method,tenor, total,code } = data;
 					html += `<tr>`;
@@ -123,11 +122,20 @@ function initCariForm(){
 					html += `<td>${buildTenor(tenor, method)}</td>`;
 					grams.forEach(weight=>html += `<td>${weight}</td>`);
 					html += `<td>${convertToRupiah(total)}</td>`
-					html += `<td>${last_log}</td>`
+					html += `<td><select name="change-status" data-code="${code}" class="form-control" onchange="change(this)">`;
+					logs.forEach(log=>{
+						const {item,value}	= log;
+						if(item == last_log){
+							html += `<option value="${item}" selected >${value}</option>`;
+						}else{
+							html += `<option value="${item}">${value}</option>`;
+						}
+					})
+					html +=		`</select></td>`;
 					html += `</tr>`;
 				})
 				$('tbody').find('tr').remove();
-				$('[data-append="item"]').append(html);
+				$('tbody').append(html);
 				KTApp.unblockPage();
 			},
 			error: function (jqXHR, textStatus, errorThrown){
@@ -164,6 +172,13 @@ $('[name="area"]').on('change',function(){
             }
         });
 });
+
+function buildTenor(tenor,method){
+	if(method !== 'INSTALLMENT'){
+		return method;
+	}
+	return `installment ${tenor}x`
+}
 
 function initGetNasabah(){
     $("#unit").on('change',function(){
@@ -249,6 +264,22 @@ jQuery(document).ready(function() {
 var type = $('[name="area"]').attr('type');
 if(type == 'hidden'){
     $('[name="area"]').trigger('change');
+}
+
+function change(element) {
+	const data = {
+		status:element.value,
+		code:element.getAttribute('data-code')
+	}
+	$.ajax({
+		type : 'POST',
+		url : "<?php echo base_url("api/lm/transactions/change"); ?>",
+		dataType : "json",
+		data:data,
+		success : function(response,status){
+			console.log(response);
+		},
+	});
 }
 
 </script>

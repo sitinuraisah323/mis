@@ -36,6 +36,10 @@
                                     <div class="col-lg-8">
                                         <input type="text" class="form-control form-control-sm" id="e_date" name="e_date" style="background-color:grey; color:white;">
                                     </div>
+									<label class="col-lg-4 col-form-label">OS</label>
+									<div class="col-lg-8">
+										<input type="text" class="form-control" id="code_unit" name="os">
+									</div>
                                 </div>
                             </div>  
 

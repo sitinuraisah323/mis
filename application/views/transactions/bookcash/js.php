@@ -252,6 +252,11 @@ function initDataTable(){
                 title: 'Kasir',
                 textAlign: 'left',
             },
+			  {
+				  field: 'os',
+				  title: 'OS',
+				  textAlign: 'left',
+			  },
             {
                 field: 'amount_balance_first',
                 title: 'Saldo Awal',
@@ -621,9 +626,10 @@ function popEdit(el)
                     $('#e_saldoakhir').val(response.data.amount_balance_final);
                     $('#e_mutasi').val(response.data.amount_mutation);                    
                     $('#e_total').val(response.data.total);                    
-                    $('#e_selisih').val(response.data.amount_gap);                   
-                    $('#e_note').val(response.data.note);                   
-                    
+                    $('#e_selisih').val(response.data.amount_gap);
+					$('#e_note').val(response.data.note);
+					$('[name="os"]').val(response.data.os);
+
 				}
 			},
 			error: function (jqXHR, textStatus, errorThrown){
