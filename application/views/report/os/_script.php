@@ -119,12 +119,12 @@ function initCariForm(){
 						template += "<td class='text-center'>"+no+"</td>";
 						template += "<td class='text-left'>"+data.name+"</td>";
 						template += "<td class='text-left'>"+data.area+"</td>";
-						template += "<td class='text-center'>"+data.noa+"</td>";
-						template += "<td class='text-right'>"+convertToRupiah(data.up)+"</td>";
+						template += "<td class='text-center'>"+data.total_outstanding.noa+"</td>";
+						template += "<td class='text-right'>"+convertToRupiah(data.total_outstanding.up)+"</td>";
 						template += '</tr>';
 						no++;
-                        total +=data.up;
-                        totNoa +=data.noa;
+                        total +=data.total_outstanding.up;
+                        totNoa +=data.total_outstanding.noa;
 					});
                     template += '<tr class="rowappend">';
                     template +='<td colspan="3" class="text-right"><b>Total</b></td>';                    
