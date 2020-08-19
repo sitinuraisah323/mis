@@ -40,6 +40,8 @@ $this->load->view('temp/MenuBar.php');
 	 <!-- begin:: Content -->
      <div class="kt-container  kt-grid__item kt-grid__item--fluid">
         <div class="row">
+            
+                    
             <div class="col-xl-6 col-lg-6">
                 <!--begin:: Widgets-->
                 <form id="form_disburse" class="form-horizontal">

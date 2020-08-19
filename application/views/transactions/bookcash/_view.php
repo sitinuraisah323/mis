@@ -23,12 +23,12 @@
                                 <label class="col-lg-2 col-form-label">Tanggal</label>
                                 <div class="col-lg-10">
                                     <input type="text" class="form-control form-control-sm" id="v_date" name="v_date" style="background-color:grey; color:white;" readonly>
-                                </div>
-								<label class="col-lg-2 col-form-label">Os</label>
-								<div class="col-lg-10">
-									<input type="text" class="form-control form-control-sm"  name="os" style="background-color:grey; color:white;" readonly>
-								</div>
-							</div>
+                                </div> 
+                                <label class="col-lg-4 col-form-label">Sisa OS UP Unit</label>
+                                    <div class="col-lg-8">
+                                        <input type="text" class="form-control form-control-sm" id="v_os_unit" name="v_os_unit" style="background-color:grey; color:white;" readonly>
+                                    </div>
+                            </div>                            
                         </div>
                         <div class="col-md-6">
                             <div class="form-group row"> 

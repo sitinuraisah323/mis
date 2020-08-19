@@ -24,6 +24,10 @@
                                 <div class="col-lg-10">
                                     <input type="text" class="form-control form-control-sm" id="date" name="date" readonly>
                                 </div> 
+                                <label class="col-lg-2 col-form-label">OS</label>
+                                <div class="col-lg-10">
+                                    <input type="text" class="form-control form-control-sm" id="os_unit" name="os_unit" readonly>
+                                </div>
                             </div>                            
                         </div>
                         <div class="col-md-6">
@@ -92,6 +96,14 @@
                                 <label class="col-lg-4 col-form-label">Selisih</label>
                                 <div class="col-lg-8">
                                     <input type="text" class="form-control form-control-sm" id="selisih" name="selisih" readonly>
+                                </div> 
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group row"> 
+                                <label class="col-lg-2 col-form-label">Note</label>
+                                <div class="col-lg-10">
+                                    <input type="text" class="form-control form-control" id="note" name="note" readonly>
                                 </div> 
                             </div>
                         </div>

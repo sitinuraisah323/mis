@@ -35,10 +35,10 @@
                                     <div class="col-lg-8">
                                         <input type="text" class="form-control form-control-sm" id="date" name="date" value="<?php echo date('d-m-Y'); ?>" style="background-color:grey; color:white;" readonly>
                                     </div>
-									<label class="col-lg-4 col-form-label">OS</label>
-									<div class="col-lg-8">
-										<input type="text" class="form-control" id="code_unit" name="os">
-									</div>
+                                    <label class="col-lg-4 col-form-label">Sisa OS UP Unit</label>
+                                    <div class="col-lg-8">
+                                        <input type="text" class="form-control form-control-sm" id="os_unit" name="os_unit">
+                                    </div>
                                 </div>
                             </div>  
 
@@ -106,7 +106,7 @@
                                     <label class="col-lg-4 col-form-label">Selisih uang fisik dengan saldo akhir</label>
                                     <div class="col-lg-2">
                                         <input type="text" class="form-control form-control-sm" id="selisih" name="selisih" style="background-color:grey; color:white;" readonly>
-                                    </div>                                    
+                                    </div>
                                 </div> 
 
                                  <div class="form-group row">                          
@@ -114,7 +114,7 @@
                                     <div class="col-lg-10">
                                         <input type="text" class="form-control form-control" id="note" name="note">
                                     </div>                                    
-                                </div>    
+                                </div>      
                             </div>
 
                             <div class="col-md-12" >     

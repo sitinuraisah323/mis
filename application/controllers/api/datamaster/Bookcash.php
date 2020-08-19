@@ -43,14 +43,15 @@ class Bookcash extends ApiController
 		if($post = $this->input->post()){
 			$this->load->library('form_validation');
 
-			$this->form_validation->set_rules('kasir', 'kasir', 'required');
-			$this->form_validation->set_rules('date', 'date', 'required');
-			$this->form_validation->set_rules('saldoawal', 'saldoawal', 'required');
-			$this->form_validation->set_rules('saldoakhir', 'saldoakhir', 'required');
+			$this->form_validation->set_rules('kasir', 'Kasir', 'required');
+			$this->form_validation->set_rules('date', 'Date', 'required');
+			$this->form_validation->set_rules('saldoawal', 'saldo awal', 'required');
+			$this->form_validation->set_rules('saldoakhir', 'aaldo akhir', 'required');
 			$this->form_validation->set_rules('penerimaan', 'penerimaan', 'required');
 			$this->form_validation->set_rules('pengeluaran', 'pengeluaran', 'required');
-			$this->form_validation->set_rules('totmutasi', 'totmutasi', 'required');
+			$this->form_validation->set_rules('totmutasi', 'total mutasi', 'required');
 			$this->form_validation->set_rules('mutasi', 'mutasi', 'required');
+			$this->form_validation->set_rules('os_unit', 'OS unit', 'required');
 
 			if ($this->form_validation->run() == FALSE)
 			{
@@ -75,6 +76,7 @@ class Bookcash extends ApiController
 					'note'					=> $post['note'],
 					'total'					=> $this->convertNumber($post['total']),
 					'amount_gap'			=> $this->convertNumber($post['selisih']),
+					'os_unit'				=> $this->convertNumber($post['os_unit']),
 					'timestamp'		=> date('Y-m-d H:i:s'),
 					'user_create'	=> $this->session->userdata('user')->id,
 					'user_update'	=> $this->session->userdata('user')->id,
@@ -140,13 +142,14 @@ class Bookcash extends ApiController
 		if($post = $this->input->post()){
 			$this->load->library('form_validation');
 
-			$this->form_validation->set_rules('e_kasir', 'e_kasir', 'required');
-			$this->form_validation->set_rules('e_date', 'e_date', 'required');
-			$this->form_validation->set_rules('e_saldoawal', 'e_saldoawal', 'required');
-			$this->form_validation->set_rules('e_saldoakhir', 'e_saldoakhir', 'required');
-			$this->form_validation->set_rules('e_penerimaan', 'e_penerimaan', 'required');
-			$this->form_validation->set_rules('e_pengeluaran', 'e_pengeluaran', 'required');
-			$this->form_validation->set_rules('e_totmutasi', 'e_totmutasi', 'required');
+			$this->form_validation->set_rules('e_kasir', 'kasir', 'required');
+			$this->form_validation->set_rules('e_date', 'date', 'required');
+			$this->form_validation->set_rules('e_saldoawal', 'saldo awal', 'required');
+			$this->form_validation->set_rules('e_saldoakhir', 'saldo akhir', 'required');
+			$this->form_validation->set_rules('e_penerimaan', 'penerimaan', 'required');
+			$this->form_validation->set_rules('e_pengeluaran', 'pengeluaran', 'required');
+			$this->form_validation->set_rules('e_totmutasi', 'total mutasi', 'required');
+			$this->form_validation->set_rules('e_os_unit', 'os unit', 'required');
 
 			if ($this->form_validation->run() == FALSE)
 			{
@@ -168,9 +171,10 @@ class Bookcash extends ApiController
 					'amount_out'			=> $this->convertNumber($post['e_pengeluaran']),
 					'amount_balance_final'	=> $this->convertNumber($post['e_saldoakhir']),
 					'amount_mutation'		=> $post['e_mutasi'],
-					'note'		=> $post['e_note'],
+					'note'					=> $post['e_note'],
 					'total'					=> $this->convertNumber($post['e_total']),
 					'amount_gap'			=> $this->convertNumber($post['e_selisih']),
+					'os_unit'				=> $this->convertNumber($post['e_os_unit']),
 					'timestamp'		=> date('Y-m-d H:i:s'),
 					'user_create'	=> $this->session->userdata('user')->id,
 					'user_update'	=> $this->session->userdata('user')->id,
@@ -373,6 +377,7 @@ class Bookcash extends ApiController
 			if($this->input->get('area')){
 				$this->model->db->where('id_area', $get['area']);
 			}
+			$this->model->db->order_by('id', 'desc');
 		}
 		$this->model->db->join('units','units.id = units_cash_book.id_unit');
 		$data = $this->model->all();
