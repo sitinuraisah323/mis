@@ -114,7 +114,7 @@ function initCariForm(){
 					{item:"ON_PROGRESS",value:"On Progress"}
 				];
 				response.data.forEach(data=>{
-					const { name, unit, position,grams, last_log, method,tenor, total,code } = data;
+					const {id, name, unit, position,grams, last_log, method,tenor, total,code } = data;
 					html += `<tr>`;
 					html += `<td>${name}</td>`;
 					html += `<td>${unit}</td>`;
@@ -132,6 +132,7 @@ function initCariForm(){
 						}
 					})
 					html +=		`</select></td>`;
+					html += `<td><button type="button" onclick="deleted(${id})" class="btn btn-sm btn-clean btn-icon btn-icon-md btn_delete"><i class="flaticon2-trash" style="cursor:pointer;"></button></td>`;
 					html += `</tr>`;
 				})
 				$('tbody').find('tr').remove();
@@ -183,8 +184,8 @@ function buildTenor(tenor,method){
 function initGetNasabah(){
     $("#unit").on('change',function(){
         var area = $('#area').val();
-        var unit = $('#unit').val(); 
-        var customers =  document.getElementById('nasabah');     
+        var unit = $('#unit').val();
+        var customers =  document.getElementById('nasabah');
         //alert(unit);
         $.ajax({
 			type : 'GET',
@@ -206,7 +207,7 @@ function initGetNasabah(){
                         opt.text = data.name;
                         customers.appendChild(opt);
 					});
-					
+
 				}
 			},
 			error: function (jqXHR, textStatus, errorThrown){
@@ -216,13 +217,13 @@ function initGetNasabah(){
 				KTApp.unblock('#form_bukukas .kt-portlet__body', {});
 			}
 		});
-       
-    });    
+
+    });
 }
 
 function initUnitNasabah(){
         var unit=$('[name="id_unit"]').val();
-        var customers =  document.getElementById('nasabah');     
+        var customers =  document.getElementById('nasabah');
         $.ajax({
 			type : 'GET',
 			url : "<?php echo base_url("api/datamaster/units/get_customers_gr_byunit"); ?>",
@@ -242,7 +243,7 @@ function initUnitNasabah(){
                         opt.value = data.nik;
                         opt.text = data.name;
                         customers.appendChild(opt);
-					});					
+					});
 				}
 			},
 			error: function (jqXHR, textStatus, errorThrown){
@@ -259,6 +260,7 @@ jQuery(document).ready(function() {
     initCariForm();
     initGetNasabah();
     initUnitNasabah();
+    initAlert();
 });
 
 var type = $('[name="area"]').attr('type');
@@ -277,9 +279,40 @@ function change(element) {
 		dataType : "json",
 		data:data,
 		success : function(response,status){
-			console.log(response);
+			AlertUtil.showSuccess(response.message,5000);
 		},
 	});
 }
-
+function deleted(id) {
+	var targetId = id;
+	swal.fire({
+		title: 'Anda Yakin?',
+		text: "Akan menghapus data ini",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonText: 'Ya, Hapus'
+	}).then(function(result) {
+		if (result.value) {
+			KTApp.blockPage();
+			$.ajax({
+				type : 'GET',
+				url : "<?php echo base_url('api/lm/transactions/delete');?>/"+targetId,
+				dataType : "json",
+				success : function(data,status){
+					KTApp.unblockPage();
+					if(data.status == true){
+						AlertUtil.showSuccess(data.message,5000);
+						$('#btncari').trigger('click');
+					}else{
+						AlertUtil.showFailed(data.message);
+					}
+				},
+				error: function (jqXHR, textStatus, errorThrown){
+					KTApp.unblockPage();
+					AlertUtil.showFailed("Cannot communicate with server please check your internet connection");
+				}
+			});
+		}
+	});
+}
 </script>
