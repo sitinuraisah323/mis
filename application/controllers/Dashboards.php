@@ -56,7 +56,8 @@ class Dashboards extends Authenticated
 	public function outstanding()
 	{
 		$this->load->view("dashboard/outstanding/index.php",array(
-			'areas'	=> $this->areas->all()
+			'areas'	=> $this->areas->all(),
+			'lasttransaction'	=> $this->regular->getLastDateTransaction()
 		));
     }
 	

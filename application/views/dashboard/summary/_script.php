@@ -146,7 +146,7 @@ function initCariForm(){
 				console.log(unit);
 				transaction.push({
 					y:unit.name,
-					a:unit.ost_today.up
+					a:unit.total_outstanding.up
 				})
 			});
 		},

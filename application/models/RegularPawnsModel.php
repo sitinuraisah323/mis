@@ -168,6 +168,21 @@ class RegularpawnsModel extends Master
 		);
 	}
 
+	public function getLastDateTransaction()
+	{
+		return $this->db->select('date_sbk as date')->from($this->table)
+			->order_by('date_sbk', 'desc')
+			->get()->row();
+	}
+
+	public function getLastDateTransactionUnit($idunit)
+	{
+		return $this->db->select('date_sbk as date')->from($this->table)
+			->where('id_unit', $idunit)
+			->order_by('date_sbk', 'desc')
+			->get()->row();
+	}
+
 	public function getOstYesterday_($idUnit, $today)
 	{
 		$noaRegular = $this->db->select('count(*) as noa')->from($this->table)

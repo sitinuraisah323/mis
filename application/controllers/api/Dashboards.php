@@ -14,8 +14,16 @@ class Dashboards extends ApiController
 		$this->load->model('OutstandingModel', 'outstanding');
 	}
 
+	
+
+	public function getlastdatetransaction(){
+		$data = $this->regular->getLastDateTransaction();
+		$this->sendMessage($data, 'Get Data Outstanding');
+	}
+
 	public function outstanding()
 	{
+		$currdate = date('Y-m-d');
 		if($area = $this->input->get('area')){
 			$this->units->db->where('id_area', $area);
 		}else if($this->session->userdata('user')->level == 'area'){
@@ -33,6 +41,15 @@ class Dashboards extends ApiController
 		}else{
 			$date = date('Y-m-d');
 		}
+
+		$lastdate = $this->regular->getLastDateTransaction()->date;
+		if ($date > $lastdate){
+			$date = $lastdate;
+		}else{
+			$date= $date;
+		}
+		//$data = $this->regular->getLastDateTransaction();
+
 		$units = $this->units->db->select('units.id, units.name, area')
 			->join('areas','areas.id = units.id_area')
 			->get('units')->result();
@@ -55,6 +72,7 @@ class Dashboards extends ApiController
 				'noa'	=> $unit->dpd_today->noa + $unit->dpd_yesterday->noa - $unit->dpd_repayment_today->noa,
 				'ost'	=> $unit->dpd_today->ost + $unit->dpd_yesterday->ost - $unit->dpd_repayment_today->ost,
 			);
+			$unit->lasttrans = $date;
 			$unit->percentage = ($unit->total_dpd->ost > 0) && ($unit->total_outstanding->up > 0) ? round($unit->total_dpd->ost / $unit->total_outstanding->up, 4) : 0;
 		}
 		$this->sendMessage($units, 'Get Data Outstanding');

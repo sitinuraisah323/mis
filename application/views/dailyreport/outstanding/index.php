@@ -24,9 +24,9 @@
             <td rowspan="2" align="center" width="60">Area</td>
             <!-- <td rowspan="2" align="center" width="25">Open</td>
             <td rowspan="2" align="center" width="20">OJK</td> -->
-            <td colspan="2" align="center" width="120">OST Kemarin</td>
-            <td colspan="2" align="center" width="120">Kredit Hari ini</td>
-            <td colspan="2" align="center" width="120">Pelunasan & Cicilan Hari ini</td>
+            <td colspan="2" align="center" width="120">OST Kemarin(<?php echo $datetrans;?>)</td>
+            <td colspan="2" align="center" width="120">Kredit(<?php echo $datetrans;?>)</td>
+            <td colspan="2" align="center" width="120">Pelunasan & Cicilan(<?php echo $datetrans;?>)</td>
             <td colspan="3" align="center" width="200">Total Outstanding</td>
             <td colspan="3" align="center" width="200">Total Disburse</td>
             </tr>
@@ -137,9 +137,9 @@
             <td rowspan="2" align="center" width="60">Area</td>
             <!-- <td rowspan="2" align="center" width="25">Open</td>
             <td rowspan="2" align="center" width="20">OJK</td> -->
-            <td colspan="2" align="center" width="120">OST Kemarin</td>
-            <td colspan="2" align="center" width="120">Kredit Hari ini</td>
-            <td colspan="2" align="center" width="120">Pelunasan & Cicilan Hari ini</td>
+            <td colspan="2" align="center" width="120">OST Kemarin(<?php echo $datetrans;?>)</td>
+            <td colspan="2" align="center" width="120">Kredit(<?php echo $datetrans;?>)</td>
+            <td colspan="2" align="center" width="120">Pelunasan & Cicilan(<?php echo $datetrans;?>)</td>
             <td colspan="3" align="center" width="200">Total Outstanding</td>
             <td colspan="3" align="center" width="200">Total Disburse</td>
             </tr>
@@ -250,9 +250,9 @@
             <td rowspan="2" align="center" width="60">Area</td>
             <!-- <td rowspan="2" align="center" width="25">Open</td>
             <td rowspan="2" align="center" width="20">OJK</td> -->
-            <td colspan="2" align="center" width="120">OST Kemarin</td>
-            <td colspan="2" align="center" width="120">Kredit Hari ini</td>
-            <td colspan="2" align="center" width="120">Pelunasan & Cicilan Hari ini</td>
+            <td colspan="2" align="center" width="120">OST Kemarin(<?php echo $datetrans;?>)</td>
+            <td colspan="2" align="center" width="120">Kredit(<?php echo $datetrans;?>)</td>
+            <td colspan="2" align="center" width="120">Pelunasan & Cicilan(<?php echo $datetrans;?>)</td>
             <td colspan="3" align="center" width="200">Total Outstanding</td>
             <td colspan="3" align="center" width="200">Total Disburse</td>
             </tr>
@@ -363,9 +363,9 @@
             <td rowspan="2" align="center" width="60">Area</td>
             <!-- <td rowspan="2" align="center" width="25">Open</td>
             <td rowspan="2" align="center" width="20">OJK</td> -->
-            <td colspan="2" align="center" width="120">OST Kemarin</td>
-            <td colspan="2" align="center" width="120">Kredit Hari ini</td>
-            <td colspan="2" align="center" width="120">Pelunasan & Cicilan Hari ini</td>
+            <td colspan="2" align="center" width="120">OST Kemarin(<?php echo $datetrans;?>)</td>
+            <td colspan="2" align="center" width="120">Kredit(<?php echo $datetrans;?>)</td>
+            <td colspan="2" align="center" width="120">Pelunasan & Cicilan(<?php echo $datetrans;?>)</td>
             <td colspan="3" align="center" width="200">Total Outstanding</td>
             <td colspan="3" align="center" width="200">Total Disburse</td>
             </tr>

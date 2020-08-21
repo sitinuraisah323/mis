@@ -29,15 +29,24 @@ class Outstanding extends Authenticated
         $currdate =date("Y-m-d");
         $nextdate = date('Y-m-d', strtotime('+1 days', strtotime($currdate)));
         $lastdate = date('Y-m-d', strtotime('-1 days', strtotime($currdate)));
+
+      $date = date('Y-m-d');
+		$lastdate = $this->regular->getLastDateTransaction()->date;
+		if ($date > $lastdate){
+			$date = $lastdate;
+		}else{
+			$date= $date;
+      }
+      
         $units = $this->units->db->select('units.id, units.name, area')
 			->join('areas','areas.id = units.id_area')
 			->get('units')->result();
 		foreach ($units as $unit){
 			//  $unit->noa = $this->regular->getOstYesterday_($unit->id, $nextdate)->noa;			
          //  $unit->up = $this->regular->getOstYesterday_($unit->id, $nextdate)->up;
-          $unit->ost_yesterday = $this->regular->getOstYesterday($unit->id, $currdate);
-			 $unit->credit_today = $this->regular->getCreditToday($unit->id, $currdate);
-			 $unit->repayment_today = $this->regular->getRepaymentToday($unit->id, $currdate);
+          $unit->ost_yesterday = $this->regular->getOstYesterday($unit->id, $date);
+			 $unit->credit_today = $this->regular->getCreditToday($unit->id, $date);
+			 $unit->repayment_today = $this->regular->getRepaymentToday($unit->id, $date);
 			 $totalNoa = (int) $unit->ost_yesterday->noa + $unit->credit_today->noa - $unit->repayment_today->noa;
 			 $totalUp = (int) $unit->ost_yesterday->up + $unit->credit_today->up - $unit->repayment_today->up;
 			 $unit->total_outstanding = (object) array(
@@ -62,18 +71,27 @@ class Outstanding extends Authenticated
 
 	public function yesterday()
 	{
-        $currdate =date("Y-m-d");
+        $currdate = date("Y-m-d");
         $nextdate = date('Y-m-d', strtotime('+1 days', strtotime($currdate)));
         $lastdate = date('Y-m-d', strtotime('-1 days', strtotime($currdate)));
+
+         $date = date('Y-m-d');
+         $lasttrans = $this->regular->getLastDateTransaction()->date;
+         if ($date > $lasttrans){
+            $date = $lasttrans;
+         }else{
+            $date= $date;
+         }
+      
         $units = $this->units->db->select('units.id, units.name, area')
 			->join('areas','areas.id = units.id_area')
 			->get('units')->result();
 		foreach ($units as $unit){
 			    //$unit->noa = $this->regular->getOstYesterday_($unit->id, $currdate)->noa;			
              //$unit->up = $this->regular->getOstYesterday_($unit->id, $currdate)->up;
-             $unit->ost_yesterday = $this->regular->getOstYesterday($unit->id, $currdate);
-             $unit->credit_today = $this->regular->getCreditToday($unit->id, $currdate);
-             $unit->repayment_today = $this->regular->getRepaymentToday($unit->id, $currdate);
+             $unit->ost_yesterday = $this->regular->getOstYesterday($unit->id, $date);
+             $unit->credit_today = $this->regular->getCreditToday($unit->id, $date);
+             $unit->repayment_today = $this->regular->getRepaymentToday($unit->id, $date);
              $totalNoa = (int) $unit->ost_yesterday->noa + $unit->credit_today->noa - $unit->repayment_today->noa;
              $totalUp = (int) $unit->ost_yesterday->up + $unit->credit_today->up - $unit->repayment_today->up;
              $unit->total_outstanding = (object) array(

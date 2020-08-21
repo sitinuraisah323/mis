@@ -79,8 +79,7 @@ class Bookcash extends ApiController
 					'os_unit'				=> $this->convertNumber($post['os_unit']),
 					'timestamp'		=> date('Y-m-d H:i:s'),
 					'user_create'	=> $this->session->userdata('user')->id,
-					'user_update'	=> $this->session->userdata('user')->id,
-					'os'	=> $post['os']
+					'user_update'	=> $this->session->userdata('user')->id
 				);
 				
 				$check = $this->db->get_where('units_cash_book',array('id_unit' => $post['id_unit'],'date'=> $date));
@@ -177,8 +176,7 @@ class Bookcash extends ApiController
 					'os_unit'				=> $this->convertNumber($post['e_os_unit']),
 					'timestamp'		=> date('Y-m-d H:i:s'),
 					'user_create'	=> $this->session->userdata('user')->id,
-					'user_update'	=> $this->session->userdata('user')->id,
-					'os'	=> $post['os']
+					'user_update'	=> $this->session->userdata('user')->id
 				);
 				
 				if($this->model->update($data,$id)){

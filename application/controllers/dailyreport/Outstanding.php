@@ -35,7 +35,7 @@ class Outstanding extends Authenticated
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		require_once APPPATH.'controllers/pdf/header.php';
 		$pdf->AddPage('L');
-		$view = $this->load->view('dailyreport/outstanding/index.php',['outstanding'=> $this->data()],true);
+		$view = $this->load->view('dailyreport/outstanding/index.php',['outstanding'=> $this->data(),'datetrans'=> $this->datetrans()],true);
 		$pdf->writeHTML($view);
 
 		$pdf->AddPage('L');
@@ -145,6 +145,18 @@ class Outstanding extends Authenticated
 		return $result;
 	}
 
+	public function datetrans(){
+		$date = date('Y-m-d');
+		$lastdate = $this->regular->getLastDateTransaction()->date;
+		if ($date > $lastdate){
+			$date = $lastdate;
+		}else{
+			$date= $date;
+		}
+
+		return date('d-m-Y',strtotime($date));
+	}
+
 	public function data()
 	{
 		// if($area = $this->input->get('area')){
@@ -166,6 +178,13 @@ class Outstanding extends Authenticated
 		// }
 
 		$date = date('Y-m-d');
+		$lastdate = $this->regular->getLastDateTransaction()->date;
+		if ($date > $lastdate){
+			$date = $lastdate;
+		}else{
+			$date= $date;
+		}
+		$nextdate = date('Y-m-d', strtotime('+1 days', strtotime($date)));
 		// $date = date('Y-m-d', strtotime('+1 days', strtotime($date)));
 		$units = $this->units->db->select('units.id, units.name, area')
 			->join('areas','areas.id = units.id_area')
