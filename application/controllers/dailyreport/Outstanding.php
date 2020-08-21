@@ -71,13 +71,13 @@ class Outstanding extends Authenticated
 	public function test(){
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		require_once APPPATH.'controllers/pdf/header.php';
-		// $pdf->AddPage('L');
-		// $view = $this->load->view('dailyreport/outstanding/index.php',['outstanding'=> $this->data()],true);
-		// $pdf->writeHTML($view);
-
 		$pdf->AddPage('L');
-		$view = $this->load->view('dailyreport/outstanding/dpd.php',['dpd'=> $this->data()],true);
+		$view = $this->load->view('dailyreport/outstanding/index.php',['outstanding'=> $this->data()],true);
 		$pdf->writeHTML($view);
+
+		// $pdf->AddPage('L');
+		// $view = $this->load->view('dailyreport/outstanding/dpd.php',['dpd'=> $this->data()],true);
+		// $pdf->writeHTML($view);
 
 		// $pdf->AddPage('L');
 		// $view = $this->load->view('dailyreport/outstanding/pencairan.php',['pencairan'	=> $this->pencairan()],true);
@@ -147,25 +147,25 @@ class Outstanding extends Authenticated
 
 	public function data()
 	{
-		if($area = $this->input->get('area')){
-			$this->units->db->where('id_area', $area);
-		}else if($this->session->userdata('user')->level == 'area'){
-			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
-		}
-		if($id_unit = $this->input->get('id_unit')){
-			$this->units->db->where('units.id', $id_unit);
-		}else if($code = $this->input->get('code')){
-			$this->units->db->where('code', zero_fill($code, 3));
-		}else if($this->session->userdata('user')->level == 'unit'){
-			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
-		}
-		if($this->input->get('date')){
-			$date = $this->input->get('date');
-		}else{
-			$date = date('Y-m-d');
-		}
+		// if($area = $this->input->get('area')){
+		// 	$this->units->db->where('id_area', $area);
+		// }else if($this->session->userdata('user')->level == 'area'){
+		// 	$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
+		// }
+		// if($id_unit = $this->input->get('id_unit')){
+		// 	$this->units->db->where('units.id', $id_unit);
+		// }else if($code = $this->input->get('code')){
+		// 	$this->units->db->where('code', zero_fill($code, 3));
+		// }else if($this->session->userdata('user')->level == 'unit'){
+		// 	$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
+		// }
+		// if($this->input->get('date')){
+		// 	$date = $this->input->get('date');
+		// }else{
+		// 	$date = date('Y-m-d');
+		// }
 
-		// $date = date('Y-m-d');
+		$date = date('Y-m-d');
 		// $date = date('Y-m-d', strtotime('+1 days', strtotime($date)));
 		$units = $this->units->db->select('units.id, units.name, area')
 			->join('areas','areas.id = units.id_area')

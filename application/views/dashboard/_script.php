@@ -1,6 +1,9 @@
 <script>
 //globals
 var cariForm;
+var pencairan;
+var pelunasan;
+var cariForm;
 <?php 
 if(date('H:i') > '20:00'){
 	$date =  date('Y-m-d');
@@ -14,6 +17,7 @@ if(date('H:i') > '20:00'){
 }
 
 ?>
+var datenow = "<?php echo $date;?>";
 var currdate = "<?php echo $_1lastdate;?>";
 var lastdate = "<?php echo $_2lastdate;?>";
 
@@ -165,21 +169,21 @@ function initCariForm(){
 	 var yesterday = 0;
 
     $.ajax({
-		url:"<?php echo base_url('api/dashboards/newoutstanding');?>",
+		url:"<?php echo base_url('api/dashboards/outstanding');?>",
 		type:"GET",
 		dataType:"JSON",
 		data:{
 			area:$('[name="area"]').val(),
-			date:currdate,
+			date:datenow,
 		},
 		success:function (response) {
 			$.each(response.data, function (index,unit) {
 				transaction.push({
 					y:unit.name,
-					a:unit.ost_today.up,
+					a:unit.total_outstanding.up,
 					b:unit.ost_yesterday.up
 				});
-				today += parseInt(unit.ost_today.up);
+				today += parseInt(unit.total_outstanding.up);
 				yesterday += parseInt(unit.ost_yesterday.up);
 			});
 		},
@@ -241,12 +245,12 @@ function totoutstanding() {
 			$('#form_outstanding').find('.date-yesterday').text(lastdate);
 		},
 	});
-
 }
 
 function pencairan() {
 	$('svg').remove();
     $('#graphPencairan').empty();
+	var totpencairan = 0;
 	var totalCurr = 0;
 	var totalLastPencairan = 0;
 
@@ -263,13 +267,15 @@ function pencairan() {
 				totalLastPencairan += unit.amount;
 				//totalLast = 0;
 			});
+			
 		},
 		complete:function () {
 			$('#form_pencairan').find('.date-yesterday').text(lastdate);
 			$('#form_pencairan').find('.total-yesterday').text(convertToRupiah(totalLastPencairan));
+			totpencairan = totalLastPencairan;
 		},
 	});
-
+	 pencairan = totpencairan;
 	//var currdate = '2020-07-20';
 	var transaction = [];
 	KTApp.block('#form_pencairan .kt-widget14', {});
@@ -291,8 +297,6 @@ function pencairan() {
 			});
 		},
 		complete:function () {
-			//$('#form_outstanding').find('.total-today').text('Rp. '+convertToRupiah(today));
-
 			$('#form_pencairan').find('.date-today').text(currdate);
 			$('#form_pencairan').find('.total-today').text(convertToRupiah(totalCurr));
 			var data = transaction,
@@ -820,11 +824,11 @@ jQuery(document).ready(function() {
 	//sample();
 	disburse();
 	outstanding();
-	totoutstanding();
-	pencairan();
 	dpd();
-	saldo();
+	pencairan();
 	pelunasan();
+	totoutstanding();
+	saldo();
 	pendapatan();
 	pengeluaran();
 });

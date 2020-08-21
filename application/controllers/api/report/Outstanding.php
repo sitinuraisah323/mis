@@ -35,8 +35,18 @@ class Outstanding extends ApiController
 			->join('areas','areas.id = units.id_area')
 			->get('units')->result();
 		foreach ($units as $unit){
-			 $unit->noa = $this->regular->getOstYesterday_($unit->id, $date)->noa;			
-			 $unit->up = $this->regular->getOstYesterday_($unit->id, $date)->up;			
+			//  $unit->noa = $this->regular->getOstYesterday_($unit->id, $date)->noa;			
+			//  $unit->up = $this->regular->getOstYesterday_($unit->id, $date)->up;			 
+			 $unit->ost_yesterday = $this->regular->getOstYesterday($unit->id, $date);
+			 $unit->credit_today = $this->regular->getCreditToday($unit->id, $date);
+			 $unit->repayment_today = $this->regular->getRepaymentToday($unit->id, $date);
+			 $totalNoa = (int) $unit->ost_yesterday->noa + $unit->credit_today->noa - $unit->repayment_today->noa;
+			 $totalUp = (int) $unit->ost_yesterday->up + $unit->credit_today->up - $unit->repayment_today->up;
+			 $unit->total_outstanding = (object) array(
+				'noa'	=> $totalNoa,
+				'up'	=> $totalUp,
+				'tiket'	=> round($totalUp > 0 ? $totalUp /$totalNoa : 0)
+			 );
 		}
         $this->sendMessage($units, 'Get Data Outstanding');
         
