@@ -76,7 +76,7 @@ $this->load->view('temp/MenuBar.php');
             </table> -->
             <!--end: Datatable -->
 
-            <form id="form_bukukas" class="form-horizontal" method="post" action="<?php echo base_url("report/regularpawns/export"); ?>">
+            <form id="form_bukukas" class="form-horizontal" method="post" action="<?php echo base_url("datamaster/logammulya/export"); ?>">
             <div class="kt-portlet__body">
             <div class="col-md-12" >
                 <div class="form-group row">
@@ -148,6 +148,7 @@ $this->load->view('temp/MenuBar.php');
 									<th class="text-left" colspan="<?php echo count($grams);?>">Order(Gram)</th>
 									<th rowspan="2">Total</th>
 									<th rowspan="2">aksi</th>
+									<th rowspan="2"></th>
 						    	</tr>
 								<tr>
 									<?php foreach ($grams as $gram):?>
