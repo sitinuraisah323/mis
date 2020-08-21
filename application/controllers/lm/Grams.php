@@ -53,11 +53,19 @@ class Grams extends Authenticated
 			->like('code', 'LM/'.date('ym/'))
 			->get()->row();
 		$code = 'LM/'.date('ym/').$getCode->no;
+
+		if($this->session->userdata('user')->level == 'unit'){
+			$this->employees->db->where('units.id', $this->session->userdata('user')->id_unit);
+		}else if($this->session->userdata('user')->level == 'area'){
+			$this->employees->db->where('units.id_area', $this->session->userdata('user')->id_area);
+		}
 		$this->employees->db
 			->select('units.name as unit')
 			->order_by('employees.fullname','asc')
 			->join('units','units.id = employees.id_unit');
 		$employees = $this->employees->all();
+
+
 		$this->load->view("lm/gram/purchase",array(
 			'employees'	=> $employees,
 			'code'	=> $code
