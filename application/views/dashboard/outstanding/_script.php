@@ -103,6 +103,7 @@ function initCariForm(){
 		var area = $('[name="area"]').val();
 		var code = $('[name="id_unit"]').val();
 		var dateStart = $('[name="date"]').val();
+		var lasttrans = "";
         KTApp.block('#form_bukukas .kt-portlet__body', {});
 		$.ajax({
 			type : 'GET',
@@ -159,6 +160,7 @@ function initCariForm(){
 					html += '<td class="text-right">'+convertToRupiah(data.total_disburse.tiket.toFixed(2))+'</td>';
 					html += '</tr>'
 					int++;
+					lasttrans = data.lasttrans;
 				});
 
 				$('.table').find('tbody').find('tr').remove();
@@ -191,6 +193,10 @@ function initCariForm(){
 				KTApp.unblockPage();
 			},
 			complete:function () {
+				var date =  moment(lasttrans).format('DD-MM-YYYY');
+				document.getElementById("dateos").innerHTML=date;
+				document.getElementById("datecredit").innerHTML=date;
+				document.getElementById("datecicilan").innerHTML=date;
 				KTApp.unblock('#form_bukukas .kt-portlet__body', {});
 			}
 		});

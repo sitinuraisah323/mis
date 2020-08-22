@@ -101,6 +101,7 @@ function initCariForm(){
         $('.rowappend').remove();
         var area = $('[name="area"]').val();
 		var date = $('[name="date"]').val();
+		var lastdate ="";
         KTApp.block('#form_bukukas .kt-portlet__body', {});
 		$.ajax({
 			type : 'GET',
@@ -125,6 +126,7 @@ function initCariForm(){
 						no++;
                         total +=data.total_outstanding.up;
                         totNoa +=data.total_outstanding.noa;
+                        lastdate = data.lastdate;
 					});
                     template += '<tr class="rowappend">';
                     template +='<td colspan="3" class="text-right"><b>Total</b></td>';                    
@@ -139,6 +141,8 @@ function initCariForm(){
 				KTApp.unblockPage();
 			},
 			complete:function () {
+                var date =  moment(lastdate).format('DD-MM-YYYY');
+				document.getElementById("dateos").innerHTML="(Last Date Transaction in " + date + ")";
 				KTApp.unblock('#form_bukukas .kt-portlet__body', {});
 			}
 		});

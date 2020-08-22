@@ -137,7 +137,7 @@ $this->load->view('temp/MenuBar.php');
 									<th class="text-left">Unit</th>
 									<th class='text-left'>Area</th>
 									<th class='text-center'>Noa</th>
-									<th class='text-right'>Outstanding</th>
+									<th class='text-right'>Outstanding <div id="dateos"></div></th>
 									<th></th>
 						    	</tr>
 						  	</thead>
