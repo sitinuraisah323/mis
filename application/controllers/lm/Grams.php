@@ -37,6 +37,8 @@ class Grams extends Authenticated
 				if($prices){
 					$gram->price_perpcs = $prices->price_perpcs;
 					$gram->price_buyback_perpcs = $prices->price_buyback_perpcs;
+					$gram->price_buyback_pergram = $prices->price_buyback_pergram;
+					$gram->price_pergram= $prices->price_pergram;
 				}
 			}
 		}

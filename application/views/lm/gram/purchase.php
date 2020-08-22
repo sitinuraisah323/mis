@@ -108,6 +108,7 @@ $this->load->view('temp/MenuBar.php');
 								<th>Harga Perpcs</th>
 								<th>Amount</th>
 								<th>Total</th>
+								<th></th>
 							</tr>
 						</thead>
 						<tbody data-append="choice">
@@ -120,6 +121,7 @@ $this->load->view('temp/MenuBar.php');
 								</td>
 								<td><input type="text" value="0" class="form-control amount"></td>
 								<td><input type="hidden" class="total"><span data-post="total">0</span></td>
+								<td><button type="button" class="btn btn-default btn_delete"><i class="fas fa-trash"></i></button></td>
 							</tr>
 						</tbody>
 						<tfoot>

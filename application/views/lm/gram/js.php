@@ -135,14 +135,23 @@
 	$('.form-input').on('submit', function (e) {
 		e.preventDefault();
 		const data = $('.form-input').serialize();
-		$.ajax({
-			url:"<?php echo base_url();?>/api/lm/transactions/insert",
-			data:data,
-			type:"POST",
-			success:function(response){
-				location.href = '<?php echo base_url();?>/lm/transactions';
-			}
-		})
+		if(document.querySelector('[name="total"]').value == 0){
+			alert('pilih lm ')
+		}else{
+			$.ajax({
+				url:"<?php echo base_url();?>/api/lm/transactions/insert",
+				data:data,
+				type:"POST",
+				success:function(response){
+					location.href = '<?php echo base_url();?>/lm/transactions';
+				}
+			});
+		}
+	})
+
+	$(document).on('click', '.btn_delete', function () {
+		this.closest('td').closest('tr').remove();
+		(new Store()).calculate();
 	})
 
 	document.querySelector('[name="tenor"]').addEventListener('change', (new Store()).simulation);
