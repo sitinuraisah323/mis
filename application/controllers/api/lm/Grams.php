@@ -22,6 +22,8 @@ class Grams extends ApiController
 				if($prices){
 					$gram->price_perpcs = $prices->price_perpcs;
 					$gram->price_buyback_perpcs = $prices->price_buyback_perpcs;
+					$gram->price_pergram = $prices->price_pergram;
+					$gram->price_buyback_pergram = $prices->price_buyback_pergram;
 				}
 			}
 		}
@@ -34,48 +36,43 @@ class Grams extends ApiController
 
 			$this->load->library('form_validation');
 
-			$this->form_validation->set_rules('name', 'Nama', 'required');
-			$this->form_validation->set_rules('id_parent', 'Menu Utama', 'required');
+			$this->form_validation->set_rules('weight', 'Berat', 'required');
+			$this->form_validation->set_rules('price_pergram', 'Harga Pergram', 'required');
+			$this->form_validation->set_rules('price_buyback_pergram', 'Harga Pergram', 'required');
+			$this->form_validation->set_rules('price_perpcs', 'Harga Perpcs', 'required');
+			$this->form_validation->set_rules('price_buyback_perpcs', 'Harga Perpcs', 'required');
 
 
 			if ($this->form_validation->run() == FALSE)
 			{
-				echo json_encode(array(
-					'data'	=> 	false,
-					'status'	=> false,
-					'message'	=> validation_errors()
-				));
+				return $this->sendMessage(false, validation_errors());
 			}
 			else
 			{
 				$data = array(
-					'id_parent'	=> $post['id_parent'],
-					'name'	=> $post['name'],
+					'weight'	=> $post['weight'],
 					'user_create'	=> $this->session->userdata('user')->id,
 					'user_update'	=> $this->session->userdata('user')->id,
 				);
-				if($this->menu->insert($data)){
-					$this->menu->buildHirarki();
-					echo json_encode(array(
-						'data'	=> 	true,
-						'status'	=> true,
-						'message'	=> 'Successfull Insert Data Menu'
+				if($this->model->insert($data)){
+					$this->model->db->order_by('id','DESC');
+					$data = $this->model->all();
+					$id = $data[0]->id;
+					$this->prices->insert(array(
+						'id_lm_gram'	=> $id,
+						'price_pergram'	=> $post['price_pergram'],
+						'price_buyback_pergram'	=> $post['price_buyback_pergram'],
+						'price_perpcs'	=> $post['price_perpcs'],
+						'price_buyback_perpcs'	=> $post['price_buyback_perpcs'],
 					));
+					return $this->sendMessage(true,'Successfull Insert Data Menu');
 				}else{
-					echo json_encode(array(
-						'data'	=> 	false,
-						'status'	=> false,
-						'message'	=> 'Failed Insert Data Menu')
-					);
+					return $this->sendMessage(false,'Failed Insert Data Menu');
 				}
 
 			}
 		}else{
-			echo json_encode(array(
-				'data'	=> 	false,
-				'status'	=> 	false,
-				'message'	=> 'Request Error Should Method POst'
-			));
+			return $this->sendMessage(false,'Request Error Should Method POst');
 		}
 
 	}
@@ -85,84 +82,72 @@ class Grams extends ApiController
 		if($post = $this->input->post()){
 
 			$this->load->library('form_validation');
-			$this->form_validation->set_rules('name', 'Nama', 'required');
-			$this->form_validation->set_rules('id_parent', 'Menu Utama', 'required');
-			$this->form_validation->set_rules('id', 'Id', 'required');
+			$this->form_validation->set_rules('weight', 'Berat', 'required');
+			$this->form_validation->set_rules('price_pergram', 'Harga Pergram', 'required');
+			$this->form_validation->set_rules('price_buyback_pergram', 'Harga Pergram', 'required');
+			$this->form_validation->set_rules('price_perpcs', 'Harga Perpcs', 'required');
+			$this->form_validation->set_rules('price_buyback_perpcs', 'Harga Perpcs', 'required');
 
 
 
 			if ($this->form_validation->run() == FALSE)
 			{
-				echo json_encode(array(
-					'data'	=> 	false,
-					'status'	=> false,
-					'message'	=> 'Failed Insert Data Level'
-				));
+				return $this->sendMessage(false, validation_errors());
 			}
 			else
 			{
 				$id = $post['id'];
 				$data = array(
-					'name'	=> $post['name'],
-					'id_parent'	=> $post['id_parent'],
+					'weight'	=> $post['weight'],
+					'user_create'	=> $this->session->userdata('user')->id,
+					'user_update'	=> $this->session->userdata('user')->id,
 				);
-				if($this->menu->update($data, $id)){
-					$this->menu->buildHirarki();
-					echo json_encode(array(
-						'data'	=> 	true,
-						'status'	=> true,
-						'message'	=> 'Successfull Update Data Level'
+				if($this->model->update($data, $id)){
+					$this->prices->insert(array(
+						'id_lm_gram'	=> $id,
+						'price_pergram'	=> $post['price_pergram'],
+						'price_buyback_pergram'	=> $post['price_buyback_pergram'],
+						'price_perpcs'	=> $post['price_perpcs'],
+						'price_buyback_perpcs'	=> $post['price_buyback_perpcs'],
 					));
+					return $this->sendMessage(true,'Successfully update',500 );
 				}else{
-					echo json_encode(array(
-							'data'	=> 	false,
-							'status'	=> false,
-							'message'	=> 'Failed Update Data Level')
-					);
+					return $this->sendMessage(false,'Failed Updated',500 );
 				}
 
 			}
 		}else{
-			echo json_encode(array(
-				'data'	=> 	false,
-				'status'	=> false,
-				'message'	=> 'Request Error Should Method POst'
-			));
+			return $this->sendMessage(false,'Request Should Post',500 );
 		}
 
 	}
 
 	public function show($id)
 	{
-		if($data = $this->menu->find($id)){
-			echo json_encode(array(
-				'data'	=> 	$data,
-				'status'	=> true,
-				'message'	=> 'Successfully Delete Data Level'
+		if($data = $this->model->find($id)){
+			$this->prices->db->order_by('lm_grams_prices.id','desc');
+			$prices = $this->prices->find(array(
+				'id_lm_gram'	=> $data->id
 			));
+			if($prices){
+				$data->price_perpcs = $prices->price_perpcs;
+				$data->price_buyback_perpcs = $prices->price_buyback_perpcs;
+				$data->price_pergram = $prices->price_pergram;
+				$data->price_buyback_pergram = $prices->price_buyback_pergram;
+			}
+			return $this->sendMessage($data, 'successfully show gram' ,200);
 		}else{
-			echo json_encode(array(
-				'data'	=> 	false,
-				'status'	=> 	false,
-				'message'	=> $id. ' Not Found'
-			));
+			return  $this->sendMessage(false, 'message'. $id.' Not Found', 500);
 		}
 	}
-	public function delete($id)
+	public function delete()
 	{
-		if($this->menu->delete($id)){
-			$this->menu->buildHirarki();
-			echo json_encode(array(
-				'data'	=> 	true,
-				'status'	=> true,
-				'message'	=> 'Successfully Delete Data Level'
-			));
+		$id = $this->input->get('id');
+		if($this->model->delete($id)){
+
+			return $this->sendMessage(true, 'Successfully delete gram',200);
 		}else{
-			echo json_encode(array(
-				'data'	=> 	false,
-				'status'	=> false,
-				'message'	=> 'Request Error Should Method Post'
-			));
+			return $this->sendMessage(false,'Data Not Found',500 );
 		}
 	}
 

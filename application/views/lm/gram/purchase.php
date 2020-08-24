@@ -91,7 +91,7 @@ $this->load->view('temp/MenuBar.php');
 			<div class="row">
 				<div class="col-md-12">
 					<div class="form-group">
-						<label for="lm">LM</label>
+						<label for="lm">Pilih Logam Mulya</label>
 						<select class="form-control search-purchase">
 							<option value="">Pilih Lm</option>
 

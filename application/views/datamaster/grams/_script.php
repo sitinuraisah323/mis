@@ -25,7 +25,7 @@ function initDTEvents(){
                     dataType : "json",
                     success : function(data,status){
                         KTApp.unblockPage();
-                        if(data.status == true){
+                        if(data.data !== false){
                             datatable.reload();
                             AlertUtil.showSuccess(data.message,5000);
                         }else{
@@ -46,13 +46,12 @@ function initDTEvents(){
         KTApp.blockPage();
         $.ajax({
             type : 'GET',
-            url : "<?php echo base_url("api/lm/grams/get_byid"); ?>",
-            data : {id:targetId},
+            url : "<?php echo base_url("api/lm/grams/show"); ?>/"+targetId,
             dataType : "json",
             success : function(response,status){
                 KTApp.unblockPage();
                 console.log(response.data);
-                if(response.status == true){
+                if(response.data !== false){
                     //populate form
                     editForm.populateForm(response.data);
                     $('#modal_edit').modal('show');
@@ -136,7 +135,7 @@ function initDataTable(){
 				  textAlign: 'center',
 			  },
 			  {
-				  field: 'price_buyback_pepcs',
+				  field: 'price_buyback_perpcs',
 				  title: 'Harga Buyback Perpicis',
 				  width:60,
 				  textAlign: 'center',
@@ -257,24 +256,39 @@ function initCreateForm(){
     });
     
     //events
-    $("#btn_add_submit").on("click",function(){
+    $(document).on("submit",'.form',function(e){
+	e.preventDefault();
       var isValid = $( "#form_add" ).valid();
+      var id = $('[name="id"]').val();
+      if(id){
+		  var url = "<?php echo base_url("api/lm/grams/update"); ?>";
+	  }else{
+      	var url = "<?php echo base_url("api/lm/grams/insert"); ?>";
+	  }
       if(isValid){
         KTApp.block('#modal_add .modal-content', {});
         $.ajax({
             type : 'POST',
-            url : "<?php echo base_url("api/lm/grams/insert"); ?>",
-            data : $('#form_add').serialize(),
+            url : url,
+            data : new FormData(this),
+			cache: false,
+			contentType: false,
+			processData: false,
             dataType : "json",
             success : function(data,status){
                 KTApp.unblock('#modal_add .modal-content');
-                if(data.status == true){
+				console.log(data.data);
+                if(data.data !== false){
                     datatable.reload();
-                    $('#modal_add').modal('hide');
+					$('#modal_add').modal('hide');
+					$('#modal_edit').modal('hide');
                     AlertUtil.showSuccess(data.message,5000);
                 }else{
                     AlertUtil.showFailedDialogAdd(data.message);
-                }                
+                }
+				$('#modal_add').on('hidden.bs.modal', function () {
+					validator.resetForm();
+				})
             },
             error: function (jqXHR, textStatus, errorThrown){
                 KTApp.unblock('#modal_add .modal-content');
@@ -282,10 +296,6 @@ function initCreateForm(){
             }
         });  
       }
-    })
-
-    $('#modal_add').on('hidden.bs.modal', function () {
-       validator.resetForm();
     })
 
     return {
@@ -345,10 +355,12 @@ function initEditForm(){
     })
 
     var populateForm = function(groupObject){
-        $("#edit_unit_id").val(groupObject.id);
-        $("#edit_unit_name").val(groupObject.name);
-        $("#edit_code_unit").val(groupObject.code);
-        $("#edit_area").val(groupObject.id_area);
+        $('[name="id"]').val(groupObject.id);
+		$('[name="price_perpcs"]').val(groupObject.price_perpcs);
+		$('[name="weight"]').val(groupObject.weight);
+        $('[name="price_pergram"]').val(groupObject.price_pergram);
+		$('[name="price_buyback_perpcs"]').val(groupObject.price_buyback_perpcs);
+		$('[name="price_buyback_pergram"]').val(groupObject.price_buyback_pergram);
         $("#edit_area").trigger('change');
     }
     

@@ -114,6 +114,11 @@ function initCariForm(){
 			data:{area:area,id_unit:unit,statusrpt:statusrpt,nasabah:nasabah,dateStart:dateStart,dateEnd:dateEnd,permit:permit},
 			success : function(response,status){
 				var html = '';
+				const logs = [
+					{item:"APPROVED_BY_AREA",value:"Approved"},
+					{item:"DECLINED",value:"Declined"},
+					{item:"ON_PROGRESS",value:"On Progress"}
+				];
 				response.data.forEach(data=>{
 					const { name, unit, position,grams, last_log, method,tenor, total,code } = data;
 					html += `<tr>`;
@@ -124,6 +129,22 @@ function initCariForm(){
 					grams.forEach(weight=>html += `<td>${weight}</td>`);
 					html += `<td>${convertToRupiah(total)}</td>`
 					html += `<td>${last_log}</td>`
+					<?php if($this->session->userdata('user')->level === 'area'):?>
+						if(last_log === 'ON_PROGRESS'){
+							html += `<td><select name="change-status" data-code="${code}" class="form-control" onchange="change(this)">`;
+							logs.forEach(log=>{
+								const {item,value}	= log;
+								if(item == last_log){
+									html += `<option value="${item}" selected >${value}</option>`;
+								}else{
+									html += `<option value="${item}">${value}</option>`;
+								}
+							})
+							html +=		`</select></td>`;
+						}else{
+							html += `<td></td>`;
+						}
+					<?php endif;?>
 					html += `</tr>`;
 				})
 				$('tbody').find('tr').remove();
@@ -249,6 +270,22 @@ jQuery(document).ready(function() {
 var type = $('[name="area"]').attr('type');
 if(type == 'hidden'){
     $('[name="area"]').trigger('change');
+}
+
+function change(element) {
+	const data = {
+		status:element.value,
+		code:element.getAttribute('data-code')
+	}
+	$.ajax({
+		type : 'POST',
+		url : "<?php echo base_url("api/lm/transactions/change"); ?>",
+		dataType : "json",
+		data:data,
+		success : function(response,status){
+			AlertUtil.showSuccess(response.message,5000);
+		},
+	});
 }
 
 </script>

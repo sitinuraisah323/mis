@@ -145,4 +145,25 @@ class Logammulya extends Authenticated
 		// }
 	}
 
+	public function invoice($id)
+	{
+		$this->model->db
+			->select('employees.fullname, position')
+			->join('employees','employees.id = lm_transactions.id_employee');
+		$transaction = $this->model->find(array(
+			'lm_transactions.id'	=> $id
+		));
+
+		$this->modelgrams->db
+			->select('lm_grams.weight')
+			->join('lm_grams','lm_grams.id = lm_transactions_grams.id_lm_gram');
+		$transactionGrams = $this->modelgrams->findWhere(array(
+			'lm_transactions_grams.id_lm_transaction'	=> $id
+		));
+		$this->load->view('datamaster/logammulya/invoice', array(
+			'transaction'	=> $transaction,
+			'items'	=> $transactionGrams
+		));
+	}
+
 }
