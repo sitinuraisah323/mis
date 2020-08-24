@@ -38,8 +38,8 @@ $this->load->view('temp/MenuBar.php');
                 </div>
                 <div class="kt-portlet__head-toolbar">
                     <div class="kt-portlet__head-wrapper">
-
-                    </div>
+						<a href="<?php echo base_url('lm/grams/purchase');?>" class="btn btn-info">Add</a>
+					</div>
                 </div>
             </div>
 
@@ -120,18 +120,13 @@ $this->load->view('temp/MenuBar.php');
                             <option value="ON_PROGRESS">On Progress</option>
                         </select>
                     </div>
-<!--					<div class="col-lg-2">-->
-<!--						<label class="col-form-label">Tanggal</label>-->
-<!--						<input type="date" class="form-control" name="date" value="">-->
-<!--					</div>-->
                     <div class="col-lg-2">
                         <label class="col-form-label">&nbsp</label>
                         <div class="position-relative">
                         <button type="button" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>
                          <button type="submit" class="btn btn-success btn-icon" name="btnexport" id="btnexport" onclick="export_xls()"><i class="fa fa-file-excel"></i></button>
-<!--                        <button type="submit" class="btn btn-danger btn-icon" name="btnexport_csv" id="btnexport_csv"><i class="fa fa-file-excel"></i></button>-->
-                        </div>
-                    </div>                  
+                     </div>
+                    </div>
 				</div>
 
             </div>
@@ -148,6 +143,9 @@ $this->load->view('temp/MenuBar.php');
 									<th colspan="<?php echo count($grams);?>">Order(Gram)</th>
 									<th rowspan="2" class="text-right">Total</th>
 									<th rowspan="2">Status</th>
+									<?php if($this->session->userdata('user')->level == 'area'):?>
+									<th rowspan="2">Aksi</th>
+									<?php endif;?>
 						    	</tr>
 								<tr>
 									<?php foreach ($grams as $gram):?>

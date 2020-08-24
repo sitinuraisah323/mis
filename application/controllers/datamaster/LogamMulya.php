@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once APPPATH.'controllers/Middleware/Authenticated.php';
-class LogamMulya extends Authenticated
+class Logammulya extends Authenticated
 {
 	/**
 	 * @var string
@@ -143,6 +143,27 @@ class LogamMulya extends Authenticated
 		// if($post = $this->input->post()){
 		// 	echo $post['area'];
 		// }
+	}
+
+	public function invoice($id)
+	{
+		$this->model->db
+			->select('employees.fullname, position')
+			->join('employees','employees.id = lm_transactions.id_employee');
+		$transaction = $this->model->find(array(
+			'lm_transactions.id'	=> $id
+		));
+
+		$this->modelgrams->db
+			->select('lm_grams.weight')
+			->join('lm_grams','lm_grams.id = lm_transactions_grams.id_lm_gram');
+		$transactionGrams = $this->modelgrams->findWhere(array(
+			'lm_transactions_grams.id_lm_transaction'	=> $id
+		));
+		$this->load->view('datamaster/logammulya/invoice', array(
+			'transaction'	=> $transaction,
+			'items'	=> $transactionGrams
+		));
 	}
 
 }

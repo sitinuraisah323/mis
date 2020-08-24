@@ -109,6 +109,7 @@ function initCariForm(){
 			success : function(response,status){
 				var html = '';
 				const logs = [
+					{item:"APPROVED_BY_AREa",value:"Wait Approved Pusat"},
 					{item:"APPROVED",value:"Approved"},
 					{item:"DECLINED",value:"Declined"},
 					{item:"ON_PROGRESS",value:"On Progress"}
@@ -122,6 +123,7 @@ function initCariForm(){
 					html += `<td>${buildTenor(tenor, method)}</td>`;
 					grams.forEach(weight=>html += `<td>${weight}</td>`);
 					html += `<td>${convertToRupiah(total)}</td>`
+					html += `<td><a href="<?php echo base_url('datamaster/logammulya/invoice/');?>/${id}"><i class="flaticon-eye"></i> ${code}</a></td>`
 					html += `<td><select name="change-status" data-code="${code}" class="form-control" onchange="change(this)">`;
 					logs.forEach(log=>{
 						const {item,value}	= log;
@@ -132,7 +134,8 @@ function initCariForm(){
 						}
 					})
 					html +=		`</select></td>`;
-					html += `<td><button type="button" onclick="deleted(${id})" class="btn btn-sm btn-clean btn-icon btn-icon-md btn_delete"><i class="flaticon2-trash" style="cursor:pointer;"></button></td>`;
+					html += `<td>
+<button type="button" onclick="deleted(${id})" class="btn btn-sm btn-clean btn-icon btn-icon-md btn_delete"><i class="flaticon2-trash" style="cursor:pointer;"></button></td>`;
 					html += `</tr>`;
 				})
 				$('tbody').find('tr').remove();
