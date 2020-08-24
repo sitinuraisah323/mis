@@ -194,7 +194,10 @@ function initCariForm(){
 			},
 			complete:function () {
 				var date =  moment(lasttrans).format('DD-MM-YYYY');
-				document.getElementById("dateos").innerHTML=date;
+				var res = new Date(lasttrans);
+				var kemarin = res.setDate(res.getDate()-1);
+				var kemarin =  moment(kemarin).format('DD-MM-YYYY');
+				document.getElementById("dateos").innerHTML=kemarin;
 				document.getElementById("datecredit").innerHTML=date;
 				document.getElementById("datecicilan").innerHTML=date;
 				KTApp.unblock('#form_bukukas .kt-portlet__body', {});

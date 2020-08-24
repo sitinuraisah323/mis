@@ -136,6 +136,7 @@ function initCariForm(){
                     var amountBalanceFinal = 0;
                     var amountGap = 0;
                     var amountBalanceFirst = 0;
+                    var osunit = 0;
 					$.each(response.data, function (index, data) {
 						template += "<tr class='rowappend'>";
 						template += "<td class='text-center'>"+no+"</td>";
@@ -156,11 +157,13 @@ function initCariForm(){
                         amountBalanceFinal += parseInt(data.amount_balance_final);
                         amountGap += parseInt(data.amount_gap);
                         amountBalanceFirst += parseInt(data.amount_balance_first);
+                        osunit += parseInt(data.os_unit);
 					});
                     $('.kt-section__content table').find('tfoot').find('.saldoawal').text(convertToRupiah(amountBalanceFirst));
                     $('.kt-section__content table').find('tfoot').find('.penerimaan').text(convertToRupiah(amountIn));
                     $('.kt-section__content table').find('tfoot').find('.pengeluaran').text(convertToRupiah(amountOut));
                     $('.kt-section__content table').find('tfoot').find('.saldoakhir').text(convertToRupiah(amountBalanceFinal));
+                    $('.kt-section__content table').find('tfoot').find('.osunit').text(convertToRupiah(osunit));
                     $('.kt-section__content table').find('tfoot').find('.selisih').text(convertToRupiah(amountGap));
 					$('.kt-section__content table').append(template);
 				}

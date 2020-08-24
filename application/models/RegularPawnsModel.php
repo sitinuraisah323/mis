@@ -95,6 +95,7 @@ class RegularpawnsModel extends Master
 				$this->db->where('MONTH(date_sbk)',$month);
 			}
 		}
+		//$date =22;$month =8;$year =2020;
 		$dataMortage = $this->db->select('sum(amount_loan) as up, count(*) as noa')->from('units_mortages')
 			->where('id_unit', $idUnit)->get()->row();
 		$noaMortages = (int)$dataMortage->noa;
@@ -111,7 +112,7 @@ class RegularpawnsModel extends Master
 				$this->db->where('MONTH(date_sbk)',$month);
 			}
 		}
-
+		//$date =22;$month =8;$year =2020;
 		$dataRegular = $this->db->select('sum(amount) as up, count(*) as noa')->from('units_regularpawns')
 			->where('id_unit', $idUnit)->get()->row();
 		$noaRegular = (int)$dataRegular->noa;

@@ -125,7 +125,7 @@ $this->load->view('temp/MenuBar.php');
 										<th>Area</th>
 										<th class="text-center">Open</th>
 										<th class="text-center">Ijin Ojk</th>
-										<th colspan="2" class="text-center">Ost Kemarin(<div id="dateos"></div>)</th>
+										<th colspan="2" class="text-center">Ost Sebelumnya(<div id="dateos"></div>)</th>
 										<th colspan="2" class="text-center">Kredit(<div id="datecredit"></div>)</th>
 										<th colspan="2" class="text-center">Pelunasan & Cicilan(<div id="datecicilan"></div>)</th>
 										<th colspan="3" class="text-center">Total Outstanding</th>

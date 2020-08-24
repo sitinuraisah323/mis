@@ -41,8 +41,9 @@ $this->load->view('temp/MenuBar.php');
      <div class="kt-container  kt-grid__item kt-grid__item--fluid">
         <div class="row">
             
-                    
             <div class="col-xl-6 col-lg-6">
+            <input type="hidden" name="disbursmax" id="disbursmax">
+
                 <!--begin:: Widgets-->
                 <form id="form_disburse" class="form-horizontal">
                 <div class="kt-portlet kt-portlet--height-fluid">
@@ -79,6 +80,63 @@ $this->load->view('temp/MenuBar.php');
                             <!-- <div class="kt-spinner kt-spinner--sm kt-spinner--brand"></div> -->
                             <div id="graphDisburse" style="height:300px;"></div>                           
                         </div>
+                        <hr/>
+                        <!--begin::Accordion-->
+                        <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
+                            <div class="card">
+                                <div class="card-header" id="headingOne3Disburse">
+                                    <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseOne3Disburse" aria-expanded="true" aria-controls="collapseOne3Disburse">
+                                        Jawa Barat
+                                    </div>
+                                </div>
+                                <div id="collapseOne3Disburse" class="collapse" aria-labelledby="headingOne3Disburse" data-parent="#accordionExample3">
+                                    <div class="card-body">
+                                        <table class="table" id="tblDisburseJabar">                                       
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header" id="headingTwo3Disburse">
+                                    <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseTwo3Disburse" aria-expanded="false" aria-controls="collapseTwo3Disburse">
+                                        Jawa Timur
+                                    </div>
+                                </div>
+                                <div id="collapseTwo3Disburse" class="collapse" aria-labelledby="headingTwo3Disburse" data-parent="#accordionExample3">
+                                    <div class="card-body">
+                                        <table class="table" id="tblDisburseJatim">                                        
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header" id="headingThree3Disburse">
+                                    <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseThree3Disburse" aria-expanded="false" aria-controls="collapseThree3Disburse">
+                                        NTB
+                                    </div>
+                                </div>
+                                <div id="collapseThree3Disburse" class="collapse" aria-labelledby="headingThree3Disburse" data-parent="#accordionExample3">
+                                    <div class="card-body">
+                                        <table class="table" id="tblDisburseNTB">                                        
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header" id="headingFour4Disburse">
+                                    <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseFour4Disburse" aria-expanded="false" aria-controls="collapseFour4Disburse">
+                                        NTT
+                                    </div>
+                                </div>
+                                <div id="collapseFour4Disburse" class="collapse" aria-labelledby="headingFour4Disburse" data-parent="#accordionExample3">
+                                    <div class="card-body">
+                                        <table class="table" id="tblDisburseNTT">                                        
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--end::Accordion--> 
                     </div>
                 </div>	        
                 </form>	        
@@ -121,6 +179,63 @@ $this->load->view('temp/MenuBar.php');
                             <!-- <div class="kt-spinner kt-spinner--sm kt-spinner--brand"></div> -->
                             <div id="graphOutstanding" style="height:300px;"></div>                           
                         </div>
+                        <hr/>
+                        <!--begin::Accordion-->
+                        <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
+                            <div class="card">
+                                <div class="card-header" id="headingOne3">
+                                    <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseOne3" aria-expanded="true" aria-controls="collapseOne3">
+                                        Jawa Barat
+                                    </div>
+                                </div>
+                                <div id="collapseOne3" class="collapse" aria-labelledby="headingOne3" data-parent="#accordionExample3">
+                                    <div class="card-body">
+                                        <table class="table" id="tblOutJabar">                                       
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header" id="headingTwo3">
+                                    <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseTwo3" aria-expanded="false" aria-controls="collapseTwo3">
+                                        Jawa Timur
+                                    </div>
+                                </div>
+                                <div id="collapseTwo3" class="collapse" aria-labelledby="headingTwo3" data-parent="#accordionExample3">
+                                    <div class="card-body">
+                                        <table class="table" id="tblOutJatim">                                        
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header" id="headingThree3">
+                                    <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseThree3" aria-expanded="false" aria-controls="collapseThree3">
+                                        NTB
+                                    </div>
+                                </div>
+                                <div id="collapseThree3" class="collapse" aria-labelledby="headingThree3" data-parent="#accordionExample3">
+                                    <div class="card-body">
+                                        <table class="table" id="tblOutNTB">                                       
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header" id="headingFour4">
+                                    <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseFour4" aria-expanded="false" aria-controls="collapseFour4">
+                                        NTT
+                                    </div>
+                                </div>
+                                <div id="collapseFour4" class="collapse" aria-labelledby="headingFour4" data-parent="#accordionExample3">
+                                    <div class="card-body">
+                                        <table class="table" id="tblOutNTT">                                        
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--end::Accordion--> 
                     </div>
                 </div>	        
                 </form>	        
