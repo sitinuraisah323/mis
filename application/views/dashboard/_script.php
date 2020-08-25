@@ -232,9 +232,9 @@ function totoutstanding() {
 				{
 					percentage = (parseInt(unit.total_outstanding.up)/parseInt(unit.max))*100;
 					templateJBR += "<tr class='rowappendjabar'>";
-					templateJBR += "<td class='text-right' width='25%'>"+unit.name+"</td>";
+					templateJBR += "<td class='text-right' width='25%'><b>"+unit.name+"</b></td>";
 					templateJBR += "<td class='text-left'  width='65%'><div class='progress progress-sm'><div class='progress-bar kt-bg-primary' role='progressbar' style='width: "+percentage+"%;' aria-valuenow='"+unit.total_outstanding.up+"' aria-valuemin='"+unit.max+"' aria-valuemax=''></div></div></td>";
-					templateJBR += "<td class='text-right' width='10%'>"+convertToRupiah(unit.total_outstanding.up)+"</td>";
+					templateJBR += "<td class='text-right' width='10%'><b>"+convertToRupiah(unit.total_outstanding.up)+"</b></td>";
 					templateJBR += '</tr>';
 				}
 
@@ -242,9 +242,9 @@ function totoutstanding() {
 				{
 					percentage = (parseInt(unit.total_outstanding.up)/parseInt(unit.max))*100;
 					templateJTM += "<tr class='rowappendjatim'>";
-					templateJTM += "<td class='text-right' width='25%'>"+unit.name+"</td>";
+					templateJTM += "<td class='text-right' width='25%'><b>"+unit.name+"</b></td>";
 					templateJTM += "<td class='text-left'  width='65%'><div class='progress progress-sm'><div class='progress-bar kt-bg-primary' role='progressbar' style='width: "+percentage+"%;' aria-valuenow='"+unit.total_outstanding.up+"' aria-valuemin='"+unit.max+"' aria-valuemax=''></div></div></td>";
-					templateJTM += "<td class='text-right' width='10%'>"+convertToRupiah(unit.total_outstanding.up)+"</td>";
+					templateJTM += "<td class='text-right' width='10%'><b>"+convertToRupiah(unit.total_outstanding.up)+"</b></td>";
 					templateJTM += '</tr>';
 				}
 
@@ -252,9 +252,9 @@ function totoutstanding() {
 				{
 					percentage = (parseInt(unit.total_outstanding.up)/parseInt(unit.max))*100;
 					templateNTB += "<tr class='rowappendntb'>";
-					templateNTB += "<td class='text-right' width='25%'>"+unit.name+"</td>";
+					templateNTB += "<td class='text-right' width='25%'><b>"+unit.name+"</b></td>";
 					templateNTB += "<td class='text-left'  width='65%'><div class='progress progress-sm'><div class='progress-bar kt-bg-primary' role='progressbar' style='width: "+percentage+"%;' aria-valuenow='"+unit.total_outstanding.up+"' aria-valuemin='"+unit.max+"' aria-valuemax=''></div></div></td>";
-					templateNTB += "<td class='text-right' width='10%'>"+convertToRupiah(unit.total_outstanding.up)+"</td>";
+					templateNTB += "<td class='text-right' width='10%'><b>"+convertToRupiah(unit.total_outstanding.up)+"</b></td>";
 					templateNTB += '</tr>';
 				}
 
@@ -262,9 +262,9 @@ function totoutstanding() {
 				{
 					percentage = (parseInt(unit.total_outstanding.up)/parseInt(unit.max))*100;
 					templateNTT += "<tr class='rowappendntt'>";
-					templateNTT += "<td class='text-right' width='25%'>"+unit.name+"</td>";
+					templateNTT += "<td class='text-right' width='25%'><b>"+unit.name+"</b></td>";
 					templateNTT += "<td class='text-left'  width='65%'><div class='progress progress-sm'><div class='progress-bar kt-bg-primary' role='progressbar' style='width: "+percentage+"%;' aria-valuenow='"+unit.total_outstanding.up+"' aria-valuemin='"+unit.max+"' aria-valuemax=''></div></div></td>";
-					templateNTT += "<td class='text-right' width='10%'>"+convertToRupiah(unit.total_outstanding.up)+"</td>";
+					templateNTT += "<td class='text-right' width='10%'><b>"+convertToRupiah(unit.total_outstanding.up)+"</b></td>";
 					templateNTT += '</tr>';
 				}
 			});
@@ -800,9 +800,9 @@ function disburse() {
 					{
 						percentage = (parseInt(unit.amount)/parseInt(max))*100;
 						templateJBR += "<tr class='rowappendjabar'>";
-						templateJBR += "<td class='text-right' width='25%'>"+unit.name+"</td>";
+						templateJBR += "<td class='text-right' width='25%'><b>"+unit.name+"</b></td>";
 						templateJBR += "<td class='text-left'  width='65%'><div class='progress progress-sm'><div class='progress-bar kt-bg-primary' role='progressbar' style='width: "+percentage+"%;' aria-valuenow='"+unit.amount+"' aria-valuemin='"+max+"' aria-valuemax=''></div></div></td>";
-						templateJBR += "<td class='text-right' width='10%'>"+convertToRupiah(unit.amount)+"</td>";
+						templateJBR += "<td class='text-right' width='10%'><b>"+convertToRupiah(unit.amount)+"</b></td>";
 						templateJBR += '</tr>';
 					}
 
@@ -810,9 +810,9 @@ function disburse() {
 					{
 						percentage = (parseInt(unit.amount)/parseInt(max))*100;
 						templateJTM += "<tr class='rowappendjabar'>";
-						templateJTM += "<td class='text-right' width='25%'>"+unit.name+"</td>";
+						templateJTM += "<td class='text-right' width='25%'><b>"+unit.name+"</b></td>";
 						templateJTM += "<td class='text-left'  width='65%'><div class='progress progress-sm'><div class='progress-bar kt-bg-primary' role='progressbar' style='width: "+percentage+"%;' aria-valuenow='"+unit.amount+"' aria-valuemin='"+max+"' aria-valuemax=''></div></div></td>";
-						templateJTM += "<td class='text-right' width='10%'>"+convertToRupiah(unit.amount)+"</td>";
+						templateJTM += "<td class='text-right' width='10%'><b>"+convertToRupiah(unit.amount)+"</b></td>";
 						templateJTM += '</tr>';
 					}
 
@@ -820,9 +820,9 @@ function disburse() {
 					{
 						percentage = (parseInt(unit.amount)/parseInt(max))*100;
 						templateNTB += "<tr class='rowappendjabar'>";
-						templateNTB += "<td class='text-right' width='25%'>"+unit.name+"</td>";
+						templateNTB += "<td class='text-right' width='25%'><b>"+unit.name+"</b></td>";
 						templateNTB += "<td class='text-left'  width='65%'><div class='progress progress-sm'><div class='progress-bar kt-bg-primary' role='progressbar' style='width: "+percentage+"%;' aria-valuenow='"+unit.amount+"' aria-valuemin='"+max+"' aria-valuemax=''></div></div></td>";
-						templateNTB += "<td class='text-right' width='10%'>"+convertToRupiah(unit.amount)+"</td>";
+						templateNTB += "<td class='text-right' width='10%'><b>"+convertToRupiah(unit.amount)+"</b></td>";
 						templateNTB += '</tr>';
 					}
 
@@ -830,9 +830,9 @@ function disburse() {
 					{
 						percentage = (parseInt(unit.amount)/parseInt(max))*100;
 						templateNTT+= "<tr class='rowappendjabar'>";
-						templateNTT += "<td class='text-right' width='25%'>"+unit.name+"</td>";
+						templateNTT += "<td class='text-right' width='25%'><b>"+unit.name+"</b></td>";
 						templateNTT += "<td class='text-left'  width='65%'><div class='progress progress-sm'><div class='progress-bar kt-bg-primary' role='progressbar' style='width: "+percentage+"%;' aria-valuenow='"+unit.amount+"' aria-valuemin='"+max+"' aria-valuemax=''></div></div></td>";
-						templateNTT += "<td class='text-right' width='10%'>"+convertToRupiah(unit.amount)+"</td>";
+						templateNTT += "<td class='text-right' width='10%'><b>"+convertToRupiah(unit.amount)+"</b></td>";
 						templateNTT += '</tr>';
 					}
 				});	
