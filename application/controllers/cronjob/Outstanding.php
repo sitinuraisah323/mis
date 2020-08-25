@@ -17,7 +17,8 @@ class Outstanding extends Authenticated
 	{
 		parent::__construct();
 		$this->load->model('UnitsModel', 'units');
-        $this->load->model('AreasModel', 'areas');
+		$this->load->model('AreasModel', 'areas');
+		$this->load->model('AreasModel', 'model');
         $this->load->model('RegularPawnsModel', 'regular');
 	}
 
@@ -139,6 +140,60 @@ class Outstanding extends Authenticated
              }
 		}
         
+	}
+
+	public function generate(){
+		if($date = $this->input->get('date')){
+			$date = $date;
+		}else{
+			$date = date('Y-m-d');
+		}
+		$units = $this->units->db->select('units.id, units.name, area')
+			->join('areas','areas.id = units.id_area')
+			->order_by('units.id','desc')
+			->get('units')->result();
+		$totalUp = 0;
+		$totalNoa = 0;
+		$totalPelunasan = 0;
+		$totalPencairan = 0;
+		foreach ($units as $unit){
+			$getOstYesterday = $this->model->db
+				->where('date <', $date)
+				->from('units_outstanding')
+				->where('id_unit', $unit->id)
+				->order_by('date','DESC')
+				->get()->row();
+			$creditToday = $this->regular->getCreditToday($unit->id, $date);
+			$repaymentToday = $this->regular->getRepaymentToday($unit->id, $date);
+			$totalOstToday = array(
+				'noa'	=> $getOstYesterday->noa+$creditToday->noa-$repaymentToday->noa,
+				'up'	=> $getOstYesterday->os+$creditToday->up-$repaymentToday->up
+			);
+			$totalUp += $getOstYesterday->os+$creditToday->up-$repaymentToday->up;
+			$totalNoa += $getOstYesterday->noa+$creditToday->noa-$repaymentToday->noa;
+			$totalPelunasan += $repaymentToday->up;
+			$totalPencairan += $creditToday->up;
+			$data = array(
+				'date'	=> $date,
+				'noa'	=> $totalOstToday['noa'],
+				'os'	=> $totalOstToday['up'],
+				'id_unit'	=> $unit->id
+			);
+			$check = $this->db->get_where('units_outstanding',array('id_unit' => $unit->id,'date'=>$date));
+			if($check->num_rows() > 0){
+				$this->db->update('units_outstanding', $data, array('id_unit' => $unit->id,'date'=>$date));
+			}else{
+				$this->db->insert('units_outstanding', $data);
+			}
+		}
+		echo json_encode(
+			array(
+				'total_noa'	=> 'total noa '.$totalNoa.'<br>',
+				'total_up'	=> 'total up'. $totalUp.'<br>',
+				'total_pelunasan'	=>  'total pelunsan'. $totalPelunasan.'<br>',
+				'total_pencairan'	=> 'total pencairan'. $totalPencairan.'<br>'
+			)
+		);
 	}
 
 }
