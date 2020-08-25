@@ -37,14 +37,14 @@ class Loaninstallments extends ApiController
 			foreach ($scan as $index => $value){
 				if($index > 1){
 					$idUnit = $value;
-					$pathTransaction = 'storage/'.$idUnit.'/transactions/'.$date.'/extract-all/'.$date.'/';
+					$pathTransaction = 'storage/'.$idUnit.'/transactions/'.$date.'/extract-all/'.$date.'/nonojk/';
 					if(is_dir($pathTransaction)){
 						$scanFile = scandir($pathTransaction);
 						foreach ($scanFile as $key => $file){
 							if($key > 1){
 								if(strtoupper(substr($file,0, 2)) == 'MS'){
 									if($key){
-										$this->process_transaction($idUnit,$pathTransaction, $scanFile[$key], $ojk);
+										$this->process_transaction($idUnit,$pathTransaction, $scanFile[$key], 'NON-OJK');
 										unset($scanFile[$key]);
 									}
 								}
@@ -52,7 +52,26 @@ class Loaninstallments extends ApiController
 						}
 						foreach ($scanFile as $i => $file){
 							if($i > 1){
-								$this->process_transaction($idUnit,$pathTransaction, $file, $ojk);
+								$this->process_transaction($idUnit,$pathTransaction, $file, 'NON-OJK');
+							}
+						}
+					}
+					$pathTransaction = 'storage/'.$idUnit.'/transactions/'.$date.'/extract-all/'.$date.'/ojk/';
+					if(is_dir($pathTransaction)){
+						$scanFile = scandir($pathTransaction);
+						foreach ($scanFile as $key => $file){
+							if($key > 1){
+								if(strtoupper(substr($file,0, 2)) == 'MS'){
+									if($key){
+										$this->process_transaction($idUnit,$pathTransaction, $scanFile[$key], 'OJK');
+										unset($scanFile[$key]);
+									}
+								}
+							}
+						}
+						foreach ($scanFile as $i => $file){
+							if($i > 1){
+								$this->process_transaction($idUnit,$pathTransaction, $file, 'OJK');
 							}
 						}
 					}
@@ -243,6 +262,7 @@ class Loaninstallments extends ApiController
 						if($installment = $this->installment->find( array(
 							'no_sbk'	=>zero_fill( $transaction['A'], 5),
 							'id_unit'	=> $id_unit,
+							'permit'	=> $jok
 						))){
 							$data['id'] = $installment->id;
 							$batchUpdate[] = $data;
@@ -644,7 +664,8 @@ class Loaninstallments extends ApiController
 						);
 						if($findTransaction = $this->regulars->find(array(
 							'no_sbk'	=>zero_fill( $transaction['A'], 5),
-							'id_unit'	=> $id_unit
+							'id_unit'	=> $id_unit,
+							'permit'	=> $jok
 						))){
 							$data['id'] = $findTransaction->id;
 							$batchUpdate[] = $data;
@@ -704,6 +725,7 @@ class Loaninstallments extends ApiController
 						if($findrepayment = $this->repayments->find(array(
 							'id_unit'		=> $unit,
 							'no_sbk'		=> zero_fill($repayment['A'], 5),
+							'permit'	=> $jok
 						))){
 							$data['id']	= $findrepayment->id;
 							$bathUpdate[] = $data;
@@ -778,6 +800,7 @@ class Loaninstallments extends ApiController
 					if($findTransaction = $this->mortages->find(array(
 						'no_sbk'	=>zero_fill( $transaction['A'], 5),
 						'id_unit'	=> $id_unit,
+						'permit'	=> $jok
 					))){
 						$data['id'] = $findTransaction->id;
 						$bathUpdate[] = $data;
@@ -826,6 +849,7 @@ class Loaninstallments extends ApiController
 					if($findrepaymentmortage = $this->repaymentmortage->find(array(
 						'id_unit'		=> $unit,
 						'no_sbk'		=> zero_fill($repmortage['B'], 5),
+						'permit'		=> $jok
 					))){
 						$data['id'] = $findrepaymentmortage->id;
 						$bathUpdate[]	= $data;
