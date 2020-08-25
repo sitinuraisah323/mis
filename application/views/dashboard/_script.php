@@ -4,6 +4,7 @@ var cariForm;
 var pencairan;
 var pelunasan;
 var cariForm;
+var maxDis;
 <?php 
 if(date('H:i') > '20:00'){
 	$date =  date('Y-m-d');
@@ -158,10 +159,47 @@ function initCariForm(){
     }
 }
 
+function totoutstanding() {
+	var today = 0;
+	var yesterday = 0;
+	var max = 0;
+	$.ajax({
+		url:"<?php echo base_url('api/dashboards/totoutstanding');?>",
+		type:"GET",
+		dataType:"JSON",
+		data:{
+			area:'',
+			date:currdate,
+		},
+		success:function (response) {
+			$.each(response.data, function (index,unit) {
+				today += unit.ost_today;
+				yesterday += unit.ost_yesterday;
+				if(max > unit.ost_yesterday){ max=max;}else{ max=unit.ost_yesterday;}
+			});
+			console.log(max);
+			//$('#valmax').val(max);
+		},
+		complete:function () {
+			
+			//$('#form_outstanding').find('.total-today').text('Rp. '+convertToRupiah(today));
+			//$('#form_outstanding').find('.date-today').text(currdate);
+			//$('#form_outstanding').find('.total-yesterday').text('Rp. '+convertToRupiah(yesterday));
+			//$('#form_outstanding').find('.date-yesterday').text(lastdate);
+		},
+	});
+}
+
  function outstanding() {
 	$('svg').remove();
     $('#graphOutstanding').empty();
-	//var currdate = '2020-07-20';
+	$('#tblOutJabar').empty();
+	$('#tblOutJatim').empty();
+	$('#tblOutNTB').empty();
+	$('#tblOutNTT').empty();
+	//var maxval = $('[name="valmax"]').val();
+	//alert(maxval);
+	var pencentage =0;
     var transaction = [];
     var total = 0;
 	KTApp.block('#form_outstanding .kt-widget14', {});
@@ -177,6 +215,10 @@ function initCariForm(){
 			date:datenow,
 		},
 		success:function (response) {
+			var templateJBR = '';
+			var templateJTM = '';
+			var templateNTB = '';
+			var templateNTT = '';
 			$.each(response.data, function (index,unit) {
 				transaction.push({
 					y:unit.name,
@@ -185,13 +227,57 @@ function initCariForm(){
 				});
 				today += parseInt(unit.total_outstanding.up);
 				yesterday += parseInt(unit.ost_yesterday.up);
+
+				if(unit.area=='Jawa Barat')
+				{
+					percentage = (parseInt(unit.total_outstanding.up)/parseInt(unit.max))*100;
+					templateJBR += "<tr class='rowappendjabar'>";
+					templateJBR += "<td class='text-right' width='25%'><b>"+unit.name+"</b></td>";
+					templateJBR += "<td class='text-left'  width='65%'><div class='progress progress-sm'><div class='progress-bar kt-bg-primary' role='progressbar' style='width: "+percentage+"%;' aria-valuenow='"+unit.total_outstanding.up+"' aria-valuemin='"+unit.max+"' aria-valuemax=''></div></div></td>";
+					templateJBR += "<td class='text-right' width='10%'><b>"+convertToRupiah(unit.total_outstanding.up)+"</b></td>";
+					templateJBR += '</tr>';
+				}
+
+				if(unit.area=='Jawa Timur')
+				{
+					percentage = (parseInt(unit.total_outstanding.up)/parseInt(unit.max))*100;
+					templateJTM += "<tr class='rowappendjatim'>";
+					templateJTM += "<td class='text-right' width='25%'><b>"+unit.name+"</b></td>";
+					templateJTM += "<td class='text-left'  width='65%'><div class='progress progress-sm'><div class='progress-bar kt-bg-primary' role='progressbar' style='width: "+percentage+"%;' aria-valuenow='"+unit.total_outstanding.up+"' aria-valuemin='"+unit.max+"' aria-valuemax=''></div></div></td>";
+					templateJTM += "<td class='text-right' width='10%'><b>"+convertToRupiah(unit.total_outstanding.up)+"</b></td>";
+					templateJTM += '</tr>';
+				}
+
+				if(unit.area=='NTB')
+				{
+					percentage = (parseInt(unit.total_outstanding.up)/parseInt(unit.max))*100;
+					templateNTB += "<tr class='rowappendntb'>";
+					templateNTB += "<td class='text-right' width='25%'><b>"+unit.name+"</b></td>";
+					templateNTB += "<td class='text-left'  width='65%'><div class='progress progress-sm'><div class='progress-bar kt-bg-primary' role='progressbar' style='width: "+percentage+"%;' aria-valuenow='"+unit.total_outstanding.up+"' aria-valuemin='"+unit.max+"' aria-valuemax=''></div></div></td>";
+					templateNTB += "<td class='text-right' width='10%'><b>"+convertToRupiah(unit.total_outstanding.up)+"</b></td>";
+					templateNTB += '</tr>';
+				}
+
+				if(unit.area=='NTT')
+				{
+					percentage = (parseInt(unit.total_outstanding.up)/parseInt(unit.max))*100;
+					templateNTT += "<tr class='rowappendntt'>";
+					templateNTT += "<td class='text-right' width='25%'><b>"+unit.name+"</b></td>";
+					templateNTT += "<td class='text-left'  width='65%'><div class='progress progress-sm'><div class='progress-bar kt-bg-primary' role='progressbar' style='width: "+percentage+"%;' aria-valuenow='"+unit.total_outstanding.up+"' aria-valuemin='"+unit.max+"' aria-valuemax=''></div></div></td>";
+					templateNTT += "<td class='text-right' width='10%'><b>"+convertToRupiah(unit.total_outstanding.up)+"</b></td>";
+					templateNTT += '</tr>';
+				}
 			});
+			$('#tblOutJabar').append(templateJBR);
+			$('#tblOutJatim').append(templateJTM);
+			$('#tblOutNTB').append(templateNTB);
+			$('#tblOutNTT').append(templateNTT);
 		},
 		complete:function () {
-			// $('#form_outstanding').find('.total-today').text('Rp. '+convertToRupiah(today));
-			// $('#form_outstanding').find('.date-today').text(currdate);
-			// $('#form_outstanding').find('.total-yesterday').text('Rp. '+convertToRupiah(yesterday));
-			// $('#form_outstanding').find('.date-yesterday').text(lastdate);
+			$('#form_outstanding').find('.total-today').text('Rp. '+convertToRupiah(today));
+			$('#form_outstanding').find('.date-today').text(currdate);
+			$('#form_outstanding').find('.total-yesterday').text('Rp. '+convertToRupiah(yesterday));
+			$('#form_outstanding').find('.date-yesterday').text(lastdate);
 			var data = transaction,
 					//config manager
 					config = {
@@ -215,34 +301,6 @@ function initCariForm(){
 			config.element = 'graphOutstanding';
 			new Morris.Bar(config);
 			KTApp.unblock('#form_outstanding .kt-widget14', {});
-		},
-	});
-}
-
-function totoutstanding() {
-	var today = 0;
-	var yesterday = 0;
-	$.ajax({
-		url:"<?php echo base_url('api/dashboards/totoutstanding');?>",
-		type:"GET",
-		dataType:"JSON",
-		data:{
-			area:'',
-			date:currdate,
-		},
-		success:function (response) {
-			console.log(response.data.today);
-			$.each(response.data, function (index,unit) {
-			today += unit.ost_today;
-			yesterday += unit.ost_yesterday;
-			// 	//totalLast = 0;
-			});
-		},
-		complete:function () {
-			$('#form_outstanding').find('.total-today').text('Rp. '+convertToRupiah(today));
-			$('#form_outstanding').find('.date-today').text(currdate);
-			$('#form_outstanding').find('.total-yesterday').text('Rp. '+convertToRupiah(yesterday));
-			$('#form_outstanding').find('.date-yesterday').text(lastdate);
 		},
 	});
 }
@@ -657,11 +715,10 @@ function disburse() {
 	$('svg').remove();
 	$('#graphDisburse').empty();
 	var transaction = [];
-	//var dateToday = "<?php //echo  date('d', strtotime('-1 days', strtotime($date)));?>";
-	//var dateYesterday = "<?php //echo  date('d', strtotime('-2 days', strtotime($date)))?>";
-	//var currdate = '20';
 	var totalYesterday = 0;
 	var totalToday = 0;
+	var maxDisburse = 0;
+	var it_works = false;
 	KTApp.block('#form_disburse .kt-widget14', {});
 	$.ajax({
 		url: "<?php echo base_url('api/dashboards/disburse');?>",
@@ -679,10 +736,14 @@ function disburse() {
 					a: unit.amount,
 					area:unit.id_area
 				})
+				if(maxDisburse > unit.amount){maxDisburse=maxDisburse;}else{maxDisburse=unit.amount;}
 			});
+			maxDisburse = maxDisburse;
+			it_works = true;
 		},
 		complete: function () {
 			$('#form_disburse').find('.total-today').text(convertToRupiah(totalToday));
+			$('#disbursmax').val(maxDisburse);
 			$('#form_disburse').find('.date-today').text(currdate);
 			var data = transaction,
 					//config manager
@@ -710,107 +771,83 @@ function disburse() {
 						// 	else  return '#2370b8';
 						// }
 					};
-			//config element name
 			config.element = 'graphDisburse';
 			new Morris.Bar(config);
 			KTApp.unblock('#form_disburse .kt-widget14', {});
 		}
 	});	
+	setTimeout(function(){ 
+		var templateJBR="";
+		var templateJTM="";
+		var templateNTT="";
+		var templateNTB="";
+		var percentage=0;
+		var max = $('#disbursmax').val();
+		console.log(max);
+		//console.log('test');
 
-	// $.ajax({
-	// 	url:"<?php //echo base_url('api/dashboards/disburse');?>",
-	// 	type:"GET",
-	// 	dataType:"JSON",
-	// 	data:{
-	// 		area:'',
-	// 		date:lastdate,
-	// 	},
-	// 	success:function (response) {
-	// 		$.each(response.data, function (index,unit) {
-	// 			totalYesterday += unit.amount;
-	// 		});
-	// 	},
-	// 	complete:function () {
-	// 		$('#form_disburse').find('.total-yesterday').text(convertToRupiah(totalYesterday));
-	// 		$('#form_disburse').find('.date-yesterday').text(lastdate);
-	// 	},
-	// });
+		$.ajax({
+			url: "<?php echo base_url('api/dashboards/disburse');?>",
+			type: "GET",
+			dataType: "JSON",
+			data: {
+				area: '',
+				date: currday,currmonth,curryears,
+			},
+			success: function (response) {
+				$.each(response.data, function (index, unit) {
+					if(unit.area=='Jawa Barat')
+					{
+						percentage = (parseInt(unit.amount)/parseInt(max))*100;
+						templateJBR += "<tr class='rowappendjabar'>";
+						templateJBR += "<td class='text-right' width='25%'><b>"+unit.name+"</b></td>";
+						templateJBR += "<td class='text-left'  width='65%'><div class='progress progress-sm'><div class='progress-bar kt-bg-primary' role='progressbar' style='width: "+percentage+"%;' aria-valuenow='"+unit.amount+"' aria-valuemin='"+max+"' aria-valuemax=''></div></div></td>";
+						templateJBR += "<td class='text-right' width='10%'><b>"+convertToRupiah(unit.amount)+"</b></td>";
+						templateJBR += '</tr>';
+					}
 
-	// transaction = [];
+					if(unit.area=='Jawa Timur')
+					{
+						percentage = (parseInt(unit.amount)/parseInt(max))*100;
+						templateJTM += "<tr class='rowappendjabar'>";
+						templateJTM += "<td class='text-right' width='25%'><b>"+unit.name+"</b></td>";
+						templateJTM += "<td class='text-left'  width='65%'><div class='progress progress-sm'><div class='progress-bar kt-bg-primary' role='progressbar' style='width: "+percentage+"%;' aria-valuenow='"+unit.amount+"' aria-valuemin='"+max+"' aria-valuemax=''></div></div></td>";
+						templateJTM += "<td class='text-right' width='10%'><b>"+convertToRupiah(unit.amount)+"</b></td>";
+						templateJTM += '</tr>';
+					}
 
+					if(unit.area=='NTB')
+					{
+						percentage = (parseInt(unit.amount)/parseInt(max))*100;
+						templateNTB += "<tr class='rowappendjabar'>";
+						templateNTB += "<td class='text-right' width='25%'><b>"+unit.name+"</b></td>";
+						templateNTB += "<td class='text-left'  width='65%'><div class='progress progress-sm'><div class='progress-bar kt-bg-primary' role='progressbar' style='width: "+percentage+"%;' aria-valuenow='"+unit.amount+"' aria-valuemin='"+max+"' aria-valuemax=''></div></div></td>";
+						templateNTB += "<td class='text-right' width='10%'><b>"+convertToRupiah(unit.amount)+"</b></td>";
+						templateNTB += '</tr>';
+					}
+
+					if(unit.area=='NTT')
+					{
+						percentage = (parseInt(unit.amount)/parseInt(max))*100;
+						templateNTT+= "<tr class='rowappendjabar'>";
+						templateNTT += "<td class='text-right' width='25%'><b>"+unit.name+"</b></td>";
+						templateNTT += "<td class='text-left'  width='65%'><div class='progress progress-sm'><div class='progress-bar kt-bg-primary' role='progressbar' style='width: "+percentage+"%;' aria-valuenow='"+unit.amount+"' aria-valuemin='"+max+"' aria-valuemax=''></div></div></td>";
+						templateNTT += "<td class='text-right' width='10%'><b>"+convertToRupiah(unit.amount)+"</b></td>";
+						templateNTT += '</tr>';
+					}
+				});	
+				$('#tblDisburseJabar').append(templateJBR);			
+				$('#tblDisburseJatim').append(templateJTM);			
+				$('#tblDisburseNTB').append(templateNTB);			
+				$('#tblDisburseNTT').append(templateNTT);			
+			},
+			complete: function () {
+			}
+		});
+
+	}, 8000);
+	
 }
-
-// function sample() {
-// 	$('svg').remove();
-// 	$('#graphSample').empty();
-// 	var labeldata = [];
-// 	var transaction = [];
-// 	var totalYesterday = 0;
-// 	var totalToday = 0;
-// 	KTApp.block('#form_sample .kt-widget14', {});
-// 	$.ajax({
-// 		url: "<?php //echo base_url('api/dashboards/disburse');?>",
-// 		type: "GET",
-// 		dataType: "JSON",
-// 		data: {
-// 			area: '',
-// 			date: currday,currmonth,curryears,
-// 		},
-// 		success: function (response) {
-// 			$.each(response.data, function (index, unit) {
-// 				totalToday += unit.amount;
-// 				transaction.push([unit.amount]})
-// 				labeldata.push([unit.name])
-// 			});
-			
-// 		},
-// 		complete: function () {
-// 			$('#form_sample').find('.total-today').text(convertToRupiah(totalToday));
-// 			$('#form_sample').find('.date-today').text(currdate);
-// 			console.log(labeldata);
-// 			var ctx = document.getElementById('myChart').getContext('2d');
-// 			var myChart = new Chart(ctx, {
-// 			type: 'horizontalBar',
-// 			data: {
-// 				labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-// 				datasets: [{
-// 					labels: ['Values'],
-// 					xkey: 'y',
-// 					ykeys: ['a'],
-// 					data: [1200000, 1900000, 300000, 500000, 200000, 300000],
-// 					backgroundColor: [
-// 					'rgba(255, 99, 132, 0.2)',
-// 					'rgba(54, 162, 235, 0.2)',
-// 					'rgba(255, 206, 86, 0.2)',
-// 					'rgba(75, 192, 192, 0.2)',
-// 					'rgba(153, 102, 255, 0.2)',
-// 					'rgba(255, 159, 64, 0.2)'
-// 				],
-// 				borderColor: [
-// 					'rgba(255, 99, 132, 1)',
-// 					'rgba(54, 162, 235, 1)',
-// 					'rgba(255, 206, 86, 1)',
-// 					'rgba(75, 192, 192, 1)',
-// 					'rgba(153, 102, 255, 1)',
-// 					'rgba(255, 159, 64, 1)'
-// 				],
-// 					borderWidth: 1
-// 				}]
-// 			},
-// 				options: {
-// 					scales: {
-// 						yAxes: [{
-// 							ticks: {
-// 								beginAtZero: true
-// 							}
-// 						}]
-// 					}
-// 				}
-// 			});
-// 			KTApp.unblock('#form_sample .kt-widget14', {});
-// 		}
-// 	});	
-// }
 
 function notfound(){
     $("#graph").empty();
@@ -820,14 +857,11 @@ function notfound(){
 }
 
 jQuery(document).ready(function() {
-    //initCariForm();
-	//sample();
 	disburse();
 	outstanding();
 	dpd();
 	pencairan();
 	pelunasan();
-	totoutstanding();
 	saldo();
 	pendapatan();
 	pengeluaran();

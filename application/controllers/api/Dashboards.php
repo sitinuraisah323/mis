@@ -24,6 +24,7 @@ class Dashboards extends ApiController
 	public function outstanding()
 	{
 		$currdate = date('Y-m-d');
+		$max = 0;
 		if($area = $this->input->get('area')){
 			$this->units->db->where('id_area', $area);
 		}else if($this->session->userdata('user')->level == 'area'){
@@ -50,6 +51,12 @@ class Dashboards extends ApiController
 		}
 		//$data = $this->regular->getLastDateTransaction();
 
+		//get max
+		$max = $this->db->select_max('os')
+			->where('date',$date)
+			->from('units_outstanding')
+			->get()->row();
+
 		$units = $this->units->db->select('units.id, units.name, area')
 			->join('areas','areas.id = units.id_area')
 			->get('units')->result();
@@ -73,6 +80,8 @@ class Dashboards extends ApiController
 				'ost'	=> $unit->dpd_today->ost + $unit->dpd_yesterday->ost - $unit->dpd_repayment_today->ost,
 			);
 			$unit->lasttrans = $date;
+			$unit->max = $max->os;
+			//$max
 			$unit->percentage = ($unit->total_dpd->ost > 0) && ($unit->total_outstanding->up > 0) ? round($unit->total_dpd->ost / $unit->total_outstanding->up, 4) : 0;
 		}
 		$this->sendMessage($units, 'Get Data Outstanding');

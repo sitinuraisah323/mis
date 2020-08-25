@@ -155,11 +155,12 @@ $this->load->view('temp/MenuBar.php');
 						  	</tbody>
                             <tfoot>
                                 <tr>
-                                    <th colspan="5" class="text-right">Total</th>
+                                    <th colspan="4" class="text-right">Total</th>
                                     <th class="saldoawal text-right"></th>
                                     <th class="penerimaan text-right"></th>
                                     <th class="pengeluaran text-right"></th>
                                     <th class="saldoakhir text-right"></th>
+                                    <th class="osunit text-right"></th>
                                     <th class="selisih text-right"></th>
                                 </tr>
                             </tfoot>

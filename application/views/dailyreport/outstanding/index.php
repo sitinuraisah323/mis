@@ -13,6 +13,9 @@
     $totalDisbureNoa_ = 0;
     $totalDisbureUp_ = 0;
     $totalDisbureTicket_ = 0;
+    $dateOST = date('d-m-Y',strtotime($datetrans));
+    $dateLastOST = date('d-m-Y', strtotime('-1 days', strtotime($datetrans)))
+
     ?>
     <table class="table" border="1">
             <tr bgcolor="#aaaa55">
@@ -24,7 +27,7 @@
             <td rowspan="2" align="center" width="60">Area</td>
             <!-- <td rowspan="2" align="center" width="25">Open</td>
             <td rowspan="2" align="center" width="20">OJK</td> -->
-            <td colspan="2" align="center" width="120">OST Kemarin(<?php echo $datetrans;?>)</td>
+            <td colspan="2" align="center" width="120">OST Sebelumnya(<?php echo $dateLastOST;?>)</td>
             <td colspan="2" align="center" width="120">Kredit(<?php echo $datetrans;?>)</td>
             <td colspan="2" align="center" width="120">Pelunasan & Cicilan(<?php echo $datetrans;?>)</td>
             <td colspan="3" align="center" width="200">Total Outstanding</td>
@@ -137,7 +140,7 @@
             <td rowspan="2" align="center" width="60">Area</td>
             <!-- <td rowspan="2" align="center" width="25">Open</td>
             <td rowspan="2" align="center" width="20">OJK</td> -->
-            <td colspan="2" align="center" width="120">OST Kemarin(<?php echo $datetrans;?>)</td>
+            <td colspan="2" align="center" width="120">OST Sebelumnya(<?php echo $dateLastOST;?>)</td>
             <td colspan="2" align="center" width="120">Kredit(<?php echo $datetrans;?>)</td>
             <td colspan="2" align="center" width="120">Pelunasan & Cicilan(<?php echo $datetrans;?>)</td>
             <td colspan="3" align="center" width="200">Total Outstanding</td>
@@ -250,7 +253,7 @@
             <td rowspan="2" align="center" width="60">Area</td>
             <!-- <td rowspan="2" align="center" width="25">Open</td>
             <td rowspan="2" align="center" width="20">OJK</td> -->
-            <td colspan="2" align="center" width="120">OST Kemarin(<?php echo $datetrans;?>)</td>
+            <td colspan="2" align="center" width="120">OST Sebelumnya(<?php echo $dateLastOST;?>)</td>
             <td colspan="2" align="center" width="120">Kredit(<?php echo $datetrans;?>)</td>
             <td colspan="2" align="center" width="120">Pelunasan & Cicilan(<?php echo $datetrans;?>)</td>
             <td colspan="3" align="center" width="200">Total Outstanding</td>
@@ -363,7 +366,7 @@
             <td rowspan="2" align="center" width="60">Area</td>
             <!-- <td rowspan="2" align="center" width="25">Open</td>
             <td rowspan="2" align="center" width="20">OJK</td> -->
-            <td colspan="2" align="center" width="120">OST Kemarin(<?php echo $datetrans;?>)</td>
+            <td colspan="2" align="center" width="120">OST Sebelumnya(<?php echo $dateLastOST;?>)</td>
             <td colspan="2" align="center" width="120">Kredit(<?php echo $datetrans;?>)</td>
             <td colspan="2" align="center" width="120">Pelunasan & Cicilan(<?php echo $datetrans;?>)</td>
             <td colspan="3" align="center" width="200">Total Outstanding</td>

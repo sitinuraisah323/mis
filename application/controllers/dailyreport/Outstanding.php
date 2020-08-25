@@ -71,9 +71,9 @@ class Outstanding extends Authenticated
 	public function test(){
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		require_once APPPATH.'controllers/pdf/header.php';
-		$pdf->AddPage('L');
-		$view = $this->load->view('dailyreport/outstanding/index.php',['outstanding'=> $this->data()],true);
-		$pdf->writeHTML($view);
+		// $pdf->AddPage('L');
+		// $view = $this->load->view('dailyreport/outstanding/index.php',['outstanding'=> $this->data()],true);
+		// $pdf->writeHTML($view);
 
 		// $pdf->AddPage('L');
 		// $view = $this->load->view('dailyreport/outstanding/dpd.php',['dpd'=> $this->data()],true);
@@ -94,6 +94,14 @@ class Outstanding extends Authenticated
 		// $pdf->AddPage('L');
 		// $view = $this->load->view('dailyreport/outstanding/pendapatan.php',['pendapatan'	=> $this->pendapatan()],true);
 		// $pdf->writeHTML($view);
+
+		// $pdf->AddPage('L');
+		// $pdf->StartProgressBarOutput(2);
+		// $pdf->WriteHTML('You will hardly have time to see the progress bars!');
+		// $pdf->Output();
+
+		//$view = $this->load->view('dailyreport/outstanding/index.php',['outstanding'=> $this->data()],true);
+		//$pdf->writeHTML($view);
 
 		// $pdf->AddPage('L');
 		// $view = $this->load->view('dailyreport/outstanding/pengeluaran.php',['pengeluaran'	=> $this->pengeluaran()],true);
