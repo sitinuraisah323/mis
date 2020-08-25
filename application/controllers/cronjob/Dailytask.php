@@ -65,12 +65,12 @@ class Dailytask extends Authenticated
              $outstanding['noa']       = $unit->total_outstanding->noa;
              $outstanding['os']        = $unit->total_outstanding->up;
              $outstanding['ticket']    = $unit->total_outstanding->tiket;
-             $check = $this->db->get_where('units_outstanding',array('id_unit' => $unit->id,'date'=>$currdate));
-             if($check->num_rows() > 0){
-                $this->db->update('units_outstanding', $outstanding, array('id_unit' => $unit->id,'date'=>$currdate));
-             }else{
-                $this->db->insert('units_outstanding', $outstanding);
-             }
+//             $check = $this->db->get_where('units_outstanding',array('id_unit' => $unit->id,'date'=>$currdate));
+//             if($check->num_rows() > 0){
+//                $this->db->update('units_outstanding', $outstanding, array('id_unit' => $unit->id,'date'=>$currdate));
+//             }else{
+//                $this->db->insert('units_outstanding', $outstanding);
+//             }
 
              $credit['id_unit']   = $unit->id;
              $credit['date']      = $currdate;

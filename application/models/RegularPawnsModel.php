@@ -39,22 +39,18 @@ class RegularpawnsModel extends Master
 	{
 		$noaRegular = $this->db->select('count(*) as noa')->from($this->table)
 			->where('id_unit', $idUnit)
-			->where('status_transaction', 'N')
 			->where('date_sbk', $today)->get()->row();
 
 		$upRegular = $this->db->select('sum(amount) as up')->from($this->table)
 			->where('id_unit', $idUnit)
-			->where('status_transaction', 'N')
 			->where('date_sbk', $today)->get()->row();
 
 		$noaMortages = $this->db->select('count(*) as noa')->from('units_mortages')
 			->where('id_unit', $idUnit)
-			->where('status_transaction', 'N')
 			->where('date_sbk', $today)->get()->row();
 
 		$upaMortages = $this->db->select('sum(amount_loan) as up')->from('units_mortages')
 			->where('id_unit', $idUnit)
-			->where('status_transaction', 'N')
 			->where('date_sbk', $today)->get()->row();
 
 		return (object)array(
@@ -76,10 +72,14 @@ class RegularpawnsModel extends Master
 
 	public function getUpByDate($idUnit, $date)
 	{
-		return (int) $this->db->select('sum(amount) as sum')->from($this->table)
+		$upaMortages = (int) $this->db->select('sum(amount_loan) as up')->from('units_mortages')
+			->where('id_unit', $idUnit)
+			->where('date_sbk', $date)->get()->row()->up;
+		$up = (int) $this->db->select('sum(amount) as sum')->from($this->table)
 			->where('id_unit', $idUnit)
 			->where('date_sbk', $date)
 			->get()->row()->sum;
+		return $up + $upaMortages;
 	}
 
 	public function getTotalDisburse($idUnit, $year = null, $month = null, $date = null)

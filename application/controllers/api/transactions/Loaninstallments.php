@@ -37,14 +37,14 @@ class Loaninstallments extends ApiController
 			foreach ($scan as $index => $value){
 				if($index > 1){
 					$idUnit = $value;
-					$pathTransaction = 'storage/'.$idUnit.'/transactions/'.$date.'/extract-all/'.$date.'/nonojk/';
+					$pathTransaction = 'storage/'.$idUnit.'/transactions/'.$date.'/extract-all/'.$date.'/';
 					if(is_dir($pathTransaction)){
 						$scanFile = scandir($pathTransaction);
 						foreach ($scanFile as $key => $file){
 							if($key > 1){
 								if(strtoupper(substr($file,0, 2)) == 'MS'){
 									if($key){
-										$this->process_transaction($idUnit,$pathTransaction, $scanFile[$key], 'NON-OJK');
+										$this->process_transaction($idUnit,$pathTransaction, $scanFile[$key], $ojk);
 										unset($scanFile[$key]);
 									}
 								}
@@ -52,26 +52,7 @@ class Loaninstallments extends ApiController
 						}
 						foreach ($scanFile as $i => $file){
 							if($i > 1){
-								$this->process_transaction($idUnit,$pathTransaction, $file, 'NON-OJK');
-							}
-						}
-					}
-					$pathTransaction = 'storage/'.$idUnit.'/transactions/'.$date.'/extract-all/'.$date.'/ojk/';
-					if(is_dir($pathTransaction)){
-						$scanFile = scandir($pathTransaction);
-						foreach ($scanFile as $key => $file){
-							if($key > 1){
-								if(strtoupper(substr($file,0, 2)) == 'MS'){
-									if($key){
-										$this->process_transaction($idUnit,$pathTransaction, $scanFile[$key], 'OJK');
-										unset($scanFile[$key]);
-									}
-								}
-							}
-						}
-						foreach ($scanFile as $i => $file){
-							if($i > 1){
-								$this->process_transaction($idUnit,$pathTransaction, $file, 'OJK');
+								$this->process_transaction($idUnit,$pathTransaction, $file, $ojk);
 							}
 						}
 					}
