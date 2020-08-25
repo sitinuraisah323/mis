@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
 require_once 'Master.php';
 class BookCashModel extends Master
 {
@@ -10,6 +11,22 @@ class BookCashModel extends Master
 	{
 		parent::__construct();
 		$this->load->model('BookCashMoneyModel','money');
+	}	
+
+	public function getbapkas($idUnit, $date)
+	{
+		$bapkas = $this->db->select('os_unit')->from('units_cash_book')
+			->where('id_unit', $idUnit)
+			->where('date', $date)->get()->row();
+
+		$outstanding = $this->db->select('os')->from('units_outstanding')
+			->where('id_unit', $idUnit)
+			->where('date', $date)->get()->row();
+
+			return (object)array(
+				'os_unit' =>(int) $bapkas->os_unit,
+				'os' => (int) $outstanding->os
+			);
 	}
 
 }
