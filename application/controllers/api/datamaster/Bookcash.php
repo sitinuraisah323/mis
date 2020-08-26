@@ -16,8 +16,9 @@ class Bookcash extends ApiController
 	public function index()
 	{
 		$this->model->db
-			->select('units.name as unit_name')
-			->join('units','units.id = units_cash_book.id_unit');
+			->select('units.name')
+			->join('units','units.id = units_cash_book.id_unit')
+		    ->order_by('id','DESC');
 		if($this->session->userdata('user')->level != 'administrator'){
 			$this->model->db->where('units.id', $this->session->userdata('user')->id_unit);
 		}
@@ -25,13 +26,11 @@ class Bookcash extends ApiController
 			if(is_array($post['query'])){
 				$value = $post['query']['generalSearch'];
 				$this->model->db
-					->select('units.name as unit_name')
-					->join('units','units.id = units_cash_book.id_unit')
-					->or_like('units.name', $value);
+					->or_like('units.name', $value)
+					->or_like('units.name', strtoupper($value));
 			}
-		}
-		$this->model->db->order_by('id','DESC');
-		$data = $this->model->all();
+			$data = $this->model->all();
+		}		
 		echo json_encode(array(
 			'data'	=> 	$data,
 			'message'	=> 'Successfully Get Data Menu'

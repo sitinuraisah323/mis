@@ -240,7 +240,7 @@ function initDataTable(){
                 textAlign: 'center',
             },
             {
-                field: 'unit_name',
+                field: 'name',
                 title: 'Nama Unit',
                 textAlign: 'left',
             },
