@@ -112,7 +112,7 @@ function initCariForm(){
 			data:{area:area,month:dmonth},
 			success : function(response,status){
 				KTApp.unblockPage();
-				if(response.status == true){
+				if(response.status == 200){
 					var template = '';
 					var no = 1;
 					var totNoa = 0;
@@ -132,8 +132,8 @@ function initCariForm(){
                     template +='<td colspan="3" class="text-right"><b>Total</b></td>';                    
                     template +='<td class="text-right"><b>'+convertToRupiah(total)+'</b></td>';                    
                     template +='</tr>';
-
-					$('.kt-section__content table').append(template);
+					console.log(template);
+					$('.table').find('tbody').append(template);
 				}
 			},
 			error: function (jqXHR, textStatus, errorThrown){
