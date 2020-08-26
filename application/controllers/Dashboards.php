@@ -439,7 +439,16 @@ class Dashboards extends Authenticated
 		foreach ($units as $unit) 
 		{
 
-			$unit->ost_yesterday = $this->regular->getOstYesterday($unit->id, $date);
+			$getOstYesterday = $this->regular->db
+				->where('date <', $date)
+				->from('units_outstanding')
+				->where('id_unit', $unit->id)
+				->order_by('date','DESC')
+				->get()->row();
+			$unit->ost_yesterday = (object) array(
+				'noa'	=> $getOstYesterday->noa,
+				'up'	=> $getOstYesterday->os
+			);
 			$unit->credit_today = $this->regular->getCreditToday($unit->id, $date);
 			$unit->repayment_today = $this->regular->getRepaymentToday($unit->id, $date);
 
