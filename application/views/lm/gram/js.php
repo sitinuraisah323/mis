@@ -110,6 +110,7 @@
 	document.querySelector('.search-purchase').addEventListener('change', (e)=>{
 		const id = e.target.value;
 		(new Store()).getChoice(id);
+		document.querySelector('.search-purchase').classList.add('d-none');
 	});
 
 	function removeSimulationTr(){
@@ -155,4 +156,7 @@
 	})
 
 	document.querySelector('[name="tenor"]').addEventListener('change', (new Store()).simulation);
+	document.querySelector('.btn-plus').addEventListener('click', ()=>{
+		document.querySelector('.search-purchase').classList.remove('d-none');
+	});
 </script>

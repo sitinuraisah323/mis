@@ -424,11 +424,11 @@ class Unitsdailycash extends ApiController
 			$this->saldo->db->where('id_unit', $idUnit);
 		}
 		if($date){
-			$this->saldo->db->where('date >=', $date);
+			$this->saldo->db->where('date >', $date);
 		}
 
 		if($dateStart){
-			$this->saldo->db->where('date <', $dateStart);
+			$this->saldo->db->where('date <=', $dateStart);
 		}
 
 		$this->unitsdailycash->db
@@ -454,7 +454,7 @@ class Unitsdailycash extends ApiController
 
 		if($get = $this->input->get()){
 			$this->unitsdailycash->db
-				->where('date >=', $get['dateStart'])
+				->where('date >', $get['dateStart'])
 				->where('date <=', $get['dateEnd']);
 			if($get['id_unit']!='all' && $get['id_unit'] != 0){
 				$this->unitsdailycash->db->where('id_unit', $get['id_unit']);

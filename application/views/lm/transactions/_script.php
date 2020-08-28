@@ -265,6 +265,7 @@ jQuery(document).ready(function() {
     initCariForm();
     initGetNasabah();
     initUnitNasabah();
+    $('#btncari').trigger('click');
 });
 
 var type = $('[name="area"]').attr('type');

@@ -264,6 +264,8 @@ jQuery(document).ready(function() {
     initGetNasabah();
     initUnitNasabah();
     initAlert();
+
+	$('#btncari').trigger('click');
 });
 
 var type = $('[name="area"]').attr('type');
