@@ -29,12 +29,8 @@ $this->load->view('temp/MenuBar.php');
 							</div>
 							<span class="kt-pricing-1__price">LM</span>
 							<h2 class="kt-pricing-1__subtitle">Berat <?php echo $gram->weight;?> Gram</h2>
-							<span class="kt-pricing-1__description">
-								<span>Harga Perpcs <?php echo  money($gram->price_perpcs);?></span>
-								<span>Harga jual  <?php echo  money($gram->price_buyback_perpcs);?></span>
-							</span>
 							<div class="kt-pricing-1__btn">
-								<a href="<?php echo base_url('lm/grams/purchase?choice='.$gram->id);?>" class="btn btn-brand btn-custom btn-pill btn-wide btn-uppercase btn-bolder btn-sm">Purchase</a>
+								<a href="<?php echo base_url('lm/grams/purchase?choice='.$gram->id);?>" class="btn btn-brand btn-custom btn-pill btn-wide btn-uppercase btn-bolder btn-sm">Beli Sekarang</a>
 							</div>
 						</div>
 					<?php endforeach;?>
