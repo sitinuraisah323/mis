@@ -29,4 +29,20 @@ class BookCashModel extends Master
 			);
 	}
 
+	public function getbapsaldo($idUnit, $date)
+	{
+		$bapkas = $this->db->select('amount_balance_final')->from('units_cash_book')
+			->where('id_unit', $idUnit)
+			->where('date', $date)->get()->row();
+
+		$outstanding = $this->db->select('os')->from('units_outstanding')
+			->where('id_unit', $idUnit)
+			->where('date', $date)->get()->row();
+
+			return (object)array(
+				'bapsaldo' =>(int) $bapkas->amount_balance_final,
+				'kassaldo' => (int) $outstanding->os
+			);
+	}
+
 }

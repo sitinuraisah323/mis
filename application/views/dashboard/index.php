@@ -59,8 +59,8 @@ $this->load->view('temp/MenuBar.php');
                                         <div class="kt-widget14__legend">
                                             <span class="kt-widget14__bullet kt-bg-info"></span>
                                             <span class="kt-widget14__stats"><span class="date-today"></span> : <span class="total-today"></span></span>
-                                            <!-- <span class="kt-widget14__bullet kt-bg-warning"></span>
-                                            <span class="kt-widget14__stats"><span class="date-yesterday"></span> : <span class="total-yesterday"></span></span> -->
+                                            <span class="kt-widget14__bullet kt-bg-warning"></span>
+                                            <span class="kt-widget14__stats"><span class="date-yesterday"></span> : <span class="total-yesterday"></span></span>
                                         </div>
                                     </div>
 									

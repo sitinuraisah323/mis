@@ -23,6 +23,7 @@ var currdate = "<?php echo $_1lastdate;?>";
 var lastdate = "<?php echo $_2lastdate;?>";
 
 var currday = "<?php echo date('d', strtotime($_1lastdate)); ?>";
+var lastday = "<?php echo date('d', strtotime($_2lastdate)); ?>";
 var currmonth =  "<?php echo date('n', strtotime(date('Y-m-d'))); ?>";
 var curryears =  "<?php echo date('Y', strtotime(date('Y-m-d'))); ?>";
 
@@ -718,7 +719,6 @@ function disburse() {
 	var totalYesterday = 0;
 	var totalToday = 0;
 	var maxDisburse = 0;
-	var it_works = false;
 	KTApp.block('#form_disburse .kt-widget14', {});
 	$.ajax({
 		url: "<?php echo base_url('api/dashboards/disburse');?>",
@@ -739,7 +739,6 @@ function disburse() {
 				if(maxDisburse > unit.amount){maxDisburse=maxDisburse;}else{maxDisburse=unit.amount;}
 			});
 			maxDisburse = maxDisburse;
-			it_works = true;
 		},
 		complete: function () {
 			$('#form_disburse').find('.total-today').text(convertToRupiah(totalToday));
@@ -775,7 +774,28 @@ function disburse() {
 			new Morris.Bar(config);
 			KTApp.unblock('#form_disburse .kt-widget14', {});
 		}
-	});	
+	});
+
+	$.ajax({
+		url: "<?php echo base_url('api/dashboards/disburse');?>",
+		type: "GET",
+		dataType: "JSON",
+		data: {
+			area: '',
+			date: lastday,currmonth,curryears,
+		},
+		success: function (response) {
+			$.each(response.data, function (index, unit) {
+				totalYesterday += unit.amount;				
+			});
+			//console.log(" total kemarin : "+totalYesterday);
+		},
+		complete: function () {
+			$('#form_disburse').find('.total-yesterday').text(convertToRupiah(totalYesterday));
+			$('#form_disburse').find('.date-yesterday').text(lastdate);
+		}
+	});
+	
 	setTimeout(function(){ 
 		var templateJBR="";
 		var templateJTM="";
