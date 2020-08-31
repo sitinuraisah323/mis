@@ -54,6 +54,26 @@ class Grams extends ApiController
 					'user_create'	=> $this->session->userdata('user')->id,
 					'user_update'	=> $this->session->userdata('user')->id,
 				);
+				if($this->input->files('image')){
+					$config['upload_path']          = './uploads/';
+					$config['allowed_types']        = 'gif|jpg|png';
+					$config['max_size']             = 100;
+					$config['max_width']            = 1024;
+					$config['max_height']           = 768;
+
+					$this->load->library('upload', $config);
+
+					if ( ! $this->upload->do_upload('image'))
+					{
+						$error = array('error' => $this->upload->display_errors());
+
+						return $this->sendMessage(false, $error,500);
+					}
+					else
+					{
+						$data['image'] = $this->upload->data('file_name');
+					}
+				}
 				if($this->model->insert($data)){
 					$this->model->db->order_by('id','DESC');
 					$data = $this->model->all();
@@ -102,6 +122,26 @@ class Grams extends ApiController
 					'user_create'	=> $this->session->userdata('user')->id,
 					'user_update'	=> $this->session->userdata('user')->id,
 				);
+				if($_FILES['image']['name']){
+					$config['upload_path']          = 'storage/lm/';
+					$config['allowed_types']        = 'gif|jpg|png';
+
+					if(!is_dir($config['upload_path'])){
+						mkdir($config['upload_path'],0777, true);
+					}
+					$this->load->library('upload', $config);
+
+					if ( ! $this->upload->do_upload('image'))
+					{
+						$error = array('error' => $this->upload->display_errors());
+
+						return $this->sendMessage(false, $error,500);
+					}
+					else
+					{
+						$data['image'] = $this->upload->data('file_name');
+					}
+				}
 				if($this->model->update($data, $id)){
 					$this->prices->insert(array(
 						'id_lm_gram'	=> $id,

@@ -1,199 +1,63 @@
 <script>
 //globals
-var datatable;
-var AlertUtil;
-var createForm;
-var editForm;
+var cariForm;
+var objAreas = [];
+var objUnit = [];
+var months = [
+    {
+        id:1,
+        name:"Januari",
+    },
+    {
+        id:2,
+        name:"Februari",
+    },
+    {
+        id:3,
+        name:"Maret",
+    },
+    {
+        id:4,
+        name:"April",
+    },
+    {
+        id:5,
+        name:"Mei",
+    },
+    {
+        id:6,
+        name:"Juni",
+    },
+    {
+        id:7,
+        name:"Juli",
+    },
+    {
+        id:8,
+        name:"Agustus",
+    },
+    {
+        id:9,
+        name:"September",
+    },
+    {
+        id:10,
+        name:"Oktober",
+    },
+    {
+        id:11,
+        name:"November",
+    },
+    {
+        id:12,
+        name:"Desember",
+    },
+]
 
-
-// function convertToRupiah(angka)
-// {
-// 	var rupiah = '';		
-// 	var angkarev = angka.toString().split('').reverse().join('');
-// 	for(var i = 0; i < angkarev.length; i++) if(i%3 == 0) rupiah += angkarev.substr(i,3)+'.';
-// 	return rupiah.split('',rupiah.length-1).reverse().join('');
-// }
-
-function initDTEvents(){
-    $(".btn_delete").on("click",function(){
-        var targetId = $(this).data("id");
-        //alert(targetId);
-        swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this",
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, delete it'
-        }).then(function(result) {
-            if (result.value) {
-                KTApp.blockPage();
-                $.ajax({
-                    type : 'GET',
-                    url : "<?php echo base_url("api/datamaster/unitstarget/delete"); ?>",
-                    data : {id:targetId},
-                    dataType : "json",
-                    success : function(data,status){
-                        KTApp.unblockPage();
-                        if(data.status == true){
-                            datatable.reload();
-                            AlertUtil.showSuccess(data.message,5000);
-                        }else{
-                            AlertUtil.showFailed(data.message);
-                        }                
-                    },
-                    error: function (jqXHR, textStatus, errorThrown){
-                        KTApp.unblockPage();
-                        AlertUtil.showFailed("Cannot communicate with server please check your internet connection");
-                    }
-                });  
-            }
-        });
-    });
-
-    $(".btn_edit").on("click",function(){
-        var targetId = $(this).data("id");
-        KTApp.blockPage();
-        $.ajax({
-            type : 'GET',
-            url : "<?php echo base_url("api/datamaster/unitstarget/get_byid"); ?>",
-            data : {id:targetId},
-            dataType : "json",
-            success : function(response,status){
-                KTApp.unblockPage();
-                console.log(response.data);
-                if(response.status == true){
-                    //populate form
-                    editForm.populateForm(response.data);
-                    $('#modal_edit').modal('show');
-                }else{
-                    AlertUtil.showFailed(data.message);
-                    $('#modal_edit').modal('show');
-                }                
-            },
-            error: function (jqXHR, textStatus, errorThrown){
-                KTApp.unblockPage();
-                AlertUtil.showFailed("Cannot communicate with server please check your internet connection");
-            }
-        });  
-    });
-}
-
-
-function initDataTable(){
-    var option = {
-        data: {
-            type: 'remote',
-            source: {
-              read: {
-                url: '<?php echo base_url("api/datamaster/unitstarget"); ?>',
-                map: function(raw) {
-                  // sample data mapping
-                  var dataSet = raw;
-                  if (typeof raw.data !== 'undefined') {
-                    dataSet = raw.data;
-                  }
-                  return dataSet;
-                },
-              },
-            },
-            serverPaging: true,
-            serverFiltering: true,
-            serverSorting: true,
-            saveState : {cookie: false,webstorage: false},
-          },
-          sortable: true,
-          pagination: true,
-          search: {
-            input: $('#generalSearch'),
-          },
-          columns: [
-            {
-                field: 'id',
-                title: 'ID',
-                sortable: 'asc',
-                width:60,
-                textAlign: 'center',
-            }, 
-            {
-                field: 'area',
-                title: 'Area',
-                sortable: 'asc',
-                textAlign: 'left',
-            }, 
-            {
-                field: 'name',
-                title: 'Unit',
-                sortable: 'asc',
-                textAlign: 'left',
-            },
-            {
-                field: 'periode',
-                title: 'Periode',
-                sortable: 'asc',
-                textAlign: 'left',
-                template: function (row) {
-                            var result = "<div class='date-td'>";
-                            var month = moment(row.month).format('MMM');
-                            result = result + '<div>' + month + ' - ' + row.year + '</div> ';
-                            result = result + "</div>";
-                            return result;
-                        }
-            }, 
-            {
-                field: 'amount_booking',
-                title: 'Booking',
-                sortable: 'asc',
-                textAlign: 'right',
-                template: function (row) {
-                    var result ="";
-                        result = row.amount_booking;
-                    return result;
-                } 
-            },
-            {
-                field: 'amount_outstanding',
-                title: 'Outstanding',
-                sortable: 'asc',
-                textAlign: 'right',
-                template: function (row) {
-                    var result ="";
-                        result = row.amount_outstanding;
-                        
-                    return result;
-                } 
-            }, 
-            {
-                field: 'status',
-                title: 'Status',
-                sortable: 'asc',
-                textAlign: 'center',
-            }, 
-            {
-                field: 'action',
-                title: 'Action',
-                sortable: false,
-                width: 100,
-                overflow: 'visible',
-                textAlign: 'center',
-                autoHide: false,
-                template: function (row) {
-                    var result ="";
-                        result = result + '<span data-id="' + row.id + '" href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md btn_edit" title="Edit" ><i class="flaticon-edit-1" style="cursor:pointer;"></i></span>';
-                        result = result + '<span data-id="' + row.id + '" href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md btn_delete" title="Delete" ><i class="flaticon2-trash" style="cursor:pointer;"></i></span>';
-                    return result;
-                }                        
-            }
-          ],
-          layout:{
-            header:true
-          }
-    }
-    datatable = $('#kt_datatable').KTDatatable(option);
-    datatable.on("kt-datatable--on-layout-updated",function(){
-        initDTEvents();
-    })
-}
-
+$(document).on('keyup','.money_format', function(){
+    const number = this.value.replace(".","");
+    this.value = convertToRupiah(number);
+})
 function initAlert(){
     AlertUtil = {
         showSuccess : function(message,timeout){
@@ -261,179 +125,274 @@ function initAlert(){
     })
 }
 
-function initCreateForm(){
+function initCariForm(){
     //validator
-    var validator = $( "#form_add" ).validate({
+    var validator = $("#form_bukukas").validate({
         ignore:[],
         rules: {
+            area: {
+                required: true,
+            },
             unit: {
-                required: true,
-            },
-            month: {
-                required: true,
-            },
-            year: {
-                required: true,
-            },
-            amount: {
                 required: true,
             }
         },
-        invalidHandler: function(event, validator) {   
+        invalidHandler: function(event, validator) {
             KTUtil.scrollTop();
         }
     });
 
-    $('#add_unit').select2({
-        placeholder: "Please select a Unit",
-        width: '100%'
-    });   
-
-    $('#add_month').select2({
-        placeholder: "Please select a Month",
-        width: '100%'
-    });
-
-    $('#add_year').select2({
-        placeholder: "Please select a Year",
-        width: '100%'
-    });
-    
+    $('#area').select2({ placeholder: "Select Area", width: '100%' });
+    $('#unit').select2({ placeholder: "Select Unit", width: '100%' });
+    $('[name="month"]').select2({ placeholder: "all", width: '100%' });
+    $('[name="year"]').select2({ placeholder: "Select a year", width: '100%' });
     //events
-    $("#btn_add_submit").on("click",function(){
-      var isValid = $( "#form_add" ).valid();
-      if(isValid){
-        KTApp.block('#modal_add .modal-content', {});
-        $.ajax({
-            type : 'POST',
-            url : "<?php echo base_url("api/datamaster/unitstarget/insert"); ?>",
-            data : $('#form_add').serialize(),
-            dataType : "json",
-            success : function(data,status){
-                KTApp.unblock('#modal_add .modal-content');
-                if(data.status == true){
-                    datatable.reload();
-                    $('#modal_add').modal('hide');
-                    AlertUtil.showSuccess(data.message,5000);
-                }else{
-                    AlertUtil.showFailedDialogAdd(data.message);
-                }                
-            },
-            error: function (jqXHR, textStatus, errorThrown){
-                KTApp.unblock('#modal_add .modal-content');
-                AlertUtil.showFailedDialogAdd("Cannot communicate with server please check your internet connection");
-            }
-        });  
-      }
-    })
+    $('#btncari').on('click',function(){
+        $('.rowappend').remove();
+        var area = $('[name="area"]').val();
+        var unit = $('[name="id_unit"]').val();
+        var nasabah = $('#nasabah').val();
+        var statusrpt = $('#status').val();
+		var dateStart = $('[name="date-start"]').val();
+		var dateEnd = $('[name="date-end"]').val();
+		var permit = $('[name="permit"]').val();
+        KTApp.block('#form_bukukas .kt-portlet__body', {});
+		$.ajax({
+			type : 'GET',
+			url : "<?php echo base_url("api/datamaster/unitstarget"); ?>",
+			dataType : "json",
+			data:{area:area,id_unit:unit},
+			success : function(response,status){
+                const targetUnits = response.data;
+                const trBody = $('.table').find('tbody').find('tr').remove();
+            
+                objUnit.forEach((unit, index)=>{
+                    const { id, name, area } =unit;
+                    const getMonth = $('[name="month"]').val();
+                    const getYear = $('[name="year"]').val();
+                    let filterMonth = months.filter(data=>{
+                        return data.id == getMonth
+                    });
 
-    $('#modal_add').on('hidden.bs.modal', function () {
-       validator.resetForm();
+                    if(filterMonth.length === 0){
+                        filterMonth = months;
+                    }
+
+                    filterMonth.forEach(month=>{
+                        const getTarget = targetUnits.filter(data=>data.id_unit == id && data.year == getYear && data.month == month.id);
+                        let amount_outstanding = 0;
+                        let amount_booking = 0;
+                        if(getTarget.length > 0){
+                            amount_booking = getTarget[0].amount_booking;
+                            amount_outstanding = getTarget[0].amount_outstanding;
+                        }
+                        let html = '';
+                        html += `<tr>`;
+                        html += `<td>${name}</td>`;
+                        html += `<td>${area}</td>`;
+                        html += `<td>${getYear}</td>`;
+                        html += `<td>${month.name}</td>`;
+                        html += `<td><input value="${amount_booking}" class="form-control money_format" type="text" name="amount_booking"></td>`;
+                        html += `<td><input value="${amount_outstanding}" class="form-control money_format" type="text" name="amount_outstanding"></td>`;
+                        html += `<td><button type="button" class="btn btn-primary">Save</button></td>`;
+                        html += `</tr>`;
+                        
+                        $('.table').find('tbody').append(html);
+                    })
+                 
+                });
+                KTApp.unblockPage();
+			},
+			error: function (jqXHR, textStatus, errorThrown){
+				KTApp.unblockPage();
+			},
+			complete:function () {
+                $('.money_format').trigger('keyup');
+				KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+			}
+		});
     })
 
     return {
         validator:validator
     }
+
+  
 }
-
-function initEditForm(){
-    //validator
-    var validator = $( "#form_edit" ).validate({
-        ignore:[],
-        rules: {
-            unit: {
-                required: true,
-            },
-            month: {
-                required: true,
-            },
-            year: {
-                required: true,
-            },
-            amount: {
-                required: true,
+$('[name="area"]').on('change',function(){
+        var area = $('[name="area"]').val();
+        var units =  $('[name="id_unit"]');
+        var url_data = $('#url_get_unit').val() + '/' + area;
+        $.get(url_data, function (data, status) {
+            var response = JSON.parse(data);
+            objUnit = response.data;
+            if (status) {
+                $("#unit").empty();
+				var opt = document.createElement("option");
+				opt.value = "0";
+				opt.text = "All";
+				units.append(opt);
+                for (var i = 0; i < response.data.length; i++) {
+                    var opt = document.createElement("option");
+                    opt.value = response.data[i].id;
+                    opt.text = response.data[i].name;
+                    units.append(opt);
+                }
             }
-        },
-        invalidHandler: function(event, validator) {   
-            KTUtil.scrollTop();
-        }
-    });  
-
-    $('#edit_unit').select2({
-        placeholder: "Please select a Unit",
-        width: '100%'
-    });   
-
-    $('#edit_month').select2({
-        placeholder: "Please select a Month",
-        width: '100%'
-    });
-
-    $('#edit_year').select2({
-        placeholder: "Please select a Year",
-        width: '100%'
-    });
-    //events
-    $("#btn_edit_submit").on("click",function(){
-      var isValid = $( "#form_edit" ).valid();
-      if(isValid){
-        KTApp.block('#modal_edit .modal-content', {});
-        $.ajax({
-            type : 'POST',
-            url : "<?php echo base_url("api/datamaster/unitstarget/update"); ?>",
-            data : $('#form_edit').serialize(),
-            dataType : "json",
-            success : function(data,status){
-                KTApp.unblock('#modal_edit .modal-content');
-                if(data.status == true){
-                    datatable.reload();
-                    $('#modal_edit').modal('hide');
-                    AlertUtil.showSuccess(data.message,5000);
-                }else{
-                    AlertUtil.showFailed(data.message);
-                }                
-            },
-            error: function (jqXHR, textStatus, errorThrown){
-                KTApp.unblock('#modal_edit .modal-content');
-                AlertUtil.showFailedDialogEdit("Cannot communicate with server please check your internet connection");
-            }
-        });  
-      }
-    })
-
-    $('#modal_edit').on('hidden.bs.modal', function () {
-       validator.resetForm();
-    
-    })
-
-    var populateForm = function(groupObject){
-        $("#edit_unitstarget_id").val(groupObject.id);
-        $("#edit_unit").val(groupObject.id_unit);
-        $("#edit_month").val(groupObject.month);
-        $("#edit_year").val(groupObject.year);
-        $("#edit_booking").val(groupObject.amount_booking);
-        $("#edit_outstanding").val(groupObject.amount_outstanding);
-        $("#edit_unit").trigger('change');
-        $("#edit_month").trigger('change');
-        $("#edit_year").trigger('change');
-    }
-    
-    return {
-        validator:validator,
-        populateForm:populateForm
-    }
-}
-
-jQuery(document).ready(function() { 
-    
-    initDataTable();
-    //createForm = initCreateForm();
-    editForm = initEditForm();
-    initAlert();
-    $('#unit').select2({
-        placeholder: "Please select a Unit",
-        width: '100%'
-    });   
+        });
 });
+
+function buildTenor(tenor,method){
+	if(method !== 'INSTALLMENT'){
+		return method;
+	}
+	return `installment ${tenor}x`
+}
+
+function initGetNasabah(){
+    $("#unit").on('change',function(){
+        var area = $('#area').val();
+        var unit = $('#unit').val();
+        var customers =  document.getElementById('nasabah');
+        //alert(unit);
+        $.ajax({
+			type : 'GET',
+			url : "<?php echo base_url("api/datamaster/units/get_customers_gr_byunit"); ?>",
+			dataType : "json",
+			data:{unit:unit},
+			success : function(response,status){
+				KTApp.unblockPage();
+				if(response.status == true){
+                    $("#nasabah").empty();
+                    var option = document.createElement("option");
+                    option.value = "all";
+                    option.text = "All";
+                    customers.appendChild(option);
+					$.each(response.data, function (index, data) {
+                        //console.log(data);
+                        var opt = document.createElement("option");
+                        opt.value = data.nik;
+                        opt.text = data.name;
+                        customers.appendChild(opt);
+					});
+
+				}
+			},
+			error: function (jqXHR, textStatus, errorThrown){
+				KTApp.unblockPage();
+			},
+			complete:function () {
+				KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+			}
+        });        
+
+    });
+}
+
+function initUnitNasabah(){
+        var unit=$('[name="id_unit"]').val();
+        var customers =  document.getElementById('nasabah');
+        $.ajax({
+			type : 'GET',
+			url : "<?php echo base_url("api/datamaster/units/get_customers_gr_byunit"); ?>",
+			dataType : "json",
+			data:{unit:unit},
+			success : function(response,status){
+				KTApp.unblockPage();
+				if(response.status == true){
+                    $("#nasabah").empty();
+                    var option = document.createElement("option");
+                    option.value = "all";
+                    option.text = "All";
+                    customers.appendChild(option);
+					$.each(response.data, function (index, data) {
+                        //console.log(data);
+                        var opt = document.createElement("option");
+                        opt.value = data.nik;
+                        opt.text = data.name;
+                        customers.appendChild(opt);
+					});
+				}
+			},
+			error: function (jqXHR, textStatus, errorThrown){
+				KTApp.unblockPage();
+			},
+			complete:function () {
+				KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+			}
+		});
+}
+
+
+jQuery(document).ready(function() {
+    $.ajax({
+        type : 'GET',
+        url : "<?php echo base_url("api/datamaster/units"); ?>",
+        dataType : "json",
+        success : function(response,status){
+            objUnit = response.data;
+        },
+    });
+
+    initCariForm();
+    initGetNasabah();
+    initUnitNasabah();
+    initAlert();
+
+	$('#btncari').trigger('click');
+});
+
+var type = $('[name="area"]').attr('type');
+if(type == 'hidden'){
+    $('[name="area"]').trigger('change');
+}
+
+function change(element) {
+	const data = {
+		status:element.value,
+		code:element.getAttribute('data-code')
+	}
+	$.ajax({
+		type : 'POST',
+		url : "<?php echo base_url("api/lm/transactions/change"); ?>",
+		dataType : "json",
+		data:data,
+		success : function(response,status){
+			AlertUtil.showSuccess(response.message,5000);
+		},
+	});
+}
+function deleted(id) {
+	var targetId = id;
+	swal.fire({
+		title: 'Anda Yakin?',
+		text: "Akan menghapus data ini",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonText: 'Ya, Hapus'
+	}).then(function(result) {
+		if (result.value) {
+			KTApp.blockPage();
+			$.ajax({
+				type : 'GET',
+				url : "<?php echo base_url('api/lm/transactions/delete');?>/"+targetId,
+				dataType : "json",
+				success : function(data,status){
+					KTApp.unblockPage();
+					if(data.status == true){
+						AlertUtil.showSuccess(data.message,5000);
+						$('#btncari').trigger('click');
+					}else{
+						AlertUtil.showFailed(data.message);
+					}
+				},
+				error: function (jqXHR, textStatus, errorThrown){
+					KTApp.unblockPage();
+					AlertUtil.showFailed("Cannot communicate with server please check your internet connection");
+				}
+			});
+		}
+	});
+};
 
 </script>
