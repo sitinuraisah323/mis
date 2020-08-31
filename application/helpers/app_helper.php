@@ -59,3 +59,20 @@ function money($string){
 	$hasil_rupiah = number_format($string,2,',','.');
 	return $hasil_rupiah;
 }
+
+function months($month = 0){
+	$data=array(1 => 'Jan.', 2 => 'Feb.', 3 => 'Mar.', 4 => 'Apr.', 5 => 'May', 6 => 'Jun.', 7 => 'Jul.', 8 => 'Aug.', 9 => 'Sep.', 10 => 'Oct.', 11 => 'Nov.', 12 => 'Dec.');
+	if($month === 0){
+		return $data;
+	}else{
+		return $data[$month];
+	}
+}
+
+function years(){
+	$data = array();
+	for($i=date('Y');$i >= 1945; $i--){
+		$data[] = $i;
+	}
+	return $data;
+}

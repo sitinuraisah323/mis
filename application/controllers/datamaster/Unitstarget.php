@@ -18,6 +18,7 @@ class Unitstarget extends Authenticated
 		parent::__construct();
 		$this->load->model('UnitsModel', 'units');
 		$this->load->model('unitstargetModel', 'unitstarget');
+		$this->load->model('AreasModel', 'area');
 	}
 
 	/**
@@ -26,6 +27,9 @@ class Unitstarget extends Authenticated
 	public function index()
 	{
         $data['units'] = $this->units->all();
+		$data['areas'] = $this->area->all();
+		$data['months'] = months();
+		$data['years'] = years();
 		$this->load->view('datamaster/unitstarget/index',$data);
 	}
 

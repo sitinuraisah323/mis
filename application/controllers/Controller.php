@@ -9,4 +9,21 @@ class Controller extends CI_Controller {
 		parent::__construct();
 	}
 
+	public function convert()
+	{
+		$path = 'storage/convert/';
+		if($files = scandir($path)){
+			foreach ($files as $index => $item){
+				if($index > 1){
+					$parts = explode('.',$item);
+					$ext = $parts[1];
+					if($ext === 'PAR'){
+						$filename = $parts[0];
+						rename ($path."/$filename.$ext", $path."/$filename.xls");
+					}
+				}
+			}
+		}
+	}
+
 }
