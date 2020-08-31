@@ -279,6 +279,29 @@ $this->load->view('temp/MenuBar.php');
                         <div class="kt-widget11">
                                 <div id="graphDPD" style="height:300px;"></div>                           
                         </div>
+                        <hr/>
+                        <!--begin::Accordion-->
+                        <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
+                            <div class="card">
+                                <div class="card-header" id="headingDPD">
+                                    <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseDPD" aria-expanded="true" aria-controls="collapseDPD">
+                                        View Detail
+                                    </div>
+                                </div>
+                                <div id="collapseDPD" class="collapse" aria-labelledby="headingDPD" data-parent="#accordionExample3">
+                                    <div class="card-body">
+                                        <table class="table" id="tblDPD">   
+                                        <tr>
+                                            <td class="text-left"><b>Area</b></td>
+                                            <td class="text-left"><b>Unit</b></td>
+                                            <td class="text-right"><b>Amount</b></td>
+                                        </tr>                                    
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>                           
+                        </div>
+                        <!--end::Accordion-->
                     </div>
                 </div>	        
                 </form>	        
@@ -319,7 +342,30 @@ $this->load->view('temp/MenuBar.php');
                         </div>                        
                         <div class="kt-widget11">
                             <div id="graphPencairan" style="height:300px;"></div>                           
-                        </div>                        
+                        </div>   
+                        <hr/>
+                        <!--begin::Accordion-->
+                        <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
+                            <div class="card">
+                                <div class="card-header" id="headingPencairan">
+                                    <div class="card-title collapsed" data-toggle="collapse" data-target="#collapsePencairan" aria-expanded="true" aria-controls="collapsePencairan">
+                                        View Detail
+                                    </div>
+                                </div>
+                                <div id="collapsePencairan" class="collapse" aria-labelledby="headingPencairan" data-parent="#accordionExample3">
+                                    <div class="card-body">
+                                        <table class="table" id="tblPencairan">         
+                                        <tr>
+                                            <td class="text-left"><b>Area</b></td>
+                                            <td class="text-left"><b>Unit</b></td>
+                                            <td class="text-right"><b>Amount</b></td>
+                                        </tr>                               
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>                           
+                        </div>
+                        <!--end::Accordion-->                      
                     </div>
                 </div>	   
                 </form>     
@@ -366,7 +412,30 @@ $this->load->view('temp/MenuBar.php');
                         </div>
                         <div class="kt-widget11">
                             <div id="graphPelunasan" style="height:300px;"></div>                           
-                        </div>   
+                        </div>  
+                        <hr/>
+                        <!--begin::Accordion-->
+                        <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
+                            <div class="card">
+                                <div class="card-header" id="headingPelunasan">
+                                    <div class="card-title collapsed" data-toggle="collapse" data-target="#collapsePelunasan" aria-expanded="true" aria-controls="collapsePelunasan">
+                                        View Detail
+                                    </div>
+                                </div>
+                                <div id="collapsePelunasan" class="collapse" aria-labelledby="headingPelunasan" data-parent="#accordionExample3">
+                                    <div class="card-body">
+                                        <table class="table" id="tblPelunasan">   
+                                        <tr>
+                                            <td class="text-left"><b>Area</b></td>
+                                            <td class="text-left"><b>Unit</b></td>
+                                            <td class="text-right"><b>Amount</b></td>
+                                        </tr>                                     
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>                           
+                        </div>
+                        <!--end::Accordion--> 
                     </div>
                 </div>	        
                 </form>	        
@@ -404,6 +473,29 @@ $this->load->view('temp/MenuBar.php');
                             <div class="kt-widget11">
                                 <div id="graphSaldo" style="height:300px;"></div>                           
                             </div>
+                            <hr/>
+                            <!--begin::Accordion-->
+                            <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
+                                <div class="card">
+                                    <div class="card-header" id="headingSaldo">
+                                        <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseSaldo" aria-expanded="true" aria-controls="collapseSaldo">
+                                            View Detail
+                                        </div>
+                                    </div>
+                                    <div id="collapseSaldo" class="collapse" aria-labelledby="headingSaldo" data-parent="#accordionExample3">
+                                        <div class="card-body">
+                                            <table class="table" id="tblSaldo"> 
+                                            <tr>
+                                                <td class="text-left"><b>Area</b></td>
+                                                <td class="text-left"><b>Unit</b></td>
+                                                <td class="text-right"><b>Amount</b></td>
+                                            </tr>                                       
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>                           
+                            </div>
+                            <!--end::Accordion--> 
                         </div>
                     </div>	        
                 </form>	        
@@ -445,6 +537,29 @@ $this->load->view('temp/MenuBar.php');
                         <div class="kt-widget11">
                             <div id="graphPengeluaran" style="height:300px;"></div>                           
                         </div>
+                        <hr/>
+                        <!--begin::Accordion-->
+                        <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
+                            <div class="card">
+                                <div class="card-header" id="headingPengeluaran">
+                                    <div class="card-title collapsed" data-toggle="collapse" data-target="#collapsePengeluaran" aria-expanded="true" aria-controls="collapsePengeluaran">
+                                        View Detail
+                                    </div>
+                                </div>
+                                <div id="collapsePengeluaran" class="collapse" aria-labelledby="headingPengeluaran" data-parent="#accordionExample3">
+                                    <div class="card-body">
+                                        <table class="table" id="tblPengeluaran">
+                                        <tr>
+                                            <td class="text-left"><b>Area</b></td>
+                                            <td class="text-left"><b>Unit</b></td>
+                                            <td class="text-right"><b>Amount</b></td>
+                                        </tr>                                        
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>                           
+                        </div>
+                        <!--end::Accordion--> 
                     </div>
                 </div>	        
                 </form>	        
@@ -478,8 +593,31 @@ $this->load->view('temp/MenuBar.php');
                            </div>                            -->
                         </div>
                         <div class="kt-widget11">
-                                <div id="graphPendapatan" style="height:300px;"></div>                           
-                            </div>
+                            <div id="graphPendapatan" style="height:300px;"></div>                           
+                        </div>
+                        <hr/>
+                        <!--begin::Accordion-->
+                        <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
+                            <div class="card">
+                                <div class="card-header" id="headingPendapatan">
+                                    <div class="card-title collapsed" data-toggle="collapse" data-target="#collapsePendapatan" aria-expanded="true" aria-controls="collapsePendapatan">
+                                        View Detail
+                                    </div>
+                                </div>
+                                <div id="collapsePendapatan" class="collapse" aria-labelledby="headingPendapatan" data-parent="#accordionExample3">
+                                    <div class="card-body">
+                                        <table class="table" id="tblPendapatan"> 
+                                        <tr>
+                                            <td class="text-left"><b>Area</b></td>
+                                            <td class="text-left"><b>Unit</b></td>
+                                            <td class="text-right"><b>Amount</b></td>
+                                        </tr>                                       
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>                           
+                        </div>
+                        <!--end::Accordion--> 
                     </div>
                 </div>	        
                 </form>	        

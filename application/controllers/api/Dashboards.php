@@ -317,12 +317,14 @@ class Dashboards extends ApiController
 			$this->units->db->where('MONTH(date)', $month);
 		}
 
-		$this->units->db->select('units.name, sum(amount) as amount')
+		$this->units->db->select('units.name,areas.area, sum(amount) as amount')
 			->join('units','units.id = units_dailycashs.id_unit')
+			->join('areas','areas.id = units.id_area')
 			->from('units_dailycashs')
 			->where('type','CASH_IN')	
 			->where_in('no_perk', $category)
 			->group_by('units.name')
+			->group_by('areas.area')
 			->order_by('amount','desc');
 		$data = $this->units->db->get()->result();
 		return $this->sendMessage($data,'Successfully get Pendapatan');
@@ -360,12 +362,14 @@ class Dashboards extends ApiController
 			$this->units->db->where('MONTH(date)', $month);
 		}
 		
-		$this->units->db->select('units.name, sum(amount) as amount')
+		$this->units->db->select('units.name,areas.area, sum(amount) as amount')
 			->join('units','units.id = units_dailycashs.id_unit')
+			->join('areas','areas.id = units.id_area')
 			->from('units_dailycashs')
 			->where('type','CASH_OUT')
 			->where_in('no_perk', $category)
 			->group_by('units.name')
+			->group_by('areas.area')
 			->order_by('amount','desc');
 		$data = $this->units->db->get()->result();
 		return $this->sendMessage($data,'Successfully get Pendapatan');
@@ -431,7 +435,7 @@ class Dashboards extends ApiController
 			$this->units->db->where('id_unit', $this->session->userdata('user')->id_unit);
 		}
 
-		$this->units->db->select('name,sum(amount) as up')
+		$this->units->db->select('name,area,sum(amount) as up')
 			->join('units','units.id = units_regularpawns.id_unit')
 			->join('areas','areas.id = units.id_area')
 			->from('units_regularpawns')
@@ -439,6 +443,7 @@ class Dashboards extends ApiController
 			->where('units_regularpawns.date_sbk <=', $date_end)
 			->where('units_regularpawns.status_transaction','N')
 			->group_by('units.name')
+			->group_by('areas.area')
 			->order_by('up','desc');
 		$data = $this->units->db->get()->result();
 		return $this->sendMessage($data,'Successfully get Pendapatan');
