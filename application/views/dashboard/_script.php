@@ -10,11 +10,13 @@ if(date('H:i') > '20:00'){
 	$date =  date('Y-m-d');
 	$_1lastdate = date('Y-m-d', strtotime($date));
 	$_2lastdate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
+	$month = date('n', strtotime(date('Y-m-d')));;
 	
 }else{
 	$date =  date('Y-m-d');
 	$_1lastdate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
 	$_2lastdate = date('Y-m-d', strtotime('-2 days', strtotime($date)));
+	$month = date('n', strtotime('-1 month', strtotime($date)));
 }
 
 ?>
@@ -24,7 +26,7 @@ var lastdate = "<?php echo $_2lastdate;?>";
 
 var currday = "<?php echo date('d', strtotime($_1lastdate)); ?>";
 var lastday = "<?php echo date('d', strtotime($_2lastdate)); ?>";
-var currmonth =  "<?php echo date('n', strtotime(date('Y-m-d'))); ?>";
+var currmonth =  "<?php echo $month; ?>";
 var curryears =  "<?php echo date('Y', strtotime(date('Y-m-d'))); ?>";
 
 //alert(currdate);
@@ -1537,6 +1539,140 @@ function pendapatan() {
 	});
 }
 
+function targetBooking(){
+	var data = [{
+            label: 'Percentage',
+            data: [10, 90, 40, 60],
+            type: 'line',
+            borderColor: '#ff0000',
+			yAxisID: 'B',
+            datalabels: {
+                display: false
+            }
+        }, {
+            label: 'Target',
+            backgroundColor: '#006699',
+			yAxisID: 'A',
+            data: [6310, 5742, 4044, 5564]
+        }, {
+            label: 'Realisasi',
+            backgroundColor: '#FFA000',
+			yAxisID: 'A',
+            data: [11542, 12400, 12510, 11450]
+        }];
+        
+        
+         var options = {
+        	tooltips: {
+            	mode: 'label',
+			},						
+			scales: {
+				xAxes: [{
+						stacked: true,
+						gridLines: {
+							display: false
+						}
+					}],
+				yAxes: [{
+						id: 'A',
+						stacked: true,						
+						ticks: {
+							beginAtZero: true,
+							callback: function (value) {
+								valuek = convertToRupiah(value) ;
+								return valuek;
+							}
+						}
+					},{
+							id: 'B',
+							type: 'linear',
+							position: 'right',
+							ticks: {
+								max: 100,
+								min: 0,
+							}
+					}]
+			}
+    };
+
+	var ctx = document.getElementById("graphtarBooking");
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ["India", "China", "USA", "Canada"],
+            datasets: data
+        },
+        options: options
+    });
+
+}
+
+function targetOutstanding(){
+	var data = [{
+            label: 'Percentage',
+            data: [10, 90, 40, 60],
+            type: 'line',
+            borderColor: '#ff0000',
+			yAxisID: 'B',
+            datalabels: {
+                display: false
+            }
+        }, {
+            label: 'Target',
+            backgroundColor: '#512DA8',
+			yAxisID: 'A',
+            data: [6310, 5742, 4044, 5564]
+        }, {
+            label: 'Realisasi',
+            backgroundColor: '#FFA000',
+			yAxisID: 'A',
+            data: [11542, 12400, 12510, 11450]
+        }];
+        
+        
+         var options = {
+        	tooltips: {
+            	mode: 'label',
+			},						
+			scales: {
+				xAxes: [{
+						stacked: true,
+						gridLines: {
+							display: false
+						}
+					}],
+				yAxes: [{
+						id: 'A',
+						stacked: true,						
+						ticks: {
+							beginAtZero: true,
+							callback: function (value) {
+								valuek = convertToRupiah(value) ;
+								return valuek;
+							}
+						}
+					},{
+							id: 'B',
+							type: 'linear',
+							position: 'right',
+							ticks: {
+								max: 100,
+								min: 0,
+							}
+					}]
+			}
+    };
+    
+  	var ctx = document.getElementById("graphtarOutstanding");
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ["India", "China", "USA", "Canada"],
+            datasets: data
+        },
+        options: options
+    });
+}
 
 function notfound(){
     $("#graph").empty();
@@ -1554,6 +1690,9 @@ jQuery(document).ready(function() {
 	saldo();
 	pengeluaran();
 	pendapatan();
+	targetBooking();
+	targetOutstanding();
+	//GraphTest();
 });
 
 </script>
