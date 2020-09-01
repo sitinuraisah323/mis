@@ -47,27 +47,28 @@ class Unitstarget extends ApiController
 	public function insert()
 	{
 		if($post = $this->input->post()){
-
             $data['id_unit']            = $this->input->post('unit');	
             $data['month']              = $this->input->post('month');	
             $data['year']               = $this->input->post('year');	
             $data['amount_booking']     = $this->input->post('booking');	
-            $data['amount_outstanding'] = $this->input->post('outstanding');	
-            $db = false;
-            $db = $this->u_target->insert($data);
-            if($db=true){
-                echo json_encode(array(
-                    'data'	=> 	true,
-                    'status'=>true,
-                    'message'	=> 'Successfull Insert Data Area'
-                ));
+            $data['amount_outstanding'] = $this->input->post('outstanding');
+            if($find = $this->u_target->find(array(
+                'year'  => $this->input->post('year') ,
+                "month" =>  $this->input->post('month'),
+                "id_unit"=> $this->input->post('unit')
+            ))){
+                $this->u_target->update($data, $find->id);
+                return $this->sendMessage($find, 'Successfully insert unit target');
             }else{
-                echo json_encode(array(
-                    'data'	=> 	false,
-                    'status'=>false,
-                    'message'	=> 'Failed Insert Data Area'
-                ));
+                $this->u_target->insert($data);
+                $this->u_target->db->order_by('id','desc');
+                $find = $this->u_target->all();
+                return $this->sendMessage($find[0], 'Successfully insert unit target');
+
             }
+         
+        }else{
+            return $this->sendMessage(false,'Get Method Not Allowed',400);
         }	
     }
     

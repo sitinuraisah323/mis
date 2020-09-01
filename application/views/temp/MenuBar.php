@@ -192,6 +192,14 @@
 											</a>
 										</li>
 									<?php endif;?>
+									<?php if(read_access('datamaster/unitstarget')):?>
+										<li class="kt-menu__item "  aria-haspopup="true">
+											<a  href="<?php echo base_url('datamaster/unitstarget'); ?>" class="kt-menu__link ">
+												<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>
+												<span class="kt-menu__link-text">Unit Target</span>
+											</a>
+										</li>
+									<?php endif;?>
 
 									<li class="kt-menu__item  kt-menu__item--submenu"  data-ktmenu-submenu-toggle="hover" aria-haspopup="true">
 										<a  href="javascript:;" class="kt-menu__link kt-menu__toggle">

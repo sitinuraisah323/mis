@@ -55,7 +55,7 @@ var months = [
 ]
 
 $(document).on('keyup','.money_format', function(){
-    const number = this.value.replace(".","");
+    const number = this.value.replaceAll(".","");
     this.value = convertToRupiah(number);
 })
 function initAlert(){
@@ -165,8 +165,15 @@ function initCariForm(){
 			success : function(response,status){
                 const targetUnits = response.data;
                 const trBody = $('.table').find('tbody').find('tr').remove();
+                const unit = $('[name="id_unit"]').val();
+
+                let filterUnit = objUnit;
+
+                if(unit > 0){
+                    filterUnit = filterUnit.filter(get=>get.id === unit);
+                }
             
-                objUnit.forEach((unit, index)=>{
+                filterUnit.forEach((unit, index)=>{
                     const { id, name, area } =unit;
                     const getMonth = $('[name="month"]').val();
                     const getYear = $('[name="year"]').val();
@@ -189,12 +196,12 @@ function initCariForm(){
                         let html = '';
                         html += `<tr>`;
                         html += `<td>${name}</td>`;
-                        html += `<td>${area}</td>`;
-                        html += `<td>${getYear}</td>`;
-                        html += `<td>${month.name}</td>`;
-                        html += `<td><input value="${amount_booking}" class="form-control money_format" type="text" name="amount_booking"></td>`;
-                        html += `<td><input value="${amount_outstanding}" class="form-control money_format" type="text" name="amount_outstanding"></td>`;
-                        html += `<td><button type="button" class="btn btn-primary">Save</button></td>`;
+                        html += `<td><input type="hidden" name="id_unit" value="${id}">${area}</td>`;
+                        html += `<td><input type="hidden" name="year" value="${getYear}">${getYear}</td>`;
+                        html += `<td><input type="hidden" name="month" value="${month.id}">${month.name}</td>`;
+                        html += `<td><input value="${amount_booking}" name="amount_booking" class="form-control money_format" type="text" name="amount_booking"></td>`;
+                        html += `<td><input value="${amount_outstanding}" name="amount_outstanding" class="form-control money_format" type="text" name="amount_outstanding"></td>`;
+                        html += `<td><button type="button" class="btn btn-primary btn-save">Save</button></td>`;
                         html += `</tr>`;
                         
                         $('.table').find('tbody').append(html);
@@ -225,6 +232,7 @@ $('[name="area"]').on('change',function(){
         var url_data = $('#url_get_unit').val() + '/' + area;
         $.get(url_data, function (data, status) {
             var response = JSON.parse(data);
+            console.log(response);
             objUnit = response.data;
             if (status) {
                 $("#unit").empty();
@@ -394,5 +402,40 @@ function deleted(id) {
 		}
 	});
 };
+
+$(document).on('click','.btn-save', (element)=>{
+    const tr = element.target.closest('td').closest('tr');
+    const amount_booking = tr.querySelector('[name="amount_booking"]').value;
+    const amount_outstanding = tr.querySelector('[name="amount_outstanding"]').value;
+    const month = tr.querySelector('[name="month"]').value;
+    const year = tr.querySelector('[name="year"]').value;
+    const id_unit = tr.querySelector('[name="id_unit"]').value;
+    const data = {
+        unit:id_unit,
+        year:year,
+        month:month,
+        booking:amount_booking.replaceAll(".",""),
+        outstanding:amount_outstanding.replaceAll(".",""),
+    };
+    $.ajax({
+        type : 'POST',
+        url : "<?php echo base_url('api/datamaster/unitstarget/insert');?>/",
+        dataType : "json",
+        data:data,
+        success : function(response,status){
+            KTApp.unblockPage();
+            if(response.status == 200){
+                AlertUtil.showSuccess(response.message,5000);
+                $('#btncari').trigger('click');
+            }else{
+                AlertUtil.showFailed(response.message);
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown){
+            KTApp.unblockPage();
+            AlertUtil.showFailed("Check Correct Field");
+        }
+    });
+})
 
 </script>
