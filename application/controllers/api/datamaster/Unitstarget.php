@@ -8,6 +8,9 @@ class Unitstarget extends ApiController
 	{
 		parent::__construct();
 		$this->load->model('UnitstargetModel', 'u_target');
+        $this->load->model('UnitsModel', 'units');
+        $this->load->model('OutstandingModel','os');
+        $this->load->model('RegularPawnsModel','regular');
 	}
 
 	public function index()
@@ -186,4 +189,74 @@ class Unitstarget extends ApiController
         $this->sendMessage($data, 'Get Data Outstanding');
     }
 
+    public function reportreal()
+	{
+        if($this->input->get('year')){
+            $year = $this->input->get('year');
+        }else{
+            $year = date('Y');
+        }
+
+        if($this->input->get('month')){
+            $month = $this->input->get('month');
+        }else{
+            $month = date('n');
+        }
+
+        if($area = $this->input->get('area')){
+            $this->units->db->where('id_area', $area);
+        }
+
+        if($unit = $this->input->get('id_unit')){
+            $this->units->db->where('units.id', $unit);
+        }
+
+		$this->units->db->select('units.id, name, areas.area')
+			->join('areas','areas.id = units.id_area');	
+        $units = $this->units->db->get('units')->result();
+
+        if($units){
+            foreach($units as $unit){
+                //get booking
+                $this->u_target->db
+                    ->where('id_unit', $unit->id)
+                    ->where('month',$month)
+                    ->where('year', $year);
+                $target = $this->u_target->db->get('units_targets')->row();
+                
+                $totalDisburse = $this->regular->getTotalDisburse($unit->id, $year, $month);
+                if($target){
+                    $unit->booking = (object) [];
+                    $unit->booking->target = (int) $target->amount_booking;
+                    $unit->booking->real = (int) $totalDisburse->credit;
+                    $unit->booking->percentage = round(($unit->booking->real / $unit->booking->target) * 100, 2);
+                }else{
+                    $unit->booking = (object) [];
+                    $unit->booking->target =0;
+                    $unit->booking->real = 0;
+                    $unit->booking->percentage = 0;
+                }
+                //get outstanding where date and year last
+                $this->u_target->db
+                    ->where('id_unit', $unit->id)
+                    ->where('MONTH(date)',$month)
+                    ->where('YEAR(date)', $year)
+                    ->order_by('date','DESC');
+                $oustanding = $this->u_target->db->get('units_outstanding')->row();
+                if($target){
+                    $unit->outstanding = (object) [];
+                    $unit->outstanding->target = (int) $target->amount_outstanding;
+                    $unit->outstanding->real = (int) $oustanding->os;
+                    $unit->outstanding->percentage = round(($unit->outstanding->real / $unit->outstanding->target) * 100, 2);
+                }else{
+                    $unit->outstanding = (object) [];
+                    $unit->outstanding->target =0;
+                    $unit->outstanding->real = 0;
+                    $unit->outstanding->percentage = 0;
+                }
+         
+            }
+        }
+        $this->sendMessage($units,'Successfully get report realisasi');		
+	}
 }
