@@ -86,7 +86,7 @@ class RegularpawnsModel extends Master
 	{
 
 		if(!is_null($date)){
-			$this->db->where('date_sbk',implode('-',array($year,$month,$date)));
+			$this->db->where('date_sbk',implode('-',array($year,zero_fill($month,2),$date)));
 		}else{
 			if(!is_null($year)){
 				$this->db->where('YEAR(date_sbk)',$year);
@@ -100,7 +100,8 @@ class RegularpawnsModel extends Master
 			->where('id_unit', $idUnit)->get()->row();
 		$noaMortages = (int)$dataMortage->noa;
 		$upMortages = (int)$dataMortage->up;
-
+	   //var_dump($this->db->last_query());
+	   //exit();
 
 		if(!is_null($date)){
 			$this->db->where('date_sbk',implode('-',array($year,$month,$date)));

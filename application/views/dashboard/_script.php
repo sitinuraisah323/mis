@@ -207,7 +207,9 @@ function disburse() {
 		dataType: "JSON",
 		data: {
 			area: '',
-			date: currday,currmonth,curryears,
+			date: currday,
+			month: currmonth,
+			year: curryears,
 		},
 		success: function (response) {
 			$.each(response.data, function (index, unit) {
@@ -1540,138 +1542,458 @@ function pendapatan() {
 }
 
 function targetBooking(){
-	var data = [{
+
+	var booking 	= [];
+	var target 		= [];
+	var percentage 	= [];
+	var unitlabel 	= [];
+	var tottarget 	 = 0;
+	var totrealisasi = 0;
+	KTApp.block('#form_tarBook .kt-widget14', {});
+	$.ajax({
+		url:"<?php echo base_url('api/datamaster/unitstarget/reportreal');?>",
+		type:"GET",
+		dataType:"JSON",
+		data:{
+			area:'',
+			month:currmonth,
+		},
+		success:function (response) {
+
+			var Tempjabar 	= "";
+			var Tempjatim	= "";
+			var Tempntt		= "";
+			var Tempntb		= "";
+			var Tempall		= "";
+			var totjabar 	= 0;
+			var totjabarreal= 0;
+			var totjatim 	= 0;
+			var totjatimreal= 0;
+			var totntb 		= 0;
+			var totntbreal	= 0;
+			var totntt 		= 0;
+			var totnttreal	= 0;
+			var totall 		= 0;
+
+			$.each(response.data, function (index,unit) {
+				unitlabel.push(unit.name);
+				booking.push(unit.booking.real);		
+				target.push(unit.booking.target);
+				percentage.push(unit.booking.percentage);
+
+				tottarget += unit.booking.target;			
+				totrealisasi += unit.booking.real;	
+
+				if(unit.area=='Jawa Barat')
+				{
+					Tempjabar += "<tr class='rowappendjabar'>";
+					Tempjabar += "<td class='text-left'><b>"+unit.area+"</b></td>";
+					Tempjabar += "<td class='text-left'><b>"+unit.name+"</b></td>";
+					Tempjabar += "<td class='text-right'><b>"+convertToRupiah(unit.booking.target)+"</b></td>";
+					Tempjabar += "<td class='text-right'><b>"+convertToRupiah(unit.booking.real)+"</b></td>";
+					Tempjabar += "<td class='text-right'><b>"+unit.booking.percentage+"</b></td>";
+					Tempjabar += '</tr>';
+					totjabar += parseInt(unit.booking.target);
+					totjabarreal += parseInt(unit.booking.real);
+				}
+
+				if(unit.area=='Jawa Timur')
+				{
+					Tempjatim += "<tr class='rowappendjabar'>";
+					Tempjatim += "<td class='text-left'><b>"+unit.area+"</b></td>";
+					Tempjatim += "<td class='text-left'><b>"+unit.name+"</b></td>";
+					Tempjatim += "<td class='text-right'><b>"+convertToRupiah(unit.booking.target)+"</b></td>";
+					Tempjatim += "<td class='text-right'><b>"+convertToRupiah(unit.booking.real)+"</b></td>";
+					Tempjatim += "<td class='text-right'><b>"+unit.booking.percentage+"</b></td>";
+					Tempjatim += '</tr>';
+					totjatim += parseInt(unit.booking.target);
+					totjatimreal += parseInt(unit.booking.real);
+				}
+
+				if(unit.area=='NTB')
+				{
+					Tempntb += "<tr class='rowappendjabar'>";
+					Tempntb += "<td class='text-left'><b>"+unit.area+"</b></td>";
+					Tempntb += "<td class='text-left'><b>"+unit.name+"</b></td>";
+					Tempntb += "<td class='text-right'><b>"+convertToRupiah(unit.booking.target)+"</b></td>";
+					Tempntb += "<td class='text-right'><b>"+convertToRupiah(unit.booking.real)+"</b></td>";
+					Tempntb += "<td class='text-right'><b>"+unit.booking.percentage+"</b></td>";
+					Tempntb += '</tr>';
+					totntb += parseInt(unit.booking.target);
+					totntbreal += parseInt(unit.booking.real);
+				}
+
+				if(unit.area=='NTT')
+				{
+					Tempntt += "<tr class='rowappendjabar'>";
+					Tempntt += "<td class='text-left'><b>"+unit.area+"</b></td>";
+					Tempntt += "<td class='text-left'><b>"+unit.name+"</b></td>";
+					Tempntt += "<td class='text-right'><b>"+convertToRupiah(unit.booking.target)+"</b></td>";
+					Tempntt += "<td class='text-right'><b>"+convertToRupiah(unit.booking.real)+"</b></td>";
+					Tempntt += "<td class='text-right'><b>"+unit.booking.percentage+"</b></td>";
+					Tempntt += '</tr>';
+					totntt += parseInt(unit.booking.target);
+					totnttreal += parseInt(unit.booking.real);
+				}		
+			});
+
+			if(Tempjabar){
+				Tempjabar += "<tr class='rowappendjabar'>";
+				Tempjabar += "<td class='text-right' colspan='2'> Total Jawa Barat </td>";
+				Tempjabar += "<td class='text-right'><b>"+convertToRupiah(totjabar)+"</b></td>";
+				Tempjabar += "<td class='text-right'><b>"+convertToRupiah(totjabarreal)+"</b></td>";
+				Tempjabar += "<td class='text-right'><b></b></td>";
+				Tempjabar += '</tr>';
+			}
+
+			if(Tempjatim){
+				Tempjatim += "<tr class='rowappendjabar'>";
+				Tempjatim += "<td class='text-right' colspan='2'> Total Jawa Timur </td>";
+				Tempjatim += "<td class='text-right'><b>"+convertToRupiah(totjatim)+"</b></td>";
+				Tempjatim += "<td class='text-right'><b>"+convertToRupiah(totjatimreal)+"</b></td>";
+				Tempjatim += "<td class='text-right'><b></b></td>";
+				Tempjatim += '</tr>';
+			}
+
+			if(Tempntt){
+				Tempntt += "<tr class='rowappendjabar'>";
+				Tempntt += "<td class='text-right' colspan='2'> Total NTT </td>";
+				Tempntt += "<td class='text-right'><b>"+convertToRupiah(totntt)+"</b></td>";
+				Tempntt += "<td class='text-right'><b>"+convertToRupiah(totnttreal)+"</b></td>";
+				Tempntt += "<td class='text-right'><b></b></td>";
+				Tempntt += '</tr>';
+			}
+
+			if(Tempntb){
+				Tempntb += "<tr class='rowappendjabar'>";
+				Tempntb += "<td class='text-right' colspan='2'> Total NTB </td>";
+				Tempntb += "<td class='text-right'><b>"+convertToRupiah(totntb)+"</b></td>";
+				Tempntb += "<td class='text-right'><b>"+convertToRupiah(totntbreal)+"</b></td>";
+				Tempntb += "<td class='text-right'><b></b></td>";
+				Tempntb += '</tr>';
+			}
+			var realtotal =0;
+			totall = parseInt(totjabar)+parseInt(totjatim)+parseInt(totntt)+parseInt(totntb);
+			realtotal = parseInt(totjabarreal)+parseInt(totjatimreal)+parseInt(totnttreal)+parseInt(totntbreal);
+			if(totall){
+				Tempall += "<tr class='rowappendjabar'>";
+				Tempall += "<td class='text-right' colspan='2'> Total </td>";
+				Tempall += "<td class='text-right'><b>"+convertToRupiah(totall)+"</b></td>";
+				Tempall += "<td class='text-right'><b>"+convertToRupiah(realtotal)+"</b></td>";
+				Tempall += '</tr>';
+			}				
+
+			$('#tbltarBook').append(Tempjabar);
+			$('#tbltarBook').append(Tempjatim);
+			$('#tbltarBook').append(Tempntt);
+			$('#tbltarBook').append(Tempntb);
+			$('#tbltarBook').append(Tempall);
+
+		},
+		complete:function () {
+			$('#form_tarBook').find('.total-target').text(convertToRupiah(tottarget));
+			$('#form_tarBook').find('.total-realisasi').text(convertToRupiah(totrealisasi));			
+			var datapercentage 	= percentage;
+			var databooking 	= booking;
+			var datatarget 		= target;
+			var dataunitlabel 	= unitlabel;
+
+			console.log(unitlabel);
+
+			var data = [{
             label: 'Percentage',
-            data: [10, 90, 40, 60],
+            data: datapercentage,
             type: 'line',
             borderColor: '#ff0000',
 			yAxisID: 'B',
             datalabels: {
                 display: false
-            }
-        }, {
-            label: 'Target',
-            backgroundColor: '#006699',
-			yAxisID: 'A',
-            data: [6310, 5742, 4044, 5564]
-        }, {
-            label: 'Realisasi',
-            backgroundColor: '#FFA000',
-			yAxisID: 'A',
-            data: [11542, 12400, 12510, 11450]
-        }];
-        
-        
-         var options = {
-        	tooltips: {
-            	mode: 'label',
-			},						
-			scales: {
-				xAxes: [{
-						stacked: true,
-						gridLines: {
-							display: false
-						}
-					}],
-				yAxes: [{
-						id: 'A',
-						stacked: true,						
-						ticks: {
-							beginAtZero: true,
-							callback: function (value) {
-								valuek = convertToRupiah(value) ;
-								return valuek;
+				}
+			}, {
+				label: 'Target',
+				backgroundColor: '#006699',
+				yAxisID: 'A',
+				data: datatarget
+			}, {
+				label: 'Realisasi',
+				backgroundColor: '#FFA000',
+				yAxisID: 'A',
+				data: databooking
+			}];
+			
+			
+			var options = {
+				tooltips: {
+					mode: 'label',
+				},						
+				scales: {
+					xAxes: [{
+							stacked: true,
+							gridLines: {
+								display: false
 							}
-						}
-					},{
-							id: 'B',
-							type: 'linear',
-							position: 'right',
+						}],
+					yAxes: [{
+							id: 'A',
+							stacked: true,						
 							ticks: {
-								max: 100,
-								min: 0,
+								beginAtZero: true,
+								callback: function (value) {
+									valuek = convertToRupiah(value) ;
+									return valuek;
+								}
 							}
-					}]
-			}
-    };
+						},{
+								id: 'B',
+								type: 'linear',
+								position: 'right',
+								ticks: {
+									max: 200,
+									min: 0,
+								}
+						}]
+				}
+		};
 
-	var ctx = document.getElementById("graphtarBooking");
-    var myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ["India", "China", "USA", "Canada"],
-            datasets: data
-        },
-        options: options
-    });
+		var ctx = document.getElementById("graphtarBooking");
+		var myChart = new Chart(ctx, {
+			type: 'bar',
+			data: {
+				labels: dataunitlabel,
+				datasets: data
+			},
+			options: options
+		});
 
+			KTApp.unblock('#form_tarBook .kt-widget14', {});
+		},
+	});
 }
 
 function targetOutstanding(){
-	var data = [{
+
+	var booking 	 = [];
+	var target 		 = [];
+	var percentage 	 = [];
+	var unitlabel 	 = [];
+	var tottarget 	 = 0;
+	var totrealisasi = 0;
+	KTApp.block('#form_tarout .kt-widget14', {});
+	$.ajax({
+		url:"<?php echo base_url('api/datamaster/unitstarget/reportreal');?>",
+		type:"GET",
+		dataType:"JSON",
+		data:{
+			area:'',
+			month:currmonth,
+		},
+		success:function (response) {
+
+			var Tempjabar 	= "";
+			var Tempjatim	= "";
+			var Tempntt		= "";
+			var Tempntb		= "";
+			var Tempall		= "";
+			var totjabar 	= 0;
+			var totjabarreal= 0;
+			var totjatim 	= 0;
+			var totjatimreal= 0;
+			var totntb 		= 0;
+			var totntbreal	= 0;
+			var totntt 		= 0;
+			var totnttreal	= 0;
+			var totall 		= 0;
+
+			$.each(response.data, function (index,unit) {
+				unitlabel.push(unit.name);
+				booking.push(unit.outstanding.real);		
+				target.push(unit.outstanding.target);
+				percentage.push(unit.outstanding.percentage);	
+				tottarget +=unit.outstanding.target; 		
+				totrealisasi +=unit.outstanding.real; 		
+
+				if(unit.area=='Jawa Barat')
+				{
+					Tempjabar += "<tr class='rowappendjabar'>";
+					Tempjabar += "<td class='text-left'><b>"+unit.area+"</b></td>";
+					Tempjabar += "<td class='text-left'><b>"+unit.name+"</b></td>";
+					Tempjabar += "<td class='text-right'><b>"+convertToRupiah(unit.outstanding.target)+"</b></td>";
+					Tempjabar += "<td class='text-right'><b>"+convertToRupiah(unit.outstanding.real)+"</b></td>";
+					Tempjabar += "<td class='text-right'><b>"+unit.outstanding.percentage+"</b></td>";
+					Tempjabar += '</tr>';
+					totjabar += parseInt(unit.outstanding.target);
+					totjabarreal += parseInt(unit.outstanding.real);
+				}
+
+				if(unit.area=='Jawa Timur')
+				{
+					Tempjatim += "<tr class='rowappendjabar'>";
+					Tempjatim += "<td class='text-left'><b>"+unit.area+"</b></td>";
+					Tempjatim += "<td class='text-left'><b>"+unit.name+"</b></td>";
+					Tempjatim += "<td class='text-right'><b>"+convertToRupiah(unit.outstanding.target)+"</b></td>";
+					Tempjatim += "<td class='text-right'><b>"+convertToRupiah(unit.outstanding.real)+"</b></td>";
+					Tempjatim += "<td class='text-right'><b>"+unit.outstanding.percentage+"</b></td>";
+					Tempjatim += '</tr>';
+					totjatim += parseInt(unit.outstanding.target);
+					totjatimreal += parseInt(unit.outstanding.real);
+				}
+
+				if(unit.area=='NTB')
+				{
+					Tempntb += "<tr class='rowappendjabar'>";
+					Tempntb += "<td class='text-left'><b>"+unit.area+"</b></td>";
+					Tempntb += "<td class='text-left'><b>"+unit.name+"</b></td>";
+					Tempntb += "<td class='text-right'><b>"+convertToRupiah(unit.outstanding.target)+"</b></td>";
+					Tempntb += "<td class='text-right'><b>"+convertToRupiah(unit.outstanding.real)+"</b></td>";
+					Tempntb += "<td class='text-right'><b>"+unit.outstanding.percentage+"</b></td>";
+					Tempntb += '</tr>';
+					totntb += parseInt(unit.outstanding.target);
+					totntbreal += parseInt(unit.outstanding.real);
+				}
+
+				if(unit.area=='NTT')
+				{
+					Tempntt += "<tr class='rowappendjabar'>";
+					Tempntt += "<td class='text-left'><b>"+unit.area+"</b></td>";
+					Tempntt += "<td class='text-left'><b>"+unit.name+"</b></td>";
+					Tempntt += "<td class='text-right'><b>"+convertToRupiah(unit.outstanding.target)+"</b></td>";
+					Tempntt += "<td class='text-right'><b>"+convertToRupiah(unit.outstanding.real)+"</b></td>";
+					Tempntt += "<td class='text-right'><b>"+unit.outstanding.percentage+"</b></td>";
+					Tempntt += '</tr>';
+					totntt += parseInt(unit.outstanding.target);
+					totnttreal += parseInt(unit.outstanding.real);
+				}	
+
+			});
+
+			if(Tempjabar){
+				Tempjabar += "<tr class='rowappendjabar'>";
+				Tempjabar += "<td class='text-right' colspan='2'> Total Jawa Barat </td>";
+				Tempjabar += "<td class='text-right'><b>"+convertToRupiah(totjabar)+"</b></td>";
+				Tempjabar += "<td class='text-right'><b>"+convertToRupiah(totjabarreal)+"</b></td>";
+				Tempjabar += "<td class='text-right'><b></b></td>";
+				Tempjabar += '</tr>';
+			}
+
+			if(Tempjatim){
+				Tempjatim += "<tr class='rowappendjabar'>";
+				Tempjatim += "<td class='text-right' colspan='2'> Total Jawa Timur </td>";
+				Tempjatim += "<td class='text-right'><b>"+convertToRupiah(totjatim)+"</b></td>";
+				Tempjatim += "<td class='text-right'><b>"+convertToRupiah(totjatimreal)+"</b></td>";
+				Tempjatim += "<td class='text-right'><b></b></td>";
+				Tempjatim += '</tr>';
+			}
+
+			if(Tempntt){
+				Tempntt += "<tr class='rowappendjabar'>";
+				Tempntt += "<td class='text-right' colspan='2'> Total NTT </td>";
+				Tempntt += "<td class='text-right'><b>"+convertToRupiah(totntt)+"</b></td>";
+				Tempntt += "<td class='text-right'><b>"+convertToRupiah(totnttreal)+"</b></td>";
+				Tempntt += "<td class='text-right'><b></b></td>";
+				Tempntt += '</tr>';
+			}
+
+			if(Tempntb){
+				Tempntb += "<tr class='rowappendjabar'>";
+				Tempntb += "<td class='text-right' colspan='2'> Total NTB </td>";
+				Tempntb += "<td class='text-right'><b>"+convertToRupiah(totntb)+"</b></td>";
+				Tempntb += "<td class='text-right'><b>"+convertToRupiah(totntbreal)+"</b></td>";
+				Tempntb += "<td class='text-right'><b></b></td>";
+				Tempntb += '</tr>';
+			}
+			var realtotal =0;
+			totall = parseInt(totjabar)+parseInt(totjatim)+parseInt(totntt)+parseInt(totntb);
+			realtotal = parseInt(totjabarreal)+parseInt(totjatimreal)+parseInt(totnttreal)+parseInt(totntbreal);
+			if(totall){
+				Tempall += "<tr class='rowappendjabar'>";
+				Tempall += "<td class='text-right' colspan='2'> Total </td>";
+				Tempall += "<td class='text-right'><b>"+convertToRupiah(totall)+"</b></td>";
+				Tempall += "<td class='text-right'><b>"+convertToRupiah(realtotal)+"</b></td>";
+				Tempall += '</tr>';
+			}				
+
+			$('#tbltarOut').append(Tempjabar);
+			$('#tbltarOut').append(Tempjatim);
+			$('#tbltarOut').append(Tempntt);
+			$('#tbltarOut').append(Tempntb);
+			$('#tbltarOut').append(Tempall);
+
+		},
+		complete:function () {
+			$('#form_tarout').find('.total-target').text(convertToRupiah(tottarget));
+			$('#form_tarout').find('.total-realisasi').text(convertToRupiah(totrealisasi));			
+			var datapercentage 	= percentage;
+			var databooking 	= booking;
+			var datatarget 		= target;
+			var dataunitlabel 	= unitlabel;
+			//console.log(unitlabel);
+			var data = [{
             label: 'Percentage',
-            data: [10, 90, 40, 60],
+            data: datapercentage,
             type: 'line',
             borderColor: '#ff0000',
 			yAxisID: 'B',
             datalabels: {
                 display: false
-            }
-        }, {
-            label: 'Target',
-            backgroundColor: '#512DA8',
-			yAxisID: 'A',
-            data: [6310, 5742, 4044, 5564]
-        }, {
-            label: 'Realisasi',
-            backgroundColor: '#FFA000',
-			yAxisID: 'A',
-            data: [11542, 12400, 12510, 11450]
-        }];
-        
-        
-         var options = {
-        	tooltips: {
-            	mode: 'label',
-			},						
-			scales: {
-				xAxes: [{
-						stacked: true,
-						gridLines: {
-							display: false
-						}
-					}],
-				yAxes: [{
-						id: 'A',
-						stacked: true,						
-						ticks: {
-							beginAtZero: true,
-							callback: function (value) {
-								valuek = convertToRupiah(value) ;
-								return valuek;
+				}
+			}, {
+				label: 'Target',
+				backgroundColor: '#512DA8',
+				yAxisID: 'A',
+				data: datatarget
+			}, {
+				label: 'Realisasi',
+				backgroundColor: '#FFA000',
+				yAxisID: 'A',
+				data: databooking
+			}];			
+			
+			var options = {
+				tooltips: {
+					mode: 'label',
+				},						
+				scales: {
+					xAxes: [{
+							stacked: true,
+							gridLines: {
+								display: false
 							}
-						}
-					},{
-							id: 'B',
-							type: 'linear',
-							position: 'right',
+						}],
+					yAxes: [{
+							id: 'A',
+							stacked: true,						
 							ticks: {
-								max: 100,
-								min: 0,
+								beginAtZero: true,
+								callback: function (value) {
+									valuek = convertToRupiah(value) ;
+									return valuek;
+								}
 							}
-					}]
-			}
-    };
-    
-  	var ctx = document.getElementById("graphtarOutstanding");
-    var myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ["India", "China", "USA", "Canada"],
-            datasets: data
-        },
-        options: options
-    });
+						},{
+								id: 'B',
+								type: 'linear',
+								position: 'right',
+								ticks: {
+									max: 200,
+									min: 0,
+								}
+						}]
+				}
+		};
+
+		var ctx = document.getElementById("graphtarOutstanding");
+		var myChart = new Chart(ctx, {
+			type: 'bar',
+			data: {
+				labels: dataunitlabel,
+				datasets: data
+			},
+			options: options
+		});
+
+			KTApp.unblock('#form_tarout .kt-widget14', {});
+		},
+	});
 }
 
 function notfound(){
@@ -1688,11 +2010,10 @@ jQuery(document).ready(function() {
 	pencairan();
 	pelunasan();
 	saldo();
-	pengeluaran();
-	pendapatan();
 	targetBooking();
 	targetOutstanding();
-	//GraphTest();
+	pengeluaran();
+	pendapatan();	
 });
 
 </script>

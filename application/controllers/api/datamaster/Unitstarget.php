@@ -1,5 +1,5 @@
 <?php
-
+//error_reporting(0);
 require_once APPPATH.'controllers/api/ApiController.php';
 class Unitstarget extends ApiController
 {
@@ -243,7 +243,7 @@ class Unitstarget extends ApiController
                     ->where('YEAR(date)', $year)
                     ->order_by('date','DESC');
                 $oustanding = $this->u_target->db->get('units_outstanding')->row();
-                if($target){
+                if($target && $oustanding){
                     $unit->outstanding = (object) [];
                     $unit->outstanding->target = (int) $target->amount_outstanding;
                     $unit->outstanding->real = (int) $oustanding->os;

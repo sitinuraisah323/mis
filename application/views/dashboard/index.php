@@ -430,7 +430,7 @@ $currmonth = date('Y-m-d');
 
     <div class="kt-container  kt-grid__item kt-grid__item--fluid">
         <div class="row">
-            <div class="col-xl-6 col-lg-6">
+            <div class="col-xl-12 col-lg-12">
                 <!--begin:: Widgets-->
                 <form id="form_tarBook" class="form-horizontal">
                 <div class="kt-portlet kt-portlet--height-fluid">
@@ -444,8 +444,10 @@ $currmonth = date('Y-m-d');
                                 </h3>
                                     <div class="kt-widget14__legends">
                                         <div class="kt-widget14__legend">
+                                            <span class="kt-widget14__bullet kt-bg-success"></span>
+                                            <span class="kt-widget14__stats"><?php  echo "Target on ".$currmonth; ?> : <span class="total-target"></span></span>
                                             <span class="kt-widget14__bullet kt-bg-info"></span>
-                                            <span class="kt-widget14__stats"><?php  echo $currmonth; ?> : <span class="total-today"></span></span>
+                                            <span class="kt-widget14__stats"><?php  echo "Realisasi on ".$currmonth; ?> : <span class="total-realisasi"></span></span>
                                         </div>
                                     </div>	
                             </div>                       
@@ -472,11 +474,13 @@ $currmonth = date('Y-m-d');
                                 </div>
                                 <div id="collapsetarBooking" class="collapse" aria-labelledby="headingtarBooking" data-parent="#accordionExample3">
                                     <div class="card-body">
-                                        <table class="table" id="tbltarBooking">
+                                        <table class="table" id="tbltarBook">
                                         <tr>
                                             <td class="text-left"><b>Area</b></td>
                                             <td class="text-left"><b>Unit</b></td>
-                                            <td class="text-right"><b>Amount</b></td>
+                                            <td class="text-right"><b>Target</b></td>
+                                            <td class="text-right"><b>Realisasi</b></td>
+                                            <td class="text-right"><b>Percentage</b></td>
                                         </tr>                                        
                                         </table>
                                     </div>
@@ -489,7 +493,12 @@ $currmonth = date('Y-m-d');
                 </form>	        
                 <!--end:: Widgets-->    
             </div>
-			<div class="col-xl-6 col-lg-6">
+        </div>
+    </div>
+
+    <div class="kt-container  kt-grid__item kt-grid__item--fluid">
+        <div class="row">
+			<div class="col-xl-12 col-lg-12">
                 <!--begin:: Widgets-->
                 <form id="form_tarout" class="form-horizontal">
                 <div class="kt-portlet kt-portlet--height-fluid">
@@ -504,7 +513,9 @@ $currmonth = date('Y-m-d');
                                     <div class="kt-widget14__legends">
                                         <div class="kt-widget14__legend">
                                             <span class="kt-widget14__bullet kt-bg-success"></span>
-                                            <span class="kt-widget14__stats"><?php  echo $currmonth; ?> : <span class="total-today"></span></span>
+                                            <span class="kt-widget14__stats"><?php  echo "Target on ".$currmonth; ?> : <span class="total-target"></span></span>
+                                            <span class="kt-widget14__bullet kt-bg-info"></span>
+                                            <span class="kt-widget14__stats"><?php  echo "Realisasi on ".$currmonth; ?> : <span class="total-realisasi"></span></span>
                                         </div>
                                     </div>
                                 </div>                           
@@ -531,11 +542,13 @@ $currmonth = date('Y-m-d');
                                 </div>
                                 <div id="collapsetarOut" class="collapse" aria-labelledby="headingtarOut" data-parent="#accordionExample3">
                                     <div class="card-body">
-                                        <table class="table" id="tbltarout"> 
+                                        <table class="table" id="tbltarOut"> 
                                         <tr>
                                             <td class="text-left"><b>Area</b></td>
                                             <td class="text-left"><b>Unit</b></td>
-                                            <td class="text-right"><b>Amount</b></td>
+                                            <td class="text-right"><b>Target</b></td>
+                                            <td class="text-right"><b>Realisasi</b></td>
+                                            <td class="text-right"><b>Percentage</b></td>
                                         </tr>                                       
                                         </table>
                                     </div>
