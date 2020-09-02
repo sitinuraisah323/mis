@@ -206,12 +206,15 @@ class Unitstarget extends ApiController
 
         if($area = $this->input->get('area')){
             $this->units->db->where('id_area', $area);
+        }else if($this->session->userdata('user')->level === 'area'){
+            $this->units->db->where('id_area', $this->session->userdata('user')->id_area);
         }
 
-        if($unit = $this->input->get('id_unit')){
+        if($this->session->userdata('user')->level === 'unit'){
+            $this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
+        }else if($unit = $this->input->get('id_unit')){
             $this->units->db->where('units.id', $unit);
         }
-
 		$this->units->db->select('units.id, name, areas.area')
 			->join('areas','areas.id = units.id_area');	
         $units = $this->units->db->get('units')->result();
