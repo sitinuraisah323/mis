@@ -478,6 +478,7 @@ $currmonth = date('Y-m-d');
                                         <tr>
                                             <td class="text-left"><b>Area</b></td>
                                             <td class="text-left"><b>Unit</b></td>
+                                            <td class="text-center"><b>Status</b></td>
                                             <td class="text-right"><b>Target</b></td>
                                             <td class="text-right"><b>Realisasi</b></td>
                                             <td class="text-right"><b>Percentage</b></td>
@@ -546,6 +547,7 @@ $currmonth = date('Y-m-d');
                                         <tr>
                                             <td class="text-left"><b>Area</b></td>
                                             <td class="text-left"><b>Unit</b></td>
+                                            <td class="text-center"><b>Status</b></td>
                                             <td class="text-right"><b>Target</b></td>
                                             <td class="text-right"><b>Realisasi</b></td>
                                             <td class="text-right"><b>Percentage</b></td>
