@@ -54,10 +54,10 @@ var months = [
     },
 ]
 
-$(document).on('keyup','.money_format', function(){
-    const number = this.value.replaceAll(".","");
-    this.value = convertToRupiah(number);
-})
+// $(document).on('keyup','.money_format', function(){
+//     const number = this.value.replace(/./g,"");
+//     this.value = convertToRupiah(number);
+// })
 function initAlert(){
     AlertUtil = {
         showSuccess : function(message,timeout){
@@ -232,7 +232,6 @@ $('[name="area"]').on('change',function(){
         var url_data = $('#url_get_unit').val() + '/' + area;
         $.get(url_data, function (data, status) {
             var response = JSON.parse(data);
-            console.log(response);
             objUnit = response.data;
             if (status) {
                 $("#unit").empty();
@@ -414,8 +413,8 @@ $(document).on('click','.btn-save', (element)=>{
         unit:id_unit,
         year:year,
         month:month,
-        booking:amount_booking.replaceAll(".",""),
-        outstanding:amount_outstanding.replaceAll(".",""),
+        booking:amount_booking,
+        outstanding:amount_outstanding,
     };
     $.ajax({
         type : 'POST',
