@@ -679,8 +679,8 @@ function dpd() {
 
 			$('#tblDPD').append(Tempjabar);
 			$('#tblDPD').append(Tempjatim);
-			$('#tblDPD').append(Tempntt);
 			$('#tblDPD').append(Tempntb);
+			$('#tblDPD').append(Tempntt);
 			$('#tblDPD').append(Tempall);
 		},
 		complete:function () {
@@ -861,8 +861,8 @@ function pencairan() {
 
 			$('#tblPencairan').append(Tempjabar);
 			$('#tblPencairan').append(Tempjatim);
-			$('#tblPencairan').append(Tempntt);
 			$('#tblPencairan').append(Tempntb);
+			$('#tblPencairan').append(Tempntt);
 			$('#tblPencairan').append(Tempall);
 
 		},
@@ -1038,8 +1038,8 @@ function pelunasan() {
 
 			$('#tblPelunasan').append(Tempjabar);
 			$('#tblPelunasan').append(Tempjatim);
-			$('#tblPelunasan').append(Tempntt);
 			$('#tblPelunasan').append(Tempntb);
+			$('#tblPelunasan').append(Tempntt);
 			$('#tblPelunasan').append(Tempall);
 
 		},
@@ -1194,8 +1194,8 @@ function saldo() {
 
 			$('#tblSaldo').append(Tempjabar);
 			$('#tblSaldo').append(Tempjatim);
-			$('#tblSaldo').append(Tempntt);
 			$('#tblSaldo').append(Tempntb);
+			$('#tblSaldo').append(Tempntt);
 			$('#tblSaldo').append(Tempall);
 
 		},
@@ -1350,8 +1350,8 @@ function pengeluaran() {
 
 			$('#tblPengeluaran').append(Tempjabar);
 			$('#tblPengeluaran').append(Tempjatim);
-			$('#tblPengeluaran').append(Tempntt);
 			$('#tblPengeluaran').append(Tempntb);
+			$('#tblPengeluaran').append(Tempntt);
 			$('#tblPengeluaran').append(Tempall);
 
 		},
@@ -1506,8 +1506,8 @@ function pendapatan() {
 
 			$('#tblPendapatan').append(Tempjabar);
 			$('#tblPendapatan').append(Tempjatim);
-			$('#tblPendapatan').append(Tempntt);
 			$('#tblPendapatan').append(Tempntb);
+			$('#tblPendapatan').append(Tempntt);
 			$('#tblPendapatan').append(Tempall);
 
 		},
