@@ -10,13 +10,15 @@ if(date('H:i') > '20:00'){
 	$date =  date('Y-m-d');
 	$_1lastdate = date('Y-m-d', strtotime($date));
 	$_2lastdate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
-	$month = date('n', strtotime(date('Y-m-d')));;
+	$month = date('n', strtotime($date));
+	$lastmonth = date('n', strtotime($_2lastdate));
 	
 }else{
 	$date =  date('Y-m-d');
 	$_1lastdate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
 	$_2lastdate = date('Y-m-d', strtotime('-2 days', strtotime($date)));
-	$month = date('n', strtotime('-1 month', strtotime($date)));
+	$month = date('n', strtotime('-1 days', strtotime($date)));
+	$lastmonth = date('n', strtotime('-1 days', strtotime($_2lastdate)));
 }
 
 ?>
@@ -27,6 +29,7 @@ var lastdate = "<?php echo $_2lastdate;?>";
 var currday = "<?php echo date('d', strtotime($_1lastdate)); ?>";
 var lastday = "<?php echo date('d', strtotime($_2lastdate)); ?>";
 var currmonth =  "<?php echo $month; ?>";
+var lastmonth =  "<?php echo $lastmonth; ?>";
 var curryears =  "<?php echo date('Y', strtotime(date('Y-m-d'))); ?>";
 
 //alert(currdate);
@@ -265,7 +268,9 @@ function disburse() {
 		dataType: "JSON",
 		data: {
 			area: '',
-			date: lastday,currmonth,curryears,
+			date: lastday,
+			month: lastmonth,
+			year: curryears,
 		},
 		success: function (response) {
 			$.each(response.data, function (index, unit) {
@@ -1574,6 +1579,7 @@ function targetBooking(){
 			var totntt 		= 0;
 			var totnttreal	= 0;
 			var totall 		= 0;
+			var status		="";
 
 			$.each(response.data, function (index,unit) {
 				unitlabel.push(unit.name);
@@ -1589,6 +1595,15 @@ function targetBooking(){
 					Tempjabar += "<tr class='rowappendjabar'>";
 					Tempjabar += "<td class='text-left'><b>"+unit.area+"</b></td>";
 					Tempjabar += "<td class='text-left'><b>"+unit.name+"</b></td>";
+					if(unit.booking.percentage!=0){
+						if(unit.booking.percentage >=100)
+						{ status="<i class='fa fa-caret-up text-success'></i><span class='kt-widget16__price  kt-font-success'> Melebihi Target</span>";}
+						else
+						{status="<i class='fa fa-caret-down text-danger'></i><span class='kt-widget16__price  kt-font-danger'> Dibawah Target</span>";}
+					}else{
+						status="";
+					}
+					Tempjabar += "<td class='text-center'><b>"+status+"</b></td>";
 					Tempjabar += "<td class='text-right'><b>"+convertToRupiah(unit.booking.target)+"</b></td>";
 					Tempjabar += "<td class='text-right'><b>"+convertToRupiah(unit.booking.real)+"</b></td>";
 					Tempjabar += "<td class='text-right'><b>"+unit.booking.percentage+"</b></td>";
@@ -1602,6 +1617,15 @@ function targetBooking(){
 					Tempjatim += "<tr class='rowappendjabar'>";
 					Tempjatim += "<td class='text-left'><b>"+unit.area+"</b></td>";
 					Tempjatim += "<td class='text-left'><b>"+unit.name+"</b></td>";
+					if(unit.booking.percentage!=0){
+						if(unit.booking.percentage >=100)
+						{ status="<i class='fa fa-caret-up text-success'></i><span class='kt-widget16__price  kt-font-success'> Melebihi Target</span>";}
+						else
+						{status="<i class='fa fa-caret-down text-danger'></i><span class='kt-widget16__price  kt-font-danger'> Dibawah Target</span>";}
+					}else{
+						status="";
+					}
+					Tempjatim += "<td class='text-center'><b>"+status+"</b></td>";
 					Tempjatim += "<td class='text-right'><b>"+convertToRupiah(unit.booking.target)+"</b></td>";
 					Tempjatim += "<td class='text-right'><b>"+convertToRupiah(unit.booking.real)+"</b></td>";
 					Tempjatim += "<td class='text-right'><b>"+unit.booking.percentage+"</b></td>";
@@ -1615,6 +1639,15 @@ function targetBooking(){
 					Tempntb += "<tr class='rowappendjabar'>";
 					Tempntb += "<td class='text-left'><b>"+unit.area+"</b></td>";
 					Tempntb += "<td class='text-left'><b>"+unit.name+"</b></td>";
+					if(unit.booking.percentage!=0){
+						if(unit.booking.percentage >=100)
+						{ status="<i class='fa fa-caret-up text-success'></i><span class='kt-widget16__price  kt-font-success'> Melebihi Target</span>";}
+						else
+						{status="<i class='fa fa-caret-down text-danger'></i><span class='kt-widget16__price  kt-font-danger'> Dibawah Target</span>";}
+					}else{
+						status="";
+					}
+					Tempntb += "<td class='text-center'><b>"+status+"</b></td>";
 					Tempntb += "<td class='text-right'><b>"+convertToRupiah(unit.booking.target)+"</b></td>";
 					Tempntb += "<td class='text-right'><b>"+convertToRupiah(unit.booking.real)+"</b></td>";
 					Tempntb += "<td class='text-right'><b>"+unit.booking.percentage+"</b></td>";
@@ -1628,6 +1661,15 @@ function targetBooking(){
 					Tempntt += "<tr class='rowappendjabar'>";
 					Tempntt += "<td class='text-left'><b>"+unit.area+"</b></td>";
 					Tempntt += "<td class='text-left'><b>"+unit.name+"</b></td>";
+					if(unit.booking.percentage!=0){
+						if(unit.booking.percentage >=100)
+						{ status="<i class='fa fa-caret-up text-success'></i><span class='kt-widget16__price  kt-font-success'> Melebihi Target</span>";}
+						else
+						{status="<i class='fa fa-caret-down text-danger'></i><span class='kt-widget16__price  kt-font-danger'> Dibawah Target</span>";}
+					}else{
+						status="";
+					}
+					Tempntt += "<td class='text-center'><b>"+status+"</b></td>";
 					Tempntt += "<td class='text-right'><b>"+convertToRupiah(unit.booking.target)+"</b></td>";
 					Tempntt += "<td class='text-right'><b>"+convertToRupiah(unit.booking.real)+"</b></td>";
 					Tempntt += "<td class='text-right'><b>"+unit.booking.percentage+"</b></td>";
@@ -1639,7 +1681,7 @@ function targetBooking(){
 
 			if(Tempjabar){
 				Tempjabar += "<tr class='rowappendjabar'>";
-				Tempjabar += "<td class='text-right' colspan='2'> Total Jawa Barat </td>";
+				Tempjabar += "<td class='text-right' colspan='3'> Total Jawa Barat </td>";
 				Tempjabar += "<td class='text-right'><b>"+convertToRupiah(totjabar)+"</b></td>";
 				Tempjabar += "<td class='text-right'><b>"+convertToRupiah(totjabarreal)+"</b></td>";
 				Tempjabar += "<td class='text-right'><b></b></td>";
@@ -1648,7 +1690,7 @@ function targetBooking(){
 
 			if(Tempjatim){
 				Tempjatim += "<tr class='rowappendjabar'>";
-				Tempjatim += "<td class='text-right' colspan='2'> Total Jawa Timur </td>";
+				Tempjatim += "<td class='text-right' colspan='3'> Total Jawa Timur </td>";
 				Tempjatim += "<td class='text-right'><b>"+convertToRupiah(totjatim)+"</b></td>";
 				Tempjatim += "<td class='text-right'><b>"+convertToRupiah(totjatimreal)+"</b></td>";
 				Tempjatim += "<td class='text-right'><b></b></td>";
@@ -1657,7 +1699,7 @@ function targetBooking(){
 
 			if(Tempntt){
 				Tempntt += "<tr class='rowappendjabar'>";
-				Tempntt += "<td class='text-right' colspan='2'> Total NTT </td>";
+				Tempntt += "<td class='text-right' colspan='3'> Total NTT </td>";
 				Tempntt += "<td class='text-right'><b>"+convertToRupiah(totntt)+"</b></td>";
 				Tempntt += "<td class='text-right'><b>"+convertToRupiah(totnttreal)+"</b></td>";
 				Tempntt += "<td class='text-right'><b></b></td>";
@@ -1666,7 +1708,7 @@ function targetBooking(){
 
 			if(Tempntb){
 				Tempntb += "<tr class='rowappendjabar'>";
-				Tempntb += "<td class='text-right' colspan='2'> Total NTB </td>";
+				Tempntb += "<td class='text-right' colspan='3'> Total NTB </td>";
 				Tempntb += "<td class='text-right'><b>"+convertToRupiah(totntb)+"</b></td>";
 				Tempntb += "<td class='text-right'><b>"+convertToRupiah(totntbreal)+"</b></td>";
 				Tempntb += "<td class='text-right'><b></b></td>";
@@ -1677,7 +1719,7 @@ function targetBooking(){
 			realtotal = parseInt(totjabarreal)+parseInt(totjatimreal)+parseInt(totnttreal)+parseInt(totntbreal);
 			if(totall){
 				Tempall += "<tr class='rowappendjabar'>";
-				Tempall += "<td class='text-right' colspan='2'> Total </td>";
+				Tempall += "<td class='text-right' colspan='3'> Total </td>";
 				Tempall += "<td class='text-right'><b>"+convertToRupiah(totall)+"</b></td>";
 				Tempall += "<td class='text-right'><b>"+convertToRupiah(realtotal)+"</b></td>";
 				Tempall += '</tr>';
@@ -1685,8 +1727,8 @@ function targetBooking(){
 
 			$('#tbltarBook').append(Tempjabar);
 			$('#tbltarBook').append(Tempjatim);
-			$('#tbltarBook').append(Tempntt);
 			$('#tbltarBook').append(Tempntb);
+			$('#tbltarBook').append(Tempntt);
 			$('#tbltarBook').append(Tempall);
 
 		},
@@ -1728,14 +1770,14 @@ function targetBooking(){
 				},						
 				scales: {
 					xAxes: [{
-							stacked: true,
+							stacked: false,
 							gridLines: {
 								display: false
 							}
 						}],
 					yAxes: [{
 							id: 'A',
-							stacked: true,						
+							stacked: false,						
 							ticks: {
 								beginAtZero: true,
 								callback: function (value) {
@@ -1778,6 +1820,7 @@ function targetOutstanding(){
 	var unitlabel 	 = [];
 	var tottarget 	 = 0;
 	var totrealisasi = 0;
+	var status		 ="";
 	KTApp.block('#form_tarout .kt-widget14', {});
 	$.ajax({
 		url:"<?php echo base_url('api/datamaster/unitstarget/reportreal');?>",
@@ -1817,6 +1860,15 @@ function targetOutstanding(){
 					Tempjabar += "<tr class='rowappendjabar'>";
 					Tempjabar += "<td class='text-left'><b>"+unit.area+"</b></td>";
 					Tempjabar += "<td class='text-left'><b>"+unit.name+"</b></td>";
+					if(unit.outstanding.percentage!=0){
+						if(unit.outstanding.percentage >=100)
+						{ status="<i class='fa fa-caret-up text-success'></i><span class='kt-widget16__price  kt-font-success'> Melebihi Target</span>";}
+						else
+						{status="<i class='fa fa-caret-down text-danger'></i><span class='kt-widget16__price  kt-font-danger'> Dibawah Target</span>";}
+					}else{
+						status="";
+					}
+					Tempjabar += "<td class='text-center'><b>"+status+"</b></td>";
 					Tempjabar += "<td class='text-right'><b>"+convertToRupiah(unit.outstanding.target)+"</b></td>";
 					Tempjabar += "<td class='text-right'><b>"+convertToRupiah(unit.outstanding.real)+"</b></td>";
 					Tempjabar += "<td class='text-right'><b>"+unit.outstanding.percentage+"</b></td>";
@@ -1830,6 +1882,15 @@ function targetOutstanding(){
 					Tempjatim += "<tr class='rowappendjabar'>";
 					Tempjatim += "<td class='text-left'><b>"+unit.area+"</b></td>";
 					Tempjatim += "<td class='text-left'><b>"+unit.name+"</b></td>";
+					if(unit.outstanding.percentage!=0){
+						if(unit.outstanding.percentage >=100)
+						{ status="<i class='fa fa-caret-up text-success'></i><span class='kt-widget16__price  kt-font-success'> Melebihi Target</span>";}
+						else
+						{status="<i class='fa fa-caret-down text-danger'></i><span class='kt-widget16__price  kt-font-danger'> Dibawah Target</span>";}
+					}else{
+						status="";
+					}
+					Tempjatim += "<td class='text-left'><b>"+status+"</b></td>";
 					Tempjatim += "<td class='text-right'><b>"+convertToRupiah(unit.outstanding.target)+"</b></td>";
 					Tempjatim += "<td class='text-right'><b>"+convertToRupiah(unit.outstanding.real)+"</b></td>";
 					Tempjatim += "<td class='text-right'><b>"+unit.outstanding.percentage+"</b></td>";
@@ -1843,6 +1904,15 @@ function targetOutstanding(){
 					Tempntb += "<tr class='rowappendjabar'>";
 					Tempntb += "<td class='text-left'><b>"+unit.area+"</b></td>";
 					Tempntb += "<td class='text-left'><b>"+unit.name+"</b></td>";
+					if(unit.outstanding.percentage!=0){
+						if(unit.outstanding.percentage >=100)
+						{ status="<i class='fa fa-caret-up text-success'></i><span class='kt-widget16__price  kt-font-success'> Melebihi Target</span>";}
+						else
+						{status="<i class='fa fa-caret-down text-danger'></i><span class='kt-widget16__price  kt-font-danger'> Dibawah Target</span>";}
+					}else{
+						status="";
+					}
+					Tempntb += "<td class='text-left'><b>"+status+"</b></td>";
 					Tempntb += "<td class='text-right'><b>"+convertToRupiah(unit.outstanding.target)+"</b></td>";
 					Tempntb += "<td class='text-right'><b>"+convertToRupiah(unit.outstanding.real)+"</b></td>";
 					Tempntb += "<td class='text-right'><b>"+unit.outstanding.percentage+"</b></td>";
@@ -1856,6 +1926,15 @@ function targetOutstanding(){
 					Tempntt += "<tr class='rowappendjabar'>";
 					Tempntt += "<td class='text-left'><b>"+unit.area+"</b></td>";
 					Tempntt += "<td class='text-left'><b>"+unit.name+"</b></td>";
+					if(unit.outstanding.percentage!=0){
+						if(unit.outstanding.percentage >=100)
+						{ status="<i class='fa fa-caret-up text-success'></i><span class='kt-widget16__price  kt-font-success'> Melebihi Target</span>";}
+						else
+						{status="<i class='fa fa-caret-down text-danger'></i><span class='kt-widget16__price  kt-font-danger'> Dibawah Target</span>";}
+					}else{
+						status="";
+					}
+					Tempntt += "<td class='text-left'><b>"+status+"</b></td>";
 					Tempntt += "<td class='text-right'><b>"+convertToRupiah(unit.outstanding.target)+"</b></td>";
 					Tempntt += "<td class='text-right'><b>"+convertToRupiah(unit.outstanding.real)+"</b></td>";
 					Tempntt += "<td class='text-right'><b>"+unit.outstanding.percentage+"</b></td>";
@@ -1868,7 +1947,7 @@ function targetOutstanding(){
 
 			if(Tempjabar){
 				Tempjabar += "<tr class='rowappendjabar'>";
-				Tempjabar += "<td class='text-right' colspan='2'> Total Jawa Barat </td>";
+				Tempjabar += "<td class='text-right' colspan='3'> Total Jawa Barat </td>";
 				Tempjabar += "<td class='text-right'><b>"+convertToRupiah(totjabar)+"</b></td>";
 				Tempjabar += "<td class='text-right'><b>"+convertToRupiah(totjabarreal)+"</b></td>";
 				Tempjabar += "<td class='text-right'><b></b></td>";
@@ -1877,7 +1956,7 @@ function targetOutstanding(){
 
 			if(Tempjatim){
 				Tempjatim += "<tr class='rowappendjabar'>";
-				Tempjatim += "<td class='text-right' colspan='2'> Total Jawa Timur </td>";
+				Tempjatim += "<td class='text-right' colspan='3'> Total Jawa Timur </td>";
 				Tempjatim += "<td class='text-right'><b>"+convertToRupiah(totjatim)+"</b></td>";
 				Tempjatim += "<td class='text-right'><b>"+convertToRupiah(totjatimreal)+"</b></td>";
 				Tempjatim += "<td class='text-right'><b></b></td>";
@@ -1886,7 +1965,7 @@ function targetOutstanding(){
 
 			if(Tempntt){
 				Tempntt += "<tr class='rowappendjabar'>";
-				Tempntt += "<td class='text-right' colspan='2'> Total NTT </td>";
+				Tempntt += "<td class='text-right' colspan='3'> Total NTT </td>";
 				Tempntt += "<td class='text-right'><b>"+convertToRupiah(totntt)+"</b></td>";
 				Tempntt += "<td class='text-right'><b>"+convertToRupiah(totnttreal)+"</b></td>";
 				Tempntt += "<td class='text-right'><b></b></td>";
@@ -1895,7 +1974,7 @@ function targetOutstanding(){
 
 			if(Tempntb){
 				Tempntb += "<tr class='rowappendjabar'>";
-				Tempntb += "<td class='text-right' colspan='2'> Total NTB </td>";
+				Tempntb += "<td class='text-right' colspan='3'> Total NTB </td>";
 				Tempntb += "<td class='text-right'><b>"+convertToRupiah(totntb)+"</b></td>";
 				Tempntb += "<td class='text-right'><b>"+convertToRupiah(totntbreal)+"</b></td>";
 				Tempntb += "<td class='text-right'><b></b></td>";
@@ -1906,7 +1985,7 @@ function targetOutstanding(){
 			realtotal = parseInt(totjabarreal)+parseInt(totjatimreal)+parseInt(totnttreal)+parseInt(totntbreal);
 			if(totall){
 				Tempall += "<tr class='rowappendjabar'>";
-				Tempall += "<td class='text-right' colspan='2'> Total </td>";
+				Tempall += "<td class='text-right' colspan='3'> Total </td>";
 				Tempall += "<td class='text-right'><b>"+convertToRupiah(totall)+"</b></td>";
 				Tempall += "<td class='text-right'><b>"+convertToRupiah(realtotal)+"</b></td>";
 				Tempall += '</tr>';
@@ -1914,8 +1993,8 @@ function targetOutstanding(){
 
 			$('#tbltarOut').append(Tempjabar);
 			$('#tbltarOut').append(Tempjatim);
-			$('#tbltarOut').append(Tempntt);
 			$('#tbltarOut').append(Tempntb);
+			$('#tbltarOut').append(Tempntt);
 			$('#tbltarOut').append(Tempall);
 
 		},
@@ -1954,14 +2033,14 @@ function targetOutstanding(){
 				},						
 				scales: {
 					xAxes: [{
-							stacked: true,
+							stacked: false,
 							gridLines: {
 								display: false
 							}
 						}],
 					yAxes: [{
 							id: 'A',
-							stacked: true,						
+							stacked: false,						
 							ticks: {
 								beginAtZero: true,
 								callback: function (value) {
