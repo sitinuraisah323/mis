@@ -32,6 +32,13 @@ class Pendapatan extends Authenticated
 		$this->load->view('report/pendapatan/index',$data);
 	}	
 
+	public function sewamodal()
+	{
+        $data['areas'] = $this->areas->all();
+		$data['pendapatan']=$this->m_casing->get_list_pendapatan();
+		$this->load->view('report/pendapatan/sewamodal',$data);
+	}
+
 	public function export()
 	{		
 		//load our new PHPExcel library

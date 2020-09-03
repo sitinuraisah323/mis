@@ -396,6 +396,14 @@
 														</a>
 													</li>
 												<?php endif;?>
+												<?php if(read_access('report/pendapatan/sewamodal')):?>
+													<li class="kt-menu__item "  aria-haspopup="true">
+														<a  href="<?php echo base_url('report/pendapatan/sewamodal'); ?>" class="kt-menu__link ">
+															<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+															<span class="kt-menu__link-text">Sewa Modal</span>
+														</a>
+													</li>
+												<?php endif;?>
 												<?php if(read_access('report/pengeluaran')):?>
 													<li class="kt-menu__item "  aria-haspopup="true">
 														<a  href="<?php echo base_url('report/pengeluaran'); ?>" class="kt-menu__link ">
