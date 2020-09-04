@@ -633,7 +633,7 @@ class Loaninstallments extends ApiController
 							'description_3'	=>  $transaction['L'],
 							'description_4'	=>  $transaction['S'],
 							'type_item'	=> $transaction['Q'],
-							'capital_lease'	=>  $transaction['T'],
+							'capital_lease'	=> str_replace(',','.',$transaction['T']),
 							'periode'	=>  $transaction['U'],
 							'installment'	=>  $transaction['V'],
 							'status_transaction'	=>  $status,

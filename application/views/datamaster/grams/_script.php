@@ -109,6 +109,9 @@ function initDataTable(){
 				  title: 'image',
 				  width:60,
 				  textAlign: 'center',
+                  template:(e)=>{
+                      return  e.avatar ? `<img src="${e.avatar}" class="img-fluid"/>` : '';
+                  }
 			  },
 			  {
 				  field: 'weight',

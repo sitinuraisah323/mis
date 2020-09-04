@@ -140,6 +140,21 @@ class Dashboards extends Authenticated
 	{
 		$this->load->view("dashboards/units/index");
 	}
+
+	public function realisasi()
+	{
+		$year = $this->input->get('year') ?  $this->input->get('year') : date('Y');
+		$month = $this->input->get('month') ?  $this->input->get('month') : date('n');
+		$area = $this->input->get('area') ?  $this->input->get('area') : 0;
+		$this->load->view("dashboards/realisasi/index", array(
+			'areas'	=> $this->areas->all(),
+			'months'	=> months(),
+			'years'	=> years(),
+			'year'	=> $year,
+			'month'	=> $month,
+			'area'	=> $area
+		));
+	}
 	
 	//report
 	public function outstandingreport(){

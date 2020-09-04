@@ -25,7 +25,13 @@ $this->load->view('temp/MenuBar.php');
 							<div class="kt-pricing-1__visual">
 								<div class="kt-pricing-1__hexagon1"></div>
 								<div class="kt-pricing-1__hexagon2"></div>
+								<?php if($gram->image):?>
+								<span class="kt-pricing-1__icon kt-font-warning">
+									<img src="<?php echo base_url('storage/lm/'.$gram->image);?>" class="img-fluid">
+								</span>
+								<?php else:?>
 								<span class="kt-pricing-1__icon kt-font-warning"><i class="fa fa-trophy"></i></span>
+								<?php endif;?>
 							</div>
 							<span class="kt-pricing-1__price">LM</span>
 							<h2 class="kt-pricing-1__subtitle">Berat <?php echo $gram->weight;?> Gram</h2>
