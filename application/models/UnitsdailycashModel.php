@@ -28,6 +28,20 @@ class UnitsdailycashModel extends Master
 		return $this->db->get('units_dailycashs as a')->result();
 	}
 
+	public function getSummaryCashin($startdate,$endate,$perk,$idUnit)
+	{
+		$data = $this->db->select('sum(amount) as amount, count(*) as total')->from('units_dailycashs')
+			->where('type =', 'CASH_IN')
+			->where('date >=', $startdate)
+			->where('date <=', $endate)
+			->where('no_perk ', $perk)
+			->where('id_unit', $idUnit)->get()->row();
+		return (object)array(
+			'amount' => (int)$data->amount,
+			'total' => (int)$data->total,
+		);
+	}
+
 
 
 }

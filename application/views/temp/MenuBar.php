@@ -402,6 +402,14 @@
 														</a>
 													</li>
 												<?php endif;?>
+												<!-- <?php if(read_access('report/pendapatan/sewamodal')):?>
+													<li class="kt-menu__item "  aria-haspopup="true">
+														<a  href="<?php echo base_url('report/pendapatan/sewamodal'); ?>" class="kt-menu__link ">
+															<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+															<span class="kt-menu__link-text">Sewa Modal</span>
+														</a>
+													</li>
+												<?php endif;?> -->
 												<?php if(read_access('report/pengeluaran')):?>
 													<li class="kt-menu__item "  aria-haspopup="true">
 														<a  href="<?php echo base_url('report/pengeluaran'); ?>" class="kt-menu__link ">
@@ -497,7 +505,15 @@
 												<span class="kt-menu__link-text">BAP Kas</span>
 											</a>
 										</li>
-									<?php endif;?>							
+									<?php endif;?>	
+									<?php if(read_access('report/summaryrate')):?>
+										<li class="kt-menu__item "  aria-haspopup="true">
+											<a  href="<?php echo base_url('report/summaryrate'); ?>" class="kt-menu__link ">
+												<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>
+												<span class="kt-menu__link-text">Units Summary Rate</span>
+											</a>
+										</li>
+									<?php endif;?>						
 									<?php if(read_access('report/customermis')):?>
 										<li class="kt-menu__item "  aria-haspopup="true">
 											<a  href="<?php echo base_url('report/customermis'); ?>" class="kt-menu__link ">
