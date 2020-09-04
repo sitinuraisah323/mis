@@ -59,6 +59,12 @@
 											</a>
 										</li>
 									<?php endif;?>
+									<li class="kt-menu__item "  aria-haspopup="true">
+										<a  href="<?php echo base_url('dashboards/realisasi'); ?>" class="kt-menu__link ">
+											<span class="kt-menu__link-icon"><i class="fa fa-chart-bar"><span></span></i></span>
+											<span class="kt-menu__link-text">Realisasi</span>
+										</a>
+									</li>
 									<!-- <li class="kt-menu__item "  aria-haspopup="true">
 									<a  href="<?php //echo base_url('dashboards/pencairan'); ?>" class="kt-menu__link ">
 										<span class="kt-menu__link-icon"><i class="fa fa-table"><span></span></i></span>
