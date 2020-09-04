@@ -127,7 +127,9 @@ function initCariForm(){
                     var up=0;
                     var rate=0;
                     var totrate=0;
+                    var totnoa=0;
                     var average=0;
+                    var totaverage=0;
                     var no = 0;
 					$.each(response.data, function (index, data) {
                     no++;
@@ -142,7 +144,11 @@ function initCariForm(){
                     }
                     template +='<td class="text-right">'+up+'</td>';
                     if(isNaN(data.summary.rate)){rate=0;}else{rate=data.summary.rate;}
-                    template +='<td class="text-right">'+parseFloat(rate).toFixed(2)+'</td>';
+                    template +='<td class="text-right">'+parseFloat(rate).toFixed(4)+'</td>';
+                    template +='<td class="text-right">'+data.summary.noa+'</td>';
+                    average = rate/data.summary.noa;
+                    if(!isNaN(average)){ average=average;}else{average=0;}
+                    template +='<td class="text-right">'+average.toFixed(4)+'</td>';
                     template +='</tr>';
                     if(data.summary.up!=null){
                         total +=  parseInt(data.summary.up);
@@ -150,11 +156,17 @@ function initCariForm(){
                     if(!isNaN(data.summary.rate)){
                         totrate +=  parseInt(data.summary.rate);
                     }
+                    totnoa += parseInt(data.summary.noa);
+                    if(!isNaN(average)){
+                        totaverage +=  parseFloat(average);
+                    }
 					});
                     template += '<tr class="rowappend">';
                     template +='<td colspan="3" class="text-right"><b>Total</b></td>';                    
                     template +='<td class="text-right"><b>'+convertToRupiah(total)+'</b></td>';
-                    template +='<td class="text-right"><b>'+totrate.toFixed(2)+'</b></td>';
+                    template +='<td class="text-right"><b>'+totrate.toFixed(4)+'</b></td>';
+                    template +='<td class="text-right"><b>'+totnoa+'</b></td>';
+                    template +='<td class="text-right"><b>'+totaverage.toFixed(4)+'</b></td>';
                     template +='</tr>';
 					$('.kt-section__content #tblsm').append(template);
 				//}
@@ -184,7 +196,7 @@ $('[name="area"]').on('change',function(){
                 $("#unit").empty();
 				var opt = document.createElement("option");
 				opt.value = "0";
-				opt.text = "all";
+				opt.text = "All";
 				units.append(opt);
                 for (var i = 0; i < response.data.length; i++) {
                     var opt = document.createElement("option");

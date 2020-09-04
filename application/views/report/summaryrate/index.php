@@ -152,6 +152,8 @@ $this->load->view('temp/MenuBar.php');
 						      		<th class="text-left">Unit</th>
 						      		<th class="text-right">UP</th>
 						      		<th class="text-right">Rate</th>
+						      		<th class="text-right">Noa</th>
+						      		<th class="text-right">Average Rate</th>
 						    	</tr>
 						  	</thead>
 						  	<tbody>						    					    	

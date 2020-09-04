@@ -1,5 +1,5 @@
 <?php
-//error_reporting(0);
+error_reporting(0);
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once APPPATH.'controllers/Middleware/Authenticated.php';
 class Summaryrate extends Authenticated
@@ -60,6 +60,10 @@ class Summaryrate extends Authenticated
         $objPHPExcel->getActiveSheet()->setCellValue('D1', 'UP');
         $objPHPExcel->getActiveSheet()->getColumnDimension('E');
 		$objPHPExcel->getActiveSheet()->setCellValue('E1', 'Rate');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('F');
+		$objPHPExcel->getActiveSheet()->setCellValue('F1', 'Noa');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('G');
+		$objPHPExcel->getActiveSheet()->setCellValue('G1', 'Average Rate');
 
 		if($area = $this->input->post('area')){
 			$this->units->db->where('id_area', $area);
@@ -81,6 +85,7 @@ class Summaryrate extends Authenticated
 		}
 				
 		$no=2;
+		$average=0;
 		foreach ($units as $row) 
 		{
 			$objPHPExcel->getActiveSheet()->setCellValue('A'.$no, $row->area);	
@@ -88,6 +93,11 @@ class Summaryrate extends Authenticated
 			$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, $row->name);				 
 			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no, $row->summary->up);				 
 			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no, $row->summary->rate);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, $row->summary->noa);
+			$average = $row->summary->rate/$row->summary->noa;
+			if(!is_nan($average)){$average=$average;}else{$average=0;}
+			//echo $average;
+			$objPHPExcel->getActiveSheet()->setCellValue('G'.$no, $average);				 
 			$no++;
 		}
 
