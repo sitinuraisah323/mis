@@ -221,21 +221,14 @@ $.ajax({
 		var dataunitlabel 	= unitlabel;
 
 
-		var data = [{
-		label: 'Percentage',
-		data: datapercentage,
-		type: 'line',
-		borderColor: '#ff0000',
-		yAxisID: 'B',
-		datalabels: {
-			display: false
-			}
-		}, {
+		var data = [
+		{
 			label: 'Target',
 			backgroundColor: '#006699',
 			yAxisID: 'A',
 			data: datatarget
-		}, {
+		},
+		 {
 			label: 'Realisasi',
 			backgroundColor: '#FFA000',
 			yAxisID: 'A',
