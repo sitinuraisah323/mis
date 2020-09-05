@@ -15,6 +15,9 @@ class Grams extends ApiController
 		$grams = $this->model->all();
 		if($grams){
 			foreach ($grams as $gram){
+				if($gram->image){
+					$gram->avatar = base_url('storage/lm/'.$gram->image);
+				}
 				$this->prices->db->order_by('lm_grams_prices.id','desc');
 				$prices = $this->prices->find(array(
 					'id_lm_gram'	=> $gram->id
