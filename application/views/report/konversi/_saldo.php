@@ -119,7 +119,7 @@ function initCariForm(){
 		var unit = $('[name="id_unit"]').val();
 		var area = $('[name="area"]').val();
 		var date = $('[name="date-start"]').val();
-        KTApp.block('#form_bukukas .kt-portlet__body', {});
+        KTApp.block('#form_saldo .kt-portlet__body', {});
 		$.ajax({
 			type : 'GET',
 			url : "<?php echo base_url("api/report/konversi/saldo"); ?>",
@@ -142,22 +142,22 @@ function initCariForm(){
 						template += "<td class='text-center'>"+no+"</td>";
 						template += "<td class='text-left'>"+data.area+"</td>";
 						template += "<td class='text-left'>"+data.name+"</td>";
-						template += "<td class='text-right'>"+convertToRupiah(data.bapkas.os_unit)+"</td>";                        
-						template += "<td class='text-right'>"+convertToRupiah(data.bapkas.os)+"</td>";
-                        selisih = data.bapkas.os_unit - data.bapkas.os;
-						template += "<td class='text-right'>"+convertToRupiah(selisih)+"</td>";
+						template += "<td class='text-right'></td>";                        
+						template += "<td class='text-right'></td>";
+                        //selisih = data.bapkas.os_unit - data.bapkas.os;
+						template += "<td class='text-right'></td>";
 						template += "<td class='text-right'></td>";
 						template += '</tr>';
-                        totbap += data.bapkas.os_unit;
-                        totos += data.bapkas.os;
-                        totselisih += selisih;
+                        //totbap += data.bapkas.os_unit;
+                        //totos += data.bapkas.os;
+                        //totselisih += selisih;
 						no++;
 					});                   
 					    template += "<tr class='rowappend'>";
 						template += "<td class='text-center' colspan='3'>Total</td>";
-						template += "<td class='text-right'>"+convertToRupiah(totbap)+"</td>";                        
-						template += "<td class='text-right'>"+convertToRupiah(totos)+"</td>";
-						template += "<td class='text-right'>"+convertToRupiah(totselisih)+"</td>";
+						template += "<td class='text-right'></td>";                        
+						template += "<td class='text-right'></td>";
+						template += "<td class='text-right'></td>";
 						template += "<td class='text-right'></td>";
 						template += '</tr>';
                     $('.kt-section__content table').append(template);
@@ -167,7 +167,7 @@ function initCariForm(){
 				KTApp.unblockPage();
 			},
 			complete:function () {
-				KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+				KTApp.unblock('#form_saldo .kt-portlet__body', {});
 			}
 		});
     })

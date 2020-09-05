@@ -76,7 +76,7 @@ $this->load->view('temp/MenuBar.php');
             </table> -->
             <!--end: Datatable -->
 
-            <form id="form_bukukas" class="form-horizontal" method="post" action="<?php echo base_url("report/bapkas/export"); ?>">
+            <form id="form_saldo" class="form-horizontal" method="post" action="<?php echo base_url("report/bapkas/export"); ?>">
             <div class="kt-portlet__body">
             <div class="col-md-12" >
                 <div class="form-group row">

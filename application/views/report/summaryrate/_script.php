@@ -126,6 +126,8 @@ function initCariForm(){
                     var total=0;
                     var up=0;
                     var rate=0;
+                    var Minrate=0;
+                    var Maxrate=0;
                     var totrate=0;
                     var totnoa=0;
                     var average=0;
@@ -143,12 +145,16 @@ function initCariForm(){
                         up=0;
                     }
                     template +='<td class="text-right">'+up+'</td>';
+                    template +='<td class="text-right">'+data.summary.noa+'</td>';
                     if(isNaN(data.summary.rate)){rate=0;}else{rate=data.summary.rate;}
                     template +='<td class="text-right">'+parseFloat(rate).toFixed(4)+'</td>';
-                    template +='<td class="text-right">'+data.summary.noa+'</td>';
-                    average = rate/data.summary.noa;
+                    average = (rate/data.summary.noa)*100;
+                    Minrate = (data.summary.min_rate)*100;
+                    Maxrate = (data.summary.max_rate)*100;
                     if(!isNaN(average)){ average=average;}else{average=0;}
                     template +='<td class="text-right">'+average.toFixed(4)+'</td>';
+                    template +='<td class="text-right">'+Minrate.toFixed(2)+'</td>';
+                    template +='<td class="text-right">'+Maxrate.toFixed(2)+'</td>';
                     template +='</tr>';
                     if(data.summary.up!=null){
                         total +=  parseInt(data.summary.up);
@@ -164,9 +170,11 @@ function initCariForm(){
                     template += '<tr class="rowappend">';
                     template +='<td colspan="3" class="text-right"><b>Total</b></td>';                    
                     template +='<td class="text-right"><b>'+convertToRupiah(total)+'</b></td>';
-                    template +='<td class="text-right"><b>'+totrate.toFixed(4)+'</b></td>';
                     template +='<td class="text-right"><b>'+totnoa+'</b></td>';
+                    template +='<td class="text-right"><b>'+totrate.toFixed(4)+'</b></td>';
                     template +='<td class="text-right"><b>'+totaverage.toFixed(4)+'</b></td>';
+                    template +='<td class="text-right"><b></b></td>';
+                    template +='<td class="text-right"><b></b></td>';
                     template +='</tr>';
 					$('.kt-section__content #tblsm').append(template);
 				//}

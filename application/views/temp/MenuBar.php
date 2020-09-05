@@ -541,12 +541,12 @@
 													</li>
 												<?php endif;?>
 												<?php if(read_access('report/konversi/saldo')):?>
-													<!-- <li class="kt-menu__item "  aria-haspopup="true">
-														<a  href="<?php //echo base_url('report/konversi/saldo'); ?>" class="kt-menu__link ">
+													<li class="kt-menu__item "  aria-haspopup="true">
+														<a  href="<?php echo base_url('report/konversi/saldo'); ?>" class="kt-menu__link ">
 															<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
 															<span class="kt-menu__link-text">Saldo</span>
 														</a>
-													</li> -->
+													</li>
 												<?php endif;?>												
 											</ul>
 										</div>

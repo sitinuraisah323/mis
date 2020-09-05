@@ -102,7 +102,7 @@ function initCariForm(){
     $('#btncari').on('click',function(){
         $('.rowappend').remove();
         var area = $('[name="area"]').val();
-        var unit = $('[name="id_unit"]').val();
+        var unit = $('[name="unit"]').val();
         var nasabah = $('#nasabah').val();
         var statusrpt = $('#status').val();
 		var dateStart = $('[name="date-start"]').val();
@@ -113,7 +113,7 @@ function initCariForm(){
 			type : 'GET',
 			url : "<?php echo base_url("api/transactions/mortages/report"); ?>",
 			dataType : "json",
-			data:{id_unit:unit,area:area,statusrpt:statusrpt,nasabah:nasabah,dateStart:dateStart,dateEnd:dateEnd,permit:permit},
+			data:{area:area,unit:unit,statusrpt:statusrpt,nasabah:nasabah,dateStart:dateStart,dateEnd:dateEnd,permit:permit},
 			success : function(response,status){
 				KTApp.unblockPage();
 				if(response.status == true){
@@ -182,7 +182,7 @@ function initCariForm(){
 
 $('[name="area"]').on('change',function(){
         var area = $('[name="area"]').val();
-        var units =  $('[name="id_unit"]');
+        var units =  $('[name="unit"]');
         var url_data = $('#url_get_unit').val() + '/' + area;
         $.get(url_data, function (data, status) {
             var response = JSON.parse(data);
@@ -243,7 +243,7 @@ function initGetNasabah(){
 }
 
 function initUnitNasabah(){
-        var unit=$('[name="id_unit"]').val();
+        var unit=$('[name="unit"]').val();
         var customers =  document.getElementById('nasabah');     
         $.ajax({
 			type : 'GET',

@@ -57,13 +57,17 @@ class Summaryrate extends Authenticated
 		$objPHPExcel->getActiveSheet()->getColumnDimension('C');
 		$objPHPExcel->getActiveSheet()->setCellValue('C1', 'Unit');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('D');
-        $objPHPExcel->getActiveSheet()->setCellValue('D1', 'UP');
-        $objPHPExcel->getActiveSheet()->getColumnDimension('E');
-		$objPHPExcel->getActiveSheet()->setCellValue('E1', 'Rate');
-		$objPHPExcel->getActiveSheet()->getColumnDimension('F');
-		$objPHPExcel->getActiveSheet()->setCellValue('F1', 'Noa');
+		$objPHPExcel->getActiveSheet()->setCellValue('D1', 'UP');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('E');
+		$objPHPExcel->getActiveSheet()->setCellValue('E1', 'Noa');
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F');
+		$objPHPExcel->getActiveSheet()->setCellValue('F1', 'Jumlah Rate');		
 		$objPHPExcel->getActiveSheet()->getColumnDimension('G');
-		$objPHPExcel->getActiveSheet()->setCellValue('G1', 'Average Rate');
+		$objPHPExcel->getActiveSheet()->setCellValue('G1', 'Average Rate(%)');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('H');
+		$objPHPExcel->getActiveSheet()->setCellValue('H1', 'Min Rate(%)');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('I');
+		$objPHPExcel->getActiveSheet()->setCellValue('I1', 'Max Rate(%)');
 
 		if($area = $this->input->post('area')){
 			$this->units->db->where('id_area', $area);
@@ -86,18 +90,24 @@ class Summaryrate extends Authenticated
 				
 		$no=2;
 		$average=0;
+		$minrate=0;
+		$maxrate=0;
 		foreach ($units as $row) 
 		{
 			$objPHPExcel->getActiveSheet()->setCellValue('A'.$no, $row->area);	
 			$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, $row->id);	
 			$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, $row->name);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no, $row->summary->up);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no, $row->summary->rate);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, $row->summary->noa);
+			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no, $row->summary->up);	
+			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no, $row->summary->noa);			 
+			$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, $row->summary->rate);				 
 			$average = $row->summary->rate/$row->summary->noa;
+			$minrate = $row->summary->min_rate*100;
+			$maxrate = $row->summary->max_rate*100;
 			if(!is_nan($average)){$average=$average;}else{$average=0;}
 			//echo $average;
 			$objPHPExcel->getActiveSheet()->setCellValue('G'.$no, $average);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('H'.$no, $minrate);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('I'.$no, $maxrate);				 
 			$no++;
 		}
 
