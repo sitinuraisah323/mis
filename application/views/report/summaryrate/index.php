@@ -151,9 +151,11 @@ $this->load->view('temp/MenuBar.php');
 						      		<th class="text-left">Area</th>
 						      		<th class="text-left">Unit</th>
 						      		<th class="text-right">UP</th>
-						      		<th class="text-right">Rate</th>
-						      		<th class="text-right">Noa</th>
-						      		<th class="text-right">Average Rate</th>
+                                      <th class="text-right">Noa</th>
+						      		<th class="text-right">Jumlah Rate(%)</th>
+						      		<th class="text-right">Average Rate(%)</th>
+						      		<th class="text-right">Min Rate(%)</th>
+						      		<th class="text-right">Max Rate(%)</th>
 						    	</tr>
 						  	</thead>
 						  	<tbody>						    					    	

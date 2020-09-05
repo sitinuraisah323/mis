@@ -82,26 +82,26 @@ class Konversi extends ApiController
             ->order_by('areas.id','asc')
             ->get('units')->result();            
 		foreach ($units as $unit){           
-			//$unit->bapkas = $this->bap->getbapsaldo($unit->id, $date);
+				$unit->bapkas = $this->bap->getbapkas($unit->id, $date);
 			
-			$this->units->db
-					->select('id_unit, name, amount,areas.area, cut_off')
-					->DISTINCT ('id_unit')
-					->from('units_saldo')			
-					->join('units','units.id = units_saldo.id_unit')
-					->join('areas','areas.id = units.id_area');
-				$getSaldo = $this->units->db->get()->result();
-				foreach ($getSaldo as $get){
-					$this->units->db->select('(sum(CASE WHEN type = "CASH_IN" THEN `amount` ELSE 0 END) - sum(CASE WHEN type = "CASH_OUT" THEN `amount` ELSE 0 END)) as amount')
-						->join('units','units.id = units_dailycashs.id_unit')
-						->from('units_dailycashs')
-						->where('units.id', $unit->id)
-						->where('units_dailycashs.date >',$get->cut_off);
-					$data = $this->units->db->get()->row();
-					if($data){
-						$unit->amount = $get->amount + $data->amount;
-					}
-				}
+			// $this->units->db
+			// 		->select('id_unit, name, amount,areas.area, cut_off')
+			// 		->DISTINCT ('id_unit')
+			// 		->from('units_saldo')			
+			// 		->join('units','units.id = units_saldo.id_unit')
+			// 		->join('areas','areas.id = units.id_area');
+			// 	$getSaldo = $this->units->db->get()->result();
+			// 	foreach ($getSaldo as $get){
+			// 		$this->units->db->select('(sum(CASE WHEN type = "CASH_IN" THEN `amount` ELSE 0 END) - sum(CASE WHEN type = "CASH_OUT" THEN `amount` ELSE 0 END)) as amount')
+			// 			->join('units','units.id = units_dailycashs.id_unit')
+			// 			->from('units_dailycashs')
+			// 			->where('units.id', $unit->id)
+			// 			->where('units_dailycashs.date >',$get->cut_off);
+			// 		$data = $this->units->db->get()->row();
+			// 		if($data){
+			// 			$unit->amount = $get->amount + $data->amount;
+			// 		}
+			// 	}
 		}
         echo json_encode(array(
 			'data'	=> $units,
