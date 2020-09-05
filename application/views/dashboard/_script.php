@@ -1735,23 +1735,13 @@ function targetBooking(){
 		complete:function () {
 			$('#form_tarBook').find('.total-target').text(convertToRupiah(tottarget));
 			$('#form_tarBook').find('.total-realisasi').text(convertToRupiah(totrealisasi));			
-			var datapercentage 	= percentage;
+			//var datapercentage 	= percentage;
 			var databooking 	= booking;
 			var datatarget 		= target;
 			var dataunitlabel 	= unitlabel;
 
-			console.log(unitlabel);
-
-			var data = [{
-            label: 'Percentage',
-            data: datapercentage,
-            type: 'line',
-            borderColor: '#ff0000',
-			yAxisID: 'B',
-            datalabels: {
-                display: false
-				}
-			}, {
+			//console.log(unitlabel);
+			var data = [ {
 				label: 'Target',
 				backgroundColor: '#006699',
 				yAxisID: 'A',
@@ -1785,14 +1775,6 @@ function targetBooking(){
 									return valuek;
 								}
 							}
-						},{
-								id: 'B',
-								type: 'linear',
-								position: 'right',
-								ticks: {
-									max: 200,
-									min: 0,
-								}
 						}]
 				}
 		};
@@ -2007,15 +1989,6 @@ function targetOutstanding(){
 			var dataunitlabel 	= unitlabel;
 			//console.log(unitlabel);
 			var data = [{
-            label: 'Percentage',
-            data: datapercentage,
-            type: 'line',
-            borderColor: '#ff0000',
-			yAxisID: 'B',
-            datalabels: {
-                display: false
-				}
-			}, {
 				label: 'Target',
 				backgroundColor: '#512DA8',
 				yAxisID: 'A',
@@ -2048,14 +2021,6 @@ function targetOutstanding(){
 									return valuek;
 								}
 							}
-						},{
-								id: 'B',
-								type: 'linear',
-								position: 'right',
-								ticks: {
-									max: 200,
-									min: 0,
-								}
 						}]
 				}
 		};
