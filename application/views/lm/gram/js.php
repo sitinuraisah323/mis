@@ -27,9 +27,11 @@
 			}else if(event.target.value === 'customer'){
 				tmpEmployee.classList.add('d-none');
 				tmpCustomer.classList.remove('d-none');
+				document.querySelector('[name="id_employee"]').value = 0;
 			}else{
 				tmpEmployee.classList.add('d-none');
 				tmpCustomer.classList.add('d-none');
+				document.querySelector('[name="id_employee"]').value = 0;
 			}
 		}
 		appendGram(data){
