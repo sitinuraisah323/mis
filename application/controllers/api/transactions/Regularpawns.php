@@ -363,29 +363,17 @@ class Regularpawns extends ApiController
 		}else if($this->session->userdata('user')->level == 'unit'){
 			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
 		}
-		
-		// if($perk = $this->input->get('perk')){
-		// 	$perk = $perk;
-		// }		
-		// if($this->input->get('dateStart')){
-		// 	$dateStart = $this->input->get('dateStart');
-		// }else{
-		// 	$dateStart = date('Y-m-d');
-		// }
-
-		// if($this->input->get('dateEnd')){
-		// 	$dateEnd = $this->input->get('dateEnd');
-		// }else{
-		// 	$dateEnd = date('Y-m-d');
-		// }
 
 		$units = $this->units->db->select('units.id, units.name, area')
 			->join('areas','areas.id = units.id_area')
 			->order_by('areas.id','asc')
 			->get('units')->result();
-		foreach ($units as $unit){
-			 $unit->summary = $this->regulars->getSummaryRate($unit->id);			
+		foreach ($units as $unit){			
+			 $unit->summaryUP = $this->regulars->getSummaryUPUnits($unit->id);			
+			 $unit->summaryRate = $this->regulars->getSummaryRateUnits($unit->id);			
 		}
+		//echo "<pre/>";
+		//print_r($units);
 		$this->sendMessage($units, 'Get Data Outstanding');
 	}
 

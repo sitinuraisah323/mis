@@ -33,7 +33,7 @@ $this->load->view('temp/MenuBar.php');
                         <i class="kt-font-brand fa fa-align-justify"></i>
                     </span>
                     <h3 class="kt-portlet__head-title">
-                    Data Units Summary Rate
+                    Units Summary Rate
                     </h3>
                 </div>
                 <div class="kt-portlet__head-toolbar">
@@ -150,12 +150,12 @@ $this->load->view('temp/MenuBar.php');
 						      		<th class="text-center">No</th>
 						      		<th class="text-left">Area</th>
 						      		<th class="text-left">Unit</th>
-						      		<th class="text-right">UP</th>
-                                      <th class="text-right">Noa</th>
-						      		<th class="text-right">Jumlah Rate(%)</th>
+						      		<th class="text-right">Total UP</th>
+                                    <th class="text-right"></th>
+						      		<!-- <th class="text-right">Jumlah Rate(%)</th>
 						      		<th class="text-right">Average Rate(%)</th>
 						      		<th class="text-right">Min Rate(%)</th>
-						      		<th class="text-right">Max Rate(%)</th>
+						      		<th class="text-right">Max Rate(%)</th> -->
 						    	</tr>
 						  	</thead>
 						  	<tbody>						    					    	
