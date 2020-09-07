@@ -82,7 +82,7 @@ class Konversi extends ApiController
             ->order_by('areas.id','asc')
             ->get('units')->result();            
 		foreach ($units as $unit){           
-				$unit->bapkas = $this->bap->getbapkas($unit->id, $date);
+				$unit->bapkas = $this->bap->getbapsaldo($unit->id, $date);
 			
 			// $this->units->db
 			// 		->select('id_unit, name, amount,areas.area, cut_off')

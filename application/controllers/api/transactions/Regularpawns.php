@@ -252,19 +252,19 @@ class Regularpawns extends ApiController
 				$this->regulars->db->where('id_area', $area);
 			}
 			$this->regulars->db
-				//->where('units_regularpawns.date_sbk >=', $get['dateStart'])
+				->where('units_regularpawns.date_sbk >=', $get['dateStart'])
 				->where('units_regularpawns.date_sbk <=', $get['dateEnd'])
 				->where_in('units_regularpawns.status_transaction ', $status);
 			if($get['id_unit']){
 				$this->regulars->db
 					->where('units_regularpawns.id_unit', $get['id_unit']);
 			}
-				if($permit = $get['permit']){
-					$this->regulars->db->where('units_regularpawns.permit', $permit);
-				}
-				if($nasabah!="all" && $nasabah != null){
-					$this->regulars->db->where('customers.nik', $nasabah);
-				}
+			if($permit = $get['permit']){
+				$this->regulars->db->where('units_regularpawns.permit', $permit);
+			}
+			if($nasabah!="all" && $nasabah != null){
+				$this->regulars->db->where('customers.nik', $nasabah);
+			}
 		}
 		$data = $this->regulars->all();
 		echo json_encode(array(

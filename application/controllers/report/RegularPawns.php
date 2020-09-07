@@ -108,7 +108,7 @@ class Regularpawns extends Authenticated
 			if($post['status']=="2"){$status=["L"];}
 			if($post['status']=="3"){$status=[""];}
 			$this->regulars->db
-				//->where('units_regularpawns.date_sbk >=', $post['date-start'])
+				->where('units_regularpawns.date_sbk >=', $post['date-start'])
 				->where('units_regularpawns.date_sbk <=', $post['date-end'])
 				->where_in('units_regularpawns.status_transaction ', $status);
 			if($idUnit = $this->input->get('id_unit')){

@@ -131,5 +131,11 @@ ALTER TABLE mis.employees ADD masa_kerja varchar(100) NULL;
 ALTER TABLE mis.units_cash_book ADD os FLOAT(10) DEFAULT 0 NOT NULL;
 ALTER TABLE mis.units_cash_book CHANGE os os FLOAT(10) DEFAULT 0 NOT NULL AFTER note;
 
+ALTER TABLE mis.lm_transactions ADD name varchar(255) NULL;
+ALTER TABLE mis.lm_transactions CHANGE name name varchar(255) NULL AFTER user_update;
+ALTER TABLE mis.lm_transactions ADD nik varchar(255) NULL;
+ALTER TABLE mis.lm_transactions ADD mobile varchar(255) NULL;
+ALTER TABLE mis.lm_transactions ADD address TEXT NULL;
+
 
 

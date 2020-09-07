@@ -16,13 +16,27 @@ $this->load->view('temp/MenuBar.php');
 	<!--begin::Form-->
 	<form class="kt-form form-input">
 		<div class="kt-portlet__body">
-			<div class="row">
-				<div class="col-md-6">
+		   <div class="row">
+		   		<div class="col-md-12">
+				   <div class="form-group row">
+				   		<label class="col-md-2">Tipe Pembeli</label>
+						<div class="col-md-10">
+							<select name="type_buyer" id="" class="form-control">
+								<option value="">Pilih Tipe Pembeli</option>
+								<option value="employee">Karyawan</option>
+								<option value="customer">Pelanggan</option>
+							</select>
+						</div>   
+				   </div>   
+				</div>
+		   </div>
+			<div class="row d-none type-employee">
+				<div class="col-md-12">
 					<div class="form-group row">
-						<label class="col-md-3">Karyawan</label>
-						<div class="col-md-9">
+						<label class="col-md-2">Karyawan</label>
+						<div class="col-md-10">
 							<select class="custom-select form-control" name="id_employee" required>
-								<option value="">Karyawan</option>
+								<option value="0">Karyawan</option>
 								<?php if($employees):?>
 									<?php foreach ($employees as $employee):?>
 										<option value="<?php echo $employee->id;?>"><?php echo implode('-', array($employee->fullname, $employee->unit));?></option>
@@ -32,11 +46,37 @@ $this->load->view('temp/MenuBar.php');
 						</div>
 					</div>
 				</div>
+			</div>
+			<div class="row d-none type-customer">
 				<div class="col-md-6">
 					<div class="form-group row">
-						<label class="col-md-3">Kode Transaksi</label>
-						<div class="col-md-9">
-							<input type="text" name="code" class="form-control" value="<?php echo $code;?>" readonly>
+						<label class="col-md-2">Nama</label>
+						<div class="col-md-10">
+							<input type="text" class="form-control" name="name"/>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group row">
+						<label class="col-md-2">No Ktp</label>
+						<div class="col-md-10">
+							<input type="text" class="form-control" name="nik"/>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group row">
+						<label class="col-md-2">Alamat</label>
+						<div class="col-md-10">
+							<textarea class="form-control" name="address"></textarea>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group row">
+						<label class="col-md-2">No Telp</label>
+						<div class="col-md-10">
+							<input type="text" class="form-control" name="mobile"/>
 						</div>
 					</div>
 				</div>
@@ -88,6 +128,7 @@ $this->load->view('temp/MenuBar.php');
 					</table>
 				</div>
 			</div>
+			<input type="hidden" name="code" value="<?php echo $code;?>" readonly>
 			<div class="row">
 				<div class="col-md-12">
 					<div class="form-group">
