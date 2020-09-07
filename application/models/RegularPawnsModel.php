@@ -249,4 +249,29 @@ class RegularpawnsModel extends Master
 		);
 	}
 
+	public function getSummaryRateUnits($idUnit)
+	{
+		$summaryRate =$this->db->select('sum(amount) as up,capital_lease as rate,sum(capital_lease) as tot_rate,count(*) as noa')->from('units_regularpawns')
+				->where('date_sbk IS NOT NULL')
+				->where('status_transaction', 'N')
+				->where('id_unit', $idUnit)
+				->group_by('capital_lease')
+	  			->get()->result();
+		return $summaryRate;
+	}
+
+	public function getSummaryUPUnits($idUnit)
+	{
+		$summaryUP =$this->db->select('sum(amount) as up,count(*) as total_noa')->from('units_regularpawns')
+				->where('date_sbk IS NOT NULL')
+				->where('status_transaction', 'N')
+				->where('id_unit', $idUnit)
+				  ->get()->row();
+		
+		return (object)array(
+			'up' => $summaryUP->up,
+			'tot_noa' => $summaryUP->total_noa
+		);
+	}
+
 }

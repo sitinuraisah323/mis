@@ -126,56 +126,41 @@ function initCariForm(){
                     var total=0;
                     var up=0;
                     var rate=0;
-                    var Minrate=0;
-                    var Maxrate=0;
-                    var totrate=0;
-                    var totnoa=0;
-                    var average=0;
-                    var totaverage=0;
-                    var no = 0;
-					$.each(response.data, function (index, data) {
-                    no++;
-                    template +='<tr class="rowappend">';
-                    template +='<td class="text-center">'+no+'</td>';
-                    template +='<td class="text-left">'+data.area+'</td>';
-                    template +='<td class="text-left">'+data.name+'</td>';
-                    if(data.summary.up!=null){
-                        up = convertToRupiah(data.summary.up);
+                    var percentage=0;
+                    var no = 1;
+					$.each(response.data, function (index, data) {                   
+                    template +='<tr class="rowappend" bgcolor="#F9F6F6">';
+                    template +='<td class="text-center"><b>'+no+'</b></td>';
+                    template +='<td class="text-left"><b>'+data.area+'</b></td>';
+                    template +='<td class="text-left"><b>'+data.name+'</b></td>';
+                    if(data.summaryUP.up){
+                        up= convertToRupiah(data.summaryUP.up);
                     }else{
                         up=0;
                     }
-                    template +='<td class="text-right">'+up+'</td>';
-                    template +='<td class="text-right">'+data.summary.noa+'</td>';
-                    if(isNaN(data.summary.rate)){rate=0;}else{rate=data.summary.rate;}
-                    template +='<td class="text-right">'+parseFloat(rate).toFixed(4)+'</td>';
-                    average = (rate/data.summary.noa)*100;
-                    Minrate = (data.summary.min_rate)*100;
-                    Maxrate = (data.summary.max_rate)*100;
-                    if(!isNaN(average)){ average=average;}else{average=0;}
-                    template +='<td class="text-right">'+average.toFixed(4)+'</td>';
-                    template +='<td class="text-right">'+Minrate.toFixed(2)+'</td>';
-                    template +='<td class="text-right">'+Maxrate.toFixed(2)+'</td>';
+                    template +='<td class="text-right"><b>'+up+'</b></td>';
+                    template +='<td class="text-right"><b></b></td>';
                     template +='</tr>';
-                    if(data.summary.up!=null){
-                        total +=  parseInt(data.summary.up);
-                    }
-                    if(!isNaN(data.summary.rate)){
-                        totrate +=  parseInt(data.summary.rate);
-                    }
-                    totnoa += parseInt(data.summary.noa);
-                    if(!isNaN(average)){
-                        totaverage +=  parseFloat(average);
-                    }
+                    template +='<tr class="rowappend" bgcolor="#FCFBFB">';
+                    template +='<td class="text-right"></td>';
+                    template +='<td class="text-right"><b>Rate</b></td>';
+                    template +='<td class="text-right"><b>Noa</b></td>';
+                    template +='<td class="text-right"><b>UP</b></td>';
+                    template +='<td class="text-right"><b>%</b></td>';
+                    template +='</tr>';
+                        for (let i = 0; i < data.summaryRate.length; i++) {
+                            template +='<tr class="rowappend">';
+                            template +='<td></td>';
+                            rate = data.summaryRate[i].rate*100;
+                            template +='<td class="text-right">'+rate.toFixed(2)+'</td>';
+                            template +='<td class="text-right">'+data.summaryRate[i].noa+'</td>';
+                            template +='<td class="text-right">'+convertToRupiah(data.summaryRate[i].up)+'</td>';
+                            percentage = (data.summaryRate[i].up/data.summaryUP.up)*100;
+                            template +='<td class="text-right">'+percentage.toFixed(2)+'</td>';
+                            template +='</tr>';
+                        }
+                    no++;
 					});
-                    template += '<tr class="rowappend">';
-                    template +='<td colspan="3" class="text-right"><b>Total</b></td>';                    
-                    template +='<td class="text-right"><b>'+convertToRupiah(total)+'</b></td>';
-                    template +='<td class="text-right"><b>'+totnoa+'</b></td>';
-                    template +='<td class="text-right"><b>'+totrate.toFixed(4)+'</b></td>';
-                    template +='<td class="text-right"><b>'+totaverage.toFixed(4)+'</b></td>';
-                    template +='<td class="text-right"><b></b></td>';
-                    template +='<td class="text-right"><b></b></td>';
-                    template +='</tr>';
 					$('.kt-section__content #tblsm').append(template);
 				//}
 			},
