@@ -152,6 +152,7 @@ $this->load->view('temp/MenuBar.php');
 						      		<th class="text-left">Unit</th>
 						      		<th class="text-right">Total UP</th>
                                     <th class="text-right"></th>
+                                    <th class="text-right"></th>
 						      		<!-- <th class="text-right">Jumlah Rate(%)</th>
 						      		<th class="text-right">Average Rate(%)</th>
 						      		<th class="text-right">Min Rate(%)</th>
