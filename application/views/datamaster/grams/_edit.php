@@ -28,6 +28,19 @@
 
 							<div class="col-md-12">
 								<div class="form-group">
+									<label>Harga Non Karyawan Perpicis</label>
+									<input type="text" class="form-control" name="price_perpcs_customer">
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div class="form-group">
+									<label>Harga Non Karyawan Pergram</label>
+									<input type="text" class="form-control" name="price_pergram_customer">
+								</div>
+							</div>
+
+							<div class="col-md-12">
+								<div class="form-group">
 									<label>Harga Perpicis</label>
 									<input type="text" class="form-control" name="price_perpcs">
 								</div>
