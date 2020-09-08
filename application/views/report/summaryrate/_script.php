@@ -125,11 +125,19 @@ function initCariForm(){
 					var template = '';
                     var total=0;
                     var up=0;
+                    var totup=0;
                     var rate=0;
+                    var totrate=0;
+                    var totnoa=0;
                     var percentage=0;
+                    var totpercentage=0;
+                    var sewamodal=0;
+                    var totsewamodal=0;
+                    var rateaverage=0;
                     var no = 1;
-					$.each(response.data, function (index, data) {                   
-                    template +='<tr class="rowappend" bgcolor="#F9F6F6">';
+					$.each(response.data, function (index, data) {  
+                    if(data.summaryUP.up!=null){
+                        template +='<tr class="rowappend" bgcolor="#F9F6F6">';
                     template +='<td class="text-center"><b>'+no+'</b></td>';
                     template +='<td class="text-left"><b>'+data.area+'</b></td>';
                     template +='<td class="text-left"><b>'+data.name+'</b></td>';
@@ -140,12 +148,14 @@ function initCariForm(){
                     }
                     template +='<td class="text-right"><b>'+up+'</b></td>';
                     template +='<td class="text-right"><b></b></td>';
+                    template +='<td class="text-right"><b></b></td>';
                     template +='</tr>';
                     template +='<tr class="rowappend" bgcolor="#FCFBFB">';
                     template +='<td class="text-right"></td>';
                     template +='<td class="text-right"><b>Rate</b></td>';
                     template +='<td class="text-right"><b>Noa</b></td>';
                     template +='<td class="text-right"><b>UP</b></td>';
+                    template +='<td class="text-right"><b>Sewa Modal</b></td>';
                     template +='<td class="text-right"><b>%</b></td>';
                     template +='</tr>';
                         for (let i = 0; i < data.summaryRate.length; i++) {
@@ -156,10 +166,28 @@ function initCariForm(){
                             template +='<td class="text-right">'+data.summaryRate[i].noa+'</td>';
                             template +='<td class="text-right">'+convertToRupiah(data.summaryRate[i].up)+'</td>';
                             percentage = (data.summaryRate[i].up/data.summaryUP.up)*100;
+                            sewamodal = (data.summaryRate[i].up*(rate.toFixed(2)));
+                            ratesewa = sewamodal/data.summaryRate[i].up;
+                            template +='<td class="text-right">'+convertToRupiah(sewamodal)+'</td>';
                             template +='<td class="text-right">'+percentage.toFixed(2)+'</td>';
                             template +='</tr>';
+                            totsewamodal += parseInt(sewamodal);
+                            totrate += parseFloat(rate);
+                            totnoa += parseInt(data.summaryRate[i].noa);
+                            totup += parseInt(data.summaryRate[i].up);
                         }
+                        rateaverage = totsewamodal/totup;
+                        template +='<tr class="rowappend" bgcolor="#FCFBFB">';
+                        template +='<td class="text-right">Total</td>';
+                        template +='<td class="text-right">'+totrate.toFixed(2)+'</td>';
+                        template +='<td class="text-right">'+convertToRupiah(totnoa)+'</td>';
+                        template +='<td class="text-right">'+convertToRupiah(totup)+'</td>';
+                        template +='<td class="text-right">'+convertToRupiah(totsewamodal)+'</td>';
+                        template +='<td class="text-right"><b> Average rate : '+rateaverage.toFixed(2)+'</b></td>';
+                        template +='</tr>';
                     no++;
+                        
+                    }               
 					});
 					$('.kt-section__content #tblsm').append(template);
 				//}
