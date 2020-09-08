@@ -15,4 +15,13 @@ class RepaymentmortageModel extends Master
 		return $this->db->get('units_repayments_mortage')->result();
 	}
 
+	public function getUpByDate($idUnit, $date)
+	{
+		return (int) $this->db->select('sum(amount) as up')
+			->from($this->table)
+			->where('id_unit', $idUnit)
+			->where('date_kredit', $date)
+			->get()->row()->up;
+	}
+
 }

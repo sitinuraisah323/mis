@@ -10,6 +10,7 @@ class Dashboards extends ApiController
 		$this->load->model('RegularPawnsModel', 'regular');
 		$this->load->model('UnitsModel', 'units');
 		$this->load->model('RepaymentModel','repayments');
+		$this->load->model('RepaymentmortageModel','repaymentsmortage');		
 		$this->load->model('MappingcaseModel', 'm_casing');
 		$this->load->model('OutstandingModel', 'outstanding');
 	}
@@ -238,6 +239,8 @@ class Dashboards extends ApiController
 			->get('units')->result();
 		foreach ($units as $unit){
 			$unit->amount = $this->repayments->getUpByDate($unit->id, $date);
+			$unit->amountmortage = $this->repaymentsmortage->getUpByDate($unit->id, $date);
+			$unit->repayment = $unit->amount + $unit->amountmortage;			
 		}
 		$this->sendMessage($units, 'Get Data Outstanding');
 	}

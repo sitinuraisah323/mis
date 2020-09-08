@@ -929,8 +929,6 @@ function pelunasan() {
 		},
 	});
 
-
-
 	KTApp.block('#form_pelunasan .kt-widget14', {});
 	$.ajax({
 		url:"<?php echo base_url('api/dashboards/pelunasandashboard');?>",
@@ -955,18 +953,18 @@ function pelunasan() {
 			$.each(response.data, function (index,unit) {
 				transaction.push({
 					y:unit.name,
-					a:unit.amount
+					a:unit.repayment
 				});
-				totalCurr += parseInt(unit.amount);
+				totalCurr += parseInt(unit.repayment);
 
 				if(unit.area=='Jawa Barat')
 				{
 					Tempjabar += "<tr class='rowappendjabar'>";
 					Tempjabar += "<td class='text-left'><b>"+unit.area+"</b></td>";
 					Tempjabar += "<td class='text-left'><b>"+unit.name+"</b></td>";
-					Tempjabar += "<td class='text-right'><b>"+convertToRupiah(unit.amount)+"</b></td>";
+					Tempjabar += "<td class='text-right'><b>"+convertToRupiah(unit.repayment)+"</b></td>";
 					Tempjabar += '</tr>';
-					totjabar += parseInt(unit.amount);
+					totjabar += parseInt(unit.repayment);
 				}
 
 				if(unit.area=='Jawa Timur')
@@ -974,9 +972,9 @@ function pelunasan() {
 					Tempjatim += "<tr class='rowappendjabar'>";
 					Tempjatim += "<td class='text-left'><b>"+unit.area+"</b></td>";
 					Tempjatim += "<td class='text-left'><b>"+unit.name+"</b></td>";
-					Tempjatim += "<td class='text-right'><b>"+convertToRupiah(unit.amount)+"</b></td>";
+					Tempjatim += "<td class='text-right'><b>"+convertToRupiah(unit.repayment)+"</b></td>";
 					Tempjatim += '</tr>';
-					totjatim += parseInt(unit.amount);
+					totjatim += parseInt(unit.repayment);
 				}
 
 				if(unit.area=='NTB')
@@ -984,9 +982,9 @@ function pelunasan() {
 					Tempntb += "<tr class='rowappendjabar'>";
 					Tempntb += "<td class='text-left'><b>"+unit.area+"</b></td>";
 					Tempntb += "<td class='text-left'><b>"+unit.name+"</b></td>";
-					Tempntb += "<td class='text-right'><b>"+convertToRupiah(unit.amount)+"</b></td>";
+					Tempntb += "<td class='text-right'><b>"+convertToRupiah(unit.repayment)+"</b></td>";
 					Tempntb += '</tr>';
-					totntb += parseInt(unit.amount);
+					totntb += parseInt(unit.repayment);
 				}
 
 				if(unit.area=='NTT')
@@ -994,9 +992,9 @@ function pelunasan() {
 					Tempntt += "<tr class='rowappendjabar'>";
 					Tempntt += "<td class='text-left'><b>"+unit.area+"</b></td>";
 					Tempntt += "<td class='text-left'><b>"+unit.name+"</b></td>";
-					Tempntt += "<td class='text-right'><b>"+convertToRupiah(unit.amount)+"</b></td>";
+					Tempntt += "<td class='text-right'><b>"+convertToRupiah(unit.repayment)+"</b></td>";
 					Tempntt += '</tr>';
-					totntt += parseInt(unit.amount);
+					totntt += parseInt(unit.repayment);
 				}
 			});
 
