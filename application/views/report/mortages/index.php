@@ -81,12 +81,12 @@ $this->load->view('temp/MenuBar.php');
             <div class="col-md-12" >
                 <div class="form-group row">
                 <?php if($this->session->userdata('user')->level == 'unit'):?>
-                    <input type="hidden" name="unit" value="<?php echo $this->session->userdata('user')->id_unit;?>">
+                    <input type="hidden" name="id_unit" value="<?php echo $this->session->userdata('user')->id_unit;?>">
                 <?php elseif($this->session->userdata('user')->level == 'area'):?>
                     <input type="hidden" name="area" value="<?php echo $this->session->userdata('user')->id_area;?>">
                     <div class="col-lg-2">
 						<label class="col-form-label">Unit</label>
-						<select class="form-control select2" name="unit" id="unit">
+						<select class="form-control select2" name="id_unit" id="unit">
 							<option value="0">All</option>
 						</select>
                     </div>
@@ -106,7 +106,7 @@ $this->load->view('temp/MenuBar.php');
                     </div>
                     <div class="col-lg-2">
 						<label class="col-form-label">Unit</label>
-						<select class="form-control select2" name="unit" id="unit">
+						<select class="form-control select2" name="id_unit" id="unit">
 							<option value="0">All</option>
 						</select>
                     </div>
@@ -124,6 +124,7 @@ $this->load->view('temp/MenuBar.php');
 					<div class="col-lg-2">
 						<label class="col-form-label">Ijin</label>
 						<select class="form-control" name="permit" id="permit">
+                        <option value="">Select Ijin</option>
 							<?php foreach (array('OJK' =>'OJK','NON-OJK' => 'Non OJK') as $value => $item):?>
 								<option value="<?php echo $value;?>"><?php echo $item;?></option>
 							<?php endforeach;?>
