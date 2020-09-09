@@ -25,7 +25,7 @@ class UnitsModel extends Master
 
 	public function get_units_cicilan_byarea($area)
 	{
-		$this->db->select('DISTINCT(units.id),areas.id,units.name');		
+		$this->db->select('DISTINCT(units.id),units.id,units.name');		
 		$this->db->join('units ','units_mortages.id_unit=units.id');		
 		$this->db->join('areas ','units.id_area=areas.id');		
 		$this->db->where('areas.id',$area);		

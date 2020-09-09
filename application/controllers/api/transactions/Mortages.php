@@ -258,9 +258,6 @@ class Mortages extends ApiController
 			if($area = $this->input->get('area')){
 				$this->mortages->db->where('id_area', $area);
 			}
-			if($unit = $this->input->get('unit')){
-				$this->mortages->db->where('id_unit', $unit);
-			}
 			if($permit = $get['permit']){
 				$this->mortages->db->where('permit', $permit);
 			}
