@@ -36,6 +36,8 @@ class Outstanding extends Authenticated
 		require_once APPPATH.'controllers/pdf/header.php';
 		$pdf->AddPage('L');
 		$view = $this->load->view('dailyreport/outstanding/index.php',['outstanding'=> $this->data(),'datetrans'=> $this->datetrans()],true);
+		var_dump($view);
+		exit;
 		$pdf->writeHTML($view);
 
 		$pdf->AddPage('L');
@@ -212,6 +214,15 @@ class Outstanding extends Authenticated
 			$unit->repayment_today = $this->regular->getRepaymentToday($unit->id, $date);
 			$totalNoa = (int) $unit->ost_yesterday->noa + $unit->credit_today->noa - $unit->repayment_today->noa;
 			$totalUp = (int) $unit->ost_yesterday->up + $unit->credit_today->up - $unit->repayment_today->up;
+			
+			//target
+			$target = (int) $this->regular->db
+				->select('amount_booking')
+				->where('month', date('n', strtotime($date)))
+				->where('year', date('Y', strtotime($date)))
+				->get('units_targets')->row()->amount_booking;
+			var_dump($target);
+			exit;
 			$unit->total_outstanding = (object) array(
 				'noa'	=> $totalNoa,
 				'up'	=> $totalUp,

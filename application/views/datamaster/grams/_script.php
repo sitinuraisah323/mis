@@ -131,6 +131,18 @@ function initDataTable(){
 				  width:60,
 				  textAlign: 'center',
 			  },
+              {
+				  field: 'price_pergram_customer',
+				  title: 'Harga  Non karyawan pergram',
+				  width:60,
+				  textAlign: 'center',
+			  },
+			  {
+				  field: 'price_perpcs_customer',
+				  title: 'Harga Non karyawan perpicis',
+				  width:60,
+				  textAlign: 'center',
+			  },
 			  {
 				  field: 'price_buyback_pergram',
 				  title: 'Harga Buyback Pergram',

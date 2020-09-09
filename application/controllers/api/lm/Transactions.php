@@ -25,16 +25,26 @@ class Transactions extends ApiController
 			}
 		}
 		$this->model->db
-			->select('units.name as unit, employees.fullname as name, position')
-			->join('employees','employees.id = lm_transactions.id_employee')
-			->join('units','units.id = employees.id_unit')
 			->order_by('lm_transactions.id','desc');
 		$data = $this->model->all();
-
 		$this->master->db->order_by('weight','asc');
 		$grams = $this->master->all();
 		if($data){
 			foreach ($data as $datum){
+				if($datum->id_employee){
+					$getEmployee = $this->model->db
+						->select('fullname as name, position, units.name as unit')
+						->from('employees')
+						->join('units','units.id = employees.id_unit')
+						->where('employees.id',$datum->id_employee)
+						->get()->row();
+					$datum->name = $getEmployee->name;
+					$datum->position = $getEmployee->position;
+					$datum->unit = $getEmployee->unit;
+				}else{
+					$datum->position = '';
+					$datum->unit = '';
+				}
 				foreach ($grams as $gram){
 					$find = $this->gram->find(array(
 						'id_lm_transaction'	=> $datum->id,
@@ -55,8 +65,6 @@ class Transactions extends ApiController
 	{
 		if($post = $this->input->post()){
 			$this->load->library('form_validation');
-
-			$this->form_validation->set_rules('id_employee', 'id_employee', 'required');
 			$this->form_validation->set_rules('date', 'date', 'required');
 			$this->form_validation->set_rules('code', 'code', 'required');
 			$this->form_validation->set_rules('total', 'total', 'required');
@@ -80,6 +88,11 @@ class Transactions extends ApiController
 					'total'	=> $post['total'],
 					'tenor'	=> $post['tenor'],
 					'method'	=> $post['method'],
+					'name'	=> $post['name'],
+					'nik'	=> $post['nik'],
+					'mobile'	=> $post['mobile'],
+					'address'	=> $post['address'],
+					'type_buyer'	=> $post['type_buyer'],
 					'user_create'	=> $this->session->userdata('user')->id,
 					'user_update'	=> $this->session->userdata('user')->id,
 				);
@@ -140,6 +153,11 @@ class Transactions extends ApiController
 					'total'	=> $post['total'],
 					'method'	=> $post['method'],
 					'tenor'	=> $post['tenor'],
+					'name'	=> $post['name'],
+					'nik'	=> $post['nik'],
+					'mobile'	=> $post['mobile'],
+					'address'	=> $post['address'],
+					'type_buyer'	=> $post['type_buyer'],
 					'user_create'	=> $this->session->userdata('user')->id,
 					'user_update'	=> $this->session->userdata('user')->id,
 				);

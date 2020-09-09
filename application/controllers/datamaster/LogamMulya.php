@@ -147,12 +147,25 @@ class Logammulya extends Authenticated
 
 	public function invoice($id)
 	{
-		$this->model->db
-			->select('employees.fullname, position')
-			->join('employees','employees.id = lm_transactions.id_employee');
 		$transaction = $this->model->find(array(
 			'lm_transactions.id'	=> $id
 		));
+
+		if($transaction->id_employee){
+			$getEmployee = $this->model->db
+				->select('fullname as name, position, units.name as unit')
+				->from('employees')
+				->join('units','units.id = employees.id_unit')
+				->where('employees.id',$transaction->id_employee)
+				->get()->row();
+			$transaction->fullname = $getEmployee->name;
+			$transaction->position = $getEmployee->position;
+			$transaction->unit = $getEmployee->unit;
+		}else{
+			$transaction->fullname = $transaction->name;
+			$transaction->position = '';
+			$transaction->unit = '';
+		}
 
 		$this->modelgrams->db
 			->select('lm_grams.weight')

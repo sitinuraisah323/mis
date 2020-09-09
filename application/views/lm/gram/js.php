@@ -18,6 +18,22 @@
 				}
 			})
 		}
+		handleType = (event) =>{
+			const tmpEmployee = document.querySelector('.type-employee');
+			const tmpCustomer =  document.querySelector('.type-customer');
+			if(event.target.value === 'employee'){
+				tmpEmployee.classList.remove('d-none');
+				tmpCustomer.classList.add('d-none');
+			}else if(event.target.value === 'customer'){
+				tmpEmployee.classList.add('d-none');
+				tmpCustomer.classList.remove('d-none');
+				document.querySelector('[name="id_employee"]').value = 0;
+			}else{
+				tmpEmployee.classList.add('d-none');
+				tmpCustomer.classList.add('d-none');
+				document.querySelector('[name="id_employee"]').value = 0;
+			}
+		}
 		appendGram(data){
 			grams = data;
 			data.forEach(data=>{
@@ -159,4 +175,6 @@
 	document.querySelector('.btn-plus').addEventListener('click', ()=>{
 		document.querySelector('.search-purchase').classList.remove('d-none');
 	});
+
+	document.querySelector('[name="type_buyer"]').addEventListener('change', (event) => (new Store()).handleType(event));
 </script>

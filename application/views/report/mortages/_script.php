@@ -108,8 +108,12 @@ function initCariForm(){
 		var dateStart = $('[name="date-start"]').val();
 		var dateEnd = $('[name="date-end"]').val();
 		var permit = $('[name="permit"]').val();
+<<<<<<< HEAD
         alert(unit);
         //console.log(unit);
+=======
+        console.log(unit);
+>>>>>>> c1461b37fb8586e6b303cf88fb3b4db164bb4cfb
         KTApp.block('#form_bukukas .kt-portlet__body', {});
 		$.ajax({
 			type : 'GET',
@@ -188,6 +192,7 @@ $('[name="area"]').on('change',function(){
         var url_data = $('#url_get_unit').val() + '/' + area;
         $.get(url_data, function (data, status) {
             var response = JSON.parse(data);
+            console.log(response);
             if (status) {
                 $("#unit").empty();
 				var opt = document.createElement("option");
