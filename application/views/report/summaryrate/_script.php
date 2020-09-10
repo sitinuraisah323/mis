@@ -166,7 +166,7 @@ function initCariForm(){
                             template +='<td class="text-right">'+data.summaryRate[i].noa+'</td>';
                             template +='<td class="text-right">'+convertToRupiah(data.summaryRate[i].up)+'</td>';
                             percentage = (data.summaryRate[i].up/data.summaryUP.up)*100;
-                            sewamodal = (data.summaryRate[i].up*(rate.toFixed(2)));
+                            sewamodal = (data.summaryRate[i].up*(rate.toFixed(2)))/100;
                             ratesewa = sewamodal/data.summaryRate[i].up;
                             template +='<td class="text-right">'+convertToRupiah(sewamodal)+'</td>';
                             template +='<td class="text-right">'+percentage.toFixed(2)+'</td>';
@@ -176,7 +176,8 @@ function initCariForm(){
                             totnoa += parseInt(data.summaryRate[i].noa);
                             totup += parseInt(data.summaryRate[i].up);
                         }
-                        rateaverage = totsewamodal/totup;
+                        rateaverage = (totsewamodal/totup)*100;
+                        console.log(rateaverage);
                         template +='<tr class="rowappend" bgcolor="#FCFBFB">';
                         template +='<td class="text-right">Total</td>';
                         template +='<td class="text-right">'+totrate.toFixed(2)+'</td>';
