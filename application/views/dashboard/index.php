@@ -381,6 +381,8 @@ $currmonth = date('Y-m-d');
                                         <div class="kt-widget14__legend">
                                             <span class="kt-widget14__bullet kt-bg-info"></span>
                                             <span class="kt-widget14__stats"><span class="date-today"></span> : <span class="total-today"></span></span>
+                                            <span class="kt-widget14__bullet kt-bg-warning"></span>
+                                            <span class="kt-widget14__stats"><span class="date-yesterday"></span> : <span class="total-yesterday"></span></span>
                                         </div>
                                     </div>
                                 </div>
@@ -425,6 +427,127 @@ $currmonth = date('Y-m-d');
                 <!--end:: Widgets-->    
             </div>
             
+        </div>
+    </div>
+
+    <div class="kt-container  kt-grid__item kt-grid__item--fluid">
+        <div class="row">
+            <div class="col-xl-6 col-lg-6">
+                <!--begin:: Widgets-->
+                <form id="form_pengeluaran" class="form-horizontal">
+                <div class="kt-portlet kt-portlet--height-fluid">
+                    <div class="kt-widget14">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="kt-widget14__header kt-margin-b-30">
+                                <h3 class="kt-widget14__title">
+                                <i class="fa fa-chart-bar"></i> Pengeluaran 
+                                    <hr/>            
+                                </h3>
+                                    <div class="kt-widget14__legends">
+                                        <div class="kt-widget14__legend">
+                                            <span class="kt-widget14__bullet kt-bg-info"></span>
+                                            <span class="kt-widget14__stats"><?php  echo $currmonth; ?> : <span class="total-today"></span></span>
+                                        </div>
+                                    </div>	
+                            </div>                       
+                        </div>
+                        <!-- <div class="col-md-6">
+                            <span class="kt-widget14__desc">
+                                Pengeluaran <?php  //echo date('F'); ?> <span class="total-today"></span>
+                            </span>
+                            <hr>
+                        </div> -->
+                    </div>
+                        <div class="kt-widget11">
+                            <div id="graphPengeluaran" style="height:300px;"></div>                           
+                        </div>
+                        <hr/>
+                        <!--begin::Accordion-->
+                        <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
+                            <div class="card">
+                                <div class="card-header" id="headingPengeluaran">
+                                    <div class="card-title collapsed" data-toggle="collapse" data-target="#collapsePengeluaran" aria-expanded="true" aria-controls="collapsePengeluaran">
+                                        View Detail
+                                    </div>
+                                </div>
+                                <div id="collapsePengeluaran" class="collapse" aria-labelledby="headingPengeluaran" data-parent="#accordionExample3">
+                                    <div class="card-body">
+                                        <table class="table" id="tblPengeluaran">
+                                        <tr>
+                                            <td class="text-left"><b>Area</b></td>
+                                            <td class="text-left"><b>Unit</b></td>
+                                            <td class="text-right"><b>Amount</b></td>
+                                        </tr>                                        
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>                           
+                        </div>
+                        <!--end::Accordion--> 
+                    </div>
+                </div>	        
+                </form>	        
+                <!--end:: Widgets-->    
+            </div>
+			<div class="col-xl-6 col-lg-6">
+                <!--begin:: Widgets-->
+                <form id="form_pendapatan" class="form-horizontal">
+                <div class="kt-portlet kt-portlet--height-fluid">
+                    <div class="kt-widget14">                    
+                        <div class="row">
+                            <div class="col-md-12">                                
+                                <div class="kt-widget14__header kt-margin-b-30">
+                                    <h3 class="kt-widget14__title">
+                                         <i class="fa fa-chart-bar"></i>  Pendapatan  
+                                         <hr/>           
+                                    </h3>
+                                    <div class="kt-widget14__legends">
+                                        <div class="kt-widget14__legend">
+                                            <span class="kt-widget14__bullet kt-bg-success"></span>
+                                            <span class="kt-widget14__stats"><?php  echo $currmonth; ?> : <span class="total-today"></span></span>
+                                        </div>
+                                    </div>
+                                </div>                           
+                            </div>
+                            <!-- <div class="col-md-6">
+                                <span class="kt-widget14__desc">
+                                    Pendapatan <?php  //echo date('F'); ?> <span class="date-today"></span> <span class="total-today"></span>
+                                </span>
+                                <hr>
+                           </div>                            -->
+                        </div>
+                        <div class="kt-widget11">
+                            <div id="graphPendapatan" style="height:300px;"></div>                           
+                        </div>
+                        <hr/>
+                        <!--begin::Accordion-->
+                        <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
+                            <div class="card">
+                                <div class="card-header" id="headingPendapatan">
+                                    <div class="card-title collapsed" data-toggle="collapse" data-target="#collapsePendapatan" aria-expanded="true" aria-controls="collapsePendapatan">
+                                        View Detail
+                                    </div>
+                                </div>
+                                <div id="collapsePendapatan" class="collapse" aria-labelledby="headingPendapatan" data-parent="#accordionExample3">
+                                    <div class="card-body">
+                                        <table class="table" id="tblPendapatan"> 
+                                        <tr>
+                                            <td class="text-left"><b>Area</b></td>
+                                            <td class="text-left"><b>Unit</b></td>
+                                            <td class="text-right"><b>Amount</b></td>
+                                        </tr>                                       
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>                           
+                        </div>
+                        <!--end::Accordion--> 
+                    </div>
+                </div>	        
+                </form>	        
+                <!--end:: Widgets-->    
+            </div>
         </div>
     </div>
 
@@ -551,127 +674,6 @@ $currmonth = date('Y-m-d');
                                             <td class="text-right"><b>Target</b></td>
                                             <td class="text-right"><b>Realisasi</b></td>
                                             <td class="text-right"><b>Percentage</b></td>
-                                        </tr>                                       
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>                           
-                        </div>
-                        <!--end::Accordion--> 
-                    </div>
-                </div>	        
-                </form>	        
-                <!--end:: Widgets-->    
-            </div>
-        </div>
-    </div>
-
-    <div class="kt-container  kt-grid__item kt-grid__item--fluid">
-        <div class="row">
-            <div class="col-xl-6 col-lg-6">
-                <!--begin:: Widgets-->
-                <form id="form_pengeluaran" class="form-horizontal">
-                <div class="kt-portlet kt-portlet--height-fluid">
-                    <div class="kt-widget14">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="kt-widget14__header kt-margin-b-30">
-                                <h3 class="kt-widget14__title">
-                                <i class="fa fa-chart-bar"></i> Pengeluaran 
-                                    <hr/>            
-                                </h3>
-                                    <div class="kt-widget14__legends">
-                                        <div class="kt-widget14__legend">
-                                            <span class="kt-widget14__bullet kt-bg-info"></span>
-                                            <span class="kt-widget14__stats"><?php  echo $currmonth; ?> : <span class="total-today"></span></span>
-                                        </div>
-                                    </div>	
-                            </div>                       
-                        </div>
-                        <!-- <div class="col-md-6">
-                            <span class="kt-widget14__desc">
-                                Pengeluaran <?php  //echo date('F'); ?> <span class="total-today"></span>
-                            </span>
-                            <hr>
-                        </div> -->
-                    </div>
-                        <div class="kt-widget11">
-                            <div id="graphPengeluaran" style="height:300px;"></div>                           
-                        </div>
-                        <hr/>
-                        <!--begin::Accordion-->
-                        <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
-                            <div class="card">
-                                <div class="card-header" id="headingPengeluaran">
-                                    <div class="card-title collapsed" data-toggle="collapse" data-target="#collapsePengeluaran" aria-expanded="true" aria-controls="collapsePengeluaran">
-                                        View Detail
-                                    </div>
-                                </div>
-                                <div id="collapsePengeluaran" class="collapse" aria-labelledby="headingPengeluaran" data-parent="#accordionExample3">
-                                    <div class="card-body">
-                                        <table class="table" id="tblPengeluaran">
-                                        <tr>
-                                            <td class="text-left"><b>Area</b></td>
-                                            <td class="text-left"><b>Unit</b></td>
-                                            <td class="text-right"><b>Amount</b></td>
-                                        </tr>                                        
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>                           
-                        </div>
-                        <!--end::Accordion--> 
-                    </div>
-                </div>	        
-                </form>	        
-                <!--end:: Widgets-->    
-            </div>
-			<div class="col-xl-6 col-lg-6">
-                <!--begin:: Widgets-->
-                <form id="form_pendapatan" class="form-horizontal">
-                <div class="kt-portlet kt-portlet--height-fluid">
-                    <div class="kt-widget14">                    
-                        <div class="row">
-                            <div class="col-md-12">                                
-                                <div class="kt-widget14__header kt-margin-b-30">
-                                    <h3 class="kt-widget14__title">
-                                         <i class="fa fa-chart-bar"></i>  Pendapatan  
-                                         <hr/>           
-                                    </h3>
-                                    <div class="kt-widget14__legends">
-                                        <div class="kt-widget14__legend">
-                                            <span class="kt-widget14__bullet kt-bg-success"></span>
-                                            <span class="kt-widget14__stats"><?php  echo $currmonth; ?> : <span class="total-today"></span></span>
-                                        </div>
-                                    </div>
-                                </div>                           
-                            </div>
-                            <!-- <div class="col-md-6">
-                                <span class="kt-widget14__desc">
-                                    Pendapatan <?php  //echo date('F'); ?> <span class="date-today"></span> <span class="total-today"></span>
-                                </span>
-                                <hr>
-                           </div>                            -->
-                        </div>
-                        <div class="kt-widget11">
-                            <div id="graphPendapatan" style="height:300px;"></div>                           
-                        </div>
-                        <hr/>
-                        <!--begin::Accordion-->
-                        <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
-                            <div class="card">
-                                <div class="card-header" id="headingPendapatan">
-                                    <div class="card-title collapsed" data-toggle="collapse" data-target="#collapsePendapatan" aria-expanded="true" aria-controls="collapsePendapatan">
-                                        View Detail
-                                    </div>
-                                </div>
-                                <div id="collapsePendapatan" class="collapse" aria-labelledby="headingPendapatan" data-parent="#accordionExample3">
-                                    <div class="card-body">
-                                        <table class="table" id="tblPendapatan"> 
-                                        <tr>
-                                            <td class="text-left"><b>Area</b></td>
-                                            <td class="text-left"><b>Unit</b></td>
-                                            <td class="text-right"><b>Amount</b></td>
                                         </tr>                                       
                                         </table>
                                     </div>

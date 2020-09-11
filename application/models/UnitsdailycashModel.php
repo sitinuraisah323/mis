@@ -71,4 +71,34 @@ class UnitsdailycashModel extends Master
 			'saldo' => (int)($saldo->amount+$cashin->amount) - $cashout->amount
 		);
 	}
+
+	public function getSaldoYestrday($idUnit,$date)
+	{
+		$saldo = $this->units->db->select('amount,cut_off')
+					->from('units_saldo')
+					->where('units_saldo.id_unit', $idUnit)
+					->get()->row();
+
+		$cashin = $this->units->db->select('sum(amount) as amount')
+					->from('units_dailycashs')
+					->where('units_dailycashs.type','CASH_IN')
+					->where('units_dailycashs.id_unit', $idUnit)
+					->where('units_dailycashs.date >',$saldo->cut_off)
+					->where('units_dailycashs.date <',$date)
+					->get()->row();
+		
+		$cashout = $this->units->db->select('sum(amount) as amount')
+					->from('units_dailycashs')
+					->where('units_dailycashs.type','CASH_OUT')
+					->where('units_dailycashs.id_unit', $idUnit)
+					->where('units_dailycashs.date >',$saldo->cut_off)
+					->where('units_dailycashs.date <',$date)
+					->get()->row();
+
+		return (object)array(
+			'cashin' => (int)$cashin->amount,
+			'cashout' => (int)$cashout->amount,
+			'saldo' => (int)($saldo->amount+$cashin->amount) - $cashout->amount
+		);
+	}
 }

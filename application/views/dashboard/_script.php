@@ -1091,7 +1091,8 @@ function saldo() {
 		dataType:"JSON",
 		data:{
 			area:'',
-			month:currmonth,
+			//month:currmonth,
+			date:currdate,
 		},
 		success:function (response) {
 			var Tempjabar 	= "";
@@ -1108,18 +1109,20 @@ function saldo() {
 			$.each(response.data, function (index,unit) {
 				transaction.push({
 					y:unit.name,
-					a:unit.amount
+					a:unit.today.saldo
 				});
-				totalCurr += parseInt(unit.amount);
+				totalCurr += parseInt(unit.today.saldo);
+				totalLast += parseInt(unit.yesterday.saldo);
+				
 
 				if(unit.area=='Jawa Barat')
 				{
 					Tempjabar += "<tr class='rowappendjabar'>";
 					Tempjabar += "<td class='text-left'><b>"+unit.area+"</b></td>";
 					Tempjabar += "<td class='text-left'><b>"+unit.name+"</b></td>";
-					Tempjabar += "<td class='text-right'><b>"+convertToRupiah(unit.amount)+"</b></td>";
+					Tempjabar += "<td class='text-right'><b>"+convertToRupiah(unit.today.saldo)+"</b></td>";
 					Tempjabar += '</tr>';
-					totjabar += parseInt(unit.amount);
+					totjabar += parseInt(unit.today.saldo);
 				}
 
 				if(unit.area=='Jawa Timur')
@@ -1127,9 +1130,9 @@ function saldo() {
 					Tempjatim += "<tr class='rowappendjabar'>";
 					Tempjatim += "<td class='text-left'><b>"+unit.area+"</b></td>";
 					Tempjatim += "<td class='text-left'><b>"+unit.name+"</b></td>";
-					Tempjatim += "<td class='text-right'><b>"+convertToRupiah(unit.amount)+"</b></td>";
+					Tempjatim += "<td class='text-right'><b>"+convertToRupiah(unit.today.saldo)+"</b></td>";
 					Tempjatim += '</tr>';
-					totjatim += parseInt(unit.amount);
+					totjatim += parseInt(unit.today.saldo);
 				}
 
 				if(unit.area=='NTB')
@@ -1137,9 +1140,9 @@ function saldo() {
 					Tempntb += "<tr class='rowappendjabar'>";
 					Tempntb += "<td class='text-left'><b>"+unit.area+"</b></td>";
 					Tempntb += "<td class='text-left'><b>"+unit.name+"</b></td>";
-					Tempntb += "<td class='text-right'><b>"+convertToRupiah(unit.amount)+"</b></td>";
+					Tempntb += "<td class='text-right'><b>"+convertToRupiah(unit.today.saldo)+"</b></td>";
 					Tempntb += '</tr>';
-					totntb += parseInt(unit.amount);
+					totntb += parseInt(unit.today.saldo);
 				}
 
 				if(unit.area=='NTT')
@@ -1147,9 +1150,9 @@ function saldo() {
 					Tempntt += "<tr class='rowappendjabar'>";
 					Tempntt += "<td class='text-left'><b>"+unit.area+"</b></td>";
 					Tempntt += "<td class='text-left'><b>"+unit.name+"</b></td>";
-					Tempntt += "<td class='text-right'><b>"+convertToRupiah(unit.amount)+"</b></td>";
+					Tempntt += "<td class='text-right'><b>"+convertToRupiah(unit.today.saldo)+"</b></td>";
 					Tempntt += '</tr>';
-					totntt += parseInt(unit.amount);
+					totntt += parseInt(unit.today.saldo);
 				}
 
 			});
@@ -1200,6 +1203,9 @@ function saldo() {
 		complete:function () {
 			$('#form_saldo').find('.total-today').text(convertToRupiah(totalCurr));
 			$('#form_saldo').find('.date-today').text(currdate);
+			$('#form_saldo').find('.total-yesterday').text(convertToRupiah(totalLast));
+			$('#form_saldo').find('.date-yesterday').text(lastdate);
+			
 			var data = transaction,
 					//config manager
 					config = {

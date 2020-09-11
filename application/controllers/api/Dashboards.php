@@ -13,6 +13,7 @@ class Dashboards extends ApiController
 		$this->load->model('RepaymentmortageModel','repaymentsmortage');		
 		$this->load->model('MappingcaseModel', 'm_casing');
 		$this->load->model('OutstandingModel', 'outstanding');
+		$this->load->model('UnitsdailycashModel', 'unitsdailycash');
 	}
 
 	
@@ -774,26 +775,40 @@ class Dashboards extends ApiController
 			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
 		}
 
-		$this->units->db
-			->select('id_unit, name, amount,areas.area, cut_off')
-			->DISTINCT ('id_unit')
-			->from('units_saldo')			
-			->join('units','units.id = units_saldo.id_unit')
-			->join('areas','areas.id = units.id_area');
-		$getSaldo = $this->units->db->get()->result();
-		foreach ($getSaldo as $get){
-			$this->units->db->select('(sum(CASE WHEN type = "CASH_IN" THEN `amount` ELSE 0 END) - sum(CASE WHEN type = "CASH_OUT" THEN `amount` ELSE 0 END)) as amount')
-				->join('units','units.id = units_dailycashs.id_unit')
-				->from('units_dailycashs')
-				->where('units.id', $get->id_unit)
-				->where('units_dailycashs.date >',$get->cut_off);
-			$data = $this->units->db->get()->row();
-			if($data){
-				$get->amount = $get->amount + $data->amount;
-			}
+		if($this->input->get('date')){
+			$date = $this->input->get('date');
+		}else{
+			$date = date('Y-m-d');
 		}
 
-		return $this->sendMessage($getSaldo,'Successfully get Pendapatan');
+		$units = $this->units->db->select('units.id, units.name, area')
+			->join('areas','areas.id = units.id_area')
+			->get('units')->result();
+		foreach ($units as $unit){
+			$unit->today = $this->unitsdailycash->getSaldo($unit->id,$date);
+			$unit->yesterday = $this->unitsdailycash->getSaldoYestrday($unit->id,$date);
+			
+		}
+
+		// $this->units->db
+		// 	->select('id_unit, name, amount,areas.area, cut_off')
+		// 	->DISTINCT ('id_unit')
+		// 	->from('units_saldo')			
+		// 	->join('units','units.id = units_saldo.id_unit')
+		// 	->join('areas','areas.id = units.id_area');
+		// $getSaldo = $this->units->db->get()->result();
+		// foreach ($getSaldo as $get){
+		// 	$this->units->db->select('(sum(CASE WHEN type = "CASH_IN" THEN `amount` ELSE 0 END) - sum(CASE WHEN type = "CASH_OUT" THEN `amount` ELSE 0 END)) as amount')
+		// 		->join('units','units.id = units_dailycashs.id_unit')
+		// 		->from('units_dailycashs')
+		// 		->where('units.id', $get->id_unit)
+		// 		->where('units_dailycashs.date >',$get->cut_off);
+		// 	$data = $this->units->db->get()->row();
+		// 	if($data){
+		// 		$get->amount = $get->amount + $data->amount;
+		// 	}
+		//}
+		return $this->sendMessage($units,'Successfully get Pendapatan');
 	}
 
 }
