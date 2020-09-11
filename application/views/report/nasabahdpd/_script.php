@@ -133,7 +133,7 @@ function initCariForm(){
                     var status="";
 
 					$.each(response.data, function (index, data) {
-						var dpd = parseInt(date_between(data.deadline,"<?php echo date('Y/m/d');?>'"));
+						var dpd = parseInt(date_between(`${data.deadline}`,"<?php echo date('Y/m/d');?>"));
 						template += "<tr class='rowappend'>";
 						template += "<td class='text-center'>"+no+"</td>";
 						template += "<td class='text-center'>"+data.no_sbk+"</td>";
@@ -161,7 +161,7 @@ function initCariForm(){
 						admin += parseInt(data.admin);
 						totalTafsiran += parseInt(data.tafsiran_sewa);
 						totalPelunasan += parseInt(calcup);
-						totalDPD += parseInt(date_between(data.deadline,"<?php echo date('Y/m/d');?>'"));
+						totalDPD += parseInt(date_between(data.deadline,"<?php echo date('Y/m/d');?>"));
 					});
 					template += "<tr class='rowappend'>";
 					template += "<td colspan='8' class='text-right'>Total</td>";
@@ -218,6 +218,18 @@ $('[name="area"]').on('change',function(){
 var type = $('[name="area"]').attr('type');
 if(type == 'hidden'){
     $('[name="area"]').trigger('change');
+}
+
+function date_between(start, end){
+    var date1 = new Date(`${start}`); 
+    var date2 = new Date(`${end}`); 
+    
+    // To calculate the time difference of two dates 
+    var Difference_In_Time = date2.getTime() - date1.getTime(); 
+    
+    // To calculate the no. of days between two dates 
+    var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24); 
+    return Difference_In_Days+1;
 }
 
 </script>

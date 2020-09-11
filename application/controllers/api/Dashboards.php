@@ -26,18 +26,6 @@ class Dashboards extends ApiController
 	{
 		$currdate = date('Y-m-d');
 		$max = 0;
-		if($area = $this->input->get('area')){
-			$this->units->db->where('id_area', $area);
-		}else if($this->session->userdata('user')->level == 'area'){
-			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
-		}
-		if($id_unit = $this->input->get('id_unit')){
-			$this->units->db->where('units.id', $id_unit);
-		}else if($code = $this->input->get('code')){
-			$this->units->db->where('code', zero_fill($code, 3));
-		}else if($this->session->userdata('user')->level == 'unit'){
-			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
-		}
 		if($this->input->get('date')){
 			$date = $this->input->get('date');
 		}else{
@@ -57,6 +45,19 @@ class Dashboards extends ApiController
 			->where('date',$date)
 			->from('units_outstanding')
 			->get()->row();
+
+		if($area = $this->input->get('area')){
+			$this->units->db->where('id_area', $area);
+		}else if($this->session->userdata('user')->level == 'area'){
+			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
+		}
+		if($id_unit = $this->input->get('id_unit')){
+			$this->units->db->where('units.id', $id_unit);
+		}else if($code = $this->input->get('code')){
+			$this->units->db->where('code', zero_fill($code, 3));
+		}else if($this->session->userdata('user')->level == 'unit'){
+			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
+		}
 
 		$units = $this->units->db->select('units.id, units.name, area')
 			->join('areas','areas.id = units.id_area')
@@ -280,7 +281,7 @@ class Dashboards extends ApiController
 		foreach ($units as $unit){
 			$dates = array();
 			foreach($daterange as $date){
-				$dates[] =  $this->repayments->getUpByDate($unit->id, $date->format('Y-m-d'));
+				$dates[] =  $this->regular->getRepaymentToday($unit->id, $date->format('Y-m-d'))->up;
 			}
 			$unit->dates = $dates;
 			$result[] = $unit;

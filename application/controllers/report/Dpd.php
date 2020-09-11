@@ -94,22 +94,25 @@ class Dpd extends Authenticated
 				WHEN amount <= 50000000 THEN 122000
 				WHEN amount <= 75000000 THEN 137000
 				ELSE '152000'
-				END AS new_admin
-				
+				END AS new_admin, 
+				status_transaction,
+				code,
+				units.name as unit_name,				
 				")
 			->join('customers','units_regularpawns.id_customer = customers.id')
-			->select('units_repayments.date_repayment as date_repayment')
-			->join('units_repayments','units_regularpawns.no_sbk = units_repayments.no_sbk','left')
-			->select('units.code,units.name as unit_name')
-			->join('units','units_regularpawns.id_unit = units.id')
-			->where('deadline <',date('Y-m-d'));
+			->join('units','units.id = units_regularpawns.id_unit')
+			->where('deadline <=',$this->input->post('date-end') ? $this->input->post('date-end') : date('Y-m-d'))
+			->where('units_regularpawns.status_transaction ', 'N');
 			$this->regulars->db
-				//->where('units_regularpawns.date_sbk >=', $post['date-start'])
-				->where('units_regularpawns.date_sbk <=', $post['date-end'])
-				->where('units_regularpawns.status_transaction ', 'N')
-				->where('units_regularpawns.id_unit', $post['id_unit']);
-			if($permit = $post['permit']){
+				->where('units_regularpawns.deadline >=', $post['date-start']);
+			if($idunit = $this->input->post('id_unit')){
+				$this->regulars->db->where('units_regularpawns.id_unit',$idunit);
+			}
+			if($permit = $this->input->post('permit')){
 				$this->regulars->db->where('units_regularpawns.permit', $permit);
+			}
+			if($this->input->post('area')){
+				$this->regulars->db->where('units.id_area', $post['area']);
 			}
 			$data = $this->regulars->all();
 		}
@@ -140,7 +143,7 @@ class Dpd extends Authenticated
 			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no, $row->customer_name);				  	
 			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no, date('d/m/Y',strtotime($row->date_sbk)));				 
 			$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, date('d/m/Y',strtotime($row->deadline)));				 
-			$objPHPExcel->getActiveSheet()->setCellValue('G'.$no,  date('d/m/Y',strtotime($row->date_repayment)));				 
+			$objPHPExcel->getActiveSheet()->setCellValue('G'.$no,  '-');				 
 			$objPHPExcel->getActiveSheet()->setCellValue('H'.$no, $row->capital_lease);				 
 			$objPHPExcel->getActiveSheet()->setCellValue('I'.$no, $row->estimation);				 
 			$objPHPExcel->getActiveSheet()->setCellValue('J'.$no, $row->new_admin);				 
@@ -148,8 +151,7 @@ class Dpd extends Authenticated
 			$objPHPExcel->getActiveSheet()->setCellValue('L'.$no, $dpd);				 
 			$objPHPExcel->getActiveSheet()->setCellValue('M'.$no, $row->tafsiran_sewa );				 
 			$objPHPExcel->getActiveSheet()->setCellValue('N'.$no, $this->calculateDenda($row->amount,$dpd));
-			$up = $this->calculateDenda($row->amount, $dpd);
-			$calcup = $up + $this->calculateDenda($row->amount,$dpd) + $row->amount;				 
+			$calcup =  $row->tafsiran_sewa + $this->calculateDenda($row->amount,$dpd) + $row->amount;				 
 			$objPHPExcel->getActiveSheet()->setCellValue('O'.$no, $calcup);				 	 
 			$no++;
 		}
@@ -171,7 +173,7 @@ class Dpd extends Authenticated
 	
 	}
 
-	function calculateDenda($dpd,$up) {
+	function calculateDenda($up, $dpd) {
 		$sumDay = intval($dpd - 15);
 		if($sumDay > 0){
 			$rate=0;

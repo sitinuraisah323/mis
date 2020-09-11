@@ -24,4 +24,14 @@ class RepaymentmortageModel extends Master
 			->get()->row()->up;
 	}
 
+
+	public function getNoaByDate($idUnit, $date)
+	{
+		return (int) $this->db->select('count(*) as noa')
+			->from($this->table)
+			->where('id_unit', $idUnit)
+			->where('date_kredit', $date)
+			->get()->row()->noa;
+	}
+
 }

@@ -111,17 +111,7 @@ $this->load->view('temp/MenuBar.php');
 						</select>
                     </div>
                 <?php endif ;?>
-					<div class="col-lg-2">
-						<label class="col-form-label">Status</label>
-                        <select class="form-control select2" name="status" id="status">
-                            <option value=""></option>
-                            <option value="0">All</option>
-                            <option value="1">Aktif</option>
-                            <option value="2">Lunas</option>
-                            <option value="3">Perpanjangan</option>
-                        </select>
-                    </div>
-					<div class="col-lg-1">
+					<!-- <div class="col-lg-1">
 						<label class="col-form-label">Ijin</label>
 						<select class="form-control" name="permit">
 							<option value="">Select Ijin</option>
@@ -129,13 +119,13 @@ $this->load->view('temp/MenuBar.php');
 								<option value="<?php echo $key;?>"><?php echo $value;?></option>
 							<?php endforeach;?>
 						</select>
-					</div>
-					<!-- <div class="col-lg-2">
-						<label class="col-form-label">Tanggal</label>
-						<input type="date" class="form-control" name="date-start" value="<?php echo date('Y-m-d');?>">
 					</div> -->
 					<div class="col-lg-2">
-						<label class="col-form-label">Tanggal</label>
+						<label class="col-form-label">Jatuh Tempo Dari</label>
+						<input type="date" class="form-control" name="date-start" value="<?php echo date('Y-m-d');?>">
+					</div>
+					<div class="col-lg-2">
+						<label class="col-form-label">Sampai</label>
 						<input type="date" class="form-control" name="date-end" value="<?php echo date('Y-m-d');?>">
 					</div>
                     <div class="col-lg-1">
