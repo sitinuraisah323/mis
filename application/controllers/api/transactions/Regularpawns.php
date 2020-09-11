@@ -322,28 +322,28 @@ class Regularpawns extends ApiController
 				WHEN amount <= 50000000 THEN 122000
 				WHEN amount <= 75000000 THEN 137000
 				ELSE '152000'
-				END AS new_admin				
+				END AS new_admin, 
+				status_transaction				
 				")
 			->join('customers','units_regularpawns.id_customer = customers.id')
 			->join('units','units.id = units_regularpawns.id_unit')
-			->select('units_repayments.date_repayment as date_repayment')
-			->join('units_repayments','units_regularpawns.no_sbk = units_repayments.no_sbk','left')
 			->where('deadline <',$this->input->get('dateEnd') ? $this->input->get('dateEnd') : date('Y-m-d'))
 			->where('units_regularpawns.status_transaction ', 'N');
 		if($get = $this->input->get()){
 			$this->regulars->db
-				//->where('units_regularpawns.date_sbk >=', $get['dateStart'])
-				->where('units_regularpawns.date_sbk <=', $get['dateEnd']);
+				->where('units_regularpawns.deadline >=', $this->input->get('dateStart'));
 			if($this->input->get('id_unit')){
 				$this->regulars->db->where('units_regularpawns.id_unit', $get['id_unit']);
 			}
-			if($permit = $get['permit']){
+			if($this->input->get('area')){
+				$this->regulars->db->where('units.id_area', $get['area']);
+			}
+			if($permit = $this->input->get('permit')){
 				$this->regulars->db->where('units_regularpawns.permit', $permit);
 			}
-
-
 		}
 		$data = $this->regulars->all();
+
 		echo json_encode(array(
 			'data'	=> $data,
 			'status'	=> true,

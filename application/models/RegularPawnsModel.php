@@ -64,9 +64,14 @@ class RegularpawnsModel extends Master
 		$data = $this->db->select('sum(money_loan) as up, count(*) as noa')->from('units_repayments')
 			->where('id_unit', $idUnit)
 			->where('date_repayment', $today)->get()->row();
+		$cicilan = $this->db->select('count(*) as noa, sum(amount) as up')
+					->from('units_repayments_mortage')
+					->where('id_unit', $idUnit)
+					->where('date_kredit', $today)
+					->get()->row();				
 		return (object)array(
-			'noa' => (int)$data->noa,
-			'up' => (int)$data->up,
+			'noa' => (int)$data->noa+$cicilan->noa,
+			'up' => (int)$data->up+$cicilan->up,
 		);
 	}
 

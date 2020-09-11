@@ -34,14 +34,18 @@ class Outstanding extends Authenticated
 	{		
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		require_once APPPATH.'controllers/pdf/header.php';
+		$os = $this->data();
+	
 		$pdf->AddPage('L');
-		$view = $this->load->view('dailyreport/outstanding/index.php',['outstanding'=> $this->data(),'datetrans'=> $this->datetrans()],true);
-		var_dump($view);
-		exit;
+		$view = $this->load->view('dailyreport/outstanding/index.php',['outstanding'=>$os,'datetrans'=> $this->datetrans()],true);
 		$pdf->writeHTML($view);
 
 		$pdf->AddPage('L');
-		$view = $this->load->view('dailyreport/outstanding/dpd.php',['dpd'=> $this->data()],true);
+		$view = $this->load->view('dailyreport/outstanding/dpd.php',['dpd'=>$os],true);
+		$pdf->writeHTML($view);
+
+		$pdf->AddPage('L');
+		$view = $this->load->view('dailyreport/outstanding/target.php',['data'=>$os,'datetrans'=> $this->datetrans()],true);
 		$pdf->writeHTML($view);
 
 		$pdf->AddPage('L');
@@ -67,47 +71,47 @@ class Outstanding extends Authenticated
 		//download
 		$pdf->Output('GHAnet_Summary_'.date('d_m_Y').'.pdf', 'D');
 		//view
-		//$pdf->Output('GHAnet_Summary_'.date('d_m_Y').'.pdf', 'I');
+		// $pdf->Output('GHAnet_Summary_'.date('d_m_Y').'.pdf', 'I');
 	}
 
 	public function test(){
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		require_once APPPATH.'controllers/pdf/header.php';
-		// $pdf->AddPage('L');
-		// $view = $this->load->view('dailyreport/outstanding/index.php',['outstanding'=> $this->data()],true);
-		// $pdf->writeHTML($view);
+		$pdf->AddPage('L');
+		$view = $this->load->view('dailyreport/outstanding/index.php',['outstanding'=> $this->data()],true);
+		$pdf->writeHTML($view);
 
-		// $pdf->AddPage('L');
-		// $view = $this->load->view('dailyreport/outstanding/dpd.php',['dpd'=> $this->data()],true);
-		// $pdf->writeHTML($view);
+		$pdf->AddPage('L');
+		$view = $this->load->view('dailyreport/outstanding/dpd.php',['dpd'=> $this->data()],true);
+		$pdf->writeHTML($view);
 
-		// $pdf->AddPage('L');
-		// $view = $this->load->view('dailyreport/outstanding/pencairan.php',['pencairan'	=> $this->pencairan()],true);
-		// $pdf->writeHTML($view);
+		$pdf->AddPage('L');
+		$view = $this->load->view('dailyreport/outstanding/pencairan.php',['pencairan'	=> $this->pencairan()],true);
+		$pdf->writeHTML($view);
 
-		// $pdf->AddPage('L');
-		// $view = $this->load->view('dailyreport/outstanding/pelunasan.php',['pelunasan'	=> $this->pelunasan()],true);
-		// $pdf->writeHTML($view);
+		$pdf->AddPage('L');
+		$view = $this->load->view('dailyreport/outstanding/pelunasan.php',['pelunasan'	=> $this->pelunasan()],true);
+		$pdf->writeHTML($view);
 
-		// $pdf->AddPage('L');
-		// $view = $this->load->view('dailyreport/outstanding/saldo.php',['saldo'	=> $this->saldounit()],true);
-		// $pdf->writeHTML($view);
+		$pdf->AddPage('L');
+		$view = $this->load->view('dailyreport/outstanding/saldo.php',['saldo'	=> $this->saldounit()],true);
+		$pdf->writeHTML($view);
 
-		// $pdf->AddPage('L');
-		// $view = $this->load->view('dailyreport/outstanding/pendapatan.php',['pendapatan'	=> $this->pendapatan()],true);
-		// $pdf->writeHTML($view);
+		$pdf->AddPage('L');
+		$view = $this->load->view('dailyreport/outstanding/pendapatan.php',['pendapatan'	=> $this->pendapatan()],true);
+		$pdf->writeHTML($view);
 
-		// $pdf->AddPage('L');
-		// $pdf->StartProgressBarOutput(2);
-		// $pdf->WriteHTML('You will hardly have time to see the progress bars!');
-		// $pdf->Output();
+		$pdf->AddPage('L');
+		$pdf->StartProgressBarOutput(2);
+		$pdf->WriteHTML('You will hardly have time to see the progress bars!');
+		$pdf->Output();
 
-		//$view = $this->load->view('dailyreport/outstanding/index.php',['outstanding'=> $this->data()],true);
-		//$pdf->writeHTML($view);
+		$view = $this->load->view('dailyreport/outstanding/index.php',['outstanding'=> $this->data()],true);
+		$pdf->writeHTML($view);
 
-		// $pdf->AddPage('L');
-		// $view = $this->load->view('dailyreport/outstanding/pengeluaran.php',['pengeluaran'	=> $this->pengeluaran()],true);
-		// $pdf->writeHTML($view);
+		$pdf->AddPage('L');
+		$view = $this->load->view('dailyreport/outstanding/pengeluaran.php',['pengeluaran'	=> $this->pengeluaran()],true);
+		$pdf->writeHTML($view);
 		//view
 		$pdf->Output('GHAnet_Summary_'.date('d_m_Y').'.pdf', 'I');
 	}
@@ -147,7 +151,7 @@ class Outstanding extends Authenticated
 		foreach ($units as $unit){
 			$dates = array();
 			foreach($daterange as $date){
-				$dates[] =  $this->repayments->getUpByDate($unit->id, $date->format('Y-m-d'));
+				$dates[] =  $this->regular->getRepaymentToday($unit->id, $date->format('Y-m-d'))->up;
 			}
 			$unit->dates = $dates;
 			$result[] = $unit;
@@ -216,13 +220,23 @@ class Outstanding extends Authenticated
 			$totalUp = (int) $unit->ost_yesterday->up + $unit->credit_today->up - $unit->repayment_today->up;
 			
 			//target
-			$target = (int) $this->regular->db
+			$target = $this->regular->db
 				->select('amount_booking')
 				->where('month', date('n', strtotime($date)))
 				->where('year', date('Y', strtotime($date)))
-				->get('units_targets')->row()->amount_booking;
-			var_dump($target);
-			exit;
+				->where('id_unit', $unit->id)
+				->get('units_targets')->row();
+			if($target){
+				$target = $target->amount_booking;
+			}else{
+				$target = 0;
+			}
+
+			$unit->target = (object) array(
+				'up'	=> $target,
+				'persentase'	=> $target ? round($unit->credit_today->up / $target,4) : 0
+			); 
+	
 			$unit->total_outstanding = (object) array(
 				'noa'	=> $totalNoa,
 				'up'	=> $totalUp,
