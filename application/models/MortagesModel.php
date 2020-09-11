@@ -7,5 +7,7 @@ class MortagesModel extends Master
 	public $primary_key = 'id';
 	
 	public $level = true;
+
+	
 	
 }

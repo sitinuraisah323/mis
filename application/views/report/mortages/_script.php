@@ -102,7 +102,7 @@ function initCariForm(){
     $('#btncari').on('click',function(){
         $('.rowappend').remove();
         var area = $('[name="area"]').val();
-        var unit = $('[name="unit"]').val();
+        var unit = $('[name="id_unit"]').val();
         var nasabah = $('#nasabah').val();
         var statusrpt = $('#status').val();
 		var dateStart = $('[name="date-start"]').val();
@@ -114,7 +114,7 @@ function initCariForm(){
 			type : 'GET',
 			url : "<?php echo base_url("api/transactions/mortages/report"); ?>",
 			dataType : "json",
-			data:{area:area,unit:unit,statusrpt:statusrpt,nasabah:nasabah,dateStart:dateStart,dateEnd:dateEnd,permit:permit},
+			data:{area:area,id_unit:unit,statusrpt:statusrpt,nasabah:nasabah,dateStart:dateStart,dateEnd:dateEnd,permit:permit},
 			success : function(response,status){
 				KTApp.unblockPage();
 				if(response.status == true){
@@ -164,7 +164,7 @@ function initCariForm(){
 					template += "<td class='text-right'></td>";
 					template += "<td class='text-right'></td>";
 					template += '</tr>';
-					$('.kt-section__content #tblcicilan').append(template);
+					$('.kt-section__content .table').append(template);
 				}
 			},
 			error: function (jqXHR, textStatus, errorThrown){
@@ -183,7 +183,7 @@ function initCariForm(){
 
 $('[name="area"]').on('change',function(){
         var area = $('[name="area"]').val();
-        var units =  $('[name="unit"]');
+        var units =  $('[name="id_unit"]');
         var url_data = $('#url_get_unit').val() + '/' + area;
         $.get(url_data, function (data, status) {
             var response = JSON.parse(data);
@@ -207,7 +207,7 @@ $('[name="area"]').on('change',function(){
 function initGetNasabah(){
     $("#unit").on('change',function(){
         var area = $('[name="area"]').val();
-        var unit = $('#unit').val(); 
+        var unit = $('#id_unit').val(); 
         var customers =  document.getElementById('nasabah');     
         //alert(unit);
         $.ajax({
@@ -245,7 +245,7 @@ function initGetNasabah(){
 }
 
 function initUnitNasabah(){
-        var unit=$('[name="unit"]').val();
+        var unit=$('[name="id_unit"]').val();
         var customers =  document.getElementById('nasabah');     
         $.ajax({
 			type : 'GET',

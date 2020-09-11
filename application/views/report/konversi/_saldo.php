@@ -134,7 +134,7 @@ function initCariForm(){
 					var no = 1;
 					var selisih = 0;
 					var totbap = 0;
-					var totos = 0;
+					var totsaldo = 0;
 					var totselisih = 0;
 					$.each(response.data, function (index, data) {
                         //console.log(data.area);
@@ -142,23 +142,21 @@ function initCariForm(){
 						template += "<td class='text-center'>"+no+"</td>";
 						template += "<td class='text-left'>"+data.area+"</td>";
 						template += "<td class='text-left'>"+data.name+"</td>";
-						template += "<td class='text-right'></td>";                        
-						template += "<td class='text-right'></td>";
-                        //selisih = data.bapkas.os_unit - data.bapkas.os;
-						template += "<td class='text-right'></td>";
-						template += "<td class='text-right'></td>";
+						template += "<td class='text-right'>"+convertToRupiah(data.bapkas.bapsaldo)+"</td>";                        
+						template += "<td class='text-right'>"+convertToRupiah(data.unitsaldo.saldo)+"</td>";
+                        selisih = data.bapkas.bapsaldo - data.unitsaldo.saldo;
+						template += "<td class='text-right'>"+convertToRupiah(selisih)+"</td>";
 						template += '</tr>';
-                        //totbap += data.bapkas.os_unit;
-                        //totos += data.bapkas.os;
-                        //totselisih += selisih;
+                        totbap += data.bapkas.bapsaldo;
+                        totsaldo += data.unitsaldo.saldo;
+                        totselisih += selisih;
 						no++;
 					});                   
 					    template += "<tr class='rowappend'>";
 						template += "<td class='text-center' colspan='3'>Total</td>";
-						template += "<td class='text-right'></td>";                        
-						template += "<td class='text-right'></td>";
-						template += "<td class='text-right'></td>";
-						template += "<td class='text-right'></td>";
+						template += "<td class='text-right'>"+convertToRupiah(totbap)+"</td>";                        
+						template += "<td class='text-right'>"+convertToRupiah(totsaldo)+"</td>";
+						template += "<td class='text-right'>"+convertToRupiah(totselisih)+"</td>";
 						template += '</tr>';
                     $('.kt-section__content table').append(template);
 				}

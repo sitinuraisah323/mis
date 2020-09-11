@@ -252,7 +252,7 @@ class Mortages extends ApiController
 				//->where('units_mortages.date_sbk >=', $get['dateStart'])
 				->where('units_mortages.date_sbk <=', $get['dateEnd'])
 				->where_in('units_mortages.status_transaction ', $status);
-			if($idUnit = $this->input->get('unit')){
+			if($idUnit = $this->input->get('id_unit')){
 				$this->mortages->db->where('units_mortages.id_unit', $idUnit);
 			}
 			if($area = $this->input->get('area')){

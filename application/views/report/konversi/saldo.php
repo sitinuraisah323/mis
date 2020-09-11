@@ -138,7 +138,6 @@ $this->load->view('temp/MenuBar.php');
 									<th class="text-right">Saldo BAP Kas</th>
 									<th class='text-right'>Saldo GHANet</th>
 									<th class='text-right'>Selisih</th>									
-                                    <th class='text-center'>#</th>
 									<th></th>
 						    	</tr>
 						  	</thead>						  	                         

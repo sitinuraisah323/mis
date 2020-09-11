@@ -33,5 +33,14 @@ class RepaymentmortageModel extends Master
 			->where('date_kredit', $date)
 			->get()->row()->noa;
 	}
+	public function getLastKredit($idUnit, $nosbk)
+	{
+		return (int) $this->db->select('saldo')
+			->from($this->table)
+			->where('id_unit', $idUnit)
+			->where('no_sbk', $nosbk)
+			->order_by('date_kredit', 'desc')
+			->get()->row()->up;
+	}
 
 }
