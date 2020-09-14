@@ -11,6 +11,17 @@
 							<a  href="javascript:;" class="kt-menu__link kt-menu__toggle"><span class="kt-menu__link-text">Dashboard</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
 							<div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--left">
 								<ul class="kt-menu__subnav">
+								<?php if($this->session->userdata('user')->level == 'unit'):?>
+									<?php if(read_access('dashboards/unit')):?>
+									<li class="kt-menu__item "  aria-haspopup="true">
+											<a  href="<?php echo base_url('dashboards/unit'); ?>" class="kt-menu__link ">
+												<span class="kt-menu__link-icon"><i class="fa fa-chart-bar"><span></span></i></span>
+												<span class="kt-menu__link-text">Dashboard</span>
+											</a>
+										</li>
+										<?php endif;?>
+								<?php endif;?>
+								<?php if($this->session->userdata('user')->level == 'administrator' || $this->session->userdata('user')->level == 'area'):?>
 									<?php if(read_access('dashboards')):?>
 										<li class="kt-menu__item "  aria-haspopup="true">
 											<a  href="<?php echo base_url('dashboards'); ?>" class="kt-menu__link ">
@@ -18,6 +29,7 @@
 												<span class="kt-menu__link-text">Dashboard</span>
 											</a>
 										</li>
+									<?php endif;?>
 									<?php endif;?>
 									<?php if(read_access('dashboards/executivesummary')):?>
 										<li class="kt-menu__item "  aria-haspopup="true">
