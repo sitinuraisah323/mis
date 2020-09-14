@@ -111,7 +111,7 @@ $this->load->view('temp/MenuBar.php');
                     </div>
                 </div>
 
-                <div class="col-xl-4 col-lg-4">
+                <div class="col-xl-6 col-lg-6">
                     <!--begin:: Widgets-->
                     <div class="kt-portlet kt-portlet--height-fluid">
                         <div class="kt-widget14">
@@ -125,9 +125,10 @@ $this->load->view('temp/MenuBar.php');
                             </div>	 
                             <div class="kt-widget14__content">	
                                 <div class="kt-widget14__chart">
-                                    <div id="kt_chart_booking" style="height: 150px; width: 150px;"></div>
+                                    <canvas id="graphBooking" style="height:200px;"></canvas>
                                 </div> 
-                                <div class="kt-widget14__legends">
+
+                                <!-- <div class="kt-widget14__legends">
                                     <div class="kt-widget14__legend">
                                         <span class="kt-widget14__bullet kt-bg-danger"></span>
                                         <span class="kt-widget14__stats">60</span>
@@ -140,14 +141,15 @@ $this->load->view('temp/MenuBar.php');
                                         <span class="kt-widget14__bullet kt-bg-warning"></span>
                                         <span class="kt-widget14__stats">40</span>
                                     </div>
-                                </div>			
+                                </div> -->
+
                             </div> 
                         </div>
                     </div>		
                     <!--end:: Widgets-->    
                 </div>
 
-                <div class="col-xl-4 col-lg-4">
+                <div class="col-xl-6 col-lg-6">
                     <!--begin:: Widgets-->
                     <div class="kt-portlet kt-portlet--height-fluid">
                         <div class="kt-widget14">
@@ -161,9 +163,10 @@ $this->load->view('temp/MenuBar.php');
                             </div>	 
                             <div class="kt-widget14__content">	
                                 <div class="kt-widget14__chart">
-                                    <div id="kt_chart_outstanding" style="height: 150px; width: 150px;"></div>
+                                    <canvas id="graphOutstanding" style="height:200px;"></canvas> 
                                 </div> 
-                                <div class="kt-widget14__legends">
+
+                                <!-- <div class="kt-widget14__legends">
                                     <div class="kt-widget14__legend">
                                         <span class="kt-widget14__bullet kt-bg-danger"></span>
                                         <span class="kt-widget14__stats">80</span>
@@ -176,14 +179,15 @@ $this->load->view('temp/MenuBar.php');
                                         <span class="kt-widget14__bullet kt-bg-warning"></span>
                                         <span class="kt-widget14__stats">40</span>
                                     </div>
-                                </div>			
+                                </div>	 -->
+
                             </div> 
                         </div>
                     </div>		
                     <!--end:: Widgets-->    
                 </div>
 
-                <div class="col-xl-4 col-lg-4">
+                <div class="col-xl-6 col-lg-6">
                     <!--begin:: Widgets-->
                     <div class="kt-portlet kt-portlet--height-fluid">
                         <div class="kt-widget14">
@@ -219,7 +223,7 @@ $this->load->view('temp/MenuBar.php');
                     <!--end:: Widgets-->    
                 </div>
 
-                <div class="col-xl-4 col-lg-4">
+                <div class="col-xl-6 col-lg-6">
                     <!--begin:: Widgets-->
                     <div class="kt-portlet kt-portlet--height-fluid">
                         <div class="kt-widget14">
@@ -255,7 +259,7 @@ $this->load->view('temp/MenuBar.php');
                     <!--end:: Widgets-->    
                 </div>
 
-                <div class="col-xl-4 col-lg-4">
+                <div class="col-xl-6 col-lg-6">
                     <!--begin:: Widgets-->
                     <div class="kt-portlet kt-portlet--height-fluid">
                         <div class="kt-widget14">
@@ -291,7 +295,7 @@ $this->load->view('temp/MenuBar.php');
                     <!--end:: Widgets-->    
                 </div>
 
-                <div class="col-xl-4 col-lg-4">
+                <div class="col-xl-6 col-lg-6">
                     <!--begin:: Widgets-->
                     <div class="kt-portlet kt-portlet--height-fluid">
                         <div class="kt-widget14">
@@ -331,5 +335,6 @@ $this->load->view('temp/MenuBar.php');
 
 <?php
 $this->load->view('temp/Footer.php');
-$this->load->view('dashboard/unit/js.php');
+//$this->load->view('dashboard/unit/js.php');
+$this->load->view('dashboard/unit/_script.php');
 ?>
