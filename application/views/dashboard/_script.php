@@ -1243,6 +1243,7 @@ function pengeluaran() {
 	$('svg').remove();
 	$('#graphPengeluaran').empty();
 	var total = 0;
+	var totalYesterday = 0;
 	//var currdate = '2020-07-20';
 	var transaction = [];
 	KTApp.block('#form_pengeluaran .kt-widget14', {});
@@ -1252,7 +1253,7 @@ function pengeluaran() {
 		dataType:"JSON",
 		data:{
 			area:'',
-			month:currmonth,
+			date:currdate,
 		},
 		success:function (response) {
 
@@ -1273,6 +1274,7 @@ function pengeluaran() {
 					a:unit.amount
 				})
 				total += parseInt(unit.amount);
+				totalYesterday += parseInt(unit.amount_yesterday);
 
 				if(unit.area=='Jawa Barat')
 				{
@@ -1359,9 +1361,11 @@ function pengeluaran() {
 			$('#tblPengeluaran').append(Tempall);
 
 		},
-		complete:function () {
+		complete:function () {			
 			$('#form_pengeluaran').find('.date-today').text(currdate);
 			$('#form_pengeluaran').find('.total-today').text(convertToRupiah(total));
+			$('#form_pengeluaran').find('.date-yesterday').text(lastdate);
+			$('#form_pengeluaran').find('.total-yesterday').text(convertToRupiah(totalYesterday));
 			var data = transaction,
 					//config manager
 					config = {
@@ -1400,6 +1404,7 @@ function pendapatan() {
 	$('#graphPendapatan').empty();
 	//var currdate = '2020-07-20';
 	var total = 0;
+	var totalYesterday = 0;
 	KTApp.block('#form_pendapatan .kt-widget14', {});
 	var transaction = [];
 	$.ajax({
@@ -1408,7 +1413,7 @@ function pendapatan() {
 		dataType:"JSON",
 		data:{
 			area:'',
-			month:currmonth,
+			date:currdate,
 		},
 		success:function (response) {
 
@@ -1429,6 +1434,7 @@ function pendapatan() {
 					a:unit.amount
 				});
 				total += parseInt(unit.amount);
+				totalYesterday += parseInt(unit.amount_yesterday);
 
 				if(unit.area=='Jawa Barat')
 				{
@@ -1518,6 +1524,9 @@ function pendapatan() {
 		complete:function () {
 			$('#form_pendapatan').find('.date-today').text(currdate);
 			$('#form_pendapatan').find('.total-today').text(convertToRupiah(total));
+			$('#form_pendapatan').find('.date-yesterday').text(lastdate);
+			$('#form_pendapatan').find('.total-yesterday').text(convertToRupiah(totalYesterday));
+		
 			var data = transaction,
 					//config manager
 					config = {

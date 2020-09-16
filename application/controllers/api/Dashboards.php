@@ -314,15 +314,14 @@ class Dashboards extends ApiController
 
 		if($this->input->get('date')){
 			$date = $this->input->get('date');
-			$this->units->db->where('date', $date);
-		}
-
-		if($this->input->get('month')){
+			$this->units->db->where('date >=', date('Y-m-01', strtotime($date)));
+			$this->units->db->where('date <=', $date);
+		}else if($this->input->get('month')){
 			$month = $this->input->get('month');
 			$this->units->db->where('MONTH(date)', $month);
 		}
 
-		$this->units->db->select('units.name,areas.area, sum(amount) as amount')
+		$this->units->db->select('units.id, units.name,areas.area, sum(amount) as amount')
 			->join('units','units.id = units_dailycashs.id_unit')
 			->join('areas','areas.id = units.id_area')
 			->from('units_dailycashs')
@@ -330,8 +329,33 @@ class Dashboards extends ApiController
 			->where_in('no_perk', $category)
 			->group_by('units.name')
 			->group_by('areas.area')
+			->group_by('units.id')
 			->order_by('amount','desc');
 		$data = $this->units->db->get()->result();
+		
+		if(count($data) && $this->input->get('date')){
+			$dateYesteray = date('Y-m-d',strtotime($this->input->get('date').' -1 days'));
+			foreach($data as $datum){
+				$this->units->db->select('units.id, units.name,areas.area, sum(amount) as amount')
+				->join('units','units.id = units_dailycashs.id_unit')
+				->join('areas','areas.id = units.id_area')
+				->from('units_dailycashs')
+				->where('type','CASH_IN')	
+				->where_in('no_perk', $category)
+				->group_by('units.name')
+				->group_by('areas.area')
+				->group_by('units.id')
+				->where('units.id', $datum->id)
+				->where('date >=', date('Y-m-01', strtotime($dateYesteray)))
+				->where('date <=', $dateYesteray);
+				$yesterday = $this->units->db->get()->row();
+				if($yesterday){
+					$datum->amount_yesterday = $yesterday->amount;
+				}else{
+					$datum->amount_yesterday = 0;
+				}
+			}
+		}
 		return $this->sendMessage($data,'Successfully get Pendapatan');
 	}
 
@@ -359,7 +383,8 @@ class Dashboards extends ApiController
 
 		if($this->input->get('date')){
 			$date = $this->input->get('date');
-			$this->units->db->where('date', $date);
+			$this->units->db->where('date >=', date('Y-m-01', strtotime($date)));
+			$this->units->db->where('date <=', $date);
 		}
 
 		if($this->input->get('month')){
@@ -367,16 +392,40 @@ class Dashboards extends ApiController
 			$this->units->db->where('MONTH(date)', $month);
 		}
 		
-		$this->units->db->select('units.name,areas.area, sum(amount) as amount')
+		$this->units->db->select('units.id, units.name,areas.area, sum(amount) as amount')
 			->join('units','units.id = units_dailycashs.id_unit')
 			->join('areas','areas.id = units.id_area')
 			->from('units_dailycashs')
 			->where('type','CASH_OUT')
 			->where_in('no_perk', $category)
 			->group_by('units.name')
+			->group_by('units.id')
 			->group_by('areas.area')
 			->order_by('amount','desc');
 		$data = $this->units->db->get()->result();
+		if(count($data) && $this->input->get('date')){
+			$dateYesterday = date('Y-m-d', strtotime($this->input->get('date').' -1 days'));
+			foreach($data as $datum){
+				$this->units->db->select('units.name,areas.area, sum(amount) as amount')
+					->join('units','units.id = units_dailycashs.id_unit')
+					->join('areas','areas.id = units.id_area')
+					->from('units_dailycashs')
+					->where('type','CASH_OUT')
+					->where('units.id', $datum->id)
+					->where('date >=', date('Y-m-', strtotime($dateYesterday)).'01')
+					->where('date <=', $dateYesterday)
+					->where_in('no_perk', $category)
+					->group_by('units.name')
+					->group_by('units.id')
+					->group_by('areas.area');
+				$yesterday = $this->units->db->get()->row();
+				if($yesterday){
+					$datum->amount_yesterday = $yesterday->amount;
+				}else{
+					$datum->amount_yesterday = 0;
+				}
+			}
+		}
 		return $this->sendMessage($data,'Successfully get Pendapatan');
 	}
 
@@ -799,7 +848,8 @@ class Dashboards extends ApiController
 		// 	->join('areas','areas.id = units.id_area');
 		// $getSaldo = $this->units->db->get()->result();
 		// foreach ($getSaldo as $get){
-		// 	$this->units->db->select('(sum(CASE WHEN type = "CASH_IN" THEN `amount` ELSE 0 END) - sum(CASE WHEN type = "CASH_OUT" THEN `amount` ELSE 0 END)) as amount')
+		// 	$this->units->db
+		// ->select('(sum(CASE WHEN type = "CASH_IN" THEN `amount` ELSE 0 END) - sum(CASE WHEN type = "CASH_OUT" THEN `amount` ELSE 0 END)) as amount')
 		// 		->join('units','units.id = units_dailycashs.id_unit')
 		// 		->from('units_dailycashs')
 		// 		->where('units.id', $get->id_unit)
