@@ -232,4 +232,9 @@ function date_between(start, end){
     return Difference_In_Days+1;
 }
 
+$(document).ready(function(){
+    $('#btncari').trigger('click');
+})
+
+
 </script>

@@ -122,7 +122,7 @@ $this->load->view('temp/MenuBar.php');
 					</div> -->
 					<div class="col-lg-2">
 						<label class="col-form-label">Jatuh Tempo Dari</label>
-						<input type="date" class="form-control" name="date-start" value="<?php echo date('Y-m-d');?>">
+						<input type="date" class="form-control" name="date-start" value="<?php echo date('Y-m-d', strtotime(date('Y-m-d').' -120 days'));?>">
 					</div>
 					<div class="col-lg-2">
 						<label class="col-form-label">Sampai</label>

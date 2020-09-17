@@ -447,7 +447,10 @@ $currmonth = date('Y-m-d');
                                     <div class="kt-widget14__legends">
                                         <div class="kt-widget14__legend">
                                             <span class="kt-widget14__bullet kt-bg-info"></span>
-                                            <span class="kt-widget14__stats"><?php  echo $currmonth; ?> : <span class="total-today"></span></span>
+                                            <span class="kt-widget14__stats"><span class="date-today"></span> : <span class="total-today"></span></span>
+                                            <span class="kt-widget14__bullet kt-bg-info"></span>
+                                            <span class="kt-widget14__stats"><span class="date-yesterday"></span> : <span class="total-yesterday"></span></span>
+                                     
                                         </div>
                                     </div>	
                             </div>                       
@@ -505,7 +508,9 @@ $currmonth = date('Y-m-d');
                                     <div class="kt-widget14__legends">
                                         <div class="kt-widget14__legend">
                                             <span class="kt-widget14__bullet kt-bg-success"></span>
-                                            <span class="kt-widget14__stats"><?php  echo $currmonth; ?> : <span class="total-today"></span></span>
+                                            <span class="kt-widget14__stats"><span class="date-today"></span> : <span class="total-today"></span></span>
+                                            <span class="kt-widget14__bullet kt-bg-success"></span>
+                                            <span class="kt-widget14__stats"><span class="date-yesterday"></span> : <span class="total-yesterday"></span></span>
                                         </div>
                                     </div>
                                 </div>                           

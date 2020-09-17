@@ -56,6 +56,7 @@ class UnitsdailycashModel extends Master
 					->where('units_dailycashs.date >',$saldo->cut_off)
 					->where('units_dailycashs.date <=',$date)
 					->get()->row();
+
 		
 		$cashout = $this->units->db->select('sum(amount) as amount')
 					->from('units_dailycashs')
