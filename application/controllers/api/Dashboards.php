@@ -1,5 +1,5 @@
 <?php
-
+error_reporting(0);
 require_once APPPATH.'controllers/api/ApiController.php';
 class Dashboards extends ApiController
 {
@@ -843,13 +843,24 @@ class Dashboards extends ApiController
 		for ($i=0; $i < $endval; $i++) { 
 			$date = date('M-Y',strtotime('+ '.$i.' month',strtotime($sdate)));
 			$month = date('m',strtotime('+ '.$i.' month',strtotime($sdate)));
+			$edate = date('Y-m-t',strtotime('+ '.$i.' month',strtotime($sdate)));
+			if($month==date('m')){
+				$date_out = date('Y-m-d');
+			}else{
+				$date_out = $edate;
+			}
 			$target = $this->db->select('id_unit,amount_booking,amount_outstanding')
 			                ->from('units_targets')
 			                ->where('month',$month)
 							->where('id_unit',$idUnit)
 							->get()->row();
 			$realBook =$this->regular->getUnitCredit($idUnit,$month);
-			$unit[] = array( "date"=> $date,"target"=>$target->amount_booking,"realisasi"=>$realBook->up);			
+			$realOut = $this->db->select('id_unit,os')
+			                ->from('units_outstanding')
+			                ->where('date',$date_out)
+							->where('id_unit',$idUnit)
+							->get()->row();
+			$unit[] = array( "date"=> $date,"target"=>$target->amount_booking,"realisasi"=>$realBook->up,"target_out"=>$target->amount_outstanding,"realisasi_out"=>$realOut->os);			
 		}	
 		$unit = array_reverse($unit, true);
 		return $this->sendMessage($unit,'Get Unit Booking');		

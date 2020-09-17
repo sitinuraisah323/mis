@@ -482,6 +482,81 @@ var KTDashboard = function() {
         });
     }
 
+    var TarOutstandinghart = function() {
+        var target = [];
+        var realisasi = [];
+        var month = [];
+
+        KTApp.block('#form_tarout .kt-widget14', {});
+        $.ajax({
+            url: "<?php echo base_url('api/dashboards/unittargetbooking');?>",
+            type:"GET",
+            dataType:"JSON",
+            data:{date:currentDate},
+            success:function(response){
+                $.each(response.data, function (index,unit) {
+                    target.push(unit.target_out);
+                    realisasi.push(unit.realisasi_out);
+                    month.push(unit.date);                    
+                });
+            },
+            error:function(xhr){
+
+            },
+            complete:function(){
+                    console.log(month);
+                    var datatarget 	    = target;
+                    var datarealisasi	= realisasi;
+                    var datamonth	    = month;
+                    var data = [{
+                            label: 'Target',
+                            backgroundColor: '#ff0066',
+                            yAxisID: 'A',
+                            data: datatarget
+                        },{
+                            label: 'Realisasi',
+                            backgroundColor: '#00b33c',
+                            yAxisID: 'A',
+                            data: datarealisasi
+                        }];			
+                    
+                    var options = {
+                        tooltips: {
+                            mode: 'label',
+                        },						
+                        scales: {
+                            xAxes: [{
+                                    stacked: false,
+                                    gridLines: {
+                                        display: false
+                                    }
+                                }],
+                            yAxes: [{
+                                    id: 'A',
+                                    stacked: false,						
+                                    ticks: {
+                                        beginAtZero: true,
+                                        callback: function (value) {
+                                            return convertToRupiah(value);
+                                        }
+                                    }
+                                }]
+                        }
+                };
+		        var ctx = document.getElementById("graptarOut");
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: datamonth,
+                        datasets: data
+                    },
+                    options: options
+                });
+                KTApp.unblock('#form_tarout .kt-widget14', {}); 
+            }
+        });
+    }
+
     return {
         // Init demos
         init: function() {
@@ -493,6 +568,7 @@ var KTDashboard = function() {
             kaschart();
             SummaryRatechart();
             TarBookinghart();
+            TarOutstandinghart();
             // demo loading
             var loading = new KTDialog({'type': 'loader', 'placement': 'top center', 'message': 'Loading ...'});
             loading.show();
