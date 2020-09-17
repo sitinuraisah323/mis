@@ -34,7 +34,8 @@ $this->load->view('temp/MenuBar.php');
         <div class="row">
 
                 <div class="col-lg-4">
-                    <div class="kt-portlet kt-iconbox kt-iconbox--wave">
+                <form id="form_saldounit" class="form-horizontal">
+                    <div class="kt-portlet kt-iconbox kt-iconbox--brand kt-iconbox--animate-slower">
                     <div class="kt-portlet__body">
                         <div class="kt-iconbox__body">
                             <div class="kt-iconbox__icon">
@@ -57,10 +58,12 @@ $this->load->view('temp/MenuBar.php');
                         </div>
                         </div>
                     </div>
+                    </form>
                 </div>
 
                 <div class="col-lg-4">
-                    <div class="kt-portlet kt-iconbox kt-iconbox--wave">
+                <form id="form_cardOut" class="form-horizontal">
+                    <div class="kt-portlet kt-iconbox kt-iconbox--brand kt-iconbox--animate-slower">
                     <div class="kt-portlet__body">
                         <div class="kt-iconbox__body">
                             <div class="kt-iconbox__icon">
@@ -74,19 +77,20 @@ $this->load->view('temp/MenuBar.php');
                             </div>
                             <div class="kt-iconbox__desc">
                                 <h3 class="kt-iconbox__title">
-                                    <a class="kt-link cash-selesih" href="#">0</a>
+                                    <a class="kt-link Outstanding" href="#">0</a>
                                 </h3>
                                 <div class="kt-iconbox__content">
-                                    Selisih Saldo unit
+                                    Outstanding
                                 </div>
                             </div>
                         </div>
                         </div>
                     </div>
+                    </form>
                 </div>
 
                 <div class="col-lg-4">
-                    <div class="kt-portlet kt-iconbox kt-iconbox--wave">
+                    <div class="kt-portlet kt-iconbox kt-iconbox--brand kt-iconbox--animate-slower">
                     <div class="kt-portlet__body">
                         <div class="kt-iconbox__body">
                             <div class="kt-iconbox__icon">
@@ -100,10 +104,10 @@ $this->load->view('temp/MenuBar.php');
                             </div>
                             <div class="kt-iconbox__desc">
                                 <h3 class="kt-iconbox__title">
-                                    <a class="kt-link cash-noa" href="#">0</a>
+                                    <a class="kt-link Average-Rate" href="#">0</a>
                                 </h3>
                                 <div class="kt-iconbox__content">
-                                    NOA
+                                   Day Past Due(DPD)
                                 </div>
                             </div>
                         </div>
@@ -113,6 +117,7 @@ $this->load->view('temp/MenuBar.php');
 
                 <div class="col-xl-6 col-lg-6">
                     <!--begin:: Widgets-->
+                    <form id="form_booking" class="form-horizontal">
                     <div class="kt-portlet kt-portlet--height-fluid">
                         <div class="kt-widget14">
                             <div class="kt-widget14__header">
@@ -123,34 +128,18 @@ $this->load->view('temp/MenuBar.php');
                                     Booking today & yesterday
                                 </span>
                             </div>	 
-                            <div class="kt-widget14__content">	
-                                <div class="kt-widget14__chart">
-                                    <canvas id="graphBooking" style="height:200px;"></canvas>
-                                </div> 
-
-                                <!-- <div class="kt-widget14__legends">
-                                    <div class="kt-widget14__legend">
-                                        <span class="kt-widget14__bullet kt-bg-danger"></span>
-                                        <span class="kt-widget14__stats">60</span>
-                                    </div>
-                                    <div class="kt-widget14__legend">
-                                        <span class="kt-widget14__bullet kt-bg-brand"></span>
-                                        <span class="kt-widget14__stats">40</span>
-                                    </div>
-                                    <div class="kt-widget14__legend">
-                                        <span class="kt-widget14__bullet kt-bg-warning"></span>
-                                        <span class="kt-widget14__stats">40</span>
-                                    </div>
-                                </div> -->
-
+                            <div class="Kt-widget11">	
+                                    <canvas id="grapBooking" style="height:200px;"></canvas>
                             </div> 
                         </div>
                     </div>		
+                    </form>
                     <!--end:: Widgets-->    
                 </div>
 
                 <div class="col-xl-6 col-lg-6">
                     <!--begin:: Widgets-->
+                    <form id="form_outstanding" class="form-horizontal">
                     <div class="kt-portlet kt-portlet--height-fluid">
                         <div class="kt-widget14">
                             <div class="kt-widget14__header">
@@ -158,32 +147,15 @@ $this->load->view('temp/MenuBar.php');
                                     Review Outstanding            
                                 </h3>
                                 <span class="kt-widget14__desc">
-                                    Outstanding today & yesterday
+                                    perfomance outstanding unit
                                 </span>
                             </div>	 
-                            <div class="kt-widget14__content">	
-                                <div class="kt-widget14__chart">
-                                    <canvas id="graphOutstanding" style="height:200px;"></canvas> 
-                                </div> 
-
-                                <!-- <div class="kt-widget14__legends">
-                                    <div class="kt-widget14__legend">
-                                        <span class="kt-widget14__bullet kt-bg-danger"></span>
-                                        <span class="kt-widget14__stats">80</span>
-                                    </div>
-                                    <div class="kt-widget14__legend">
-                                        <span class="kt-widget14__bullet kt-bg-brand"></span>
-                                        <span class="kt-widget14__stats">20</span>
-                                    </div>
-                                    <div class="kt-widget14__legend">
-                                        <span class="kt-widget14__bullet kt-bg-warning"></span>
-                                        <span class="kt-widget14__stats">40</span>
-                                    </div>
-                                </div>	 -->
-
+                            <div class="kt-widget11">	                               
+                                <canvas id="grapOutstanding" style="height:200px;"></canvas> 
                             </div> 
                         </div>
-                    </div>		
+                    </div>
+                    </form>		
                     <!--end:: Widgets-->    
                 </div>
 
@@ -225,78 +197,51 @@ $this->load->view('temp/MenuBar.php');
 
                 <div class="col-xl-6 col-lg-6">
                     <!--begin:: Widgets-->
+                    <form id="form_pencairan" class="form-horizontal">
                     <div class="kt-portlet kt-portlet--height-fluid">
                         <div class="kt-widget14">
                             <div class="kt-widget14__header">
                                 <h3 class="kt-widget14__title">
-                                    Review Pencairan            
+                                    Review Pencairan & Pelunasan           
                                 </h3>
                                 <span class="kt-widget14__desc">
                                     Pencairan Reguler & Cicilan
                                 </span>
                             </div>	 
-                            <div class="kt-widget14__content">	
-                                <div class="kt-widget14__chart">
-                                    <div id="kt_chart_pencairan" style="height: 150px; width: 150px;"></div>
-                                </div> 
-                                <div class="kt-widget14__legends">
-                                    <div class="kt-widget14__legend">
-                                        <span class="kt-widget14__bullet kt-bg-danger"></span>
-                                        <span class="kt-widget14__stats">70</span>
-                                    </div>
-                                    <div class="kt-widget14__legend">
-                                        <span class="kt-widget14__bullet kt-bg-brand"></span>
-                                        <span class="kt-widget14__stats">30</span>
-                                    </div>
-                                    <div class="kt-widget14__legend">
-                                        <span class="kt-widget14__bullet kt-bg-warning"></span>
-                                        <span class="kt-widget14__stats">40</span>
-                                    </div>
-                                </div>			
-                            </div> 
+                            <div class="kt-widget11">	                               
+                                <canvas id="grapPencairan" style="height:200px;"></canvas> 
+                            </div>  
                         </div>
                     </div>		
+                    </form>
                     <!--end:: Widgets-->    
                 </div>
 
                 <div class="col-xl-6 col-lg-6">
                     <!--begin:: Widgets-->
+                    <form id="form_rate" class="form-horizontal">
                     <div class="kt-portlet kt-portlet--height-fluid">
                         <div class="kt-widget14">
                             <div class="kt-widget14__header">
                                 <h3 class="kt-widget14__title">
-                                    Review Pelunasan            
+                                    Review Rate           
                                 </h3>
                                 <span class="kt-widget14__desc">
-                                    Pelunasan Reguler & Cicilan
+                                    Rate Bunga Rguler & Cicilan
                                 </span>
                             </div>	 
-                            <div class="kt-widget14__content">	
-                                <div class="kt-widget14__chart">
-                                    <div id="kt_chart_pelunasan" style="height: 150px; width: 150px;"></div>
-                                </div> 
-                                <div class="kt-widget14__legends">
-                                    <div class="kt-widget14__legend">
-                                        <span class="kt-widget14__bullet kt-bg-danger"></span>
-                                        <span class="kt-widget14__stats">70</span>
-                                    </div>
-                                    <div class="kt-widget14__legend">
-                                        <span class="kt-widget14__bullet kt-bg-brand"></span>
-                                        <span class="kt-widget14__stats">30</span>
-                                    </div>
-                                    <div class="kt-widget14__legend">
-                                        <span class="kt-widget14__bullet kt-bg-warning"></span>
-                                        <span class="kt-widget14__stats">40</span>
-                                    </div>
-                                </div>			
-                            </div> 
+                            <div class="kt-widget11">	                               
+                                <canvas id="grapRate" style="height:200px;"></canvas> 
+                            </div>  
                         </div>
                     </div>		
+                    </form>
                     <!--end:: Widgets-->    
                 </div>
 
                 <div class="col-xl-6 col-lg-6">
                     <!--begin:: Widgets-->
+                    <form id="form_kas" class="form-horizontal">
                     <div class="kt-portlet kt-portlet--height-fluid">
                         <div class="kt-widget14">
                             <div class="kt-widget14__header">
@@ -307,23 +252,12 @@ $this->load->view('temp/MenuBar.php');
                                     Pendaptan & Pengeluaran
                                 </span>
                             </div>	 
-                            <div class="kt-widget14__content">	
-                                <div class="kt-widget14__chart">
-                                    <div id="kt_chart_profit" style="height: 150px; width: 150px;"></div>
-                                </div> 
-                                <div class="kt-widget14__legends">
-                                    <div class="kt-widget14__legend">
-                                        <span class="kt-widget14__bullet kt-bg-danger"></span>
-                                        <span class="kt-widget14__stats">70</span>
-                                    </div>
-                                    <div class="kt-widget14__legend">
-                                        <span class="kt-widget14__bullet kt-bg-brand"></span>
-                                        <span class="kt-widget14__stats">30</span>
-                                    </div>
-                                </div>			
-                            </div> 
+                            <div class="kt-widget11">	                               
+                                <canvas id="grapkas" style="height:200px;"></canvas> 
+                            </div>  
                         </div>
-                    </div>		
+                    </div>	
+                    </form>	
                     <!--end:: Widgets-->    
                 </div>
 
@@ -335,6 +269,5 @@ $this->load->view('temp/MenuBar.php');
 
 <?php
 $this->load->view('temp/Footer.php');
-//$this->load->view('dashboard/unit/js.php');
 $this->load->view('dashboard/unit/_script.php');
 ?>

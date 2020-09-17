@@ -279,4 +279,64 @@ class RegularpawnsModel extends Master
 		);
 	}
 
+	public function getBooking($idUnit, $today)
+	{
+		$noaRegular = $this->db->select('count(*) as noa')->from($this->table)
+			->where('id_unit', $idUnit)
+			->where('date_sbk', $today)->get()->row();
+
+		$upRegular = $this->db->select('sum(amount) as up')->from($this->table)
+			->where('id_unit', $idUnit)
+			->where('date_sbk', $today)->get()->row();
+
+		$noaMortages = $this->db->select('count(*) as noa')->from('units_mortages')
+			->where('id_unit', $idUnit)
+			->where('date_sbk', $today)->get()->row();
+
+		$upaMortages = $this->db->select('sum(amount_loan) as up')->from('units_mortages')
+			->where('id_unit', $idUnit)
+			->where('date_sbk', $today)->get()->row();
+
+		return (object)array(
+			'noa_reg' 	 => $noaRegular->noa,
+			'noa_nonreg' => $noaMortages->noa,
+			'up_reg' 	 => $upRegular->up,
+			'up_nonreg'  => $upaMortages->up
+		);
+	}
+
+	public function getTransaction($idUnit, $today)
+	{
+		$noaRegular = $this->db->select('count(*) as noa')->from($this->table)
+			->where('id_unit', $idUnit)
+			->where('date_sbk', $today)->get()->row();
+
+		$upRegular = $this->db->select('sum(amount) as up')->from($this->table)
+			->where('id_unit', $idUnit)
+			->where('date_sbk', $today)->get()->row();
+
+		$noaMortages = $this->db->select('count(*) as noa')->from('units_mortages')
+			->where('id_unit', $idUnit)
+			->where('date_sbk', $today)->get()->row();
+
+		$upaMortages = $this->db->select('sum(amount_loan) as up')->from('units_mortages')
+			->where('id_unit', $idUnit)
+			->where('date_sbk', $today)->get()->row();
+
+		$upRepayRegular = $this->db->select('sum(money_loan) as up, count(*) as noa')->from('units_repayments')
+			->where('id_unit', $idUnit)
+			->where('date_repayment', $today)->get()->row();
+		$upRepayMortage = $this->db->select('count(*) as noa, sum(amount) as up')
+					->from('units_repayments_mortage')
+					->where('id_unit', $idUnit)
+					->where('date_kredit', $today)
+					->get()->row();				
+		return (object)array(
+			'noa_pencairan' => (int) $noaMortages->noa + $noaRegular->noa,
+			'up_pencairan' 	=> (int) $upRegular->up + $upaMortages->up,
+			'noa_pelunasan' => (int)$upRepayMortage->noa + $upRepayMortage->noa,
+			'up_pelunasan' 	=> (int)$upRepayRegular->up + $upRepayMortage->up
+		);
+	}
+
 }

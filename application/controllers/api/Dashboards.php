@@ -587,63 +587,38 @@ class Dashboards extends ApiController
 	public function unitbooking()
 	{
 		$idUnit = $this->session->userdata('user')->id_unit;
-		$date = $this->input->get('date');
-		if(is_null($date)){
-			$date = date('Y-m-d');
-		}
-		$dateLast = date('Y-m-d', strtotime($date. ' -1 Days'));
-		$today = $this->regular->db
-			->select('count(*) as noa, sum(amount) as up')
-			->from('units_regularpawns')
-			->where('id_unit',$idUnit)
-			->where('date_sbk',$date)
-			->get()->row();
-		$last = $this->regular->db
-			->select('count(*) as noa, sum(amount) as up')
-			->from('units_regularpawns')
-			->where('id_unit',$idUnit)
-			->where('date_sbk',$dateLast)
-			->get()->row();
-		$data = new stdClass();
-		$data->today_noa = (int) $today->noa;
-		$data->today_up = (int) $today->up;
-		$data->last_noa = (int) $last->noa;
-		$data->last_up = (int) $last->up;
-		$data->total_noa = $data->today_noa + $data->last_noa;
-		$data->total_up = $data->today_up + $data->last_up;
-		return $this->sendMessage($data,'Get Unit Booking');
+		$datestart = date('Y-m-01');
+		$dateend   = date('Y-m-d');
+		$tgl1 = new DateTime($datestart);
+		$tgl2 = new DateTime($dateend);
+		$unit =array();
+		$selisih = $tgl2->diff($tgl1)->days + 1;
+		for ($i=0; $i < $selisih; $i++) { 
+			$date = date('Y-m-d',strtotime('+ '.$i.' day',strtotime($datestart)));
+			$day = date('l',strtotime($date));
+			if($day!='Sunday'){
+				$pencairan = $this->regular->getCreditToday($idUnit,$date);
+				$unit[] = array( "date"=> $date,"up"=> $pencairan->up,"noa"=> $pencairan->noa);
+			}
+		}	
+		$unit = array_reverse($unit, true);
+		return $this->sendMessage($unit,'Get Unit Booking');
 	}
 	
 	public function unitost()
 	{
 		$idUnit = $this->session->userdata('user')->id_unit;
-		$date = $this->input->get('date');
-		if(is_null($date)){
-			$date = date('Y-m-d');
-		}
-		$dateLast = date('Y-m-d', strtotime($date. ' -1 Days'));
-		$today = $this->regular->db
-			->select('count(*) as noa, sum(amount) as up')
-			->from('units_regularpawns')
-			->where('id_unit',$idUnit)
-			->where('date_sbk',$date)
-			->where('status_transaction',"N")
-			->get()->row();
-		$last = $this->regular->db
-			->select('count(*) as noa, sum(amount) as up')
-			->from('units_regularpawns')
-			->where('id_unit',$idUnit)
-			->where('date_sbk <',$dateLast)			
-			->where('status_transaction',"N")
-			->get()->row();
-		$data = new stdClass();
-		$data->today_noa = (int) $today->noa;
-		$data->today_up = (int) $today->up;
-		$data->last_noa = (int) $last->noa;
-		$data->last_up = (int) $last->up;
-		$data->total_noa = $data->today_noa + $data->last_noa;
-		$data->total_up = $data->today_up + $data->last_up;
-		return $this->sendMessage($data,'Get Unit Booking');
+		$sdate = date('Y-m-01');
+		$edate = date('Y-m-d');
+		$this->db->select('units_outstanding.date,units_outstanding.noa,sum(units_outstanding.os) as up')
+					 ->from('units_outstanding')
+					 ->where('date >=',$sdate)
+					 ->where('date <=',$edate)
+					 ->where('id_unit ',$idUnit)
+					 ->group_by('units_outstanding.date')
+					 ->group_by('units_outstanding.noa');
+		$units =$this->db->get()->result();		
+		return $this->sendMessage($units,'Get Unit Booking');
 	}
 
 	public function unitdpd()
@@ -681,29 +656,22 @@ class Dashboards extends ApiController
 	public function unitpencairan()
 	{
 		$idUnit = $this->session->userdata('user')->id_unit;
-		$date = $this->input->get('date');
-		if(is_null($date)){
-			$date = date('Y-m-d');
-		}
-		$dateLast = date('Y-m-d', strtotime($date. ' -1 Days'));
-		$today = $this->regular->db
-			->select('count(*) as noa, sum(amount) as up')
-			->from('units_regularpawns')
-			->where('id_unit',$idUnit)
-			->get()->row();
-		$last = $this->regular->db
-			->select('count(*) as noa, sum(amount_loan) as up')
-			->from('units_mortages')
-			->where('id_unit',$idUnit)		
-			->get()->row();
-		$data = new stdClass();
-		$data->reg_noa = (int) $today->noa;
-		$data->reg_up = (int) $today->up;
-		$data->mor_noa = (int) $last->noa;
-		$data->mor_up = (int) $last->up;
-		$data->total_noa = $data->reg_noa + $data->mor_noa;
-		$data->total_up = $data->reg_up + $data->mor_up;
-		return $this->sendMessage($data,'Get Unit Booking');
+		$datestart = date('Y-m-01');
+		$dateend   = date('Y-m-d');
+		$tgl1 = new DateTime($datestart);
+		$tgl2 = new DateTime($dateend);
+		$unit =array();
+		$selisih = $tgl2->diff($tgl1)->days + 1;
+		for ($i=0; $i < $selisih; $i++) { 
+			$date = date('Y-m-d',strtotime('+ '.$i.' day',strtotime($datestart)));
+			$day = date('l',strtotime($date));
+			if($day!='Sunday'){
+				$trans = $this->regular->getTransaction($idUnit,$date);
+				$unit[] = array( "date"=> $date,"pencairan"=> $trans->up_pencairan,"pelunasan"=> $trans->up_pelunasan);
+			}
+		}	
+		$unit = array_reverse($unit, true);
+		return $this->sendMessage($unit,'Get Unit Booking');
 	}
 
 	public function unitpelunasan()
@@ -739,28 +707,50 @@ class Dashboards extends ApiController
 	public function unitprofit()
 	{
 		$idUnit = $this->session->userdata('user')->id_unit;
-		$date = $this->input->get('date');
-		if(is_null($date)){
-			$date = date('Y-m-d');
+		$datestart = date('Y-m-01');
+		$dateend   = date('Y-m-d');
+		$tgl1 = new DateTime($datestart);
+		$tgl2 = new DateTime($dateend);
+		
+		//list Perk
+		$PerkCashOut = $this->m_casing->get_list_pengeluaran();
+		$CodeCashOut=array();
+		foreach ($PerkCashOut as $value) {
+			array_push($CodeCashOut, $value->no_perk);
 		}
-		$dateLast = date('Y-m-d', strtotime($date. ' -1 Days'));
-		$today = $this->regular->db
-			->select('sum(amount) as up')
-			->from('units_dailycashs')
-			->where('id_unit',$idUnit)
-			->where('type','CASH_IN')
-			->get()->row();
-		$last = $this->regular->db
-			->select('sum(amount) as up')
-			->from('units_dailycashs')
-			->where('id_unit',$idUnit)		
-			->where('type','CASH_OUT')		
-			->get()->row();
-		$data = new stdClass();
-		$data->cash_in = (int) $today->up;
-		$data->cash_out = (int) $last->up;
-		$data->total_up = $data->cash_in + $data->cash_out;
-		return $this->sendMessage($data,'Get Unit Booking');
+
+		$PerkCashIn = $this->m_casing->get_list_pendapatan();
+		$CodeCashIn=array();
+		foreach ($PerkCashIn as $value) {
+			array_push($CodeCashIn, $value->no_perk);
+		}
+
+		$unit =array();
+		$selisih = $tgl2->diff($tgl1)->days + 1;
+		for ($i=0; $i < $selisih; $i++) { 
+			$date = date('Y-m-d',strtotime('+ '.$i.' day',strtotime($datestart)));
+			$day = date('l',strtotime($date));
+			if($day!='Sunday'){
+				//$trans = $this->regular->getTransaction($idUnit,$date);
+				$CashIn = $this->units->db->select('sum(amount) as amount,count(*) as noa')
+						->from('units_dailycashs')
+						->where('type','CASH_IN')
+						->where_in('no_perk', $CodeCashIn)
+						->where('date',$date)	
+						->where('id_unit',$idUnit)	
+						->get()->row();
+				$CashOut = $this->units->db->select('sum(amount) as amount,count(*) as noa')
+						->from('units_dailycashs')
+						->where('type','CASH_OUT')
+						->where_in('no_perk', $CodeCashOut)
+						->where('date',$date)	
+						->where('id_unit',$idUnit)	
+						->get()->row();
+				$unit[] = array( "date"=> $date,"pendapatan"=> $CashIn->amount,"pengeluaran"=>$CashOut->amount);
+			}
+		}	
+		$unit = array_reverse($unit, true);
+		return $this->sendMessage($unit,'Get Unit Booking');		
 	}
 
 	public function saldounit()
@@ -790,26 +780,27 @@ class Dashboards extends ApiController
 			$unit->yesterday = $this->unitsdailycash->getSaldoYestrday($unit->id,$date);
 			
 		}
-
-		// $this->units->db
-		// 	->select('id_unit, name, amount,areas.area, cut_off')
-		// 	->DISTINCT ('id_unit')
-		// 	->from('units_saldo')			
-		// 	->join('units','units.id = units_saldo.id_unit')
-		// 	->join('areas','areas.id = units.id_area');
-		// $getSaldo = $this->units->db->get()->result();
-		// foreach ($getSaldo as $get){
-		// 	$this->units->db->select('(sum(CASE WHEN type = "CASH_IN" THEN `amount` ELSE 0 END) - sum(CASE WHEN type = "CASH_OUT" THEN `amount` ELSE 0 END)) as amount')
-		// 		->join('units','units.id = units_dailycashs.id_unit')
-		// 		->from('units_dailycashs')
-		// 		->where('units.id', $get->id_unit)
-		// 		->where('units_dailycashs.date >',$get->cut_off);
-		// 	$data = $this->units->db->get()->row();
-		// 	if($data){
-		// 		$get->amount = $get->amount + $data->amount;
-		// 	}
-		//}
 		return $this->sendMessage($units,'Successfully get Pendapatan');
+	}
+
+	public function SummaryRateUnit()
+	{
+		$idUnit = $this->session->userdata('user')->id_unit;
+		$units = $this->regular->getSummaryRateUnits($idUnit);
+		return $this->sendMessage($units,'Successfully get Pendapatan');
+	}
+
+	public function SummaryUnit()
+	{
+		$idUnit = $this->session->userdata('user')->id_unit;
+		$saldo = $this->db
+					 ->where('id_unit', $idUnit)
+					 ->order_by('id','DESC')->get('units_cash_book')->row();
+		$outstanding = $this->db
+					 ->where('id_unit', $idUnit)
+					 ->order_by('id','DESC')->get('units_outstanding')->row();
+		$data = array("saldo"=>$saldo->amount_balance_final,"outstanding"=>$outstanding->os);		
+		return $this->sendMessage($data,'Get Book Cash Daily');
 	}
 
 }
