@@ -832,6 +832,29 @@ class Dashboards extends ApiController
 		return $this->sendMessage($units,'Successfully get Pendapatan');
 	}
 
+	public function unittargetbooking()
+	{
+		$idUnit = $this->session->userdata('user')->id_unit;
+		$sdate = date('Y-01-01');	
+		$date = date('Y-m-d');	
+		$endval = intval(date('m'));	
+		
+		$unit =array();
+		for ($i=0; $i < $endval; $i++) { 
+			$date = date('M-Y',strtotime('+ '.$i.' month',strtotime($sdate)));
+			$month = date('m',strtotime('+ '.$i.' month',strtotime($sdate)));
+			$target = $this->db->select('id_unit,amount_booking,amount_outstanding')
+			                ->from('units_targets')
+			                ->where('month',$month)
+							->where('id_unit',$idUnit)
+							->get()->row();
+			$realBook =$this->regular->getUnitCredit($idUnit,$month);
+			$unit[] = array( "date"=> $date,"target"=>$target->amount_booking,"realisasi"=>$realBook->up);			
+		}	
+		$unit = array_reverse($unit, true);
+		return $this->sendMessage($unit,'Get Unit Booking');		
+	}
+
 	public function SummaryRateUnit()
 	{
 		$idUnit = $this->session->userdata('user')->id_unit;
@@ -842,13 +865,23 @@ class Dashboards extends ApiController
 	public function SummaryUnit()
 	{
 		$idUnit = $this->session->userdata('user')->id_unit;
+		$date = date('Y-m-d');
 		$saldo = $this->db
 					 ->where('id_unit', $idUnit)
 					 ->order_by('id','DESC')->get('units_cash_book')->row();
 		$outstanding = $this->db
 					 ->where('id_unit', $idUnit)
 					 ->order_by('id','DESC')->get('units_outstanding')->row();
-		$data = array("saldo"=>$saldo->amount_balance_final,"outstanding"=>$outstanding->os);		
+		
+		$dpd = $this->db->select('sum(amount) as up,count(*) as noa')
+					->from('units_regularpawns')
+					->where('deadline <=',$date)
+					->where('units_regularpawns.date_sbk <=', $date)
+					->where('units_regularpawns.status_transaction','N')
+					->where('units_regularpawns.id_unit',$idUnit)
+					->get()->row();
+
+		$data = array("saldo"=>$saldo->amount_balance_final,"outstanding"=>$outstanding->os,"dpd"=>$dpd->up);		
 		return $this->sendMessage($data,'Get Book Cash Daily');
 	}
 

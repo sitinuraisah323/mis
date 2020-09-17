@@ -358,7 +358,7 @@ var KTDashboard = function() {
 
             },
             complete:function(){
-                console.log(rate);
+                    //console.log(rate);
                     var dataNoa 	= noa;
                     var dataRate	= rate;
                     var TotRate	    = TotRate;
@@ -407,6 +407,81 @@ var KTDashboard = function() {
         });
     }
 
+    var TarBookinghart = function() {
+        var target = [];
+        var realisasi = [];
+        var month = [];
+
+        KTApp.block('#form_tarbooking .kt-widget14', {});
+        $.ajax({
+            url: "<?php echo base_url('api/dashboards/unittargetbooking');?>",
+            type:"GET",
+            dataType:"JSON",
+            data:{date:currentDate},
+            success:function(response){
+                $.each(response.data, function (index,unit) {
+                    target.push(unit.target);
+                    realisasi.push(unit.realisasi);
+                    month.push(unit.date);                    
+                });
+            },
+            error:function(xhr){
+
+            },
+            complete:function(){
+                    console.log(month);
+                    var datatarget 	    = target;
+                    var datarealisasi	= realisasi;
+                    var datamonth	    = month;
+                    var data = [{
+                            label: 'Target',
+                            backgroundColor: '#ff0066',
+                            yAxisID: 'A',
+                            data: datatarget
+                        },{
+                            label: 'Realisasi',
+                            backgroundColor: '#0066ff',
+                            yAxisID: 'A',
+                            data: datarealisasi
+                        }];			
+                    
+                    var options = {
+                        tooltips: {
+                            mode: 'label',
+                        },						
+                        scales: {
+                            xAxes: [{
+                                    stacked: false,
+                                    gridLines: {
+                                        display: false
+                                    }
+                                }],
+                            yAxes: [{
+                                    id: 'A',
+                                    stacked: false,						
+                                    ticks: {
+                                        beginAtZero: true,
+                                        callback: function (value) {
+                                            return convertToRupiah(value);
+                                        }
+                                    }
+                                }]
+                        }
+                };
+		        var ctx = document.getElementById("graptarBooking");
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: datamonth,
+                        datasets: data
+                    },
+                    options: options
+                });
+                KTApp.unblock('#form_tarbooking .kt-widget14', {}); 
+            }
+        });
+    }
+
     return {
         // Init demos
         init: function() {
@@ -417,6 +492,7 @@ var KTDashboard = function() {
             pencairanchart();
             kaschart();
             SummaryRatechart();
+            TarBookinghart();
             // demo loading
             var loading = new KTDialog({'type': 'loader', 'placement': 'top center', 'message': 'Loading ...'});
             loading.show();
@@ -431,8 +507,11 @@ var KTDashboard = function() {
 function initCash(){
     var saldo=0;
     var outstanding=0;
+    var dpd=0;
     KTApp.block('#form_saldounit .kt-portlet', {});
-    KTApp.block('#form_cardOut .kt-portlet', {});    
+    KTApp.block('#form_cardOut .kt-portlet', {}); 
+    KTApp.block('#form_cardDPD .kt-portlet', {}); 
+       
     $.ajax({
         url: "<?php echo base_url('api/dashboards/SummaryUnit');?>",
         type:"GET",
@@ -440,6 +519,7 @@ function initCash(){
         success:function(response){
             saldo = response.data.saldo;
             outstanding = response.data.outstanding;
+            dpd = response.data.dpd;
            
         },
         error:function(xhr){
@@ -448,8 +528,11 @@ function initCash(){
         complete:function(){
             $('.cash-saldo').text(convertToRupiah(saldo));
             $('.Outstanding').text(convertToRupiah(outstanding));
+            $('.dpd-unit').text(convertToRupiah(dpd));
           KTApp.unblock('#form_saldounit .kt-portlet', {}); 
-          KTApp.unblock('#form_cardOut .kt-portlet', {});           
+          KTApp.unblock('#form_cardOut .kt-portlet', {});  
+          KTApp.unblock('#form_cardDPD .kt-portlet', {});  
+                   
         }
     });
 }

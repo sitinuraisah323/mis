@@ -52,7 +52,7 @@ $this->load->view('temp/MenuBar.php');
                                     <a class="kt-link cash-saldo" href="#">0</a>
                                 </h3>
                                 <div class="kt-iconbox__content">
-                                    Saldo  Unit
+                                    Saldo
                                 </div>
                             </div>
                         </div>
@@ -90,6 +90,7 @@ $this->load->view('temp/MenuBar.php');
                 </div>
 
                 <div class="col-lg-4">
+                <form id="form_cardDPD" class="form-horizontal">
                     <div class="kt-portlet kt-iconbox kt-iconbox--brand kt-iconbox--animate-slower">
                     <div class="kt-portlet__body">
                         <div class="kt-iconbox__body">
@@ -104,7 +105,7 @@ $this->load->view('temp/MenuBar.php');
                             </div>
                             <div class="kt-iconbox__desc">
                                 <h3 class="kt-iconbox__title">
-                                    <a class="kt-link Average-Rate" href="#">0</a>
+                                    <a class="kt-link dpd-unit" href="#">0</a>
                                 </h3>
                                 <div class="kt-iconbox__content">
                                    Day Past Due(DPD)
@@ -113,6 +114,7 @@ $this->load->view('temp/MenuBar.php');
                         </div>
                         </div>
                     </div>
+                    </form>
                 </div>
 
                 <div class="col-xl-6 col-lg-6">
@@ -125,7 +127,7 @@ $this->load->view('temp/MenuBar.php');
                                     Review Booking            
                                 </h3>
                                 <span class="kt-widget14__desc">
-                                    Booking today & yesterday
+                                    Booking on <?php echo date('F'); ?>
                                 </span>
                             </div>	 
                             <div class="Kt-widget11">	
@@ -147,7 +149,7 @@ $this->load->view('temp/MenuBar.php');
                                     Review Outstanding            
                                 </h3>
                                 <span class="kt-widget14__desc">
-                                    perfomance outstanding unit
+                                    Outstanding unit on <?php echo date('F'); ?>
                                 </span>
                             </div>	 
                             <div class="kt-widget11">	                               
@@ -168,28 +170,12 @@ $this->load->view('temp/MenuBar.php');
                                     Review Day Past Due(DPD)            
                                 </h3>
                                 <span class="kt-widget14__desc">
-                                    Day Past Due(DPD)  today & yesterday
+                                    DPD on <?php echo date('F'); ?>
                                 </span>
                             </div>	 
-                            <div class="kt-widget14__content">	
-                                <div class="kt-widget14__chart">
-                                    <div id="kt_chart_dpd" style="height: 150px; width: 150px;"></div>
-                                </div> 
-                                <div class="kt-widget14__legends">
-                                    <div class="kt-widget14__legend">
-                                        <span class="kt-widget14__bullet kt-bg-danger"></span>
-                                        <span class="kt-widget14__stats">70</span>
-                                    </div>
-                                    <div class="kt-widget14__legend">
-                                        <span class="kt-widget14__bullet kt-bg-brand"></span>
-                                        <span class="kt-widget14__stats">30</span>
-                                    </div>
-                                    <div class="kt-widget14__legend">
-                                        <span class="kt-widget14__bullet kt-bg-warning"></span>
-                                        <span class="kt-widget14__stats">40</span>
-                                    </div>
-                                </div>			
-                            </div> 
+                            <div class="kt-widget11">	                               
+                                <canvas id="grapDPD" style="height:200px;"></canvas> 
+                            </div>  
                         </div>
                     </div>		
                     <!--end:: Widgets-->    
@@ -205,7 +191,7 @@ $this->load->view('temp/MenuBar.php');
                                     Review Pencairan & Pelunasan           
                                 </h3>
                                 <span class="kt-widget14__desc">
-                                    Pencairan Reguler & Cicilan
+                                    Pencairan & Pelunasan on <?php echo date('F'); ?>
                                 </span>
                             </div>	 
                             <div class="kt-widget11">	                               
@@ -227,7 +213,7 @@ $this->load->view('temp/MenuBar.php');
                                     Review Rate           
                                 </h3>
                                 <span class="kt-widget14__desc">
-                                    Rate Bunga Rguler & Cicilan
+                                    summary Rate Reguler
                                 </span>
                             </div>	 
                             <div class="kt-widget11">	                               
@@ -249,11 +235,55 @@ $this->load->view('temp/MenuBar.php');
                                     Review Pendaptan & Pengeluaran            
                                 </h3>
                                 <span class="kt-widget14__desc">
-                                    Pendaptan & Pengeluaran
+                                    Pendaptan & Pengeluaran on <?php echo date('F'); ?>
                                 </span>
                             </div>	 
                             <div class="kt-widget11">	                               
                                 <canvas id="grapkas" style="height:200px;"></canvas> 
+                            </div>  
+                        </div>
+                    </div>	
+                    </form>	
+                    <!--end:: Widgets-->    
+                </div>
+
+                <div class="col-xl-6 col-lg-6">
+                    <!--begin:: Widgets-->
+                    <form id="form_tarbooking" class="form-horizontal">
+                    <div class="kt-portlet kt-portlet--height-fluid">
+                        <div class="kt-widget14">
+                            <div class="kt-widget14__header">
+                                <h3 class="kt-widget14__title">
+                                    Review Target Booking            
+                                </h3>
+                                <span class="kt-widget14__desc">
+                                    Target Booking on <?php echo date('Y'); ?>
+                                </span>
+                            </div>	 
+                            <div class="kt-widget11">	                               
+                                <canvas id="graptarBooking" style="height:200px;"></canvas> 
+                            </div>  
+                        </div>
+                    </div>	
+                    </form>	
+                    <!--end:: Widgets-->    
+                </div>
+
+                <div class="col-xl-6 col-lg-6">
+                    <!--begin:: Widgets-->
+                    <form id="form_tarout" class="form-horizontal">
+                    <div class="kt-portlet kt-portlet--height-fluid">
+                        <div class="kt-widget14">
+                            <div class="kt-widget14__header">
+                                <h3 class="kt-widget14__title">
+                                    Review Target Outstanding            
+                                </h3>
+                                <span class="kt-widget14__desc">
+                                    Target Outstanding on <?php echo date('m'); ?>
+                                </span>
+                            </div>	 
+                            <div class="kt-widget11">	                               
+                                <canvas id="graptarOut" style="height:200px;"></canvas> 
                             </div>  
                         </div>
                     </div>	
