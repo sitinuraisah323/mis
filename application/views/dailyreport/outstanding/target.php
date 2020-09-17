@@ -23,7 +23,7 @@
 			<td width="20%" align="left"> <?php echo $data->area;?></td>
 			<td width="20%" align="right"> <?php echo number_format($data->credit_today->up,0);?> </td>
 			<td width="20%" align="right"> <?php echo number_format($data->target->up,0);?> </td>
-			<td width="15%" align="center"> <?php echo $data->target->persentase;?> </td>
+			<td width="15%" align="center"> <?php echo $data->target->persentase ? $data->target->persentase * 100 : 0;?> </td>
             <?php $totalCredit +=$data->credit_today->up; ?>
             <?php $totalUp +=$data->target->up; ?>
             <?php $totalPersent +=$data->target->persentase; ?>
@@ -33,7 +33,7 @@
     <td width="45%" align="right">Total</td>
     <td width="20%" align="right"><?php echo number_format($totalCredit,0); ?></td>
     <td width="20%" align="right"><?php echo number_format($totalUp,0); ?></td>
-    <td width="15%" align="center"><?php echo $totalPersent; ?></td>
+    <td width="15%" align="center"><?php echo round($totalCredit / $totalUp  * 100,2); ?></td>
     </tr>
 	</tbody>
 	<tfoot>

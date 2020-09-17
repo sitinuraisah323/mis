@@ -51,7 +51,7 @@
 			<td align="right" width="90"><?php echo number_format($data->dpd_repayment_today->ost,0);?></td>
 			<td align="center" width="40"><?php echo $data->total_dpd->noa;?></td>
 			<td align="right" width="90"><?php echo number_format($data->total_dpd->ost,0);?></td>
-			<td align="right" width="120"><?php echo $data->percentage;?></td>
+			<td align="right" width="120"><?php echo $data->percentage ? $data->percentage*100 : '' ;?></td>
 			<?php
 			$dpdYesterdayNoa +=$data->dpd_yesterday->noa;
 			$dpdYesterdayUp +=$data->dpd_yesterday->ost;
@@ -75,7 +75,7 @@
 			<td align="right"><?php echo number_format($dpdRepaymenUp,0);?></td>
 			<td align="center"><?php echo $dpdTotalNoa;?></td>
 			<td align="right"><?php echo number_format($dpdTotalUp,0);?></td>
-			<td align="right"><?php echo number_format($percentage/$no,2);?></td>
+			<td align="right"><?php echo  number_format($percentage/$no*100,2);?></td>
 		</tr>
 	</tbody>
 	<tfoot>
