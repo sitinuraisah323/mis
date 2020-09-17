@@ -279,7 +279,7 @@ $this->load->view('temp/MenuBar.php');
                                     Review Target Outstanding            
                                 </h3>
                                 <span class="kt-widget14__desc">
-                                    Target Outstanding on <?php echo date('m'); ?>
+                                    Target Outstanding on <?php echo date('F'); ?>
                                 </span>
                             </div>	 
                             <div class="kt-widget11">	                               
