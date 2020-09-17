@@ -310,6 +310,7 @@ class Regularpawns extends ApiController
 
 	public function reportdpd()
 	{
+		$date = date('Y-m-d');
 		$this->regulars->db
 			->select("customers.name as customer_name, ROUND(units_regularpawns.capital_lease * 4 * amount) as tafsiran_sewa,
 				CASE WHEN amount <=1000000 THEN 9000
@@ -323,12 +324,14 @@ class Regularpawns extends ApiController
 				WHEN amount <= 75000000 THEN 137000
 				ELSE '152000'
 				END AS new_admin, 
-				status_transaction				
+				status_transaction,
+				DATEDIFF('$date', units_regularpawns.deadline) as dpd				
 				")
 			->join('customers','units_regularpawns.id_customer = customers.id')
 			->join('units','units.id = units_regularpawns.id_unit')
 			->where('deadline <',$this->input->get('dateEnd') ? $this->input->get('dateEnd') : date('Y-m-d'))
 			->where('units_regularpawns.status_transaction ', 'N');
+			// ->where("DATEDIFF('$date', units_regularpawns.deadline) >", 30);
 		if($get = $this->input->get()){
 			$this->regulars->db
 				->where('units_regularpawns.deadline >=', $this->input->get('dateStart'));
@@ -341,9 +344,25 @@ class Regularpawns extends ApiController
 			if($permit = $this->input->get('permit')){
 				$this->regulars->db->where('units_regularpawns.permit', $permit);
 			}
+			if($packet = $this->input->get('packet')){
+				if($packet === '120-135'){
+					$this->regulars->db
+						->where("DATEDIFF('$date', units_regularpawns.deadline) >=", 0)
+						->where("DATEDIFF('$date', units_regularpawns.deadline) <=", 15);
+				}
+				if($packet === '136-150'){
+					$this->regulars->db
+					->where("DATEDIFF('$date', units_regularpawns.deadline) >=", 16)
+					->where("DATEDIFF('$date', units_regularpawns.deadline) <=", 30);
+				}
+				if($packet === '>150'){
+					$this->regulars->db
+					->where("DATEDIFF('$date', units_regularpawns.deadline) >=", 31);
+				}
+			}
 		}
+		$this->regulars->db->order_by('dpd','DESC');
 		$data = $this->regulars->all();
-
 		echo json_encode(array(
 			'data'	=> $data,
 			'status'	=> true,

@@ -82,6 +82,7 @@ class Dpd extends Authenticated
 		$objPHPExcel->getActiveSheet()->setCellValue('O1', 'Pelunasan');
 		
 		if($post = $this->input->post()){
+			$date = date('Y-m-d');
 			$this->regulars->db
 			->select("customers.name as customer_name, ROUND(units_regularpawns.capital_lease * 4 * amount) as tafsiran_sewa,
 				CASE WHEN amount <=1000000 THEN 9000
@@ -97,12 +98,14 @@ class Dpd extends Authenticated
 				END AS new_admin, 
 				status_transaction,
 				code,
-				units.name as unit_name,				
+				units.name as unit_name,		
+				DATEDIFF('$date', units_regularpawns.deadline) as dpd				
 				")
 			->join('customers','units_regularpawns.id_customer = customers.id')
 			->join('units','units.id = units_regularpawns.id_unit')
 			->where('deadline <=',$this->input->post('date-end') ? $this->input->post('date-end') : date('Y-m-d'))
-			->where('units_regularpawns.status_transaction ', 'N');
+			->where('units_regularpawns.status_transaction ', 'N')
+			->order_by('dpd', 'DESC');
 			$this->regulars->db
 				->where('units_regularpawns.deadline >=', $post['date-start']);
 			if($idunit = $this->input->post('id_unit')){
@@ -113,6 +116,22 @@ class Dpd extends Authenticated
 			}
 			if($this->input->post('area')){
 				$this->regulars->db->where('units.id_area', $post['area']);
+			}
+			if($packet = $this->input->post('packet')){
+				if($packet === '120-135'){
+					$this->regulars->db
+						->where("DATEDIFF('$date', units_regularpawns.deadline) >=", 0)
+						->where("DATEDIFF('$date', units_regularpawns.deadline) <=", 15);
+				}
+				if($packet === '136-150'){
+					$this->regulars->db
+					->where("DATEDIFF('$date', units_regularpawns.deadline) >=", 16)
+					->where("DATEDIFF('$date', units_regularpawns.deadline) <=", 30);
+				}
+				if($packet === '>150'){
+					$this->regulars->db
+					->where("DATEDIFF('$date', units_regularpawns.deadline) >=", 31);
+				}
 			}
 			$data = $this->regulars->all();
 		}

@@ -113,12 +113,13 @@ function initCariForm(){
 		var dateStart = $('[name="date-start"]').val();
 		var dateEnd = $('[name="date-end"]').val();
 		var permit = $('[name="permit"]').val();
+        var packet = $('[name="packet"]').val();
         KTApp.block('#form_bukukas .kt-portlet__body', {});
 		$.ajax({
 			type : 'GET',
 			url : "<?php echo base_url("api/transactions/regularpawns/reportdpd"); ?>",
 			dataType : "json",
-			data:{area:area,id_unit:unit,dateStart:dateStart,dateEnd:dateEnd,permit:permit},
+			data:{area:area,id_unit:unit,dateStart:dateStart,dateEnd:dateEnd,permit:permit, packet},
 			success : function(response,status){
 				KTApp.unblockPage();
 				if(response.status == true){

@@ -51,23 +51,17 @@ class Summaryrate extends Authenticated
 	
 		$objPHPExcel->setActiveSheetIndex(0);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('A');
-		$objPHPExcel->getActiveSheet()->setCellValue('A1', 'Area');
+		$objPHPExcel->getActiveSheet()->setCellValue('A1', 'No');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('B');
-		$objPHPExcel->getActiveSheet()->setCellValue('B1', 'Kode Unit');
+		$objPHPExcel->getActiveSheet()->setCellValue('B1', 'Area');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('C');
 		$objPHPExcel->getActiveSheet()->setCellValue('C1', 'Unit');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('D');
-		$objPHPExcel->getActiveSheet()->setCellValue('D1', 'UP');
+		$objPHPExcel->getActiveSheet()->setCellValue('D1', 'Total Up');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('E');
-		$objPHPExcel->getActiveSheet()->setCellValue('E1', 'Noa');
-        $objPHPExcel->getActiveSheet()->getColumnDimension('F');
-		$objPHPExcel->getActiveSheet()->setCellValue('F1', 'Jumlah Rate');		
-		$objPHPExcel->getActiveSheet()->getColumnDimension('G');
-		$objPHPExcel->getActiveSheet()->setCellValue('G1', 'Average Rate(%)');
-		$objPHPExcel->getActiveSheet()->getColumnDimension('H');
-		$objPHPExcel->getActiveSheet()->setCellValue('H1', 'Min Rate(%)');
-		$objPHPExcel->getActiveSheet()->getColumnDimension('I');
-		$objPHPExcel->getActiveSheet()->setCellValue('I1', 'Max Rate(%)');
+		$objPHPExcel->getActiveSheet()->setCellValue('E1', '');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('F');
+		$objPHPExcel->getActiveSheet()->setCellValue('F1', '');
 
 		if($area = $this->input->post('area')){
 			$this->units->db->where('id_area', $area);
@@ -84,31 +78,59 @@ class Summaryrate extends Authenticated
 			->join('areas','areas.id = units.id_area')
 			->order_by('areas.id','asc')
 			->get('units')->result();
-		foreach ($units as $unit){
-			 $unit->summary = $this->regulars->getSummaryRate($unit->id);			
-		}
-				
+		$i = 1;
+			
 		$no=2;
-		$average=0;
-		$minrate=0;
-		$maxrate=0;
-		foreach ($units as $row) 
-		{
-			$objPHPExcel->getActiveSheet()->setCellValue('A'.$no, $row->area);	
-			$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, $row->id);	
-			$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, $row->name);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no, $row->summary->up);	
-			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no, $row->summary->noa);			 
-			$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, $row->summary->rate);				 
-			$average = $row->summary->rate/$row->summary->noa;
-			$minrate = $row->summary->min_rate*100;
-			$maxrate = $row->summary->max_rate*100;
-			if(!is_nan($average)){$average=$average;}else{$average=0;}
-			//echo $average;
-			$objPHPExcel->getActiveSheet()->setCellValue('G'.$no, $average);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('H'.$no, $minrate);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('I'.$no, $maxrate);				 
+		foreach ($units as $unit){
+			$unit->summaryUP = $this->regulars->getSummaryUPUnits($unit->id);			
+			$unit->summaryRate = $this->regulars->getSummaryRateUnits($unit->id);	
+		
+			$objPHPExcel->getActiveSheet()->setCellValue('A'.$no, $i);
+			$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, $unit->area);
+			$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, $unit->name);
+			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no, $unit->summaryUP->up);
+			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no, '');
+			$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, '');
+
 			$no++;
+
+			$objPHPExcel->getActiveSheet()->setCellValue('A'.$no, '');
+			$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, 'RATE');
+			$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, 'NOA');
+			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no,'UP');
+			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no, 'Sewa Modal');
+			$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, '%');
+			
+			$totalRate = 0;
+			$totalNoa = 0;
+			$totalUp = 0;
+			$totalSewa = 0;
+
+			foreach($unit->summaryRate as $rate){
+				$no++;
+				$totalRate += $rate->rate;
+				$totalNoa += $rate->noa;
+				$totalUp += $rate->up;
+				$totalSewa += $rate->rate * $rate->up;
+				$objPHPExcel->getActiveSheet()->setCellValue('A'.$no, '');
+				$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, $rate->rate);
+				$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, $rate->noa);
+				$objPHPExcel->getActiveSheet()->setCellValue('D'.$no,number_format($rate->up, 2));
+				$objPHPExcel->getActiveSheet()->setCellValue('E'.$no,number_format($rate->rate * $rate->up, 2));
+				$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, round(($rate->up/ $unit->summaryUP->up*100),2));
+			}
+
+			$no++;
+
+			$objPHPExcel->getActiveSheet()->setCellValue('A'.$no, "Total");
+			$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, $totalRate);
+			$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, $totalNoa);
+			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no,number_format($totalUp, 2));
+			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no,number_format($totalSewa, 2));
+			$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, round(($totalSewa/ $totalUp *100),2));
+
+			$no++;
+			$i++;
 		}
 
 		//Redirect output to a client’s WBE browser (Excel5)

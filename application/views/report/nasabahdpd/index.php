@@ -128,6 +128,15 @@ $this->load->view('temp/MenuBar.php');
 						<label class="col-form-label">Sampai</label>
 						<input type="date" class="form-control" name="date-end" value="<?php echo date('Y-m-d');?>">
 					</div>
+                    <div class="col-lg-2">
+						<label class="col-form-label">Paket</label>
+                        <select name="packet" class="form-control">
+                                <option value="all">All</option>
+                                <option value="120-135">1 (120 > 135)</option>
+                                <option value="136-150">2 (136 > 150)</option>
+                                <option value=">150">3 (> 150)</option>
+                        </select>
+                	</div>
                     <div class="col-lg-1">
                         <label class="col-form-label">&nbsp</label>
                         <div class="position-relative">
