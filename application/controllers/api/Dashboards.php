@@ -892,7 +892,7 @@ class Dashboards extends ApiController
 					->where('units_regularpawns.id_unit',$idUnit)
 					->get()->row();
 
-		$data = array("saldo"=>$saldo->amount_balance_final,"outstanding"=>$outstanding->os,"dpd"=>$dpd->up);		
+		$data = array("saldo"=>(int) $saldo->amount_balance_final,"outstanding"=>(int) $outstanding->os,"dpd"=>(int) $dpd->up);		
 		return $this->sendMessage($data,'Get Book Cash Daily');
 	}
 
