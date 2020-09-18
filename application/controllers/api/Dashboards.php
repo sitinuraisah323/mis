@@ -1,5 +1,5 @@
 <?php
-
+error_reporting(0);
 require_once APPPATH.'controllers/api/ApiController.php';
 class Dashboards extends ApiController
 {
@@ -673,32 +673,20 @@ class Dashboards extends ApiController
 	public function unitdpd()
 	{
 		$idUnit = $this->session->userdata('user')->id_unit;
-		$date = $this->input->get('date');
-		if(is_null($date)){
-			$date = date('Y-m-d');
-		}
-		$dateLast = date('Y-m-d', strtotime($date. ' -1 Days'));
-		$today = $this->regular->db
-			->select('count(*) as noa, sum(amount) as up')
-			->from('units_regularpawns')
-			->where('id_unit',$idUnit)
-			->where('deadline',$date)
-			->where('status_transaction',"N")
-			->get()->row();
-		$last = $this->regular->db
-			->select('count(*) as noa, sum(amount) as up')
-			->from('units_regularpawns')
-			->where('id_unit',$idUnit)
-			->where('deadline <',$date)			
-			->where('status_transaction',"N")
-			->get()->row();
-		$data = new stdClass();
-		$data->today_noa = (int) $today->noa;
-		$data->today_up = (int) $today->up;
-		$data->last_noa = (int) $last->noa;
-		$data->last_up = (int) $last->up;
-		$data->total_noa = $data->today_noa + $data->last_noa;
-		$data->total_up = $data->today_up + $data->last_up;
+		//$sdate = $this->inputdate('Y-m-d', strtotime(date('Y-m-d').' -120 days'));
+		$date = date('Y-m-d');
+
+		$date = date('Y-m-d');
+		$data = $this->db
+					 ->select("customers.name as customer_name,date_sbk,deadline,amount,ROUND(units_regularpawns.capital_lease * 4 * amount) AS tafsiran_sewa,
+						status_transaction,
+						DATEDIFF('$date', units_regularpawns.deadline) AS dpd")
+					 ->from("units_regularpawns")
+					 ->join('customers','units_regularpawns.id_customer = customers.id')
+					 ->where('units_regularpawns.deadline <',$date)
+					 ->where('units_regularpawns.status_transaction ', 'N')
+					 ->where('units_regularpawns.id_unit ', $idUnit)
+					 ->get()->result();		
 		return $this->sendMessage($data,'Get Unit Booking');
 	}
 
@@ -795,7 +783,7 @@ class Dashboards extends ApiController
 						->where('date',$date)	
 						->where('id_unit',$idUnit)	
 						->get()->row();
-				$unit[] = array( "date"=> $date,"pendapatan"=> $CashIn->amount,"pengeluaran"=>$CashOut->amount);
+				$unit[] = array( "date"=> $date,"pendapatan"=>(int) $CashIn->amount,"pengeluaran"=>(int) $CashOut->amount);
 			}
 		}	
 		$unit = array_reverse($unit, true);
@@ -832,6 +820,44 @@ class Dashboards extends ApiController
 		return $this->sendMessage($units,'Successfully get Pendapatan');
 	}
 
+	public function unittargetbooking()
+	{
+		$idUnit = $this->session->userdata('user')->id_unit;
+		$sdate = date('Y-01-01');	
+		$date = date('Y-m-d');	
+		$endval = intval(date('m'));	
+		
+		$unit =array();
+		for ($i=0; $i < $endval; $i++) { 
+			$date = date('M-Y',strtotime('+ '.$i.' month',strtotime($sdate)));
+			$month = date('m',strtotime('+ '.$i.' month',strtotime($sdate)));
+			$edate = date('Y-m-t',strtotime('+ '.$i.' month',strtotime($sdate)));
+			if($month==date('m')){
+				if(date('H')=='20.00'){
+					$date_out = date('Y-m-d');
+				}else{
+					$date_out = date('Y-m-d',strtotime('-1 days',strtotime(date('Y-m-d'))));
+				}
+			}else{
+				$date_out = $edate;
+			}
+			$target = $this->db->select('id_unit,amount_booking,amount_outstanding')
+			                ->from('units_targets')
+			                ->where('month',$month)
+							->where('id_unit',$idUnit)
+							->get()->row();
+			$realBook =$this->regular->getUnitCredit($idUnit,$month);
+			$realOut = $this->db->select('id_unit,os')
+			                ->from('units_outstanding')
+			                ->where('date',$date_out)
+							->where('id_unit',$idUnit)
+							->get()->row();
+			$unit[] = array( "date"=> $date,"target"=>(int)$target->amount_booking,"realisasi"=>(int)$realBook->up,"target_out"=>(int)$target->amount_outstanding,"realisasi_out"=>(int)$realOut->os);			
+		}	
+		$unit = array_reverse($unit, true);
+		return $this->sendMessage($unit,'Get Unit Booking');		
+	}
+
 	public function SummaryRateUnit()
 	{
 		$idUnit = $this->session->userdata('user')->id_unit;
@@ -842,13 +868,23 @@ class Dashboards extends ApiController
 	public function SummaryUnit()
 	{
 		$idUnit = $this->session->userdata('user')->id_unit;
+		$date = date('Y-m-d');
 		$saldo = $this->db
 					 ->where('id_unit', $idUnit)
 					 ->order_by('id','DESC')->get('units_cash_book')->row();
 		$outstanding = $this->db
 					 ->where('id_unit', $idUnit)
 					 ->order_by('id','DESC')->get('units_outstanding')->row();
-		$data = array("saldo"=>$saldo->amount_balance_final,"outstanding"=>$outstanding->os);		
+		
+		$dpd = $this->db->select('sum(amount) as up,count(*) as noa')
+					->from('units_regularpawns')
+					->where('deadline <=',$date)
+					->where('units_regularpawns.date_sbk <=', $date)
+					->where('units_regularpawns.status_transaction','N')
+					->where('units_regularpawns.id_unit',$idUnit)
+					->get()->row();
+
+		$data = array("saldo"=>(int) $saldo->amount_balance_final,"outstanding"=>(int) $outstanding->os,"dpd"=>(int) $dpd->up);		
 		return $this->sendMessage($data,'Get Book Cash Daily');
 	}
 

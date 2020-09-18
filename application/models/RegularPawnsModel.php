@@ -339,4 +339,18 @@ class RegularpawnsModel extends Master
 		);
 	}
 
+	public function getUnitCredit($idUnit, $today)
+	{
+		$upRegular = $this->db->select('sum(amount) as up')->from($this->table)
+			->where('id_unit', $idUnit)
+			->where('MONTH(date_sbk)', $today)->get()->row();
+		$upaMortages = $this->db->select('sum(amount_loan) as up')->from('units_mortages')
+			->where('id_unit', $idUnit)
+			->where('MONTH(date_sbk)', $today)->get()->row();
+
+		return (object)array(
+			'up' => $upRegular->up + $upaMortages->up
+		);
+	}
+
 }

@@ -26,11 +26,20 @@ var KTDashboard = function() {
             dataType:"JSON",
             data:{date:currentDate},
             success:function(response){
+                Temp ="";
                 $.each(response.data, function (index,unit) {
                     outstanding.push(unit.up);
                     noa.push(unit.noa);
-                    lbldate.push(unit.date);                    
+                    lbldate.push(unit.date);       
+                    Temp += "<tr class='rowappendpk1'>";
+                    Temp += "<td class='text-left'><b>"+unit.date+"</b></td>";
+                    Temp += "<td class='text-center'><b>"+unit.noa+"</b></td>";
+                    Temp += "<td class='text-right'><b>"+convertToRupiah(unit.up)+"</b></td>";
+                    Temp += "</tr>";   
+                    //totalnoa += parseInt(unit.noa);
+                    //totalup += parseInt(unit.up);             
                 });
+                $('#tblOutstanding').append(Temp);
             },
             error:function(xhr){
             },
@@ -51,9 +60,13 @@ var KTDashboard = function() {
 			}];			
 			
 			var options = {
-				tooltips: {
-					mode: 'label',
-				},						
+                tooltips: { 
+                            mode: 'label', 
+                            label: 'mylabel', 
+                            callbacks: { 
+                            label: function(tooltipItem, data) { 
+                            return tooltipItem.yLabel.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); }, }, 
+                        }, 						
 				scales: {
 					xAxes: [{
 							stacked: false,
@@ -106,11 +119,30 @@ var KTDashboard = function() {
             dataType:"JSON",
             data:{date:currentDate},
             success:function(response){
+                var Temp 	= "";
+                var totalnoa 	= 0
+                var totalup 	= 0
                 $.each(response.data, function (index,unit) {
                     outstanding.push(unit.up);
                     noa.push(unit.noa);
-                    lbldate.push(unit.date);                    
+                    lbldate.push(unit.date);   
+
+                    Temp += "<tr class='rowappendpk1'>";
+                    Temp += "<td class='text-left'><b>"+unit.date+"</b></td>";
+                    Temp += "<td class='text-center'><b>"+unit.noa+"</b></td>";
+                    Temp += "<td class='text-right'><b>"+convertToRupiah(unit.up)+"</b></td>";
+                    Temp += "</tr>";   
+                    totalnoa += parseInt(unit.noa);
+                    totalup += parseInt(unit.up);                                    
                 });
+
+                Temp += "<tr class='rowappendjabar'>";
+                Temp += "<td class='text-right'> Total</td>";
+                Temp += "<td class='text-center'><b>"+convertToRupiah(totalnoa)+"</b></td>";
+                Temp += "<td class='text-right'><b>"+convertToRupiah(totalup)+"</b></td>";
+                Temp += '</tr>';
+                $('#tblBooking').append(Temp);
+
             },
             error:function(xhr){
 
@@ -133,7 +165,11 @@ var KTDashboard = function() {
                     
                     var options = {
                         tooltips: {
-                            mode: 'label',
+                            mode: 'label', 
+                            label: 'mylabel', 
+                            callbacks: { 
+                            label: function(tooltipItem, data) { 
+                            return tooltipItem.yLabel.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); }, },
                         },						
                         scales: {
                             xAxes: [{
@@ -186,11 +222,29 @@ var KTDashboard = function() {
             dataType:"JSON",
             data:{date:currentDate},
             success:function(response){
+                var Temp ="";
+                var totpencairan=0;
+                var totpelunasan=0;
                 $.each(response.data, function (index,unit) {
                     pencairan.push(unit.pencairan);
                     pelunasan.push(unit.pelunasan);
-                    lbldate.push(unit.date);                    
+                    lbldate.push(unit.date); 
+
+                    Temp += "<tr class='rowappendpk1'>";
+                    Temp += "<td class='text-left'><b>"+unit.date+"</b></td>";
+                    Temp += "<td class='text-right'><b>"+convertToRupiah(unit.pencairan)+"</b></td>";
+                    Temp += "<td class='text-right'><b>"+convertToRupiah(unit.pelunasan)+"</b></td>";
+                    Temp += "</tr>";   
+                    totpencairan += parseInt(unit.pencairan);
+                    totpelunasan += parseInt(unit.pelunasan);                      
                 });
+
+                    Temp += "<tr class='rowappendpk1'>";
+                    Temp += "<td class='text-right'>Total </td>";
+                    Temp += "<td class='text-right'><b>"+convertToRupiah(totpencairan)+"</b></td>";
+                    Temp += "<td class='text-right'><b>"+convertToRupiah(totpelunasan)+"</b></td>";
+                    Temp += "</tr>"; 
+                    $("#tblpencairan").append(Temp);
             },
             error:function(xhr){
 
@@ -213,7 +267,11 @@ var KTDashboard = function() {
                     
                     var options = {
                         tooltips: {
-                            mode: 'label',
+                            mode: 'label', 
+                            label: 'mylabel', 
+                            callbacks: { 
+                            label: function(tooltipItem, data) { 
+                            return tooltipItem.yLabel.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); }, },
                         },						
                         scales: {
                             xAxes: [{
@@ -254,6 +312,138 @@ var KTDashboard = function() {
         });
     }
 
+    var dpdchart = function() {
+        var packet = [];
+        var totpacket1 =0;
+        var totpacket2 =0;
+        var totpacket3 =0;
+        var lblpacket = [];
+
+        KTApp.block('#form_dpd .kt-widget14', {});
+        $.ajax({
+            url: "<?php echo base_url('api/dashboards/unitdpd');?>",
+            type:"GET",
+            dataType:"JSON",
+            data:{date:currentDate},
+            success:function(response){
+                var Temppaket1 	= "";
+                var Temppaket2	= "";
+                var Temppaket3	= "";
+
+                $.each(response.data, function (index,unit) {
+                    if(parseInt(unit.dpd)>0 && parseInt(unit.dpd) <=15){
+                        totpacket1 += parseInt(unit.amount);
+                        Temppaket1 += "<tr class='rowappendpk1'>";
+					    Temppaket1 += "<td class='text-left'><b>"+unit.customer_name+"</b></td>";
+					    Temppaket1 += "<td class='text-center'><b>"+unit.date_sbk+"</b></td>";
+					    Temppaket1 += "<td class='text-center'><b>"+unit.deadline+"</b></td>";
+					    Temppaket1 += "<td class='text-right'><b>"+convertToRupiah(unit.amount)+"</b></td>";
+					    Temppaket1 += "<td class='text-center'><b>"+unit.dpd+"</b></td>";
+                        Temppaket1 += "</tr>";
+
+                    }
+                    if(parseInt(unit.dpd) >= 16 && parseInt(unit.dpd) <=30){
+                        totpacket2 += parseInt(unit.amount);
+                        Temppaket2 += "<tr class='rowappendpk1'>";
+					    Temppaket2 += "<td class='text-left'><b>"+unit.customer_name+"</b></td>";
+					    Temppaket2 += "<td class='text-center'><b>"+unit.date_sbk+"</b></td>";
+					    Temppaket2 += "<td class='text-center'><b>"+unit.deadline+"</b></td>";
+					    Temppaket2 += "<td class='text-right'><b>"+convertToRupiah(unit.amount)+"</b></td>";
+					    Temppaket2 += "<td class='text-center'><b>"+unit.dpd+"</b></td>";
+                        Temppaket2 += "</tr>";
+                    }
+                    if(parseInt(unit.dpd) > 31){
+                        totpacket3 += parseInt(unit.amount);
+                        Temppaket3 += "<tr class='rowappendpk1'>";
+					    Temppaket3 += "<td class='text-left'><b>"+unit.customer_name+"</b></td>";
+					    Temppaket3 += "<td class='text-center'><b>"+unit.date_sbk+"</b></td>";
+					    Temppaket3 += "<td class='text-center'><b>"+unit.deadline+"</b></td>";
+					    Temppaket3 += "<td class='text-right'><b>"+convertToRupiah(unit.amount)+"</b></td>";
+					    Temppaket3 += "<td class='text-center'><b>"+unit.dpd+"</b></td>";
+                        Temppaket3 += "</tr>";
+                    }                   
+                });
+                packet.push(totpacket1,totpacket2,totpacket3);
+                if(Temppaket1){
+                    Temppaket1 += "<tr class='rowappendjabar'>";
+                    Temppaket1 += "<td class='text-right' colspan='3'>DPD <= 15 hari - (Total)</td>";
+                    Temppaket1 += "<td class='text-right'><b>"+convertToRupiah(totpacket1)+"</b></td>";
+                    Temppaket1 += "<td class='text-right'><b></b></td>";
+                    Temppaket1 += '</tr>';
+			    }
+                if(Temppaket2){
+                    Temppaket2 += "<tr class='rowappendjabar'>";
+                    Temppaket2 += "<td class='text-right' colspan='3'>DPD >= 16 & <=30 hari - (Total) </td>";
+                    Temppaket2 += "<td class='text-right'><b>"+convertToRupiah(totpacket2)+"</b></td>";
+                    Temppaket2 += "<td class='text-right'><b></b></td>";
+                    Temppaket2 += '</tr>';
+			    }
+                if(Temppaket3){
+                    Temppaket3 += "<tr class='rowappendjabar'>";
+                    Temppaket3 += "<td class='text-right' colspan='3'> DPD >= 30 hari - (Total) </td>";
+                    Temppaket3 += "<td class='text-right'><b>"+convertToRupiah(totpacket3)+"</b></td>";
+                    Temppaket3 += "<td class='text-right'><b></b></td>";
+                    Temppaket3 += '</tr>';
+			    }
+                $('#tbldpd').append(Temppaket1);
+                $('#tbldpd').append(Temppaket2);
+                $('#tbldpd').append(Temppaket3);
+            },
+            error:function(xhr){
+
+            },
+            complete:function(){
+                    //console.log(packet);
+                    var datapacket = packet;
+                    var datalabel 	= ["Normal","Warning","Danger"];
+                    var data = [{
+                        label: 'DPD',
+                        backgroundColor: ['#008000','#b3b300','#e62e00'],
+                        yAxisID: 'A',
+                        data: datapacket
+                    }];			
+                    
+                    var options = {
+                        tooltips: { 
+                                    mode: 'label', 
+                                    label: 'mylabel', 
+                                    callbacks: { 
+                                        label: function(tooltipItem, data) { 
+                                            return tooltipItem.yLabel.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); }, }, 
+                                    }, 
+                        scales: {
+                            xAxes: [{
+                                    stacked: false,
+                                    gridLines: {
+                                        display: false
+                                    }
+                                }],
+                            yAxes: [{
+                                    id: 'A',
+                                    stacked: false,						
+                                    ticks: {
+                                        beginAtZero: true,
+                                        callback: function (value) {
+                                            return convertToRupiah(value);
+                                        }
+                                    }
+                                }]
+                        }
+                };
+		        var ctx = document.getElementById("grapDPD");
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: datalabel,
+                        datasets: data
+                    },
+                    options: options
+                });
+                KTApp.unblock('#form_dpd .kt-widget14', {}); 
+            }
+        });
+    }
+
     var kaschart = function() {
         var pendapatan = [];
         var pengeluaran = [];
@@ -266,11 +456,29 @@ var KTDashboard = function() {
             dataType:"JSON",
             data:{date:currentDate},
             success:function(response){
+                var Temp ="";
+                var totcashin =0;
+                var totcashout =0;
                 $.each(response.data, function (index,unit) {
                     pendapatan.push(unit.pendapatan);
                     pengeluaran.push(unit.pengeluaran);
-                    lbldate.push(unit.date);                    
+                    lbldate.push(unit.date); 
+
+                    Temp += "<tr class='rowappendpk1'>";
+                    Temp += "<td class='text-left'><b>"+unit.date+"</b></td>";
+                    Temp += "<td class='text-right'><b>"+convertToRupiah(unit.pendapatan)+"</b></td>";
+                    Temp += "<td class='text-right'><b>"+convertToRupiah(unit.pengeluaran)+"</b></td>";
+                    Temp += "</tr>";   
+                    totcashin += parseInt(unit.pendapatan);
+                    totcashout += parseInt(unit.pengeluaran);                    
                 });
+
+                    Temp += "<tr class='rowappendpk1'>";
+                    Temp += "<td class='text-right'>Total </td>";
+                    Temp += "<td class='text-right'><b>"+convertToRupiah(totcashin)+"</b></td>";
+                    Temp += "<td class='text-right'><b>"+convertToRupiah(totcashout)+"</b></td>";
+                    Temp += "</tr>";  
+                    $('#tblprofit').append(Temp);
             },
             error:function(xhr){
 
@@ -293,7 +501,11 @@ var KTDashboard = function() {
                     
                     var options = {
                         tooltips: {
-                            mode: 'label',
+                            mode: 'label', 
+                            label: 'mylabel', 
+                            callbacks: { 
+                            label: function(tooltipItem, data) { 
+                            return tooltipItem.yLabel.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); }, },
                         },						
                         scales: {
                             xAxes: [{
@@ -347,18 +559,36 @@ var KTDashboard = function() {
             dataType:"JSON",
             data:{date:currentDate},
             success:function(response){
+                var Temp="";
+                var totnoa=0;
+                var totup=0;
                 $.each(response.data, function (index,unit) {
                     noa.push(unit.noa);
                     rate.push(unit.rate);
                     TotRate.push(unit.tot_rate);                    
-                    Totup.push(unit.up);                    
+                    Totup.push(unit.up); 
+                    
+                    Temp += "<tr class='rowappendpk1'>";
+                    Temp += "<td class='text-left'><b>"+unit.rate+"</b></td>";
+                    Temp += "<td class='text-right'><b>"+convertToRupiah(unit.noa)+"</b></td>";
+                    Temp += "<td class='text-right'><b>"+convertToRupiah(unit.up)+"</b></td>";
+                    Temp += "</tr>";   
+                    totnoa += parseInt(unit.noa);
+                    totup += parseInt(unit.up);                   
                 });
+                    Temp += "<tr class='rowappendpk1'>";
+                    Temp += "<td class='text-left'>Total </td>";
+                    Temp += "<td class='text-right'><b>"+convertToRupiah(totnoa)+"</b></td>";
+                    Temp += "<td class='text-right'><b>"+convertToRupiah(totup)+"</b></td>";
+                    Temp += "</tr>"; 
+                    $('#tblrate').append(Temp); 
+                   
             },
             error:function(xhr){
 
             },
             complete:function(){
-                console.log(rate);
+                    //console.log(rate);
                     var dataNoa 	= noa;
                     var dataRate	= rate;
                     var TotRate	    = TotRate;
@@ -372,7 +602,11 @@ var KTDashboard = function() {
                     
                     var options = {
                         tooltips: {
-                            mode: 'label',
+                            mode: 'label', 
+                            label: 'mylabel', 
+                            callbacks: { 
+                            label: function(tooltipItem, data) { 
+                            return tooltipItem.yLabel.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); }, },
                         },						
                         scales: {
                             xAxes: [{
@@ -407,16 +641,220 @@ var KTDashboard = function() {
         });
     }
 
+    var TarBookinghart = function() {
+        var target = [];
+        var realisasi = [];
+        var month = [];
+
+        KTApp.block('#form_tarbooking .kt-widget14', {});
+        $.ajax({
+            url: "<?php echo base_url('api/dashboards/unittargetbooking');?>",
+            type:"GET",
+            dataType:"JSON",
+            data:{date:currentDate},
+            success:function(response){
+                var Temp ="";
+                var tottarget =0;
+                var totbooking =0;
+
+                $.each(response.data, function (index,unit) {
+                    target.push(unit.target);
+                    realisasi.push(unit.realisasi);
+                    month.push(unit.date);    
+
+                    Temp += "<tr class='rowappendpk1'>";
+                    Temp += "<td class='text-left'><b>"+unit.date+"</b></td>";
+                    if(unit.realisasi > unit.target){
+                        status="<i class='fa fa-caret-up text-success'></i><span class='kt-widget16__price  kt-font-success'> Melebihi Target</span>";
+                    }else{
+                        status="<i class='fa fa-caret-down text-danger'></i><span class='kt-widget16__price  kt-font-danger'> Dibawah Target</span>";
+                    }
+                    Temp += "<td class='text-left'><b>"+status+"</b></td>";
+                    Temp += "<td class='text-right'><b>"+convertToRupiah(unit.target)+"</b></td>";
+                    Temp += "<td class='text-right'><b>"+convertToRupiah(unit.realisasi)+"</b></td>";
+                    Temp += "</tr>";   
+                    tottarget += parseInt(unit.target);
+                    totbooking += parseInt(unit.realisasi);                 
+                });
+
+                    Temp += "<tr class='rowappendpk1'>";
+                    Temp += "<td class='text-right' colspan='2'>Total</td>";
+                    Temp += "<td class='text-right'><b>"+convertToRupiah(tottarget)+"</b></td>";
+                    Temp += "<td class='text-right'><b>"+convertToRupiah(totbooking)+"</b></td>";
+                    Temp += "</tr>";  
+                    $("#tbltarbook").append(Temp);
+            },
+            error:function(xhr){
+
+            },
+            complete:function(){
+                    console.log(month);
+                    var datatarget 	    = target;
+                    var datarealisasi	= realisasi;
+                    var datamonth	    = month;
+                    var data = [{
+                            label: 'Target',
+                            backgroundColor: '#ff0066',
+                            yAxisID: 'A',
+                            data: datatarget
+                        },{
+                            label: 'Realisasi',
+                            backgroundColor: '#0066ff',
+                            yAxisID: 'A',
+                            data: datarealisasi
+                        }];			
+                    
+                    var options = {
+                        tooltips: {
+                            mode: 'label', 
+                            label: 'mylabel', 
+                            callbacks: { 
+                            label: function(tooltipItem, data) { 
+                            return tooltipItem.yLabel.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); }, },
+                        },						
+                        scales: {
+                            xAxes: [{
+                                    stacked: false,
+                                    gridLines: {
+                                        display: false
+                                    }
+                                }],
+                            yAxes: [{
+                                    id: 'A',
+                                    stacked: false,						
+                                    ticks: {
+                                        beginAtZero: true,
+                                        callback: function (value) {
+                                            return convertToRupiah(value);
+                                        }
+                                    }
+                                }]
+                        }
+                };
+		        var ctx = document.getElementById("graptarBooking");
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: datamonth,
+                        datasets: data
+                    },
+                    options: options
+                });
+                KTApp.unblock('#form_tarbooking .kt-widget14', {}); 
+            }
+        });
+    }
+
+    var TarOutstandinghart = function() {
+        var target = [];
+        var realisasi = [];
+        var month = [];
+
+        KTApp.block('#form_tarout .kt-widget14', {});
+        $.ajax({
+            url: "<?php echo base_url('api/dashboards/unittargetbooking');?>",
+            type:"GET",
+            dataType:"JSON",
+            data:{date:currentDate},
+            success:function(response){
+                var Temp ="";
+                var tottarget ="";
+                var totrealisasi ="";
+                $.each(response.data, function (index,unit) {
+                    target.push(unit.target_out);
+                    realisasi.push(unit.realisasi_out);
+                    month.push(unit.date);     
+
+                    Temp += "<tr class='rowappendpk1'>";
+                    Temp += "<td class='text-left'><b>"+unit.date+"</b></td>";
+                    if(unit.realisasi_out > unit.target_out){
+                        status="<i class='fa fa-caret-up text-success'></i><span class='kt-widget16__price  kt-font-success'> Melebihi Target</span>";
+                    }else{
+                        status="<i class='fa fa-caret-down text-danger'></i><span class='kt-widget16__price  kt-font-danger'> Dibawah Target</span>";
+                    }
+                    Temp += "<td class='text-left'><b>"+status+"</b></td>";
+                    Temp += "<td class='text-right'><b>"+convertToRupiah(unit.target_out)+"</b></td>";
+                    Temp += "<td class='text-right'><b>"+unit.realisasi_out+"</b></td>";
+                    Temp += "</tr>";   
+                    tottarget += parseInt(unit.target_out);
+                    totrealisasi += parseInt(unit.realisasi_out);
+
+                });
+                    $("#tbltarout").append(Temp);
+            },
+            error:function(xhr){
+
+            },
+            complete:function(){
+                    console.log(month);
+                    var datatarget 	    = target;
+                    var datarealisasi	= realisasi;
+                    var datamonth	    = month;
+                    var data = [{
+                            label: 'Target',
+                            backgroundColor: '#ff0066',
+                            yAxisID: 'A',
+                            data: datatarget
+                        },{
+                            label: 'Realisasi',
+                            backgroundColor: '#00b33c',
+                            yAxisID: 'A',
+                            data: datarealisasi
+                        }];			
+                    
+                    var options = {
+                        tooltips: {
+                            mode: 'label', 
+                            label: 'mylabel', 
+                            callbacks: { 
+                            label: function(tooltipItem, data) { 
+                            return tooltipItem.yLabel.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); }, },
+                        },						
+                        scales: {
+                            xAxes: [{
+                                    stacked: false,
+                                    gridLines: {
+                                        display: false
+                                    }
+                                }],
+                            yAxes: [{
+                                    id: 'A',
+                                    stacked: false,						
+                                    ticks: {
+                                        beginAtZero: true,
+                                        callback: function (value) {
+                                            return convertToRupiah(value);
+                                        }
+                                    }
+                                }]
+                        }
+                };
+		        var ctx = document.getElementById("graptarOut");
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: datamonth,
+                        datasets: data
+                    },
+                    options: options
+                });
+                KTApp.unblock('#form_tarout .kt-widget14', {}); 
+            }
+        });
+    }
+
     return {
         // Init demos
         init: function() {
             // init charts
             outstandingchart(); 
             bookingchart(); 
-            //dpdchart(); 
+            dpdchart(); 
             pencairanchart();
             kaschart();
             SummaryRatechart();
+            TarBookinghart();
+            TarOutstandinghart();
             // demo loading
             var loading = new KTDialog({'type': 'loader', 'placement': 'top center', 'message': 'Loading ...'});
             loading.show();
@@ -431,8 +869,11 @@ var KTDashboard = function() {
 function initCash(){
     var saldo=0;
     var outstanding=0;
+    var dpd=0;
     KTApp.block('#form_saldounit .kt-portlet', {});
-    KTApp.block('#form_cardOut .kt-portlet', {});    
+    KTApp.block('#form_cardOut .kt-portlet', {}); 
+    KTApp.block('#form_cardDPD .kt-portlet', {}); 
+       
     $.ajax({
         url: "<?php echo base_url('api/dashboards/SummaryUnit');?>",
         type:"GET",
@@ -440,6 +881,7 @@ function initCash(){
         success:function(response){
             saldo = response.data.saldo;
             outstanding = response.data.outstanding;
+            dpd = response.data.dpd;
            
         },
         error:function(xhr){
@@ -448,8 +890,11 @@ function initCash(){
         complete:function(){
             $('.cash-saldo').text(convertToRupiah(saldo));
             $('.Outstanding').text(convertToRupiah(outstanding));
+            $('.dpd-unit').text(convertToRupiah(dpd));
           KTApp.unblock('#form_saldounit .kt-portlet', {}); 
-          KTApp.unblock('#form_cardOut .kt-portlet', {});           
+          KTApp.unblock('#form_cardOut .kt-portlet', {});  
+          KTApp.unblock('#form_cardDPD .kt-portlet', {});  
+                   
         }
     });
 }

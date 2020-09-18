@@ -52,7 +52,7 @@ $this->load->view('temp/MenuBar.php');
                                     <a class="kt-link cash-saldo" href="#">0</a>
                                 </h3>
                                 <div class="kt-iconbox__content">
-                                    Saldo  Unit
+                                    Saldo
                                 </div>
                             </div>
                         </div>
@@ -90,6 +90,7 @@ $this->load->view('temp/MenuBar.php');
                 </div>
 
                 <div class="col-lg-4">
+                <form id="form_cardDPD" class="form-horizontal">
                     <div class="kt-portlet kt-iconbox kt-iconbox--brand kt-iconbox--animate-slower">
                     <div class="kt-portlet__body">
                         <div class="kt-iconbox__body">
@@ -104,7 +105,7 @@ $this->load->view('temp/MenuBar.php');
                             </div>
                             <div class="kt-iconbox__desc">
                                 <h3 class="kt-iconbox__title">
-                                    <a class="kt-link Average-Rate" href="#">0</a>
+                                    <a class="kt-link dpd-unit" href="#">0</a>
                                 </h3>
                                 <div class="kt-iconbox__content">
                                    Day Past Due(DPD)
@@ -113,6 +114,7 @@ $this->load->view('temp/MenuBar.php');
                         </div>
                         </div>
                     </div>
+                    </form>
                 </div>
 
                 <div class="col-xl-6 col-lg-6">
@@ -125,12 +127,35 @@ $this->load->view('temp/MenuBar.php');
                                     Review Booking            
                                 </h3>
                                 <span class="kt-widget14__desc">
-                                    Booking today & yesterday
+                                    Booking on <?php echo date('F'); ?>
                                 </span>
                             </div>	 
                             <div class="Kt-widget11">	
                                     <canvas id="grapBooking" style="height:200px;"></canvas>
                             </div> 
+                            <hr/>
+                            <!--begin::Accordion-->
+                            <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
+                                <div class="card">
+                                    <div class="card-header" id="headingBook">
+                                        <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseBook" aria-expanded="true" aria-controls="collapseBook">
+                                            View Detail
+                                        </div>
+                                    </div>
+                                    <div id="collapseBook" class="collapse" aria-labelledby="headingBook" data-parent="#accordionExample3">
+                                        <div class="card-body">
+                                            <table class="table" id="tblBooking"> 
+                                            <tr>
+                                                <td class="text-left"><b>Date</b></td>
+                                                <td class="text-center"><b>Noa</b></td>
+                                                <td class="text-right"><b>Amount</b></td>
+                                            </tr>                                       
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>                           
+                            </div>
+                            <!--end::Accordion-->
                         </div>
                     </div>		
                     </form>
@@ -147,12 +172,35 @@ $this->load->view('temp/MenuBar.php');
                                     Review Outstanding            
                                 </h3>
                                 <span class="kt-widget14__desc">
-                                    perfomance outstanding unit
+                                    Outstanding unit on <?php echo date('F'); ?>
                                 </span>
                             </div>	 
                             <div class="kt-widget11">	                               
                                 <canvas id="grapOutstanding" style="height:200px;"></canvas> 
                             </div> 
+                            <hr/>
+                            <!--begin::Accordion-->
+                            <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
+                                <div class="card">
+                                    <div class="card-header" id="headingOut">
+                                        <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseOut" aria-expanded="true" aria-controls="collapseOut">
+                                            View Detail
+                                        </div>
+                                    </div>
+                                    <div id="collapseOut" class="collapse" aria-labelledby="headingOut" data-parent="#accordionExample3">
+                                        <div class="card-body">
+                                            <table class="table" id="tblOutstanding"> 
+                                            <tr>
+                                                <td class="text-left"><b>Date</b></td>
+                                                <td class="text-center"><b>Noa</b></td>
+                                                <td class="text-right"><b>Amount</b></td>
+                                            </tr>                                       
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>                           
+                            </div>
+                            <!--end::Accordion-->
                         </div>
                     </div>
                     </form>		
@@ -161,6 +209,7 @@ $this->load->view('temp/MenuBar.php');
 
                 <div class="col-xl-6 col-lg-6">
                     <!--begin:: Widgets-->
+                    <form id="form_dpd" class="form-horizontal">
                     <div class="kt-portlet kt-portlet--height-fluid">
                         <div class="kt-widget14">
                             <div class="kt-widget14__header">
@@ -168,30 +217,40 @@ $this->load->view('temp/MenuBar.php');
                                     Review Day Past Due(DPD)            
                                 </h3>
                                 <span class="kt-widget14__desc">
-                                    Day Past Due(DPD)  today & yesterday
+                                    DPD on <?php echo date('F'); ?>
                                 </span>
                             </div>	 
-                            <div class="kt-widget14__content">	
-                                <div class="kt-widget14__chart">
-                                    <div id="kt_chart_dpd" style="height: 150px; width: 150px;"></div>
-                                </div> 
-                                <div class="kt-widget14__legends">
-                                    <div class="kt-widget14__legend">
-                                        <span class="kt-widget14__bullet kt-bg-danger"></span>
-                                        <span class="kt-widget14__stats">70</span>
+                            <div class="kt-widget11">	                               
+                                <canvas id="grapDPD" style="height:200px;"></canvas> 
+                            </div>  
+                            <hr/>
+                            <!--begin::Accordion-->
+                            <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
+                                <div class="card">
+                                    <div class="card-header" id="headingDPD">
+                                        <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseDPD" aria-expanded="true" aria-controls="collapseDPD">
+                                            View Detail
+                                        </div>
                                     </div>
-                                    <div class="kt-widget14__legend">
-                                        <span class="kt-widget14__bullet kt-bg-brand"></span>
-                                        <span class="kt-widget14__stats">30</span>
+                                    <div id="collapseDPD" class="collapse" aria-labelledby="headingDPD" data-parent="#accordionExample3">
+                                        <div class="card-body">
+                                            <table class="table" id="tbldpd"> 
+                                            <tr>
+                                                <td class="text-left"><b>Customer</b></td>
+                                                <td class="text-center"><b>Tanggal Kredit</b></td>
+                                                <td class="text-center"><b>Tanggal Deadline</b></td>
+                                                <td class="text-right"><b>UP</b></td>
+                                                <td class="text-center"><b>DPD</b></td>
+                                            </tr>                                       
+                                            </table>
+                                        </div>
                                     </div>
-                                    <div class="kt-widget14__legend">
-                                        <span class="kt-widget14__bullet kt-bg-warning"></span>
-                                        <span class="kt-widget14__stats">40</span>
-                                    </div>
-                                </div>			
-                            </div> 
+                                </div>                           
+                            </div>
+                            <!--end::Accordion-->
                         </div>
                     </div>		
+                    </form>
                     <!--end:: Widgets-->    
                 </div>
 
@@ -205,12 +264,35 @@ $this->load->view('temp/MenuBar.php');
                                     Review Pencairan & Pelunasan           
                                 </h3>
                                 <span class="kt-widget14__desc">
-                                    Pencairan Reguler & Cicilan
+                                    Pencairan & Pelunasan on <?php echo date('F'); ?>
                                 </span>
                             </div>	 
                             <div class="kt-widget11">	                               
                                 <canvas id="grapPencairan" style="height:200px;"></canvas> 
-                            </div>  
+                            </div> 
+                            <hr/>
+                            <!--begin::Accordion-->
+                            <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
+                                <div class="card">
+                                    <div class="card-header" id="headingPencairan">
+                                        <div class="card-title collapsed" data-toggle="collapse" data-target="#collapsePencairan" aria-expanded="true" aria-controls="collapsePencairan">
+                                            View Detail
+                                        </div>
+                                    </div>
+                                    <div id="collapsePencairan" class="collapse" aria-labelledby="headingPencairan" data-parent="#accordionExample3">
+                                        <div class="card-body">
+                                            <table class="table" id="tblpencairan"> 
+                                            <tr>
+                                                <td class="text-left"><b>Date</b></td>
+                                                <td class="text-right"><b>Pencairan</b></td>
+                                                <td class="text-right"><b>Pelunasan</b></td>
+                                            </tr>                                       
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>                           
+                            </div>
+                            <!--end::Accordion--> 
                         </div>
                     </div>		
                     </form>
@@ -227,12 +309,35 @@ $this->load->view('temp/MenuBar.php');
                                     Review Rate           
                                 </h3>
                                 <span class="kt-widget14__desc">
-                                    Rate Bunga Rguler & Cicilan
+                                    summary Rate Reguler
                                 </span>
                             </div>	 
                             <div class="kt-widget11">	                               
                                 <canvas id="grapRate" style="height:200px;"></canvas> 
                             </div>  
+                            <hr/>
+                            <!--begin::Accordion-->
+                            <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
+                                <div class="card">
+                                    <div class="card-header" id="headingRate">
+                                        <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseRate" aria-expanded="true" aria-controls="collapseRate">
+                                            View Detail
+                                        </div>
+                                    </div>
+                                    <div id="collapseRate" class="collapse" aria-labelledby="headingRate" data-parent="#accordionExample3">
+                                        <div class="card-body">
+                                            <table class="table" id="tblrate"> 
+                                            <tr>
+                                                <td class="text-left"><b>Rate</b></td>
+                                                <td class="text-right"><b>Noa</b></td>                                                
+                                                <td class="text-right"><b>Amount</b></td>                                                
+                                            </tr>                                       
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>                           
+                            </div>
+                            <!--end::Accordion-->
                         </div>
                     </div>		
                     </form>
@@ -249,12 +354,127 @@ $this->load->view('temp/MenuBar.php');
                                     Review Pendaptan & Pengeluaran            
                                 </h3>
                                 <span class="kt-widget14__desc">
-                                    Pendaptan & Pengeluaran
+                                    Pendaptan & Pengeluaran on <?php echo date('F'); ?>
                                 </span>
                             </div>	 
                             <div class="kt-widget11">	                               
                                 <canvas id="grapkas" style="height:200px;"></canvas> 
                             </div>  
+                            <hr/>
+                            <!--begin::Accordion-->
+                            <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
+                                <div class="card">
+                                    <div class="card-header" id="headingprofit">
+                                        <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseprofit" aria-expanded="true" aria-controls="collapseprofit">
+                                            View Detail
+                                        </div>
+                                    </div>
+                                    <div id="collapseprofit" class="collapse" aria-labelledby="headingprofit" data-parent="#accordionExample3">
+                                        <div class="card-body">
+                                            <table class="table" id="tblprofit"> 
+                                            <tr>
+                                                <td class="text-left"><b>Date</b></td>
+                                                <td class="text-right"><b>Pendapatan</b></td>
+                                                <td class="text-right"><b>Pengeluaran</b></td>
+                                            </tr>                                       
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>                           
+                            </div>
+                            <!--end::Accordion-->
+                        </div>
+                    </div>	
+                    </form>	
+                    <!--end:: Widgets-->    
+                </div>
+
+                <div class="col-xl-6 col-lg-6">
+                    <!--begin:: Widgets-->
+                    <form id="form_tarbooking" class="form-horizontal">
+                    <div class="kt-portlet kt-portlet--height-fluid">
+                        <div class="kt-widget14">
+                            <div class="kt-widget14__header">
+                                <h3 class="kt-widget14__title">
+                                    Review Target Booking            
+                                </h3>
+                                <span class="kt-widget14__desc">
+                                    Target Booking on <?php echo date('Y'); ?>
+                                </span>
+                            </div>	 
+                            <div class="kt-widget11">	                               
+                                <canvas id="graptarBooking" style="height:200px;"></canvas> 
+                            </div>  
+                            <hr/>
+                            <!--begin::Accordion-->
+                            <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
+                                <div class="card">
+                                    <div class="card-header" id="headingtarBook">
+                                        <div class="card-title collapsed" data-toggle="collapse" data-target="#collapsetarBook" aria-expanded="true" aria-controls="collapsetarBook">
+                                            View Detail
+                                        </div>
+                                    </div>
+                                    <div id="collapsetarBook" class="collapse" aria-labelledby="headingtarBook" data-parent="#accordionExample3">
+                                        <div class="card-body">
+                                            <table class="table" id="tbltarbook"> 
+                                            <tr>
+                                                <td class="text-left"><b>Month</b></td>
+                                                <td class="text-left"><b>Status</b></td>
+                                                <td class="text-right"><b>Target</b></td>
+                                                <td class="text-right"><b>Realisasi</b></td>
+                                            </tr>                                       
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>                           
+                            </div>
+                            <!--end::Accordion-->
+                        </div>
+                    </div>	
+                    </form>	
+                    <!--end:: Widgets-->    
+                </div>
+
+                <div class="col-xl-6 col-lg-6">
+                    <!--begin:: Widgets-->
+                    <form id="form_tarout" class="form-horizontal">
+                    <div class="kt-portlet kt-portlet--height-fluid">
+                        <div class="kt-widget14">
+                            <div class="kt-widget14__header">
+                                <h3 class="kt-widget14__title">
+                                    Review Target Outstanding            
+                                </h3>
+                                <span class="kt-widget14__desc">
+                                    Target Outstanding on <?php echo date('Y'); ?>
+                                </span>
+                            </div>	 
+                            <div class="kt-widget11">	                               
+                                <canvas id="graptarOut" style="height:200px;"></canvas> 
+                            </div> 
+                            <hr/>
+                            <!--begin::Accordion-->
+                            <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
+                                <div class="card">
+                                    <div class="card-header" id="headingtarOut">
+                                        <div class="card-title collapsed" data-toggle="collapse" data-target="#collapsetarOut" aria-expanded="true" aria-controls="collapsetarOut">
+                                            View Detail
+                                        </div>
+                                    </div>
+                                    <div id="collapsetarOut" class="collapse" aria-labelledby="headingtarOut" data-parent="#accordionExample3">
+                                        <div class="card-body">
+                                            <table class="table" id="tbltarout"> 
+                                            <tr>
+                                                <td class="text-left"><b>Month</b></td>
+                                                <td class="text-left"><b>Status</b></td>
+                                                <td class="text-right"><b>Target</b></td>
+                                                <td class="text-right"><b>Realisasi</b></td>
+                                            </tr>                                       
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>                           
+                            </div>
+                            <!--end::Accordion--> 
                         </div>
                     </div>	
                     </form>	
