@@ -416,11 +416,12 @@ $this->load->view('temp/MenuBar.php');
                                     </div>
                                     <div id="collapsetarBook" class="collapse" aria-labelledby="headingtarBook" data-parent="#accordionExample3">
                                         <div class="card-body">
-                                            <table class="table" id="tbltarOut"> 
+                                            <table class="table" id="tbltarbook"> 
                                             <tr>
-                                                <td class="text-left"><b>Area</b></td>
-                                                <td class="text-left"><b>Unit</b></td>
-                                                <td class="text-right"><b>Amount</b></td>
+                                                <td class="text-left"><b>Month</b></td>
+                                                <td class="text-left"><b>Status</b></td>
+                                                <td class="text-right"><b>Target</b></td>
+                                                <td class="text-right"><b>Realisasi</b></td>
                                             </tr>                                       
                                             </table>
                                         </div>
@@ -461,11 +462,12 @@ $this->load->view('temp/MenuBar.php');
                                     </div>
                                     <div id="collapsetarOut" class="collapse" aria-labelledby="headingtarOut" data-parent="#accordionExample3">
                                         <div class="card-body">
-                                            <table class="table" id="tbltarOut"> 
+                                            <table class="table" id="tbltarout"> 
                                             <tr>
-                                                <td class="text-left"><b>Area</b></td>
-                                                <td class="text-left"><b>Unit</b></td>
-                                                <td class="text-right"><b>Amount</b></td>
+                                                <td class="text-left"><b>Month</b></td>
+                                                <td class="text-left"><b>Status</b></td>
+                                                <td class="text-right"><b>Target</b></td>
+                                                <td class="text-right"><b>Realisasi</b></td>
                                             </tr>                                       
                                             </table>
                                         </div>

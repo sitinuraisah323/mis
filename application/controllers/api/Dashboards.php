@@ -852,7 +852,7 @@ class Dashboards extends ApiController
 			                ->where('date',$date_out)
 							->where('id_unit',$idUnit)
 							->get()->row();
-			$unit[] = array( "date"=> $date,"target"=>$target->amount_booking,"realisasi"=>$realBook->up,"target_out"=>$target->amount_outstanding,"realisasi_out"=>$realOut->os);			
+			$unit[] = array( "date"=> $date,"target"=>(int)$target->amount_booking,"realisasi"=>(int)$realBook->up,"target_out"=>(int)$target->amount_outstanding,"realisasi_out"=>(int)$realOut->os);			
 		}	
 		$unit = array_reverse($unit, true);
 		return $this->sendMessage($unit,'Get Unit Booking');		

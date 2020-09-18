@@ -653,11 +653,36 @@ var KTDashboard = function() {
             dataType:"JSON",
             data:{date:currentDate},
             success:function(response){
+                var Temp ="";
+                var tottarget =0;
+                var totbooking =0;
+
                 $.each(response.data, function (index,unit) {
                     target.push(unit.target);
                     realisasi.push(unit.realisasi);
-                    month.push(unit.date);                    
+                    month.push(unit.date);    
+
+                    Temp += "<tr class='rowappendpk1'>";
+                    Temp += "<td class='text-left'><b>"+unit.date+"</b></td>";
+                    if(unit.realisasi > unit.target){
+                        status="<i class='fa fa-caret-up text-success'></i><span class='kt-widget16__price  kt-font-success'> Melebihi Target</span>";
+                    }else{
+                        status="<i class='fa fa-caret-down text-danger'></i><span class='kt-widget16__price  kt-font-danger'> Dibawah Target</span>";
+                    }
+                    Temp += "<td class='text-left'><b>"+status+"</b></td>";
+                    Temp += "<td class='text-right'><b>"+convertToRupiah(unit.target)+"</b></td>";
+                    Temp += "<td class='text-right'><b>"+convertToRupiah(unit.realisasi)+"</b></td>";
+                    Temp += "</tr>";   
+                    tottarget += parseInt(unit.target);
+                    totbooking += parseInt(unit.realisasi);                 
                 });
+
+                    Temp += "<tr class='rowappendpk1'>";
+                    Temp += "<td class='text-right' colspan='2'>Total</td>";
+                    Temp += "<td class='text-right'><b>"+convertToRupiah(tottarget)+"</b></td>";
+                    Temp += "<td class='text-right'><b>"+convertToRupiah(totbooking)+"</b></td>";
+                    Temp += "</tr>";  
+                    $("#tbltarbook").append(Temp);
             },
             error:function(xhr){
 
@@ -732,11 +757,30 @@ var KTDashboard = function() {
             dataType:"JSON",
             data:{date:currentDate},
             success:function(response){
+                var Temp ="";
+                var tottarget ="";
+                var totrealisasi ="";
                 $.each(response.data, function (index,unit) {
                     target.push(unit.target_out);
                     realisasi.push(unit.realisasi_out);
-                    month.push(unit.date);                    
+                    month.push(unit.date);     
+
+                    Temp += "<tr class='rowappendpk1'>";
+                    Temp += "<td class='text-left'><b>"+unit.date+"</b></td>";
+                    if(unit.realisasi_out > unit.target_out){
+                        status="<i class='fa fa-caret-up text-success'></i><span class='kt-widget16__price  kt-font-success'> Melebihi Target</span>";
+                    }else{
+                        status="<i class='fa fa-caret-down text-danger'></i><span class='kt-widget16__price  kt-font-danger'> Dibawah Target</span>";
+                    }
+                    Temp += "<td class='text-left'><b>"+status+"</b></td>";
+                    Temp += "<td class='text-right'><b>"+convertToRupiah(unit.target_out)+"</b></td>";
+                    Temp += "<td class='text-right'><b>"+unit.realisasi_out+"</b></td>";
+                    Temp += "</tr>";   
+                    tottarget += parseInt(unit.target_out);
+                    totrealisasi += parseInt(unit.realisasi_out);
+
                 });
+                    $("#tbltarout").append(Temp);
             },
             error:function(xhr){
 
