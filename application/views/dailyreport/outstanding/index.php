@@ -19,12 +19,11 @@
     ?>
     <table class="table" border="1">
             <tr bgcolor="#aaaa55">
-                <td colspan="15" align="center" width="960">JAWA BARAT</td>
+                <td colspan="14" align="center" width="900">JAWA BARAT</td>
             </tr>
             <tr bgcolor="#cccccc">
             <td rowspan="2" align="center"  width="20">No</td>
             <td rowspan="2" align="center" width="120">Unit</td>
-            <td rowspan="2" align="center" width="60">Area</td>
             <!-- <td rowspan="2" align="center" width="25">Open</td>
             <td rowspan="2" align="center" width="20">OJK</td> -->
             <td colspan="2" align="center" width="120">OST Sebelumnya(<?php echo $dateLastOST;?>)</td>
@@ -65,7 +64,6 @@
             <tr>
                 <td align="center"><?php echo $no;?></td>
                 <td align="left"><?php echo $data->name;?></td>
-                <td align="center"><?php echo $data->area;?></td>
                 <!-- <td align="center">-</td>
                 <td align="center">-</td> -->
                 <td align="center"><?php echo $data->ost_yesterday->noa;?></td>
@@ -98,7 +96,7 @@
             <?php } ?>
             <?php endforeach ?>
             <tr>
-                <td align="right" colspan="3"> </td>
+                <td align="right" colspan="2"> </td>
                 <td align="center"><?php echo $totalNoaOstYesterday; ?></td>
                 <td align="right"><?php echo number_format($totalUpaOstYesterday,0); ?></td>
                 <td align="center"><?php echo $totalNoaOstToday; ?></td>
@@ -132,12 +130,11 @@
             <br/><br/>
            <table class="table" border="1">
            <tr bgcolor="#aaaa55">
-                <td colspan="15" align="center" width="960">JAWA TIMUR</td>
+                <td colspan="14" align="center" width="900">JAWA TIMUR</td>
             </tr>
             <tr bgcolor="#cccccc">
             <td rowspan="2" align="center"  width="20">No</td>
             <td rowspan="2" align="center" width="120">Unit</td>
-            <td rowspan="2" align="center" width="60">Area</td>
             <!-- <td rowspan="2" align="center" width="25">Open</td>
             <td rowspan="2" align="center" width="20">OJK</td> -->
             <td colspan="2" align="center" width="120">OST Sebelumnya(<?php echo $dateLastOST;?>)</td>
@@ -178,7 +175,6 @@
             <tr>
                 <td align="center"><?php echo $no;?></td>
                 <td align="left"><?php echo $data->name;?></td>
-                <td align="center"><?php echo $data->area;?></td>
                 <!-- <td align="center">-</td>
                 <td align="center">-</td> -->
                 <td align="center"><?php echo $data->ost_yesterday->noa;?></td>
@@ -211,7 +207,7 @@
             <?php } ?>
             <?php endforeach ?>
             <tr>
-                <td align="right" colspan="3"> </td>
+                <td align="right" colspan="2"> </td>
                 <td align="center"><?php echo $totalNoaOstYesterday; ?></td>
                 <td align="right"><?php echo number_format($totalUpaOstYesterday,0); ?></td>
                 <td align="center"><?php echo $totalNoaOstToday; ?></td>
@@ -245,12 +241,11 @@
 <br/><br/>
            <table class="table" border="1">
            <tr bgcolor="#aaaa55">
-                <td colspan="15" align="center" width="960">NTB</td>
+                <td colspan="14" align="center" width="900">NTB</td>
             </tr>
             <tr bgcolor="#cccccc">
             <td rowspan="2" align="center"  width="20">No</td>
             <td rowspan="2" align="center" width="120">Unit</td>
-            <td rowspan="2" align="center" width="60">Area</td>
             <!-- <td rowspan="2" align="center" width="25">Open</td>
             <td rowspan="2" align="center" width="20">OJK</td> -->
             <td colspan="2" align="center" width="120">OST Sebelumnya(<?php echo $dateLastOST;?>)</td>
@@ -291,7 +286,6 @@
             <tr>
                 <td align="center"><?php echo $no;?></td>
                 <td align="left"><?php echo $data->name;?></td>
-                <td align="center"><?php echo $data->area;?></td>
                 <!-- <td align="center">-</td>
                 <td align="center">-</td> -->
                 <td align="center"><?php echo $data->ost_yesterday->noa;?></td>
@@ -324,7 +318,7 @@
             <?php } ?>
             <?php endforeach ?>
             <tr>
-                <td align="right" colspan="3"> </td>
+                <td align="right" colspan="2"> </td>
                 <td align="center"><?php echo $totalNoaOstYesterday; ?></td>
                 <td align="right"><?php echo number_format($totalUpaOstYesterday,0); ?></td>
                 <td align="center"><?php echo $totalNoaOstToday; ?></td>
@@ -358,12 +352,11 @@
 <br/><br/>
            <table class="table" border="1">
            <tr bgcolor="#aaaa55">
-                <td colspan="15" align="center" width="960">NTT</td>
+                <td colspan="14" align="center" width="900">NTT</td>
             </tr>
             <tr bgcolor="#cccccc">
             <td rowspan="2" align="center"  width="20">No</td>
             <td rowspan="2" align="center" width="120">Unit</td>
-            <td rowspan="2" align="center" width="60">Area</td>
             <!-- <td rowspan="2" align="center" width="25">Open</td>
             <td rowspan="2" align="center" width="20">OJK</td> -->
             <td colspan="2" align="center" width="120">OST Sebelumnya(<?php echo $dateLastOST;?>)</td>
@@ -404,7 +397,6 @@
             <tr>
                 <td align="center"><?php echo $no;?></td>
                 <td align="left"><?php echo $data->name;?></td>
-                <td align="center"><?php echo $data->area;?></td>
                 <!-- <td align="center">-</td>
                 <td align="center">-</td> -->
                 <td align="center"><?php echo $data->ost_yesterday->noa;?></td>
@@ -437,7 +429,7 @@
             <?php } ?>
             <?php endforeach ?>
             <tr>
-                <td align="right" colspan="3"> </td>
+                <td align="right" colspan="2"> </td>
                 <td align="center"><?php echo $totalNoaOstYesterday; ?></td>
                 <td align="right"><?php echo number_format($totalUpaOstYesterday,0); ?></td>
                 <td align="center"><?php echo $totalNoaOstToday; ?></td>
@@ -469,7 +461,7 @@
 <br/>
 <table class="table" border="1">            
     <tr bgcolor="#ffff00">
-        <td align="right" colspan="3" width="200">Total </td>
+        <td align="right" colspan="2" width="140">Total </td>
         <td align="center"  width="40"><?php echo $totalNoaOstYesterday_; ?></td>
         <td align="right" width="80"><?php echo number_format($totalUpaOstYesterday_,0); ?></td>
         <td align="center"  width="40"><?php echo $totalNoaOstToday_; ?></td>

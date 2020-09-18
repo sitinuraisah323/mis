@@ -11,17 +11,19 @@
 		<th colspan="2" align="center" width="130">DPD Hari Ini</th>
 		<th colspan="2" align="center" width="130">Pelunasan DPD Hari Ini</th>
 		<th colspan="2" align="center" width="130">Total DPD</th>
-		<th align="right" width="120">%</th>
+		<th align="right" width="130">Total OST</th>
+		<th align="right" width="100">%</th>
 	</tr>
 	<tr  bgcolor="#cccccc">
 		<th align="center" width="40">Noa</th>
-		<th align="center" width="90">Ost</th>
+		<th align="center" width="90">UP</th>
 		<th align="center" width="40">Noa</th>
-		<th align="center" width="90">Ost</th>
+		<th align="center" width="90">UP</th>
 		<th align="center" width="40">Noa</th>
-		<th align="center" width="90">Ost</th>
+		<th align="center" width="90">UP</th>
 		<th align="center" width="40">Noa</th>
-		<th align="center" width="90">Ost</th>
+		<th align="center" width="90">UP</th>
+		<th></th>
 		<th></th>
 	</tr>
 	</thead>
@@ -36,8 +38,9 @@
 	$dpdTotalNoa=0;
 	$dpdTotalUp=0;
 	$percentage=0;
+	$totalOs = 0;
 	foreach($dpd as $data): $no++;?>
-		<tr>
+		<tr <?php echo $data->percentage*100 > 2.5 ? ' bgcolor="red" ' : '';?> >
 			<td align="center" width="20"><?php echo $no;?></td>
 			<td align="left" width="120"> <?php echo $data->name;?></td>
 			<td align="center" width="100"><?php echo $data->area;?></td>
@@ -51,8 +54,10 @@
 			<td align="right" width="90"><?php echo number_format($data->dpd_repayment_today->ost,0);?></td>
 			<td align="center" width="40"><?php echo $data->total_dpd->noa;?></td>
 			<td align="right" width="90"><?php echo number_format($data->total_dpd->ost,0);?></td>
-			<td align="right" width="120"><?php echo $data->percentage ? $data->percentage*100 : '' ;?></td>
+			<td align="right" width="130"><?php echo number_format($data->total_outstanding->up,0);?></td>
+			<td align="right" width="100"><?php echo $data->percentage ? $data->percentage*100 : '' ;?></td>
 			<?php
+			$totalOs += $data->total_outstanding->up;
 			$dpdYesterdayNoa +=$data->dpd_yesterday->noa;
 			$dpdYesterdayUp +=$data->dpd_yesterday->ost;
 			$dpdTodayNoa +=$data->dpd_today->noa;
@@ -65,7 +70,7 @@
 			?>
 		</tr>
 	<?php endforeach ?>
-		<tr>
+		<tr <?php echo $percentage/$no*100 > 2.5 ? ' bgcolor="red" ' : '';?>>
 			<td align="right" colspan="3">Total </td>
 			<td align="center"><?php echo $dpdYesterdayNoa?></td>
 			<td align="right"><?php echo number_format($dpdYesterdayUp,0);?></td>
@@ -75,6 +80,7 @@
 			<td align="right"><?php echo number_format($dpdRepaymenUp,0);?></td>
 			<td align="center"><?php echo $dpdTotalNoa;?></td>
 			<td align="right"><?php echo number_format($dpdTotalUp,0);?></td>
+			<td align="right"><?php echo  number_format($totalOs*100,2);?></td>
 			<td align="right"><?php echo  number_format($percentage/$no*100,2);?></td>
 		</tr>
 	</tbody>
