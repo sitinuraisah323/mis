@@ -26,11 +26,20 @@ var KTDashboard = function() {
             dataType:"JSON",
             data:{date:currentDate},
             success:function(response){
+                Temp ="";
                 $.each(response.data, function (index,unit) {
                     outstanding.push(unit.up);
                     noa.push(unit.noa);
-                    lbldate.push(unit.date);                    
+                    lbldate.push(unit.date);       
+                    Temp += "<tr class='rowappendpk1'>";
+                    Temp += "<td class='text-left'><b>"+unit.date+"</b></td>";
+                    Temp += "<td class='text-center'><b>"+unit.noa+"</b></td>";
+                    Temp += "<td class='text-right'><b>"+convertToRupiah(unit.up)+"</b></td>";
+                    Temp += "</tr>";   
+                    //totalnoa += parseInt(unit.noa);
+                    //totalup += parseInt(unit.up);             
                 });
+                $('#tblOutstanding').append(Temp);
             },
             error:function(xhr){
             },
@@ -51,9 +60,13 @@ var KTDashboard = function() {
 			}];			
 			
 			var options = {
-				tooltips: {
-					mode: 'label',
-				},						
+                tooltips: { 
+                            mode: 'label', 
+                            label: 'mylabel', 
+                            callbacks: { 
+                            label: function(tooltipItem, data) { 
+                            return tooltipItem.yLabel.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); }, }, 
+                        }, 						
 				scales: {
 					xAxes: [{
 							stacked: false,
@@ -106,11 +119,30 @@ var KTDashboard = function() {
             dataType:"JSON",
             data:{date:currentDate},
             success:function(response){
+                var Temp 	= "";
+                var totalnoa 	= 0
+                var totalup 	= 0
                 $.each(response.data, function (index,unit) {
                     outstanding.push(unit.up);
                     noa.push(unit.noa);
-                    lbldate.push(unit.date);                    
+                    lbldate.push(unit.date);   
+
+                    Temp += "<tr class='rowappendpk1'>";
+                    Temp += "<td class='text-left'><b>"+unit.date+"</b></td>";
+                    Temp += "<td class='text-center'><b>"+unit.noa+"</b></td>";
+                    Temp += "<td class='text-right'><b>"+convertToRupiah(unit.up)+"</b></td>";
+                    Temp += "</tr>";   
+                    totalnoa += parseInt(unit.noa);
+                    totalup += parseInt(unit.up);                                    
                 });
+
+                Temp += "<tr class='rowappendjabar'>";
+                Temp += "<td class='text-right'> Total</td>";
+                Temp += "<td class='text-center'><b>"+convertToRupiah(totalnoa)+"</b></td>";
+                Temp += "<td class='text-right'><b>"+convertToRupiah(totalup)+"</b></td>";
+                Temp += '</tr>';
+                $('#tblBooking').append(Temp);
+
             },
             error:function(xhr){
 
@@ -133,7 +165,11 @@ var KTDashboard = function() {
                     
                     var options = {
                         tooltips: {
-                            mode: 'label',
+                            mode: 'label', 
+                            label: 'mylabel', 
+                            callbacks: { 
+                            label: function(tooltipItem, data) { 
+                            return tooltipItem.yLabel.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); }, },
                         },						
                         scales: {
                             xAxes: [{
@@ -186,11 +222,29 @@ var KTDashboard = function() {
             dataType:"JSON",
             data:{date:currentDate},
             success:function(response){
+                var Temp ="";
+                var totpencairan=0;
+                var totpelunasan=0;
                 $.each(response.data, function (index,unit) {
                     pencairan.push(unit.pencairan);
                     pelunasan.push(unit.pelunasan);
-                    lbldate.push(unit.date);                    
+                    lbldate.push(unit.date); 
+
+                    Temp += "<tr class='rowappendpk1'>";
+                    Temp += "<td class='text-left'><b>"+unit.date+"</b></td>";
+                    Temp += "<td class='text-right'><b>"+convertToRupiah(unit.pencairan)+"</b></td>";
+                    Temp += "<td class='text-right'><b>"+convertToRupiah(unit.pelunasan)+"</b></td>";
+                    Temp += "</tr>";   
+                    totpencairan += parseInt(unit.pencairan);
+                    totpelunasan += parseInt(unit.pelunasan);                      
                 });
+
+                    Temp += "<tr class='rowappendpk1'>";
+                    Temp += "<td class='text-right'>Total </td>";
+                    Temp += "<td class='text-right'><b>"+convertToRupiah(totpencairan)+"</b></td>";
+                    Temp += "<td class='text-right'><b>"+convertToRupiah(totpelunasan)+"</b></td>";
+                    Temp += "</tr>"; 
+                    $("#tblpencairan").append(Temp);
             },
             error:function(xhr){
 
@@ -213,7 +267,11 @@ var KTDashboard = function() {
                     
                     var options = {
                         tooltips: {
-                            mode: 'label',
+                            mode: 'label', 
+                            label: 'mylabel', 
+                            callbacks: { 
+                            label: function(tooltipItem, data) { 
+                            return tooltipItem.yLabel.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); }, },
                         },						
                         scales: {
                             xAxes: [{
@@ -254,6 +312,138 @@ var KTDashboard = function() {
         });
     }
 
+    var dpdchart = function() {
+        var packet = [];
+        var totpacket1 =0;
+        var totpacket2 =0;
+        var totpacket3 =0;
+        var lblpacket = [];
+
+        KTApp.block('#form_dpd .kt-widget14', {});
+        $.ajax({
+            url: "<?php echo base_url('api/dashboards/unitdpd');?>",
+            type:"GET",
+            dataType:"JSON",
+            data:{date:currentDate},
+            success:function(response){
+                var Temppaket1 	= "";
+                var Temppaket2	= "";
+                var Temppaket3	= "";
+
+                $.each(response.data, function (index,unit) {
+                    if(parseInt(unit.dpd)>0 && parseInt(unit.dpd) <=15){
+                        totpacket1 += parseInt(unit.amount);
+                        Temppaket1 += "<tr class='rowappendpk1'>";
+					    Temppaket1 += "<td class='text-left'><b>"+unit.customer_name+"</b></td>";
+					    Temppaket1 += "<td class='text-center'><b>"+unit.date_sbk+"</b></td>";
+					    Temppaket1 += "<td class='text-center'><b>"+unit.deadline+"</b></td>";
+					    Temppaket1 += "<td class='text-right'><b>"+convertToRupiah(unit.amount)+"</b></td>";
+					    Temppaket1 += "<td class='text-center'><b>"+unit.dpd+"</b></td>";
+                        Temppaket1 += "</tr>";
+
+                    }
+                    if(parseInt(unit.dpd) >= 16 && parseInt(unit.dpd) <=30){
+                        totpacket2 += parseInt(unit.amount);
+                        Temppaket2 += "<tr class='rowappendpk1'>";
+					    Temppaket2 += "<td class='text-left'><b>"+unit.customer_name+"</b></td>";
+					    Temppaket2 += "<td class='text-center'><b>"+unit.date_sbk+"</b></td>";
+					    Temppaket2 += "<td class='text-center'><b>"+unit.deadline+"</b></td>";
+					    Temppaket2 += "<td class='text-right'><b>"+convertToRupiah(unit.amount)+"</b></td>";
+					    Temppaket2 += "<td class='text-center'><b>"+unit.dpd+"</b></td>";
+                        Temppaket2 += "</tr>";
+                    }
+                    if(parseInt(unit.dpd) > 31){
+                        totpacket3 += parseInt(unit.amount);
+                        Temppaket3 += "<tr class='rowappendpk1'>";
+					    Temppaket3 += "<td class='text-left'><b>"+unit.customer_name+"</b></td>";
+					    Temppaket3 += "<td class='text-center'><b>"+unit.date_sbk+"</b></td>";
+					    Temppaket3 += "<td class='text-center'><b>"+unit.deadline+"</b></td>";
+					    Temppaket3 += "<td class='text-right'><b>"+convertToRupiah(unit.amount)+"</b></td>";
+					    Temppaket3 += "<td class='text-center'><b>"+unit.dpd+"</b></td>";
+                        Temppaket3 += "</tr>";
+                    }                   
+                });
+                packet.push(totpacket1,totpacket2,totpacket3);
+                if(Temppaket1){
+                    Temppaket1 += "<tr class='rowappendjabar'>";
+                    Temppaket1 += "<td class='text-right' colspan='3'>DPD <= 15 hari - (Total)</td>";
+                    Temppaket1 += "<td class='text-right'><b>"+convertToRupiah(totpacket1)+"</b></td>";
+                    Temppaket1 += "<td class='text-right'><b></b></td>";
+                    Temppaket1 += '</tr>';
+			    }
+                if(Temppaket2){
+                    Temppaket2 += "<tr class='rowappendjabar'>";
+                    Temppaket2 += "<td class='text-right' colspan='3'>DPD >= 16 & <=30 hari - (Total) </td>";
+                    Temppaket2 += "<td class='text-right'><b>"+convertToRupiah(totpacket2)+"</b></td>";
+                    Temppaket2 += "<td class='text-right'><b></b></td>";
+                    Temppaket2 += '</tr>';
+			    }
+                if(Temppaket3){
+                    Temppaket3 += "<tr class='rowappendjabar'>";
+                    Temppaket3 += "<td class='text-right' colspan='3'> DPD >= 30 hari - (Total) </td>";
+                    Temppaket3 += "<td class='text-right'><b>"+convertToRupiah(totpacket3)+"</b></td>";
+                    Temppaket3 += "<td class='text-right'><b></b></td>";
+                    Temppaket3 += '</tr>';
+			    }
+                $('#tbldpd').append(Temppaket1);
+                $('#tbldpd').append(Temppaket2);
+                $('#tbldpd').append(Temppaket3);
+            },
+            error:function(xhr){
+
+            },
+            complete:function(){
+                    //console.log(packet);
+                    var datapacket = packet;
+                    var datalabel 	= ["Normal","Warning","Danger"];
+                    var data = [{
+                        label: 'DPD',
+                        backgroundColor: ['#008000','#b3b300','#e62e00'],
+                        yAxisID: 'A',
+                        data: datapacket
+                    }];			
+                    
+                    var options = {
+                        tooltips: { 
+                                    mode: 'label', 
+                                    label: 'mylabel', 
+                                    callbacks: { 
+                                        label: function(tooltipItem, data) { 
+                                            return tooltipItem.yLabel.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); }, }, 
+                                    }, 
+                        scales: {
+                            xAxes: [{
+                                    stacked: false,
+                                    gridLines: {
+                                        display: false
+                                    }
+                                }],
+                            yAxes: [{
+                                    id: 'A',
+                                    stacked: false,						
+                                    ticks: {
+                                        beginAtZero: true,
+                                        callback: function (value) {
+                                            return convertToRupiah(value);
+                                        }
+                                    }
+                                }]
+                        }
+                };
+		        var ctx = document.getElementById("grapDPD");
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: datalabel,
+                        datasets: data
+                    },
+                    options: options
+                });
+                KTApp.unblock('#form_dpd .kt-widget14', {}); 
+            }
+        });
+    }
+
     var kaschart = function() {
         var pendapatan = [];
         var pengeluaran = [];
@@ -266,11 +456,29 @@ var KTDashboard = function() {
             dataType:"JSON",
             data:{date:currentDate},
             success:function(response){
+                var Temp ="";
+                var totcashin =0;
+                var totcashout =0;
                 $.each(response.data, function (index,unit) {
                     pendapatan.push(unit.pendapatan);
                     pengeluaran.push(unit.pengeluaran);
-                    lbldate.push(unit.date);                    
+                    lbldate.push(unit.date); 
+
+                    Temp += "<tr class='rowappendpk1'>";
+                    Temp += "<td class='text-left'><b>"+unit.date+"</b></td>";
+                    Temp += "<td class='text-right'><b>"+convertToRupiah(unit.pendapatan)+"</b></td>";
+                    Temp += "<td class='text-right'><b>"+convertToRupiah(unit.pengeluaran)+"</b></td>";
+                    Temp += "</tr>";   
+                    totcashin += parseInt(unit.pendapatan);
+                    totcashout += parseInt(unit.pengeluaran);                    
                 });
+
+                    Temp += "<tr class='rowappendpk1'>";
+                    Temp += "<td class='text-right'>Total </td>";
+                    Temp += "<td class='text-right'><b>"+convertToRupiah(totcashin)+"</b></td>";
+                    Temp += "<td class='text-right'><b>"+convertToRupiah(totcashout)+"</b></td>";
+                    Temp += "</tr>";  
+                    $('#tblprofit').append(Temp);
             },
             error:function(xhr){
 
@@ -293,7 +501,11 @@ var KTDashboard = function() {
                     
                     var options = {
                         tooltips: {
-                            mode: 'label',
+                            mode: 'label', 
+                            label: 'mylabel', 
+                            callbacks: { 
+                            label: function(tooltipItem, data) { 
+                            return tooltipItem.yLabel.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); }, },
                         },						
                         scales: {
                             xAxes: [{
@@ -347,12 +559,30 @@ var KTDashboard = function() {
             dataType:"JSON",
             data:{date:currentDate},
             success:function(response){
+                var Temp="";
+                var totnoa=0;
+                var totup=0;
                 $.each(response.data, function (index,unit) {
                     noa.push(unit.noa);
                     rate.push(unit.rate);
                     TotRate.push(unit.tot_rate);                    
-                    Totup.push(unit.up);                    
+                    Totup.push(unit.up); 
+                    
+                    Temp += "<tr class='rowappendpk1'>";
+                    Temp += "<td class='text-left'><b>"+unit.rate+"</b></td>";
+                    Temp += "<td class='text-right'><b>"+convertToRupiah(unit.noa)+"</b></td>";
+                    Temp += "<td class='text-right'><b>"+convertToRupiah(unit.up)+"</b></td>";
+                    Temp += "</tr>";   
+                    totnoa += parseInt(unit.noa);
+                    totup += parseInt(unit.up);                   
                 });
+                    Temp += "<tr class='rowappendpk1'>";
+                    Temp += "<td class='text-left'>Total </td>";
+                    Temp += "<td class='text-right'><b>"+convertToRupiah(totnoa)+"</b></td>";
+                    Temp += "<td class='text-right'><b>"+convertToRupiah(totup)+"</b></td>";
+                    Temp += "</tr>"; 
+                    $('#tblrate').append(Temp); 
+                   
             },
             error:function(xhr){
 
@@ -372,7 +602,11 @@ var KTDashboard = function() {
                     
                     var options = {
                         tooltips: {
-                            mode: 'label',
+                            mode: 'label', 
+                            label: 'mylabel', 
+                            callbacks: { 
+                            label: function(tooltipItem, data) { 
+                            return tooltipItem.yLabel.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); }, },
                         },						
                         scales: {
                             xAxes: [{
@@ -447,7 +681,11 @@ var KTDashboard = function() {
                     
                     var options = {
                         tooltips: {
-                            mode: 'label',
+                            mode: 'label', 
+                            label: 'mylabel', 
+                            callbacks: { 
+                            label: function(tooltipItem, data) { 
+                            return tooltipItem.yLabel.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); }, },
                         },						
                         scales: {
                             xAxes: [{
@@ -522,7 +760,11 @@ var KTDashboard = function() {
                     
                     var options = {
                         tooltips: {
-                            mode: 'label',
+                            mode: 'label', 
+                            label: 'mylabel', 
+                            callbacks: { 
+                            label: function(tooltipItem, data) { 
+                            return tooltipItem.yLabel.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); }, },
                         },						
                         scales: {
                             xAxes: [{
@@ -563,7 +805,7 @@ var KTDashboard = function() {
             // init charts
             outstandingchart(); 
             bookingchart(); 
-            //dpdchart(); 
+            dpdchart(); 
             pencairanchart();
             kaschart();
             SummaryRatechart();

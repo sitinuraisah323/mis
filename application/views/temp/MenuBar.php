@@ -31,6 +31,16 @@
 										</li>
 									<?php endif;?>
 									<?php endif;?>
+									<?php if($this->session->userdata('user')->level == 'pusat' || $this->session->userdata('user')->level == 'area'):?>
+									<?php if(read_access('dashboards')):?>
+										<li class="kt-menu__item "  aria-haspopup="true">
+											<a  href="<?php echo base_url('dashboards'); ?>" class="kt-menu__link ">
+												<span class="kt-menu__link-icon"><i class="fa fa-chart-bar"><span></span></i></span>
+												<span class="kt-menu__link-text">Dashboard</span>
+											</a>
+										</li>
+									<?php endif;?>
+									<?php endif;?>
 									<?php if(read_access('dashboards/executivesummary')):?>
 										<li class="kt-menu__item "  aria-haspopup="true">
 											<a  href="<?php echo base_url('dashboards/executivesummary'); ?>" class="kt-menu__link ">

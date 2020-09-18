@@ -144,10 +144,10 @@ $this->load->view('temp/MenuBar.php');
                                     </div>
                                     <div id="collapseBook" class="collapse" aria-labelledby="headingBook" data-parent="#accordionExample3">
                                         <div class="card-body">
-                                            <table class="table" id="tbltarOut"> 
+                                            <table class="table" id="tblBooking"> 
                                             <tr>
-                                                <td class="text-left"><b>Area</b></td>
-                                                <td class="text-left"><b>Unit</b></td>
+                                                <td class="text-left"><b>Date</b></td>
+                                                <td class="text-center"><b>Noa</b></td>
                                                 <td class="text-right"><b>Amount</b></td>
                                             </tr>                                       
                                             </table>
@@ -189,10 +189,10 @@ $this->load->view('temp/MenuBar.php');
                                     </div>
                                     <div id="collapseOut" class="collapse" aria-labelledby="headingOut" data-parent="#accordionExample3">
                                         <div class="card-body">
-                                            <table class="table" id="tbltarOut"> 
+                                            <table class="table" id="tblOutstanding"> 
                                             <tr>
-                                                <td class="text-left"><b>Area</b></td>
-                                                <td class="text-left"><b>Unit</b></td>
+                                                <td class="text-left"><b>Date</b></td>
+                                                <td class="text-center"><b>Noa</b></td>
                                                 <td class="text-right"><b>Amount</b></td>
                                             </tr>                                       
                                             </table>
@@ -209,6 +209,7 @@ $this->load->view('temp/MenuBar.php');
 
                 <div class="col-xl-6 col-lg-6">
                     <!--begin:: Widgets-->
+                    <form id="form_dpd" class="form-horizontal">
                     <div class="kt-portlet kt-portlet--height-fluid">
                         <div class="kt-widget14">
                             <div class="kt-widget14__header">
@@ -233,11 +234,13 @@ $this->load->view('temp/MenuBar.php');
                                     </div>
                                     <div id="collapseDPD" class="collapse" aria-labelledby="headingDPD" data-parent="#accordionExample3">
                                         <div class="card-body">
-                                            <table class="table" id="tbltarOut"> 
+                                            <table class="table" id="tbldpd"> 
                                             <tr>
-                                                <td class="text-left"><b>Area</b></td>
-                                                <td class="text-left"><b>Unit</b></td>
-                                                <td class="text-right"><b>Amount</b></td>
+                                                <td class="text-left"><b>Customer</b></td>
+                                                <td class="text-center"><b>Tanggal Kredit</b></td>
+                                                <td class="text-center"><b>Tanggal Deadline</b></td>
+                                                <td class="text-right"><b>UP</b></td>
+                                                <td class="text-center"><b>DPD</b></td>
                                             </tr>                                       
                                             </table>
                                         </div>
@@ -247,6 +250,7 @@ $this->load->view('temp/MenuBar.php');
                             <!--end::Accordion-->
                         </div>
                     </div>		
+                    </form>
                     <!--end:: Widgets-->    
                 </div>
 
@@ -277,11 +281,11 @@ $this->load->view('temp/MenuBar.php');
                                     </div>
                                     <div id="collapsePencairan" class="collapse" aria-labelledby="headingPencairan" data-parent="#accordionExample3">
                                         <div class="card-body">
-                                            <table class="table" id="tbltarOut"> 
+                                            <table class="table" id="tblpencairan"> 
                                             <tr>
-                                                <td class="text-left"><b>Area</b></td>
-                                                <td class="text-left"><b>Unit</b></td>
-                                                <td class="text-right"><b>Amount</b></td>
+                                                <td class="text-left"><b>Date</b></td>
+                                                <td class="text-right"><b>Pencairan</b></td>
+                                                <td class="text-right"><b>Pelunasan</b></td>
                                             </tr>                                       
                                             </table>
                                         </div>
@@ -322,11 +326,11 @@ $this->load->view('temp/MenuBar.php');
                                     </div>
                                     <div id="collapseRate" class="collapse" aria-labelledby="headingRate" data-parent="#accordionExample3">
                                         <div class="card-body">
-                                            <table class="table" id="tbltarOut"> 
+                                            <table class="table" id="tblrate"> 
                                             <tr>
-                                                <td class="text-left"><b>Area</b></td>
-                                                <td class="text-left"><b>Unit</b></td>
-                                                <td class="text-right"><b>Amount</b></td>
+                                                <td class="text-left"><b>Rate</b></td>
+                                                <td class="text-right"><b>Noa</b></td>                                                
+                                                <td class="text-right"><b>Amount</b></td>                                                
                                             </tr>                                       
                                             </table>
                                         </div>
@@ -367,11 +371,11 @@ $this->load->view('temp/MenuBar.php');
                                     </div>
                                     <div id="collapseprofit" class="collapse" aria-labelledby="headingprofit" data-parent="#accordionExample3">
                                         <div class="card-body">
-                                            <table class="table" id="tbltarOut"> 
+                                            <table class="table" id="tblprofit"> 
                                             <tr>
-                                                <td class="text-left"><b>Area</b></td>
-                                                <td class="text-left"><b>Unit</b></td>
-                                                <td class="text-right"><b>Amount</b></td>
+                                                <td class="text-left"><b>Date</b></td>
+                                                <td class="text-right"><b>Pendapatan</b></td>
+                                                <td class="text-right"><b>Pengeluaran</b></td>
                                             </tr>                                       
                                             </table>
                                         </div>
