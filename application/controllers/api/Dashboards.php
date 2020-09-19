@@ -637,7 +637,11 @@ class Dashboards extends ApiController
 	{
 		$idUnit = $this->session->userdata('user')->id_unit;
 		$datestart = date('Y-m-01');
-		$dateend   = date('Y-m-d');
+		if(date('H')=='20.00'){
+			$dateend   = date('Y-m-d');
+		}else{
+			$dateend   =date('Y-m-d',strtotime('- 1 day',strtotime(date('Y-m-d'))));
+		}
 		$tgl1 = new DateTime($datestart);
 		$tgl2 = new DateTime($dateend);
 		$unit =array();
@@ -694,7 +698,11 @@ class Dashboards extends ApiController
 	{
 		$idUnit = $this->session->userdata('user')->id_unit;
 		$datestart = date('Y-m-01');
-		$dateend   = date('Y-m-d');
+		if(date('H')=='20.00'){
+			$dateend   = date('Y-m-d');
+		}else{
+			$dateend   =date('Y-m-d',strtotime('- 1 day',strtotime(date('Y-m-d'))));
+		}
 		$tgl1 = new DateTime($datestart);
 		$tgl2 = new DateTime($dateend);
 		$unit =array();
@@ -745,7 +753,11 @@ class Dashboards extends ApiController
 	{
 		$idUnit = $this->session->userdata('user')->id_unit;
 		$datestart = date('Y-m-01');
-		$dateend   = date('Y-m-d');
+		if(date('H')=='20.00'){
+			$dateend   = date('Y-m-d');
+		}else{
+			$dateend   =date('Y-m-d',strtotime('- 1 day',strtotime(date('Y-m-d'))));
+		}
 		$tgl1 = new DateTime($datestart);
 		$tgl2 = new DateTime($dateend);
 		
