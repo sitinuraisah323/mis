@@ -102,4 +102,51 @@ class UnitsdailycashModel extends Master
 			'saldo' => (int)($saldo->amount+$cashin->amount) - $cashout->amount
 		);
 	}
+
+	public function getCoc($gets, $percentageAnnualy = 11, $month = 0, $year = 0)
+	{	
+		$percentageMonthly = $percentageAnnualy/12;
+	
+		if($month === 0){
+			$month = date('m');
+		}
+
+		if($year === 0){
+			$year = date('Y');
+		}
+
+		$daysInMonth = days_in_month($month, $year);
+
+		$dateEnd = implode('-', array(
+			$year, $month, $daysInMonth
+		));
+
+		if($gets){
+			if(key_exists('area', $gets)){
+				if( $gets['area']){
+					$this->db->where('u.id_area', $gets['area']);
+				}
+			}
+			if(key_exists('unit', $gets)){
+				if($gets['unit']){
+					$this->db->where('u.id', $gets['unit']);
+				}
+			}
+		}
+
+		$this->db
+			->select("u.name, a.area,  ud.date, ud.amount, (DATEDIFF('$dateEnd',ud.date)+1) as tenor,
+			 ROUND((ud.amount*$percentageMonthly/100) / $daysInMonth) as coc_montly,
+			 ROUND( ((ud.amount*$percentageMonthly/100) / $daysInMonth) *(DATEDIFF('$dateEnd',ud.date)+1) / $daysInMonth) as coc_payment,			 
+			 ")
+			->from($this->table.' ud')
+			->join('units u','u.id = ud.id_unit')
+			->join('areas a','a.id = u.id_area')
+			->where('MONTH(ud.date)', $month)
+			->where('YEAR(ud.date)', $year)
+			->where('no_perk','1110000')
+			->order_by('a.id','ASC')
+			->order_by('coc_payment','DESC');
+		return $this->db->get()->result();
+	}
 }
