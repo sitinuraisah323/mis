@@ -76,7 +76,7 @@ $this->load->view('temp/MenuBar.php');
             </table> -->
             <!--end: Datatable -->
 
-            <form id="form_pendapatan" class="form-horizontal" method="post" action="<?php echo base_url("report/typerate/export"); ?>">
+            <form id="form_pendapatan" class="form-horizontal" method="post" action="<?php echo base_url("report/coc/export"); ?>">
             <div class="kt-portlet__body">
             <div class="col-md-12" > 
 
@@ -150,7 +150,7 @@ $this->load->view('temp/MenuBar.php');
 						</select>
                     </div>
                     <div class="col-lg-2">
-						<label class="col-form-label">Bunga Tahunan</label>
+						<label class="col-form-label">Rate</label>
 						<input type="text" name="percentage" value="11" class="form-control" />
                     </div>
                     <div class="col-lg-1">
@@ -175,13 +175,13 @@ $this->load->view('temp/MenuBar.php');
 						      		<th class="text-right">Tanggal Moker</th>
                                     <th class="text-right">Jumlah Moker</th>
                                     <th class="text-right">Tenor</th>
-                                    <th class="text-right">Coc Bulanan</th>
-                                    <th class="text-right">Coc Pembayaran</th>
+                                    <th class="text-right">COC Harian</th>
+                                    <th class="text-right">Total COC</th>
 						    	</tr>
 						  	</thead>
 						  	<tbody>						    					    	
 						  	</tbody>
-                              <tfoot>						    					    	
+                            <tfoot>						    					    	
 						  	</tfoot>
 						</table>
 				</div>
