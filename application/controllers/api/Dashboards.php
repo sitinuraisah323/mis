@@ -845,10 +845,14 @@ class Dashboards extends ApiController
 			$month = date('m',strtotime('+ '.$i.' month',strtotime($sdate)));
 			$edate = date('Y-m-t',strtotime('+ '.$i.' month',strtotime($sdate)));
 			if($month==date('m')){
-				if(date('H')=='20.00'){
+				if(date('H')=='20.00'){					
 					$date_out = date('Y-m-d');
 				}else{
 					$date_out = date('Y-m-d',strtotime('-1 days',strtotime(date('Y-m-d'))));
+					$day = date('l',strtotime($date_out));
+					if($day=='Sunday'){
+						$date_out = date('Y-m-d',strtotime('-2 days',strtotime(date('Y-m-d'))));
+					}
 				}
 			}else{
 				$date_out = $edate;

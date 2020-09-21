@@ -171,7 +171,7 @@ $this->load->view('temp/MenuBar.php');
                                     Review Outstanding            
                                 </h3>
                                 <span class="kt-widget14__desc">
-                                    Outstanding unit on <?php echo date('F'); ?>
+                                    Outstanding on <?php echo date('F'); ?>
                                 </span>
                             </div>	 
                             <div class="kt-widget11">	                               

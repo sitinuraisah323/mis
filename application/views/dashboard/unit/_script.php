@@ -758,8 +758,9 @@ var KTDashboard = function() {
             data:{date:currentDate},
             success:function(response){
                 var Temp ="";
-                var tottarget ="";
-                var totrealisasi ="";
+                var tottarget =0;
+                var totrealisasi =0;
+                var totout =0;
                 $.each(response.data, function (index,unit) {
                     target.push(unit.target_out);
                     realisasi.push(unit.realisasi_out);
@@ -774,7 +775,8 @@ var KTDashboard = function() {
                     }
                     Temp += "<td class='text-left'><b>"+status+"</b></td>";
                     Temp += "<td class='text-right'><b>"+convertToRupiah(unit.target_out)+"</b></td>";
-                    Temp += "<td class='text-right'><b>"+unit.realisasi_out+"</b></td>";
+                    if(unit.realisasi_out!=0){ totout = convertToRupiah(unit.realisasi_out);}else{totout=0;}
+                    Temp += "<td class='text-right'><b>"+totout+"</b></td>";
                     Temp += "</tr>";   
                     tottarget += parseInt(unit.target_out);
                     totrealisasi += parseInt(unit.realisasi_out);
