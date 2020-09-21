@@ -376,6 +376,7 @@ class Outstanding extends Authenticated
 			->where_in('no_perk', $category)
 			->group_by('units.name')
 			->group_by('areas.area')
+			->order_by('amount','DESC')
 			->order_by('areas.area','asc');
 			//->order_by('units.id','desc');
 		$data = $this->units->db->get()->result();
@@ -428,6 +429,7 @@ class Outstanding extends Authenticated
 			->where_in('no_perk', $category)
 			->group_by('units.name')
 			->group_by('areas.area')
+			->order_by('amount','DESC')
 			->order_by('areas.area','asc');
 		$data = $this->units->db->get()->result();
 		return $data; //->sendMessage($data,'Successfully get Pendapatan');

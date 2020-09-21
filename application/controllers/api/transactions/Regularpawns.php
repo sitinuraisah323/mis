@@ -396,4 +396,10 @@ class Regularpawns extends ApiController
 		$this->sendMessage($units, 'Get Data Outstanding');
 	}
 
+	public function typerates()
+	{
+		$units = $this->units->typerates();
+		$this->sendMessage($units, 'Get Data Regular pawns');
+	}
+
 }

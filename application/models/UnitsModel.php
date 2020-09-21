@@ -53,5 +53,55 @@ class UnitsModel extends Master
 		return $this->db->get('units_mortages as a')->result();
 	}
 
+	public function typerates()
+	{
+		if($area = $this->input->get('area')){
+			$this->db->where('id_area', $area);
+		}else if($this->session->userdata('user')->level == 'area'){
+			$this->db->where('id_area', $this->session->userdata('user')->id_area);
+		}
+		if($code = $this->input->get('unit')){
+			$this->db->where('units.id', $code);
+		}else if($this->session->userdata('user')->level == 'unit'){
+			$this->db->where('units.id', $this->session->userdata('user')->id_unit);
+		}
+		return $this->db->select("units.id, units.name, area,
+			(
+				select sum(amount) from units_regularpawns where capital_lease < 0.015
+				and units_regularpawns.id_unit = units.id
+				and units_regularpawns.status_transaction = 'N'
+				and amount != 0
+			) as small_then_up ,
+			(
+				select count(distinct(amount)) from units_regularpawns where capital_lease < 0.015
+				and units_regularpawns.id_unit = units.id
+				and units_regularpawns.status_transaction = 'N'
+				and  amount != 0
+			) as small_then_noa ,
+			(
+				select sum(amount) from units_regularpawns where capital_lease >= 0.015
+				and units_regularpawns.id_unit = units.id
+				and units_regularpawns.status_transaction = 'N'
+				and  amount != 0
+			) as bigger_then_up ,
+			(
+				select count(distinct(amount)) from units_regularpawns where capital_lease >= 0.015
+				and units_regularpawns.id_unit = units.id
+				and units_regularpawns.status_transaction = 'N'
+				and  amount != 0
+			) as bigger_then_noa ,
+			(
+				select sum(amount) from units_regularpawns where 
+				units_regularpawns.id_unit = units.id
+				and units_regularpawns.status_transaction = 'N'
+				and amount != 0
+			) as total_up
+			")
+			->join('areas','areas.id = units.id_area')
+			->order_by('areas.id','asc')
+			->order_by('total_up','desc')
+			->get('units')->result();
+	}
+
 
 }
