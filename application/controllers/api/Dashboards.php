@@ -637,7 +637,7 @@ class Dashboards extends ApiController
 	{
 		$idUnit = $this->session->userdata('user')->id_unit;
 		$datestart = date('Y-m-01');
-		if(date('H')=='20.00'){
+		if(date('H:i')=='20:00'){
 			$dateend   = date('Y-m-d');
 		}else{
 			$dateend   =date('Y-m-d',strtotime('- 1 day',strtotime(date('Y-m-d'))));
@@ -646,7 +646,7 @@ class Dashboards extends ApiController
 		$tgl2 = new DateTime($dateend);
 		$unit =array();
 		$selisih = $tgl2->diff($tgl1)->days + 1;
-		for ($i=0; $i < $selisih; $i++) { 
+		for ($i=0; $i <= $selisih; $i++) { 
 			$date = date('Y-m-d',strtotime('+ '.$i.' day',strtotime($datestart)));
 			$day = date('l',strtotime($date));
 			if($day!='Sunday'){
@@ -698,7 +698,7 @@ class Dashboards extends ApiController
 	{
 		$idUnit = $this->session->userdata('user')->id_unit;
 		$datestart = date('Y-m-01');
-		if(date('H')=='20.00'){
+		if(date('H:i')=='20:00'){
 			$dateend   = date('Y-m-d');
 		}else{
 			$dateend   =date('Y-m-d',strtotime('- 1 day',strtotime(date('Y-m-d'))));
@@ -707,7 +707,7 @@ class Dashboards extends ApiController
 		$tgl2 = new DateTime($dateend);
 		$unit =array();
 		$selisih = $tgl2->diff($tgl1)->days + 1;
-		for ($i=0; $i < $selisih; $i++) { 
+		for ($i=0; $i <= $selisih; $i++) { 
 			$date = date('Y-m-d',strtotime('+ '.$i.' day',strtotime($datestart)));
 			$day = date('l',strtotime($date));
 			if($day!='Sunday'){
@@ -753,7 +753,7 @@ class Dashboards extends ApiController
 	{
 		$idUnit = $this->session->userdata('user')->id_unit;
 		$datestart = date('Y-m-01');
-		if(date('H')=='20.00'){
+		if(date('H:i')=='20:00'){
 			$dateend   = date('Y-m-d');
 		}else{
 			$dateend   =date('Y-m-d',strtotime('- 1 day',strtotime(date('Y-m-d'))));
@@ -776,7 +776,7 @@ class Dashboards extends ApiController
 
 		$unit =array();
 		$selisih = $tgl2->diff($tgl1)->days + 1;
-		for ($i=0; $i < $selisih; $i++) { 
+		for ($i=0; $i <= $selisih; $i++) { 
 			$date = date('Y-m-d',strtotime('+ '.$i.' day',strtotime($datestart)));
 			$day = date('l',strtotime($date));
 			if($day!='Sunday'){

@@ -145,7 +145,7 @@ function initCariForm(){
 
                     html += '<tr class="rowappend">';
                     html += `<td></td>`;
-                    html += `<td>< 15 %</td>`;
+                    html += `<td>< 1.5 %</td>`;
                     html += `<td>${data.small_then_noa}</td>`;
                     upunit_low = data.small_then_up ? data.small_then_up : '0';
                     html += `<td  class="text-right">${convertToRupiah(upunit_low)}</td>`;
@@ -157,7 +157,7 @@ function initCariForm(){
 
                     html += '<tr class="rowappend">';
                     html += `<td></td>`;
-                    html += `<td> > 15 %</td>`;
+                    html += `<td> >= 1.5 %</td>`;
                     html += `<td>${data.bigger_then_noa}</td>`;
                     upunit_up = data.bigger_then_up ? data.bigger_then_up : '0';
                     html += `<td   class="text-right">${convertToRupiah(upunit_up)}</td>`;

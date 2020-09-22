@@ -1769,7 +1769,11 @@ function targetBooking(){
 			
 			var options = {
 				tooltips: {
-					mode: 'label',
+					mode: 'label', 
+					label: 'mylabel', 
+					callbacks: { 
+					label: function(tooltipItem, data) { 
+					return tooltipItem.yLabel.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); }, },
 				},						
 				scales: {
 					xAxes: [{
@@ -2022,7 +2026,11 @@ function targetOutstanding(){
 			
 			var options = {
 				tooltips: {
-					mode: 'label',
+					mode: 'label', 
+					label: 'mylabel', 
+					callbacks: { 
+					label: function(tooltipItem, data) { 
+					return tooltipItem.yLabel.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); }, },
 				},						
 				scales: {
 					xAxes: [{
