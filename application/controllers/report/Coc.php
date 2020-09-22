@@ -18,6 +18,7 @@ class Coc extends Authenticated
 	{
 		parent::__construct();
 		$this->load->model('AreasModel', 'areas');
+		$this->load->model('UnitsdailycashModel','dailycash');
 	}
 
 	/**
@@ -54,60 +55,37 @@ class Coc extends Authenticated
 		$objPHPExcel->getActiveSheet()->getColumnDimension('C');
 		$objPHPExcel->getActiveSheet()->setCellValue('C1', 'Unit');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('D');
-		$objPHPExcel->getActiveSheet()->setCellValue('D1', 'Total Up');
+		$objPHPExcel->getActiveSheet()->setCellValue('D1', 'Tanggal Moker');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('E');
-		$objPHPExcel->getActiveSheet()->setCellValue('E1', '');
+		$objPHPExcel->getActiveSheet()->setCellValue('E1', 'Jumlah Moker');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('F');
-		$objPHPExcel->getActiveSheet()->setCellValue('F1', '');
+		$objPHPExcel->getActiveSheet()->setCellValue('F1', 'Tenor');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('G');
+		$objPHPExcel->getActiveSheet()->setCellValue('G1', 'COC Harian');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('F');
+		$objPHPExcel->getActiveSheet()->setCellValue('H1', 'Total COC');
 
-		$units = $this->units->typerates();
+		$units = $this->dailycash->getCoc($this->input->post(), $this->input->post('percentage'), $this->input->post('month'),$this->input->post('year'));
 		$i = 1;
 			
 		$no=2;
 		foreach ($units as $unit){
-		
-		
+
 			$objPHPExcel->getActiveSheet()->setCellValue('A'.$no, $i);
-			$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, $unit->area);
+			$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, $data->area);
 			$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, $unit->name);
-			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no, $unit->total_up);
-			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no, '');
-			$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, '');
-
-			$no++;
-
-			$objPHPExcel->getActiveSheet()->setCellValue('A'.$no, '');
-			$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, 'RATE');
-			$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, 'NOA');
-			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no,'UP');
-			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no, 'Sewa Modal');
-			$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, '%');
-			
-			
-			$no++;
-
-			$objPHPExcel->getActiveSheet()->setCellValue('A'.$no, "Total");
-			$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, '<15');
-			$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, $unit->small_then_noa);
-			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no,number_format($unit->small_then_up, 2));
-			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no,number_format($unit->small_then_up*1.5, 2));
-			$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, round(($unit->small_then_up/ $unit->total_up *100),2));
-		
-			$no++;
-
-			$objPHPExcel->getActiveSheet()->setCellValue('A'.$no, "Total");
-			$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, '>15');
-			$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, $unit->bigger_then_noa);
-			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no,number_format($unit->bigger_then_up, 2));
-			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no,number_format($unit->bigger_then_up*1.5, 2));
-			$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, round(($unit->bigger_then_up/ $unit->total_up *100),2));
+			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no,$unit->date);
+			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no,money($unit->amount,2));
+			$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, $unit->tenor);
+			$objPHPExcel->getActiveSheet()->setCellValue('G'.$no, money($unit->coc_daily, 2));
+			$objPHPExcel->getActiveSheet()->setCellValue('H'.$no, money($unit->coc_payment, 2));
 
 			$no++;
 			$i++;
 		}
 
 		//Redirect output to a client’s WBE browser (Excel5)
-		$filename ="Summary Rate_".date('Y-m-d H:i:s');
+		$filename ="Coc ".date('Y-m-d H:i:s');
 		header('Content-Type: application/vnd.ms-excel');
 		header('Content-Disposition: attachment;filename="'.$filename.'.xls"');
 		header('Cache-Control: max-age=0');

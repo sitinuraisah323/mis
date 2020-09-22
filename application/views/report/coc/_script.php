@@ -131,10 +131,10 @@ function initCariForm(){
                 let html = '';
                 let no = 1;
                 response.data.forEach(data=>{
-                  const { name, area,amount, id, date, tenor, coc_montly, coc_payment } = data;
+                  const { name, area,amount, id, date, tenor, coc_daily, coc_payment } = data;
                   totalPayment += parseInt(coc_payment);
                   totalAmount += parseInt(amount);
-                  totalMontly +=parseInt (coc_montly);
+                  totalMontly +=parseInt (coc_daily);
                   totalTenor += parseInt(tenor);
                   html += '<tr>';
 
@@ -144,7 +144,7 @@ function initCariForm(){
                   html += `<td class="text-right">${date}</td>`;
                   html += `<td class="text-right">${convertToRupiah(amount)}</td>`;
                   html += `<td class="text-right">${tenor}</td>`;
-                  html += `<td class="text-right">${convertToRupiah(coc_montly)}</td>`;
+                  html += `<td class="text-right">${convertToRupiah(coc_daily)}</td>`;
                   html += `<td class="text-right">${convertToRupiah(coc_payment)}</td>`;
                   html += '</tr>';
                   no++;    
