@@ -353,4 +353,19 @@ class RegularpawnsModel extends Master
 		);
 	}
 
+	public function unitMontly($idUnit, $month, $year)
+	{
+		$data = $this->db
+				->select('count(*) noa, sum(amount) as up')
+				->from($this->table)
+				->where('id_unit', $idUnit)
+				->where('MONTH(date_sbk)', $month)
+				->where('YEAR(date_sbk)', $year)
+				->get()->row();
+		return (object) array(
+			'up'	=> (int) $data->up,
+			'noa'	=> (int) $data->noa
+		);
+	}
+
 }

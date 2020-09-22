@@ -12,7 +12,6 @@ class Units extends ApiController
 
 	public function index()
 	{
-        $data = $this->units->get_units();
 		if($post = $this->input->post()){
 			if(is_array($post['query'])){
 				$value = $post['query']['generalSearch'];
@@ -21,10 +20,11 @@ class Units extends ApiController
                 ->or_like('area',strtoupper($value))
                 ->or_like('name', $value)
                 ->or_like('code', $value)
-                ->or_like('name',strtoupper($value));					
-				$data = $this->units->get_units();
+                ->or_like('name',strtoupper($value));			
 			}
-		}        
+        }        
+        		
+        $data = $this->units->get_units();
 		echo json_encode(array(
             'data'	=> 	$data,
             'status'=>true,
@@ -88,10 +88,10 @@ class Units extends ApiController
 	public function insert()
 	{
 		if($post = $this->input->post()){
-
             $data['id_area']    = $this->input->post('area');	
             $data['name']       = $this->input->post('unit');	
             $data['code']       = $this->input->post('code_unit');	
+            $data['date_open']       = $this->input->post('date_open');	
             $db = false;
             $db = $this->units->insert($data);
             if($db=true){
@@ -113,11 +113,11 @@ class Units extends ApiController
     public function update()
 	{
 		if($post = $this->input->post()){
-
             $id                 = $this->input->post('id');	
             $data['id_area']    = $this->input->post('area');	
             $data['name']       = $this->input->post('unit');	
             $data['code']       = $this->input->post('code_unit');		
+            $data['date_open']       = $this->input->post('date_open');	
             $db = false;
             $db = $this->units->update($data,$id);
             if($db=true){

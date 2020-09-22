@@ -17,6 +17,7 @@ class Coc extends Authenticated
 	public function __construct()
 	{
 		parent::__construct();
+        $this->load->library('pdf');
 		$this->load->model('AreasModel', 'areas');
 		$this->load->model('UnitsdailycashModel','dailycash');
 	}
@@ -34,6 +35,9 @@ class Coc extends Authenticated
 
 	public function export()
 	{		
+		if($this->input->post('btnexport_csv') != 'csv'){
+			$this->pdf();
+		}
 		//load our new PHPExcel library
 		$this->load->library('PHPExcel');
 
@@ -92,6 +96,22 @@ class Coc extends Authenticated
 		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 		$objWriter->save('php://output');
 
+	}
+
+
+	public function pdf()
+	{		
+		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		require_once APPPATH.'controllers/pdf/header.php';
+		$areas = $this->dailycash->getCocCalcutation($this->input->post(), $this->input->post('percentage'), $this->input->post('month'),$this->input->post('year'));
+	
+		$pdf->AddPage('L');
+		$view = $this->load->view('report/coc/pdf.php',[
+			'areas'=>$areas	
+		],true);
+		$pdf->writeHTML($view);
+		//download
+		$pdf->Output('GHAnet_COC_'.date('d_m_Y').'.pdf', 'D');
 	}
 	
 }

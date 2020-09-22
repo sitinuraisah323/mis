@@ -1,0 +1,42 @@
+<h3>COC <?php echo date('d-m-Y'); ?></h3>
+<?php foreach($areas as $units):?>
+    <table class="table" border="1">
+        <thead class="thead-light">
+            <tr bgcolor="#aaaa55">
+                <td colspan="14" align="center" width="100%"><?php echo $units[0]->area;?></td>
+            </tr>
+            <tr  bgcolor="#cccccc">
+                <th align="center" width="5%"> No </th>
+                <th width="20%"> Unit</th>
+                <th width="40%" align="right"> Penerimaan Moker </th>
+                <th width="35%" align="right"> Total COC </th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php $i = 1;?>
+            <?php $totalAmount = 0;?>
+            <?php $totalCOC = 0;?>
+            <?php if($units):?>
+                <?php foreach($units as $unit):?>
+                    <tr>
+                        <th align="center" width="5%"> <?php echo $i;?> </th>
+                        <th width="20%"> <?php echo $unit->name;?></th>
+                        <th width="40%" align="right"> <?php echo money($unit->amount);?> </th>
+                        <th width="35%" align="right"> <?php echo money($unit->coc_payment);?> </th>
+                    </tr>
+                    <?php $totalAmount += $unit->amount;?>
+                    <?php $totalCOC += $unit->coc_payment;?>
+                    <?php $i++;?>
+                <?php endforeach;?>
+            <?php endif;?>
+            <tr  bgcolor="#cccccc">
+                <th align="right" width="5%"></th>
+                <th width="20%" align="right" >Total</th>
+                <th width="40%" align="right"><?php echo money($totalAmount);?>  </th>
+                <th width="35%" align="right"><?php echo money($totalCOC);?> </th>
+            </tr>
+        </tbody>
+        <tfoot>
+        </tfoot>
+    </table>
+<?php endforeach;?>

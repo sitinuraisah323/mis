@@ -21,10 +21,10 @@
 			<td width="5%" align="center"> <?php echo $no;?></td>
 			<td width="20%" align="left"> <?php echo $data->name;?></td>
 			<td width="20%" align="left"> <?php echo $data->area;?></td>
-			<td width="20%" align="right"> <?php echo number_format($data->credit_today->up,0);?> </td>
+			<td width="20%" align="right"> <?php echo number_format($data->target->booking,0);?> </td>
 			<td width="20%" align="right"> <?php echo number_format($data->target->up,0);?> </td>
 			<td width="15%" align="center"> <?php echo $data->target->persentase ? $data->target->persentase * 100 : 0;?> </td>
-            <?php $totalCredit +=$data->credit_today->up; ?>
+            <?php $totalCredit +=$data->target->booking; ?>
             <?php $totalUp +=$data->target->up; ?>
             <?php $totalPersent +=$data->target->persentase; ?>
 		</tr>

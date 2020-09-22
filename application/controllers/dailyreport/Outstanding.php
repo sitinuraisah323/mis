@@ -21,6 +21,7 @@ class Outstanding extends Authenticated
         $this->load->library('pdf');
 		$this->load->model('UsersModel','model');
 		$this->load->model('RegularPawnsModel', 'regular');
+		$this->load->model('MortagesModel', 'mortages');
 		$this->load->model('UnitsModel', 'units');
 		$this->load->model('RepaymentModel','repayments');
 		$this->load->model('MappingcaseModel', 'm_casing');
@@ -48,13 +49,13 @@ class Outstanding extends Authenticated
 		$view = $this->load->view('dailyreport/outstanding/target.php',['data'=>$os,'datetrans'=> $this->datetrans()],true);
 		$pdf->writeHTML($view);
 
-		$pdf->AddPage('L');
-		$view = $this->load->view('dailyreport/outstanding/pencairan.php',['pencairan'	=> $this->pencairan()],true);
-		$pdf->writeHTML($view);
+		// $pdf->AddPage('L');
+		// $view = $this->load->view('dailyreport/outstanding/pencairan.php',['pencairan'	=> $this->pencairan()],true);
+		// $pdf->writeHTML($view);
 
-		$pdf->AddPage('L');
-		$view = $this->load->view('dailyreport/outstanding/pelunasan.php',['pelunasan'	=> $this->pelunasan()],true);
-		$pdf->writeHTML($view);
+		// $pdf->AddPage('L');
+		// $view = $this->load->view('dailyreport/outstanding/pelunasan.php',['pelunasan'	=> $this->pelunasan()],true);
+		// $pdf->writeHTML($view);
 
 		$pdf->AddPage('L');
 		$view = $this->load->view('dailyreport/outstanding/saldo.php',['saldo'	=> $this->saldounit()],true);
@@ -199,6 +200,8 @@ class Outstanding extends Authenticated
 			$date= $date;
 		}
 		$nextdate = date('Y-m-d', strtotime('+1 days', strtotime($date)));
+		$year = date('Y', strtotime('+1 days', strtotime($date)));
+		$month = date('n', strtotime('+1 days', strtotime($date)));
 		// $date = date('Y-m-d', strtotime('+1 days', strtotime($date)));
 		$units = $this->units->db->select('units.id, units.name, area')
 			->join('areas','areas.id = units.id_area')
@@ -231,10 +234,12 @@ class Outstanding extends Authenticated
 			}else{
 				$target = 0;
 			}
+			$booking =  $this->mortages->unitMontly($unit->id, $month, $year)->up + $this->regular->unitMontly($unit->id, $month, $year)->up;
 
 			$unit->target = (object) array(
 				'up'	=> $target,
-				'persentase'	=> $target ? round($unit->credit_today->up / $target,4) : 0
+				'booking'	=> $booking,
+				'persentase'	=> $target ? round($booking / $target,2) : 0
 			); 
 	
 			$unit->total_outstanding = (object) array(
@@ -313,23 +318,18 @@ class Outstanding extends Authenticated
 		}
 
 		$this->units->db
-			->select('id_unit, name, amount,areas.area, cut_off')
+			->select('id_unit, name, amount,areas.area, cut_off,( (
+				select (sum(CASE WHEN type = "CASH_IN" THEN `amount` ELSE 0 END) - sum(CASE WHEN type = "CASH_OUT" THEN `amount` ELSE 0 END))
+				from units_dailycashs
+				where units_dailycashs.id_unit = units_saldo.id_unit
+				and units_dailycashs.date > units_saldo.cut_off
+			) + units_saldo.amount )as amount')
 			->DISTINCT ('id_unit')
 			->from('units_saldo')			
 			->join('units','units.id = units_saldo.id_unit')
-			->join('areas','areas.id = units.id_area');
+			->join('areas','areas.id = units.id_area')
+			->order_by('amount', 'desc');
 		$getSaldo = $this->units->db->get()->result();
-		foreach ($getSaldo as $get){
-			$this->units->db->select('(sum(CASE WHEN type = "CASH_IN" THEN `amount` ELSE 0 END) - sum(CASE WHEN type = "CASH_OUT" THEN `amount` ELSE 0 END)) as amount')
-				->join('units','units.id = units_dailycashs.id_unit')
-				->from('units_dailycashs')
-				->where('units.id', $get->id_unit)
-				->where('units_dailycashs.date >',$get->cut_off);
-			$data = $this->units->db->get()->row();
-			if($data){
-				$get->amount = $get->amount + $data->amount;
-			}
-		}
 		return $getSaldo;
 	}
 
