@@ -131,6 +131,7 @@ function initCariForm(){
 
                     template +='<tr class="rowappend">';
                     template +='<td class="text-center">'+no+'</td>';
+                    template +='<td class="text-center">'+data.unit+'</td>';
                     template +='<td>'+date+'</td>';
                     template +='<td class="text-center">'+month+'</td>';
                     template +='<td class="text-center">'+year+'</td>';

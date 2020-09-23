@@ -103,7 +103,7 @@ class UnitsdailycashModel extends Master
 		);
 	}
 
-	public function getCoc($gets, $percentageAnnualy = 11, $month = 0, $year = 0)
+	public function getCoc($gets = null, $percentageAnnualy = 11, $month = 0, $year = 0)
 	{	
 		if($month === 0){
 			$month = date('m');
@@ -113,21 +113,7 @@ class UnitsdailycashModel extends Master
 			$year = date('Y');
 		}
 
-		$daysInMonth = days_in_month($month, $year);
-
-		$dateEnd = implode('-', array(
-			$year, $month, $daysInMonth
-		));
-
-		$dateStart = implode('-', array(
-			$year, $month, '01'
-		));
-
-		if($year == date('Y') && $month == date('m')){
-			$dateEnd = implode('-', array(
-				$year, $month, date('d')
-			));
-		}
+		$dateEnd = date('Y-m-d');
 
 		if($gets){
 			if(key_exists('area', $gets)){
@@ -144,14 +130,14 @@ class UnitsdailycashModel extends Master
 
 		$this->db
 			->select("u.name, a.area,  ud.date, ud.amount, 
-			 CASE WHEN '$year' = YEAR(ud.date) and '$month' = MONTH(ud.date) THEN  (DATEDIFF('$dateEnd',ud.date)+1) ELSE (DATEDIFF('$dateEnd','$dateStart')+1) END as tenor,
+			 (DATEDIFF('$dateEnd',ud.date)+1) as tenor,
 			 ROUND(ud.amount*$percentageAnnualy/100/365) as coc_daily,
-			 ROUND( (ud.amount*$percentageAnnualy/100/365) * CASE WHEN '$year' = YEAR(ud.date) and '$month' = MONTH(ud.date) THEN  (DATEDIFF('$dateEnd',ud.date)+1) ELSE (DATEDIFF('$dateEnd','$dateStart')+1) END) as coc_payment,			 
+			 ROUND( (ud.amount*$percentageAnnualy/100/365) * (DATEDIFF('$dateEnd',ud.date)+1) ) as coc_payment,			 
 			 ")
 			->from($this->table.' ud')
 			->join('units u','u.id = ud.id_unit')
 			->join('areas a','a.id = u.id_area')
-			->where('MONTH(ud.date) <=', $month)
+			->where('MONTH(ud.date)', $month)
 			->where('YEAR(ud.date)', $year)
 			->where('no_perk','1110000')
 			->order_by('a.id','ASC')
@@ -159,7 +145,7 @@ class UnitsdailycashModel extends Master
 		return $this->db->get()->result();
 	}
 
-	public function getCocCalcutation($gets, $percentageAnnualy = 11, $month = 0, $year = 0)
+	public function getCocCalcutation($gets = null, $percentageAnnualy = 11, $month = 0, $year = 0)
 	{
 		if($month === 0){
 			$month = date('m');
@@ -171,19 +157,8 @@ class UnitsdailycashModel extends Master
 
 		$daysInMonth = days_in_month($month, $year);
 
-		$dateEnd = implode('-', array(
-			$year, $month, $daysInMonth
-		));
+		$dateEnd = date('Y-m-d');
 
-		if($year == date('Y') && $month == date('m')){
-			$dateEnd = implode('-', array(
-				$year, $month, date('d')
-			));
-		}
-
-		$dateStart = implode('-', array(
-			$year, $month, '01'
-		));
 
 		if($gets){
 			if(key_exists('area', $gets)){
@@ -200,14 +175,14 @@ class UnitsdailycashModel extends Master
 
 		$this->db
 			->select("u.id, u.name, a.area,  ud.date, ud.amount,  
-			CASE WHEN '$year' = YEAR(ud.date) and '$month' = MONTH(ud.date) THEN  (DATEDIFF('$dateEnd',ud.date)+1) ELSE (DATEDIFF('$dateEnd','$dateStart')+1) END as tenor,
+			(DATEDIFF('$dateEnd',ud.date)+1) as tenor,
 			ROUND(ud.amount*$percentageAnnualy/100/365) as coc_daily,
-			 ROUND( (ud.amount*$percentageAnnualy/100/365) * 	CASE WHEN '$year' = YEAR(ud.date) and '$month' = MONTH(ud.date) THEN  (DATEDIFF('$dateEnd',ud.date)+1) ELSE (DATEDIFF('$dateEnd','$dateStart')+1) END) as coc_payment,			 
+			 ROUND( (ud.amount*$percentageAnnualy/100/365) * (DATEDIFF('$dateEnd',ud.date)+1)) as coc_payment,			 
 			 ")
 			->from($this->table.' ud')
 			->join('units u','u.id = ud.id_unit')
 			->join('areas a','a.id = u.id_area')
-			->where('MONTH(ud.date) <=', $month)
+			->where('MONTH(ud.date)', $month)
 			->where('YEAR(ud.date)', $year)
 			->where('no_perk','1110000')
 			->order_by('a.id','ASC')

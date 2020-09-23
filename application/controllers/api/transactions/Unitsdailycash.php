@@ -211,8 +211,14 @@ class Unitsdailycash extends ApiController
 		$ignore = array('1110000');
 		if($get = $this->input->get()){
 			$category = $get['category'];
-			$this->unitsdailycash->db
-				->where('date <=', $get['dateEnd']);
+			if($this->input->get('dateEnd')){
+				$this->unitsdailycash->db->where('date <=', $get['dateEnd']);
+			}
+
+			if($this->input->get('dateStart')){
+				$this->unitsdailycash->db->where('date >=', $get['dateStart']);
+			}
+
 			if($this->input->get('id_unit')){
 				$this->unitsdailycash->db->where('id_unit', $get['id_unit']);
 			}
@@ -226,7 +232,9 @@ class Unitsdailycash extends ApiController
 					->where_not_in('no_perk', $ignore);
 				}
 		}
-		$this->unitsdailycash->db->join('units','units.id = units_dailycashs.id_unit');
+		$this->unitsdailycash->db
+			->select('units.name as unit')
+			->join('units','units.id = units_dailycashs.id_unit');
 		$data = $this->unitsdailycash->all();
 		echo json_encode(array(
 			'data'	=> $data,
@@ -280,7 +288,9 @@ class Unitsdailycash extends ApiController
 				$this->unitsdailycash->db->where('id_area', $get['area']);
 			}
 		}
-		$this->unitsdailycash->db->join('units','units.id = units_dailycashs.id_unit');
+		$this->unitsdailycash->db
+			->select('units.name as unit')
+			->join('units','units.id = units_dailycashs.id_unit');
 		$data = $this->unitsdailycash->all();
 		echo json_encode(array(
 			'data'	=> $data,
@@ -351,7 +361,9 @@ class Unitsdailycash extends ApiController
 				$this->unitsdailycash->db->where('id_area', $get['area']);
 			}
 		}
-		$this->unitsdailycash->db->join('units','units.id = units_dailycashs.id_unit');
+		$this->unitsdailycash->db
+			->select('units.name as unit')
+			->join('units','units.id = units_dailycashs.id_unit');
 		$data = $this->unitsdailycash->all();
 		echo json_encode(array(
 			'data'	=> $data,

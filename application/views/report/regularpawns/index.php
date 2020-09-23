@@ -163,10 +163,11 @@ $this->load->view('temp/MenuBar.php');
 						  	<thead class="thead-light">
 						    	<tr>
 						      		<th class="text-center">No</th>
+									<th class="text-center">Unit</th>
 									<th class="text-center">No. SBK</th>
 									<th class="text-center">Tanggal SBK</th>
 									<th class="text-center">Tanggal Tempo</th>
-									<th class="text-center">Tanggal Lunas</th>
+									<!-- <th class="text-center">Tanggal Lunas</th> -->
 						      		<th>Nasabah</th>
 									<th class="text-center">Sewa Modal</th>
 									<th class='text-right'>Tafsiran</th>

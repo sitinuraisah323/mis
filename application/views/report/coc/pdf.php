@@ -1,4 +1,4 @@
-<h3>COC <?php echo date('d-m-Y'); ?></h3>
+<h3>COC <?php echo $datetrans ?></h3>
 <?php foreach($areas as $units):?>
     <table class="table" border="1">
         <thead class="thead-light">

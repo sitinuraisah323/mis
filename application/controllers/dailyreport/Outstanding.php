@@ -26,6 +26,7 @@ class Outstanding extends Authenticated
 		$this->load->model('RepaymentModel','repayments');
 		$this->load->model('MappingcaseModel', 'm_casing');
 		$this->load->model('OutstandingModel', 'outstanding');
+		$this->load->model('UnitsdailycashModel','dailycash');
 	}
 
 	/**
@@ -72,6 +73,15 @@ class Outstanding extends Authenticated
 		$pdf->AddPage('L');
 		$view = $this->load->view('dailyreport/outstanding/pengeluaran.php',['pengeluaran'	=> $this->pengeluaran()],true);
 		$pdf->writeHTML($view);
+
+		$areas = $this->dailycash->getCocCalcutation();
+		$pdf->AddPage('L');
+		$view = $this->load->view('report/coc/pdf.php',[
+			'areas'=>$areas	,
+			'datetrans'	=> $this->datetrans()
+		],true);
+		$pdf->writeHTML($view);
+	
 
 		//download
 		$pdf->Output('GHAnet_Summary_'.date('d_m_Y').'.pdf', 'D');
