@@ -137,6 +137,7 @@ function initCariForm(){
                     var amountGap = 0;
                     var amountBalanceFirst = 0;
                     var osunit = 0;
+                    var oscicilan = 0;
 					$.each(response.data, function (index, data) {
 						template += "<tr class='rowappend'>";
 						template += "<td class='text-center'>"+no+"</td>";
@@ -147,7 +148,8 @@ function initCariForm(){
 						template += "<td class='text-right'>"+convertToRupiah(data.amount_in)+"</td>";
 						template += "<td class='text-right'>"+convertToRupiah(data.amount_out)+"</td>";
 						template += "<td class='text-right'>"+convertToRupiah(data.amount_balance_final)+"</td>";
-						template += "<td class='text-right'>"+convertToRupiah(data.os_unit)+"</td>";
+                        if(data.os_cicilan!=null){oscicilan=data.os_cicilan;}else{oscicilan=0;}
+						template += "<td class='text-right'>"+convertToRupiah(parseInt(data.os_unit)+parseInt(oscicilan))+"</td>";
 						template += "<td class='text-right'>"+convertToRupiah(data.amount_gap)+"</td>";
 						template += "<td class='text-center'><span data-id='"+data.id+"' href='' class='btn btn-sm btn-clean btn-icon btn-icon-md viewBtn' title='View Data' data-toggle='modal' data-target='#modal_view'><i class='flaticon-eye' style='cursor:pointer;'></i></span></td>";
 						template += '</tr>';
@@ -157,7 +159,7 @@ function initCariForm(){
                         amountBalanceFinal += parseInt(data.amount_balance_final);
                         amountGap += parseInt(data.amount_gap);
                         amountBalanceFirst += parseInt(data.amount_balance_first);
-                        osunit += parseInt(data.os_unit);
+                        osunit += parseInt(data.os_unit)+parseInt(oscicilan);
 					});
                     $('.kt-section__content table').find('tfoot').find('.saldoawal').text(convertToRupiah(amountBalanceFirst));
                     $('.kt-section__content table').find('tfoot').find('.penerimaan').text(convertToRupiah(amountIn));
@@ -227,7 +229,7 @@ function popView(el)
                     $('#mutasi').val(formatRupiah(response.data.amount_mutation));
                     $('#saldoakhir').val(formatRupiah(response.data.amount_balance_final));
                     $('#selisih').val(formatRupiah(response.data.amount_gap));                   
-                    $('#os_unit').val(formatRupiah(response.data.os_unit));                   
+                    $('#os_unit').val((parseInt(response.data.os_unit)+parseInt(response.data.os_cicilan)));                   
                     $('#note').val(response.data.note);                   
                     
 				}

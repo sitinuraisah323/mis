@@ -8,6 +8,25 @@ class MortagesModel extends Master
 	
 	public $level = true;
 
-	
+	public function getMortages($idUnit, $sbk)
+	{
+		$noaMortages = $this->db->select('count(*) as noa')->from('units_repayments_mortage')
+			->where('id_unit', $idUnit)
+			->where('no_sbk', $sbk)->get()->row();
+
+		$upaMortages = $this->db->select('date_kredit,date_installment,amount,capital_lease,fine,saldo')->from('units_repayments_mortage')
+			->where('id_unit', $idUnit)
+			->where('no_sbk', $sbk)
+			->order_by('date_kredit','desc')->get()->row();
+
+		return (object)array(
+			'noa' 				=> $noaMortages->noa,
+			'date_kredit' 		=> $upaMortages->date_kredit,
+			'date_installment' 	=> $upaMortages->date_installment,
+			'amount' 			=> $upaMortages->amount,
+			'capital_lease' 	=> $upaMortages->capital_lease,
+			'saldo' 			=> $upaMortages->saldo
+		);
+	} 
 	
 }

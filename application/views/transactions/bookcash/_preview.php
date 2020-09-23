@@ -60,7 +60,7 @@
 				<td width="80">Sisa UP Kredit </td>
 				<td width="10"> :</td>
 				<td width="80"> </td>
-				<td width="200"> <?php echo number_format($bookcash->os_unit,0); ?></td>
+				<td width="200"> <?php echo number_format($bookcash->os_unit+$bookcash->os_cicilan,0); ?></td>
 			</tr>
 		</table>
 		</td>

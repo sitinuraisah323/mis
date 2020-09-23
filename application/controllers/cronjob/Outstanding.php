@@ -1,6 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once APPPATH.'controllers/Middleware/Authenticated.php';
+error_reporting(0);
 class Outstanding extends Authenticated
 {
 	/**
@@ -19,7 +20,8 @@ class Outstanding extends Authenticated
 		$this->load->model('UnitsModel', 'units');
 		$this->load->model('AreasModel', 'areas');
 		$this->load->model('AreasModel', 'model');
-        $this->load->model('RegularPawnsModel', 'regular');
+		$this->load->model('RegularPawnsModel', 'regular');
+		$this->load->model('MortagesModel', 'mortages');		
 	}
 
 	/**
@@ -115,30 +117,17 @@ class Outstanding extends Authenticated
         
    }
    
-   public function old()
+   public function cicilan()
 	{
-        $currdate =date("Y-m-d");
-        $nextdate = date('Y-m-d', strtotime('+1 days', strtotime($currdate)));
-        $lastdate = date('Y-m-d', strtotime('-2 days', strtotime($currdate)));
-        $old = date('Y-m-d', strtotime('-3 days', strtotime($currdate)));
-        $units = $this->units->db->select('units.id, units.name, area')
-			->join('areas','areas.id = units.id_area')
-			->get('units')->result();
-		foreach ($units as $unit){
-			 $unit->noa = $this->regular->getOstYesterday_($unit->id, $old)->noa;			
-             $unit->up = $this->regular->getOstYesterday_($unit->id, $old)->up;
-             
-             $data['id_unit']   = $unit->id;
-             $data['date']      = $lastdate;
-             $data['noa']       = $unit->noa;
-             $data['os']        = $unit->up;
-             $check = $this->db->get_where('units_outstanding',array('id_unit' => $unit->id,'date'=>$lastdate));
-             if($check->num_rows() > 0){
-                $this->db->update('units_outstanding', $data, array('id_unit' => $unit->id,'date'=>$lastdate));
-             }else{
-                $this->db->insert('units_outstanding', $data);
-             }
-		}
+		$idunit ='1';
+		$units = $this->db->select('id,id_unit,id_customer,no_sbk,nic,date_sbk,deadline,amount_loan,periode,status_transaction')
+						->from('units_mortages')
+						->where('id_unit',$idunit)
+						->get()->result();
+		foreach ($units as  $unit) {
+			$unit->cicilan = $this->mortages->getMortages($unit->id_unit,$unit->no_sbk);
+		}		
+		$this->sendMessage($units, 'Get Data Outstanding');
         
 	}
 

@@ -27,17 +27,25 @@
                                 <?php else:?>
                                     <input type="hidden" class="form-control form-control-sm" name="id_unit" id="unitid" value="<?php echo $this->session->userdata('user')->id_unit;?>">
                                 <?php endif;?>                                    
-                                    <label class="col-lg-4 col-form-label">Kasir</label>
-                                    <div class="col-lg-8">
+                                    <label class="col-lg-5 col-form-label">Kasir</label>
+                                    <div class="col-lg-7">
                                         <input type="text" class="form-control form-control-sm" id="kasir" name="kasir">
                                     </div>
-                                    <label class="col-lg-4 col-form-label">Tanggal</label>
-                                    <div class="col-lg-8">
+                                    <label class="col-lg-5 col-form-label">Tanggal</label>
+                                    <div class="col-lg-7">
                                         <input type="text" class="form-control form-control-sm" id="date" name="date" value="<?php echo date('d-m-Y'); ?>" style="background-color:grey; color:white;" readonly>
                                     </div>
-                                    <label class="col-lg-4 col-form-label">Sisa OS UP Unit</label>
-                                    <div class="col-lg-8">
-                                        <input type="text" class="form-control form-control-sm" id="os_unit" name="os_unit">
+                                    <label class="col-lg-5 col-form-label">Sisa UP Regular</label>
+                                    <div class="col-lg-7">
+                                        <input type="text" class="form-control form-control-sm" id="os_unit" name="os_unit" value="0">
+                                    </div>
+                                    <label class="col-lg-5 col-form-label">Sisa UP Cicilan</label>
+                                    <div class="col-lg-7">
+                                        <input type="text" class="form-control form-control-sm" id="os_cicilan" name="os_cicilan" value="0">
+                                    </div>
+                                    <label class="col-lg-5 col-form-label">OS Unit</label>
+                                    <div class="col-lg-7">
+                                        <input type="text" class="form-control form-control-sm" id="os" name="os" style="background-color:grey; color:white;" readonly>
                                     </div>
                                 </div>
                             </div>  

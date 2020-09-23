@@ -51,6 +51,7 @@ class Bookcash extends ApiController
 			$this->form_validation->set_rules('totmutasi', 'total mutasi', 'required');
 			$this->form_validation->set_rules('mutasi', 'mutasi', 'required');
 			$this->form_validation->set_rules('os_unit', 'OS unit', 'required');
+			$this->form_validation->set_rules('os_cicilan', 'os cicilan', 'required');
 
 			if ($this->form_validation->run() == FALSE)
 			{
@@ -76,6 +77,7 @@ class Bookcash extends ApiController
 					'total'					=> $this->convertNumber($post['total']),
 					'amount_gap'			=> $this->convertNumber($post['selisih']),
 					'os_unit'				=> $this->convertNumber($post['os_unit']),
+					'os_cicilan'			=> $this->convertNumber($post['os_cicilan']),
 					'timestamp'		=> date('Y-m-d H:i:s'),
 					'user_create'	=> $this->session->userdata('user')->id,
 					'user_update'	=> $this->session->userdata('user')->id
@@ -148,6 +150,7 @@ class Bookcash extends ApiController
 			$this->form_validation->set_rules('e_pengeluaran', 'pengeluaran', 'required');
 			$this->form_validation->set_rules('e_totmutasi', 'total mutasi', 'required');
 			$this->form_validation->set_rules('e_os_unit', 'os unit', 'required');
+			$this->form_validation->set_rules('e_os_cicilan', 'os cicilan', 'required');
 
 			if ($this->form_validation->run() == FALSE)
 			{
@@ -173,6 +176,7 @@ class Bookcash extends ApiController
 					'total'					=> $this->convertNumber($post['e_total']),
 					'amount_gap'			=> $this->convertNumber($post['e_selisih']),
 					'os_unit'				=> $this->convertNumber($post['e_os_unit']),
+					'os_cicilan'			=> $this->convertNumber($post['e_os_cicilan']),
 					'timestamp'		=> date('Y-m-d H:i:s'),
 					'user_create'	=> $this->session->userdata('user')->id,
 					'user_update'	=> $this->session->userdata('user')->id
