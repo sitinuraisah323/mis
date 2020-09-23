@@ -119,6 +119,16 @@ class UnitsdailycashModel extends Master
 			$year, $month, $daysInMonth
 		));
 
+		$dateStart = implode('-', array(
+			$year, $month, '01'
+		));
+
+		if($year == date('Y') && $month == date('m')){
+			$dateEnd = implode('-', array(
+				$year, $month, date('d')
+			));
+		}
+
 		if($gets){
 			if(key_exists('area', $gets)){
 				if( $gets['area']){
@@ -133,9 +143,10 @@ class UnitsdailycashModel extends Master
 		}
 
 		$this->db
-			->select("u.name, a.area,  ud.date, ud.amount,  CASE WHEN (DATEDIFF('$dateEnd',ud.date)+1) >= '$daysInMonth' THEN $daysInMonth ELSE (DATEDIFF('$dateEnd',ud.date)+1) END as tenor,
+			->select("u.name, a.area,  ud.date, ud.amount, 
+			 CASE WHEN '$year' = YEAR(ud.date) and '$month' = MONTH(ud.date) THEN  (DATEDIFF('$dateEnd',ud.date)+1) ELSE (DATEDIFF('$dateEnd','$dateStart')+1) END as tenor,
 			 ROUND(ud.amount*$percentageAnnualy/100/365) as coc_daily,
-			 ROUND( (ud.amount*$percentageAnnualy/100/365) * CASE WHEN (DATEDIFF('$dateEnd',ud.date)+1) >= '$daysInMonth' THEN $daysInMonth ELSE (DATEDIFF('$dateEnd',ud.date)+1) END) as coc_payment,			 
+			 ROUND( (ud.amount*$percentageAnnualy/100/365) * CASE WHEN '$year' = YEAR(ud.date) and '$month' = MONTH(ud.date) THEN  (DATEDIFF('$dateEnd',ud.date)+1) ELSE (DATEDIFF('$dateEnd','$dateStart')+1) END) as coc_payment,			 
 			 ")
 			->from($this->table.' ud')
 			->join('units u','u.id = ud.id_unit')
@@ -164,6 +175,16 @@ class UnitsdailycashModel extends Master
 			$year, $month, $daysInMonth
 		));
 
+		if($year == date('Y') && $month == date('m')){
+			$dateEnd = implode('-', array(
+				$year, $month, date('d')
+			));
+		}
+
+		$dateStart = implode('-', array(
+			$year, $month, '01'
+		));
+
 		if($gets){
 			if(key_exists('area', $gets)){
 				if( $gets['area']){
@@ -178,9 +199,10 @@ class UnitsdailycashModel extends Master
 		}
 
 		$this->db
-			->select("u.id, u.name, a.area,  ud.date, ud.amount,  CASE WHEN (DATEDIFF('$dateEnd',ud.date)+1) >= '$daysInMonth' THEN $daysInMonth ELSE (DATEDIFF('$dateEnd',ud.date)+1) END as tenor,
-			 ROUND(ud.amount*$percentageAnnualy/100/365) as coc_daily,
-			 ROUND( (ud.amount*$percentageAnnualy/100/365) * CASE WHEN (DATEDIFF('$dateEnd',ud.date)+1) >= '$daysInMonth' THEN $daysInMonth ELSE (DATEDIFF('$dateEnd',ud.date)+1) END) as coc_payment,			 
+			->select("u.id, u.name, a.area,  ud.date, ud.amount,  
+			CASE WHEN '$year' = YEAR(ud.date) and '$month' = MONTH(ud.date) THEN  (DATEDIFF('$dateEnd',ud.date)+1) ELSE (DATEDIFF('$dateEnd','$dateStart')+1) END as tenor,
+			ROUND(ud.amount*$percentageAnnualy/100/365) as coc_daily,
+			 ROUND( (ud.amount*$percentageAnnualy/100/365) * 	CASE WHEN '$year' = YEAR(ud.date) and '$month' = MONTH(ud.date) THEN  (DATEDIFF('$dateEnd',ud.date)+1) ELSE (DATEDIFF('$dateEnd','$dateStart')+1) END) as coc_payment,			 
 			 ")
 			->from($this->table.' ud')
 			->join('units u','u.id = ud.id_unit')
