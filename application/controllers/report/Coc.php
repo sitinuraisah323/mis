@@ -76,7 +76,7 @@ class Coc extends Authenticated
 		foreach ($units as $unit){
 
 			$objPHPExcel->getActiveSheet()->setCellValue('A'.$no, $i);
-			$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, $data->area);
+			$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, $unit->area);
 			$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, $unit->name);
 			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no,$unit->date);
 			$objPHPExcel->getActiveSheet()->getStyle('E'.$no)->getNumberFormat()->setFormatCode('#,##0.00');
