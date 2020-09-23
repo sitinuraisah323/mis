@@ -33,6 +33,22 @@ $this->load->view('temp/MenuBar.php');
      <div class="kt-container  kt-grid__item kt-grid__item--fluid">
         <div class="row">
 
+                <div class="col-lg-12">
+                    <div class="alert alert-danger" role="alert" id="message_alert" style="display: none;">                    
+                        <div class="alert-text">                        
+                            <h4 class="alert-heading">Got Issues!</h4>
+                            <p>Terdapat kesalahan pencatatan transaksi sebesar <span class="badge badge-primary"><b><label class="total_err"></b></span> dari  <span class="badge badge-primary"><b><label class="total_noa_err"></b></span> Noa status masih aktif, hal ini terjadi karena kesalahan pencatatan data nasabah, untuk selanjutnya tiap unit bisa lebih teliti lagi dalam pencatatan transaksi supaya kesalahan tidak terulang lagi.</p>
+                            <hr>
+                            <p class="mb-0">Kesalahan pencatatan transaksi ini akan diakui sebagai OS di GHAnet jika statusnya masih aktif</p>
+                        </div>
+                        <div class="alert-close">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true"><i class="la la-close"></i></span>
+                                </button>
+                            </div>
+                    </div>
+                </div>
+
                 <div class="col-lg-4">
                 <form id="form_saldounit" class="form-horizontal">
                     <div class="kt-portlet kt-iconbox kt-iconbox--brand kt-iconbox--animate-slower">
@@ -77,10 +93,12 @@ $this->load->view('temp/MenuBar.php');
                             </div>
                             <div class="kt-iconbox__desc">
                                 <h3 class="kt-iconbox__title">
-                                    <a class="kt-link Outstanding" href="#">0</a>
+                                    <a class="kt-link Outstanding" href="#">0</a> (OS)
                                 </h3>
                                 <div class="kt-iconbox__content">
-                                    Outstanding
+                                   UP Kredit Reguler ( <b><a class="kt-link upregular" href="#">0</a></b>)
+                                   <br/>UP Kredit Cicilan ( <b><a class="kt-link saldocicilan" href="#">0</a></b>)                                      
+                                   <!-- <br/>UP Cicilan ( <b><a class="kt-link upcicilan" href="#">0</a></b>)  -->
                                 </div>
                             </div>
                         </div>
@@ -107,7 +125,7 @@ $this->load->view('temp/MenuBar.php');
                                     <a class="kt-link dpd-unit" href="#">0</a>
                                 </h3>
                                 <div class="kt-iconbox__content">
-                                   Day Past Due(DPD)
+                                   Day Past Due(DPD) of <b><a class="kt-link dpdnoa" href="#">0</a></b> Noa
                                 </div>
                             </div>
                         </div>

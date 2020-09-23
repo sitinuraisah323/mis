@@ -14,6 +14,7 @@ class Dashboards extends ApiController
 		$this->load->model('MappingcaseModel', 'm_casing');
 		$this->load->model('OutstandingModel', 'outstanding');
 		$this->load->model('UnitsdailycashModel', 'unitsdailycash');
+		$this->load->model('MortagesModel', 'mortages');		
 	}
 
 	
@@ -884,13 +885,37 @@ class Dashboards extends ApiController
 	public function SummaryUnit()
 	{
 		$idUnit = $this->session->userdata('user')->id_unit;
+
 		$date = date('Y-m-d');
 		$saldo = $this->db
 					 ->where('id_unit', $idUnit)
 					 ->order_by('id','DESC')->get('units_cash_book')->row();
+
 		$outstanding = $this->db
 					 ->where('id_unit', $idUnit)
 					 ->order_by('id','DESC')->get('units_outstanding')->row();
+
+		$saldocicilan =0;
+		$upcicilan =0;
+		$units = $this->db->select('*')
+								  ->from('units_mortages')
+								  ->where('status_transaction','N')
+								  ->where('id_unit',$idUnit)
+								  ->get()->result();
+		foreach ($units as $unit) {
+			$unit->cicilan = $this->mortages->getMortages($unit->id_unit,$unit->no_sbk);
+			if($unit->cicilan->saldo!=""){$sumcicil=$unit->cicilan->saldo;}else{$sumcicil = $unit->amount_loan;}
+			$saldocicilan +=$sumcicil;
+			$upcicilan +=$unit->amount_loan;
+		}
+		$saldoup = $saldocicilan;
+		$upcicilan = $upcicilan;
+
+		$mortagesup = $this->db->select('sum(amount_loan) as up')
+							->from('units_mortages')
+							->where('status_transaction','N')
+							->where('id_unit',$idUnit)
+							->get()->row();		
 		
 		$dpd = $this->db->select('sum(amount) as up,count(*) as noa')
 					->from('units_regularpawns')
@@ -900,8 +925,35 @@ class Dashboards extends ApiController
 					->where('units_regularpawns.id_unit',$idUnit)
 					->get()->row();
 
-		$data = array("saldo"=>(int) $saldo->amount_balance_final,"outstanding"=>(int) $outstanding->os,"dpd"=>(int) $dpd->up);		
+		$data = array("saldo"=>(int) $saldo->amount_balance_final,"upreguler"=>(int) $outstanding->os,"outstanding"=>(int) $outstanding->os + (int) $saldocicilan,"upcicilan"=>(int) $mortagesup->up,"saldocicilan"=>(int) $saldocicilan,"dpd"=>(int) $dpd->up,"noadpd"=>(int) $dpd->noa);		
 		return $this->sendMessage($data,'Get Book Cash Daily');
+	}
+
+	public function unitsMortages()
+	{
+		$idunit ='1';
+		$units = $this->db->select('id,id_unit,id_customer,no_sbk,nic,date_sbk,deadline,amount_loan,periode,status_transaction')
+						->from('units_mortages')
+						->where('status_transaction','N')
+						->where('id_unit',$idunit)
+						->get()->result();
+		foreach ($units as  $unit) {
+			$unit->cicilan = $this->mortages->getMortages($unit->id_unit,$unit->no_sbk)->saldo;
+		}		
+		$this->sendMessage($units, 'Get Data Outstanding');
+        
+	}
+
+	public function reportcustomers()
+	{
+		$idUnit = $this->session->userdata('user')->id_unit;
+		$units = $this->db->select('id,id_unit,id_customer,amount')
+					->from('units_regularpawns')
+					->where('status_transaction','N')
+					->where('id_customer', '0')
+					->where('id_unit',$idUnit)
+					->get()->result();					
+		$this->sendMessage($units, 'Get Data Outstanding');
 	}
 
 }

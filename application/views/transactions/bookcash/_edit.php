@@ -40,6 +40,14 @@
                                     <div class="col-lg-8">
                                         <input type="text" class="form-control form-control-sm" id="e_os_unit" name="e_os_unit">
                                     </div>
+                                    <label class="col-lg-4 col-form-label">Sisa UP Cicilan</label>
+                                    <div class="col-lg-8">
+                                        <input type="text" class="form-control form-control-sm" id="e_os_cicilan" name="e_os_cicilan" value="0">
+                                    </div>
+                                    <label class="col-lg-4 col-form-label">OS Unit</label>
+                                    <div class="col-lg-8">
+                                        <input type="text" class="form-control form-control-sm" id="e_os" name="e_os" style="background-color:grey; color:white;" readonly>
+                                    </div>
                                 </div>
                             </div>  
 

@@ -40,8 +40,10 @@ var penerimaan = document.getElementById('penerimaan');
 var pengeluaran = document.getElementById('pengeluaran');
 var totmutasi = document.getElementById('totmutasi');
 var osunit = document.getElementById('os_unit');
+var oscicialn = document.getElementById('os_cicilan');
 
-osunit.addEventListener('keyup', function(e){convertNumber();});
+osunit.addEventListener('keyup', function(e){convertNumber(); hitung();});
+oscicialn.addEventListener('keyup', function(e){convertNumber(); hitung();});
 saldoawal.addEventListener('keyup', function(e){convertNumber(); hitung(); calculateSum();});
 penerimaan.addEventListener('keyup', function(e){convertNumber(); hitung(); calculateSum(); });
 pengeluaran.addEventListener('keyup', function(e){ convertNumber(); hitung(); calculateSum();});
@@ -51,22 +53,26 @@ var epenerimaan = document.getElementById('e_penerimaan');
 var epengeluaran = document.getElementById('e_pengeluaran');
 var etotmutasi = document.getElementById('e_totmutasi');
 var eosunit = document.getElementById('e_os_unit');
+var eoscicilan = document.getElementById('e_os_cicilan');
 
 esaldoawal.addEventListener('keyup', function(e){convertEditNumber(); e_hitung(); e_calculateSum();});
 epenerimaan.addEventListener('keyup', function(e){convertEditNumber(); e_hitung(); e_calculateSum(); });
 epengeluaran.addEventListener('keyup', function(e){ convertEditNumber(); e_hitung(); e_calculateSum();});
-eosunit.addEventListener('keyup', function(e){ convertEditNumber();});
+eosunit.addEventListener('keyup', function(e){ convertEditNumber();  e_hitung();});
+eoscicilan.addEventListener('keyup', function(e){ convertEditNumber(); e_hitung();});
 
 function convertNumber(){
     var saldoawal = document.getElementById('saldoawal');
     var penerimaan = document.getElementById('penerimaan');
     var pengeluaran = document.getElementById('pengeluaran');
     var osunit = document.getElementById('os_unit');
+    var oscicialn = document.getElementById('os_cicilan');
 
     saldoawal.value   = formatRupiah(saldoawal.value);
     penerimaan.value   = formatRupiah(penerimaan.value);
     pengeluaran.value  = formatRupiah(pengeluaran.value);
     osunit.value  = formatRupiah(osunit.value);
+    oscicialn.value  = formatRupiah(oscicialn.value);
 }
 
 function convertEditNumber(){
@@ -74,11 +80,13 @@ function convertEditNumber(){
     var penerimaan = document.getElementById('e_penerimaan');
     var pengeluaran = document.getElementById('e_pengeluaran');
     var osunit = document.getElementById('e_os_unit');
+    var oscicilan = document.getElementById('e_os_cicilan');
 
-    saldoawal.value   = formatRupiah(saldoawal.value);
+    saldoawal.value    = formatRupiah(saldoawal.value);
     penerimaan.value   = formatRupiah(penerimaan.value);
     pengeluaran.value  = formatRupiah(pengeluaran.value);
-    osunit.value        = formatRupiah(osunit.value);
+    osunit.value       = formatRupiah(osunit.value);
+    oscicilan.value    = formatRupiah(oscicilan.value);
 }
 
 function convertView(){   
@@ -111,6 +119,8 @@ function convertEdit(){
     var totmutasi = document.getElementById('e_totmutasi');
     var mutasi = document.getElementById('e_mutasi');
     var osunit = document.getElementById('e_os_unit');
+    var oscicilan = document.getElementById('e_os_cicilan');
+    var eos = document.getElementById('e_os');
 
     saldoawal.value     = formatRupiah(saldoawal.value);
     penerimaan.value    = formatRupiah(penerimaan.value);
@@ -119,25 +129,11 @@ function convertEdit(){
     selisih.value       = formatRupiah(selisih.value);
     saldoakhir.value    = formatRupiah(saldoakhir.value); 
     osunit.value        = formatRupiah(osunit.value); 
+    oscicilan.value     = formatRupiah(oscicilan.value); 
     if(parseInt(totmutasi.value) >0){ totmutasi.value       = formatRupiah(totmutasi.value); }   
+    if(parseInt(eos.value) >0){ eos.value       = formatRupiah(eos.value); }   
     //alert(saldoawal.value);
 }
-
-function ConverPecahanKertas(){
-    //alert('test');
-    //var i;
-    //var k_pecahan = document.getElementById('k_pecahan_1').value;
-    //alert(k_pecahan);
-    //k_pecahan_1.value   = formatRupiah(k_pecahan_1.value);
-    // for(i=1; i <=7; i++){
-    //     var k_pecahan_1 = document.getElementById('k_pecahan_1');
-    //     //k_pecahan_1.value   = "";
-    // }
-    //var thisElement = $(this);
-    //var pecahan = find('.pecahan').val();
-    //alert(pecahan);
-}
-
 
 function initDTEvents(){
     $(".btn_delete").on("click",function(){
@@ -203,7 +199,6 @@ function initDTEvents(){
     });
 }
 
-
 function initDataTable(){
     var option = {
         data: {
@@ -262,7 +257,7 @@ function initDataTable(){
 				  template:row => {
 				  	date = new Date(row.date_create);
 				  	return `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
-			  }
+			        }
 			  },
             {
                 field: 'kasir',
@@ -319,7 +314,7 @@ function initDataTable(){
                 textAlign: 'left',
                 template: function (row) {
                     var result = "<div class='date-td'>";
-                    result =convertToRupiah(row.os_unit);
+                    result =convertToRupiah(parseInt(row.os_unit) + parseInt(row.os_cicilan));
                     result = result + "</div>";
                     return result;
                 }
@@ -655,7 +650,8 @@ function popEdit(el)
                     $('#e_selisih').val(response.data.amount_gap);                   
                     $('#e_note').val(response.data.note);                   
                     $('#e_os_unit').val(response.data.os_unit);                   
-                    
+                    $('#e_os_cicilan').val(response.data.os_cicilan);                   
+                    $('#e_os').val(parseInt(response.data.os_cicilan)+ parseInt(response.data.os_unit));                   
 				}
 			},
 			error: function (jqXHR, textStatus, errorThrown){
@@ -744,7 +740,7 @@ function popView(el)
                     $('#v_saldoakhir').val(response.data.amount_balance_final);
                     $('#v_selisih').val(response.data.amount_gap);                   
                     $('#v_note').val(response.data.note);                   
-                    $('#v_os_unit').val(response.data.os_unit);                   
+                    $('#v_os_unit').val(parseInt(response.data.os_unit)+parseInt(response.data.os_cicilan));                   
 				}
 			},
 			error: function (jqXHR, textStatus, errorThrown){
@@ -822,11 +818,19 @@ function hitung(){
     var saldoawal   = $("#saldoawal").val();
     var penerimaan  = $("#penerimaan").val();
     var pengeluaran = $("#pengeluaran").val();
+    var osregular = $("#os_unit").val();
+    var oscicilan = $("#os_cicilan").val();
     if(saldoawal){saldoawal=formatNumber(saldoawal);}else{saldoawal=0;}
     if(penerimaan){penerimaan=formatNumber(penerimaan);}else{penerimaan=0;}
     if(pengeluaran){pengeluaran=formatNumber(pengeluaran);}else{pengeluaran=0;}
+    if(osregular){osregular=formatNumber(osregular);}else{osregular=0;}
+    if(oscicilan){oscicilan=formatNumber(oscicilan);}else{oscicilan=0;}
+    var os      = (parseInt(osregular)) + parseInt(oscicilan);
     var mutasi      = (parseInt(penerimaan)) - parseInt(pengeluaran);
     var saldoakhir  = (parseInt(saldoawal) + parseInt(penerimaan)) - parseInt(pengeluaran);
+    if(!isNaN(os)){
+        $('[name="os"]').val(os);
+    }
     if(!isNaN(mutasi)){
         $('[name="totmutasi"]').val(mutasi);
         $('[name="mutasi"]').val(mutasi);
@@ -837,20 +841,31 @@ function hitung(){
 
     var totmutasi       = document.getElementById('totmutasi');
     var saldoakhir      = document.getElementById('saldoakhir');
+    var outstanding      = document.getElementById('os');
+
     if(mutasi>0){ totmutasi.value = formatRupiah(totmutasi.value);}
     if(saldoakhir>0){ saldoakhir.value    = formatRupiah(saldoakhir.value);}    
+    if(os>0){ outstanding.value    = formatRupiah(outstanding.value);}    
 }
 
 function e_hitung(){
     var saldoawal   = $("#e_saldoawal").val();
     var penerimaan  = $("#e_penerimaan").val();
     var pengeluaran = $("#e_pengeluaran").val();
+    var osunit      = $("#e_os_unit").val();
+    var oscicilan   = $("#e_os_cicilan").val();
 
+    if(osunit){osunit=formatNumber(osunit);}else{osunit=0;}
+    if(oscicilan){oscicilan=formatNumber(oscicilan);}else{oscicilan=0;}
     if(saldoawal){saldoawal=formatNumber(saldoawal);}else{saldoawal=0;}
     if(penerimaan){penerimaan=formatNumber(penerimaan);}else{penerimaan=0;}
     if(pengeluaran){pengeluaran=formatNumber(pengeluaran);}else{pengeluaran=0;}
+    var os          = (parseInt(osunit)) + parseInt(oscicilan);
     var mutasi      = (parseInt(penerimaan)) - parseInt(pengeluaran);
     var saldoakhir  = (parseInt(saldoawal) + parseInt(penerimaan)) - parseInt(pengeluaran);
+    if(!isNaN(os)){
+        $('[name="e_os"]').val(os);
+    }
     if(!isNaN(mutasi)){
         $('[name="e_totmutasi"]').val(mutasi);
         $('[name="e_mutasi"]').val(mutasi);
@@ -861,7 +876,9 @@ function e_hitung(){
 
     var totmutasi       = document.getElementById('e_totmutasi');
     var saldoakhir      = document.getElementById('e_saldoakhir');
-    if(mutasi>0){ totmutasi.value = formatRupiah(totmutasi.value);}
+    var outstanding      = document.getElementById('e_os');
+    if(mutasi>0){ outstanding.value = formatRupiah(outstanding.value);}
+    if(os>0){ totmutasi.value = formatRupiah(totmutasi.value);}
     saldoakhir.value    = formatRupiah(saldoakhir.value);
 }
 

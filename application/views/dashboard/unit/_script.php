@@ -8,7 +8,6 @@ function convertToRupiah(angka)
 	return rupiah.split('',rupiah.length-1).reverse().join('');
 }
 
-
 var KTDashboard = function() {
     var currentDate = "<?php $date = date('Y-m-d'); echo $date?>";
     var lastDate = "<?php echo  date('Y-m-d', strtotime($date . " -1 days"));?>";
@@ -871,7 +870,11 @@ var KTDashboard = function() {
 function initCash(){
     var saldo=0;
     var outstanding=0;
+    var upregular=0;
+    var upcicilan=0;
+    var saldocicilan=0;
     var dpd=0;
+    var dpdnoa=0;
     KTApp.block('#form_saldounit .kt-portlet', {});
     KTApp.block('#form_cardOut .kt-portlet', {}); 
     KTApp.block('#form_cardDPD .kt-portlet', {}); 
@@ -881,28 +884,67 @@ function initCash(){
         type:"GET",
         dataType:"JSON",
         success:function(response){
-            saldo = response.data.saldo;
-            outstanding = response.data.outstanding;
-            dpd = response.data.dpd;
+            saldo        = response.data.saldo;
+            outstanding  = response.data.outstanding;
+            dpd          = response.data.dpd;
+            upregular    = response.data.upreguler;
+            upcicilan    = response.data.upcicilan;
+            saldocicilan = response.data.saldocicilan;
+            dpdnoa       = response.data.noadpd;
            
         },
         error:function(xhr){
             $('.cash-saldo').text(0);
         },
         complete:function(){
+            $('.Outstanding').empty();
             $('.cash-saldo').text(convertToRupiah(saldo));
             $('.Outstanding').text(convertToRupiah(outstanding));
+            $('.upregular').text(convertToRupiah(upregular));
+            $('.saldocicilan').text(convertToRupiah(saldocicilan));
+            //$('.upcicilan').text(convertToRupiah(upcicilan));
             $('.dpd-unit').text(convertToRupiah(dpd));
+            $('.dpdnoa').text(convertToRupiah(dpdnoa));            
           KTApp.unblock('#form_saldounit .kt-portlet', {}); 
           KTApp.unblock('#form_cardOut .kt-portlet', {});  
           KTApp.unblock('#form_cardDPD .kt-portlet', {});  
-                   
+          //$("#message_alert").show();                    
         }
     });
 }
+
+function initCaseOs(){
+    var total=0;
+    var noa=0;
+    //KTApp.block('#form_saldounit .kt-portlet', {});       
+    $.ajax({
+        url: "<?php echo base_url('api/dashboards/reportcustomers');?>",
+        type:"GET",
+        dataType:"JSON",
+        success:function(response){
+            $.each(response.data, function (index,unit) {
+                    total += parseInt(unit.amount);
+                    noa += 1;
+            });
+            total = total;
+            noa = noa;
+        },
+        error:function(xhr){
+        },
+        complete:function(){
+            if(total >0){
+                $("#message_alert").show();                   
+                $('.total_err').text(convertToRupiah(total));
+                $('.total_noa_err').text(noa);
+            }
+        }
+    });
+}
+
 // Class initialization on page load
 jQuery(document).ready(function() {
     KTDashboard.init();
     initCash();
+    initCaseOs();
 });
 </script>
