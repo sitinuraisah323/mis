@@ -79,10 +79,13 @@ class Coc extends Authenticated
 			$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, $data->area);
 			$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, $unit->name);
 			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no,$unit->date);
-			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no,money($unit->amount,2));
+			$objPHPExcel->getActiveSheet()->getStyle('E'.$no)->getNumberFormat()->setFormatCode('#,##0.00');
+			$objPHPExcel->getActiveSheet()->getStyle('G'.$no)->getNumberFormat()->setFormatCode('#,##0.00');
+			$objPHPExcel->getActiveSheet()->getStyle('H'.$no)->getNumberFormat()->setFormatCode('#,##0.00');
+			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no,$unit->amount);
 			$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, $unit->tenor);
-			$objPHPExcel->getActiveSheet()->setCellValue('G'.$no, money($unit->coc_daily, 2));
-			$objPHPExcel->getActiveSheet()->setCellValue('H'.$no, money($unit->coc_payment, 2));
+			$objPHPExcel->getActiveSheet()->setCellValue('G'.$no, $unit->coc_daily);
+			$objPHPExcel->getActiveSheet()->setCellValue('H'.$no, $unit->coc_payment);
 
 			$no++;
 			$i++;
