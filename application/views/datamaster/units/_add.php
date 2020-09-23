@@ -39,6 +39,12 @@
                                     <input type="text" class="form-control" id="add_unit" name="unit">	                            		
                                 </div>
                             </div>    
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Tanggal Buka</label>
+                                    <input type="date" class="form-control" id="date_open" name="date_open">	                            		
+                                </div>
+                            </div>
   
                             <div class="col-md-12" >     
                                 <div class="kt-section">

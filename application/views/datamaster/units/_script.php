@@ -124,6 +124,12 @@ function initDataTable(){
                 textAlign: 'left',
             }, 
             {
+                field: 'date_open',
+                title: 'Tanggal Buka',
+                sortable: 'asc',
+                textAlign: 'left',
+            }, 
+            {
                 field: 'status',
                 title: 'Status',
                 sortable: 'asc',
@@ -264,6 +270,9 @@ function initCreateForm(){
                     AlertUtil.showFailedDialogAdd(data.message);
                 }                
             },
+            complete: function(){
+                clearForm()
+            },
             error: function (jqXHR, textStatus, errorThrown){
                 KTApp.unblock('#modal_add .modal-content');
                 AlertUtil.showFailedDialogAdd("Cannot communicate with server please check your internet connection");
@@ -319,6 +328,9 @@ function initEditForm(){
                     AlertUtil.showFailed(data.message);
                 }                
             },
+            complete: function(){
+                clearForm()
+            },
             error: function (jqXHR, textStatus, errorThrown){
                 KTApp.unblock('#modal_edit .modal-content');
                 AlertUtil.showFailedDialogEdit("Cannot communicate with server please check your internet connection");
@@ -337,7 +349,16 @@ function initEditForm(){
         $("#edit_unit_name").val(groupObject.name);
         $("#edit_code_unit").val(groupObject.code);
         $("#edit_area").val(groupObject.id_area);
+        $("[name='date_open']").val(groupObject.date_open);
         $("#edit_area").trigger('change');
+    }
+
+    const  clearForm = function(){
+        $("#edit_unit_id").val('');
+        $("#edit_unit_name").val('');
+        $("#edit_code_unit").val('');
+        $("#edit_area").val('');
+        $("#date_open").val('');
     }
     
     return {

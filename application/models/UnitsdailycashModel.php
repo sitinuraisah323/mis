@@ -103,7 +103,7 @@ class UnitsdailycashModel extends Master
 		);
 	}
 
-	public function getCoc($gets, $percentageAnnualy = 11, $month = 0, $year = 0)
+	public function getCoc($gets = null, $percentageAnnualy = 11, $month = 0, $year = 0)
 	{	
 		if($month === 0){
 			$month = date('m');
@@ -113,11 +113,7 @@ class UnitsdailycashModel extends Master
 			$year = date('Y');
 		}
 
-		$daysInMonth = days_in_month($month, $year);
-
-		$dateEnd = implode('-', array(
-			$year, $month, $daysInMonth
-		));
+		$dateEnd = date('Y-m-d');
 
 		if($gets){
 			if(key_exists('area', $gets)){
@@ -133,18 +129,83 @@ class UnitsdailycashModel extends Master
 		}
 
 		$this->db
-			->select("u.name, a.area,  ud.date, ud.amount,  CASE WHEN (DATEDIFF('$dateEnd',ud.date)+1) >= '$daysInMonth' THEN $daysInMonth ELSE (DATEDIFF('$dateEnd',ud.date)+1) END as tenor,
+			->select("u.name, a.area,  ud.date, ud.amount, 
+			 (DATEDIFF('$dateEnd',ud.date)+1) as tenor,
 			 ROUND(ud.amount*$percentageAnnualy/100/365) as coc_daily,
-			 ROUND( (ud.amount*$percentageAnnualy/100/365) * CASE WHEN (DATEDIFF('$dateEnd',ud.date)+1) >= '$daysInMonth' THEN $daysInMonth ELSE (DATEDIFF('$dateEnd',ud.date)+1) END) as coc_payment,			 
+			 ROUND( (ud.amount*$percentageAnnualy/100/365) * (DATEDIFF('$dateEnd',ud.date)+1) ) as coc_payment,			 
 			 ")
 			->from($this->table.' ud')
 			->join('units u','u.id = ud.id_unit')
 			->join('areas a','a.id = u.id_area')
-			->where('MONTH(ud.date) <=', $month)
+			->where('MONTH(ud.date)', $month)
 			->where('YEAR(ud.date)', $year)
 			->where('no_perk','1110000')
 			->order_by('a.id','ASC')
 			->order_by('coc_payment','DESC');
 		return $this->db->get()->result();
+	}
+
+	public function getCocCalcutation($gets = null, $percentageAnnualy = 11, $month = 0, $year = 0)
+	{
+		if($month === 0){
+			$month = date('m');
+		}
+
+		if($year === 0){
+			$year = date('Y');
+		}
+
+		$daysInMonth = days_in_month($month, $year);
+
+		$dateEnd = date('Y-m-d');
+
+
+		if($gets){
+			if(key_exists('area', $gets)){
+				if( $gets['area']){
+					$this->db->where('u.id_area', $gets['area']);
+				}
+			}
+			if(key_exists('unit', $gets)){
+				if($gets['unit']){
+					$this->db->where('u.id', $gets['unit']);
+				}
+			}
+		}
+
+		$this->db
+			->select("u.id, u.name, a.area,  ud.date, ud.amount,  
+			(DATEDIFF('$dateEnd',ud.date)+1) as tenor,
+			ROUND(ud.amount*$percentageAnnualy/100/365) as coc_daily,
+			 ROUND( (ud.amount*$percentageAnnualy/100/365) * (DATEDIFF('$dateEnd',ud.date)+1)) as coc_payment,			 
+			 ")
+			->from($this->table.' ud')
+			->join('units u','u.id = ud.id_unit')
+			->join('areas a','a.id = u.id_area')
+			->where('MONTH(ud.date)', $month)
+			->where('YEAR(ud.date)', $year)
+			->where('no_perk','1110000')
+			->order_by('a.id','ASC')
+			->order_by('coc_payment','DESC');
+		$data = $this->db->get()->result();
+
+		$result = array();
+		foreach($data as $datum){
+			if($result[$datum->id]){
+				$result[$datum->id]->amount = $result[$datum->id]->amount + $datum->amount;
+				$result[$datum->id]->coc_payment = $result[$datum->id]->coc_payment + $datum->coc_payment;
+			}else{
+				$result[$datum->id] = $datum;
+			}
+		}
+		$groupArea = array();
+		foreach($result as $index => $show){
+			if($groupArea[$show->area]){
+				$groupArea[$show->area][] = $show;
+			}else{
+				$groupArea[$show->area][] = $show;
+			}
+		}
+		return $groupArea;
 	}
 }
