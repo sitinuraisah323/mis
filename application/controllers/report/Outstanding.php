@@ -34,6 +34,38 @@ class Outstanding extends Authenticated
 		$this->load->view('report/os/index',$data);
 	}
 
+	public function checkos($idunit)
+	{
+		$saldoNonReg =0;
+		$regular = $this->db->select('SUM(amount) as up')
+							->from('units_regularpawns')
+							->where('status_transaction','N')
+							->where('id_unit',$idunit)
+							->get()->row();
+		$nonReg = $this->db->select('*')
+						    ->from('units_mortages')
+							->where('status_transaction','N')
+							->where('id_unit',$idunit)
+							->get()->result();
+		foreach ($nonReg as $row) {
+			$getcicilan = $this->db->select('*')
+									->from('units_repayments_mortage')
+									->where('no_sbk',$row->no_sbk)
+									->where('id_unit',$idunit)
+									->get()->row();
+			if(!empty($getcicilan)){
+				$saldoNonReg += $getcicilan->saldo;
+			}else{
+				$saldoNonReg += $row->amount_loan;
+			}
+		}
+
+		$saldoNonReg = $saldoNonReg;
+		$os = $regular->up + $saldoNonReg;
+
+		 echo  "Regular = ".$regular->up." | Cicilan = ".$saldoNonReg." | OS = ".$os;		
+	}
+
 	public function export()
 	{		
 		//load our new PHPExcel library

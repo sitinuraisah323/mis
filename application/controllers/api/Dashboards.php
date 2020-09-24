@@ -891,25 +891,54 @@ class Dashboards extends ApiController
 					 ->where('id_unit', $idUnit)
 					 ->order_by('id','DESC')->get('units_cash_book')->row();
 
-		$outstanding = $this->db
-					 ->where('id_unit', $idUnit)
-					 ->order_by('id','DESC')->get('units_outstanding')->row();
+		// $outstanding = $this->db->select('sum(amount) as up')
+		// 			 ->where('status_transaction', 'N')
+		// 			 ->where('id_unit', $idUnit)
+		// 			 ->get('units_regularpawns')->row();
 
-		$saldocicilan =0;
-		$upcicilan =0;
-		$units = $this->db->select('*')
-								  ->from('units_mortages')
-								  ->where('status_transaction','N')
-								  ->where('id_unit',$idUnit)
-								  ->get()->result();
-		foreach ($units as $unit) {
-			$unit->cicilan = $this->mortages->getMortages($unit->id_unit,$unit->no_sbk);
-			if($unit->cicilan->saldo!=""){$sumcicil=$unit->cicilan->saldo;}else{$sumcicil = $unit->amount_loan;}
-			$saldocicilan +=$sumcicil;
-			$upcicilan +=$unit->amount_loan;
+		// $saldocicilan =0;
+		// $upcicilan =0;
+		// $units = $this->db->select('*')
+		// 						  ->from('units_mortages')
+		// 						  ->where('status_transaction','N')
+		// 						  ->where('id_unit',$idUnit)
+		// 						  ->get()->result();
+		// foreach ($units as $unit) {
+		// 	$unit->cicilan = $this->mortages->getMortages($unit->id_unit,$unit->no_sbk);
+		// 	if($unit->cicilan->saldo!=""){$sumcicil=$unit->cicilan->saldo;}else{$sumcicil = $unit->amount_loan;}
+		// 	$saldocicilan +=$sumcicil;
+		// 	$upcicilan +=$unit->amount_loan;
+		// }
+		// $saldoup = $saldocicilan;
+		// $upcicilan = $upcicilan;
+
+		$saldoNonReg =0;
+		$regular = $this->db->select('SUM(amount) as up')
+							->from('units_regularpawns')
+							->where('status_transaction','N')
+							->where('id_unit',$idUnit)
+							->get()->row();
+
+		$nonReg = $this->db->select('*')
+						    ->from('units_mortages')
+							->where('status_transaction','N')
+							->where('id_unit',$idUnit)
+							->get()->result();
+		foreach ($nonReg as $row) {
+			$getcicilan = $this->db->select('*')
+									->from('units_repayments_mortage')
+									->where('no_sbk',$row->no_sbk)
+									->where('id_unit',$idUnit)
+									->get()->row();
+			if(!empty($getcicilan)){
+				$saldoNonReg += $getcicilan->saldo;
+			}else{
+				$saldoNonReg += $row->amount_loan;
+			}
 		}
-		$saldoup = $saldocicilan;
-		$upcicilan = $upcicilan;
+
+		$saldoNonReg = $saldoNonReg;
+		$os = $regular->up + $saldoNonReg;
 
 		$mortagesup = $this->db->select('sum(amount_loan) as up')
 							->from('units_mortages')
@@ -925,7 +954,7 @@ class Dashboards extends ApiController
 					->where('units_regularpawns.id_unit',$idUnit)
 					->get()->row();
 
-		$data = array("saldo"=>(int) $saldo->amount_balance_final,"upreguler"=>(int) $outstanding->os,"outstanding"=>(int) $outstanding->os + (int) $saldocicilan,"upcicilan"=>(int) $mortagesup->up,"saldocicilan"=>(int) $saldocicilan,"dpd"=>(int) $dpd->up,"noadpd"=>(int) $dpd->noa);		
+		$data = array("saldo"=>(int) $saldo->amount_balance_final,"upreguler"=>(int) $regular->up,"outstanding"=>(int) $regular->up + (int) $saldoNonReg,"upcicilan"=>(int) $mortagesup->up,"saldocicilan"=>(int) $saldoNonReg,"dpd"=>(int) $dpd->up,"noadpd"=>(int) $dpd->noa);		
 		return $this->sendMessage($data,'Get Book Cash Daily');
 	}
 
