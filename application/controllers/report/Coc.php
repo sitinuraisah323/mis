@@ -35,7 +35,7 @@ class Coc extends Authenticated
 
 	public function export()
 	{		
-		if($this->input->post('btnexport_csv') != 'csv'){
+		if($this->input->post('btnexport_csv') != 'excel'){
 			$this->pdf();
 		}
 		//load our new PHPExcel library
@@ -69,7 +69,8 @@ class Coc extends Authenticated
 		$objPHPExcel->getActiveSheet()->getColumnDimension('F');
 		$objPHPExcel->getActiveSheet()->setCellValue('H1', 'Total COC');
 
-		$units = $this->dailycash->getCoc($this->input->post(), $this->input->post('percentage'), $this->input->post('month'),$this->input->post('year'));
+		$units = $this->dailycash->getCoc($this->input->post(), $this->input->post('percentage'), $this->input->post('month'),$this->input->post('year'),
+		$this->input->post('period_month'),$this->input->post('period_year'));
 		$i = 1;
 			
 		$no=2;

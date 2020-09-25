@@ -129,8 +129,8 @@ function initCariForm(){
                     html += '<tr bgcolor="#f5f5f0" class="rowappend">';
                     html += `<td>${no}</td>`;
                     html += `<td>${data.area}</td>`;
-                    html += `<td>${data.name}</td>`;                    
-                    html += `<td class="text-right">${convertToRupiah(data.total_up)}</td>`;
+                    html += `<td>${data.name}</td>`;         
+                    html += `<td class="text-right">${convertToRupiah(parseInt(data.total_up))}</td>`;
                     html += `<td></td>`;
                     html += `<td></td>`;
                     html += '</tr>';
@@ -143,7 +143,8 @@ function initCariForm(){
                     html += `<th class="text-right">%</th>`;
                     html += '</tr>';
 
-                    html += '<tr class="rowappend">';
+                    let percentSmall = (data.small_then_up/data.total_up * 100);
+                    html += `<tr class="rowappend"  bgcolor="${percentSmall.toFixed(2) > 25 ? 'red' : ''}">`;
                     html += `<td></td>`;
                     html += `<td>< 1.5 %</td>`;
                     html += `<td>${data.small_then_noa}</td>`;
@@ -151,7 +152,6 @@ function initCariForm(){
                     html += `<td  class="text-right">${convertToRupiah(upunit_low)}</td>`;
                     let sewamodelSmall = data.small_then_up * 15/100;
                     html += `<td  class="text-right">${convertToRupiah(sewamodelSmall)}</td>`;
-                    let percentSmall = (data.small_then_up/data.total_up * 100);
                     html += `<td class="text-right">${percentSmall.toFixed(2)}</td>`;
                     html += '</tr>';
 

@@ -103,7 +103,7 @@ class UnitsdailycashModel extends Master
 		);
 	}
 
-	public function getCoc($gets = null, $percentageAnnualy = 11, $month = 0, $year = 0)
+	public function getCoc($gets = null, $percentageAnnualy = 11, $month = 0, $year = 0, $periodMonth = 0, $periodYear = 0)
 	{	
 		if($month === 0){
 			$month = date('m');
@@ -114,6 +114,13 @@ class UnitsdailycashModel extends Master
 		}
 
 		$dateEnd = date('Y-m-d');
+
+		if($periodYear && $periodMonth){
+			$daysInMonth = days_in_month($periodMonth, $periodYear);
+			$dateEnd = implode('-', array(
+				$periodYear, $periodMonth, $daysInMonth
+			));
+		}
 
 		if($gets){
 			if(key_exists('area', $gets)){
@@ -129,7 +136,7 @@ class UnitsdailycashModel extends Master
 		}
 
 		$this->db
-			->select("u.name, a.area,  ud.date, ud.amount, 
+			->select("description, u.name, a.area,  ud.date, ud.amount, 
 			 (DATEDIFF('$dateEnd',ud.date)+1) as tenor,
 			 ROUND(ud.amount*$percentageAnnualy/100/365) as coc_daily,
 			 ROUND( (ud.amount*$percentageAnnualy/100/365) * (DATEDIFF('$dateEnd',ud.date)+1) ) as coc_payment,			 
@@ -139,13 +146,15 @@ class UnitsdailycashModel extends Master
 			->join('areas a','a.id = u.id_area')
 			->where('MONTH(ud.date)', $month)
 			->where('YEAR(ud.date)', $year)
-			->where('no_perk','1110000')
+			->where_in('SUBSTRING(no_perk, 1, 4)',array('1110', '1120'))
+			->where("`description` IN (SELECT `description` FROM $this->table where description like '%penerimaan bank%' or description like '%penerimaan kas kantor pusat%')  ", NULL, FALSE)
 			->order_by('a.id','ASC')
 			->order_by('coc_payment','DESC');
 		return $this->db->get()->result();
+		
 	}
 
-	public function getCocCalcutation($gets = null, $percentageAnnualy = 11, $month = 0, $year = 0)
+	public function getCocCalcutation($gets = null, $percentageAnnualy = 11, $month = 0, $year = 0, $periodMonth = 0, $periodYear= 0)
 	{
 		if($month === 0){
 			$month = date('m');
@@ -155,9 +164,16 @@ class UnitsdailycashModel extends Master
 			$year = date('Y');
 		}
 
-		$daysInMonth = days_in_month($month, $year);
+	
 
 		$dateEnd = date('Y-m-d');
+
+		if($periodYear && $periodMonth){
+			$daysInMonth = days_in_month($periodMonth, $periodYear);
+			$dateEnd = implode('-', array(
+				$periodYear, $periodMonth, $daysInMonth
+			));
+		}
 
 
 		if($gets){
@@ -184,7 +200,8 @@ class UnitsdailycashModel extends Master
 			->join('areas a','a.id = u.id_area')
 			->where('MONTH(ud.date)', $month)
 			->where('YEAR(ud.date)', $year)
-			->where('no_perk','1110000')
+			->where_in('SUBSTRING(no_perk, 1, 4)',array('1110', '1120'))
+			->where("`description` IN (SELECT `description` FROM $this->table where description like '%penerimaan bank%' or description like '%penerimaan kas kantor pusat%')  ", NULL, FALSE)
 			->order_by('a.id','ASC')
 			->order_by('coc_payment','DESC');
 		$data = $this->db->get()->result();

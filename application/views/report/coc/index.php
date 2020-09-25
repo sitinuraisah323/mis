@@ -149,16 +149,34 @@ $this->load->view('temp/MenuBar.php');
                             <?php endforeach;?>
 						</select>
                     </div>
+                    <div class="col-lg-2">
+						<label class="col-form-label">Periode Pembayaran Bulan</label>
+						<select class="form-control" name="period_month">
+							<option value="0">Tanggal Bulan Sekarang</option>
+                            <?php foreach($months as $key => $value):?>
+                                <option value="<?php echo zero_fill($key,2);?>"><?php echo $value;?></option>
+                            <?php endforeach;?>
+						</select>
+                    </div>
+                    <div class="col-lg-2">
+						<label class="col-form-label">Periode Pembayaran Tahun</label>
+						<select class="form-control" name="period_year">
+							<option value="0">All</option>
+                            <?php foreach($years as $key => $value):?>
+                                <option value="<?php echo $value;?>" <?php echo $value === date('Y') ? 'selected' : ''?> ><?php echo $value;?></option>
+                            <?php endforeach;?>
+						</select>
+                    </div>
                     <!-- <div class="col-lg-2">
 						<label class="col-form-label">Rate</label> -->
 						<input type="hidden" name="percentage" value="11" class="form-control" />
                     <!-- </div> -->
-                    <div class="col-lg-3">
+                    <div class="col-lg-2">
                         <label class="col-form-label">&nbsp</label>
                         <div class="position-relative">
                         <button type="button" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>
-                        <input type="submit" class="btn btn-danger btn-icon" value="csv" name="btnexport_csv">
-                        <!-- <input type="submit" class="btn btn-danger btn-icon" value="pdf" name="btnexport_csv"> -->
+                        <input type="submit" class="btn btn-danger btn-icon" value="excel" name="btnexport_csv">
+                        <input type="submit" class="btn btn-danger btn-icon" value="pdf" name="btnexport_csv">
                         </div>
                     </div>
 				</div>	               
@@ -173,6 +191,7 @@ $this->load->view('temp/MenuBar.php');
 						      		<th class="text-center">No</th>
 						      		<th class="text-left">Area</th>
 						      		<th class="text-left">Unit</th>
+						      		<th class="text-left">Description</th>
 						      		<th class="text-right">Tanggal Moker</th>
                                     <th class="text-right">Jumlah Moker</th>
                                     <th class="text-right">Tenor</th>
