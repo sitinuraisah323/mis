@@ -125,12 +125,14 @@ function initCariForm(){
                 // $('.kt-section__content #tblsm').append(template);
                 let html = '';
                 let no = 1;
+                let price_up = 0;
+                let price_low = 0;
                 response.data.forEach(data=>{
                     html += '<tr bgcolor="#f5f5f0" class="rowappend">';
                     html += `<td>${no}</td>`;
                     html += `<td>${data.area}</td>`;
-                    html += `<td>${data.name}</td>`;                    
-                    html += `<td class="text-right">${convertToRupiah(data.total_up)}</td>`;
+                    html += `<td>${data.name}</td>`;         
+                    html += `<td class="text-right">${convertToRupiah(parseInt(data.total_up))}</td>`;
                     html += `<td></td>`;
                     html += `<td></td>`;
                     html += '</tr>';
@@ -143,15 +145,16 @@ function initCariForm(){
                     html += `<th class="text-right">%</th>`;
                     html += '</tr>';
 
-                    html += '<tr class="rowappend">';
+                    let percentSmall = (data.small_then_up/data.total_up * 100);
+                    html += `<tr class="rowappend"  bgcolor="${percentSmall.toFixed(2) > 25 ? 'red' : ''}">`;
                     html += `<td></td>`;
                     html += `<td>< 1.5 %</td>`;
                     html += `<td>${data.small_then_noa}</td>`;
                     upunit_low = data.small_then_up ? data.small_then_up : '0';
+                    price_low += parseInt(upunit_low);
                     html += `<td  class="text-right">${convertToRupiah(upunit_low)}</td>`;
                     let sewamodelSmall = data.small_then_up * 15/100;
                     html += `<td  class="text-right">${convertToRupiah(sewamodelSmall)}</td>`;
-                    let percentSmall = (data.small_then_up/data.total_up * 100);
                     html += `<td class="text-right">${percentSmall.toFixed(2)}</td>`;
                     html += '</tr>';
 
@@ -160,6 +163,7 @@ function initCariForm(){
                     html += `<td> >= 1.5 %</td>`;
                     html += `<td>${data.bigger_then_noa}</td>`;
                     upunit_up = data.bigger_then_up ? data.bigger_then_up : '0';
+                    price_up += parseInt(upunit_up);
                     html += `<td   class="text-right">${convertToRupiah(upunit_up)}</td>`;
                     let sewamodelBigger = data.bigger_then_up * 15/100;
                     html += `<td  class="text-right">${convertToRupiah(sewamodelBigger)}</td>`;
@@ -169,6 +173,13 @@ function initCariForm(){
 
                     no++;
                 });
+                html += `<tr>`;
+                html += `<th>Total</th>`;
+                html += `<th> < 15%</th>`;
+                html += `<th>${convertToRupiah(price_low)}</th>`;
+                html += `<th class="text-right"> > 15%</th>`;
+                html += `<th class="text-right">${convertToRupiah(price_up)}</th>`;
+                html += `</tr>`;
                 $('#tblsm').find('tbody').append(html);
 			},
 			error: function (jqXHR, textStatus, errorThrown){

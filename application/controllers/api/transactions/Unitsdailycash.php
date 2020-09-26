@@ -498,7 +498,7 @@ class Unitsdailycash extends ApiController
 
 	public function coc()
 	{
-		return $this->sendMessage($this->unitsdailycash->getCoc($this->input->get(), $this->input->get('percentage'), $this->input->get('month'), $this->input->get('year')), 'Successfully get Coc');
+		return $this->sendMessage($this->unitsdailycash->getCoc($this->input->get(), $this->input->get('percentage'), $this->input->get('month'), $this->input->get('year'), $this->input->get('period_month'), $this->input->get('period_year')), 'Successfully get Coc');
 	}
 
 }

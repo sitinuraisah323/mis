@@ -112,6 +112,8 @@ function initCariForm(){
         var unit        = $('[name="id_unit"]').val();
         var month        = $('[name="month"]').val();
         var year        = $('[name="year"]').val();
+        var period_month        = $('[name="period_month"]').val();
+        var period_year        = $('[name="period_year"]').val();
         var percentage = $('[name="percentage"]').val();
         KTApp.block('#form_pendapatan .kt-portlet__body', {});
         var totalTenor = 0;
@@ -124,14 +126,14 @@ function initCariForm(){
 			type : 'GET',
 			url : "<?php echo base_url("api/transactions/unitsdailycash/coc"); ?>",
 			dataType : "json",
-			data:{area:area,unit:unit, month, year, percentage},
+			data:{area:area,unit:unit, month, year, percentage, period_month, period_year},
 			success : function(response,status){
 				KTApp.unblockPage();
                 // $('.kt-section__content #tblsm').append(template);
                 let html = '';
                 let no = 1;
                 response.data.forEach(data=>{
-                  const { name, area,amount, id, date, tenor, coc_daily, coc_payment } = data;
+                  const { name, area,amount, description, id, date, tenor, coc_daily, coc_payment } = data;
                   totalPayment += parseInt(coc_payment);
                   totalAmount += parseInt(amount);
                   totalMontly +=parseInt (coc_daily);
@@ -141,6 +143,7 @@ function initCariForm(){
                   html += `<td>${no}</td>`;
                   html += `<td>${area}</td>`;
                   html += `<td>${name}</td>`;
+                  html += `<td class="text-left">${description}</td>`;
                   html += `<td class="text-right">${date}</td>`;
                   html += `<td class="text-right">${convertToRupiah(amount)}</td>`;
                   html += `<td class="text-right">${tenor}</td>`;
@@ -150,7 +153,7 @@ function initCariForm(){
                   no++;    
                 });
                 foot = '<tr>';
-                foot += `<th class="text-right" colspan="5></th>`;
+                foot += `<th class="text-right" colspan="6></th>`;
                 foot += `<th class="text-right">${convertToRupiah(totalAmount)}</th>`;
                 foot += `<th class="text-right">${totalTenor}</th>`;
                 foot += `<th class="text-right">${convertToRupiah(totalMontly)}</th>`;

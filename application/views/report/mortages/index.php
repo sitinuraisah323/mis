@@ -146,6 +146,21 @@ $this->load->view('temp/MenuBar.php');
 						</select>
                     </div>
                     <div class="col-lg-2">
+						<label class="col-form-label">Sort By</label>
+                        <select class="form-control select2" name="sort_by" id="sort_by">
+							<option value="0">Pilih</option>
+                            <option value="no_sbk">No Sbk</option>
+                            <option value="date_sbk">Tanggal Sbk</option>
+						</select>
+                    </div>
+                    <div class="col-lg-2">
+                      <label class="col-form-label">Sort Method</label>
+                        <select class="form-control select2" name="sort_method" id="sort_method">
+							<option value="asc">Ascending</option>
+                            <option value="desc">Descending</option>
+						</select>
+                    </div>
+                    <div class="col-lg-2">
                         <label class="col-form-label">&nbsp</label>
                         <div class="position-relative">
                         <button type="button" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>
@@ -162,6 +177,8 @@ $this->load->view('temp/MenuBar.php');
 						  	<thead class="thead-light">
 						    	<tr>
 						      		<th class='text-center'>No</th>
+                                    <th class="text-center">Unit</th>
+									<th class="text-center">NIC</th>
 									<th class='text-center'>No. SBK</th>
 									<th class='text-center'>Tanggal SBK</th>
 									<th class='text-center'>Tanggal Tempo</th>

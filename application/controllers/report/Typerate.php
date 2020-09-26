@@ -67,6 +67,8 @@ class Typerate extends Authenticated
 		$i = 1;
 			
 		$no=2;
+		$price_up = 0;
+		$price_low = 0;
 		foreach ($units as $unit){
 		
 		
@@ -92,22 +94,31 @@ class Typerate extends Authenticated
 			$objPHPExcel->getActiveSheet()->setCellValue('A'.$no, "Total");
 			$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, '<15');
 			$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, $unit->small_then_noa);
-			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no,number_format($unit->small_then_up, 2));
-			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no,number_format($unit->small_then_up*1.5, 2));
+			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no,$unit->small_then_up);
+			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no,$unit->small_then_up*1.5);
 			$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, round(($unit->small_then_up/ $unit->total_up *100),2));
 		
+			$price_low += (int) $unit->small_then_up;
+			$price_up += (int) $unit->bigger_then_up;
+
 			$no++;
 
 			$objPHPExcel->getActiveSheet()->setCellValue('A'.$no, "Total");
 			$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, '>15');
 			$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, $unit->bigger_then_noa);
-			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no,number_format($unit->bigger_then_up, 2));
-			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no,number_format($unit->bigger_then_up*1.5, 2));
+			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no,$unit->bigger_then_up);
+			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no,$unit->bigger_then_up*1.5);
 			$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, round(($unit->bigger_then_up/ $unit->total_up *100),2));
 
 			$no++;
 			$i++;
 		}
+		$objPHPExcel->getActiveSheet()->setCellValue('A'.$no, "Total");
+		$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, '< 15');
+		$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, $price_low);
+		$objPHPExcel->getActiveSheet()->setCellValue('D'.$no,'> 15');
+		$objPHPExcel->getActiveSheet()->setCellValue('E'.$no,$price_up);
+	
 
 		//Redirect output to a client’s WBE browser (Excel5)
 		$filename ="Summary Rate_".date('Y-m-d H:i:s');

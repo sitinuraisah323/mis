@@ -265,6 +265,9 @@ class Regularpawns extends ApiController
 			if($nasabah!="all" && $nasabah != null){
 				$this->regulars->db->where('customers.nik', $nasabah);
 			}
+			if($sortBy = $this->input->get('sort_by')){
+				$this->regulars->db->order_by('units_regularpawns.'.$sortBy, $this->input->get('sort_method'));
+			}
 		}
 		$data = $this->regulars->all();
 		echo json_encode(array(

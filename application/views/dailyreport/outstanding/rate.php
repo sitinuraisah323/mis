@@ -25,16 +25,17 @@
     <?php $totup_jbr=0; $totnoa_jbr=0; $totup_small=0; $totup_big=0; $totnoa_big=0; $totnoa_small=0; ?>
     <?php $no=0; foreach ($rate as $index => $data): $no++;?>
     <?php if($data->area=='Jawa Barat'): ?>
-        <tr>
+        <?php  $percentSmall = ($data->small_then_up/$data->total_up * 100); 
+                   if($percentSmall!=0){ $percentSmall = number_format($percentSmall,2);}else{ $percentSmall=0;}
+            ?>
+        <tr bgcolor="<?php echo $percentSmall > 25 ? 'red' : ''?>" >
             <td align="center"  width="30"><?php echo $no; ?></td>
             <td align="left" width="165"> <?php echo $data->name; ?></td>
             <td align="center" width="100"><?php echo $data->small_then_noa + $data->bigger_then_noa; ?></td>
             <td align="right" width="150"> <?php echo number_format($data->total_up,0); ?> </td>
             <td align="center"  width="50"><?php echo $data->small_then_noa; ?></td>
             <td align="right" width="150"> <?php echo number_format($data->small_then_up,0); ?> </td>
-            <?php  $percentSmall = ($data->small_then_up/$data->total_up * 100); 
-                   if($percentSmall!=0){ $percentSmall = number_format($percentSmall,2);}else{ $percentSmall=0;}
-            ?>
+     
             <td align="center" width="50"><?php echo $percentSmall; ?></td>
             <td align="center"  width="50"><?php echo $data->bigger_then_noa; ?></td>
             <td align="right" width="155"> <?php echo number_format($data->bigger_then_up,0); ?> </td>
@@ -89,16 +90,17 @@
     <?php $totup_jbt=0; $totnoa_jbt=0; $totup_small_jbt=0; $totup_big_jbt=0; $totnoa_big_jbt=0; $totnoa_small_jbt=0; ?>
     <?php $no=0; foreach ($rate as $index => $data):?>
     <?php if($data->area=='Jawa Timur'):  $no++;?>
-        <tr>
+        <?php  $percentSmall = ($data->small_then_up/$data->total_up * 100); 
+                    if($percentSmall!=0){ $percentSmall = number_format($percentSmall,2);}else{ $percentSmall=0;}
+                ?>
+        <tr bgcolor="<?php echo $percentSmall > 25 ? 'red' : ''?>">
             <td align="center"  width="30"><?php echo $no; ?></td>
             <td align="left" width="165"> <?php echo $data->name; ?></td>
             <td align="center" width="100"><?php echo $data->small_then_noa + $data->bigger_then_noa; ?></td>
             <td align="right" width="150"> <?php echo number_format($data->total_up,0); ?> </td>
             <td align="center"  width="50"><?php echo $data->small_then_noa; ?></td>
             <td align="right" width="150"> <?php echo number_format($data->small_then_up,0); ?> </td>
-            <?php  $percentSmall = ($data->small_then_up/$data->total_up * 100); 
-                   if($percentSmall!=0){ $percentSmall = number_format($percentSmall,2);}else{ $percentSmall=0;}
-            ?>
+         
             <td align="center" width="50"><?php echo $percentSmall; ?></td>
             <td align="center"  width="50"><?php echo $data->bigger_then_noa; ?></td>
             <td align="right" width="155"> <?php echo number_format($data->bigger_then_up,0); ?> </td>
@@ -153,16 +155,17 @@
     <?php $totup_ntb=0; $totnoa_ntb=0; $totup_small_ntb=0; $totup_big_ntb=0; $totnoa_big_ntb=0; $totnoa_small_ntb=0; ?>
     <?php $no=0; foreach ($rate as $index => $data):?>
     <?php if($data->area=='NTB'):  $no++;?>
-        <tr>
+    <?php  $percentSmall = ($data->small_then_up/$data->total_up * 100); 
+                   if($percentSmall!=0){ $percentSmall = number_format($percentSmall,2);}else{ $percentSmall=0;}
+            ?>
+          <tr bgcolor="<?php echo $percentSmall > 25 ? 'red' : ''?>">
             <td align="center"  width="30"><?php echo $no; ?></td>
             <td align="left" width="165"> <?php echo $data->name; ?></td>
             <td align="center" width="100"><?php echo $data->small_then_noa + $data->bigger_then_noa; ?></td>
             <td align="right" width="150"> <?php echo number_format($data->total_up,0); ?> </td>
             <td align="center"  width="50"><?php echo $data->small_then_noa; ?></td>
             <td align="right" width="150"> <?php echo number_format($data->small_then_up,0); ?> </td>
-            <?php  $percentSmall = ($data->small_then_up/$data->total_up * 100); 
-                   if($percentSmall!=0){ $percentSmall = number_format($percentSmall,2);}else{ $percentSmall=0;}
-            ?>
+         
             <td align="center" width="50"><?php echo $percentSmall; ?></td>
             <td align="center"  width="50"><?php echo $data->bigger_then_noa; ?></td>
             <td align="right" width="155"> <?php echo number_format($data->bigger_then_up,0); ?> </td>
@@ -217,16 +220,17 @@
     <?php $totup_ntt=0; $totnoa_ntt=0; $totup_small_ntt=0; $totup_big_ntt=0; $totnoa_big_ntt=0; $totnoa_small_ntt=0; ?>
     <?php $no=0; foreach ($rate as $index => $data):?>
     <?php if($data->area=='NTT'):  $no++;?>
-        <tr>
+    <?php  $percentSmall = ($data->small_then_up/$data->total_up * 100); 
+                   if($percentSmall!=0){ $percentSmall = number_format($percentSmall,2);}else{ $percentSmall=0;}
+            ?>
+       <tr bgcolor="<?php echo $percentSmall > 25 ? 'red' : ''?>">
             <td align="center"  width="30"><?php echo $no; ?></td>
             <td align="left" width="165"> <?php echo $data->name; ?></td>
             <td align="center" width="100"><?php echo $data->small_then_noa + $data->bigger_then_noa; ?></td>
             <td align="right" width="150"> <?php echo number_format($data->total_up,0); ?> </td>
             <td align="center"  width="50"><?php echo $data->small_then_noa; ?></td>
             <td align="right" width="150"> <?php echo number_format($data->small_then_up,0); ?> </td>
-            <?php  $percentSmall = ($data->small_then_up/$data->total_up * 100); 
-                   if($percentSmall!=0){ $percentSmall = number_format($percentSmall,2);}else{ $percentSmall=0;}
-            ?>
+          
             <td align="center" width="50"><?php echo $percentSmall; ?></td>
             <td align="center"  width="50"><?php echo $data->bigger_then_noa; ?></td>
             <td align="right" width="155"> <?php echo number_format($data->bigger_then_up,0); ?> </td>

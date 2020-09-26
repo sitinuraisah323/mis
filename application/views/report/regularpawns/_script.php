@@ -98,6 +98,8 @@ function initCariForm(){
     $('#unit').select2({ placeholder: "Select Unit", width: '100%' });
     $('#status').select2({ placeholder: "Select a Status", width: '100%' });
     $('#nasabah').select2({ placeholder: "Select a Nasabah", width: '100%' });
+    $('#sort_method').select2({ placeholder: "Select a Sort", width: '100%' });
+    $('#sort_by').select2({ placeholder: "Select a Sort", width: '100%' });
     //events
     $('#btncari').on('click',function(){
         $('.rowappend').remove();
@@ -108,12 +110,14 @@ function initCariForm(){
 		var dateStart = $('[name="date-start"]').val();
 		var dateEnd = $('[name="date-end"]').val();
 		var permit = $('[name="permit"]').val();
+        var sort_by = $('[name="sort_by"]').val();
+        var sort_method = $('[name="sort_method"]').val();
         KTApp.block('#form_bukukas .kt-portlet__body', {});
 		$.ajax({
 			type : 'GET',
 			url : "<?php echo base_url("api/transactions/regularpawns/report"); ?>",
 			dataType : "json",
-			data:{area:area,id_unit:unit,statusrpt:statusrpt,nasabah:nasabah,dateStart:dateStart,dateEnd:dateEnd,permit:permit},
+			data:{area:area,id_unit:unit,statusrpt:statusrpt,nasabah:nasabah,dateStart:dateStart,dateEnd:dateEnd,permit:permit, sort_by, sort_method},
 			success : function(response,status){
 				KTApp.unblockPage();
 				if(response.status == true){
@@ -126,6 +130,7 @@ function initCariForm(){
 						template += "<tr class='rowappend'>";
 						template += "<td class='text-center'>"+no+"</td>";
 						template += "<td class='text-center'>"+data.unit+"</td>";
+						template += "<td class='text-center'>"+data.nic+"</td>";
 						template += "<td class='text-center'>"+data.no_sbk+"</td>";
 						template += "<td class='text-center'>"+moment(data.date_sbk).format('DD-MM-YYYY')+"</td>";
                         template += "<td class='text-center'>"+moment(data.deadline).format('DD-MM-YYYY')+"</td>";
