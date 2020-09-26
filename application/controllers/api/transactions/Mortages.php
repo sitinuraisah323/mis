@@ -238,7 +238,7 @@ class Mortages extends ApiController
 	public function report()
 	{
 		$this->mortages->db
-			->select('customers.name as customer_name,customers.nik as nik, (select count(id) from units_repayments_mortage where units_repayments_mortage.no_sbk =units_mortages.no_sbk and units_repayments_mortage.id_unit =units_mortages.id_unit  ) as cicilan')
+			->select('units.name as unit_name, customers.name as customer_name,customers.nik as nik, (select count(id) from units_repayments_mortage where units_repayments_mortage.no_sbk =units_mortages.no_sbk and units_repayments_mortage.id_unit =units_mortages.id_unit  ) as cicilan')
 			->join('customers','units_mortages.id_customer = customers.id')			
 			->join('units','units.id = units_mortages.id_unit');
 		if($get = $this->input->get()){
@@ -263,6 +263,9 @@ class Mortages extends ApiController
 			}
 			if($nasabah != "all" && $nasabah != null){
 				$this->mortages->db->where('customers.nik', $nasabah);
+			}
+			if($sortBy = $this->input->get('sort_by')){
+				$this->mortages->db->order_by('units_mortages.'.$sortBy, $this->input->get('sort_method'));
 			}
 		}
 		$data = $this->mortages->all();

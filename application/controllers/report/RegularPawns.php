@@ -77,23 +77,25 @@ class Regularpawns extends Authenticated
 		$objPHPExcel->getActiveSheet()->getColumnDimension('B');
 		$objPHPExcel->getActiveSheet()->setCellValue('B1', 'Unit');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('C');
-		$objPHPExcel->getActiveSheet()->setCellValue('C1', 'No SGE');
+		$objPHPExcel->getActiveSheet()->setCellValue('C1', 'NIC');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('D');
-		$objPHPExcel->getActiveSheet()->setCellValue('D1', 'Nasabah');
+		$objPHPExcel->getActiveSheet()->setCellValue('D1', 'No SGE');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('E');
-		$objPHPExcel->getActiveSheet()->setCellValue('E1', 'Tanggal Kredit');
+		$objPHPExcel->getActiveSheet()->setCellValue('E1', 'Nasabah');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('F');
-		$objPHPExcel->getActiveSheet()->setCellValue('F1', 'Tanggal jatuh Tempo');
+		$objPHPExcel->getActiveSheet()->setCellValue('F1', 'Tanggal Kredit');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('G');
-		$objPHPExcel->getActiveSheet()->setCellValue('G1', 'Tanggal Lelang');
+		$objPHPExcel->getActiveSheet()->setCellValue('G1', 'Tanggal jatuh Tempo');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('H');
-		$objPHPExcel->getActiveSheet()->setCellValue('H1', 'Taksiran');
+		$objPHPExcel->getActiveSheet()->setCellValue('H1', 'Tanggal Lelang');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('I');
-		$objPHPExcel->getActiveSheet()->setCellValue('I1', 'Pinjaman');
+		$objPHPExcel->getActiveSheet()->setCellValue('I1', 'Taksiran');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('J');
-		$objPHPExcel->getActiveSheet()->setCellValue('J1', 'Admin');
+		$objPHPExcel->getActiveSheet()->setCellValue('J1', 'Pinjaman');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('K');
-		$objPHPExcel->getActiveSheet()->setCellValue('K1', 'Status');
+		$objPHPExcel->getActiveSheet()->setCellValue('K1', 'Admin');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('L');
+		$objPHPExcel->getActiveSheet()->setCellValue('L1', 'Status');
 
 		$this->regulars->db
 			->select('customers.name as customer_name,customers.nik as nik, (select date_repayment from units_repayments where units_repayments.no_sbk = units_regularpawns.no_sbk and units_repayments.id_unit = units_repayments.id_unit limit 1 ) as date_repayment')
@@ -131,16 +133,17 @@ class Regularpawns extends Authenticated
 		{
 			$objPHPExcel->getActiveSheet()->setCellValue('A'.$no, $row->code);				  	
 			$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, $row->unit_name );				 
-			$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, $row->no_sbk );				 
-			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no, $row->customer_name);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no, date('d/m/Y',strtotime($row->date_sbk)));				 
-			$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, date('d/m/Y',strtotime($row->deadline)));				 
-			$objPHPExcel->getActiveSheet()->setCellValue('G'.$no, date('d/m/Y',strtotime($row->date_auction)));				 
-			$objPHPExcel->getActiveSheet()->setCellValue('H'.$no, $row->estimation);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('I'.$no, $row->amount);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('J'.$no, $row->admin );		
+			$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, $row->nic );				 
+			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no, $row->no_sbk );				 
+			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no, $row->customer_name);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, date('d/m/Y',strtotime($row->date_sbk)));				 
+			$objPHPExcel->getActiveSheet()->setCellValue('G'.$no, date('d/m/Y',strtotime($row->deadline)));				 
+			$objPHPExcel->getActiveSheet()->setCellValue('H'.$no, date('d/m/Y',strtotime($row->date_auction)));				 
+			$objPHPExcel->getActiveSheet()->setCellValue('I'.$no, $row->estimation);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('J'.$no, $row->amount);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('K'.$no, $row->admin );		
 			if($row->status_transaction=="L"){$status="Lunas";}else{$status="Aktif";}		 
-			$objPHPExcel->getActiveSheet()->setCellValue('K'.$no, $status);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('L'.$no, $status);				 
 			$no++;
 		}
 

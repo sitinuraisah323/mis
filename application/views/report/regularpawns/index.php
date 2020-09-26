@@ -132,7 +132,7 @@ $this->load->view('temp/MenuBar.php');
 					</div>
 					<div class="col-lg-2">
 						<label class="col-form-label">Tanggal</label>
-						<input type="date" class="form-control" name="date-start" value="<?php echo date('Y-m-d');?>">
+						<input type="date" class="form-control" name="date-start" value="<?php echo date('Y-m-01');?>">
 					</div>
 					<div class="col-lg-2">
 						<label class="col-form-label">Tanggal</label>
@@ -143,6 +143,21 @@ $this->load->view('temp/MenuBar.php');
                         <select class="form-control select2" name="nasabah" id="nasabah">
 							<option value=""></option>
                             <option value="all">All</option>
+						</select>
+                    </div>
+                    <div class="col-lg-2">
+						<label class="col-form-label">Sort By</label>
+                        <select class="form-control select2" name="sort_by" id="sort_by">
+							<option value="0">Pilih</option>
+                            <option value="no_sbk">No Sbk</option>
+                            <option value="date_sbk">Tanggal Sbk</option>
+						</select>
+                    </div>
+                    <div class="col-lg-2">
+                      <label class="col-form-label">Sort Method</label>
+                        <select class="form-control select2" name="sort_method" id="sort_method">
+							<option value="asc">Ascending</option>
+                            <option value="desc">Descending</option>
 						</select>
                     </div>
                     <div class="col-lg-2">
@@ -164,6 +179,7 @@ $this->load->view('temp/MenuBar.php');
 						    	<tr>
 						      		<th class="text-center">No</th>
 									<th class="text-center">Unit</th>
+									<th class="text-center">NIC</th>
 									<th class="text-center">No. SBK</th>
 									<th class="text-center">Tanggal SBK</th>
 									<th class="text-center">Tanggal Tempo</th>
