@@ -140,6 +140,7 @@ function initCariForm(){
 						}
                     template += '<tr class="rowappend">';
                     template +='<td class="text-center">'+no+'</td>';
+                    template +='<td class="text-center">'+data.no_perk+'</td>';
                     template +='<td>'+date+'</td>';
                     template +='<td class="text-center">'+month+'</td>';
                     template +='<td class="text-center">'+year+'</td>';
@@ -151,7 +152,7 @@ function initCariForm(){
 					});
 
                     template += '<tr class="rowappend">';
-                    template +='<td colspan="5" class="text-right"><b>Total</b></td>';                    
+                    template +='<td colspan="6" class="text-right"><b>Total</b></td>';                    
                     template +='<td class="text-right"><b>'+convertToRupiah(TotSaldoIn)+'</b></td>';
                     template +='<td class="text-right"><b>'+convertToRupiah(TotSaldoOut)+'</b></td>';
                     template +='<td class="text-right"><b>'+convertToRupiah(currentSaldo)+'</b></td>';

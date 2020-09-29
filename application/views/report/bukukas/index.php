@@ -133,6 +133,7 @@ $this->load->view('temp/MenuBar.php');
 						  	<thead class="thead-light">
 						    	<tr>
 						      		<th class="text-center">No</th>
+						      		<th class="text-center">No Perk</th>
 						      		<th>Tanggal</th>
 						      		<th class="text-center">Bulan</th>
 						      		<th class="text-center">Tahun</th>

@@ -95,8 +95,14 @@ class Regularpawns extends Authenticated
 		$objPHPExcel->getActiveSheet()->getColumnDimension('K');
 		$objPHPExcel->getActiveSheet()->setCellValue('K1', 'Admin');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('L');
-		$objPHPExcel->getActiveSheet()->setCellValue('L1', 'Status');
+		$objPHPExcel->getActiveSheet()->setCellValue('L1', 'Rate');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('M');
+		$objPHPExcel->getActiveSheet()->setCellValue('M1', 'Keterangan');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('N');
+		$objPHPExcel->getActiveSheet()->setCellValue('N1', 'Status');
 
+	
+		
 		$this->regulars->db
 			->select('customers.name as customer_name,customers.nik as nik, (select date_repayment from units_repayments where units_repayments.no_sbk = units_regularpawns.no_sbk and units_repayments.id_unit = units_repayments.id_unit limit 1 ) as date_repayment')
 			->join('customers','units_regularpawns.id_customer = customers.id')
@@ -113,10 +119,10 @@ class Regularpawns extends Authenticated
 				->where('units_regularpawns.date_sbk >=', $post['date-start'])
 				->where('units_regularpawns.date_sbk <=', $post['date-end'])
 				->where_in('units_regularpawns.status_transaction ', $status);
-			if($idUnit = $this->input->get('id_unit')){
+			if($idUnit = $this->input->post('id_unit')){
 				$this->regulars->db->where('units_regularpawns.id_unit', $post['id_unit']);
 			}
-			if($area = $this->input->get('area')){
+			if($area = $this->input->post('area')){
 				$this->regulars->db->where('id_area', $area);
 			}
 			if($permit = $post['permit']){
@@ -143,7 +149,9 @@ class Regularpawns extends Authenticated
 			$objPHPExcel->getActiveSheet()->setCellValue('J'.$no, $row->amount);				 
 			$objPHPExcel->getActiveSheet()->setCellValue('K'.$no, $row->admin );		
 			if($row->status_transaction=="L"){$status="Lunas";}else{$status="Aktif";}		 
-			$objPHPExcel->getActiveSheet()->setCellValue('L'.$no, $status);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('L'.$no, $row->capital_lease*100 .' %');				 
+			$objPHPExcel->getActiveSheet()->setCellValue('M'.$no, $row->description_1);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('N'.$no, $status);				 
 			$no++;
 		}
 
