@@ -162,7 +162,7 @@ function initCariForm(){
                         totcicilan  +=parseInt(saldocicilan);
 					});
 					template += "<tr class='rowappend'>";
-					template += "<td colspan='7' class='text-right'>Total</td>";
+					template += "<td colspan='9' class='text-right'>Total</td>";
 					template += "<td class='text-right'>"+convertToRupiah(admin)+"</td>";
 					template += "<td class='text-right'>"+convertToRupiah(amount)+"</td>";
 					template += "<td class='text-right'></td>";

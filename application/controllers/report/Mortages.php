@@ -56,11 +56,11 @@ class Mortages extends Authenticated
 		$objPHPExcel->getActiveSheet()->getColumnDimension('B');
 		$objPHPExcel->getActiveSheet()->setCellValue('B1', 'Unit');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('C');
-		$objPHPExcel->getActiveSheet()->setCellValue('C1', 'No SGE');
+		$objPHPExcel->getActiveSheet()->setCellValue('C1', 'No SBK');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('D');
 		$objPHPExcel->getActiveSheet()->setCellValue('D1', 'Nasabah');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('E');
-		$objPHPExcel->getActiveSheet()->setCellValue('E1', 'Tanggal SGE');
+		$objPHPExcel->getActiveSheet()->setCellValue('E1', 'Tanggal Kredit');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('F');
 		$objPHPExcel->getActiveSheet()->setCellValue('F1', 'Tanggal jatuh Tempo');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('G');
@@ -79,13 +79,16 @@ class Mortages extends Authenticated
 		$objPHPExcel->getActiveSheet()->setCellValue('M1', 'Status');
 
 		$this->mortages->db
-			->select('customers.name as customer_name,customers.nik as nik, (select count(id) from units_repayments_mortage where units_repayments_mortage.no_sbk =units_mortages.no_sbk and units_repayments_mortage.id_unit =units_mortages.id_unit  ) as cicilan')
+			->select('customers.name as customer_name,customers.nik as nik, (select count(distinct(date_kredit)) from units_repayments_mortage where units_repayments_mortage.no_sbk =units_mortages.no_sbk and units_repayments_mortage.id_unit =units_mortages.id_unit  ) as cicilan')
 			->join('customers','units_mortages.id_customer = customers.id')
-			->select('units.name as unit_name,units.code as code')
-			->join('units','units_mortages.id_unit = units.id');
+			->select('areas.area,units.name as unit_name,units.code as code')
+			->join('units','units_mortages.id_unit = units.id')
+			->join('areas','units.id_area = areas.id');
 		if($post = $this->input->post()){
 			$status =null;
 			$nasabah = $post['nasabah'];
+			$area = $post['area'];
+			$idunit = $post['id_unit'];
 			if($post['status']=="0"){$status=["N","L"];}
 			if($post['status']=="1"){$status=["N"];}
 			if($post['status']=="2"){$status=["L"];}
@@ -93,14 +96,21 @@ class Mortages extends Authenticated
 			$this->mortages->db
 				//->where('units_mortages.date_sbk >=', $post['date-start'])
 				->where('units_mortages.date_sbk <=', $post['date-end'])
-				->where_in('units_mortages.status_transaction ', $status)
-				->where('units_mortages.id_unit', $post['id_unit']);
-			if($permit = $post['permit']){
-				$this->mortages->db->where('permit', $permit);
+				->where_in('units_mortages.status_transaction ', $status);
+			if($area != 0){
+				$this->mortages->db->where('units.id_area', $area);
 			}
-			if($nasabah != "all"){
-				$this->mortages->db->where('customers.nik', $nasabah);
+			if($idunit != 0){
+				$this->mortages->db->where('id_unit', $idunit);
 			}
+			// if($permit = $post['permit']){
+			// 	$this->mortages->db->where('permit', $permit);
+			// }
+			// if($nasabah != "all"){
+			// 	$this->mortages->db->where('customers.nik', $nasabah);
+			// }
+			$this->mortages->db->order_by('units_mortages.id_unit')
+							   ->order_by('units_mortages.date_sbk','asc');
 		}
 		$data = $this->mortages->all();
 
