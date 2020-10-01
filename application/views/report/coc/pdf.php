@@ -1,4 +1,6 @@
 <h3>COC <?php echo $datetrans ?></h3>
+<?php $totalAmountNasional = 0;?>
+<?php $totalCocNasional = 0;?>
 <?php foreach($areas as $units):?>
     <table class="table" border="1">
         <thead class="thead-light">
@@ -26,6 +28,8 @@
                     </tr>
                     <?php $totalAmount += $unit->amount;?>
                     <?php $totalCOC += $unit->coc_payment;?>
+                    <?php $totalAmountNasional += $unit->amount;?>
+                    <?php $totalCocNasional += $unit->coc_payment;?>
                     <?php $i++;?>
                 <?php endforeach;?>
             <?php endif;?>
@@ -40,3 +44,12 @@
         </tfoot>
     </table>
 <?php endforeach;?>
+
+<table class="table" border="1">            
+    <tr bgcolor="#ffff00">
+        <th align="right" width="5%"></th>
+        <th width="20%" align="right" >Total</th>
+        <th width="40%" align="right"><?php echo money($totalAmountNasional);?>  </th>
+        <th width="35%" align="right"><?php echo money($totalCocNasional);?> </th>
+    </tr>
+</table>
