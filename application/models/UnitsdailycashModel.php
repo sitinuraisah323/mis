@@ -239,4 +239,20 @@ class UnitsdailycashModel extends Master
 		}
 		return $groupArea;
 	}
+
+	public function pengeluaran_perk()
+	{
+		$this->db->select('units_dailycashs.no_perk,units_dailycashs.description, coa.name_perk,  sum(amount) as amount')
+			->from('units_dailycashs')
+			->where_in('units_dailycashs.no_perk', [
+				'5260101','5150101','5110601','5130101','5130201','5130301','5140801',
+				'5130401','5130501','5130602','5130701','5130707','5130708','5130710',
+				'5140101','5140104','5140401','5140401','5140501','5140504','5140701','5141001',
+				'5141004','5141102','5141201','5141504','5141514','5140403','5150101','5260101'
+			])
+			->join('coa','coa.no_perk = units_dailycashs.no_perk')
+			->group_by('units_dailycashs.no_perk, coa.name_perk')
+			->order_by('amount','desc');
+		return $this->db->get()->result();
+	}
 }

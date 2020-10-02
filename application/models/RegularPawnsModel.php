@@ -368,4 +368,23 @@ class RegularpawnsModel extends Master
 		);
 	}
 
+	public function getPendapatan($idUnit, $date)
+	{
+		$this->load->model('MappingcaseModel', 'm_casing');	
+		$data = $this->m_casing->get_list_pendapatan();
+		$category=array();
+		foreach ($data as $value) {
+			array_push($category, $value->no_perk);
+		}
+
+		$this->db
+		->select('sum(units_dailycashs.amount) as up')
+		->join('units','units.id = units_dailycashs.id_unit')
+		->where('units_dailycashs.id_unit', $idUnit)
+		->where_in('units_dailycashs.no_perk', $category)
+		->where('units_dailycashs.date',$date);
+		return $this->db->get('units_dailycashs')->row();
+	
+	}
+
 }

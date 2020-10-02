@@ -97,11 +97,15 @@ class Mortages extends Authenticated
 				//->where('units_mortages.date_sbk >=', $post['date-start'])
 				->where('units_mortages.date_sbk <=', $post['date-end'])
 				->where_in('units_mortages.status_transaction ', $status);
-			if($area != 0){
-				$this->mortages->db->where('units.id_area', $area);
+			if($post['id_unit']){
+				$this->mortages->db->where('units_mortages.id_unit', $post['id_unit']);
+
 			}
-			if($idunit != 0){
-				$this->mortages->db->where('id_unit', $idunit);
+			if($permit = $post['permit']){
+				$this->mortages->db->where('permit', $permit);
+			}
+			if($nasabah != "all" && $nasabah != ''){
+				$this->mortages->db->where('customers.nik', $nasabah);
 			}
 			// if($permit = $post['permit']){
 			// 	$this->mortages->db->where('permit', $permit);
@@ -113,7 +117,6 @@ class Mortages extends Authenticated
 							   ->order_by('units_mortages.date_sbk','asc');
 		}
 		$data = $this->mortages->all();
-
 		$no=2;
 		$status_trans="";
 		$saldocicilan=0;

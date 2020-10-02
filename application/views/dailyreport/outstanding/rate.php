@@ -59,10 +59,10 @@
     <td align="right"><?php echo number_format($totup_jbr,0); ?></td>
     <td align="center"><?php echo number_format($totnoa_small,0); ?></td>
     <td align="right"><?php echo number_format($totup_small,0); ?></td>
-    <td><?php echo round($totup_small / $totup_jbr *100,2);?></td>
+    <td align="center"><?php echo round($totup_small / $totup_jbr *100,2);?></td>
     <td align="center"><?php echo number_format($totnoa_big,0); ?></td>
     <td align="right"><?php echo number_format($totup_big,0); ?></td>
-    <td><?php echo round($totup_big / $totup_jbr *100, 2);?></td>
+    <td align="center"><?php echo round($totup_big / $totup_jbr *100, 2);?></td>
     
     <?php $nasionalNoa += $totnoa_jbr;  $nasionalUp += $totup_jbr; $smallUp += $totup_small; $bigUp += $totup_big; $smallNoa += $totnoa_small; $bigNoa += $totnoa_big;?>
     </tr>
@@ -126,10 +126,10 @@
     <td align="right"><?php echo number_format($totup_jbt,0); ?></td>
     <td align="center"><?php echo number_format($totnoa_small_jbt,0); ?></td>
     <td align="right"><?php echo number_format($totup_small_jbt,0); ?></td>
-    <td><?php echo round($totup_small_jbt / $totup_jbt *100, 2);?></td>
+    <td align="center"><?php echo round($totup_small_jbt / $totup_jbt *100, 2);?></td>
     <td align="center"><?php echo number_format($totnoa_big_jbt,0); ?></td>
     <td align="right"><?php echo number_format($totup_big_jbt,0); ?></td>
-    <td><?php echo round($totup_big_jbt / $totup_jbt *100, 2);?></td>
+    <td align="center"><?php echo round($totup_big_jbt / $totup_jbt *100, 2);?></td>
     <?php $nasionalNoa += $totnoa_jbt; $nasionalUp += $totup_jbt; $smallUp += $totup_small_jbt; $bigUp += $totup_big_jbt; $smallNoa += $totnoa_small_jbt; $bigNoa += $totnoa_big_jbt ?>
     </tr>
 </table>
@@ -192,10 +192,10 @@
     <td align="right"><?php echo number_format($totup_ntb,0); ?></td>
     <td align="center"><?php echo number_format($totnoa_small_ntb,0); ?></td>
     <td align="right"><?php echo number_format($totup_small_ntb,0); ?></td>
-    <td><?php echo round($totup_small_ntb / $totup_ntb *100, 2);?></td>
+    <td align="center"><?php echo round($totup_small_ntb / $totup_ntb *100, 2);?></td>
     <td align="center"><?php echo number_format($totnoa_big_ntb,0); ?></td>
     <td align="right"><?php echo number_format($totup_big_ntb,0); ?></td>
-    <td><?php echo round($totup_big_ntb / $totup_ntb *100, 2);?></td>
+    <td align="center"><?php echo round($totup_big_ntb / $totup_ntb *100, 2);?></td>
     <?php $nasionalNoa += $totnoa_ntb;  $nasionalUp += $totup_ntb; $smallUp += $totup_small_ntb; $bigUp += $totup_big_ntb; $smallNoa += $totnoa_small_ntb; $bigNoa += $totnoa_big_ntb?>
     </tr>
 </table>
@@ -258,22 +258,22 @@
     <td align="right"><?php echo number_format($totup_ntt,0); ?></td>
     <td align="center"><?php echo number_format($totnoa_small_ntt,0); ?></td>
     <td align="right"><?php echo number_format($totup_small_ntt,0); ?></td>
-    <td><?php echo round($totup_small_ntt / $totup_ntt *100, 2);?></td>
+    <td align="center"><?php echo round($totup_small_ntt / $totup_ntt *100, 2);?></td>
     <td align="center"><?php echo number_format($totnoa_big_ntt,0); ?></td>
     <td align="right"><?php echo number_format($totup_big_ntt,0); ?></td>
-    <td><?php echo round($totup_big_ntt / $totup_ntt *100, 2);?></td>
+    <td align="center"><?php echo round($totup_big_ntt / $totup_ntt *100, 2);?></td>
     
     </tr>
     <?php $nasionalNoa += $totnoa_ntt; $nasionalUp += $totup_ntt; $smallUp += $totup_small_ntt; $bigUp += $totup_big_ntt; $smallNoa += $totnoa_small_ntt; $bigNoa += $totnoa_big_ntt?>
     <tr bgcolor="yellow">
-    <td colspan="2"></td>
+    <td colspan="2" align="right">Total Nasional</td>
     <td align="center"><?php echo number_format($nasionalNoa,0); ?></td>
     <td align="right"><?php echo number_format($nasionalUp,0); ?></td>
     <td align="center"><?php echo number_format($smallNoa,0); ?></td>
     <td align="right"><?php echo number_format($smallUp,0); ?></td>
-    <td><?php echo round($smallUp / $nasionalUp *100, 2);?></td>
+    <td align="center"><?php echo round($smallUp / $nasionalUp *100, 2);?></td>
     <td align="center"><?php echo number_format($bigNoa,0); ?></td>
     <td align="right"><?php echo number_format($bigUp,0); ?></td>
-    <td><?php echo round($bigUp / $nasionalUp *100, 2);?></td> 
+    <td align="center"><?php echo round($bigUp / $nasionalUp *100, 2);?></td> 
     </tr>
 </table>

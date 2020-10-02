@@ -14,7 +14,7 @@ $this->load->view('temp/MenuBar.php');
         <div class="kt-subheader__main">
             <h3 class="kt-subheader__title">Dashboard</h3>
             <span class="kt-subheader__separator kt-subheader__separator--v"></span>
-            <span class="kt-subheader__desc">Pelunasan</span>
+            <span class="kt-subheader__desc">pendapatan</span>
         </div>
         <div class="kt-subheader__toolbar">
             <div class="kt-subheader__wrapper">
@@ -33,7 +33,7 @@ $this->load->view('temp/MenuBar.php');
                         <i class="kt-font-brand fa fa-align-justify"></i>
                     </span>
                     <h3 class="kt-portlet__head-title">
-                       Data Pelunasan
+                       Data pendapatan
                     </h3>
                 </div>
                 <div class="kt-portlet__head-toolbar">
@@ -110,33 +110,13 @@ $this->load->view('temp/MenuBar.php');
 						  	</thead>
 						  	<tbody>
 						  	</tbody>
+                            <tfoot></tfoor>
 						</table>
-                        
 				</div>
             </div>
 
             </div>
             </form>
-
-            <div class="col-xl-3 col-lg-3 order-lg-3 order-xl-1">
-            <!--begin:: Widgets/Sale Reports-->
-            <div class="kt-portlet kt-portlet--tabs kt-portlet--height-fluid">
-                <div class="kt-portlet__head">
-                    <div class="kt-portlet__head-label">
-                        <h3 class="kt-portlet__head-title">
-                            Test Grapik
-                        </h3>
-                    </div>
-                </div>
-                <div class="kt-portlet__body">
-                    <!--Begin::Tab Content-->
-                    <div class="kt-widget11">
-                        <div id="Severity_graph" style="height:250px;"></div>
-                    </div>
-                </div>
-                <!--End::Tab Content-->
-            </div>
-        </div>
 
         </div>
         </div>

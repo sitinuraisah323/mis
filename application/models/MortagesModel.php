@@ -17,7 +17,7 @@ class MortagesModel extends Master
 				->where('MONTH(date_sbk)', $month)
 				->where('YEAR(date_sbk)', $year)
 				->get()->row();
-	
+
 		return (object) array(
 			'up'	=> (int) $data->up,
 			'noa'	=> (int) $data->noa

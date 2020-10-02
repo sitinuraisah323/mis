@@ -1,4 +1,4 @@
-<h3>Pengeluaran Nasional (<?php echo date('F Y'); ?>)</h3>
+<h3>Pengeluaran Nasional (<?php echo date('F Y', strtotime($datetrans)); ?>)</h3>
 <table class="table" border="1">
 	<thead class="thead-light">
 	<tr  bgcolor="#cccccc">
