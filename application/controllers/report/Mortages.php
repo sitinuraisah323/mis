@@ -93,17 +93,19 @@ class Mortages extends Authenticated
 			$this->mortages->db
 				//->where('units_mortages.date_sbk >=', $post['date-start'])
 				->where('units_mortages.date_sbk <=', $post['date-end'])
-				->where_in('units_mortages.status_transaction ', $status)
-				->where('units_mortages.id_unit', $post['id_unit']);
+				->where_in('units_mortages.status_transaction ', $status);
+			if($post['id_unit']){
+				$this->mortages->db->where('units_mortages.id_unit', $post['id_unit']);
+
+			}
 			if($permit = $post['permit']){
 				$this->mortages->db->where('permit', $permit);
 			}
-			if($nasabah != "all"){
+			if($nasabah != "all" && $nasabah != ''){
 				$this->mortages->db->where('customers.nik', $nasabah);
 			}
 		}
 		$data = $this->mortages->all();
-
 		$no=2;
 		$status_trans="";
 		$saldocicilan=0;

@@ -37,7 +37,6 @@ class Outstanding extends Authenticated
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		require_once APPPATH.'controllers/pdf/header.php';
 		$os = $this->data();
-	
 		$pdf->AddPage('L');
 		$view = $this->load->view('dailyreport/outstanding/index.php',['outstanding'=>$os,'datetrans'=> $this->datetrans()],true);
 		$pdf->writeHTML($view);
@@ -45,6 +44,8 @@ class Outstanding extends Authenticated
 		$pdf->AddPage('L');
 		$view = $this->load->view('dailyreport/outstanding/dpd.php',['dpd'=>$os],true);
 		$pdf->writeHTML($view);
+
+		
 
 		$pdf->AddPage('L');
 		$view = $this->load->view('dailyreport/outstanding/target.php',['data'=>$os,'datetrans'=> $this->datetrans()],true);
@@ -67,14 +68,26 @@ class Outstanding extends Authenticated
 		$pdf->writeHTML($view);
 
 		$pdf->AddPage('L');
-		$view = $this->load->view('dailyreport/outstanding/pendapatan.php',['pendapatan'	=> $this->pendapatan()],true);
+		$view = $this->load->view('dailyreport/outstanding/pendapatan.php',['pendapatan'	=> $this->pendapatan(),
+		'datetrans'=> $this->datetrans()],true);
 		$pdf->writeHTML($view);
 
 		$pdf->AddPage('L');
-		$view = $this->load->view('dailyreport/outstanding/pengeluaran.php',['pengeluaran'	=> $this->pengeluaran()],true);
+		$view = $this->load->view('dailyreport/outstanding/pengeluaran.php',['pengeluaran'	=> $this->pengeluaran(),
+		'datetrans'=> $this->datetrans()],true);
 		$pdf->writeHTML($view);
 
-		$areas = $this->dailycash->getCocCalcutation();
+		$coas = $this->dailycash->pengeluaran_perk();
+
+		$pdf->AddPage('L');
+		$view = $this->load->view('dailyreport/outstanding/pengeluaran_operasi',[
+			'coas'=>$coas	,
+			'datetrans'	=> $this->datetrans()
+		],true);
+		$pdf->writeHTML($view);
+		
+
+		$areas = $this->dailycash-> getCocCalcutation(null,  11,date('n', strtotime($this->datetrans())), date('Y', strtotime($this->datetrans())),  0,  0);
 		$pdf->AddPage('L');
 		$view = $this->load->view('report/coc/pdf.php',[
 			'areas'=>$areas	,
@@ -250,12 +263,13 @@ class Outstanding extends Authenticated
 				->where('year', date('Y', strtotime($date)))
 				->where('id_unit', $unit->id)
 				->get('units_targets')->row();
+			
 			if($target){
 				$target = $target->amount_booking;
 			}else{
 				$target = 0;
 			}
-			$booking =  $this->mortages->unitMontly($unit->id, $month, $year)->up + $this->regular->unitMontly($unit->id, $month, $year)->up;
+			$booking =  $this->mortages->unitMontly($unit->id,  date('n', strtotime($date)), date('Y', strtotime($date)))->up + $this->regular->unitMontly($unit->id, date('n', strtotime($date)), date('Y', strtotime($date)))->up;
 
 			$unit->target = (object) array(
 				'up'	=> $target,
@@ -386,7 +400,7 @@ class Outstanding extends Authenticated
 			$this->units->db->where('MONTH(date)', $month);
 		}
 
-		$month = date('n');
+		$month = date('n', strtotime($this->datetrans()));
 
 		$this->units->db->select('units.name,areas.area, sum(amount) as amount')
 			->join('units','units.id = units_dailycashs.id_unit')
@@ -439,7 +453,7 @@ class Outstanding extends Authenticated
 			$this->units->db->where('MONTH(date)', $month);
 		}
 
-		$month = date('n');
+		$month = date('n', strtotime($this->datetrans()));
 		
 		$this->units->db->select('units.name,areas.area, sum(amount) as amount')
 			->join('units','units.id = units_dailycashs.id_unit')

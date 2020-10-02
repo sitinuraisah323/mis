@@ -501,4 +501,12 @@ class Unitsdailycash extends ApiController
 		return $this->sendMessage($this->unitsdailycash->getCoc($this->input->get(), $this->input->get('percentage'), $this->input->get('month'), $this->input->get('year'), $this->input->get('period_month'), $this->input->get('period_year')), 'Successfully get Coc');
 	}
 
+	public function pengeluran_perk()
+	{
+		
+		$daily = $this->unitsdailycash->pengeluaran_perk();
+
+		return $this->sendMessage($daily, 'success', 200);
+	}
+
 }

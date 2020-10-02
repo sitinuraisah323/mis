@@ -985,4 +985,46 @@ class Dashboards extends ApiController
 		$this->sendMessage($units, 'Get Data Outstanding');
 	}
 
+	public function pendapatan_daily()
+	{
+		if($area = $this->input->get('area')){
+			$this->units->db->where('id_area', $area);
+		}
+		if($code = $this->input->get('code')){
+			$this->units->db->where('units.id', $code);
+		}
+		if($id_unit = $this->input->get('id_unit')){
+			$this->units->db->where('units.id', $id_unit);
+		}
+		if($this->input->get('date')){
+			$date = $this->input->get('date');
+		}else{
+			$date = date('Y-m-d');
+		}
+		$date = date('Y-m-d', strtotime($date. ' +1 days'));
+		$begin = new DateTime( $date );
+		$end = new DateTime($date);
+		$end = $end->modify( '-6 day' );
+		$interval = new DateInterval('P1D');
+		$daterange = new DatePeriod($end, $interval ,$begin);
+
+		$dates = array();
+		foreach($daterange as $date){
+			$dates[] =  $date->format('Y-m-d');
+		}
+
+		$result[] = array('no' => 'No','unit'=> 'Unit','area'=>'Area','dates'=>$dates);
+		$units = $this->units->db->select('units.id, units.name, areas.area as area')
+			->join('areas','areas.id = units.id_area')
+			->get('units')->result();
+		foreach ($units as $unit){
+			$dates = array();
+			foreach($daterange as $date){
+				$dates[] =  (int) $this->regular->getPendapatan($unit->id, $date->format('Y-m-d'))->up;
+			}
+			$unit->dates = $dates;
+			$result[] = $unit;
+		}
+		$this->sendMessage($result, 'Get Data Pendaptan');
+	}
 }

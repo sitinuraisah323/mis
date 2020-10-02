@@ -80,7 +80,7 @@
 			<td align="right"><?php echo number_format($dpdRepaymenUp,0);?></td>
 			<td align="center"><?php echo $dpdTotalNoa;?></td>
 			<td align="right"><?php echo number_format($dpdTotalUp,0);?></td>
-			<td align="right"><?php echo  number_format($totalOs*100,2);?></td>
+			<td align="right"><?php echo  number_format($totalOs,2);?></td>
 			<td align="right"><?php echo  number_format($percentage/$no*100,2);?></td>
 		</tr>
 	</tbody>
