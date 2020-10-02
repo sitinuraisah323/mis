@@ -32,21 +32,7 @@ class Repaymentmortage extends ApiController
 	public function get_byid()
 	{
 		$sbk = $this->input->get('nosbk');
-		$unit = $this->input->get('unit');
-
-		// $this->repaymentmortage->db
-		// 	->select('units_dailycashs.amount as angsuran')
-		// 	->join('units_dailycashs','units_repayments_mortage.no_sbk = units_dailycashs.code_trans and units_repayments_mortage.id_unit=units_repayments_mortage.id_unit')
-		// 	->where('units_repayments_mortage.no_sbk ', $sbk)
-		// 	->where('units_repayments_mortage.id_unit', $unit);
-		
-		// $data = $this->repaymentmortage->all();
-		// echo json_encode(array(
-		// 	'data'	=> $data,
-		// 	'status'	=> true,
-		// 	'message'	=> 'Successfully Get Data Regular Pawns'
-		// ));
-		
+		$unit = $this->input->get('unit');		
 		$data = $this->repaymentmortage->get_repaymentsmortage($sbk,$unit);
 		echo json_encode(array(
 			'data'		=> $data ,
