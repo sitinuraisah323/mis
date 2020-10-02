@@ -56,30 +56,35 @@ class Mortages extends Authenticated
 		$objPHPExcel->getActiveSheet()->getColumnDimension('B');
 		$objPHPExcel->getActiveSheet()->setCellValue('B1', 'Unit');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('C');
-		$objPHPExcel->getActiveSheet()->setCellValue('C1', 'No SBK');
+		$objPHPExcel->getActiveSheet()->setCellValue('C1', 'NIC');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('D');
-		$objPHPExcel->getActiveSheet()->setCellValue('D1', 'Nasabah');
+		$objPHPExcel->getActiveSheet()->setCellValue('D1', 'No SBK');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('E');
-		$objPHPExcel->getActiveSheet()->setCellValue('E1', 'Tanggal Kredit');
+		$objPHPExcel->getActiveSheet()->setCellValue('E1', 'Nasabah');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('F');
-		$objPHPExcel->getActiveSheet()->setCellValue('F1', 'Tanggal jatuh Tempo');
+		$objPHPExcel->getActiveSheet()->setCellValue('F1', 'Tanggal Kredit');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('G');
-		$objPHPExcel->getActiveSheet()->setCellValue('G1', 'Sewa Modal');
+		$objPHPExcel->getActiveSheet()->setCellValue('G1', 'Tanggal jatuh Tempo');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('H');
-		$objPHPExcel->getActiveSheet()->setCellValue('H1', 'Taksiran');
+		$objPHPExcel->getActiveSheet()->setCellValue('H1', 'Sewa Modal');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('I');
-		$objPHPExcel->getActiveSheet()->setCellValue('I1', 'Admin');
+		$objPHPExcel->getActiveSheet()->setCellValue('I1', 'Taksiran');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('J');
-		$objPHPExcel->getActiveSheet()->setCellValue('J1', 'Pinjaman');
+		$objPHPExcel->getActiveSheet()->setCellValue('J1', 'Admin');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('K');
-		$objPHPExcel->getActiveSheet()->setCellValue('K1', 'Cicilan');
+		$objPHPExcel->getActiveSheet()->setCellValue('K1', 'Pinjaman');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('L');
-		$objPHPExcel->getActiveSheet()->setCellValue('L1', 'Sisa Cicilan');
+		$objPHPExcel->getActiveSheet()->setCellValue('L1', 'Cicilan');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('M');
-		$objPHPExcel->getActiveSheet()->setCellValue('M1', 'Status');
+		$objPHPExcel->getActiveSheet()->setCellValue('M1', 'Sisa Cicilan');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('N');
+		$objPHPExcel->getActiveSheet()->setCellValue('N1', 'Status');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth("1000");
+		//$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth("50");
+		$objPHPExcel->getActiveSheet()->setCellValue('O1', 'Description');
 
 		$this->mortages->db
-			->select('customers.name as customer_name,customers.nik as nik, (select count(distinct(date_kredit)) from units_repayments_mortage where units_repayments_mortage.no_sbk =units_mortages.no_sbk and units_repayments_mortage.id_unit =units_mortages.id_unit  ) as cicilan')
+			->select('nic,customers.name as customer_name,customers.nik as nik,description_2,description_2,description_3,description_4,(select count(distinct(date_kredit)) from units_repayments_mortage where units_repayments_mortage.no_sbk =units_mortages.no_sbk and units_repayments_mortage.id_unit =units_mortages.id_unit  ) as cicilan')
 			->join('customers','units_mortages.id_customer = customers.id')
 			->select('areas.area,units.name as unit_name,units.code as code')
 			->join('units','units_mortages.id_unit = units.id')
@@ -125,21 +130,23 @@ class Mortages extends Authenticated
 		{
 			$objPHPExcel->getActiveSheet()->setCellValue('A'.$no, $row->code);				  	
 			$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, $row->unit_name );				 
-			$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, $row->no_sbk );				 
-			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no, $row->customer_name);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no, date('d/m/Y',strtotime($row->date_sbk)));				 
-			$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, date('d/m/Y',strtotime($row->deadline)));				 
-			$objPHPExcel->getActiveSheet()->setCellValue('G'.$no, $row->capital_lease);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('H'.$no, $row->estimation);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('I'.$no, $row->amount_admin);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('J'.$no, $row->amount_loan);		
-			$objPHPExcel->getActiveSheet()->setCellValue('K'.$no, $row->cicilan);		
+			$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, $row->nic );				 
+			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no, $row->no_sbk );				 
+			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no, $row->customer_name);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, date('d/m/Y',strtotime($row->date_sbk)));				 
+			$objPHPExcel->getActiveSheet()->setCellValue('G'.$no, date('d/m/Y',strtotime($row->deadline)));				 
+			$objPHPExcel->getActiveSheet()->setCellValue('H'.$no, $row->capital_lease);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('I'.$no, $row->estimation);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('J'.$no, $row->amount_admin);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('K'.$no, $row->amount_loan);		
+			$objPHPExcel->getActiveSheet()->setCellValue('L'.$no, $row->cicilan);		
 			$jumcicilan = $row->cicilan * $row->installment;
 			$saldocicilan=$row->amount_loan - $jumcicilan;
 			if($row->status_transaction=="L"){$saldocicilan="0";}else{$saldocicilan=$saldocicilan;}
-			$objPHPExcel->getActiveSheet()->setCellValue('L'.$no, $saldocicilan);		
+			$objPHPExcel->getActiveSheet()->setCellValue('M'.$no, $saldocicilan);		
 			if($row->status_transaction=="L"){$status_trans="Lunas";}else{$status_trans="Aktif";}		 
-			$objPHPExcel->getActiveSheet()->setCellValue('M'.$no, $status_trans);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('N'.$no, $status_trans);
+			$objPHPExcel->getActiveSheet()->setCellValue('O'.$no, "- ".$row->description_1.'  |'.$row->description_2.'  |'.$row->description_3.' |'.$row->description_4);				 
 			$no++;
 		}
 
