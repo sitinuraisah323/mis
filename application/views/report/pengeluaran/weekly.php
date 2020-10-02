@@ -14,7 +14,7 @@ $this->load->view('temp/MenuBar.php');
         <div class="kt-subheader__main">            
             <h3 class="kt-subheader__title">Report</h3>            
             <span class="kt-subheader__separator kt-subheader__separator--v"></span>            
-            <span class="kt-subheader__desc">Pengeluaran Harian</span>            
+            <span class="kt-subheader__desc">Pengeluaran Mingguan</span>            
         </div>
         <div class="kt-subheader__toolbar">
             <div class="kt-subheader__wrapper">                              
@@ -33,7 +33,7 @@ $this->load->view('temp/MenuBar.php');
                         <i class="kt-font-brand fa fa-align-justify"></i>
                     </span>
                     <h3 class="kt-portlet__head-title">
-                       Data Pengeluaran Harian
+                       Data Pengeluaran Mingguan
                     </h3>
                 </div>
                 <div class="kt-portlet__head-toolbar">
@@ -122,11 +122,7 @@ $this->load->view('temp/MenuBar.php');
                             }
                             ?>
                             </select>
-                    </div>
-                    <!-- <div class="col-lg-2">
-                        <label class="col-form-label">Tanggal</label>					
-						<input type="date" class="form-control" name="date-start" value="<?php echo date('Y-m-01');?>">
-					</div> -->
+                    </div>                    
 					<div class="col-lg-2">
                         <label class="col-form-label">Tanggal</label>
 						<input type="date" class="form-control" name="date-end" value="<?php echo date('Y-m-d');?>">
@@ -134,8 +130,8 @@ $this->load->view('temp/MenuBar.php');
                     <div class="col-lg-1">
                         <label class="col-form-label">&nbsp</label>
                         <div class="position-relative">
-                        <button type="button" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>
-                        <button type="submit" class="btn btn-danger btn-icon" name="btnexport_csv" id="btnexport_csv"><i class="fa fa-file-excel"></i></button>
+                        <button type="button" class="btn btn-brand btn-icon" name="btncari_weekly" id="btncari_weekly"><i class="fa fa-search"></i></button>
+                        <button type="submit" class="btn btn-danger btn-icon" name="btnexport_weekly" id="btnexport_weekly"><i class="fa fa-file-excel"></i></button>
                         </div>
                     </div>
 				</div>	               
@@ -144,18 +140,12 @@ $this->load->view('temp/MenuBar.php');
 
             <div class="col-md-12">
                 <div class="kt-section__content">
-						<table class="table" id="tblmodalkerjapusat">
-						  	<thead class="thead-light">
-						    	<tr>
-						      		<th class="text-center">No</th>
-						      		<th class="text-left">Area</th>
-						      		<th class="text-left">Unit</th>
-						      		<th class="text-center">Tanggal</th>
-						      		<th class="text-right">Jumlah</th>
-						    	</tr>
+                        <table class="table">
+						  	<thead  class="thead-light">
 						  	</thead>
-						  	<tbody>						    					    	
+						  	<tbody>
 						  	</tbody>
+							<tfoot></tfoot>
 						</table>
 				</div>
             </div>

@@ -423,22 +423,44 @@
 															<span class="kt-menu__link-text">Pendapatan</span>
 														</a>
 													</li>
-												<?php endif;?>
-												<!-- <?php if(read_access('report/pendapatan/sewamodal')):?>
-													<li class="kt-menu__item "  aria-haspopup="true">
-														<a  href="<?php echo base_url('report/pendapatan/sewamodal'); ?>" class="kt-menu__link ">
-															<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
-															<span class="kt-menu__link-text">Sewa Modal</span>
-														</a>
-													</li>
-												<?php endif;?> -->
+												<?php endif;?>												
 												<?php if(read_access('report/pengeluaran')):?>
-													<li class="kt-menu__item "  aria-haspopup="true">
-														<a  href="<?php echo base_url('report/pengeluaran'); ?>" class="kt-menu__link ">
-															<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
-															<span class="kt-menu__link-text">Pengeluaran</span>
-														</a>
-													</li>
+													<li class="kt-menu__item  kt-menu__item--submenu"  data-ktmenu-submenu-toggle="hover" aria-haspopup="true">
+															<a  href="javascript:;" class="kt-menu__link kt-menu__toggle">
+														<span class="kt-menu__link-icon">
+														<i class="fa fa-copy"><span></span></i>
+														</span>
+																<span class="kt-menu__link-text">Pengeluaran</span><i class="kt-menu__hor-arrow la la-angle-right"></i><i class="kt-menu__ver-arrow la la-angle-right"></i>
+															</a>
+															<div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--right">
+																<ul class="kt-menu__subnav">											
+																	<?php if(read_access('report/pengeluaran')):?>
+																		<li class="kt-menu__item "  aria-haspopup="true">
+																			<a  href="<?php echo base_url('report/pengeluaran'); ?>" class="kt-menu__link ">
+																				<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+																				<span class="kt-menu__link-text">Daily</span>
+																			</a>
+																		</li>
+																	<?php endif;?>												
+																	<?php if(read_access('report/pengeluaran')):?>
+																		<li class="kt-menu__item "  aria-haspopup="true">
+																			<a  href="<?php echo base_url('report/pengeluaran/weekly'); ?>" class="kt-menu__link ">
+																				<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+																				<span class="kt-menu__link-text">Weekly</span>
+																			</a>
+																		</li>
+																	<?php endif;?>
+																	<?php if(read_access('report/pengeluaran')):?>
+																		<li class="kt-menu__item "  aria-haspopup="true">
+																			<a  href="<?php echo base_url('report/pengeluaran/monthly'); ?>" class="kt-menu__link ">
+																				<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+																				<span class="kt-menu__link-text">Monthly</span>
+																			</a>
+																		</li>
+																	<?php endif;?>																	
+																</ul>
+															</div>
+														</li>
 												<?php endif;?>
 												<?php if(read_access('report/bukukas')):?>
 													<li class="kt-menu__item "  aria-haspopup="true">
