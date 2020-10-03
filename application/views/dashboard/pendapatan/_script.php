@@ -96,6 +96,7 @@ function initCariForm(){
 
     $('#area').select2({ placeholder: "Select area", width: '100%' });
     $('#unit').select2({ placeholder: "Select Unit", width: '100%' });
+    $('#method').select2({ placeholder: "Select Method", width: '100%' });
     $('#status').select2({ placeholder: "Select a status", width: '100%' });
     //events
     $('#btncari').on('click',function(){
@@ -103,12 +104,13 @@ function initCariForm(){
 		var	area = $('[name="area"]').val();
         var code = $('[name="id_unit"]').val();
 		var dateStart = $('[name="date-start"]').val();
+		var method = $('[name="method"]').val();
         KTApp.block('#form_bukukas .kt-portlet__body', {});
 		$.ajax({
 			type : 'GET',
 			url : "<?php echo base_url("api/dashboards/pendapatan_daily"); ?>",
 			dataType : "json",
-			data:{area:area,date:dateStart, code:code},
+			data:{area:area,date:dateStart, code:code, method},
 			success : function(response,status){
 				KTApp.unblockPage();
 				var body = '';

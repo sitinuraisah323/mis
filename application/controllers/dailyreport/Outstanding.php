@@ -77,7 +77,7 @@ class Outstanding extends Authenticated
 		'datetrans'=> $this->datetrans()],true);
 		$pdf->writeHTML($view);
 
-		$coas = $this->dailycash->pengeluaran_perk();
+		$coas = $this->dailycash->pengeluaran_perk($this->datetrans());
 
 		$pdf->AddPage('L');
 		$view = $this->load->view('dailyreport/outstanding/pengeluaran_operasi',[

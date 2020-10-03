@@ -1020,7 +1020,7 @@ class Dashboards extends ApiController
 		foreach ($units as $unit){
 			$dates = array();
 			foreach($daterange as $date){
-				$dates[] =  (int) $this->regular->getPendapatan($unit->id, $date->format('Y-m-d'))->up;
+				$dates[] =  (int) $this->regular->getPendapatan($unit->id, $date->format('Y-m-d'), $this->input->get('method'))->up;
 			}
 			$unit->dates = $dates;
 			$result[] = $unit;

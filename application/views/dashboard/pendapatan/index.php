@@ -93,6 +93,12 @@ $this->load->view('temp/MenuBar.php');
                             ?>
                         </select>
                     </div>
+                    <div class="col-lg-2">
+                        <select class="form-control select2" name="method" id="method">
+                            <option value="daily">Harian</option>
+                            <option value="montly">Bulanan</option>
+                        </select>
+                    </div>
 					<label class="col-form-label">Tanggal</label>
 					<div class="col-lg-2">
 						<input type="date" class="form-control" name="date-start" value="<?php echo date('Y-m-d');?>">

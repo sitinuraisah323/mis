@@ -226,8 +226,13 @@ class UnitsdailycashModel extends Master
 		return $groupArea;
 	}
 
-	public function pengeluaran_perk()
+	public function pengeluaran_perk($date = null)
 	{
+		if($date === null){
+			$date = date('Y-m-d');
+		}
+		$this->db->where('units_dailycashs.date >=', date('Y-m-01', strtotime($date)));
+		$this->db->where('units_dailycashs.date <=', date('Y-m-d', strtotime($date)));
 		$this->db->select('units_dailycashs.no_perk,units_dailycashs.description, coa.name_perk,  sum(amount) as amount')
 			->from('units_dailycashs')
 			->where_in('units_dailycashs.no_perk', [
