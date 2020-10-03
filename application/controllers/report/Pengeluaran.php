@@ -31,6 +31,22 @@ class Pengeluaran extends Authenticated
 		$data['pengeluaran']=$this->m_casing->get_list_pengeluaran();
 		$this->load->view('report/pengeluaran/index',$data);
 	}	
+
+	public function weekly()
+	{
+		$data['areas'] = $this->areas->all();
+		$data['pengeluaran']=$this->m_casing->get_list_pengeluaran();
+		$this->load->view('report/pengeluaran/weekly',$data);
+	}
+
+	public function monthly()
+	{
+		$data['areas'] = $this->areas->all();
+		$data['pengeluaran']=$this->m_casing->get_list_pengeluaran();
+		$this->load->view('report/pengeluaran/monthly',$data);
+	}
+
+
 	
 	public function export()
 	{		

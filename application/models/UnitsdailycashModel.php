@@ -42,6 +42,20 @@ class UnitsdailycashModel extends Master
 		);
 	}
 
+	public function getSummaryCashout($date,$perk,$idUnit)
+	{
+		$data = $this->db->select('sum(amount) as amount, count(*) as total')->from('units_dailycashs')
+			->where('type =', 'CASH_OUT')
+			->where('date =', $date)
+			->where_in('no_perk ', $perk)
+			->where('id_unit', $idUnit)->get()->row();
+		return (object)array(
+			'amount' => (int)$data->amount,
+			'total' => (int)$data->total,
+		);
+	}
+
+
 	public function getSaldo($idUnit,$date)
 	{
 		$saldo = $this->units->db->select('amount,cut_off')
