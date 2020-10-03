@@ -125,7 +125,7 @@ class Pengeluaran extends ApiController
 		$this->sendMessage($result, 'Get Data Outstanding');
 	}
     
-    public function monthly()
+    public function monthly_()
 	{
         $listdata=array();
         if($this->input->get('category')!='all'){
@@ -169,6 +169,56 @@ class Pengeluaran extends ApiController
 			->order_by('amount','desc');
 		$data = $this->units->db->get()->result();
 		return $this->sendMessage($data,'Successfully get pengeluaran');
+	}
+
+	public function monthly()
+	{
+        $listdata=array();
+        if($this->input->get('category')!='all'){
+            $listdata = $this->input->get('category');
+        }else{           
+            $listperk = $this->m_casing->get_list_pengeluaran();
+            foreach ($listperk as $value) 
+            {
+                array_push($listdata, $value->no_perk);
+            }
+        }		
+		
+		if($this->input->get('area')){
+			$area = $this->input->get('area');
+			$this->units->db->where('id_area', $area);
+		}else if($this->session->userdata('user')->level == 'area'){
+			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
+		}
+
+		if($this->input->get('id_unit')){
+			$code = $this->input->get('id_unit');
+			$this->units->db->where('id_unit', $code);
+		}else if($this->session->userdata('user')->level == 'unit'){
+			$this->units->db->where('id_unit', $this->session->userdata('user')->id_unit);
+		}
+
+		if($this->input->get('dateEnd')){
+			$month = date('m',strtotime($this->input->get('dateEnd')));
+            $this->units->db->where('MONTH(date)', $month);
+		}
+		
+		$units  = $this->units->db->select('units.id, units.name,areas.area, sum(amount) as amount')
+		    ->join('units','units.id = units_dailycashs.id_unit')
+			->join('areas','areas.id = units.id_area')
+			->from('units_dailycashs')
+			->where('type','CASH_OUT')
+			->where_in('no_perk', $listdata)
+			->group_by('units.name')
+			->group_by('units.id')
+			->group_by('areas.area')
+			->order_by('amount','desc')
+			->get()->result();
+		foreach ($units as $unit) {
+			$unit->perk = $this->unitsdailycash->getSummaryCashoutPerk($month,$listdata,$unit->id);
+		}
+		//$data = $this->units->db->get()->result();
+		return $this->sendMessage($units,'Successfully get pengeluaran');
 	}
 
 	

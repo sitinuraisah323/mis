@@ -55,6 +55,22 @@ class UnitsdailycashModel extends Master
 		);
 	}
 
+	public function getSummaryCashoutPerk($date,$perk,$idUnit)
+	{
+		$data = $this->db->select('coa.name_perk,units_dailycashs.no_perk,sum(amount) as amount')
+			->from('units_dailycashs')
+			->join('coa','coa.no_perk=units_dailycashs.no_perk')
+			->where('units_dailycashs.type =', 'CASH_OUT')
+			->where('MONTH(date) =', $date)
+			->where_in('units_dailycashs.no_perk ', $perk)
+			->where('units_dailycashs.id_unit', $idUnit)
+			->group_by('units_dailycashs.id_unit')
+			->group_by('units_dailycashs.no_perk')
+			->group_by('coa.name_perk')
+			->get()->result();
+		return $data;
+	}
+
 
 	public function getSaldo($idUnit,$date)
 	{

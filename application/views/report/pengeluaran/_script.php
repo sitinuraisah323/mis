@@ -237,11 +237,12 @@ function initCariForm(){
 				//if(response.status == true){
 					var template = '';
                     var total=0;
+                    var totalperk=0;
                     var no = 0;
 					$.each(response.data, function (index, data) {
                         no++;
                         var month = moment(dateEnd).format('MMMM');
-                        template +='<tr class="rowappend">';
+                        template +='<tr class="rowappend" bgcolor="#e6e600">';
                         template +='<td class="text-center">'+no+'</td>';
                         template +='<td class="text-left">'+data.area+'</td>';
                         template +='<td class="text-left">'+data.name+'</td>';
@@ -249,6 +250,17 @@ function initCariForm(){
                         template +='<td class="text-right">'+convertToRupiah(data.amount)+'</td>';
                         template +='</tr>';
                         total +=  parseInt(data.amount);
+                        $.each(data.perk, function (index, perk) {
+                            template +='<tr class="rowappend">';
+                            template +='<td class="text-right" colspan="4">'+perk.name_perk+'</td>';
+                            template +='<td class="text-right">'+convertToRupiah(perk.amount)+'</td>';
+                            template +='</tr>';
+                            totalperk += parseInt(perk.amount);
+                        });
+                        // template += '<tr class="rowappend" bgcolor="#e6e600">';
+                        // template +='<td class="text-right" colspan="4"><b>Total</b></td>';
+                        // template +='<td class="text-right"><b>'+convertToRupiah(totalperk)+'</b></td>';
+                        // template +='</tr>';
 					});
                     template += '<tr class="rowappend">';
                     template +='<td colspan="4" class="text-right"><b>Total</b></td>';                    
