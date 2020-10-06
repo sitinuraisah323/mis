@@ -891,6 +891,8 @@ function initCash(){
             upcicilan    = response.data.upcicilan;
             saldocicilan = response.data.saldocicilan;
             dpdnoa       = response.data.noadpd;
+            noareg       = response.data.noareguler;
+            noaunreg     = response.data.noa_cicilan;
            
         },
         error:function(xhr){
@@ -901,7 +903,9 @@ function initCash(){
             $('.cash-saldo').text(convertToRupiah(saldo));
             $('.Outstanding').text(convertToRupiah(outstanding));
             $('.upregular').text(convertToRupiah(upregular));
+            $('.noareg').text(convertToRupiah(noareg));            
             $('.saldocicilan').text(convertToRupiah(saldocicilan));
+            $('.noacicilan').text(convertToRupiah(noaunreg));            
             //$('.upcicilan').text(convertToRupiah(upcicilan));
             $('.dpd-unit').text(convertToRupiah(dpd));
             $('.dpdnoa').text(convertToRupiah(dpdnoa));            

@@ -95,11 +95,7 @@ class Regularpawns extends Authenticated
 		$objPHPExcel->getActiveSheet()->getColumnDimension('K');
 		$objPHPExcel->getActiveSheet()->setCellValue('K1', 'Admin');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('L');
-		$objPHPExcel->getActiveSheet()->setCellValue('L1', 'Rate');
-		$objPHPExcel->getActiveSheet()->getColumnDimension('M');
-		$objPHPExcel->getActiveSheet()->setCellValue('M1', 'Keterangan');
-		$objPHPExcel->getActiveSheet()->getColumnDimension('N');
-		$objPHPExcel->getActiveSheet()->setCellValue('N1', 'Status');
+		$objPHPExcel->getActiveSheet()->setCellValue('L1', 'Status');
 
 	
 		
@@ -149,9 +145,7 @@ class Regularpawns extends Authenticated
 			$objPHPExcel->getActiveSheet()->setCellValue('J'.$no, $row->amount);				 
 			$objPHPExcel->getActiveSheet()->setCellValue('K'.$no, $row->admin );		
 			if($row->status_transaction=="L"){$status="Lunas";}else{$status="Aktif";}		 
-			$objPHPExcel->getActiveSheet()->setCellValue('L'.$no, $row->capital_lease*100 .' %');				 
-			$objPHPExcel->getActiveSheet()->setCellValue('M'.$no, $row->description_1);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('N'.$no, $status);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('L'.$no, $status);				 
 			$no++;
 		}
 

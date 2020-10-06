@@ -243,11 +243,11 @@ function initCariForm(){
                         no++;
                         var month = moment(dateEnd).format('MMMM');
                         template +='<tr class="rowappend" bgcolor="#e6e600">';
-                        template +='<td class="text-center">'+no+'</td>';
-                        template +='<td class="text-left">'+data.area+'</td>';
-                        template +='<td class="text-left">'+data.name+'</td>';
-                        template +='<td class="text-center">'+month+'</td>';
-                        template +='<td class="text-right">'+convertToRupiah(data.amount)+'</td>';
+                        template +='<td class="text-center"><b>'+no+'</b></td>';
+                        template +='<td class="text-left"><b>'+data.area+'</b></td>';
+                        template +='<td class="text-left"><b>'+data.name+'</b></td>';
+                        template +='<td class="text-center"><b>'+month+'</b></td>';
+                        template +='<td class="text-right"><b>'+convertToRupiah(data.amount)+'</b></td>';
                         template +='</tr>';
                         total +=  parseInt(data.amount);
                         $.each(data.perk, function (index, perk) {

@@ -19,8 +19,7 @@ $this->load->view('temp/MenuBar.php');
 			<div class="kt-subheader__toolbar">
 				<div class="kt-subheader__wrapper">
                     <a href="<?php echo base_url('dashboards/executivesummary'); ?>" class="btn kt-subheader__btn-daterange" id="kt_dashboard_daterangepicker" data-toggle="kt-tooltip" data-placement="left">
-                        <span class="kt-subheader__btn-daterange-title" id="kt_dashboard_daterangepicker_title">Summary Report : </span>&nbsp;
-                    
+                        <span class="kt-subheader__btn-daterange-title" id="kt_dashboard_daterangepicker_title">Summary Report : </span>&nbsp;                  
                     </a>
                     <a href="<?php echo base_url('dailyreport/outstanding'); ?>" title="Download" class="btn kt-subheader__btn-primary btn-icon">
                         <i class="flaticon-download-1"></i>

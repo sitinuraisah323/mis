@@ -96,8 +96,8 @@ $this->load->view('temp/MenuBar.php');
                                     <a class="kt-link Outstanding" href="#">0</a> (OS)
                                 </h3>
                                 <div class="kt-iconbox__content">
-                                   UP Kredit Reguler ( <b><a class="kt-link upregular" href="#">0</a></b>)
-                                   <br/>UP Kredit Cicilan ( <b><a class="kt-link saldocicilan" href="#">0</a></b>)                                      
+                                   UP Reguler ( <b><a class="kt-link upregular" href="#">0</a></b>) of <b><a class="kt-link noareg" href="#">0</a></b> Noa
+                                   <br/>UP Cicilan ( <b><a class="kt-link saldocicilan" href="#">0</a></b>) of <b><a class="kt-link noacicilan" href="#">0</a></b> Noa                                      
                                    <!-- <br/>UP Cicilan ( <b><a class="kt-link upcicilan" href="#">0</a></b>)  -->
                                 </div>
                             </div>
