@@ -894,6 +894,7 @@ class Dashboards extends ApiController
 		$regular 	= $this->db->select('SUM(amount) as up,COUNT(*) as noa')
 					 ->from('units_regularpawns')
 					 ->where('status_transaction','N')
+					 ->where('amount !=','0')
 					 ->where('id_unit',$idUnit)
 					 ->get()->row();
 
