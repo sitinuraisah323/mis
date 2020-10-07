@@ -72,30 +72,30 @@ class Dashboards extends ApiController
 				->order_by('date','DESC')
 				->get()->row();
 			$unit->ost_yesterday = (object) array(
-				'noa'	=> $getOstYesterday->noa,
-				'up'	=> $getOstYesterday->os
+				'noa'	=>(int) $getOstYesterday->noa,
+				'up'	=>(int) $getOstYesterday->os
 			);
 			$unit->credit_today = $this->regular->getCreditToday($unit->id, $date);
 			$unit->repayment_today = $this->regular->getRepaymentToday($unit->id, $date);
 			$totalNoa = (int) $unit->ost_yesterday->noa + $unit->credit_today->noa - $unit->repayment_today->noa;
 			$totalUp = (int) $unit->ost_yesterday->up + $unit->credit_today->up - $unit->repayment_today->up;
 			$unit->total_outstanding = (object) array(
-				'noa'	=> $totalNoa,
-				'up'	=> $totalUp,
-				'tiket'	=> round($totalUp > 0 ? $totalUp /$totalNoa : 0)
+				'noa'	=>(int) $totalNoa,
+				'up'	=>(int) $totalUp,
+				'tiket'	=>(int) round($totalUp > 0 ? $totalUp /$totalNoa : 0)
 			);
 			$unit->total_disburse = $this->regular->getTotalDisburse($unit->id);
 			$unit->dpd_yesterday = $this->regular->getDpdYesterday($unit->id, $date);
 			$unit->dpd_today = $this->regular->getDpdToday($unit->id, $date);
 			$unit->dpd_repayment_today = $this->regular->getDpdRepaymentToday($unit->id,$date);
 			$unit->total_dpd = (object) array(
-				'noa'	=> $unit->dpd_today->noa + $unit->dpd_yesterday->noa - $unit->dpd_repayment_today->noa,
-				'ost'	=> $unit->dpd_today->ost + $unit->dpd_yesterday->ost - $unit->dpd_repayment_today->ost,
+				'noa'	=>(int) $unit->dpd_today->noa + $unit->dpd_yesterday->noa - $unit->dpd_repayment_today->noa,
+				'ost'	=>(int) $unit->dpd_today->ost + $unit->dpd_yesterday->ost - $unit->dpd_repayment_today->ost,
 			);
 			$unit->lasttrans = $date;
 			$unit->max = $max->os;
 			//$max
-			$unit->percentage = ($unit->total_dpd->ost > 0) && ($unit->total_outstanding->up > 0) ? round($unit->total_dpd->ost / $unit->total_outstanding->up, 4) : 0;
+			$unit->percentage =(int) ($unit->total_dpd->ost > 0) && ($unit->total_outstanding->up > 0) ? round($unit->total_dpd->ost / $unit->total_outstanding->up, 4) : 0;
 		}
 		$this->sendMessage($units, 'Get Data Outstanding');
 	}
