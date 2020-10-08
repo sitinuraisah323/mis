@@ -843,6 +843,7 @@ class Dashboards extends ApiController
 		$unit =array();
 		for ($i=0; $i < $endval; $i++) { 
 			$date = date('M-Y',strtotime('+ '.$i.' month',strtotime($sdate)));
+			$year = date('Y',strtotime($sdate));
 			$month = date('m',strtotime('+ '.$i.' month',strtotime($sdate)));
 			$edate = date('Y-m-t',strtotime('+ '.$i.' month',strtotime($sdate)));
 			if($month==date('m')){
@@ -861,9 +862,10 @@ class Dashboards extends ApiController
 			$target = $this->db->select('id_unit,amount_booking,amount_outstanding')
 			                ->from('units_targets')
 			                ->where('month',$month)
+			                ->where('year',$year)
 							->where('id_unit',$idUnit)
 							->get()->row();
-			$realBook =$this->regular->getUnitCredit($idUnit,$month);
+			$realBook =$this->regular->getUnitCredit($idUnit,$month,$year);
 			$realOut = $this->db->select('id_unit,os')
 			                ->from('units_outstanding')
 			                ->where('date',$date_out)
