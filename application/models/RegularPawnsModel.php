@@ -339,17 +339,46 @@ class RegularpawnsModel extends Master
 		);
 	}
 
-	public function getUnitCredit($idUnit, $today)
+	public function getUnitCredit($idUnit, $month,$year)
 	{
 		$upRegular = $this->db->select('sum(amount) as up')->from($this->table)
 			->where('id_unit', $idUnit)
-			->where('MONTH(date_sbk)', $today)->get()->row();
+			->where('MONTH(date_sbk)', $month)
+			->where('YEAR(date_sbk)', $year)->get()->row();
 		$upaMortages = $this->db->select('sum(amount_loan) as up')->from('units_mortages')
 			->where('id_unit', $idUnit)
-			->where('MONTH(date_sbk)', $today)->get()->row();
+			->where('MONTH(date_sbk)', $month)
+			->where('YEAR(date_sbk)', $year)->get()->row();
 
 		return (object)array(
-			'up' => $upRegular->up + $upaMortages->up
+			'upRegular' => (int)$upRegular->up,
+			'upMortage' => (int)$upaMortages->up,
+			'up' => (int)$upRegular->up + (int)$upaMortages->up
+		);
+	}
+
+	public function getUnitsRepayment($idUnit, $month,$year)
+	{
+		$Regular = $this->db->select('sum(money_loan) as up, count(*) as noa')->from('units_repayments')
+			->where('id_unit', $idUnit)
+			->where('MONTH(date_repayment)', $month)
+			->where('YEAR(date_repayment)', $year)->get()->row();
+
+		$Mortages = $this->db->select('distinct(date_kredit),amount')
+					->from('units_repayments_mortage')
+					->where('id_unit', $idUnit)
+					->where('MONTH(date_kredit)', $month)
+					->where('YEAR(date_kredit)', $year)
+					->get()->result();
+		$upMortage =0;
+	    foreach ($Mortages as $Mortage) {
+			$upMortage += $Mortage->amount; 
+		}		
+		$upMortage = $upMortage;	
+		return (object)array(
+			'upRegular' => (int) $Regular->up,
+			'upMortage' => (int) $upMortage,
+			'up' => (int)$Regular->up + (int)$upMortage
 		);
 	}
 

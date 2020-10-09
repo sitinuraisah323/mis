@@ -468,6 +468,82 @@
 															</div>
 														</li>
 												<?php endif;?>
+												<?php if(read_access('report/pengeluaran')):?>
+													<li class="kt-menu__item  kt-menu__item--submenu"  data-ktmenu-submenu-toggle="hover" aria-haspopup="true">
+															<a  href="javascript:;" class="kt-menu__link kt-menu__toggle">
+														<span class="kt-menu__link-icon">
+														<i class="fa fa-copy"><span></span></i>
+														</span>
+																<span class="kt-menu__link-text">Pencairan</span><i class="kt-menu__hor-arrow la la-angle-right"></i><i class="kt-menu__ver-arrow la la-angle-right"></i>
+															</a>
+															<div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--right">
+																<ul class="kt-menu__subnav">											
+																	<?php if(read_access('report/pencairan')):?>
+																		<li class="kt-menu__item "  aria-haspopup="true">
+																			<a  href="<?php echo base_url('report/pencairan'); ?>" class="kt-menu__link ">
+																				<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+																				<span class="kt-menu__link-text">Daily</span>
+																			</a>
+																		</li>
+																	<?php endif;?>												
+																	<?php if(read_access('report/pencairan')):?>
+																		<li class="kt-menu__item "  aria-haspopup="true">
+																			<a  href="<?php echo base_url('report/pencairan/weekly'); ?>" class="kt-menu__link ">
+																				<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+																				<span class="kt-menu__link-text">Weekly</span>
+																			</a>
+																		</li>
+																	<?php endif;?>
+																	<?php if(read_access('report/pencairan')):?>
+																		<li class="kt-menu__item "  aria-haspopup="true">
+																			<a  href="<?php echo base_url('report/pencairan/monthly'); ?>" class="kt-menu__link ">
+																				<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+																				<span class="kt-menu__link-text">Monthly</span>
+																			</a>
+																		</li>
+																	<?php endif;?>																	
+																</ul>
+															</div>
+														</li>
+												<?php endif;?>
+												<?php if(read_access('report/pengeluaran')):?>
+													<li class="kt-menu__item  kt-menu__item--submenu"  data-ktmenu-submenu-toggle="hover" aria-haspopup="true">
+															<a  href="javascript:;" class="kt-menu__link kt-menu__toggle">
+														<span class="kt-menu__link-icon">
+														<i class="fa fa-copy"><span></span></i>
+														</span>
+																<span class="kt-menu__link-text">Pelunasan</span><i class="kt-menu__hor-arrow la la-angle-right"></i><i class="kt-menu__ver-arrow la la-angle-right"></i>
+															</a>
+															<div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--right">
+																<ul class="kt-menu__subnav">											
+																	<?php if(read_access('report/pelunasan')):?>
+																		<li class="kt-menu__item "  aria-haspopup="true">
+																			<a  href="<?php echo base_url('report/pelunasan'); ?>" class="kt-menu__link ">
+																				<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+																				<span class="kt-menu__link-text">Daily</span>
+																			</a>
+																		</li>
+																	<?php endif;?>												
+																	<?php if(read_access('report/pelunasan')):?>
+																		<li class="kt-menu__item "  aria-haspopup="true">
+																			<a  href="<?php echo base_url('report/pelunasan/weekly'); ?>" class="kt-menu__link ">
+																				<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+																				<span class="kt-menu__link-text">Weekly</span>
+																			</a>
+																		</li>
+																	<?php endif;?>
+																	<?php if(read_access('report/pelunasan')):?>
+																		<li class="kt-menu__item "  aria-haspopup="true">
+																			<a  href="<?php echo base_url('report/pelunasan/monthly'); ?>" class="kt-menu__link ">
+																				<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+																				<span class="kt-menu__link-text">Monthly</span>
+																			</a>
+																		</li>
+																	<?php endif;?>																	
+																</ul>
+															</div>
+														</li>
+												<?php endif;?>
 												<?php if(read_access('report/bukukas')):?>
 													<li class="kt-menu__item "  aria-haspopup="true">
 														<a  href="<?php echo base_url('report/bukukas'); ?>" class="kt-menu__link ">

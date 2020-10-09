@@ -143,6 +143,67 @@ function initCariForm(){
 		});
     })
 
+    $('#btncari_monthly').on('click',function(){
+        $('.rowappend').remove();
+        var area = $('[name="area"]').val();
+        var unit = $('[name="unit"]').val();
+		var date = $('[name="date"]').val();
+        KTApp.block('#form_bukukas .kt-portlet__body', {});
+		$.ajax({
+			type : 'GET',
+			url : "<?php echo base_url("api/report/pencairan/monthly"); ?>",
+			dataType : "json",
+			data:{area:area,unit:unit,date:date},
+			success : function(response,status){
+				KTApp.unblockPage();
+				//if(response.status == true){
+					var template = '';
+					var no = 1;
+					var total = 0;
+					var totalall = 0;
+					var totregular = 0;
+					var totmortage = 0;
+					$.each(response.data, function (index, data) {
+                        var month = moment(date).format('MMMM');
+                        var year = moment(date).format('Y');
+						template += "<tr class='rowappend'>";
+						template += "<td class='text-center'>"+no+"</td>";
+                        template += "<td class='text-left'>"+data.area+"</td>";
+						template += "<td class='text-left'>"+data.name+"</td>";
+						template += "<td class='text-center'>"+month+"</td>";
+						template += "<td class='text-center'>"+year+"</td>";
+						template += "<td class='text-right'>"+convertToRupiah(data.summary.upRegular)+"</td>";
+						template += "<td class='text-right'>"+convertToRupiah(data.summary.upMortage)+"</td>";
+                        total = parseInt(data.summary.upRegular) + parseInt(data.summary.upMortage);
+						template += "<td class='text-right'>"+convertToRupiah(total)+"</td>";
+						template += '</tr>';
+						no++;
+                        totalall +=total;
+                        totregular +=parseInt(data.summary.upRegular);
+                        totmortage +=parseInt(data.summary.upMortage);
+					});
+                    totalall = totalall;
+                    totregular = totregular;
+                    totmortage = totmortage;
+                    template += '<tr class="rowappend">';
+                    template +='<td colspan="5" class="text-right"><b>Total</b></td>';                    
+                    template +='<td class="text-right"><b>'+convertToRupiah(totregular)+'</b></td>';                    
+                    template +='<td class="text-right"><b>'+convertToRupiah(totmortage)+'</b></td>';                    
+                    template +='<td class="text-right"><b>'+convertToRupiah(totalall)+'</b></td>';                    
+                    template +='</tr>';
+
+					$('.kt-section__content table').append(template);
+				//}
+			},
+			error: function (jqXHR, textStatus, errorThrown){
+				KTApp.unblockPage();
+			},
+			complete:function () {
+				KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+			}
+		});
+    })
+
     return {
         validator:validator
     }
