@@ -123,9 +123,9 @@ function initCariForm(){
         KTApp.block('#form_bukukas .kt-portlet__body', {});
 		$.ajax({
 			type : 'GET',
-			url : "<?php echo base_url("api/datamaster/bookcash/report"); ?>",
+			url : "<?php echo base_url("api/datamaster/bookcash/reportbapkas"); ?>",
 			dataType : "json",
-			data:{id_unit:unit,dateStart:dateStart,dateEnd:dateEnd, area:area},
+			data:{area:area,id_unit:unit,date:dateStart},
 			success : function(response,status){
 				KTApp.unblockPage();
 				if(response.status == true){
@@ -141,32 +141,32 @@ function initCariForm(){
 					$.each(response.data, function (index, data) {
 						template += "<tr class='rowappend'>";
 						template += "<td class='text-center'>"+no+"</td>";
-						template += "<td class='text-left'>"+data.unit_name+"</td>";
-						template += "<td class='text-left'>"+data.kasir+"</td>";
-						template += "<td class='text-center'>"+moment(data.date).format('DD-MM-YYYY')+"</td>";
-						template += "<td class='text-right'>"+convertToRupiah(data.amount_balance_first)+"</td>";
-						template += "<td class='text-right'>"+convertToRupiah(data.amount_in)+"</td>";
-						template += "<td class='text-right'>"+convertToRupiah(data.amount_out)+"</td>";
-						template += "<td class='text-right'>"+convertToRupiah(data.amount_balance_final)+"</td>";
-                        if(data.os_cicilan!=null){oscicilan=data.os_cicilan;}else{oscicilan=0;}
-						template += "<td class='text-right'>"+convertToRupiah(parseInt(data.os_unit)+parseInt(oscicilan))+"</td>";
-						template += "<td class='text-right'>"+convertToRupiah(data.amount_gap)+"</td>";
-						template += "<td class='text-center'><span data-id='"+data.id+"' href='' class='btn btn-sm btn-clean btn-icon btn-icon-md viewBtn' title='View Data' data-toggle='modal' data-target='#modal_view'><i class='flaticon-eye' style='cursor:pointer;'></i></span></td>";
+						template += "<td class='text-left'>"+data.name+"</td>";
+						template += "<td class='text-left'>"+data.bapkas.kasir+"</td>";
+						template += "<td class='text-center'>"+moment(data.bapkas.date).format('DD-MM-YYYY')+"</td>";
+						template += "<td class='text-right'>"+convertToRupiah(parseInt(data.bapkas.amount_balance_first))+"</td>";
+						template += "<td class='text-right'>"+convertToRupiah(parseInt(data.bapkas.amount_in))+"</td>";
+						template += "<td class='text-right'>"+convertToRupiah(parseInt(data.bapkas.amount_out))+"</td>";
+						template += "<td class='text-right'>"+convertToRupiah(parseInt(data.bapkas.amount_balance_final))+"</td>";
+                        if(data.bapkas.os_cicilan!=null){oscicilan= parseInt(data.bapkas.os_cicilan);}else{oscicilan=0;}
+						template += "<td class='text-right'>"+convertToRupiah(parseInt(data.bapkas.os_unit)+parseInt(oscicilan))+"</td>";
+						template += "<td class='text-right'>"+convertToRupiah(parseInt(data.bapkas.amount_gap))+"</td>";
+						template += "<td class='text-center'><span data-id='"+data.bapkas.id+"' href='' class='btn btn-sm btn-clean btn-icon btn-icon-md viewBtn' title='View Data' data-toggle='modal' data-target='#modal_view'><i class='flaticon-eye' style='cursor:pointer;'></i></span></td>";
 						template += '</tr>';
 						no++;
-                        amountIn += parseInt(data.amount_in);
-                        amountOut += parseInt(data.amount_out);
-                        amountBalanceFinal += parseInt(data.amount_balance_final);
-                        amountGap += parseInt(data.amount_gap);
-                        amountBalanceFirst += parseInt(data.amount_balance_first);
-                        osunit += parseInt(data.os_unit)+parseInt(oscicilan);
+                        amountIn += parseInt(data.bapkas.amount_in);
+                        amountOut += parseInt(data.bapkas.amount_out);
+                        amountBalanceFinal += parseInt(data.bapkas.amount_balance_final);
+                        amountGap += parseInt(data.bapkas.amount_gap);
+                        amountBalanceFirst += parseInt(data.bapkas.amount_balance_first);
+                        osunit += parseInt(data.bapkas.os_unit)+parseInt(oscicilan);
 					});
-                    $('.kt-section__content table').find('tfoot').find('.saldoawal').text(convertToRupiah(amountBalanceFirst));
-                    $('.kt-section__content table').find('tfoot').find('.penerimaan').text(convertToRupiah(amountIn));
-                    $('.kt-section__content table').find('tfoot').find('.pengeluaran').text(convertToRupiah(amountOut));
-                    $('.kt-section__content table').find('tfoot').find('.saldoakhir').text(convertToRupiah(amountBalanceFinal));
-                    $('.kt-section__content table').find('tfoot').find('.osunit').text(convertToRupiah(osunit));
-                    $('.kt-section__content table').find('tfoot').find('.selisih').text(convertToRupiah(amountGap));
+                    $('.kt-section__content table').find('tfoot').find('.saldoawal').text(convertToRupiah(parseInt(amountBalanceFirst)));
+                    $('.kt-section__content table').find('tfoot').find('.penerimaan').text(convertToRupiah(parseInt(amountIn)));
+                    $('.kt-section__content table').find('tfoot').find('.pengeluaran').text(convertToRupiah(parseInt(amountOut)));
+                    $('.kt-section__content table').find('tfoot').find('.saldoakhir').text(convertToRupiah(parseInt(amountBalanceFinal)));
+                    $('.kt-section__content table').find('tfoot').find('.osunit').text(convertToRupiah(parseInt(osunit)));
+                    $('.kt-section__content table').find('tfoot').find('.selisih').text(convertToRupiah(parseInt(amountGap)));
 					$('.kt-section__content table').append(template);
 				}
 			},

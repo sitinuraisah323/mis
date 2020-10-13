@@ -10,16 +10,14 @@ class Bookcash extends ApiController
 		$this->load->model('BookCashModel', 'model');
 		$this->load->model('BookCashModelModel', 'money');
 		$this->load->model('FractionOfMoneyModel', 'fraction');
-		$this->load->model('UnitsModel', 'units');
 		
 	}
 
 	public function index()
 	{
 		$this->model->db
-			->select('units.name')
-			->join('units','units.id = units_cash_book.id_unit')
-		    ->order_by('id','DESC');
+			->select('units.name as unit_name')
+			->join('units','units.id = units_cash_book.id_unit');
 		if($this->session->userdata('user')->level != 'administrator'){
 			$this->model->db->where('units.id', $this->session->userdata('user')->id_unit);
 		}
@@ -27,11 +25,13 @@ class Bookcash extends ApiController
 			if(is_array($post['query'])){
 				$value = $post['query']['generalSearch'];
 				$this->model->db
-					->or_like('units.name', $value)
-					->or_like('units.name', strtoupper($value));
+					->select('units.name as unit_name')
+					->join('units','units.id = units_cash_book.id_unit')
+					->or_like('units.name', $value);
 			}
-			$data = $this->model->all();
-		}		
+		}
+		$this->model->db->order_by('id','DESC');
+		$data = $this->model->all();
 		echo json_encode(array(
 			'data'	=> 	$data,
 			'message'	=> 'Successfully Get Data Menu'
@@ -52,7 +52,6 @@ class Bookcash extends ApiController
 			$this->form_validation->set_rules('totmutasi', 'total mutasi', 'required');
 			$this->form_validation->set_rules('mutasi', 'mutasi', 'required');
 			$this->form_validation->set_rules('os_unit', 'OS unit', 'required');
-			$this->form_validation->set_rules('os_cicilan', 'os cicilan', 'required');
 
 			if ($this->form_validation->run() == FALSE)
 			{
@@ -78,7 +77,6 @@ class Bookcash extends ApiController
 					'total'					=> $this->convertNumber($post['total']),
 					'amount_gap'			=> $this->convertNumber($post['selisih']),
 					'os_unit'				=> $this->convertNumber($post['os_unit']),
-					'os_cicilan'			=> $this->convertNumber($post['os_cicilan']),
 					'timestamp'		=> date('Y-m-d H:i:s'),
 					'user_create'	=> $this->session->userdata('user')->id,
 					'user_update'	=> $this->session->userdata('user')->id
@@ -151,7 +149,6 @@ class Bookcash extends ApiController
 			$this->form_validation->set_rules('e_pengeluaran', 'pengeluaran', 'required');
 			$this->form_validation->set_rules('e_totmutasi', 'total mutasi', 'required');
 			$this->form_validation->set_rules('e_os_unit', 'os unit', 'required');
-			$this->form_validation->set_rules('e_os_cicilan', 'os cicilan', 'required');
 
 			if ($this->form_validation->run() == FALSE)
 			{
@@ -177,7 +174,6 @@ class Bookcash extends ApiController
 					'total'					=> $this->convertNumber($post['e_total']),
 					'amount_gap'			=> $this->convertNumber($post['e_selisih']),
 					'os_unit'				=> $this->convertNumber($post['e_os_unit']),
-					'os_cicilan'			=> $this->convertNumber($post['e_os_cicilan']),
 					'timestamp'		=> date('Y-m-d H:i:s'),
 					'user_create'	=> $this->session->userdata('user')->id,
 					'user_update'	=> $this->session->userdata('user')->id
@@ -385,40 +381,6 @@ class Bookcash extends ApiController
 		$data = $this->model->all();
 		echo json_encode(array(
 			'data'	=> $data,
-			'status'	=> true,
-			'message'	=> 'Successfully Get Data Regular Pawns'
-		));
-	}
-
-	public function reportbapkas()
-	{
-		if($area = $this->input->get('area')){
-			$this->units->db->where('id_area', $area);
-		}else if($this->session->userdata('user')->level == 'area'){
-			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
-		}
-		if($code = $this->input->get('id_unit')){
-			$this->units->db->where('id', $code);
-		}else if($this->session->userdata('user')->level == 'unit'){
-			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
-		}
-
-		if($this->input->get('date')){
-			$date = $this->input->get('date');
-		}else{
-			$date = date('Y-m-d');
-		}
-		
-		$units = $this->db->select('units.id, units.name, areas.area')
-			->from('units')
-			->join('areas','areas.id = units.id_area')
-			->get()->result();	
-		foreach ($units as $unit) {
-			$unit->bapkas = $this->model->getUnitBapKas($unit->id,$date);
-		}
-			
-		echo json_encode(array(
-			'data'	=> $units,
 			'status'	=> true,
 			'message'	=> 'Successfully Get Data Regular Pawns'
 		));

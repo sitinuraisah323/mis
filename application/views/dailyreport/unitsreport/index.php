@@ -37,7 +37,7 @@ $this->load->view('temp/MenuBar.php');
 
     <!--Begin:: Inbox Aside-->
     <div class="kt-grid__item   kt-portlet  kt-inbox__aside" id="kt_inbox_aside">
-        <button type="button" class="btn btn-brand  btn-upper btn-bold  kt-inbox__compose" data-toggle="modal" data-target="#kt_inbox_compose">new message</button>
+        <button type="button" class="btn btn-brand  btn-upper btn-bold  kt-inbox__compose" data-toggle="modal" data-target="#kt_inbox_compose">Upload Data</button>
         <div class="kt-inbox__nav">
             <ul class="kt-nav">
                 <li class="kt-nav__item kt-nav__item--active">
