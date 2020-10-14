@@ -38,7 +38,8 @@ class Outstanding extends Authenticated
 		require_once APPPATH.'controllers/pdf/header.php';
 		$os = $this->data();
 		$pdf->AddPage('L');
-		$view = $this->load->view('dailyreport/outstanding/index.php',['outstanding'=>$os,'datetrans'=> $this->datetrans()],true);
+		$view = $this->load->view('dailyreport/outstanding/index.php',['outstanding'=>$this->dataNew(),'datetrans'=> $this->datetrans()],true);
+
 		$pdf->writeHTML($view);
 
 		$pdf->AddPage('L');
@@ -206,6 +207,119 @@ class Outstanding extends Authenticated
 		return date('d-m-Y',strtotime($date));
 	}
 
+	public function dataNew()
+	{
+		
+		$date = date('Y-m-d');
+		$lastdate = $this->regular->getLastDateTransaction()->date;
+		if ($date > $lastdate){
+			$date = $lastdate;
+		}else{
+			$date= $date;
+		}
+		$nextdate = date('Y-m-d', strtotime('+1 days', strtotime($date)));
+		$year = date('Y', strtotime('+1 days', strtotime($date)));
+		$month = date('n', strtotime('+1 days', strtotime($date)));
+		// $date = date('Y-m-d', strtotime('+1 days', strtotime($date)));
+		$units = $this->units->db->select('units.id, units.name, area')
+			->join('areas','areas.id = units.id_area')
+			->get('units')->result();
+		foreach ($units as $unit){
+			$getOstYesterday = $this->regular->db
+				->where('date <', $date)
+				->from('units_outstanding')
+				->where('id_unit', $unit->id)
+				->order_by('date','DESC')
+				->get()->row();
+			$unit->ost_yesterday = (object) array(
+				'noa'	=> $getOstYesterday->noa,
+				'up'	=> $getOstYesterday->os
+			);
+			$unit->credit_today = $this->regular->creditToday($unit->id, $date);
+			$unit->repayment_today = $this->regular->repaymentToday($unit->id, $date);
+			$unit->total = (object) array(
+				'noa'	=> $unit->ost_yesterday->noa + $unit->credit_today->reguler['noa'] - $unit->repayment_today->reguler['noa'],
+				'up'	=> $unit->ost_yesterday->up +  $unit->credit_today->reguler['up'] +  $unit->credit_today->mortage['up'] -
+				$unit->repayment_today->reguler['up'] -  $unit->repayment_today->mortage['up']
+				,
+			);
+		}
+		return $units;
+	}
+
+	public function pencairan()
+	{
+		if($area = $this->input->get('area')){
+			$this->units->db->where('id_area', $area);
+		}else if($this->session->userdata('user')->level == 'area'){
+			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
+		}
+		if($code = $this->input->get('code')){
+			$this->units->db->where('units.id', $code);
+		}else if($this->session->userdata('user')->level == 'unit'){
+			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
+		}
+		if($this->input->get('date')){
+			$date = $this->input->get('date');
+		}else{
+			$date = date('Y-m-d');
+		}
+		$date = date('Y-m-d', strtotime($date.' +1 days'));
+		$begin = new DateTime( $date );
+		$end = new DateTime($date);
+		$end = $end->modify( '-6 day' );
+		$interval = new DateInterval('P1D');
+		$daterange = new DatePeriod($end, $interval ,$begin);
+
+		$dates = array();
+		foreach($daterange as $date){
+			$dates[] =  $date->format('Y-m-d');
+		}
+
+		$result[] = array('no' => 'No','unit'=> 'Unit','area'=>'Area','dates'=>$dates);
+		$units = $this->units->db->select('units.id, units.name, areas.area as area')
+			->join('areas','areas.id = units.id_area')
+			->get('units')->result();
+		foreach ($units as $unit){
+			$dates = array();
+			foreach($daterange as $date){
+				$dates[] =  $this->regular->getUpByDate($unit->id, $date->format('Y-m-d'));
+			}
+			$unit->dates = $dates;
+			$result[] = $unit;
+		}
+		return $result;
+	}
+
+	public function saldounit()
+	{
+		if($area = $this->input->get('area')){
+			$this->units->db->where('id_area', $area);
+		}else if($this->session->userdata('user')->level == 'area'){
+			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
+		}
+		if($code = $this->input->get('id_unit')){
+			$this->units->db->where('id_unit', $code);
+		}else if($this->session->userdata('user')->level == 'unit'){
+			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
+		}
+
+		$this->units->db
+			->select('id_unit, name, amount,areas.area, cut_off,( (
+				select (sum(CASE WHEN type = "CASH_IN" THEN `amount` ELSE 0 END) - sum(CASE WHEN type = "CASH_OUT" THEN `amount` ELSE 0 END))
+				from units_dailycashs
+				where units_dailycashs.id_unit = units_saldo.id_unit
+				and units_dailycashs.date > units_saldo.cut_off
+			) + units_saldo.amount )as amount')
+			->DISTINCT ('id_unit')
+			->from('units_saldo')			
+			->join('units','units.id = units_saldo.id_unit')
+			->join('areas','areas.id = units.id_area')
+			->order_by('amount', 'desc');
+		$getSaldo = $this->units->db->get()->result();
+		return $getSaldo;
+	}
+
 	public function data()
 	{
 		// if($area = $this->input->get('area')){
@@ -293,79 +407,6 @@ class Outstanding extends Authenticated
 			$unit->percentage = ($unit->total_dpd->ost > 0) && ($unit->total_outstanding->up > 0) ? round($unit->total_dpd->ost / $unit->total_outstanding->up, 4) : 0;
 		}
 		return $units;
-	}
-
-	public function pencairan()
-	{
-		if($area = $this->input->get('area')){
-			$this->units->db->where('id_area', $area);
-		}else if($this->session->userdata('user')->level == 'area'){
-			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
-		}
-		if($code = $this->input->get('code')){
-			$this->units->db->where('units.id', $code);
-		}else if($this->session->userdata('user')->level == 'unit'){
-			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
-		}
-		if($this->input->get('date')){
-			$date = $this->input->get('date');
-		}else{
-			$date = date('Y-m-d');
-		}
-		$date = date('Y-m-d', strtotime($date.' +1 days'));
-		$begin = new DateTime( $date );
-		$end = new DateTime($date);
-		$end = $end->modify( '-6 day' );
-		$interval = new DateInterval('P1D');
-		$daterange = new DatePeriod($end, $interval ,$begin);
-
-		$dates = array();
-		foreach($daterange as $date){
-			$dates[] =  $date->format('Y-m-d');
-		}
-
-		$result[] = array('no' => 'No','unit'=> 'Unit','area'=>'Area','dates'=>$dates);
-		$units = $this->units->db->select('units.id, units.name, areas.area as area')
-			->join('areas','areas.id = units.id_area')
-			->get('units')->result();
-		foreach ($units as $unit){
-			$dates = array();
-			foreach($daterange as $date){
-				$dates[] =  $this->regular->getUpByDate($unit->id, $date->format('Y-m-d'));
-			}
-			$unit->dates = $dates;
-			$result[] = $unit;
-		}
-		return $result;
-	}
-
-	public function saldounit()
-	{
-		if($area = $this->input->get('area')){
-			$this->units->db->where('id_area', $area);
-		}else if($this->session->userdata('user')->level == 'area'){
-			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
-		}
-		if($code = $this->input->get('id_unit')){
-			$this->units->db->where('id_unit', $code);
-		}else if($this->session->userdata('user')->level == 'unit'){
-			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
-		}
-
-		$this->units->db
-			->select('id_unit, name, amount,areas.area, cut_off,( (
-				select (sum(CASE WHEN type = "CASH_IN" THEN `amount` ELSE 0 END) - sum(CASE WHEN type = "CASH_OUT" THEN `amount` ELSE 0 END))
-				from units_dailycashs
-				where units_dailycashs.id_unit = units_saldo.id_unit
-				and units_dailycashs.date > units_saldo.cut_off
-			) + units_saldo.amount )as amount')
-			->DISTINCT ('id_unit')
-			->from('units_saldo')			
-			->join('units','units.id = units_saldo.id_unit')
-			->join('areas','areas.id = units.id_area')
-			->order_by('amount', 'desc');
-		$getSaldo = $this->units->db->get()->result();
-		return $getSaldo;
 	}
 
 	public function pendapatan()

@@ -35,6 +35,36 @@ class RegularpawnsModel extends Master
 		);
 	}
 
+	public function creditToday($idUnit, $today)
+	{
+		$noaRegular = $this->db->select('count(*) as noa')->from($this->table)
+		->where('id_unit', $idUnit)
+		->where('date_sbk', $today)->get()->row();
+
+		$upRegular = $this->db->select('sum(amount) as up')->from($this->table)
+			->where('id_unit', $idUnit)
+			->where('date_sbk', $today)->get()->row();
+
+		$noaMortages = $this->db->select('count(*) as noa')->from('units_mortages')
+			->where('id_unit', $idUnit)
+			->where('date_sbk', $today)->get()->row();
+
+		$upaMortages = $this->db->select('sum(amount_loan) as up')->from('units_mortages')
+			->where('id_unit', $idUnit)
+			->where('date_sbk', $today)->get()->row();
+
+		return (object)array(
+			'mortage' => array(
+				'noa'	=> (int) $noaMortages->noa,
+				'up'	=> (int) $upaMortages->up,
+			),
+			'reguler'	=> array(
+				'noa' =>  (int) $noaRegular->noa,
+				'up' => (int) $upRegular->up 
+			)	
+		);
+	}
+
 	public function getCreditToday($idUnit, $today)
 	{
 		$noaRegular = $this->db->select('count(*) as noa')->from($this->table)
@@ -56,6 +86,28 @@ class RegularpawnsModel extends Master
 		return (object)array(
 			'noa' => $noaMortages->noa + $noaRegular->noa,
 			'up' => $upRegular->up + $upaMortages->up
+		);
+	}
+
+	public function repaymentToday($idUnit, $today)
+	{
+		$data = $this->db->select('sum(money_loan) as up, count(*) as noa')->from('units_repayments')
+			->where('id_unit', $idUnit)
+			->where('date_repayment', $today)->get()->row();
+		$cicilan = $this->db->select('count(*) as noa, sum(amount) as up')
+					->from('units_repayments_mortage')
+					->where('id_unit', $idUnit)
+					->where('date_kredit', $today)
+					->get()->row();				
+		return (object)array(
+			'mortage' => array(
+				'noa'	=> (int) $cicilan->noa,
+				'up'	=> (int) $cicilan->up,
+			),
+			'reguler'	=> array(
+				'noa' => (int)$data->noa,
+				'up' => (int)$data->up
+			)
 		);
 	}
 

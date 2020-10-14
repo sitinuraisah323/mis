@@ -1,5 +1,5 @@
 <?php error_reporting(0); ?>
-<h3>Distribusi Rate Nasional <?php echo date('d-m-Y'); ?></h3>
+<h3>Distribusi Rate Reguler Nasional <?php echo date('d-m-Y'); ?></h3>
 <hr/>
 <?php $nasionalUp = 0; $smallUp = 0; $bigUp = 0; $smallNoa = 0; $bigNoa = 0; $nasionalNoa = 0?>
 <table class="table" border="1">
