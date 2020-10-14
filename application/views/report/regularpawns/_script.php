@@ -156,7 +156,7 @@ function initCariForm(){
 						admin += parseInt(data.admin);
 					});
 					template += "<tr class='rowappend'>";
-					template += "<td colspan='8' class='text-right'>Total</td>";
+					template += "<td colspan='9' class='text-right'>Total</td>";
 					template += "<td class='text-right'>"+convertToRupiah(admin)+"</td>";
 					template += "<td class='text-right'>"+convertToRupiah(amount)+"</td>";
 					template += "<td class='text-right'></td>";
