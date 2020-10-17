@@ -1254,6 +1254,7 @@ function pengeluaran() {
 		data:{
 			area:'',
 			date:currdate,
+			permit:$('[name="permit"]').val(),
 		},
 		success:function (response) {
 
@@ -1414,6 +1415,7 @@ function pendapatan() {
 		data:{
 			area:'',
 			date:currdate,
+			permit:$('[name="permit"]').val(),
 		},
 		success:function (response) {
 

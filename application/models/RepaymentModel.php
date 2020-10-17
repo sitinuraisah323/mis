@@ -25,4 +25,18 @@ class RepaymentModel extends Master
 			->get()->row()->up;
 	}
 
+	public function getUpByDate_($idUnit, $date, $permit)
+	{
+		$repayment = (int) $this->db->select('sum(money_loan) as up')
+			->from($this->table)
+			->where('id_unit', $idUnit)
+			->where('date_repayment', $date);
+			if($permit!='All'){
+				$repayment = (int)$this->db->where('permit', $permit)->get()->row()->up;
+			}else{
+				$repayment = (int) $this->db->get()->row()->up;
+			}				
+			return $repayment;
+	}
+
 }

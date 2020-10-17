@@ -183,7 +183,7 @@ $this->load->view('temp/MenuBar.php');
 									<th class="text-center">No. SBK</th>
 									<th class="text-center">Tanggal SBK</th>
 									<th class="text-center">Tanggal Tempo</th>
-									<!-- <th class="text-center">Tanggal Lunas</th> -->
+									<th class="text-center">Tanggal Lunas</th>
 						      		<th>Nasabah</th>
 									<th class="text-center">Sewa Modal</th>
 									<th class='text-right'>Tafsiran</th>

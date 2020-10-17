@@ -87,20 +87,24 @@ class Regularpawns extends Authenticated
 		$objPHPExcel->getActiveSheet()->getColumnDimension('G');
 		$objPHPExcel->getActiveSheet()->setCellValue('G1', 'Tanggal jatuh Tempo');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('H');
-		$objPHPExcel->getActiveSheet()->setCellValue('H1', 'Tanggal Lelang');
+		$objPHPExcel->getActiveSheet()->setCellValue('H1', 'Tanggal Lunas');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('I');
-		$objPHPExcel->getActiveSheet()->setCellValue('I1', 'Taksiran');
+		$objPHPExcel->getActiveSheet()->setCellValue('I1', 'Tanggal Lelang');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('J');
-		$objPHPExcel->getActiveSheet()->setCellValue('J1', 'Pinjaman');
+		$objPHPExcel->getActiveSheet()->setCellValue('J1', 'Taksiran');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('K');
-		$objPHPExcel->getActiveSheet()->setCellValue('K1', 'Admin');
+		$objPHPExcel->getActiveSheet()->setCellValue('K1', 'Pinjaman');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('L');
-		$objPHPExcel->getActiveSheet()->setCellValue('L1', 'Status');
+		$objPHPExcel->getActiveSheet()->setCellValue('L1', 'Admin');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('M');
+		$objPHPExcel->getActiveSheet()->setCellValue('M1', 'Status');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('N');
+		$objPHPExcel->getActiveSheet()->setCellValue('N1', 'Description');
 
 	
 		
 		$this->regulars->db
-			->select('customers.name as customer_name,customers.nik as nik, (select date_repayment from units_repayments where units_repayments.no_sbk = units_regularpawns.no_sbk and units_repayments.id_unit = units_repayments.id_unit limit 1 ) as date_repayment')
+			->select('customers.name as customer_name,customers.nik as nik, (select date_repayment from units_repayments where units_repayments.no_sbk = units_regularpawns.no_sbk and units_repayments.id_unit = units_regularpawns.id_unit and units_repayments.permit = units_regularpawns.permit limit 1 ) as date_repayment')
 			->join('customers','units_regularpawns.id_customer = customers.id')
 			->select('units.name as unit_name,units.code as code')
 			->join('units','units_regularpawns.id_unit = units.id');
@@ -139,13 +143,19 @@ class Regularpawns extends Authenticated
 			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no, $row->no_sbk );				 
 			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no, $row->customer_name);				 
 			$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, date('d/m/Y',strtotime($row->date_sbk)));				 
-			$objPHPExcel->getActiveSheet()->setCellValue('G'.$no, date('d/m/Y',strtotime($row->deadline)));				 
-			$objPHPExcel->getActiveSheet()->setCellValue('H'.$no, date('d/m/Y',strtotime($row->date_auction)));				 
-			$objPHPExcel->getActiveSheet()->setCellValue('I'.$no, $row->estimation);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('J'.$no, $row->amount);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('K'.$no, $row->admin );		
+			$objPHPExcel->getActiveSheet()->setCellValue('G'.$no, date('d/m/Y',strtotime($row->deadline)));	
+			if($row->date_repayment){
+				$objPHPExcel->getActiveSheet()->setCellValue('H'.$no, date('d/m/Y',strtotime($row->date_repayment)));				 
+			}else{
+				$objPHPExcel->getActiveSheet()->setCellValue('H'.$no, '-');				 
+			}			 
+			$objPHPExcel->getActiveSheet()->setCellValue('I'.$no, date('d/m/Y',strtotime($row->date_auction)));				 
+			$objPHPExcel->getActiveSheet()->setCellValue('J'.$no, $row->estimation);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('K'.$no, $row->amount);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('L'.$no, $row->admin );		
 			if($row->status_transaction=="L"){$status="Lunas";}else{$status="Aktif";}		 
-			$objPHPExcel->getActiveSheet()->setCellValue('L'.$no, $status);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('M'.$no, $status);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('N'.$no, $row->description_1);				 
 			$no++;
 		}
 
@@ -163,7 +173,7 @@ class Regularpawns extends Authenticated
 	{
 		$this->load->helper('app');
 		$this->regulars->db
-			->select('customers.name as customer_name,customers.nik as nik, (select date_repayment from units_repayments where units_repayments.no_sbk = units_regularpawns.no_sbk and units_repayments.id_unit = units_repayments.id_unit limit 1 ) as date_repayment')
+			->select('customers.name as customer_name,customers.nik as nik, (select date_repayment from units_repayments where units_repayments.no_sbk = units_regularpawns.no_sbk and units_repayments.id_unit = units_regularpawns.id_unit limit 1 ) as date_repayment')
 			->join('customers','units_regularpawns.id_customer = customers.id')
 			->select('units.name as unit_name,units.code as code')
 			->join('units','units_regularpawns.id_unit = units.id');

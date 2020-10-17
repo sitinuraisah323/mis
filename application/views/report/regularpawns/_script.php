@@ -135,7 +135,7 @@ function initCariForm(){
 						template += "<td class='text-center'>"+moment(data.date_sbk).format('DD-MM-YYYY')+"</td>";
                         template += "<td class='text-center'>"+moment(data.deadline).format('DD-MM-YYYY')+"</td>";
                         if(data.date_repayment!=null){ var DateRepayment = moment(data.date_repayment).format('DD-MM-YYYY');}else{ var DateRepayment = "-";}
-						// template += "<td class='text-center'>"+DateRepayment+"</td>";
+						template += "<td class='text-center'>"+DateRepayment+"</td>";
 						template += "<td>"+data.customer_name+"</td>";
 						template += "<td class='text-center'>"+data.capital_lease+"</td>";
 						template += "<td class='text-right'>"+convertToRupiah(data.estimation)+"</td>";
@@ -156,7 +156,7 @@ function initCariForm(){
 						admin += parseInt(data.admin);
 					});
 					template += "<tr class='rowappend'>";
-					template += "<td colspan='9' class='text-right'>Total</td>";
+					template += "<td colspan='8' class='text-right'>Total</td>";
 					template += "<td class='text-right'>"+convertToRupiah(admin)+"</td>";
 					template += "<td class='text-right'>"+convertToRupiah(amount)+"</td>";
 					template += "<td class='text-right'></td>";
