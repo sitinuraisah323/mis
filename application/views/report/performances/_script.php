@@ -25,45 +25,112 @@
 			const rate = response.data.repayment;
 			const dpd = response.data.dpd;
 			const os = response.data.outstanding;
+			let tableos = $('#collapseOne1').find('table');
+			tableos.append(`<tr><td>Bulan</td><td class="text-right">Jumlah</td></tr>`);
+			let html = '';
+			let sumOs = 0;
 			$.each(os, function (index,unit) {
+				html += `<tr><td>${index}</td><td class="text-right">${convertToRupiah(unit)}</td></tr>`;
 				data_os.push({
 					y:index,
 					a:unit
-				})
+				});
+				sumOs += parseInt(unit);
 			});
+			html += `<tr><td>Total</td><td class="text-right">${convertToRupiah(sumOs)}</td></tr>`;
+				
+			tableos.append(html);
 
+			let tabledpd = $('#collapseOne2').find('table');
+			tabledpd.append(`<tr><td>Bulan</td><td class="text-right">Jumlah</td></tr>`);
+			let htmldpd = '';
+
+			let sumDPd = 0;
 			$.each(dpd, function (index,unit) {
 				data_dpd.push({
 					y:index,
 					a:unit
 				})
+				htmldpd += `<tr><td>${index}</td><td class="text-right">${convertToRupiah(unit)}</td></tr>`;
+				sumDPd += parseInt(unit);
 			});
 
+			htmldpd += `<tr><td>Total</td><td class="text-right">${convertToRupiah(sumDPd)}</td></tr>`;
+		
 
+			tabledpd.append(htmldpd);
+
+			let tablebooking = $('#collapseOne3').find('table');
+			tablebooking.append(`<tr><td>Bulan</td><td class="text-right">Jumlah</td></tr>`);
+			let htmlbooking = '';
+
+			let sumBooking = 0;
 			$.each(booking, function (index,unit) {
+				htmlbooking += `<tr><td>${index}</td><td class="text-right">${convertToRupiah(unit)}</td></tr>`;
 				data_booking.push({
 					y:index,
 					a:unit
 				})
+				sumBooking += parseInt(unit);
 			});
+
+			htmlbooking += `<tr><td>Total</td><td class="text-right">${convertToRupiah(sumBooking)}</td></tr>`;
+				
+
+			tablebooking.append(htmlbooking);
+
+			let tablependapatan = $('#collapseOne5').find('table');
+			tablependapatan.append(`<tr><td>Bulan</td><td class="text-right">Jumlah</td></tr>`);
+			let htmlpendapatan = '';
+
+			let sumPendapatan = 0;
 			$.each(pendapatan, function (index,unit) {
+				htmlpendapatan += `<tr><td>${index}</td><td class="text-right">${convertToRupiah(unit)}</td></tr>`;
 				data_pendapatan.push({
 					y:index,
 					a:unit
-				})
+				});
+				sumPendapatan += parseInt(unit);
 			});
+
+			htmlpendapatan += `<tr><td>Total</td><td class="text-right">${convertToRupiah(sumPendapatan)}</td></tr>`;
+			tablependapatan.append(htmlpendapatan);
+
+			let tablepengeluaran = $('#collapseOne6').find('table');
+			tablepengeluaran.append(`<tr><td>Bulan</td><td class="text-right">Jumlah</td></tr>`);
+			let htmlpengeluaran = '';
+
+			let sumPengeluaran = 0;
 			$.each(pengeluaran, function (index,unit) {
+				htmlpengeluaran += `<tr><td>${index}</td><td class="text-right">${convertToRupiah(unit)}</td></tr>`;			
 				data_pengeluaran.push({
 					y:index,
 					a:unit
 				})
+				sumPengeluaran += parseInt(unit);
 			});
+			htmlpengeluaran += `<tr><td>Total</td><td class="text-right">${convertToRupiah(sumPengeluaran)}</td></tr>`;			
+				
+			tablepengeluaran.append(htmlpengeluaran);
+
+
+			let tablerate = $('#collapseOne4').find('table');
+			tablerate.append(`<tr><td>Bulan</td><td class="text-right">Jumlah</td></tr>`);
+			let htmlrate = '';
+
+			let sumRate = 0;
 			$.each(rate, function (index,unit) {
+				htmlrate += `<tr><td>${index}</td><td class="text-right">${convertToRupiah(unit)}</td></tr>`;			
 				data_rate.push({
 					y:index,
 					a:unit
-				})
+				});
+				sumRate += parseInt(unit);
 			});
+			htmlrate += `<tr><td>Total</td><td class="text-right">${convertToRupiah(sumRate)}</td></tr>`;	
+
+			tablerate.append(htmlrate);
+
 			initOs(data_os);
 			initDpd(data_dpd);
 			initBooking(data_booking);
