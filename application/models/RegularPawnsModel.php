@@ -473,4 +473,90 @@ class RegularpawnsModel extends Master
 	
 	}
 
+	public function performance($year = null)
+	{
+		if($year === null){
+			$year = date('Y');
+		}
+		$result = array();
+		$months = months();
+		foreach($months as $key => $index){
+			$result['booking'][$index] = $this->getBookingMontly($key, $year);
+			$result['pendapatan'][$index] = $this->getPendapatanMontly($key, $year);
+			$result['pengeluaran'][$index] = $this->getPengeluaranMontly($key, $year);
+			$result['repayment'][$index] = $this->getRepaymentMontly($key, $year);
+			$result['dpd'][$index] = $this->getDPDMontly($key, $year);
+			$result['outstanding'][$index] = $this->getOstMontly($key, $year);
+		}
+		return $result;
+	}
+
+	public function getRepaymentMontly($month, $year)
+	{
+		$this->db
+			->select('( sum(money_loan) ) as avg')
+			->where('month(date_sbk)', $month)
+			->where('year(date_sbk)', $year);
+		return $this->db->get('units_repayments')->row()->avg;
+	
+	}
+
+	public function getPengeluaranMontly($month, $year)
+	{
+		
+		$this->db->where('year', $year);
+		$this->db->where('month', $month);
+	
+		$this->db->select('COALESCE(sum(amount),0) as amount')
+			->from('performances');
+		return $this->db->get()->row()->amount;
+	}
+
+	public function getDPDMontly($month, $year)
+	{
+		
+		$this->db->where('year', $year);
+		$this->db->where('month', $month);
+	
+		$this->db->select('COALESCE(sum(amount),0) as amount')
+			->from('performances')
+			->where('type','DPD');
+		return $this->db->get()->row()->amount;
+	}
+
+	public function getOstMontly($month, $year)
+	{
+		
+		$this->db->where('year', $year);
+		$this->db->where('month', $month);
+	
+		$this->db->select('COALESCE(sum(amount),0) as amount')
+			->from('performances')
+			->where('type','OUTSTANDING');
+		return $this->db->get()->row()->amount;
+	}
+
+	public function getPendapatanMontly($month, $year)
+	{
+		
+		$this->db
+				->select('COALESCE(sum(amount), 0) as up')
+				->where('type','PENDAPATAN');
+				
+		$this->db->where('month',$month);
+		$this->db->where('year',$year);
+
+		return $this->db->get('performances')->row()->up;
+	}
+
+	public function getBookingMontly($month, $year)
+	{
+		
+		return $this->db
+			->select('COALESCE(sum(amount), 0) as amount')
+			->where('month(date_sbk)', $month)
+			->where('year(date_sbk)', $year)
+			->get($this->table)->row()->amount;
+	}
+
 }

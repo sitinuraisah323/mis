@@ -118,7 +118,7 @@ $this->load->view('temp/MenuBar.php');
                                             Oustanding          
                                         </h3>
                                         <span class="kt-widget14__desc">
-                                            Graph performance nasional
+                                            Graph performance each unit
                                         </span>
                                     </div>
                                     <div class="kt-widget11">
@@ -147,7 +147,7 @@ $this->load->view('temp/MenuBar.php');
                                             DPD          
                                         </h3>
                                         <span class="kt-widget14__desc">
-                                            Graph performance nasional
+                                            Graph performance each unit
                                         </span>
                                     </div>
                                     <div class="kt-widget11">
@@ -176,7 +176,7 @@ $this->load->view('temp/MenuBar.php');
                                             Booking          
                                         </h3>
                                         <span class="kt-widget14__desc">
-                                            Graph performance nasional
+                                            Graph performance each unit
                                         </span>
                                     </div>
                                     <div class="kt-widget11">
@@ -202,10 +202,10 @@ $this->load->view('temp/MenuBar.php');
                                 <div class="kt-widget14">
                                     <div class="kt-widget14__header kt-margin-b-30">
                                         <h3 class="kt-widget14__title">
-                                            Repayments          
+                                            Rate          
                                         </h3>
                                         <span class="kt-widget14__desc">
-                                            Graph performance nasional
+                                            Graph performance each unit
                                         </span>
                                     </div>
                                     <div class="kt-widget11">
@@ -234,7 +234,7 @@ $this->load->view('temp/MenuBar.php');
                                             Pendapatan          
                                         </h3>
                                         <span class="kt-widget14__desc">
-                                            Graph performance nasional
+                                            Graph performance each unit
                                         </span>
                                     </div>
                                     <div class="kt-widget11">
@@ -263,7 +263,7 @@ $this->load->view('temp/MenuBar.php');
                                             Pengeluaran          
                                         </h3>
                                         <span class="kt-widget14__desc">
-                                            Graph performance nasional
+                                            Graph performance each unit
                                         </span>
                                     </div>
                                     <div class="kt-widget11">

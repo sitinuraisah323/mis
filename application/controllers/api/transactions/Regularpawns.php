@@ -413,4 +413,10 @@ class Regularpawns extends ApiController
 		$this->sendMessage($units, 'Get Data Regular pawns');
 	}
 
+	public function performance()
+	{
+
+		return $this->sendMessage($this->regulars->performance(),'Successfully get performance');
+	}
+
 }
