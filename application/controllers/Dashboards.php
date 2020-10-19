@@ -29,9 +29,20 @@ class Dashboards extends Authenticated
 	 */
 	public function index()
 	{
-		$this->load->view("dashboard/index",array(
-			'areas'	=> $this->areas->all()
-		));
+		$data['permit'] = "All";
+		$this->load->view("dashboard/index",$data);
+	}
+
+	public function ojk()
+	{
+		$data['permit'] = "OJK";
+		$this->load->view("dashboard/ojk",$data);
+	}
+
+	public function nonojk()
+	{
+		$data['permit'] = "NON-OJK";
+		$this->load->view("dashboard/nonojk",$data);
 	}
 
 	public function new()

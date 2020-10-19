@@ -127,6 +127,33 @@ class RegularpawnsModel extends Master
 		);
 	}
 
+	public function getOS($idUnit, $today, $permit)
+	{
+		$regular 	= $this->db->select('SUM(amount) as up,COUNT(*) as noa')
+					 ->from('units_regularpawns')
+					 ->where('status_transaction','N')
+					 ->where('id_unit',$idUnit)
+					 ->where('date_sbk <=',$today)
+					 ->where('permit =',$permit)
+					 ->where('amount !=','0')
+					 ->get()->row();	
+
+		$mortages = $this->db->select('SUM(amount_loan) AS up,SUM(amount_loan - (SELECT COUNT(DISTINCT(date_kredit)) FROM units_repayments_mortage WHERE units_repayments_mortage.no_sbk =units_mortages.no_sbk AND units_repayments_mortage.id_unit =units_mortages.id_unit) * installment) AS saldocicilan,COUNT(*) AS noa')
+						->from('units_mortages')
+						->join('customers','units_mortages.id_customer = customers.id')			
+						->where('units_mortages.status_transaction ','N')
+						->where('units_mortages.id_unit ', $idUnit)						
+						->where('date_sbk <=',$today)
+						->where('permit',$permit)
+						->get()->row();			
+
+	 return	$data = array(	"outstanding"=>(int) $regular->up + (int) $mortages->saldocicilan,
+							"outReg"=>(int) $regular->up,
+							"noaReg"=>(int) $regular->noa,
+							"outnonReg"=>(int) $mortages->saldocicilan,
+							"noanonReg"=>(int) $mortages->noa);		
+	}
+
 	public function getUpByDate($idUnit, $date)
 	{
 		$upaMortages = (int) $this->db->select('sum(amount_loan) as up')->from('units_mortages')
@@ -173,6 +200,60 @@ class RegularpawnsModel extends Master
 		//$date =22;$month =8;$year =2020;
 		$dataRegular = $this->db->select('sum(amount) as up, count(*) as noa')->from('units_regularpawns')
 			->where('id_unit', $idUnit)->get()->row();
+		$noaRegular = (int)$dataRegular->noa;
+		$upRegular = (int)$dataRegular->up;
+
+		return (object)array(
+			'noa' => (int)$noaMortages + $noaRegular,
+			'credit' => (int)$upMortages + $upRegular,
+			'tiket' => (int)$upMortages + $upRegular > 0 ? ($upMortages + $upRegular) / ($noaMortages + $noaRegular) : 0,
+		);
+	}
+
+	public function getTotalDisburse_($idUnit, $year = null, $month = null, $date = null,$permit)
+	{
+
+		if(!is_null($date)){
+			$this->db->where('date_sbk',implode('-',array($year,zero_fill($month,2),$date)));
+		}else{
+			if(!is_null($year)){
+				$this->db->where('YEAR(date_sbk)',$year);
+			}
+			if(!is_null($month)){
+				$this->db->where('MONTH(date_sbk)',$month);
+			}			
+		}		
+		
+		if($permit!='All'){
+			$this->db->where('permit',$permit);
+		}
+		
+		//$date =22;$month =8;$year =2020;
+		$dataMortage = $this->db->select('sum(amount_loan) as up, count(*) as noa')->from('units_mortages')
+								->where('id_unit', $idUnit)->get()->row();							
+		$noaMortages = (int)$dataMortage->noa;
+		$upMortages = (int)$dataMortage->up;
+	   //var_dump($this->db->last_query());
+	   //exit();
+
+		if(!is_null($date)){
+			$this->db->where('date_sbk',implode('-',array($year,$month,$date)));
+		}else{
+			if(!is_null($year)){
+				$this->db->where('YEAR(date_sbk)',$year);
+			}
+			if(!is_null($month)){
+				$this->db->where('MONTH(date_sbk)',$month);
+			}		
+		}
+
+		if($permit!='All'){
+			$this->db->where('permit',$permit);
+		}
+		
+		//$date =22;$month =8;$year =2020;
+		$dataRegular = $this->db->select('sum(amount) as up, count(*) as noa')->from('units_regularpawns')
+							->where('id_unit', $idUnit)->get()->row();
 		$noaRegular = (int)$dataRegular->noa;
 		$upRegular = (int)$dataRegular->up;
 

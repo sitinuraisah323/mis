@@ -15,16 +15,9 @@ class Dashboards extends ApiController
 		$this->load->model('OutstandingModel', 'outstanding');
 		$this->load->model('UnitsdailycashModel', 'unitsdailycash');
 		$this->load->model('MortagesModel', 'mortages');		
-	}
-
-	
-
-	public function getlastdatetransaction(){
-		$data = $this->regular->getLastDateTransaction();
-		$this->sendMessage($data, 'Get Data Outstanding');
-	}
-
-	public function booking()
+    }
+    
+    public function booking()
 	{
 		if($area = $this->input->get('area')){
 			$this->units->db->where('id_area', $area);
@@ -64,7 +57,7 @@ class Dashboards extends ApiController
 								->join('areas','areas.id = units.id_area')
 								->get('units')->result();
 		foreach ($units as $unit){
-			$unit->amount = $this->regular->getTotalDisburse_($unit->id, $year, $month, $date,$permit)->credit;
+			$unit->amount = $this->regular->getTotalDisburse($unit->id, $year, $month, $date,$permit)->credit;
 		}
 		$this->sendMessage($units, 'Get Data Outstanding');
 	}
@@ -141,39 +134,6 @@ class Dashboards extends ApiController
 			$unit->max = $max->os;
 			//$max
 			$unit->percentage =(int) ($unit->total_dpd->ost > 0) && ($unit->total_outstanding->up > 0) ? round($unit->total_dpd->ost / $unit->total_outstanding->up, 4) : 0;
-		}
-		$this->sendMessage($units, 'Get Data Outstanding');
-	}
-
-	public function getos()
-	{
-		$permit = $this->input->get('permit');
-		$currdate = date('Y-m-d');		
-		if($this->input->get('date')){
-			$date = $this->input->get('date');
-		}else{
-			$date = date('Y-m-d');
-		}
-
-		if($area = $this->input->get('area')){
-			$this->units->db->where('id_area', $area);
-		}else if($this->session->userdata('user')->level == 'area'){
-			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
-		}
-		if($id_unit = $this->input->get('id_unit')){
-			$this->units->db->where('units.id', $id_unit);
-		}else if($code = $this->input->get('code')){
-			$this->units->db->where('code', zero_fill($code, 3));
-		}else if($this->session->userdata('user')->level == 'unit'){
-			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
-		}
-
-		$units = $this->units->db->select('units.id, units.name, area')
-			->join('areas','areas.id = units.id_area')
-			->get('units')->result();
-		foreach ($units as $unit)
-		{
-			$unit->os = $this->regular->getOS($unit->id, $date,$permit);
 		}
 		$this->sendMessage($units, 'Get Data Outstanding');
 	}
@@ -326,40 +286,6 @@ class Dashboards extends ApiController
 		$this->sendMessage($units, 'Get Data Outstanding');
 	}
 
-	public function pelunasanpermit()
-	{
-		if($area = $this->input->get('area')){
-			$this->units->db->where('id_area', $area);
-		}else if($this->session->userdata('user')->level == 'area'){
-			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
-		}
-		if($code = $this->input->get('code')){
-			$this->units->db->where('code', $code);
-		}else if($this->session->userdata('user')->level == 'unit'){
-			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
-		}
-		if($this->input->get('date')){
-			$date = $this->input->get('date');
-		}else{
-			$date = date('Y-m-d');
-		}
-		if($this->input->get('month')){
-			$date = $this->input->get('month');
-		}
-
-		$permit = $this->input->get('permit');
-
-		$units = $this->units->db->select('units.id, units.name, areas.area as area')
-			->join('areas','areas.id = units.id_area')
-			->get('units')->result();
-		foreach ($units as $unit){
-			$unit->amount = $this->repayments->getUpByDate_($unit->id, $date, $permit);
-			$unit->amountmortage = $this->repaymentsmortage->getUpByDate_($unit->id, $date, $permit);
-			$unit->repayment = $unit->amount + $unit->amountmortage;			
-		}
-		$this->sendMessage($units, 'Get Data Outstanding');
-	}
-
 	public function pelunasan()
 	{
 		if($area = $this->input->get('area')){
@@ -434,8 +360,6 @@ class Dashboards extends ApiController
 			$this->units->db->where('MONTH(date)', $month);
 		}
 
-		$permit = $this->input->get('permit');
-
 		$this->units->db->select('units.id, units.name,areas.area, sum(amount) as amount')
 			->join('units','units.id = units_dailycashs.id_unit')
 			->join('areas','areas.id = units.id_area')
@@ -446,11 +370,7 @@ class Dashboards extends ApiController
 			->group_by('areas.area')
 			->group_by('units.id')
 			->order_by('amount','desc');
-			if($permit!='All'){
-				$this->units->db->where('permit',$permit);
-			}
-
-			$data = $this->units->db->get()->result();
+		$data = $this->units->db->get()->result();
 		
 		if(count($data) && $this->input->get('date')){
 			$dateYesteray = date('Y-m-d',strtotime($this->input->get('date').' -1 days'));
@@ -467,10 +387,6 @@ class Dashboards extends ApiController
 				->where('units.id', $datum->id)
 				->where('date >=', date('Y-m-01', strtotime($dateYesteray)))
 				->where('date <=', $dateYesteray);
-				if($permit!='All'){
-					$this->units->db->where('permit',$permit);
-				}
-
 				$yesterday = $this->units->db->get()->row();
 				if($yesterday){
 					$datum->amount_yesterday = $yesterday->amount;
@@ -514,8 +430,6 @@ class Dashboards extends ApiController
 			$month = $this->input->get('month');
 			$this->units->db->where('MONTH(date)', $month);
 		}
-
-		$permit = $this->input->get('permit');
 		
 		$this->units->db->select('units.id, units.name,areas.area, sum(amount) as amount')
 			->join('units','units.id = units_dailycashs.id_unit')
@@ -527,11 +441,7 @@ class Dashboards extends ApiController
 			->group_by('units.id')
 			->group_by('areas.area')
 			->order_by('amount','desc');
-			if($permit!='All'){
-				$this->units->db->where('permit',$permit);
-			}
-			$data = $this->units->db->get()->result();
-
+		$data = $this->units->db->get()->result();
 		if(count($data) && $this->input->get('date')){
 			$dateYesterday = date('Y-m-d', strtotime($this->input->get('date').' -1 days'));
 			foreach($data as $datum){
@@ -547,17 +457,12 @@ class Dashboards extends ApiController
 					->group_by('units.name')
 					->group_by('units.id')
 					->group_by('areas.area');
-
-					if($permit!='All'){
-						$this->units->db->where('permit',$permit);
-					}
-					$yesterday = $this->units->db->get()->row();
-
-					if($yesterday){
-						$datum->amount_yesterday = $yesterday->amount;
-					}else{
-						$datum->amount_yesterday = 0;
-					}
+				$yesterday = $this->units->db->get()->row();
+				if($yesterday){
+					$datum->amount_yesterday = $yesterday->amount;
+				}else{
+					$datum->amount_yesterday = 0;
+				}
 			}
 		}
 		return $this->sendMessage($data,'Successfully get Pendapatan');
@@ -635,45 +540,6 @@ class Dashboards extends ApiController
 			->order_by('up','desc');
 		$data = $this->units->db->get()->result();
 		return $this->sendMessage($data,'Successfully get Pendapatan');
-	}
-
-	public function disburse()
-	{
-		if($area = $this->input->get('area')){
-			$this->units->db->where('id_area', $area);
-		}else if($this->session->userdata('user')->level == 'area'){
-			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
-		}
-		if($code = $this->input->get('code')){
-			$this->units->db->where('code', $code);
-		}else if($this->session->userdata('user')->level == 'unit'){
-			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
-		}
-		if($this->input->get('year')){
-			$year = $this->input->get('year');
-		}else{
-			$year = date('Y');
-		}
-
-		if($this->input->get('month')){
-			$month = $this->input->get('month');
-		}else{
-			$month = date('n');
-		}
-
-		if($this->input->get('date')){
-			$date = $this->input->get('date');
-		}else{
-			$date = date('d');
-		}
-
-		$units = $this->units->db->select('units.id, units.name, units.id_area,areas.area')
-								->join('areas','areas.id = units.id_area')
-								->get('units')->result();
-		foreach ($units as $unit){
-			$unit->amount = $this->regular->getTotalDisburse($unit->id, $year, $month, $date)->credit;
-		}
-		$this->sendMessage($units, 'Get Data Outstanding');
 	}
 
 	public function newoutstanding()

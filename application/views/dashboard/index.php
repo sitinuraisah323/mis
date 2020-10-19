@@ -15,7 +15,7 @@ $currmonth = date('Y-m-d');
 			<div class="kt-subheader__main">
 				<h3 class="kt-subheader__title">Dashboard</h3>
 				<span class="kt-subheader__separator kt-subheader__separator--v"></span>
-				<span class="kt-subheader__desc">GHA</span>
+				<span class="kt-subheader__desc">GHA Nasinal <input type="hidden" name="permit" id="permit" value="<?php echo $permit; ?>"/></span>
 			</div>
 			<div class="kt-subheader__toolbar">
 				<div class="kt-subheader__wrapper">
