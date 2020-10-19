@@ -82,18 +82,28 @@ class RegularpawnsModel extends Master
 					 ->where('status_transaction','N')
 					 ->where('id_unit',$idUnit)
 					 ->where('date_sbk <=',$today)
-					 ->where('permit =',$permit)
-					 ->where('amount !=','0')
-					 ->get()->row();	
+					 //->where('permit =',$permit)
+					 ->where('amount !=','0');
+					 if($permit!='All'){
+						$regular = $this->db->where('permit',$permit)->get()->row();
+					 }else{
+						$regular = $this->db->get()->row();
+					 }
+					 
 
 		$mortages = $this->db->select('SUM(amount_loan) AS up,SUM(amount_loan - (SELECT COUNT(DISTINCT(date_kredit)) FROM units_repayments_mortage WHERE units_repayments_mortage.no_sbk =units_mortages.no_sbk AND units_repayments_mortage.id_unit =units_mortages.id_unit) * installment) AS saldocicilan,COUNT(*) AS noa')
 						->from('units_mortages')
 						->join('customers','units_mortages.id_customer = customers.id')			
 						->where('units_mortages.status_transaction ','N')
 						->where('units_mortages.id_unit ', $idUnit)						
-						->where('date_sbk <=',$today)
-						->where('permit',$permit)
-						->get()->row();			
+						->where('date_sbk <=',$today);
+						//->where('permit',$permit)
+						//->get()->row();		
+						if($permit!='All'){
+							$mortages = $this->db->where('permit',$permit)->get()->row();
+						 }else{
+							$mortages = $this->db->get()->row();
+						 }	
 
 	 return	$data = array(	"outstanding"=>(int) $regular->up + (int) $mortages->saldocicilan,
 							"outReg"=>(int) $regular->up,

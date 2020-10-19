@@ -5,23 +5,24 @@ var pencairan;
 var pelunasan;
 var cariForm;
 var maxDis;
-<?php 
-if(date('H:i') > '20:00'){
-	$date =  date('Y-m-d');
-	$_1lastdate = date('Y-m-d', strtotime($date));
-	$_2lastdate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
-	$month = date('n', strtotime($date));
-	$lastmonth = date('n', strtotime($_2lastdate));
-	
-}else{
-	$date =  date('Y-m-d');
-	$_1lastdate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
-	$_2lastdate = date('Y-m-d', strtotime('-2 days', strtotime($date)));
-	$month = date('n', strtotime('-1 days', strtotime($date)));
-	$lastmonth = date('n', strtotime('-1 days', strtotime($_2lastdate)));
-}
 
+<?php 
+	if(date('H:i') > '20:00'){
+		$date =  date('Y-m-d');
+		$_1lastdate = date('Y-m-d', strtotime($date));
+		$_2lastdate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
+		$month = date('n', strtotime($date));
+		$lastmonth = date('n', strtotime($_2lastdate));
+		
+	}else{
+		$date =  date('Y-m-d');
+		$_1lastdate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
+		$_2lastdate = date('Y-m-d', strtotime('-2 days', strtotime($date)));
+		$month = date('n', strtotime('-1 days', strtotime($date)));
+		$lastmonth = date('n', strtotime('-1 days', strtotime($_2lastdate)));
+	}
 ?>
+
 var datenow = "<?php echo $date;?>";
 var currdate = "<?php echo $_1lastdate;?>";
 var lastdate = "<?php echo $_2lastdate;?>";
@@ -35,9 +36,7 @@ var curryears =  "<?php echo date('Y', strtotime(date('Y-m-d'))); ?>";
 //alert(currdate);
 //alert(lastdate);
 
-function timer(){
-	
-}
+function timer(){}
 
 function convertToRupiah(angka)
 {
@@ -192,6 +191,326 @@ function totoutstanding() {
 			//$('#form_outstanding').find('.date-today').text(currdate);
 			//$('#form_outstanding').find('.total-yesterday').text('Rp. '+convertToRupiah(yesterday));
 			//$('#form_outstanding').find('.date-yesterday').text(lastdate);
+		},
+	});
+}
+
+function outstanding() {
+	$('svg').remove();
+    $('#graphOutstanding').empty();
+	$('#tblOut').empty();
+	var pencentage =0;
+    var transaction = [];
+    var total = 0;
+	KTApp.block('#form_outstanding .kt-widget14', {});
+	 var today = 0;
+	 var yesterday = 0;
+
+    $.ajax({
+		url:"<?php echo base_url('api/dashboards/outstanding');?>",
+		type:"GET",
+		dataType:"JSON",
+		data:{
+			area:$('[name="area"]').val(),
+			date:datenow,
+		},
+		success:function (response) {
+			var templateJBR="";
+			var templateJTM="";
+			var templateNTT="";
+			var templateNTB="";
+			var tempall="";
+			var totjabar 	= 0;
+			var totjatim 	= 0;
+			var totntb 		= 0;
+			var totntt 		= 0;
+			var totall 		= 0;
+			$.each(response.data, function (index,unit) {
+				transaction.push({
+					y:unit.name,
+					a:unit.total_outstanding.up,
+					b:unit.ost_yesterday.up
+				});
+				today += parseInt(unit.total_outstanding.up);
+				yesterday += parseInt(unit.ost_yesterday.up);
+
+				if(unit.area=='Jawa Barat')
+				{
+					percentage = (parseInt(unit.total_outstanding.up)/parseInt(unit.max))*100;
+					templateJBR += "<tr class='rowappendjabar'>";
+					templateJBR += "<td class='text-right' width='30%'><b>"+unit.name+"</b></td>";
+					templateJBR += "<td class='text-left'  width='60%'><div class='progress progress-sm'><div class='progress-bar kt-bg-primary' role='progressbar' style='width: "+percentage+"%;' aria-valuenow='"+unit.total_outstanding.up+"' aria-valuemin='"+unit.max+"' aria-valuemax=''></div></div></td>";
+					templateJBR += "<td class='text-right' width='10%'><b>"+convertToRupiah(unit.total_outstanding.up)+"</b></td>";
+					templateJBR += '</tr>';
+					totjabar +=unit.total_outstanding.up;
+				}
+
+				if(unit.area=='Jawa Timur')
+				{
+					percentage = (parseInt(unit.total_outstanding.up)/parseInt(unit.max))*100;
+					templateJTM += "<tr class='rowappendjatim'>";
+					templateJTM += "<td class='text-right' width='30%'><b>"+unit.name+"</b></td>";
+					templateJTM += "<td class='text-left'  width='60%'><div class='progress progress-sm'><div class='progress-bar kt-bg-primary' role='progressbar' style='width: "+percentage+"%;' aria-valuenow='"+unit.total_outstanding.up+"' aria-valuemin='"+unit.max+"' aria-valuemax=''></div></div></td>";
+					templateJTM += "<td class='text-right' width='10%'><b>"+convertToRupiah(unit.total_outstanding.up)+"</b></td>";
+					templateJTM += '</tr>';
+					totjatim +=unit.total_outstanding.up;
+				}
+
+				if(unit.area=='NTB')
+				{
+					percentage = (parseInt(unit.total_outstanding.up)/parseInt(unit.max))*100;
+					templateNTB += "<tr class='rowappendntb'>";
+					templateNTB += "<td class='text-right' width='30%'><b>"+unit.name+"</b></td>";
+					templateNTB += "<td class='text-left'  width='60%'><div class='progress progress-sm'><div class='progress-bar kt-bg-primary' role='progressbar' style='width: "+percentage+"%;' aria-valuenow='"+unit.total_outstanding.up+"' aria-valuemin='"+unit.max+"' aria-valuemax=''></div></div></td>";
+					templateNTB += "<td class='text-right' width='10%'><b>"+convertToRupiah(unit.total_outstanding.up)+"</b></td>";
+					templateNTB += '</tr>';
+					totntb +=unit.total_outstanding.up;
+				}
+
+				if(unit.area=='NTT')
+				{
+					percentage = (parseInt(unit.total_outstanding.up)/parseInt(unit.max))*100;
+					templateNTT += "<tr class='rowappendntt'>";
+					templateNTT += "<td class='text-right' width='30%'><b>"+unit.name+"</b></td>";
+					templateNTT += "<td class='text-left'  width='60%'><div class='progress progress-sm'><div class='progress-bar kt-bg-primary' role='progressbar' style='width: "+percentage+"%;' aria-valuenow='"+unit.total_outstanding.up+"' aria-valuemin='"+unit.max+"' aria-valuemax=''></div></div></td>";
+					templateNTT += "<td class='text-right' width='10%'><b>"+convertToRupiah(unit.total_outstanding.up)+"</b></td>";
+					templateNTT += '</tr>';
+					totntt +=unit.total_outstanding.up;
+				}
+			});
+
+			if(templateJBR){
+					templateJBR += "<tr class='rowappendjabar'>";
+					templateJBR += "<td class='text-right' colspan='2'> Total Jawa Barat </td>";
+					templateJBR += "<td class='text-right'><b>"+convertToRupiah(totjabar)+"</b></td>";
+					templateJBR += '</tr>';
+				}
+
+				if(templateJTM){
+					templateJTM += "<tr class='rowappendjabar'>";
+					templateJTM += "<td class='text-right' colspan='2'> Total Jawa Timur </td>";
+					templateJTM += "<td class='text-right'><b>"+convertToRupiah(totjatim)+"</b></td>";
+					templateJTM += '</tr>';
+				}
+
+				if(templateNTB){
+					templateNTB += "<tr class='rowappendjabar'>";
+					templateNTB += "<td class='text-right' colspan='2'> Total NTB </td>";
+					templateNTB += "<td class='text-right'><b>"+convertToRupiah(totntb)+"</b></td>";
+					templateNTB += '</tr>';
+				}
+
+				if(templateNTT){
+					templateNTT += "<tr class='rowappendjabar'>";
+					templateNTT += "<td class='text-right' colspan='2'> Total NTT </td>";
+					templateNTT += "<td class='text-right'><b>"+convertToRupiah(totntt)+"</b></td>";
+					templateNTT += '</tr>';
+				}
+
+				totall = parseInt(totjabar)+parseInt(totjatim)+parseInt(totntt)+parseInt(totntb);
+				if(totall){
+					tempall += "<tr class='rowappendjabar'>";
+					tempall += "<td class='text-right' colspan='2'> Total </td>";
+					tempall += "<td class='text-right'><b>"+convertToRupiah(totall)+"</b></td>";
+					tempall += '</tr>';
+				}
+
+				$('#tblOut').append(templateJBR);
+				$('#tblOut').append(templateJTM);
+				$('#tblOut').append(templateNTB);
+				$('#tblOut').append(templateNTT);
+				$('#tblOut').append(tempall);
+		},
+		complete:function () {
+			$('#form_outstanding').find('.total-today').text('Rp. '+convertToRupiah(today));
+			$('#form_outstanding').find('.date-today').text(currdate);
+			$('#form_outstanding').find('.total-yesterday').text('Rp. '+convertToRupiah(yesterday));
+			$('#form_outstanding').find('.date-yesterday').text(lastdate);
+			var data = transaction,
+					//config manager
+					config = {
+						//type: 'horizontalBar',
+						data: data,
+						xkey: 'y',
+						ykeys: ['a'],
+						labels: ['Values'],
+						lineColors: ['#6e4ff5', '#f6aa33'],
+						resize: true,
+						xLabelAngle: '80',
+						xLabelMargin: '10',
+						parseTime: false,
+						gridTextSize: '10',
+						gridTextColor: '#5cb85c',
+						verticalGrid: true,
+						hideHover: 'auto',
+						barColors: ['#3578FC','#FF0000', '#FFD500']
+					};
+			//config element name
+			config.element = 'graphOutstanding';
+			new Morris.Bar(config);
+			KTApp.unblock('#form_outstanding .kt-widget14', {});
+		},
+	});
+}
+
+function OSMortage() {
+	$('svg').remove();
+    $('#graphOsCicilan').empty();
+	$('#tblOutcicilan').empty();
+	var permit = "";
+	var pencentage =0;
+    var transaction = [];
+    var total = 0;
+	KTApp.block('#form_cicilan .kt-widget14', {});
+	 var today = 0;
+	 var yesterday = 0;
+
+    $.ajax({
+		url:"<?php echo base_url('api/dashboards/getos');?>",
+		type:"GET",
+		dataType:"JSON",
+		data:{
+			area:$('[name="area"]').val(),
+			date:datenow,
+			permit:$('[name="permit"]').val(),
+		},
+		success:function (response) {
+			var templateJBR="";
+			var templateJTM="";
+			var templateNTT="";
+			var templateNTB="";
+			var tempall="";
+			var totjabar 	= 0;
+			var totjatim 	= 0;
+			var totntb 		= 0;
+			var totntt 		= 0;
+			var totall 		= 0;
+			$.each(response.data, function (index,unit) {
+				if(unit.os.outnonReg!=0){
+					transaction.push({
+						y:unit.name,
+						a:unit.os.outnonReg,
+						//b:unit.ost_yesterday.up						
+					});
+
+					if(unit.area=='Jawa Barat')
+					{
+						//percentage = (parseInt(unit.total_outstanding.up)/parseInt(unit.max))*100;
+						templateJBR += "<tr class='rowappendjabar'>";
+						templateJBR += "<td class='text-right'><b>"+unit.area+"</b></td>";
+						templateJBR += "<td class='text-left'><b>"+unit.name+"</b></td>";
+						templateJBR += "<td class='text-right'><b>"+convertToRupiah(unit.os.outnonReg)+"</b></td>";
+						templateJBR += '</tr>';
+						totjabar +=unit.os.outnonReg;
+					}
+
+					if(unit.area=='Jawa Timur')
+					{
+						//percentage = (parseInt(unit.total_outstanding.up)/parseInt(unit.max))*100;
+						templateJTM += "<tr class='rowappendjatim'>";
+						templateJTM += "<td class='text-right'><b>"+unit.area+"</b></td>";
+						templateJTM += "<td class='text-left'><b>"+unit.name+"</b></td>";
+						templateJTM += "<td class='text-right'><b>"+convertToRupiah(unit.os.outnonReg)+"</b></td>";
+						templateJTM += '</tr>';
+						totjatim +=unit.os.outnonReg;
+					}
+
+					if(unit.area=='NTB')
+					{
+						//percentage = (parseInt(unit.total_outstanding.up)/parseInt(unit.max))*100;
+						templateNTB += "<tr class='rowappendntb'>";
+						templateNTB += "<td class='text-right'><b>"+unit.area+"</b></td>";
+						templateNTB += "<td class='text-left'><b>"+unit.name+"</b></td>";
+						templateNTB += "<td class='text-right'><b>"+convertToRupiah(unit.os.outnonReg)+"</b></td>";
+						templateNTB += '</tr>';
+						totntb +=unit.os.outnonReg;
+					}
+
+					if(unit.area=='NTT')
+					{
+						//percentage = (parseInt(unit.total_outstanding.up)/parseInt(unit.max))*100;
+						templateNTT += "<tr class='rowappendntt'>";
+						templateNTT += "<td class='text-right'><b>"+unit.area+"</b></td>";
+						templateNTT += "<td class='text-left'><b>"+unit.name+"</b></td>";
+						templateNTT += "<td class='text-right'><b>"+convertToRupiah(unit.os.outnonReg)+"</b></td>";
+						templateNTT += '</tr>';
+						totntt +=unit.os.outnonReg;
+					}
+				}			
+				today += parseInt(unit.os.outnonReg);
+				yesterday += parseInt(unit.os.outnonReg);
+			});
+				if(templateJBR){
+					templateJBR += "<tr class='rowappendjabar'>";
+					templateJBR += "<td class='text-right' colspan='2'> Total Jawa Barat </td>";
+					templateJBR += "<td class='text-right'><b>"+convertToRupiah(totjabar)+"</b></td>";
+					templateJBR += '</tr>';
+				}
+
+				if(templateJTM){
+					templateJTM += "<tr class='rowappendjabar'>";
+					templateJTM += "<td class='text-right' colspan='2'> Total Jawa Timur </td>";
+					templateJTM += "<td class='text-right'><b>"+convertToRupiah(totjatim)+"</b></td>";
+					templateJTM += '</tr>';
+				}
+
+				if(templateNTB){
+					templateNTB += "<tr class='rowappendjabar'>";
+					templateNTB += "<td class='text-right' colspan='2'> Total NTB </td>";
+					templateNTB += "<td class='text-right'><b>"+convertToRupiah(totntb)+"</b></td>";
+					templateNTB += '</tr>';
+				}
+
+				if(templateNTT){
+					templateNTT += "<tr class='rowappendjabar'>";
+					templateNTT += "<td class='text-right' colspan='2'> Total NTT </td>";
+					templateNTT += "<td class='text-right'><b>"+convertToRupiah(totntt)+"</b></td>";
+					templateNTT += '</tr>';
+				}
+
+				totall = parseInt(totjabar)+parseInt(totjatim)+parseInt(totntt)+parseInt(totntb);
+				if(totall){
+					tempall += "<tr class='rowappendjabar'>";
+					tempall += "<td class='text-right' colspan='2'> Total </td>";
+					tempall += "<td class='text-right'><b>"+convertToRupiah(totall)+"</b></td>";
+					tempall += '</tr>';
+				}
+
+				$('#tblOutcicilan').append(templateJBR);
+				$('#tblOutcicilan').append(templateJTM);
+				$('#tblOutcicilan').append(templateNTB);
+				$('#tblOutcicilan').append(templateNTT);
+				$('#tblOutcicilan').append(tempall);
+		},
+		complete:function () {
+			//console.log(permit);
+			$('#form_cicilan').find('.total-today').text('Rp. '+convertToRupiah(today));
+			$('#form_cicilan').find('.date-today').text(currdate);
+			//$('#form_outstanding').find('.total-yesterday').text('Rp. '+convertToRupiah(yesterday));
+			//$('#form_outstanding').find('.date-yesterday').text(lastdate);
+			var data = transaction,
+					//config manager
+					config = {
+						//type: 'horizontalBar',
+						data: data,
+						xkey: 'y',
+						ykeys: ['a'],
+						labels: ['Values'],
+						lineColors: ['#6e4ff5', '#f6aa33'],
+						resize: true,
+						xLabelAngle: '80',
+						xLabelMargin: '10',
+						parseTime: false,
+						gridTextSize: '10',
+						gridTextColor: '#5cb85c',
+						verticalGrid: true,
+						hideHover: 'auto',
+						barColors: ['#3578FC','#FF0000', '#FFD500']
+					};
+			//config element name
+			config.element = 'graphOsCicilan';
+			new Morris.Bar(config);
+			KTApp.unblock('#form_cicilan .kt-widget14', {});
 		},
 	});
 }
@@ -404,319 +723,6 @@ function disburse() {
 
 	}, 8000);
 	
-}
-
-function outstanding() {
-	$('svg').remove();
-    $('#graphOutstanding').empty();
-	$('#tblOut').empty();
-	var pencentage =0;
-    var transaction = [];
-    var total = 0;
-	KTApp.block('#form_outstanding .kt-widget14', {});
-	 var today = 0;
-	 var yesterday = 0;
-
-    $.ajax({
-		url:"<?php echo base_url('api/dashboards/outstanding');?>",
-		type:"GET",
-		dataType:"JSON",
-		data:{
-			area:$('[name="area"]').val(),
-			date:datenow,
-		},
-		success:function (response) {
-			var templateJBR="";
-			var templateJTM="";
-			var templateNTT="";
-			var templateNTB="";
-			var tempall="";
-			var totjabar 	= 0;
-			var totjatim 	= 0;
-			var totntb 		= 0;
-			var totntt 		= 0;
-			var totall 		= 0;
-			$.each(response.data, function (index,unit) {
-				transaction.push({
-					y:unit.name,
-					a:unit.total_outstanding.up,
-					b:unit.ost_yesterday.up
-				});
-				today += parseInt(unit.total_outstanding.up);
-				yesterday += parseInt(unit.ost_yesterday.up);
-
-				if(unit.area=='Jawa Barat')
-				{
-					percentage = (parseInt(unit.total_outstanding.up)/parseInt(unit.max))*100;
-					templateJBR += "<tr class='rowappendjabar'>";
-					templateJBR += "<td class='text-right' width='30%'><b>"+unit.name+"</b></td>";
-					templateJBR += "<td class='text-left'  width='60%'><div class='progress progress-sm'><div class='progress-bar kt-bg-primary' role='progressbar' style='width: "+percentage+"%;' aria-valuenow='"+unit.total_outstanding.up+"' aria-valuemin='"+unit.max+"' aria-valuemax=''></div></div></td>";
-					templateJBR += "<td class='text-right' width='10%'><b>"+convertToRupiah(unit.total_outstanding.up)+"</b></td>";
-					templateJBR += '</tr>';
-					totjabar +=unit.total_outstanding.up;
-				}
-
-				if(unit.area=='Jawa Timur')
-				{
-					percentage = (parseInt(unit.total_outstanding.up)/parseInt(unit.max))*100;
-					templateJTM += "<tr class='rowappendjatim'>";
-					templateJTM += "<td class='text-right' width='30%'><b>"+unit.name+"</b></td>";
-					templateJTM += "<td class='text-left'  width='60%'><div class='progress progress-sm'><div class='progress-bar kt-bg-primary' role='progressbar' style='width: "+percentage+"%;' aria-valuenow='"+unit.total_outstanding.up+"' aria-valuemin='"+unit.max+"' aria-valuemax=''></div></div></td>";
-					templateJTM += "<td class='text-right' width='10%'><b>"+convertToRupiah(unit.total_outstanding.up)+"</b></td>";
-					templateJTM += '</tr>';
-					totjatim +=unit.total_outstanding.up;
-				}
-
-				if(unit.area=='NTB')
-				{
-					percentage = (parseInt(unit.total_outstanding.up)/parseInt(unit.max))*100;
-					templateNTB += "<tr class='rowappendntb'>";
-					templateNTB += "<td class='text-right' width='30%'><b>"+unit.name+"</b></td>";
-					templateNTB += "<td class='text-left'  width='60%'><div class='progress progress-sm'><div class='progress-bar kt-bg-primary' role='progressbar' style='width: "+percentage+"%;' aria-valuenow='"+unit.total_outstanding.up+"' aria-valuemin='"+unit.max+"' aria-valuemax=''></div></div></td>";
-					templateNTB += "<td class='text-right' width='10%'><b>"+convertToRupiah(unit.total_outstanding.up)+"</b></td>";
-					templateNTB += '</tr>';
-					totntb +=unit.total_outstanding.up;
-				}
-
-				if(unit.area=='NTT')
-				{
-					percentage = (parseInt(unit.total_outstanding.up)/parseInt(unit.max))*100;
-					templateNTT += "<tr class='rowappendntt'>";
-					templateNTT += "<td class='text-right' width='30%'><b>"+unit.name+"</b></td>";
-					templateNTT += "<td class='text-left'  width='60%'><div class='progress progress-sm'><div class='progress-bar kt-bg-primary' role='progressbar' style='width: "+percentage+"%;' aria-valuenow='"+unit.total_outstanding.up+"' aria-valuemin='"+unit.max+"' aria-valuemax=''></div></div></td>";
-					templateNTT += "<td class='text-right' width='10%'><b>"+convertToRupiah(unit.total_outstanding.up)+"</b></td>";
-					templateNTT += '</tr>';
-					totntt +=unit.total_outstanding.up;
-				}
-			});
-
-			if(templateJBR){
-					templateJBR += "<tr class='rowappendjabar'>";
-					templateJBR += "<td class='text-right' colspan='2'> Total Jawa Barat </td>";
-					templateJBR += "<td class='text-right'><b>"+convertToRupiah(totjabar)+"</b></td>";
-					templateJBR += '</tr>';
-				}
-
-				if(templateJTM){
-					templateJTM += "<tr class='rowappendjabar'>";
-					templateJTM += "<td class='text-right' colspan='2'> Total Jawa Timur </td>";
-					templateJTM += "<td class='text-right'><b>"+convertToRupiah(totjatim)+"</b></td>";
-					templateJTM += '</tr>';
-				}
-
-				if(templateNTB){
-					templateNTB += "<tr class='rowappendjabar'>";
-					templateNTB += "<td class='text-right' colspan='2'> Total NTB </td>";
-					templateNTB += "<td class='text-right'><b>"+convertToRupiah(totntb)+"</b></td>";
-					templateNTB += '</tr>';
-				}
-
-				if(templateNTT){
-					templateNTT += "<tr class='rowappendjabar'>";
-					templateNTT += "<td class='text-right' colspan='2'> Total NTT </td>";
-					templateNTT += "<td class='text-right'><b>"+convertToRupiah(totntt)+"</b></td>";
-					templateNTT += '</tr>';
-				}
-
-				totall = parseInt(totjabar)+parseInt(totjatim)+parseInt(totntt)+parseInt(totntb);
-				if(totall){
-					tempall += "<tr class='rowappendjabar'>";
-					tempall += "<td class='text-right' colspan='2'> Total </td>";
-					tempall += "<td class='text-right'><b>"+convertToRupiah(totall)+"</b></td>";
-					tempall += '</tr>';
-				}
-
-				$('#tblOut').append(templateJBR);
-				$('#tblOut').append(templateJTM);
-				$('#tblOut').append(templateNTB);
-				$('#tblOut').append(templateNTT);
-				$('#tblOut').append(tempall);
-		},
-		complete:function () {
-			$('#form_outstanding').find('.total-today').text('Rp. '+convertToRupiah(today));
-			$('#form_outstanding').find('.date-today').text(currdate);
-			$('#form_outstanding').find('.total-yesterday').text('Rp. '+convertToRupiah(yesterday));
-			$('#form_outstanding').find('.date-yesterday').text(lastdate);
-			var data = transaction,
-					//config manager
-					config = {
-						//type: 'horizontalBar',
-						data: data,
-						xkey: 'y',
-						ykeys: ['a'],
-						labels: ['Values'],
-						lineColors: ['#6e4ff5', '#f6aa33'],
-						resize: true,
-						xLabelAngle: '80',
-						xLabelMargin: '10',
-						parseTime: false,
-						gridTextSize: '10',
-						gridTextColor: '#5cb85c',
-						verticalGrid: true,
-						hideHover: 'auto',
-						barColors: ['#3578FC','#FF0000', '#FFD500']
-					};
-			//config element name
-			config.element = 'graphOutstanding';
-			new Morris.Bar(config);
-			KTApp.unblock('#form_outstanding .kt-widget14', {});
-		},
-	});
-}
-
-function dpd() {
-	$('svg').remove();
-	$('#graphDPD').empty();
-	var transaction = [];
-	var total = 0;
-	KTApp.block('#form_dpd .kt-widget14', {});
-	$.ajax({
-		url:"<?php echo base_url('api/dashboards/dpd');?>",
-		type:"GET",
-		dataType:"JSON",
-		data:{
-			area:'',
-			date:currdate,
-		},
-		success:function (response) {
-			var Tempjabar 	= "";
-			var Tempjatim	= "";
-			var Tempntt		= "";
-			var Tempntb		= "";
-			var Tempall		= "";
-			var totjabar 	= 0;
-			var totjatim 	= 0;
-			var totntb 		= 0;
-			var totntt 		= 0;
-			var totall 		= 0;
-			$.each(response.data, function (index,unit) {
-				transaction.push({
-					y:unit.name,
-					a:unit.up
-				});
-				total += parseInt(unit.up);
-
-				if(unit.area=='Jawa Barat')
-				{
-					//percentage = (parseInt(unit.total_outstanding.up)/parseInt(unit.max))*100;
-					Tempjabar += "<tr class='rowappendjabar'>";
-					Tempjabar += "<td class='text-left'><b>"+unit.area+"</b></td>";
-					Tempjabar += "<td class='text-left'><b>"+unit.name+"</b></td>";
-					Tempjabar += "<td class='text-right'><b>"+convertToRupiah(unit.up)+"</b></td>";
-					Tempjabar += '</tr>';
-					totjabar += parseInt(unit.up);
-				}
-
-				if(unit.area=='Jawa Timur')
-				{
-					//percentage = (parseInt(unit.total_outstanding.up)/parseInt(unit.max))*100;
-					Tempjatim += "<tr class='rowappendjabar'>";
-					Tempjatim += "<td class='text-left'><b>"+unit.area+"</b></td>";
-					Tempjatim += "<td class='text-left'><b>"+unit.name+"</b></td>";
-					Tempjatim += "<td class='text-right'><b>"+convertToRupiah(unit.up)+"</b></td>";
-					Tempjatim += '</tr>';
-					totjatim += parseInt(unit.up);
-				}
-
-				if(unit.area=='NTB')
-				{
-					//percentage = (parseInt(unit.total_outstanding.up)/parseInt(unit.max))*100;
-					Tempntb += "<tr class='rowappendjabar'>";
-					Tempntb += "<td class='text-left'><b>"+unit.area+"</b></td>";
-					Tempntb += "<td class='text-left'><b>"+unit.name+"</b></td>";
-					Tempntb += "<td class='text-right'><b>"+convertToRupiah(unit.up)+"</b></td>";
-					Tempntb += '</tr>';
-					totntb += parseInt(unit.up);
-				}
-
-				if(unit.area=='NTT')
-				{
-					//percentage = (parseInt(unit.total_outstanding.up)/parseInt(unit.max))*100;
-					Tempntt += "<tr class='rowappendjabar'>";
-					Tempntt += "<td class='text-left'><b>"+unit.area+"</b></td>";
-					Tempntt += "<td class='text-left'><b>"+unit.name+"</b></td>";
-					Tempntt += "<td class='text-right'><b>"+convertToRupiah(unit.up)+"</b></td>";
-					Tempntt += '</tr>';
-					totntt += parseInt(unit.up);
-				}
-
-			});
-			if(Tempjabar){
-				Tempjabar += "<tr class='rowappendjabar'>";
-				Tempjabar += "<td class='text-right' colspan='2'> Total Jawa Barat </td>";
-				Tempjabar += "<td class='text-right'><b>"+convertToRupiah(totjabar)+"</b></td>";
-				Tempjabar += '</tr>';
-			}
-
-			if(Tempjatim){
-				Tempjatim += "<tr class='rowappendjabar'>";
-				Tempjatim += "<td class='text-right' colspan='2'> Total Jawa Timur </td>";
-				Tempjatim += "<td class='text-right'><b>"+convertToRupiah(totjatim)+"</b></td>";
-				Tempjatim += '</tr>';
-			}
-
-			if(Tempntt){
-				Tempntt += "<tr class='rowappendjabar'>";
-				Tempntt += "<td class='text-right' colspan='2'> Total NTT </td>";
-				Tempntt += "<td class='text-right'><b>"+convertToRupiah(totntt)+"</b></td>";
-				Tempntt += '</tr>';
-			}
-
-			if(Tempntb){
-				Tempntb += "<tr class='rowappendjabar'>";
-				Tempntb += "<td class='text-right' colspan='2'> Total NTB </td>";
-				Tempntb += "<td class='text-right'><b>"+convertToRupiah(totntb)+"</b></td>";
-				Tempntb += '</tr>';
-			}
-
-			totall = parseInt(totjabar)+parseInt(totjatim)+parseInt(totntt)+parseInt(totntb);
-			if(totall){
-				Tempall += "<tr class='rowappendjabar'>";
-				Tempall += "<td class='text-right' colspan='2'> Total </td>";
-				Tempall += "<td class='text-right'><b>"+convertToRupiah(totall)+"</b></td>";
-				Tempall += '</tr>';
-			}
-
-			$('#tblDPD').append(Tempjabar);
-			$('#tblDPD').append(Tempjatim);
-			$('#tblDPD').append(Tempntb);
-			$('#tblDPD').append(Tempntt);
-			$('#tblDPD').append(Tempall);
-		},
-		complete:function () {
-			$('#form_dpd').find('.date-today').text(currdate);
-			$('#form_dpd').find('.total-today').text(convertToRupiah(total));
-			var data = transaction,
-					//config manager
-					config = {
-						data: data,
-						xkey: 'y',
-						ykeys: ['a'],
-						labels: ['Values'],
-						lineColors: ['#6e4ff5', '#f6aa33'],
-						resize: true,
-						xLabelAngle: '80',
-						xLabelMargin: '10',
-						parseTime: false,
-						gridTextSize: '10',
-						gridTextColor: '#5cb85c',
-						verticalGrid: true,
-						hideHover: 'auto',
-						barColors: ['#3578FC','#FF0000', '#FFD500']
-						// barColors: function (row, series, type) {
-						//     if (row.label == "Low") return "#3578FC";
-						//     else if (row.label == "Medium") return "#FFD500";
-						//     else if (row.label == "High") return "#FF0000";
-						//     else if (row.label == "Fatal") return "#000000";
-						// }
-					};
-			//config element name
-			config.element = 'graphDPD';
-			new Morris.Bar(config);
-			KTApp.unblock('#form_dpd .kt-widget14', {});
-		},
-	});
-
 }
 
 function pencairan() {
@@ -1072,6 +1078,161 @@ function pelunasan() {
 			config.element = 'graphPelunasan';
 			new Morris.Bar(config);
 			KTApp.unblock('#form_pelunasan .kt-widget14', {});
+		},
+	});
+
+}
+
+function dpd() {
+	$('svg').remove();
+	$('#graphDPD').empty();
+	var transaction = [];
+	var total = 0;
+	KTApp.block('#form_dpd .kt-widget14', {});
+	$.ajax({
+		url:"<?php echo base_url('api/dashboards/dpd');?>",
+		type:"GET",
+		dataType:"JSON",
+		data:{
+			area:'',
+			date:currdate,
+		},
+		success:function (response) {
+			var Tempjabar 	= "";
+			var Tempjatim	= "";
+			var Tempntt		= "";
+			var Tempntb		= "";
+			var Tempall		= "";
+			var totjabar 	= 0;
+			var totjatim 	= 0;
+			var totntb 		= 0;
+			var totntt 		= 0;
+			var totall 		= 0;
+			$.each(response.data, function (index,unit) {
+				transaction.push({
+					y:unit.name,
+					a:unit.up
+				});
+				total += parseInt(unit.up);
+
+				if(unit.area=='Jawa Barat')
+				{
+					//percentage = (parseInt(unit.total_outstanding.up)/parseInt(unit.max))*100;
+					Tempjabar += "<tr class='rowappendjabar'>";
+					Tempjabar += "<td class='text-left'><b>"+unit.area+"</b></td>";
+					Tempjabar += "<td class='text-left'><b>"+unit.name+"</b></td>";
+					Tempjabar += "<td class='text-right'><b>"+convertToRupiah(unit.up)+"</b></td>";
+					Tempjabar += '</tr>';
+					totjabar += parseInt(unit.up);
+				}
+
+				if(unit.area=='Jawa Timur')
+				{
+					//percentage = (parseInt(unit.total_outstanding.up)/parseInt(unit.max))*100;
+					Tempjatim += "<tr class='rowappendjabar'>";
+					Tempjatim += "<td class='text-left'><b>"+unit.area+"</b></td>";
+					Tempjatim += "<td class='text-left'><b>"+unit.name+"</b></td>";
+					Tempjatim += "<td class='text-right'><b>"+convertToRupiah(unit.up)+"</b></td>";
+					Tempjatim += '</tr>';
+					totjatim += parseInt(unit.up);
+				}
+
+				if(unit.area=='NTB')
+				{
+					//percentage = (parseInt(unit.total_outstanding.up)/parseInt(unit.max))*100;
+					Tempntb += "<tr class='rowappendjabar'>";
+					Tempntb += "<td class='text-left'><b>"+unit.area+"</b></td>";
+					Tempntb += "<td class='text-left'><b>"+unit.name+"</b></td>";
+					Tempntb += "<td class='text-right'><b>"+convertToRupiah(unit.up)+"</b></td>";
+					Tempntb += '</tr>';
+					totntb += parseInt(unit.up);
+				}
+
+				if(unit.area=='NTT')
+				{
+					//percentage = (parseInt(unit.total_outstanding.up)/parseInt(unit.max))*100;
+					Tempntt += "<tr class='rowappendjabar'>";
+					Tempntt += "<td class='text-left'><b>"+unit.area+"</b></td>";
+					Tempntt += "<td class='text-left'><b>"+unit.name+"</b></td>";
+					Tempntt += "<td class='text-right'><b>"+convertToRupiah(unit.up)+"</b></td>";
+					Tempntt += '</tr>';
+					totntt += parseInt(unit.up);
+				}
+
+			});
+			if(Tempjabar){
+				Tempjabar += "<tr class='rowappendjabar'>";
+				Tempjabar += "<td class='text-right' colspan='2'> Total Jawa Barat </td>";
+				Tempjabar += "<td class='text-right'><b>"+convertToRupiah(totjabar)+"</b></td>";
+				Tempjabar += '</tr>';
+			}
+
+			if(Tempjatim){
+				Tempjatim += "<tr class='rowappendjabar'>";
+				Tempjatim += "<td class='text-right' colspan='2'> Total Jawa Timur </td>";
+				Tempjatim += "<td class='text-right'><b>"+convertToRupiah(totjatim)+"</b></td>";
+				Tempjatim += '</tr>';
+			}
+
+			if(Tempntt){
+				Tempntt += "<tr class='rowappendjabar'>";
+				Tempntt += "<td class='text-right' colspan='2'> Total NTT </td>";
+				Tempntt += "<td class='text-right'><b>"+convertToRupiah(totntt)+"</b></td>";
+				Tempntt += '</tr>';
+			}
+
+			if(Tempntb){
+				Tempntb += "<tr class='rowappendjabar'>";
+				Tempntb += "<td class='text-right' colspan='2'> Total NTB </td>";
+				Tempntb += "<td class='text-right'><b>"+convertToRupiah(totntb)+"</b></td>";
+				Tempntb += '</tr>';
+			}
+
+			totall = parseInt(totjabar)+parseInt(totjatim)+parseInt(totntt)+parseInt(totntb);
+			if(totall){
+				Tempall += "<tr class='rowappendjabar'>";
+				Tempall += "<td class='text-right' colspan='2'> Total </td>";
+				Tempall += "<td class='text-right'><b>"+convertToRupiah(totall)+"</b></td>";
+				Tempall += '</tr>';
+			}
+
+			$('#tblDPD').append(Tempjabar);
+			$('#tblDPD').append(Tempjatim);
+			$('#tblDPD').append(Tempntb);
+			$('#tblDPD').append(Tempntt);
+			$('#tblDPD').append(Tempall);
+		},
+		complete:function () {
+			$('#form_dpd').find('.date-today').text(currdate);
+			$('#form_dpd').find('.total-today').text(convertToRupiah(total));
+			var data = transaction,
+					//config manager
+					config = {
+						data: data,
+						xkey: 'y',
+						ykeys: ['a'],
+						labels: ['Values'],
+						lineColors: ['#6e4ff5', '#f6aa33'],
+						resize: true,
+						xLabelAngle: '80',
+						xLabelMargin: '10',
+						parseTime: false,
+						gridTextSize: '10',
+						gridTextColor: '#5cb85c',
+						verticalGrid: true,
+						hideHover: 'auto',
+						barColors: ['#3578FC','#FF0000', '#FFD500']
+						// barColors: function (row, series, type) {
+						//     if (row.label == "Low") return "#3578FC";
+						//     else if (row.label == "Medium") return "#FFD500";
+						//     else if (row.label == "High") return "#FF0000";
+						//     else if (row.label == "Fatal") return "#000000";
+						// }
+					};
+			//config element name
+			config.element = 'graphDPD';
+			new Morris.Bar(config);
+			KTApp.unblock('#form_dpd .kt-widget14', {});
 		},
 	});
 
@@ -2085,16 +2246,17 @@ function notfound(){
 }
 
 jQuery(document).ready(function() {
-	disburse();
 	outstanding();
-	dpd();
-	pencairan();
+	OSMortage();
+	disburse();
+	//pencairan();
 	pelunasan();
+	dpd();
 	saldo();
-	targetBooking();
-	targetOutstanding();
 	pengeluaran();
 	pendapatan();	
+	targetBooking();
+	targetOutstanding();
 });
 
 </script>
