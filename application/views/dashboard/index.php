@@ -41,71 +41,8 @@ $currmonth = date('Y-m-d');
 	 <!-- begin:: Content -->
      <div class="kt-container  kt-grid__item kt-grid__item--fluid">
         <div class="row">
-            
+
             <div class="col-xl-6 col-lg-6">
-            <input type="hidden" name="disbursmax" id="disbursmax">
-
-                <!--begin:: Widgets-->
-                <form id="form_disburse" class="form-horizontal">
-                <div class="kt-portlet kt-portlet--height-fluid">
-                    <div class="kt-widget14">
-                        <div class="kt-widget14__header kt-margin-b-30">
-							<div class="row">
-								<div class="col-md-12">
-									<h3 class="kt-widget14__title">
-										<i class="fa fa-chart-bar"></i> Booking Nasional
-                                        <hr/>
-									</h3>
-                                    <div class="kt-widget14__legends">
-                                        <div class="kt-widget14__legend">
-                                            <span class="kt-widget14__bullet kt-bg-info"></span>
-                                            <span class="kt-widget14__stats"><span class="date-today"></span> : <span class="total-today"></span></span>
-                                            <span class="kt-widget14__bullet kt-bg-warning"></span>
-                                            <span class="kt-widget14__stats"><span class="date-yesterday"></span> : <span class="total-yesterday"></span></span>
-                                        </div>
-                                    </div>
-									
-								</div>
-								<!-- <div class="col-md-6">
-									<span class="kt-widget14__desc">
-										Total Booking <span class="date-today"></span> <span class="total-today"></span>
-									</span>
-									<hr>
-									<span class="kt-widget14__desc">
-										Total Booking <span class="date-yesterday"></span> <span class="total-yesterday"></span>
-									</span>
-								</div> -->
-							</div>
-                        </div>
-                        <div class="kt-widget11">
-                            <!-- <div class="kt-spinner kt-spinner--sm kt-spinner--brand"></div> -->
-                            <div id="graphDisburse" style="height:300px;"></div>                           
-                        </div>
-                        <hr/>
-                        <!--begin::Accordion-->
-                        <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
-                            <div class="card">
-                                <div class="card-header" id="headingOne3Disburse">
-                                    <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseOne3Disburse" aria-expanded="true" aria-controls="collapseOne3Disburse">
-                                        View Detail
-                                    </div>
-                                </div>
-                                <div id="collapseOne3Disburse" class="collapse" aria-labelledby="headingOne3Disburse" data-parent="#accordionExample3">
-                                    <div class="card-body">
-                                        <table class="table" id="tblDisburse">                                       
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>                           
-                        </div>
-                        <!--end::Accordion--> 
-                    </div>
-                </div>	        
-                </form>	        
-                <!--end:: Widgets-->    
-            </div>
-
-			<div class="col-xl-6 col-lg-6">
                 <!--begin:: Widgets-->
                 <form id="form_outstanding" class="form-horizontal">
                 <div class="kt-portlet kt-portlet--height-fluid">                
@@ -114,7 +51,7 @@ $currmonth = date('Y-m-d');
 							<div class="row">
 								<div class="col-md-12">
 									<h3 class="kt-widget14__title">
-										<i class="fa fa-chart-bar"></i> Outstanding Nasional
+										<i class="fa fa-chart-bar"></i> Outstanding Nasional(Regular)
                                         <hr/>
 									</h3>									
                                         <div class="kt-widget14__legends">
@@ -126,15 +63,6 @@ $currmonth = date('Y-m-d');
                                             </div>
                                         </div>									
 								</div>
-								<!-- <div class="col-md-6">
-									<span class="kt-widget14__desc">
-										Os Nasional <span class="date-today"></span> <span class="total-today"></span>
-									</span>
-									<hr>
-									<span class="kt-widget14__desc">
-										Os Nasional <span class="date-yesterday"></span> <span class="total-yesterday"></span>
-									</span>
-								</div> -->
 							</div>
                         </div>
                         <div class="kt-widget11">
@@ -165,84 +93,18 @@ $currmonth = date('Y-m-d');
                 <!--end:: Widgets-->    
             </div>
 
-        </div>
-     </div>
-
-    <div class="kt-container  kt-grid__item kt-grid__item--fluid">
-        <div class="row">
             <div class="col-xl-6 col-lg-6">
                 <!--begin:: Widgets-->
-                <form id="form_dpd" class="form-horizontal">
-                <div class="kt-portlet kt-portlet--height-fluid">
+                <form id="form_cicilan" class="form-horizontal">
+                <div class="kt-portlet kt-portlet--height-fluid">                
                     <div class="kt-widget14">
                         <div class="kt-widget14__header kt-margin-b-30">
-                        <div class="row">
-                                <div class="col-md-12">
-                                    <h3 class="kt-widget14__title">
-                                    <i class="fa fa-chart-bar"></i> Day Past Due(DPD) Nasional  
-                                    <hr/>           
-                                    </h3>
-                                    <div class="kt-widget14__legends">
-                                        <div class="kt-widget14__legend">
-                                            <span class="kt-widget14__bullet kt-bg-info"></span>
-                                            <span class="kt-widget14__stats"><span class="date-today"></span> : <span class="total-today"></span></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- <div class="col-md-6">
-                                        <span class="kt-widget14__desc">
-                                            DPD Nasional <span class="date-today"></span> <span class="total-today"></span>
-                                        </span>
-                                        <hr>
-                                </div> -->
-                        </div>
-                          
-                        
-                        </div>
-                        <div class="kt-widget11">
-                                <div id="graphDPD" style="height:300px;"></div>                           
-                        </div>
-                        <hr/>
-                        <!--begin::Accordion-->
-                        <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
-                            <div class="card">
-                                <div class="card-header" id="headingDPD">
-                                    <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseDPD" aria-expanded="true" aria-controls="collapseDPD">
-                                        View Detail
-                                    </div>
-                                </div>
-                                <div id="collapseDPD" class="collapse" aria-labelledby="headingDPD" data-parent="#accordionExample3">
-                                    <div class="card-body">
-                                        <table class="table" id="tblDPD">   
-                                        <tr>
-                                            <td class="text-left"><b>Area</b></td>
-                                            <td class="text-left"><b>Unit</b></td>
-                                            <td class="text-right"><b>Amount</b></td>
-                                        </tr>                                    
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>                           
-                        </div>
-                        <!--end::Accordion-->
-                    </div>
-                </div>	        
-                </form>	        
-                <!--end:: Widgets-->    
-            </div>
-
-            <div class="col-xl-6 col-lg-6">
-                <!--begin:: Widgets-->
-                <form id="form_pencairan" class="form-horizontal">
-                <div class="kt-portlet kt-portlet--height-fluid">
-                    <div class="kt-widget14">
-                        <div class="kt-widget14__header kt-margin-b-30">                           
-                            <div class="row">
-                                <div class="col-md-12">
-                                   <h3 class="kt-widget14__title">
-                                        <i class="fa fa-chart-bar"></i> Pencairan Gadai Reguler   
-                                        <hr/>          
-                                    </h3>
+							<div class="row">
+								<div class="col-md-12">
+									<h3 class="kt-widget14__title">
+										<i class="fa fa-chart-bar"></i> Outstanding Nasional(Cicilan)
+                                        <hr/>
+									</h3>									
                                         <div class="kt-widget14__legends">
                                             <div class="kt-widget14__legend">
                                                 <span class="kt-widget14__bullet kt-bg-info"></span>
@@ -250,58 +112,99 @@ $currmonth = date('Y-m-d');
                                                 <span class="kt-widget14__bullet kt-bg-warning"></span>
                                                 <span class="kt-widget14__stats"><span class="date-yesterday"></span> : <span class="total-yesterday"></span></span>
                                             </div>
-                                        </div>	
-                                </div>
-                                 <!-- <div class="col-md-6">
-									<span class="kt-widget14__desc">
-										Gadai Reguler <span class="date-today"></span> <span class="total-today"></span>
-									</span>
-									<hr>
-									<span class="kt-widget14__desc">
-                                        Gadai Reguler <span class="date-yesterday"></span> <span class="total-yesterday"></span>
-									</span>
-								</div> -->
-                            </div>
-                        </div>                        
+                                        </div>									
+								</div>
+							</div>
+                        </div>
                         <div class="kt-widget11">
-                            <div id="graphPencairan" style="height:300px;"></div>                           
-                        </div>   
+                            <!-- <div class="kt-spinner kt-spinner--sm kt-spinner--brand"></div> -->
+                            <div id="graphOsCicilan" style="height:300px;"></div>                           
+                        </div>
                         <hr/>
                         <!--begin::Accordion-->
-                        <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
+                        <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3cc">
                             <div class="card">
-                                <div class="card-header" id="headingPencairan">
-                                    <div class="card-title collapsed" data-toggle="collapse" data-target="#collapsePencairan" aria-expanded="true" aria-controls="collapsePencairan">
+                                <div class="card-header" id="headingOne3cc">
+                                    <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseOne3cc" aria-expanded="true" aria-controls="collapseOne3cc">
                                         View Detail
                                     </div>
                                 </div>
-                                <div id="collapsePencairan" class="collapse" aria-labelledby="headingPencairan" data-parent="#accordionExample3">
+                                <div id="collapseOne3cc" class="collapse" aria-labelledby="headingOne3cc" data-parent="#accordionExample3cc">
                                     <div class="card-body">
-                                        <table class="table" id="tblPencairan">         
-                                        <tr>
-                                            <td class="text-left"><b>Area</b></td>
-                                            <td class="text-left"><b>Unit</b></td>
-                                            <td class="text-right"><b>Amount</b></td>
-                                        </tr>                               
+                                        <table class="table" id="tblOutcicilan">                                       
                                         </table>
                                     </div>
                                 </div>
                             </div>                           
                         </div>
-                        <!--end::Accordion-->                      
+                        <!--end::Accordion--> 
                     </div>
-                </div>	   
-                </form>     
+                </div>	        
+                </form>	        
                 <!--end:: Widgets-->    
-            </div>		
+            </div>
+            			
 
         </div>
-    </div>
+     </div>
 
     <div class="kt-container  kt-grid__item kt-grid__item--fluid">
-        <div class="row">
-            
-			<div class="col-xl-6 col-lg-6">
+        <div class="row">          
+
+            <div class="col-xl-6 col-lg-6">
+                <input type="hidden" name="disbursmax" id="disbursmax">
+                <!--begin:: Widgets-->
+                <form id="form_disburse" class="form-horizontal">
+                <div class="kt-portlet kt-portlet--height-fluid">
+                    <div class="kt-widget14">
+                        <div class="kt-widget14__header kt-margin-b-30">
+							<div class="row">
+								<div class="col-md-12">
+									<h3 class="kt-widget14__title">
+										<i class="fa fa-chart-bar"></i> Booking Nasional
+                                        <hr/>
+									</h3>
+                                    <div class="kt-widget14__legends">
+                                        <div class="kt-widget14__legend">
+                                            <span class="kt-widget14__bullet kt-bg-info"></span>
+                                            <span class="kt-widget14__stats"><span class="date-today"></span> : <span class="total-today"></span></span>
+                                            <span class="kt-widget14__bullet kt-bg-warning"></span>
+                                            <span class="kt-widget14__stats"><span class="date-yesterday"></span> : <span class="total-yesterday"></span></span>
+                                        </div>
+                                    </div>
+									
+								</div>
+							</div>
+                        </div>
+                        <div class="kt-widget11">
+                            <!-- <div class="kt-spinner kt-spinner--sm kt-spinner--brand"></div> -->
+                            <div id="graphDisburse" style="height:300px;"></div>                           
+                        </div>
+                        <hr/>
+                        <!--begin::Accordion-->
+                        <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
+                            <div class="card">
+                                <div class="card-header" id="headingOne3Disburse">
+                                    <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseOne3Disburse" aria-expanded="true" aria-controls="collapseOne3Disburse">
+                                        View Detail
+                                    </div>
+                                </div>
+                                <div id="collapseOne3Disburse" class="collapse" aria-labelledby="headingOne3Disburse" data-parent="#accordionExample3">
+                                    <div class="card-body">
+                                        <table class="table" id="tblDisburse">                                       
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>                           
+                        </div>
+                        <!--end::Accordion--> 
+                    </div>
+                </div>	        
+                </form>	        
+                <!--end:: Widgets-->    
+            </div>
+
+            <div class="col-xl-6 col-lg-6">
                 <!--begin:: Widgets-->
                 <form id="form_pelunasan" class="form-horizontal">
                 <div class="kt-portlet kt-portlet--height-fluid">
@@ -359,6 +262,73 @@ $currmonth = date('Y-m-d');
                             </div>                           
                         </div>
                         <!--end::Accordion--> 
+                    </div>
+                </div>	        
+                </form>	        
+                <!--end:: Widgets-->    
+            </div>
+
+        </div>
+    </div>
+
+    <div class="kt-container  kt-grid__item kt-grid__item--fluid">
+        <div class="row">         
+
+            <div class="col-xl-6 col-lg-6">
+                <!--begin:: Widgets-->
+                <form id="form_dpd" class="form-horizontal">
+                <div class="kt-portlet kt-portlet--height-fluid">
+                    <div class="kt-widget14">
+                        <div class="kt-widget14__header kt-margin-b-30">
+                        <div class="row">
+                                <div class="col-md-12">
+                                    <h3 class="kt-widget14__title">
+                                    <i class="fa fa-chart-bar"></i> Day Past Due(DPD) Nasional  
+                                    <hr/>           
+                                    </h3>
+                                    <div class="kt-widget14__legends">
+                                        <div class="kt-widget14__legend">
+                                            <span class="kt-widget14__bullet kt-bg-info"></span>
+                                            <span class="kt-widget14__stats"><span class="date-today"></span> : <span class="total-today"></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <div class="col-md-6">
+                                        <span class="kt-widget14__desc">
+                                            DPD Nasional <span class="date-today"></span> <span class="total-today"></span>
+                                        </span>
+                                        <hr>
+                                </div> -->
+                        </div>
+                          
+                        
+                        </div>
+                        <div class="kt-widget11">
+                                <div id="graphDPD" style="height:300px;"></div>                           
+                        </div>
+                        <hr/>
+                        <!--begin::Accordion-->
+                        <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
+                            <div class="card">
+                                <div class="card-header" id="headingDPD">
+                                    <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseDPD" aria-expanded="true" aria-controls="collapseDPD">
+                                        View Detail
+                                    </div>
+                                </div>
+                                <div id="collapseDPD" class="collapse" aria-labelledby="headingDPD" data-parent="#accordionExample3">
+                                    <div class="card-body">
+                                        <table class="table" id="tblDPD">   
+                                        <tr>
+                                            <td class="text-left"><b>Area</b></td>
+                                            <td class="text-left"><b>Unit</b></td>
+                                            <td class="text-right"><b>Amount</b></td>
+                                        </tr>                                    
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>                           
+                        </div>
+                        <!--end::Accordion-->
                     </div>
                 </div>	        
                 </form>	        
@@ -432,6 +402,7 @@ $currmonth = date('Y-m-d');
 
     <div class="kt-container  kt-grid__item kt-grid__item--fluid">
         <div class="row">
+
             <div class="col-xl-6 col-lg-6">
                 <!--begin:: Widgets-->
                 <form id="form_pengeluaran" class="form-horizontal">
@@ -493,6 +464,7 @@ $currmonth = date('Y-m-d');
                 </form>	        
                 <!--end:: Widgets-->    
             </div>
+
 			<div class="col-xl-6 col-lg-6">
                 <!--begin:: Widgets-->
                 <form id="form_pendapatan" class="form-horizontal">

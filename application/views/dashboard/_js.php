@@ -5,24 +5,24 @@ var pencairan;
 var pelunasan;
 var cariForm;
 var maxDis;
-//var permit = null;
-<?php 
-if(date('H:i') > '20:00'){
-	$date =  date('Y-m-d');
-	$_1lastdate = date('Y-m-d', strtotime($date));
-	$_2lastdate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
-	$month = date('n', strtotime($date));
-	$lastmonth = date('n', strtotime($_2lastdate));
-	
-}else{
-	$date =  date('Y-m-d');
-	$_1lastdate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
-	$_2lastdate = date('Y-m-d', strtotime('-2 days', strtotime($date)));
-	$month = date('n', strtotime('-1 days', strtotime($date)));
-	$lastmonth = date('n', strtotime('-1 days', strtotime($_2lastdate)));
-}
 
+<?php 
+	if(date('H:i') > '20:00'){
+		$date =  date('Y-m-d');
+		$_1lastdate = date('Y-m-d', strtotime($date));
+		$_2lastdate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
+		$month = date('n', strtotime($date));
+		$lastmonth = date('n', strtotime($_2lastdate));
+		
+	}else{
+		$date =  date('Y-m-d');
+		$_1lastdate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
+		$_2lastdate = date('Y-m-d', strtotime('-2 days', strtotime($date)));
+		$month = date('n', strtotime('-1 days', strtotime($date)));
+		$lastmonth = date('n', strtotime('-1 days', strtotime($_2lastdate)));
+	}
 ?>
+
 var datenow = "<?php echo $date;?>";
 var currdate = "<?php echo $_1lastdate;?>";
 var lastdate = "<?php echo $_2lastdate;?>";
@@ -33,12 +33,7 @@ var currmonth =  "<?php echo $month; ?>";
 var lastmonth =  "<?php echo $lastmonth; ?>";
 var curryears =  "<?php echo date('Y', strtotime(date('Y-m-d'))); ?>";
 
-//alert(currdate);
-//alert(lastdate);
-
-function timer(){
-	
-}
+function timer(){}
 
 function convertToRupiah(angka)
 {
