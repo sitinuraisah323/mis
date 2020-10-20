@@ -572,12 +572,14 @@ class RegularpawnsModel extends Master
 		$result = array();
 		$months = months();
 		foreach($months as $key => $index){
-			$result['booking'][$index] = $this->getBookingMontly($key, $year);
-			$result['pendapatan'][$index] = $this->getPendapatanMontly($key, $year);
-			$result['pengeluaran'][$index] = $this->getPengeluaranMontly($key, $year);
-			$result['repayment'][$index] = $this->getRepaymentMontly($key, $year);
-			$result['dpd'][$index] = $this->getDPDMontly($key, $year);
-			$result['outstanding'][$index] = $this->getOstMontly($key, $year);
+			if($key <= date('n')){
+				$result['booking'][$index] = $this->getBookingMontly($key, $year);
+				$result['pendapatan'][$index] = $this->getPendapatanMontly($key, $year);
+				$result['pengeluaran'][$index] = $this->getPengeluaranMontly($key, $year);
+				$result['repayment'][$index] = $this->getRepaymentMontly($key, $year);
+				$result['dpd'][$index] = $this->getDPDMontly($key, $year);
+				$result['outstanding'][$index] = $this->getOstMontly($key, $year);
+			}
 		}
 		return $result;
 	}

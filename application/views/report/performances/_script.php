@@ -161,12 +161,13 @@ function initRate(rate){
 					gridTextSize: '10',
 					gridTextColor: '#5cb85c',
 					verticalGrid: true,
-					hideHover: 'auto',
+					hideHover: false,
+					gridTextSize:'13',
 					barColors: ['#3578FC','#FF0000', '#FFD500']					
 				};
 		//config element name
 		config.element = 'graph-rate';
-		new Morris.Bar(config);
+		new Morris.Line(config);
 		KTApp.unblock('#rate .kt-portlet__body', {});
 }
 function initPendapatan(pendatapan){
@@ -185,12 +186,13 @@ function initPendapatan(pendatapan){
 					gridTextSize: '10',
 					gridTextColor: '#5cb85c',
 					verticalGrid: true,
-					hideHover: 'auto',
+					hideHover: false,
+					gridTextSize:'13',
 					barColors: ['#3578FC','#FF0000', '#FFD500']					
 				};
 		//config element name
 		config.element = 'graph-pendapatan';
-		new Morris.Bar(config);
+		new Morris.Line(config);
 		KTApp.unblock('#pendapatan .kt-portlet__body', {});
 }
 
@@ -210,12 +212,13 @@ function initPengeluaran(pengeluaran){
 					gridTextSize: '10',
 					gridTextColor: '#5cb85c',
 					verticalGrid: true,
-					hideHover: 'auto',
+					hideHover: false,
+					gridTextSize:'13',
 					barColors: ['#3578FC','#FF0000', '#FFD500']					
 				};
 		//config element name
 		config.element = 'graph-pengeluaran';
-		new Morris.Bar(config);
+		new Morris.Line(config);
 		KTApp.unblock('#pengeluaran .kt-portlet__body', {});
 }
 function initBooking(booking){
@@ -234,12 +237,13 @@ function initBooking(booking){
 					gridTextSize: '10',
 					gridTextColor: '#5cb85c',
 					verticalGrid: true,
-					hideHover: 'auto',
+					hideHover: false,
+					gridTextSize:'13',
 					barColors: ['#3578FC','#FF0000', '#FFD500']					
 				};
 		//config element name
 		config.element = 'graph-booking';
-		new Morris.Bar(config);
+		new Morris.Line(config);
 		KTApp.unblock('#booking .kt-portlet__body', {});
 }
 function initDpd(booking){
@@ -258,12 +262,13 @@ function initDpd(booking){
 					gridTextSize: '10',
 					gridTextColor: '#5cb85c',
 					verticalGrid: true,
-					hideHover: 'auto',
+					hideHover: false,
+					gridTextSize:'13',
 					barColors: ['#3578FC','#FF0000', '#FFD500']					
 				};
 		//config element name
 		config.element = 'graph-dpd';
-		new Morris.Bar(config);
+		new Morris.Line(config);
 		KTApp.unblock('#booking .kt-portlet__body', {});
 }
 
@@ -283,12 +288,13 @@ function initOs(booking){
 					gridTextSize: '10',
 					gridTextColor: '#5cb85c',
 					verticalGrid: true,
-					hideHover: 'auto',
+					hideHover: false,
+					gridTextSize:'13',
 					barColors: ['#3578FC','#FF0000', '#FFD500']					
 				};
 		//config element name
 		config.element = 'graph-os';
-		new Morris.Bar(config);
+		new Morris.Line(config);
 		KTApp.unblock('#booking .kt-portlet__body', {});
 }
 jQuery(document).ready(function() {
