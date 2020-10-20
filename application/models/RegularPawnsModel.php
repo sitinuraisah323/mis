@@ -647,7 +647,11 @@ class RegularpawnsModel extends Master
 			->select('COALESCE(sum(amount), 0) as amount')
 			->where('month(date_sbk)', $month)
 			->where('year(date_sbk)', $year)
-			->get($this->table)->row()->amount;
+			->get($this->table)->row()->amount +  $this->db
+			->select('COALESCE(sum(amount_loan), 0) as amount')
+			->where('month(date_sbk)', $month)
+			->where('year(date_sbk)', $year)
+			->get('units_mortages')->row()->amount;
 	}
 
 }
