@@ -1,502 +1,478 @@
 <h3>Outstanding Nasional <?php echo date('d-m-Y'); ?></h3>
 <hr/>
     <?php 
-    $yesterdayNoa = 0;
-    $yesterdayUp = 0;
-    $todayRegNoa = 0;
-    $todayRegUp = 0;
-    $todayMorNoa = 0;
-    $todayMorUp = 0;
-    $repaymentRegNoa = 0;
-    $repaymentRegUp = 0;
-    $repaymentMorUp = 0;
-    $repaymentMorNoa = 0;
-    $totalNoa = 0;
-    $totalUp = 0;
-    $totalTicket = 0;
+    $totalNoaOstYesterday_ = 0;
+    $totalNoaOstToday_ = 0;
+    $totalUpOstToday_ = 0;
+    $totalUpaOstYesterday_ = 0;
+    $totalRepaymentTodayUp_ = 0;
+    $totalRepaymentTodayNoa_ = 0;
+    $totalOstNoa_ = 0;
+    $totalOstUp_ = 0;
+    $totalOstTicket_ = 0;
+    $totalDisbureNoa_ = 0;
+    $totalDisbureUp_ = 0;
+    $totalDisbureTicket_ = 0;
     $dateOST = date('d-m-Y',strtotime($datetrans));
     $dateLastOST = date('d-m-Y', strtotime('-1 days', strtotime($datetrans)))
 
     ?>
     <table class="table" border="1">
-    <?php
-      $yesterdayNoa_ = 0;
-      $yesterdayUp_ = 0;
-      $todayRegNoa_ = 0;
-      $todayRegUp_ = 0;
-      $todayMorNoa_ = 0;
-      $todayMorUp_ = 0;
-      $repaymentRegNoa_ = 0;
-      $repaymentRegUp_ = 0;
-      $repaymentMorUp_ = 0;
-      $repaymentMorNoa_ = 0;
-      $totalNoa_ = 0;
-      $totalUp_ = 0;
-      $totalTicket_ = 0;
-    ;?>
             <tr bgcolor="#aaaa55">
                 <td colspan="14" align="center" width="900">JAWA BARAT</td>
             </tr>
-            <tr>
-              <td rowspan="3" align="center"  width="20">No</td>
-              <td rowspan="3" align="center" width="60">Unit</td>
-              <td colspan="2" bgcolor="#a9a9a9" align="center" width="150">OST Tgl(<?php echo $dateLastOST;?>)</td>
-              <td colspan="8" bgcolor="#b7e1cd" align="center" width="450">OST Tgl(<?php echo $datetrans;?>)</td>
-              <td  colspan="3" bgcolor="#FFFFE0" align="center" width="220">Total OST</td>
+            <tr bgcolor="#cccccc">
+            <td rowspan="2" align="center"  width="20">No</td>
+            <td rowspan="2" align="center" width="120">Unit</td>
+            <!-- <td rowspan="2" align="center" width="25">Open</td>
+            <td rowspan="2" align="center" width="20">OJK</td> -->
+            <td colspan="2" align="center" width="120">OST Sebelumnya(<?php echo $dateLastOST;?>)</td>
+            <td colspan="2" align="center" width="120">Kredit(<?php echo $datetrans;?>)</td>
+            <td colspan="2" align="center" width="120">Pelunasan & Cicilan(<?php echo $datetrans;?>)</td>
+            <td colspan="3" align="center" width="200">Total Outstanding</td>
+            <td colspan="3" align="center" width="200">Total Disburse</td>
             </tr>
             <tr bgcolor="#cccccc">
-               <td rowspan="2"  align="center" width="50">Noa</td>
-               <td rowspan="2" bgcolor="#a9a9a9" align="center" width="100">Up</td>
-               <td bgcolor="#b7e1cd" colspan="4" align="center" width="225">Pencairan Reguler & Cicilan</td>
-               <td bgcolor="#b7e1cd" colspan="4" align="center" width="225">Pelunasan Reguler & Angsuran Cicilan</td>
-               <td bgcolor="#FFFFE0" rowspan="2" align="center" width="73">Noa</td>
-               <td bgcolor="#FFFFE0" rowspan="2" align="center" width="73">OS</td>
-               <td bgcolor="#FFFFE0"  rowspan="2"align="center" width="73">Ticket Size</td>
-           </tr>
-            <tr>
-              <td bgcolor="#b7e1cd" align="center" width="56.25">Noa Reguler</td>
-              <td bgcolor="#b7e1cd" align="center" width="56.25">Os Reguler</td>
-              <td bgcolor="#b7e1cd" align="center" width="56.25">Noa Cicilan</td>
-              <td bgcolor="#b7e1cd" align="center" width="56.25">Os Cicilan</td>
-
-              <td bgcolor="#b7e1cd" align="center" width="56.25">Noa Reguler</td>
-              <td bgcolor="#b7e1cd" align="center" width="56.25">Os Reguler</td>
-              <td bgcolor="#b7e1cd" align="center" width="56.25">Noa Cicilan</td>
-              <td bgcolor="#b7e1cd" align="center" width="56.25">Os Cicilan</td>
+            <td align="center" width="40">Noa</td>
+            <td align="center" width="80">Ost</td>
+            <td align="center" width="40">Noa</td>
+            <td align="center" width="80">Kredit</td>
+            <td align="center" width="40">Noa</td>
+            <td align="center" width="80">Kredit</td>
+            <td align="center" width="40">Noa</td>
+            <td align="center" width="80">Ost</td>
+            <td align="center" width="80">Ticket Size</td>
+            <td align="center" width="40">Noa</td>
+            <td align="center" width="80">Kredit</td>
+            <td align="center" width="80">Ticket Size</td>
             </tr>
-            <?php $i=0;?>
-            <?php foreach($outstanding as $os):?>
-              <?php
-                $yesterdayNoa += $os->ost_yesterday->noa;
-                $yesterdayUp += $os->ost_yesterday->up;
-                $todayRegNoa += $os->credit_today->reguler['noa'];
-                $todayRegUp += $os->credit_today->reguler['up'];
-                $todayMorNoa += $os->credit_today->mortage['noa'];
-                $todayMorUp += $os->credit_today->mortage['up'];
-                $repaymentRegNoa += $os->repayment_today->reguler['noa'];
-                $repaymentRegUp += $os->repayment_today->reguler['up'];
-                $repaymentMorUp += $os->repayment_today->mortage['noa'];
-                $repaymentMorNoa += $os->repayment_today->mortage['up'];
-
-                $totalNoa += $os->total->noa;
-                $totalUp += $os->total->up;
-              ?>
-
-            <?php if($os->area == 'Jawa Barat'):?>
-
-              <?php
-                $yesterdayNoa_ += $os->ost_yesterday->noa;
-                $yesterdayUp_ += $os->ost_yesterday->up;
-                $todayRegNoa_ += $os->credit_today->reguler['noa'];
-                $todayRegUp_ += $os->credit_today->reguler['up'];
-                $todayMorNoa_ += $os->credit_today->mortage['noa'];
-                $todayMorUp_ += $os->credit_today->mortage['up'];
-                $repaymentRegNoa_ += $os->repayment_today->reguler['noa'];
-                $repaymentRegUp_ += $os->repayment_today->reguler['up'];
-                $repaymentMorUp_ += $os->repayment_today->mortage['noa'];
-                $repaymentMorNoa_ += $os->repayment_today->mortage['up'];
-
-                $totalNoa_ += $os->total->noa;
-                $totalUp_ += $os->total->up;
-              ?>
-            
-            <?php $i++;?>
+            <?php $no=0;
+                  $totalNoaOstYesterday = 0;
+                  $totalNoaOstToday = 0;
+                  $totalUpOstToday = 0;
+                  $totalUpaOstYesterday = 0;
+                  $totalRepaymentTodayUp = 0;
+                  $totalRepaymentTodayNoa = 0;
+                  $totalOstNoa = 0;
+                  $totalOstUp = 0;
+                  $totalOstTicket = 0;
+                  $totalDisbureNoa = 0;
+                  $totalDisbureUp = 0;
+                  $totalDisbureTicket = 0;
+            foreach($outstanding as $data): $no++;?>
+            <?php if($data->area=='Jawa Barat'){ ?>
             <tr>
-              <td  align="center" width="20"><?php echo $i;?></td>
-              <td  align="center" width="60"><?php echo $os->name;?></td>
-              <td bgcolor="#a9a9a9" align="center" width="50"><?php echo $os->ost_yesterday->noa;?></td>
-              <td bgcolor="#a9a9a9" align="right" width="100"><?php echo $os->ost_yesterday->up;?></td>
-
-              <td bgcolor="#b7e1cd" align="center" width="56.25"><?php echo $os->credit_today->reguler['noa'];?> </td>
-              <td bgcolor="#b7e1cd" align="right" width="56.25"><?php echo $os->credit_today->reguler['up'];?></td>
-              <td bgcolor="#b7e1cd" align="center" width="56.25"><?php echo $os->credit_today->mortage['noa'];?></td>
-              <td bgcolor="#b7e1cd" align="right" width="56.25"><?php echo $os->credit_today->mortage['up'];?></td>
-
-              <td bgcolor="#b7e1cd" align="center" width="56.25"><?php echo $os->repayment_today->reguler['noa'];?> </td>
-              <td bgcolor="#b7e1cd" align="right" width="56.25"><?php echo $os->repayment_today->reguler['up'];?></td>
-              <td bgcolor="#b7e1cd" align="center" width="56.25"><?php echo $os->repayment_today->mortage['noa'];?></td>
-              <td bgcolor="#b7e1cd" align="right" width="56.25"><?php echo $os->repayment_today->mortage['up'];?></td>
-
-              <td bgcolor="#FFFFE0" align="center" width="73"><?php echo $os->total->noa;?></td>
-              <td bgcolor="#FFFFE0" align="right" width="73"><?php echo $os->total->up;?></td>
-              <td bgcolor="#FFFFE0" align="right" width="73"><?php echo round( $os->total->up/ $os->total->noa, 2);?></td>
-
+                <td align="center"><?php echo $no;?></td>
+                <td align="left"><?php echo $data->name;?></td>
+                <!-- <td align="center">-</td>
+                <td align="center">-</td> -->
+                <td align="center"><?php echo $data->ost_yesterday->noa;?></td>
+                <td align="right"><?php echo number_format($data->ost_yesterday->up,0);?></td>
+                <td align="center"><?php echo $data->credit_today->noa;?></td>
+                <td align="right"><?php echo number_format($data->credit_today->up,0);?></td>
+                <td align="center"><?php echo $data->repayment_today->noa;?></td>
+                <td align="right"><?php echo number_format($data->repayment_today->up,0);?></td>
+                <td align="center"><?php echo $data->total_outstanding->noa;?></td>
+                <td align="right"><?php echo number_format($data->total_outstanding->up,0);?></td>
+                <td align="right"><?php echo number_format($data->total_outstanding->tiket,0);?></td>
+                <td align="center"><?php echo $data->total_disburse->noa;?></td>
+                <td align="right"><?php echo number_format($data->total_disburse->credit,0);?></td>
+                <td align="right"><?php echo number_format($data->total_disburse->tiket,0);?></td>
+                <?php
+                    $totalNoaOstYesterday += $data->ost_yesterday->noa;
+                    $totalNoaOstToday += $data->credit_today->noa;
+                    $totalUpOstToday += $data->credit_today->up;
+                    $totalUpaOstYesterday += $data->ost_yesterday->up;
+                    $totalRepaymentTodayUp += $data->repayment_today->up;
+                    $totalRepaymentTodayNoa += $data->repayment_today->noa;
+                    $totalOstNoa += $data->total_outstanding->noa;
+                    $totalOstUp += $data->total_outstanding->up;
+                    $totalOstTicket += $data->total_outstanding->tiket;
+                    $totalDisbureNoa += $data->total_disburse->noa;
+                    $totalDisbureUp += $data->total_disburse->credit;
+                    $totalDisbureTicket += $data->total_disburse->tiket;
+                ?>
             </tr>
-            <?php endif;?>
-            
+            <?php } ?>
+            <?php endforeach ?>
+            <tr>
+                <td align="right" colspan="2"> </td>
+                <td align="center"><?php echo $totalNoaOstYesterday; ?></td>
+                <td align="right"><?php echo number_format($totalUpaOstYesterday,0); ?></td>
+                <td align="center"><?php echo $totalNoaOstToday; ?></td>
+                <td align="right"><?php echo number_format($totalUpOstToday,0); ?></td>
+                <td align="center"><?php echo $totalRepaymentTodayNoa; ?></td>
+                <td align="right"><?php echo number_format($totalRepaymentTodayUp,0); ?></td>
+                <td align="center"><?php echo $totalOstNoa; ?></td>
+                <td align="right"><?php echo number_format($totalOstUp,0); ?></td>
+                <td align="right"><?php echo number_format($totalOstTicket,0); ?></td>
+                <td align="center"><?php echo $totalDisbureNoa; ?></td>
+                <td align="right"><?php echo number_format($totalDisbureUp,0); ?></td>
+                <td align="right"><?php echo number_format($totalDisbureTicket,0); ?></td>
+            </tr>
+           </table>
 
-            <?php endforeach;?>
-            <tr bgcolor="#ffff00">
-              <td align="right" colspan="2" width="80">Total </td>
-              <td align="center"  width="50"><?php echo $yesterdayNoa_; ?></td>
-              <td align="right" width="100"><?php echo number_format($yesterdayUp_,0); ?></td>
-              <td align="center"  width="56.25"><?php echo $todayRegNoa_; ?></td>
-              <td align="right" width="56.25"><?php echo number_format($todayRegUp_,0); ?></td>
-              <td align="center"  width="56.25"><?php echo $todayMorNoa_; ?></td>
-              <td align="right" width="56.25"><?php echo number_format($todayMorUp_,0); ?></td>
-              <td align="center"  width="56.25"><?php echo $repaymentRegNoa_; ?></td>
-              <td align="right" width="56.25"><?php echo number_format($repaymentRegUp_,0); ?></td>
-              <td align="center"  width="56.25"><?php echo $repaymentMorUp_; ?></td>
-              <td align="right" width="56.25"><?php echo number_format($repaymentMorNoa_,0); ?></td>
-              <td align="center"  width="73"><?php echo $totalNoa_; ?></td>
-              <td align="right" width="73"><?php echo number_format($totalUp_,0); ?></td>
-              <td align="right" width="73"><?php echo number_format($totalUp_/$totalNoa_,0); ?></td>
-          </tr>
+           <?php 
+           $totalNoaOstYesterday_   = $totalNoaOstYesterday;
+           $totalNoaOstToday_       = $totalNoaOstToday;
+           $totalUpOstToday_        = $totalUpOstToday;
+           $totalUpaOstYesterday_   = $totalUpaOstYesterday;
+           $totalRepaymentTodayUp_  = $totalRepaymentTodayUp;
+           $totalRepaymentTodayNoa_ = $totalRepaymentTodayNoa;
+           $totalOstNoa_            = $totalOstNoa;
+           $totalOstUp_             = $totalOstUp;
+           $totalOstTicket_         = $totalOstTicket;
+           $totalDisbureNoa_        = $totalDisbureNoa;
+           $totalDisbureUp_         = $totalDisbureUp;
+           $totalDisbureTicket_     = $totalDisbureTicket;
+           ?>
 
-           
-    </table>
-    <br/>
-    <table class="table" border="1">
-    <?php
-      $yesterdayNoa_ = 0;
-      $yesterdayUp_ = 0;
-      $todayRegNoa_ = 0;
-      $todayRegUp_ = 0;
-      $todayMorNoa_ = 0;
-      $todayMorUp_ = 0;
-      $repaymentRegNoa_ = 0;
-      $repaymentRegUp_ = 0;
-      $repaymentMorUp_ = 0;
-      $repaymentMorNoa_ = 0;
-      $totalNoa_ = 0;
-      $totalUp_ = 0;
-      $totalTicket_ = 0;
-    ;?>
-              <tr bgcolor="#aaaa55">
+            <br/><br/>
+           <table class="table" border="1">
+           <tr bgcolor="#aaaa55">
                 <td colspan="14" align="center" width="900">JAWA TIMUR</td>
             </tr>
-            <tr>
-              <td rowspan="3" align="center"  width="20">No</td>
-              <td rowspan="3" align="center" width="60">Unit</td>
-              <td colspan="2" bgcolor="#a9a9a9" align="center" width="150">OST Tgl(<?php echo $dateLastOST;?>)</td>
-              <td colspan="8" bgcolor="#b7e1cd" align="center" width="450">OST Tgl(<?php echo $datetrans;?>)</td>
-              <td  colspan="3" bgcolor="#FFFFE0" align="center" width="220">Total OST</td>
+            <tr bgcolor="#cccccc">
+            <td rowspan="2" align="center"  width="20">No</td>
+            <td rowspan="2" align="center" width="120">Unit</td>
+            <!-- <td rowspan="2" align="center" width="25">Open</td>
+            <td rowspan="2" align="center" width="20">OJK</td> -->
+            <td colspan="2" align="center" width="120">OST Sebelumnya(<?php echo $dateLastOST;?>)</td>
+            <td colspan="2" align="center" width="120">Kredit(<?php echo $datetrans;?>)</td>
+            <td colspan="2" align="center" width="120">Pelunasan & Cicilan(<?php echo $datetrans;?>)</td>
+            <td colspan="3" align="center" width="200">Total Outstanding</td>
+            <td colspan="3" align="center" width="200">Total Disburse</td>
             </tr>
             <tr bgcolor="#cccccc">
-               <td rowspan="2"  align="center" width="50">Noa</td>
-               <td rowspan="2" bgcolor="#a9a9a9" align="center" width="100">Up</td>
-               <td bgcolor="#b7e1cd" colspan="4" align="center" width="225">Pencairan Reguler & Cicilan</td>
-               <td bgcolor="#b7e1cd" colspan="4" align="center" width="225">Pelunasan Reguler & Angsuran Cicilan</td>
-               <td bgcolor="#FFFFE0" rowspan="2" align="center" width="73">Noa</td>
-               <td bgcolor="#FFFFE0" rowspan="2" align="center" width="73">OS</td>
-               <td bgcolor="#FFFFE0"  rowspan="2"align="center" width="73">Ticket Size</td>
-           </tr>
-            <tr>
-              <td bgcolor="#b7e1cd" align="center" width="56.25">Noa Reguler</td>
-              <td bgcolor="#b7e1cd" align="center" width="56.25">Os Reguler</td>
-              <td bgcolor="#b7e1cd" align="center" width="56.25">Noa Cicilan</td>
-              <td bgcolor="#b7e1cd" align="center" width="56.25">Os Cicilan</td>
-
-              <td bgcolor="#b7e1cd" align="center" width="56.25">Noa Reguler</td>
-              <td bgcolor="#b7e1cd" align="center" width="56.25">Os Reguler</td>
-              <td bgcolor="#b7e1cd" align="center" width="56.25">Noa Cicilan</td>
-              <td bgcolor="#b7e1cd" align="center" width="56.25">Os Cicilan</td>
+            <td align="center" width="40">Noa</td>
+            <td align="center" width="80">Ost</td>
+            <td align="center" width="40">Noa</td>
+            <td align="center" width="80">Kredit</td>
+            <td align="center" width="40">Noa</td>
+            <td align="center" width="80">Kredit</td>
+            <td align="center" width="40">Noa</td>
+            <td align="center" width="80">Ost</td>
+            <td align="center" width="80">Ticket Size</td>
+            <td align="center" width="40">Noa</td>
+            <td align="center" width="80">Kredit</td>
+            <td align="center" width="80">Ticket Size</td>
             </tr>
-            <?php $i=0;?>
-            <?php foreach($outstanding as $os):?>
-            <?php if($os->area == 'Jawa Timur'):?>
-
-              <?php
-                $yesterdayNoa_ += $os->ost_yesterday->noa;
-                $yesterdayUp_ += $os->ost_yesterday->up;
-                $todayRegNoa_ += $os->credit_today->reguler['noa'];
-                $todayRegUp_ += $os->credit_today->reguler['up'];
-                $todayMorNoa_ += $os->credit_today->mortage['noa'];
-                $todayMorUp_ += $os->credit_today->mortage['up'];
-                $repaymentRegNoa_ += $os->repayment_today->reguler['noa'];
-                $repaymentRegUp_ += $os->repayment_today->reguler['up'];
-                $repaymentMorUp_ += $os->repayment_today->mortage['noa'];
-                $repaymentMorNoa_ += $os->repayment_today->mortage['up'];
-
-                $totalNoa_ += $os->total->noa;
-                $totalUp_ += $os->total->up;
-              ?>
-            
-            <?php $i++;?>
+            <?php $no=0;
+                  $totalNoaOstYesterday = 0;
+                  $totalNoaOstToday = 0;
+                  $totalUpOstToday = 0;
+                  $totalUpaOstYesterday = 0;
+                  $totalRepaymentTodayUp = 0;
+                  $totalRepaymentTodayNoa = 0;
+                  $totalOstNoa = 0;
+                  $totalOstUp = 0;
+                  $totalOstTicket = 0;
+                  $totalDisbureNoa = 0;
+                  $totalDisbureUp = 0;
+                  $totalDisbureTicket = 0;
+            foreach($outstanding as $data): $no++;?>
+            <?php if($data->area=='Jawa Timur'){ ?>
             <tr>
-              <td  align="center" width="20"><?php echo $i;?></td>
-              <td  align="center" width="60"><?php echo $os->name;?></td>
-              <td bgcolor="#a9a9a9" align="center" width="50"><?php echo $os->ost_yesterday->noa;?></td>
-              <td bgcolor="#a9a9a9" align="right" width="100"><?php echo $os->ost_yesterday->up;?></td>
-
-              <td bgcolor="#b7e1cd" align="center" width="56.25"><?php echo $os->credit_today->reguler['noa'];?> </td>
-              <td bgcolor="#b7e1cd" align="right" width="56.25"><?php echo $os->credit_today->reguler['up'];?></td>
-              <td bgcolor="#b7e1cd" align="center" width="56.25"><?php echo $os->credit_today->mortage['noa'];?></td>
-              <td bgcolor="#b7e1cd" align="right" width="56.25"><?php echo $os->credit_today->mortage['up'];?></td>
-
-              <td bgcolor="#b7e1cd" align="center" width="56.25"><?php echo $os->repayment_today->reguler['noa'];?> </td>
-              <td bgcolor="#b7e1cd" align="right" width="56.25"><?php echo $os->repayment_today->reguler['up'];?></td>
-              <td bgcolor="#b7e1cd" align="center" width="56.25"><?php echo $os->repayment_today->mortage['noa'];?></td>
-              <td bgcolor="#b7e1cd" align="right" width="56.25"><?php echo $os->repayment_today->mortage['up'];?></td>
-
-              <td bgcolor="#FFFFE0" align="center" width="73"><?php echo $os->total->noa;?></td>
-              <td bgcolor="#FFFFE0" align="right" width="73"><?php echo $os->total->up;?></td>
-              <td bgcolor="#FFFFE0" align="right" width="73"><?php echo round( $os->total->up/ $os->total->noa, 2);?></td>
-
+                <td align="center"><?php echo $no;?></td>
+                <td align="left"><?php echo $data->name;?></td>
+                <!-- <td align="center">-</td>
+                <td align="center">-</td> -->
+                <td align="center"><?php echo $data->ost_yesterday->noa;?></td>
+                <td align="right"><?php echo number_format($data->ost_yesterday->up,0);?></td>
+                <td align="center"><?php echo $data->credit_today->noa;?></td>
+                <td align="right"><?php echo number_format($data->credit_today->up,0);?></td>
+                <td align="center"><?php echo $data->repayment_today->noa;?></td>
+                <td align="right"><?php echo number_format($data->repayment_today->up,0);?></td>
+                <td align="center"><?php echo $data->total_outstanding->noa;?></td>
+                <td align="right"><?php echo number_format($data->total_outstanding->up,0);?></td>
+                <td align="right"><?php echo number_format($data->total_outstanding->tiket,0);?></td>
+                <td align="center"><?php echo $data->total_disburse->noa;?></td>
+                <td align="right"><?php echo number_format($data->total_disburse->credit,0);?></td>
+                <td align="right"><?php echo number_format($data->total_disburse->tiket,0);?></td>
+                <?php
+                    $totalNoaOstYesterday += $data->ost_yesterday->noa;
+                    $totalNoaOstToday += $data->credit_today->noa;
+                    $totalUpOstToday += $data->credit_today->up;
+                    $totalUpaOstYesterday += $data->ost_yesterday->up;
+                    $totalRepaymentTodayUp += $data->repayment_today->up;
+                    $totalRepaymentTodayNoa += $data->repayment_today->noa;
+                    $totalOstNoa += $data->total_outstanding->noa;
+                    $totalOstUp += $data->total_outstanding->up;
+                    $totalOstTicket += $data->total_outstanding->tiket;
+                    $totalDisbureNoa += $data->total_disburse->noa;
+                    $totalDisbureUp += $data->total_disburse->credit;
+                    $totalDisbureTicket += $data->total_disburse->tiket;
+                ?>
             </tr>
-            <?php endif;?>
-            
+            <?php } ?>
+            <?php endforeach ?>
+            <tr>
+                <td align="right" colspan="2"> </td>
+                <td align="center"><?php echo $totalNoaOstYesterday; ?></td>
+                <td align="right"><?php echo number_format($totalUpaOstYesterday,0); ?></td>
+                <td align="center"><?php echo $totalNoaOstToday; ?></td>
+                <td align="right"><?php echo number_format($totalUpOstToday,0); ?></td>
+                <td align="center"><?php echo $totalRepaymentTodayNoa; ?></td>
+                <td align="right"><?php echo number_format($totalRepaymentTodayUp,0); ?></td>
+                <td align="center"><?php echo $totalOstNoa; ?></td>
+                <td align="right"><?php echo number_format($totalOstUp,0); ?></td>
+                <td align="right"><?php echo number_format($totalOstTicket,0); ?></td>
+                <td align="center"><?php echo $totalDisbureNoa; ?></td>
+                <td align="right"><?php echo number_format($totalDisbureUp,0); ?></td>
+                <td align="right"><?php echo number_format($totalDisbureTicket,0); ?></td>
+            </tr>
+</table>
 
-            <?php endforeach;?>
-            <tr bgcolor="#ffff00">
-              <td align="right" colspan="2" width="80">Total </td>
-              <td align="center"  width="50"><?php echo $yesterdayNoa_; ?></td>
-              <td align="right" width="100"><?php echo number_format($yesterdayUp_,0); ?></td>
-              <td align="center"  width="56.25"><?php echo $todayRegNoa_; ?></td>
-              <td align="right" width="56.25"><?php echo number_format($todayRegUp_,0); ?></td>
-              <td align="center"  width="56.25"><?php echo $todayMorNoa_; ?></td>
-              <td align="right" width="56.25"><?php echo number_format($todayMorUp_,0); ?></td>
-              <td align="center"  width="56.25"><?php echo $repaymentRegNoa_; ?></td>
-              <td align="right" width="56.25"><?php echo number_format($repaymentRegUp_,0); ?></td>
-              <td align="center"  width="56.25"><?php echo $repaymentMorUp_; ?></td>
-              <td align="right" width="56.25"><?php echo number_format($repaymentMorNoa_,0); ?></td>
-              <td align="center"  width="73"><?php echo $totalNoa_; ?></td>
-              <td align="right" width="73"><?php echo number_format($totalUp_,0); ?></td>
-              <td align="right" width="73"><?php echo number_format($totalUp_/$totalNoa_,0); ?></td>
-          </tr>
+            <?php 
+           $totalNoaOstYesterday_   = $totalNoaOstYesterday_ + $totalNoaOstYesterday;
+           $totalNoaOstToday_       = $totalNoaOstToday_ + $totalNoaOstToday;
+           $totalUpOstToday_        = $totalUpOstToday_ + $totalUpOstToday;
+           $totalUpaOstYesterday_   = $totalUpaOstYesterday_ + $totalUpaOstYesterday;
+           $totalRepaymentTodayUp_  = $totalRepaymentTodayUp_ + $totalRepaymentTodayUp;
+           $totalRepaymentTodayNoa_ = $totalRepaymentTodayNoa_ + $totalRepaymentTodayNoa;
+           $totalOstNoa_            = $totalOstNoa_ + $totalOstNoa;
+           $totalOstUp_             = $totalOstUp_ + $totalOstUp;
+           $totalOstTicket_         = $totalOstTicket_ + $totalOstTicket;
+           $totalDisbureNoa_        = $totalDisbureNoa_ + $totalDisbureNoa;
+           $totalDisbureUp_         = $totalDisbureUp_ + $totalDisbureUp;
+           $totalDisbureTicket_     = $totalDisbureTicket_ + $totalDisbureTicket;
+           ?>
 
-           
-    </table>
-    <br/>
-    <table class="table" border="1">
-    <?php
-      $yesterdayNoa_ = 0;
-      $yesterdayUp_ = 0;
-      $todayRegNoa_ = 0;
-      $todayRegUp_ = 0;
-      $todayMorNoa_ = 0;
-      $todayMorUp_ = 0;
-      $repaymentRegNoa_ = 0;
-      $repaymentRegUp_ = 0;
-      $repaymentMorUp_ = 0;
-      $repaymentMorNoa_ = 0;
-      $totalNoa_ = 0;
-      $totalUp_ = 0;
-      $totalTicket_ = 0;
-    ;?>
-             <tr bgcolor="#aaaa55">
+<br/><br/>
+           <table class="table" border="1">
+           <tr bgcolor="#aaaa55">
                 <td colspan="14" align="center" width="900">NTB</td>
             </tr>
-            <tr>
-              <td rowspan="3" align="center"  width="20">No</td>
-              <td rowspan="3" align="center" width="60">Unit</td>
-              <td colspan="2" bgcolor="#a9a9a9" align="center" width="150">OST Tgl(<?php echo $dateLastOST;?>)</td>
-              <td colspan="8" bgcolor="#b7e1cd" align="center" width="450">OST Tgl(<?php echo $datetrans;?>)</td>
-              <td  colspan="3" bgcolor="#FFFFE0" align="center" width="220">Total OST</td>
+            <tr bgcolor="#cccccc">
+            <td rowspan="2" align="center"  width="20">No</td>
+            <td rowspan="2" align="center" width="120">Unit</td>
+            <!-- <td rowspan="2" align="center" width="25">Open</td>
+            <td rowspan="2" align="center" width="20">OJK</td> -->
+            <td colspan="2" align="center" width="120">OST Sebelumnya(<?php echo $dateLastOST;?>)</td>
+            <td colspan="2" align="center" width="120">Kredit(<?php echo $datetrans;?>)</td>
+            <td colspan="2" align="center" width="120">Pelunasan & Cicilan(<?php echo $datetrans;?>)</td>
+            <td colspan="3" align="center" width="200">Total Outstanding</td>
+            <td colspan="3" align="center" width="200">Total Disburse</td>
             </tr>
             <tr bgcolor="#cccccc">
-               <td rowspan="2"  align="center" width="50">Noa</td>
-               <td rowspan="2" bgcolor="#a9a9a9" align="center" width="100">Up</td>
-               <td bgcolor="#b7e1cd" colspan="4" align="center" width="225">Pencairan Reguler & Cicilan</td>
-               <td bgcolor="#b7e1cd" colspan="4" align="center" width="225">Pelunasan Reguler & Angsuran Cicilan</td>
-               <td bgcolor="#FFFFE0" rowspan="2" align="center" width="73">Noa</td>
-               <td bgcolor="#FFFFE0" rowspan="2" align="center" width="73">OS</td>
-               <td bgcolor="#FFFFE0"  rowspan="2"align="center" width="73">Ticket Size</td>
-           </tr>
-            <tr>
-              <td bgcolor="#b7e1cd" align="center" width="56.25">Noa Reguler</td>
-              <td bgcolor="#b7e1cd" align="center" width="56.25">Os Reguler</td>
-              <td bgcolor="#b7e1cd" align="center" width="56.25">Noa Cicilan</td>
-              <td bgcolor="#b7e1cd" align="center" width="56.25">Os Cicilan</td>
-
-              <td bgcolor="#b7e1cd" align="center" width="56.25">Noa Reguler</td>
-              <td bgcolor="#b7e1cd" align="center" width="56.25">Os Reguler</td>
-              <td bgcolor="#b7e1cd" align="center" width="56.25">Noa Cicilan</td>
-              <td bgcolor="#b7e1cd" align="center" width="56.25">Os Cicilan</td>
+            <td align="center" width="40">Noa</td>
+            <td align="center" width="80">Ost</td>
+            <td align="center" width="40">Noa</td>
+            <td align="center" width="80">Kredit</td>
+            <td align="center" width="40">Noa</td>
+            <td align="center" width="80">Kredit</td>
+            <td align="center" width="40">Noa</td>
+            <td align="center" width="80">Ost</td>
+            <td align="center" width="80">Ticket Size</td>
+            <td align="center" width="40">Noa</td>
+            <td align="center" width="80">Kredit</td>
+            <td align="center" width="80">Ticket Size</td>
             </tr>
-            <?php $i=0;?>
-            <?php foreach($outstanding as $os):?>
-            <?php if($os->area == 'NTB'):?>
-
-              <?php
-                $yesterdayNoa_ += $os->ost_yesterday->noa;
-                $yesterdayUp_ += $os->ost_yesterday->up;
-                $todayRegNoa_ += $os->credit_today->reguler['noa'];
-                $todayRegUp_ += $os->credit_today->reguler['up'];
-                $todayMorNoa_ += $os->credit_today->mortage['noa'];
-                $todayMorUp_ += $os->credit_today->mortage['up'];
-                $repaymentRegNoa_ += $os->repayment_today->reguler['noa'];
-                $repaymentRegUp_ += $os->repayment_today->reguler['up'];
-                $repaymentMorUp_ += $os->repayment_today->mortage['noa'];
-                $repaymentMorNoa_ += $os->repayment_today->mortage['up'];
-
-                $totalNoa_ += $os->total->noa;
-                $totalUp_ += $os->total->up;
-              ?>
-            
-            <?php $i++;?>
+            <?php $no=0;
+                  $totalNoaOstYesterday = 0;
+                  $totalNoaOstToday = 0;
+                  $totalUpOstToday = 0;
+                  $totalUpaOstYesterday = 0;
+                  $totalRepaymentTodayUp = 0;
+                  $totalRepaymentTodayNoa = 0;
+                  $totalOstNoa = 0;
+                  $totalOstUp = 0;
+                  $totalOstTicket = 0;
+                  $totalDisbureNoa = 0;
+                  $totalDisbureUp = 0;
+                  $totalDisbureTicket = 0;
+            foreach($outstanding as $data): $no++;?>
+            <?php if($data->area=='NTB'){ ?>
             <tr>
-              <td  align="center" width="20"><?php echo $i;?></td>
-              <td  align="center" width="60"><?php echo $os->name;?></td>
-              <td bgcolor="#a9a9a9" align="center" width="50"><?php echo $os->ost_yesterday->noa;?></td>
-              <td bgcolor="#a9a9a9" align="right" width="100"><?php echo $os->ost_yesterday->up;?></td>
-
-              <td bgcolor="#b7e1cd" align="center" width="56.25"><?php echo $os->credit_today->reguler['noa'];?> </td>
-              <td bgcolor="#b7e1cd" align="right" width="56.25"><?php echo $os->credit_today->reguler['up'];?></td>
-              <td bgcolor="#b7e1cd" align="center" width="56.25"><?php echo $os->credit_today->mortage['noa'];?></td>
-              <td bgcolor="#b7e1cd" align="right" width="56.25"><?php echo $os->credit_today->mortage['up'];?></td>
-
-              <td bgcolor="#b7e1cd" align="center" width="56.25"><?php echo $os->repayment_today->reguler['noa'];?> </td>
-              <td bgcolor="#b7e1cd" align="right" width="56.25"><?php echo $os->repayment_today->reguler['up'];?></td>
-              <td bgcolor="#b7e1cd" align="center" width="56.25"><?php echo $os->repayment_today->mortage['noa'];?></td>
-              <td bgcolor="#b7e1cd" align="right" width="56.25"><?php echo $os->repayment_today->mortage['up'];?></td>
-
-              <td bgcolor="#FFFFE0" align="center" width="73"><?php echo $os->total->noa;?></td>
-              <td bgcolor="#FFFFE0" align="right" width="73"><?php echo $os->total->up;?></td>
-              <td bgcolor="#FFFFE0" align="right" width="73"><?php echo round( $os->total->up/ $os->total->noa, 2);?></td>
-
+                <td align="center"><?php echo $no;?></td>
+                <td align="left"><?php echo $data->name;?></td>
+                <!-- <td align="center">-</td>
+                <td align="center">-</td> -->
+                <td align="center"><?php echo $data->ost_yesterday->noa;?></td>
+                <td align="right"><?php echo number_format($data->ost_yesterday->up,0);?></td>
+                <td align="center"><?php echo $data->credit_today->noa;?></td>
+                <td align="right"><?php echo number_format($data->credit_today->up,0);?></td>
+                <td align="center"><?php echo $data->repayment_today->noa;?></td>
+                <td align="right"><?php echo number_format($data->repayment_today->up,0);?></td>
+                <td align="center"><?php echo $data->total_outstanding->noa;?></td>
+                <td align="right"><?php echo number_format($data->total_outstanding->up,0);?></td>
+                <td align="right"><?php echo number_format($data->total_outstanding->tiket,0);?></td>
+                <td align="center"><?php echo $data->total_disburse->noa;?></td>
+                <td align="right"><?php echo number_format($data->total_disburse->credit,0);?></td>
+                <td align="right"><?php echo number_format($data->total_disburse->tiket,0);?></td>
+                <?php
+                    $totalNoaOstYesterday += $data->ost_yesterday->noa;
+                    $totalNoaOstToday += $data->credit_today->noa;
+                    $totalUpOstToday += $data->credit_today->up;
+                    $totalUpaOstYesterday += $data->ost_yesterday->up;
+                    $totalRepaymentTodayUp += $data->repayment_today->up;
+                    $totalRepaymentTodayNoa += $data->repayment_today->noa;
+                    $totalOstNoa += $data->total_outstanding->noa;
+                    $totalOstUp += $data->total_outstanding->up;
+                    $totalOstTicket += $data->total_outstanding->tiket;
+                    $totalDisbureNoa += $data->total_disburse->noa;
+                    $totalDisbureUp += $data->total_disburse->credit;
+                    $totalDisbureTicket += $data->total_disburse->tiket;
+                ?>
             </tr>
-            <?php endif;?>
-            
+            <?php } ?>
+            <?php endforeach ?>
+            <tr>
+                <td align="right" colspan="2"> </td>
+                <td align="center"><?php echo $totalNoaOstYesterday; ?></td>
+                <td align="right"><?php echo number_format($totalUpaOstYesterday,0); ?></td>
+                <td align="center"><?php echo $totalNoaOstToday; ?></td>
+                <td align="right"><?php echo number_format($totalUpOstToday,0); ?></td>
+                <td align="center"><?php echo $totalRepaymentTodayNoa; ?></td>
+                <td align="right"><?php echo number_format($totalRepaymentTodayUp,0); ?></td>
+                <td align="center"><?php echo $totalOstNoa; ?></td>
+                <td align="right"><?php echo number_format($totalOstUp,0); ?></td>
+                <td align="right"><?php echo number_format($totalOstTicket,0); ?></td>
+                <td align="center"><?php echo $totalDisbureNoa; ?></td>
+                <td align="right"><?php echo number_format($totalDisbureUp,0); ?></td>
+                <td align="right"><?php echo number_format($totalDisbureTicket,0); ?></td>
+            </tr>
+</table>
 
-            <?php endforeach;?>
-            <tr bgcolor="#ffff00">
-              <td align="right" colspan="2" width="80">Total </td>
-              <td align="center"  width="50"><?php echo $yesterdayNoa_; ?></td>
-              <td align="right" width="100"><?php echo number_format($yesterdayUp_,0); ?></td>
-              <td align="center"  width="56.25"><?php echo $todayRegNoa_; ?></td>
-              <td align="right" width="56.25"><?php echo number_format($todayRegUp_,0); ?></td>
-              <td align="center"  width="56.25"><?php echo $todayMorNoa_; ?></td>
-              <td align="right" width="56.25"><?php echo number_format($todayMorUp_,0); ?></td>
-              <td align="center"  width="56.25"><?php echo $repaymentRegNoa_; ?></td>
-              <td align="right" width="56.25"><?php echo number_format($repaymentRegUp_,0); ?></td>
-              <td align="center"  width="56.25"><?php echo $repaymentMorUp_; ?></td>
-              <td align="right" width="56.25"><?php echo number_format($repaymentMorNoa_,0); ?></td>
-              <td align="center"  width="73"><?php echo $totalNoa_; ?></td>
-              <td align="right" width="73"><?php echo number_format($totalUp_,0); ?></td>
-              <td align="right" width="73"><?php echo number_format($totalUp_/$totalNoa_,0); ?></td>
-          </tr>
+            <?php 
+           $totalNoaOstYesterday_   = $totalNoaOstYesterday_ + $totalNoaOstYesterday;
+           $totalNoaOstToday_       = $totalNoaOstToday_ + $totalNoaOstToday;
+           $totalUpOstToday_        = $totalUpOstToday_ + $totalUpOstToday;
+           $totalUpaOstYesterday_   = $totalUpaOstYesterday_ + $totalUpaOstYesterday;
+           $totalRepaymentTodayUp_  = $totalRepaymentTodayUp_ + $totalRepaymentTodayUp;
+           $totalRepaymentTodayNoa_ = $totalRepaymentTodayNoa_ + $totalRepaymentTodayNoa;
+           $totalOstNoa_            = $totalOstNoa_ + $totalOstNoa;
+           $totalOstUp_             = $totalOstUp_ + $totalOstUp;
+           $totalOstTicket_         = $totalOstTicket_ + $totalOstTicket;
+           $totalDisbureNoa_        = $totalDisbureNoa_ + $totalDisbureNoa;
+           $totalDisbureUp_         = $totalDisbureUp_ + $totalDisbureUp;
+           $totalDisbureTicket_     = $totalDisbureTicket_ + $totalDisbureTicket;
+           ?>
 
-           
-    </table>
-    <br/>
-    <table class="table" border="1">
-    <?php
-      $yesterdayNoa_ = 0;
-      $yesterdayUp_ = 0;
-      $todayRegNoa_ = 0;
-      $todayRegUp_ = 0;
-      $todayMorNoa_ = 0;
-      $todayMorUp_ = 0;
-      $repaymentRegNoa_ = 0;
-      $repaymentRegUp_ = 0;
-      $repaymentMorUp_ = 0;
-      $repaymentMorNoa_ = 0;
-      $totalNoa_ = 0;
-      $totalUp_ = 0;
-      $totalTicket_ = 0;
-    ;?>
-            <tr bgcolor="#aaaa55">
+<br/><br/>
+           <table class="table" border="1">
+           <tr bgcolor="#aaaa55">
                 <td colspan="14" align="center" width="900">NTT</td>
             </tr>
-            <tr>
-              <td rowspan="3" align="center"  width="20">No</td>
-              <td rowspan="3" align="center" width="60">Unit</td>
-              <td colspan="2" bgcolor="#a9a9a9" align="center" width="150">OST Tgl(<?php echo $dateLastOST;?>)</td>
-              <td colspan="8" bgcolor="#b7e1cd" align="center" width="450">OST Tgl(<?php echo $datetrans;?>)</td>
-              <td  colspan="3" bgcolor="#FFFFE0" align="center" width="220">Total OST</td>
+            <tr bgcolor="#cccccc">
+            <td rowspan="2" align="center"  width="20">No</td>
+            <td rowspan="2" align="center" width="120">Unit</td>
+            <!-- <td rowspan="2" align="center" width="25">Open</td>
+            <td rowspan="2" align="center" width="20">OJK</td> -->
+            <td colspan="2" align="center" width="120">OST Sebelumnya(<?php echo $dateLastOST;?>)</td>
+            <td colspan="2" align="center" width="120">Kredit(<?php echo $datetrans;?>)</td>
+            <td colspan="2" align="center" width="120">Pelunasan & Cicilan(<?php echo $datetrans;?>)</td>
+            <td colspan="3" align="center" width="200">Total Outstanding</td>
+            <td colspan="3" align="center" width="200">Total Disburse</td>
             </tr>
             <tr bgcolor="#cccccc">
-               <td rowspan="2"  align="center" width="50">Noa</td>
-               <td rowspan="2" bgcolor="#a9a9a9" align="center" width="100">Up</td>
-               <td bgcolor="#b7e1cd" colspan="4" align="center" width="225">Pencairan Reguler & Cicilan</td>
-               <td bgcolor="#b7e1cd" colspan="4" align="center" width="225">Pelunasan Reguler & Angsuran Cicilan</td>
-               <td bgcolor="#FFFFE0" rowspan="2" align="center" width="73">Noa</td>
-               <td bgcolor="#FFFFE0" rowspan="2" align="center" width="73">OS</td>
-               <td bgcolor="#FFFFE0"  rowspan="2"align="center" width="73">Ticket Size</td>
-           </tr>
-            <tr>
-              <td bgcolor="#b7e1cd" align="center" width="56.25">Noa Reguler</td>
-              <td bgcolor="#b7e1cd" align="center" width="56.25">Os Reguler</td>
-              <td bgcolor="#b7e1cd" align="center" width="56.25">Noa Cicilan</td>
-              <td bgcolor="#b7e1cd" align="center" width="56.25">Os Cicilan</td>
-
-              <td bgcolor="#b7e1cd" align="center" width="56.25">Noa Reguler</td>
-              <td bgcolor="#b7e1cd" align="center" width="56.25">Os Reguler</td>
-              <td bgcolor="#b7e1cd" align="center" width="56.25">Noa Cicilan</td>
-              <td bgcolor="#b7e1cd" align="center" width="56.25">Os Cicilan</td>
+            <td align="center" width="40">Noa</td>
+            <td align="center" width="80">Ost</td>
+            <td align="center" width="40">Noa</td>
+            <td align="center" width="80">Kredit</td>
+            <td align="center" width="40">Noa</td>
+            <td align="center" width="80">Kredit</td>
+            <td align="center" width="40">Noa</td>
+            <td align="center" width="80">Ost</td>
+            <td align="center" width="80">Ticket Size</td>
+            <td align="center" width="40">Noa</td>
+            <td align="center" width="80">Kredit</td>
+            <td align="center" width="80">Ticket Size</td>
             </tr>
-            <?php $i=0;?>
-            <?php foreach($outstanding as $os):?>
-            <?php if($os->area == 'NTT'):?>
-
-              <?php
-                $yesterdayNoa_ += $os->ost_yesterday->noa;
-                $yesterdayUp_ += $os->ost_yesterday->up;
-                $todayRegNoa_ += $os->credit_today->reguler['noa'];
-                $todayRegUp_ += $os->credit_today->reguler['up'];
-                $todayMorNoa_ += $os->credit_today->mortage['noa'];
-                $todayMorUp_ += $os->credit_today->mortage['up'];
-                $repaymentRegNoa_ += $os->repayment_today->reguler['noa'];
-                $repaymentRegUp_ += $os->repayment_today->reguler['up'];
-                $repaymentMorUp_ += $os->repayment_today->mortage['noa'];
-                $repaymentMorNoa_ += $os->repayment_today->mortage['up'];
-
-                $totalNoa_ += $os->total->noa;
-                $totalUp_ += $os->total->up;
-              ?>
-            
-            <?php $i++;?>
+            <?php $no=0;
+                  $totalNoaOstYesterday = 0;
+                  $totalNoaOstToday = 0;
+                  $totalUpOstToday = 0;
+                  $totalUpaOstYesterday = 0;
+                  $totalRepaymentTodayUp = 0;
+                  $totalRepaymentTodayNoa = 0;
+                  $totalOstNoa = 0;
+                  $totalOstUp = 0;
+                  $totalOstTicket = 0;
+                  $totalDisbureNoa = 0;
+                  $totalDisbureUp = 0;
+                  $totalDisbureTicket = 0;
+            foreach($outstanding as $data): $no++;?>
+            <?php if($data->area=='NTT'){ ?>
             <tr>
-              <td  align="center" width="20"><?php echo $i;?></td>
-              <td  align="center" width="60"><?php echo $os->name;?></td>
-              <td bgcolor="#a9a9a9" align="center" width="50"><?php echo $os->ost_yesterday->noa;?></td>
-              <td bgcolor="#a9a9a9" align="right" width="100"><?php echo $os->ost_yesterday->up;?></td>
-
-              <td bgcolor="#b7e1cd" align="center" width="56.25"><?php echo $os->credit_today->reguler['noa'];?> </td>
-              <td bgcolor="#b7e1cd" align="right" width="56.25"><?php echo $os->credit_today->reguler['up'];?></td>
-              <td bgcolor="#b7e1cd" align="center" width="56.25"><?php echo $os->credit_today->mortage['noa'];?></td>
-              <td bgcolor="#b7e1cd" align="right" width="56.25"><?php echo $os->credit_today->mortage['up'];?></td>
-
-              <td bgcolor="#b7e1cd" align="center" width="56.25"><?php echo $os->repayment_today->reguler['noa'];?> </td>
-              <td bgcolor="#b7e1cd" align="right" width="56.25"><?php echo $os->repayment_today->reguler['up'];?></td>
-              <td bgcolor="#b7e1cd" align="center" width="56.25"><?php echo $os->repayment_today->mortage['noa'];?></td>
-              <td bgcolor="#b7e1cd" align="right" width="56.25"><?php echo $os->repayment_today->mortage['up'];?></td>
-
-              <td bgcolor="#FFFFE0" align="center" width="73"><?php echo $os->total->noa;?></td>
-              <td bgcolor="#FFFFE0" align="right" width="73"><?php echo $os->total->up;?></td>
-              <td bgcolor="#FFFFE0" align="right" width="73"><?php echo round( $os->total->up/ $os->total->noa, 2);?></td>
-
+                <td align="center"><?php echo $no;?></td>
+                <td align="left"><?php echo $data->name;?></td>
+                <!-- <td align="center">-</td>
+                <td align="center">-</td> -->
+                <td align="center"><?php echo $data->ost_yesterday->noa;?></td>
+                <td align="right"><?php echo number_format($data->ost_yesterday->up,0);?></td>
+                <td align="center"><?php echo $data->credit_today->noa;?></td>
+                <td align="right"><?php echo number_format($data->credit_today->up,0);?></td>
+                <td align="center"><?php echo $data->repayment_today->noa;?></td>
+                <td align="right"><?php echo number_format($data->repayment_today->up,0);?></td>
+                <td align="center"><?php echo $data->total_outstanding->noa;?></td>
+                <td align="right"><?php echo number_format($data->total_outstanding->up,0);?></td>
+                <td align="right"><?php echo number_format($data->total_outstanding->tiket,0);?></td>
+                <td align="center"><?php echo $data->total_disburse->noa;?></td>
+                <td align="right"><?php echo number_format($data->total_disburse->credit,0);?></td>
+                <td align="right"><?php echo number_format($data->total_disburse->tiket,0);?></td>
+                <?php
+                    $totalNoaOstYesterday += $data->ost_yesterday->noa;
+                    $totalNoaOstToday += $data->credit_today->noa;
+                    $totalUpOstToday += $data->credit_today->up;
+                    $totalUpaOstYesterday += $data->ost_yesterday->up;
+                    $totalRepaymentTodayUp += $data->repayment_today->up;
+                    $totalRepaymentTodayNoa += $data->repayment_today->noa;
+                    $totalOstNoa += $data->total_outstanding->noa;
+                    $totalOstUp += $data->total_outstanding->up;
+                    $totalOstTicket += $data->total_outstanding->tiket;
+                    $totalDisbureNoa += $data->total_disburse->noa;
+                    $totalDisbureUp += $data->total_disburse->credit;
+                    $totalDisbureTicket += $data->total_disburse->tiket;
+                ?>
             </tr>
-            <?php endif;?>
-            
-
-            <?php endforeach;?>
-            <tr bgcolor="#ffff00">
-              <td align="right" colspan="2" width="80">Total </td>
-              <td align="center"  width="50"><?php echo $yesterdayNoa_; ?></td>
-              <td align="right" width="100"><?php echo number_format($yesterdayUp_,0); ?></td>
-              <td align="center"  width="56.25"><?php echo $todayRegNoa_; ?></td>
-              <td align="right" width="56.25"><?php echo number_format($todayRegUp_,0); ?></td>
-              <td align="center"  width="56.25"><?php echo $todayMorNoa_; ?></td>
-              <td align="right" width="56.25"><?php echo number_format($todayMorUp_,0); ?></td>
-              <td align="center"  width="56.25"><?php echo $repaymentRegNoa_; ?></td>
-              <td align="right" width="56.25"><?php echo number_format($repaymentRegUp_,0); ?></td>
-              <td align="center"  width="56.25"><?php echo $repaymentMorUp_; ?></td>
-              <td align="right" width="56.25"><?php echo number_format($repaymentMorNoa_,0); ?></td>
-              <td align="center"  width="73"><?php echo $totalNoa_; ?></td>
-              <td align="right" width="73"><?php echo number_format($totalUp_,0); ?></td>
-              <td align="right" width="73"><?php echo number_format($totalUp_/$totalNoa_,0); ?></td>
-          </tr>
-
-           
-    </table>
-    <br/>
+            <?php } ?>
+            <?php endforeach ?>
+            <tr>
+                <td align="right" colspan="2"> </td>
+                <td align="center"><?php echo $totalNoaOstYesterday; ?></td>
+                <td align="right"><?php echo number_format($totalUpaOstYesterday,0); ?></td>
+                <td align="center"><?php echo $totalNoaOstToday; ?></td>
+                <td align="right"><?php echo number_format($totalUpOstToday,0); ?></td>
+                <td align="center"><?php echo $totalRepaymentTodayNoa; ?></td>
+                <td align="right"><?php echo number_format($totalRepaymentTodayUp,0); ?></td>
+                <td align="center"><?php echo $totalOstNoa; ?></td>
+                <td align="right"><?php echo number_format($totalOstUp,0); ?></td>
+                <td align="right"><?php echo number_format($totalOstTicket,0); ?></td>
+                <td align="center"><?php echo $totalDisbureNoa; ?></td>
+                <td align="right"><?php echo number_format($totalDisbureUp,0); ?></td>
+                <td align="right"><?php echo number_format($totalDisbureTicket,0); ?></td>
+            </tr>
+</table>
+            <?php 
+           $totalNoaOstYesterday_   = $totalNoaOstYesterday_ + $totalNoaOstYesterday;
+           $totalNoaOstToday_       = $totalNoaOstToday_ + $totalNoaOstToday;
+           $totalUpOstToday_        = $totalUpOstToday_ + $totalUpOstToday;
+           $totalUpaOstYesterday_   = $totalUpaOstYesterday_ + $totalUpaOstYesterday;
+           $totalRepaymentTodayUp_  = $totalRepaymentTodayUp_ + $totalRepaymentTodayUp;
+           $totalRepaymentTodayNoa_ = $totalRepaymentTodayNoa_ + $totalRepaymentTodayNoa;
+           $totalOstNoa_            = $totalOstNoa_ + $totalOstNoa;
+           $totalOstUp_             = $totalOstUp_ + $totalOstUp;
+           $totalOstTicket_         = $totalOstTicket_ + $totalOstTicket;
+           $totalDisbureNoa_        = $totalDisbureNoa_ + $totalDisbureNoa;
+           $totalDisbureUp_         = $totalDisbureUp_ + $totalDisbureUp;
+           $totalDisbureTicket_     = $totalDisbureTicket_ + $totalDisbureTicket;
+           ?>
+<br/>
 <table class="table" border="1">            
     <tr bgcolor="#ffff00">
-        <td align="right" colspan="2" width="80">Total </td>
-        <td align="center"  width="50"><?php echo $yesterdayNoa; ?></td>
-        <td align="right" width="100"><?php echo number_format($yesterdayUp,0); ?></td>
-        <td align="center"  width="56.25"><?php echo $todayRegNoa; ?></td>
-        <td align="right" width="56.25"><?php echo number_format($todayRegUp,0); ?></td>
-        <td align="center"  width="56.25"><?php echo $todayMorNoa; ?></td>
-        <td align="right" width="56.25"><?php echo number_format($todayMorUp,0); ?></td>
-        <td align="center"  width="56.25"><?php echo $repaymentRegNoa; ?></td>
-        <td align="right" width="56.25"><?php echo number_format($repaymentRegUp,0); ?></td>
-        <td align="center"  width="56.25"><?php echo $repaymentMorUp; ?></td>
-        <td align="right" width="56.25"><?php echo number_format($repaymentMorNoa,0); ?></td>
-        <td align="center"  width="73"><?php echo $totalNoa; ?></td>
-        <td align="right" width="73"><?php echo number_format($totalUp,0); ?></td>
-        <td align="right" width="73"><?php echo number_format($totalUp/$totalNoa,0); ?></td>
+        <td align="right" colspan="2" width="140">Total </td>
+        <td align="center"  width="40"><?php echo $totalNoaOstYesterday_; ?></td>
+        <td align="right" width="80"><?php echo number_format($totalUpaOstYesterday_,0); ?></td>
+        <td align="center"  width="40"><?php echo $totalNoaOstToday_; ?></td>
+        <td align="right" width="80"><?php echo number_format($totalUpOstToday_,0); ?></td>
+        <td align="center"  width="40"><?php echo $totalRepaymentTodayNoa_; ?></td>
+        <td align="right" width="80"><?php echo number_format($totalRepaymentTodayUp_,0); ?></td>
+        <td align="center"  width="40"><?php echo $totalOstNoa_; ?></td>
+        <td align="right" width="80"><?php echo number_format($totalOstUp_,0); ?></td>
+        <td align="right" width="80"><?php echo number_format($totalOstTicket_,0); ?></td>
+        <td align="center"  width="40"><?php echo $totalDisbureNoa_; ?></td>
+        <td align="right" width="80"><?php echo number_format($totalDisbureUp_,0); ?></td>
+        <td align="right" width="80"><?php echo number_format($totalDisbureTicket_,0); ?></td>
     </tr>
 </table>

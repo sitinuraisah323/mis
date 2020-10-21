@@ -38,7 +38,7 @@ class Outstanding extends Authenticated
 		require_once APPPATH.'controllers/pdf/header.php';
 		$os = $this->data();
 		$pdf->AddPage('L');
-		$view = $this->load->view('dailyreport/outstanding/index.php',['outstanding'=>$this->dataNew(),'datetrans'=> $this->datetrans()],true);
+		$view = $this->load->view('dailyreport/outstanding/index.php',['outstanding'=>$os,'datetrans'=> $this->datetrans()],true);
 
 		$pdf->writeHTML($view);
 
