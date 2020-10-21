@@ -139,14 +139,16 @@ $this->load->view('temp/MenuBar.php');
 						    	<tr>
 						      		<th class="text-center">No</th>
 									<th class="text-left">Units</th>
-									<th class="text-left">Kasir</th>
+									<!-- <th class="text-left">Kasir</th> -->
 									<th class="text-center">Tanggal</th>
 									<th class='text-right'>Saldo Awal</th>
 									<th class='text-right'>Penerimaan</th>
 									<th class='text-right'>Pengeluaran</th>
 									<th class='text-right'>Saldo Akhir</th>
-									<th class='text-right'>Outstanding</th>
-									<th class='text-right'>Selisih</th>
+                                    <th class='text-right'>Selisih</th>
+									<th class='text-right'>OS. Regular</th>
+									<th class='text-right'>OS. Cicilah</th>
+									<th class='text-right'>Total OS</th>									
                                     <th class='text-center'>#</th>
 									<th></th>
 						    	</tr>
@@ -155,13 +157,15 @@ $this->load->view('temp/MenuBar.php');
 						  	</tbody>
                             <tfoot>
                                 <tr>
-                                    <th colspan="4" class="text-right">Total</th>
+                                    <th colspan="3" class="text-right">Total</th>
                                     <th class="saldoawal text-right"></th>
                                     <th class="penerimaan text-right"></th>
                                     <th class="pengeluaran text-right"></th>
                                     <th class="saldoakhir text-right"></th>
-                                    <th class="osunit text-right"></th>
                                     <th class="selisih text-right"></th>
+                                    <th class="osreg text-right"></th>
+                                    <th class="osnonreg text-right"></th>
+                                    <th class="totos text-right"></th>
                                 </tr>
                             </tfoot>
 						</table>

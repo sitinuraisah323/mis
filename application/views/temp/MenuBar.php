@@ -12,7 +12,7 @@
 							<div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--left">
 								<ul class="kt-menu__subnav">
 
-								<?php if($this->session->userdata('user')->level == 'administrator' || $this->session->userdata('user')->level == 'area'):?>
+								<?php if($this->session->userdata('user')->level == 'administrator' || $this->session->userdata('user')->level == 'area' || $this->session->userdata('user')->level == 'pusat'):?>
 									<?php if(read_access('dashboards')):?>
 										<!-- <li class="kt-menu__item "  aria-haspopup="true">
 											<a  href="<?php //echo base_url('dashboards'); ?>" class="kt-menu__link ">

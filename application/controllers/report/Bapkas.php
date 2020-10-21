@@ -65,7 +65,13 @@ class Bapkas extends Authenticated
 		$objPHPExcel->getActiveSheet()->getColumnDimension('G');
 		$objPHPExcel->getActiveSheet()->setCellValue('G1', 'Pengeluaran');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('H');
-		$objPHPExcel->getActiveSheet()->setCellValue('H1', 'Saldo Akhir');		
+		$objPHPExcel->getActiveSheet()->setCellValue('H1', 'Saldo Akhir');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('I');
+		$objPHPExcel->getActiveSheet()->setCellValue('I1', 'OS Regular');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('J');
+		$objPHPExcel->getActiveSheet()->setCellValue('J1', 'OS Cicilan');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('K');
+		$objPHPExcel->getActiveSheet()->setCellValue('K1', 'Total OS');		
 		if($post = $this->input->post()){
 			$this->model->db
 			->select('units.code,units.name as unit_name')
@@ -78,6 +84,7 @@ class Bapkas extends Authenticated
 			$data = $this->model->all();
 		}
 		$no=2;
+		$oscicilan=0;
 		foreach ($data as $row) 
 		{
 			$objPHPExcel->getActiveSheet()->setCellValue('A'.$no, $row->code);	
@@ -87,7 +94,11 @@ class Bapkas extends Authenticated
 			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no, $row->amount_balance_first);				 
 			$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, $row->amount_in);				 
 			$objPHPExcel->getActiveSheet()->setCellValue('G'.$no, $row->amount_out);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('H'.$no, $row->amount_balance_final);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('H'.$no, $row->amount_balance_final);	
+			if($row->os_cicilan!=null){$oscicilan= $row->os_cicilan;}else{$oscicilan=0;}	
+			$objPHPExcel->getActiveSheet()->setCellValue('I'.$no, $row->os_unit);
+			$objPHPExcel->getActiveSheet()->setCellValue('J'.$no, $oscicilan);
+			$objPHPExcel->getActiveSheet()->setCellValue('K'.$no, $row->os_unit + $oscicilan);		 
 			$no++;
 		}
 
