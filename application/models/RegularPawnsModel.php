@@ -587,11 +587,17 @@ class RegularpawnsModel extends Master
 	public function getRepaymentMontly($month, $year)
 	{
 		$this->db
-			->select('COALESCE(sum(money_loan),0) as avg')
-			->where('month(date_sbk)', $month)
-			->where('year(date_sbk)', $year);
-		return $this->db->get('units_repayments')->row()->avg;
-	
+			->select('COALESCE(sum(money_loan),0) as sum')
+			->where('month(date_repayment)', $month)
+			->where('year(date_repayment)', $year);
+		$upReg = $this->db->get('units_repayments')->row()->sum;
+
+		$this->db
+			->select('COALESCE(sum(amount),0) as sum')
+			->where('month(date_kredit)', $month)
+			->where('year(date_kredit)', $year);
+		$upMor = $this->db->get('units_repayments_mortage')->row()->sum;
+		return $upReg + $upMor;
 	}
 
 	public function getPengeluaranMontly($month, $year)

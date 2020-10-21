@@ -125,7 +125,7 @@ $this->load->view('temp/MenuBar.php');
                                         <div id="graph-os" style="height:300px;"></div>
                                     </div>
                                        <!--begin::Accordion-->
-                                            <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
+                                            <!-- <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
                                                 <div class="card">
                                                     <div class="card-header" id="headingOne3">
                                                         <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseOne1" aria-expanded="true" aria-controls="collapseOne3">
@@ -139,7 +139,7 @@ $this->load->view('temp/MenuBar.php');
                                                         </div>
                                                     </div>
                                                 </div>                           
-                                            </div>
+                                            </div> -->
                                         <!--end::Accordion--> 
                                 </div>
                                 </div>
@@ -171,7 +171,7 @@ $this->load->view('temp/MenuBar.php');
                                         <div id="graph-dpd" style="height:300px;"></div>
                                     </div>
                                        <!--begin::Accordion-->
-                                        <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
+                                        <!-- <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
                                             <div class="card">
                                                 <div class="card-header" id="headingOne3">
                                                     <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseOne2" aria-expanded="true" aria-controls="collapseOne3">
@@ -185,7 +185,7 @@ $this->load->view('temp/MenuBar.php');
                                                     </div>
                                                 </div>
                                             </div>                           
-                                        </div>
+                                        </div> -->
                                         <!--end::Accordion--> 
                                 </div>
                                 </div>
@@ -217,7 +217,7 @@ $this->load->view('temp/MenuBar.php');
                                         <div id="graph-booking" style="height:300px;"></div>
                                     </div>
                                        <!--begin::Accordion-->
-                                            <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
+                                            <!-- <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
                                                 <div class="card">
                                                     <div class="card-header" id="headingOne3">
                                                         <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseOne3" aria-expanded="true" aria-controls="collapseOne3">
@@ -231,7 +231,7 @@ $this->load->view('temp/MenuBar.php');
                                                         </div>
                                                     </div>
                                                 </div>                           
-                                            </div>
+                                            </div> -->
                                         <!--end::Accordion--> 
                                 </div>
                                 </div>
@@ -263,7 +263,7 @@ $this->load->view('temp/MenuBar.php');
                                         <div id="graph-rate" style="height:300px;"></div>
                                     </div>
                                        <!--begin::Accordion-->
-                                        <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
+                                        <!-- <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
                                             <div class="card">
                                                 <div class="card-header" id="headingOne3">
                                                     <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseOne4" aria-expanded="true" aria-controls="collapseOne3">
@@ -277,7 +277,7 @@ $this->load->view('temp/MenuBar.php');
                                                     </div>
                                                 </div>
                                             </div>                           
-                                        </div>
+                                        </div> -->
                                         <!--end::Accordion--> 
                                 </div>
                                 </div>
@@ -309,7 +309,7 @@ $this->load->view('temp/MenuBar.php');
                                         <div id="graph-pendapatan" style="height:300px;"></div>
                                     </div>
                                        <!--begin::Accordion-->
-                                        <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
+                                        <!-- <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
                                             <div class="card">
                                                 <div class="card-header" id="headingOne3">
                                                     <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseOne5" aria-expanded="true" aria-controls="collapseOne3">
@@ -323,7 +323,7 @@ $this->load->view('temp/MenuBar.php');
                                                     </div>
                                                 </div>
                                             </div>                           
-                                        </div>
+                                        </div> -->
                                         <!--end::Accordion--> 
                                 </div>
                                 </div>
@@ -355,7 +355,7 @@ $this->load->view('temp/MenuBar.php');
                                         <div id="graph-pengeluaran" style="height:300px;"></div>
                                     </div>
                                        <!--begin::Accordion-->
-                                        <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
+                                        <!-- <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
                                             <div class="card">
                                                 <div class="card-header" id="headingOne3">
                                                     <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseOne6" aria-expanded="true" aria-controls="collapseOne3">
@@ -369,7 +369,7 @@ $this->load->view('temp/MenuBar.php');
                                                     </div>
                                                 </div>
                                             </div>                           
-                                        </div>
+                                        </div> -->
                                         <!--end::Accordion--> 
                                 </div>
                                 </div>
