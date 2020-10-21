@@ -166,6 +166,7 @@
 
 	 <!--begin::Page Scripts(used by this page) -->
 	 <script src="<?php echo base_url(); ?>assets/js/demo2/pages/custom/inbox/inbox.js" type="text/javascript"></script>
+	 <script src="<?php echo base_url(); ?>assets/canvas/canvasjs.min.js" type="text/javascript"></script>
                         <!--end::Page Scripts -->
 
 	<?php if(isset($js)):?>
