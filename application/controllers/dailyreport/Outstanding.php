@@ -459,7 +459,6 @@ class Outstanding extends Authenticated
 		//echo "<pre/>";
 		//print_r($data);
 		return  $data;
-
 	}
 
 	public function pengeluaran()
