@@ -69,10 +69,12 @@ class RegularpawnsModel extends Master
 	{
 		$noaRegular = $this->db->select('count(*) as noa')->from($this->table)
 			->where('id_unit', $idUnit)
+			->where('amount !=', '0')
 			->where('date_sbk', $today)->get()->row();
 
 		$upRegular = $this->db->select('sum(amount) as up')->from($this->table)
 			->where('id_unit', $idUnit)
+			->where('amount !=', '0')
 			->where('date_sbk', $today)->get()->row();
 
 		$noaMortages = $this->db->select('count(*) as noa')->from('units_mortages')
@@ -85,20 +87,26 @@ class RegularpawnsModel extends Master
 
 		return (object)array(
 			'noa' => $noaMortages->noa + $noaRegular->noa,
-			'up' => $upRegular->up + $upaMortages->up
+			'up' => $upRegular->up + $upaMortages->up,
+			'noa_reguler' => $noaRegular->noa,
+			'up_reguler' => $upRegular->up,
+			'noa_mortages' =>(int) $noaMortages->noa,
+			'up_mortages' => (int) $upaMortages->up
 		);
 	}
 
 	public function repaymentToday($idUnit, $today)
 	{
 		$data = $this->db->select('sum(money_loan) as up, count(*) as noa')->from('units_repayments')
-			->where('id_unit', $idUnit)
-			->where('date_repayment', $today)->get()->row();
+						 ->where('id_unit', $idUnit)
+						 ->where('date_repayment', $today)->get()->row();
+
 		$cicilan = $this->db->select('count(*) as noa, sum(amount) as up')
 					->from('units_repayments_mortage')
 					->where('id_unit', $idUnit)
 					->where('date_kredit', $today)
-					->get()->row();				
+					->get()->row();		
+
 		return (object)array(
 			'mortage' => array(
 				'noa'	=> (int) $cicilan->noa,
@@ -114,16 +122,22 @@ class RegularpawnsModel extends Master
 	public function getRepaymentToday($idUnit, $today)
 	{
 		$data = $this->db->select('sum(money_loan) as up, count(*) as noa')->from('units_repayments')
-			->where('id_unit', $idUnit)
-			->where('date_repayment', $today)->get()->row();
+						 ->where('id_unit', $idUnit)
+						 ->where('date_repayment', $today)->get()->row();
+
 		$cicilan = $this->db->select('count(*) as noa, sum(amount) as up')
-					->from('units_repayments_mortage')
-					->where('id_unit', $idUnit)
-					->where('date_kredit', $today)
-					->get()->row();				
+							->from('units_repayments_mortage')
+							->where('id_unit', $idUnit)
+							->where('date_kredit', $today)
+							->get()->row();		
+
 		return (object)array(
 			'noa' => (int)$data->noa+$cicilan->noa,
 			'up' => (int)$data->up+$cicilan->up,
+			'noa_regular' => (int)$data->noa+$cicilan->noa,
+			'up_regular' => (int)$data->up+$cicilan->up,
+			'noa_mortages' => (int)$data->noa+$cicilan->noa,
+			'up_mortages' => (int)$data->up+$cicilan->up
 		);
 	}
 

@@ -23,7 +23,7 @@
             </tr>
             <tr bgcolor="#cccccc">
             <td rowspan="2" align="center"  width="20">No</td>
-            <td rowspan="2" align="center" width="120">Unit</td>
+            <td rowspan="2" align="left" width="120">Unit</td>
             <!-- <td rowspan="2" align="center" width="25">Open</td>
             <td rowspan="2" align="center" width="20">OJK</td> -->
             <td colspan="2" align="center" width="120">OST Sebelumnya(<?php echo $dateLastOST;?>)</td>
