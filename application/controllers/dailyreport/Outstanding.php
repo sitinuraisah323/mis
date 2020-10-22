@@ -65,7 +65,9 @@ class Outstanding extends Authenticated
 		$pdf->writeHTML($view);
 
 		$pdf->AddPage('L');
-		$view = $this->load->view('dailyreport/outstanding/saldo.php',['saldo'	=> $this->saldounit()],true);
+		$view = $this->load->view('dailyreport/outstanding/saldo.php',[
+			'saldo'	=> $this->saldounit($this->datetrans()),
+			'datetrans'=> $this->datetrans()],true);
 		$pdf->writeHTML($view);
 
 		$pdf->AddPage('L');
@@ -291,7 +293,7 @@ class Outstanding extends Authenticated
 		return $result;
 	}
 
-	public function saldounit()
+	public function saldounit($date)
 	{
 		if($area = $this->input->get('area')){
 			$this->units->db->where('id_area', $area);
@@ -306,11 +308,27 @@ class Outstanding extends Authenticated
 
 		$this->units->db
 			->select('id_unit, name, amount,areas.area, cut_off,( (
-				select (sum(CASE WHEN type = "CASH_IN" THEN `amount` ELSE 0 END) - sum(CASE WHEN type = "CASH_OUT" THEN `amount` ELSE 0 END))
-				from units_dailycashs
-				where units_dailycashs.id_unit = units_saldo.id_unit
-				and units_dailycashs.date > units_saldo.cut_off
+				select (sum(CASE WHEN s.type = "CASH_IN" THEN `amount` ELSE 0 END) - sum(CASE WHEN s.type = "CASH_OUT" THEN `amount` ELSE 0 END))
+				from units_dailycashs as s
+				where s.id_unit = units_saldo.id_unit
+				and s.date > units_saldo.cut_off
 			) + units_saldo.amount )as amount')
+			->select('( (
+				select (sum(CASE WHEN s.type = "CASH_IN" THEN `amount` ELSE 0 END) - sum(CASE WHEN s.type = "CASH_OUT" THEN `amount` ELSE 0 END))
+				from units_dailycashs as s
+				where s.id_unit = units_saldo.id_unit
+				and s.date > units_saldo.cut_off
+				and s.date <= "'.date('Y-m-d', strtotime($date.' -1 days')).'"
+			) + units_saldo.amount )as amount1'
+			)
+			->select('( (
+				select (sum(CASE WHEN s.type = "CASH_IN" THEN `amount` ELSE 0 END) - sum(CASE WHEN s.type = "CASH_OUT" THEN `amount` ELSE 0 END))
+				from units_dailycashs as s
+				where s.id_unit = units_saldo.id_unit
+				and s.date > units_saldo.cut_off
+				and s.date <= "'.date('Y-m-d', strtotime($date.' -2 days')).'"
+			) + units_saldo.amount )as amount2'
+			)
 			->DISTINCT ('id_unit')
 			->from('units_saldo')			
 			->join('units','units.id = units_saldo.id_unit')
