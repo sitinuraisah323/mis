@@ -831,15 +831,11 @@ class Loaninstallments extends ApiController
 						'id_unit'			=> $unit,
 						'no_sbk'			=> zero_fill($repmortage['B'], 5),
 						'date_kredit'		=> date('Y-m-d', strtotime($repmortage['C'])),
-						'date_installment'	=> date('Y-m-d', strtotime($repmortage['P'])),
 						'amount'			=> $repmortage['I'],
-						'capital_lease'		=> $repmortage['K'],
-						'fine'				=> $repmortage['L'],
-						'saldo'				=> $repmortage['M'],
 						'permit'			=> $jok
 					))){
-						$data['id'] = $findrepaymentmortage->id;
-						$bathUpdate[]	= $data;
+						//$data['id'] = $findrepaymentmortage->id;
+						//$bathUpdate[]	= $data;
 					}else{
 						$bathInsert[] = $data;
 					}
