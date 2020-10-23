@@ -21,12 +21,12 @@
 			<td width="5%" align="center"> <?php echo $no;?></td>
 			<td width="20%" align="left"> <?php echo $data->name;?></td>
 			<td width="20%" align="left"> <?php echo $data->area;?></td>
-			<td width="20%" align="right"> <?php echo number_format($data->target->booking,0);?> </td>
-			<td width="20%" align="right"> <?php echo number_format($data->target->up,0);?> </td>
-			<td width="15%" align="center"> <?php echo $data->target->persentase ? $data->target->persentase * 100 : 0;?> </td>
-            <?php $totalCredit +=$data->target->booking; ?>
-            <?php $totalUp +=$data->target->up; ?>
-            <?php $totalPersent +=$data->target->persentase; ?>
+			<td width="20%" align="right"> <?php echo number_format($data->booking,0);?> </td>
+			<td width="20%" align="right"> <?php echo number_format($data->up,0);?> </td>
+			<td width="15%" align="center"> <?php echo $data->persentase ? round($data->persentase * 100) : 0;?> </td>
+            <?php $totalCredit +=$data->booking; ?>
+            <?php $totalUp +=$data->up; ?>
+            <?php $totalPersent +=$data->persentase; ?>
 		</tr>
 	<?php endforeach ?>
     <tr>

@@ -29,6 +29,52 @@ class Outstanding extends Authenticated
 		$this->load->model('UnitsdailycashModel','dailycash');
 	}
 
+	public function target($date)
+	{		
+		$this->units->db
+					->select('units.id, units.name, area')
+					->select('(
+						select COALESCE(t.amount_booking,0) from units_targets t where units.id = t.id_unit
+						and month = "'.date('n', strtotime($date)).'"
+						and year = "'.date('Y', strtotime($date)).'"
+						limit 1
+					) as up')
+					->select('
+					(
+						(
+							(
+								select COALESCE(sum(amount),0) from units_regularpawns ur where ur.id_unit = units.id
+								and year(date_sbk) = "'.date('Y', strtotime($date)).'"
+								and month(date_sbk) = "'.date('n', strtotime($date)).'"
+							) +
+							(
+								select COALESCE(sum(amount_loan),0) from units_mortages um where um.id_unit = units.id
+								and year(date_sbk) = "'.date('Y', strtotime($date)).'"
+								and month(date_sbk) = "'.date('n', strtotime($date)).'"
+							)
+						) /						
+						(select COALESCE(t.amount_booking,0) from units_targets t where units.id = t.id_unit
+						and month = "'.date('n', strtotime($date)).'"
+						and year = "'.date('Y', strtotime($date)).'"
+						limit 1)
+					) as persentase')
+					->select('(
+						(
+							select COALESCE(sum(amount),0) from units_regularpawns ur where ur.id_unit = units.id
+							and year(date_sbk) = "'.date('Y', strtotime($date)).'"
+							and month(date_sbk) = "'.date('n', strtotime($date)).'"
+						) +
+						(
+							select COALESCE(sum(amount_loan),0) from units_mortages um where um.id_unit = units.id
+							and year(date_sbk) = "'.date('Y', strtotime($date)).'"
+							and month(date_sbk) = "'.date('n', strtotime($date)).'"
+						)
+					) as booking')
+					->join('areas','areas.id = units.id_area')
+					->order_by('booking', 'desc');
+		return $this->units->db->get('units')->result();
+	}
+
 	/**
 	 * Welcome Index()
 	 */
@@ -49,7 +95,7 @@ class Outstanding extends Authenticated
 		
 
 		$pdf->AddPage('L');
-		$view = $this->load->view('dailyreport/outstanding/target.php',['data'=>$os,'datetrans'=> $this->datetrans()],true);
+		$view = $this->load->view('dailyreport/outstanding/target.php',['data'=>$this->target($this->datetrans()),'datetrans'=> $this->datetrans()],true);
 		$pdf->writeHTML($view);
 
 		// $pdf->AddPage('L');
@@ -401,13 +447,7 @@ class Outstanding extends Authenticated
 			}else{
 				$target = 0;
 			}
-			$booking =  $this->mortages->unitMontly($unit->id,  date('n', strtotime($date)), date('Y', strtotime($date)))->up + $this->regular->unitMontly($unit->id, date('n', strtotime($date)), date('Y', strtotime($date)))->up;
-
-			$unit->target = (object) array(
-				'up'	=> $target,
-				'booking'	=> $booking,
-				'persentase'	=> $target ? round($booking / $target,2) : 0
-			); 
+		
 	
 			$unit->total_outstanding = (object) array(
 				'noa'	=> $totalNoa,
