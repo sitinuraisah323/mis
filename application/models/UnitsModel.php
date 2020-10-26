@@ -67,25 +67,25 @@ class UnitsModel extends Master
 		}
 		return $this->db->select("units.id, units.name, area,
 			(
-				select sum(amount) from units_regularpawns where capital_lease < 0.015
+				select sum(amount) from units_regularpawns where capital_lease <= 0.014
 				and units_regularpawns.id_unit = units.id
 				and units_regularpawns.status_transaction = 'N'
 				and amount != 0
 			) as small_then_up ,
 			(
-				select count(distinct(amount)) from units_regularpawns where capital_lease < 0.015
+				select count(distinct(amount)) from units_regularpawns where capital_lease <= 0.014
 				and units_regularpawns.id_unit = units.id
 				and units_regularpawns.status_transaction = 'N'
 				and  amount != 0
 			) as small_then_noa ,
 			(
-				select sum(amount) from units_regularpawns where capital_lease >= 0.015
+				select sum(amount) from units_regularpawns where capital_lease >= 0.014
 				and units_regularpawns.id_unit = units.id
 				and units_regularpawns.status_transaction = 'N'
 				and  amount != 0
 			) as bigger_then_up ,
 			(
-				select count(distinct(amount)) from units_regularpawns where capital_lease >= 0.015
+				select count(distinct(amount)) from units_regularpawns where capital_lease >= 0.014
 				and units_regularpawns.id_unit = units.id
 				and units_regularpawns.status_transaction = 'N'
 				and  amount != 0

@@ -172,6 +172,7 @@ function initCariForm(){
                             template += "<td class='text-center'>-</td>";
                         }
                         template += '</tr>';
+                        console.log(data);
                         if(data.bapkas!=null){
                             amountIn += parseInt(data.bapkas.amount_in);
                             amountOut += parseInt(data.bapkas.amount_out);
@@ -181,15 +182,6 @@ function initCariForm(){
                             osreg += parseInt(data.bapkas.os_unit);
                             osnonreg += parseInt(oscicilan);
                             totos += parseInt(data.bapkas.os_unit)+parseInt(oscicilan);
-                        }else{
-                            amountIn = 0;
-                            amountOut = 0;
-                            amountBalanceFinal =0;
-                            amountGap = 0;
-                            amountBalanceFirst = 0;
-                            osreg = 0;
-                            osnonreg = 0;
-                            totos = 0;
                         }
                         no++;
 					});

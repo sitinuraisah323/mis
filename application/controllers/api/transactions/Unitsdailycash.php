@@ -427,6 +427,7 @@ class Unitsdailycash extends ApiController
 
 		$this->saldo->db
 			->select('sum(amount) as amount, cut_off')
+			->select('units.name')
 			->from('units_saldo')
 			->group_by('cut_off')
 			->join('units','units.id = units_saldo.id_unit');
@@ -466,6 +467,7 @@ class Unitsdailycash extends ApiController
 
 		$data = (object) array(
 			'id'	=> 0,
+			'name'	=> $getSaldo->name,
 			'id_unit' => $this->input->get('id_unit') ? $this->input->get('id_unit') : 0,
 			'no_perk'	=> 0,
 			'date'	=> '',
@@ -486,7 +488,9 @@ class Unitsdailycash extends ApiController
 				$this->unitsdailycash->db->where('id_area', $get['area']);
 			}
 		}
-		$this->unitsdailycash->db->join('units','units.id = units_dailycashs.id_unit');
+		$this->unitsdailycash->db
+			->select('units.name')
+			->join('units','units.id = units_dailycashs.id_unit');
 		$getCash = $this->unitsdailycash->all();
 		array_unshift( $getCash, $data);
 		echo json_encode(array(

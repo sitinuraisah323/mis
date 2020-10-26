@@ -29,7 +29,7 @@
 		</tr>
 	<?php endforeach ?>
     <tr>
-    <td width="25%" align="right">Total</td>
+    <td width="45%" align="right">Total</td>
     <td width="20%" align="right"><?php echo number_format($total2,0); ?></td>
     <td width="20%" align="right"><?php echo number_format($total1,0); ?></td>
     <td width="20%" align="right"><?php echo number_format($total,0); ?></td>
