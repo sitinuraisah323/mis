@@ -105,10 +105,10 @@
                 <td align="right"><?php echo number_format($totalRepaymentTodayUp,0); ?></td>
                 <td align="center"><?php echo $totalOstNoa; ?></td>
                 <td align="right"><?php echo number_format($totalOstUp,0); ?></td>
-                <td align="right"><?php echo number_format($totalOstTicket,0); ?></td>
+                <td align="right"><?php echo number_format(round($totalOstUp/$totalOstNoa),0); ?></td>
                 <td align="center"><?php echo $totalDisbureNoa; ?></td>
                 <td align="right"><?php echo number_format($totalDisbureUp,0); ?></td>
-                <td align="right"><?php echo number_format($totalDisbureTicket,0); ?></td>
+                <td align="right"><?php echo number_format(round($totalDisbureUp/$totalDisbureNoa),0); ?></td>
             </tr>
            </table>
 
@@ -216,10 +216,10 @@
                 <td align="right"><?php echo number_format($totalRepaymentTodayUp,0); ?></td>
                 <td align="center"><?php echo $totalOstNoa; ?></td>
                 <td align="right"><?php echo number_format($totalOstUp,0); ?></td>
-                <td align="right"><?php echo number_format($totalOstTicket,0); ?></td>
+                <td align="right"><?php echo number_format(round($totalOstUp/$totalOstNoa),0); ?></td>
                 <td align="center"><?php echo $totalDisbureNoa; ?></td>
                 <td align="right"><?php echo number_format($totalDisbureUp,0); ?></td>
-                <td align="right"><?php echo number_format($totalDisbureTicket,0); ?></td>
+                <td align="right"><?php echo number_format(round($totalDisbureUp/$totalDisbureNoa),0); ?></td>
             </tr>
 </table>
 
@@ -327,10 +327,10 @@
                 <td align="right"><?php echo number_format($totalRepaymentTodayUp,0); ?></td>
                 <td align="center"><?php echo $totalOstNoa; ?></td>
                 <td align="right"><?php echo number_format($totalOstUp,0); ?></td>
-                <td align="right"><?php echo number_format($totalOstTicket,0); ?></td>
+                <td align="right"><?php echo number_format(round($totalOstUp/$totalOstNoa),0); ?></td>
                 <td align="center"><?php echo $totalDisbureNoa; ?></td>
                 <td align="right"><?php echo number_format($totalDisbureUp,0); ?></td>
-                <td align="right"><?php echo number_format($totalDisbureTicket,0); ?></td>
+                <td align="right"><?php echo number_format(round($totalDisbureUp/$totalDisbureNoa),0); ?></td>
             </tr>
 </table>
 
@@ -438,10 +438,10 @@
                 <td align="right"><?php echo number_format($totalRepaymentTodayUp,0); ?></td>
                 <td align="center"><?php echo $totalOstNoa; ?></td>
                 <td align="right"><?php echo number_format($totalOstUp,0); ?></td>
-                <td align="right"><?php echo number_format($totalOstTicket,0); ?></td>
+                <td align="right"><?php echo number_format(round($totalOstUp/$totalOstNoa),0); ?></td>
                 <td align="center"><?php echo $totalDisbureNoa; ?></td>
                 <td align="right"><?php echo number_format($totalDisbureUp,0); ?></td>
-                <td align="right"><?php echo number_format($totalDisbureTicket,0); ?></td>
+                <td align="right"><?php echo number_format($totalDisbureUp/$totalDisbureNoa,0); ?></td>
             </tr>
 </table>
             <?php 
@@ -470,9 +470,9 @@
         <td align="right" width="80"><?php echo number_format($totalRepaymentTodayUp_,0); ?></td>
         <td align="center"  width="40"><?php echo $totalOstNoa_; ?></td>
         <td align="right" width="80"><?php echo number_format($totalOstUp_,0); ?></td>
-        <td align="right" width="80"><?php echo number_format($totalOstTicket_,0); ?></td>
+        <td align="right" width="80"><?php echo number_format(round($totalOstUp_/$totalOstNoa_),0); ?></td>
         <td align="center"  width="40"><?php echo $totalDisbureNoa_; ?></td>
         <td align="right" width="80"><?php echo number_format($totalDisbureUp_,0); ?></td>
-        <td align="right" width="80"><?php echo number_format($totalDisbureTicket_,0); ?></td>
+        <td align="right" width="80"><?php echo number_format(round($totalDisbureUp_/$totalDisbureNoa_),0); ?></td>
     </tr>
 </table>
