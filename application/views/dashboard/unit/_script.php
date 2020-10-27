@@ -869,6 +869,7 @@ var KTDashboard = function() {
 
 function initCash(){
     var saldo=0;
+    var saldoselisih=0;
     var outstanding=0;
     var upregular=0;
     var upcicilan=0;
@@ -885,6 +886,8 @@ function initCash(){
         dataType:"JSON",
         success:function(response){
             saldo        = response.data.saldo;
+            saldounit    = response.data.saldounit;
+            saldoselisih = parseInt(response.data.saldo) - parseInt(response.data.saldounit);
             outstanding  = response.data.outstanding;
             dpd          = response.data.dpd;
             upregular    = response.data.upreguler;
@@ -900,13 +903,14 @@ function initCash(){
         },
         complete:function(){
             $('.Outstanding').empty();
-            $('.cash-saldo').text(convertToRupiah(saldo));
+            $('.cash-saldo').text(convertToRupiah(saldoselisih));
             $('.Outstanding').text(convertToRupiah(outstanding));
             $('.upregular').text(convertToRupiah(upregular));
             $('.noareg').text(convertToRupiah(noareg));            
             $('.saldocicilan').text(convertToRupiah(saldocicilan));
             $('.noacicilan').text(convertToRupiah(noaunreg));            
-            //$('.upcicilan').text(convertToRupiah(upcicilan));
+            $('.saldounit').text(convertToRupiah(saldo));
+            $('.saldoghanet').text(convertToRupiah(saldounit));
             $('.dpd-unit').text(convertToRupiah(dpd));
             $('.dpdnoa').text(convertToRupiah(dpdnoa));            
           KTApp.unblock('#form_saldounit .kt-portlet', {}); 

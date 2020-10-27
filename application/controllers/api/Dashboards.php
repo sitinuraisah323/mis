@@ -1026,6 +1026,8 @@ class Dashboards extends ApiController
 					 ->where('id_unit', $idUnit)
 					 ->order_by('id','DESC')->get('units_cash_book')->row();
 
+		$unitsaldo = $this->unitsdailycash->getSaldo($idUnit,$date);
+
 		$regular 	= $this->db->select('SUM(amount) as up,COUNT(*) as noa')
 					 ->from('units_regularpawns')
 					 ->where('status_transaction','N')
@@ -1074,6 +1076,7 @@ class Dashboards extends ApiController
 					->get()->row();
 
 		$data = array("saldo"=>(int) $saldo->amount_balance_final,
+			  		  "saldounit"=>(int) $unitsaldo->saldo,
 					  "outstanding"=>(int) $regular->up + (int) $mortages_ojk->saldocicilan + (int) $mortages_nonojk->saldocicilan,
 					  "upreguler"=>(int) $regular->up,
 					  "noareguler"=>(int) $regular->noa,
