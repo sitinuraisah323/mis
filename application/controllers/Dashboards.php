@@ -471,10 +471,17 @@ class Dashboards extends Authenticated
 				->where('id_unit', $unit->id)
 				->order_by('date','DESC')
 				->get()->row();
-			$unit->ost_yesterday = (object) array(
-				'noa'	=> $getOstYesterday->noa,
-				'up'	=> $getOstYesterday->os
-			);
+			if($getOstYesterday){
+				$unit->ost_yesterday = (object) array(
+					'noa'	=> $getOstYesterday->noa,
+					'up'	=> $getOstYesterday->os
+				);
+			}else{
+				$unit->ost_yesterday = (object) array(
+					'noa'	=> 0,
+					'up'	=> 0,
+				);
+			}
 			$unit->credit_today = $this->regular->getCreditToday($unit->id, $date);
 			$unit->repayment_today = $this->regular->getRepaymentToday($unit->id, $date);
 
@@ -482,7 +489,7 @@ class Dashboards extends Authenticated
 			$totalUp = (int) $unit->ost_yesterday->up + $unit->credit_today->up - $unit->repayment_today->up;
 			$ticketsize = round($totalUp > 0 ? $totalUp /$totalNoa : 0);
 
-			$unit->total_disburse = $this->regular->getTotalDisburse($unit->id);
+			$unit->total_disburse = $this->regular->getTotalDisburse($unit->id, null, null, $date);
 
 			$objPHPExcel->getActiveSheet()->setCellValue('A'.$no, $unit->name);	
 			$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, $unit->area);	
