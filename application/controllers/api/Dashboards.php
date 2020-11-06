@@ -671,7 +671,7 @@ class Dashboards extends ApiController
 								->join('areas','areas.id = units.id_area')
 								->get('units')->result();
 		foreach ($units as $unit){
-			$unit->amount = $this->regular->getTotalDisburse($unit->id, $year, $month, $date)->credit;
+			$unit->amount = $this->regular->getTotalDisburse($unit->id, $year, $month, [$year, $month, $date])->credit;
 		}
 		$this->sendMessage($units, 'Get Data Outstanding');
 	}
