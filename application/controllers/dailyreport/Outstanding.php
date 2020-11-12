@@ -151,6 +151,79 @@ class Outstanding extends Authenticated
 		// $pdf->Output('GHAnet_Summary_'.date('d_m_Y').'.pdf', 'I');
 	}
 
+	public function generatereport()
+	{
+		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		require_once APPPATH.'controllers/pdf/header.php';
+
+		$pdf->AddPage('L', 'A3');
+		$view = $this->load->view('dailyreport/outstanding/generate.php',['outstanding'=> $this->dataoutstanding()],true);
+		$pdf->writeHTML($view);
+
+		//view
+		$pdf->Output('GHAnet_Summary_'.date('d_m_Y').'.pdf', 'I');
+	}
+
+	public function dataoutstanding()
+	{
+
+		//$date = '2020-10-30';
+		$date = date('Y-m-d');
+		$lastdate = $this->regular->getLastDateTransaction()->date;
+		if ($date > $lastdate){
+			$date = $lastdate;
+		}else{
+			$date= $date;
+		}
+
+		$units = $this->units->db->select('units.id, units.name, area')
+							  ->join('areas','areas.id = units.id_area')
+							  ->get('units')->result();
+
+		foreach ($units as $unit){
+			$getOstYesterday = $this->regular->db
+									->where('date <', $date)
+									->from('units_outstanding')
+									->where('id_unit', $unit->id)
+									->order_by('date','DESC')
+									->get()->row();	
+
+			$unit->ost_yesterday = (object) array(
+										'noa_regular'	=> $getOstYesterday->noa_os_regular,
+										'os_regular'	=> $getOstYesterday->os_regular,
+										'noa_mortages'	=> $getOstYesterday->noa_os_mortage,
+										'os_mortages'	=> $getOstYesterday->os_mortage,
+									);						
+
+			$getOstToday 	= $this->regular->db
+									->where('date <=', $date)
+									->from('units_outstanding')
+									->where('id_unit', $unit->id)
+									->order_by('date','DESC')
+									->get()->row();
+			
+			$unit->ost_today = (object) array(
+										'noa_regular'			=> $getOstToday->noa_regular,
+										'up_regular'			=> $getOstToday->up_regular,
+										'noa_repyment_regular'	=> $getOstToday->noa_repyment_regular,
+										'repyment_regular'		=> $getOstToday->repyment_regular,
+										'noa_mortage'			=> $getOstToday->noa_mortage,
+										'up_mortage'			=> $getOstToday->up_mortage,
+										'noa_repayment_mortage'	=> $getOstToday->noa_repayment_mortage,
+										'repayment_mortage'		=> $getOstToday->repayment_mortage,
+									);
+			$totalNoa = (int) ($getOstYesterday->noa_os_regular + $getOstYesterday->noa_os_mortage + $getOstToday->noa_regular + $getOstToday->noa_mortage) - ($getOstToday->noa_repyment_regular + $getOstToday->noa_mortage);
+			$totalUp = (int) ($getOstYesterday->os_regular + $getOstYesterday->os_mortage + $getOstToday->up_regular + $getOstToday->up_mortage) - ($getOstToday->repyment_regular + $getOstToday->repayment_mortage);
+			$unit->disburse = (object) array(
+				'noa'	=> $totalNoa,
+				'up'	=> $totalUp,
+				'tiket'	=> round($totalUp > 0 ? $totalUp /$totalNoa : 0)
+			);
+						
+		}	
+		return $units;
+	}
+
 	public function test(){
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		require_once APPPATH.'controllers/pdf/header.php';

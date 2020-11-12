@@ -126,6 +126,17 @@ $this->load->view('temp/MenuBar.php');
 										<?php endforeach;?>
 									</select>
 								</div>
+
+								<div class="form-group">
+									<label>Group</label>
+									<select  name="group" class="form-control" id="group">
+									<option  value=""></option>
+										<?php foreach ($groups as $row):?>
+											<option value="<?php echo $row->id;?>"><?php echo $row->group;?></option>
+										<?php endforeach;?>
+									</select>
+								</div>
+
 								<div class="form-group d-none">
 									<label>Unit</label>
 									<select  name="id_unit" class="form-control" id="id_unit">

@@ -115,7 +115,7 @@ class Outstanding extends Authenticated
              }
 		}
         
-   }
+   	}
    
    public function cicilan()
 	{
@@ -183,6 +183,62 @@ class Outstanding extends Authenticated
 				'total_pencairan'	=> 'total pencairan'. $totalPencairan.'<br>'
 			)
 		);
+	}
+
+	public function generatereport(){
+
+		if($date = $this->input->get('date')){
+			$date = $date;
+		}else{
+			$date = date('Y-m-d');
+		}
+
+		//$date = '2020-10-27';
+		$totalUp = 0;
+		$totalNoa = 0;
+		$totalPelunasan = 0;
+		$totalPencairan = 0;
+
+		$units = $this->units->db->select('units.id, units.name, area')
+			->join('areas','areas.id = units.id_area')
+			->order_by('units.id','desc')
+			->get('units')->result();
+
+		foreach ($units as $unit){
+			$creditToday 	= $this->regular->getCreditToday($unit->id, $date);
+			$repaymentToday = $this->regular->getRepaymentToday($unit->id, $date);
+			$getOS 			= $this->regular->getOutstanding($unit->id, $date);
+			
+			$transaction = array(
+				//'area'					=> $unit->area,
+				//'unit'					=> $unit->name,
+				'id_unit'				=> $unit->id,
+				'date'					=> $date,
+				//reguler
+				'noa_regular'			=> $creditToday->noa_regular,
+				'up_regular'			=> $creditToday->up_regular,
+				'noa_repyment_regular'	=> $repaymentToday->noa_regular,
+				'repyment_regular'		=> $repaymentToday->up_regular,
+				'noa_os_regular'		=> $getOS->noa_os_regular,
+				'os_regular'			=> $getOS->os_regular,
+				//cicilan
+				'noa_mortage'			=> $creditToday->noa_mortage,
+				'up_mortage'			=> $creditToday->up_mortage,
+				'noa_repayment_mortage'	=> $repaymentToday->noa_mortage,
+				'repayment_mortage'		=> $repaymentToday->up_mortage,
+				'noa_os_mortage'		=> $getOS->noa_os_mortage,
+				'os_mortage'			=> $getOS->os_mortage,
+			);
+
+			echo "<pre/>";
+			print_r($transaction);
+			$check = $this->db->get_where('units_outstanding',array('id_unit' => $unit->id,'date'=>$date));
+			if($check->num_rows() > 0){
+				$this->db->update('units_outstanding', $transaction, array('id_unit' => $unit->id,'date'=>$date));
+			}else{
+				$this->db->insert('units_outstanding', $transaction);
+			}
+		}
 	}
 
 }

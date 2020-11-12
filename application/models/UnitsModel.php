@@ -8,8 +8,9 @@ class UnitsModel extends Master
 
 	public function get_units()
 	{
-		$this->db->select('a.id,a.date_open, b.area,a.name,a.code,a.status,a.date_create,a.date_update,a.user_create,a.user_update');		
+		$this->db->select('a.id,a.date_open,c.group,b.area,a.name,a.code,a.status,a.date_create,a.date_update,a.user_create,a.user_update');		
 		$this->db->join('areas as b','b.id=a.id_area');		
+		$this->db->join('groups as c','c.id=a.id_group','left');		
 		$this->db->order_by('a.id','desc');		
 		return $this->db->get('units as a')->result();
 	}

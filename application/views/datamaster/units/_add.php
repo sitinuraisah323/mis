@@ -11,7 +11,7 @@
                 <form action="#" id="form_add" class="form-horizontal">
                     <div class="form-body">
                         <div class="row"> 
-                        <div class="col-md-12">
+                            <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Area</label>
                                     <select class="form-control select2" name="area" id="add_area">
@@ -19,6 +19,21 @@
                                         if (!empty($areas)){
                                             foreach($areas as $row){
                                                echo "<option value=".$row->id.">".$row->area."</option>";
+                                            }
+                                        }
+                                    ?>
+                                    </select>
+                                </div>
+                            </div> 
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Group</label>
+                                    <select class="form-control select2" name="group" id="add_group">
+                                    <?php 
+                                        if (!empty($groups)){
+                                            foreach($groups as $row){
+                                               echo "<option value=".$row->id.">".$row->group."</option>";
                                             }
                                         }
                                     ?>

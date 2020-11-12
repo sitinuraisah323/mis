@@ -86,12 +86,12 @@ class RegularpawnsModel extends Master
 			->where('date_sbk', $today)->get()->row();
 
 		return (object)array(
-			'noa' => $noaMortages->noa + $noaRegular->noa,
-			'up' => $upRegular->up + $upaMortages->up,
-			'noa_reguler' => $noaRegular->noa,
-			'up_reguler' => $upRegular->up,
-			'noa_mortages' =>(int) $noaMortages->noa,
-			'up_mortages' => (int) $upaMortages->up
+			'noa' 			=> $noaMortages->noa + $noaRegular->noa,
+			'up' 			=> $upRegular->up + $upaMortages->up,
+			'noa_regular' 	=> (int) $noaRegular->noa,
+			'up_regular' 	=> (int) $upRegular->up,
+			'noa_mortage' 	=> (int) $noaMortages->noa,
+			'up_mortage' 	=> (int) $upaMortages->up
 		);
 	}
 
@@ -132,12 +132,12 @@ class RegularpawnsModel extends Master
 							->get()->row();		
 
 		return (object)array(
-			'noa' => (int)$data->noa+$cicilan->noa,
-			'up' => (int)$data->up+$cicilan->up,
-			'noa_regular' => (int)$data->noa+$cicilan->noa,
-			'up_regular' => (int)$data->up+$cicilan->up,
-			'noa_mortages' => (int)$data->noa+$cicilan->noa,
-			'up_mortages' => (int)$data->up+$cicilan->up
+			'noa' 			=> (int)$data->noa+$cicilan->noa,
+			'up' 			=> (int)$data->up+$cicilan->up,
+			'noa_regular' 	=> (int)$data->noa,
+			'up_regular' 	=> (int)$data->up,
+			'noa_mortage' 	=> (int)$cicilan->noa,
+			'up_mortage' 	=> (int)$cicilan->up
 		);
 	}
 
@@ -176,6 +176,31 @@ class RegularpawnsModel extends Master
 							"noaReg"=>(int) $regular->noa,
 							"outnonReg"=>(int) $mortages->saldocicilan,
 							"noanonReg"=>(int) $mortages->noa);		
+	}
+
+	public function getOutstanding($idUnit, $today)
+	{
+		$regular 	= $this->db->select('SUM(amount) as up,COUNT(*) as noa')
+					 ->from('units_regularpawns')
+					 ->where('status_transaction','N')
+					 ->where('id_unit',$idUnit)
+					 ->where('date_sbk <=',$today)
+					 ->get()->row();					 
+
+		$mortages = $this->db->select('SUM(amount_loan) AS up,SUM(amount_loan - (SELECT COUNT(DISTINCT(date_kredit)) FROM units_repayments_mortage WHERE units_repayments_mortage.no_sbk =units_mortages.no_sbk AND units_repayments_mortage.id_unit =units_mortages.id_unit) * installment) AS saldocicilan,COUNT(*) AS noa')
+						->from('units_mortages')
+						->join('customers','units_mortages.id_customer = customers.id')			
+						->where('units_mortages.status_transaction ','N')
+						->where('units_mortages.id_unit ', $idUnit)						
+						->where('date_sbk <=',$today)
+						->get()->row();	
+
+			return (object)array(
+							"noa_os_regular"	=>(int) $regular->noa,
+							"os_regular"		=>(int) $regular->up,
+							"noa_os_mortage"	=>(int) $mortages->noa,
+							"os_mortage"		=>(int) $mortages->saldocicilan
+						);
 	}
 
 	public function getUpByDate($idUnit, $date)

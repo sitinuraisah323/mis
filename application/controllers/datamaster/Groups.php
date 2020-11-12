@@ -1,13 +1,13 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once APPPATH.'controllers/Middleware/Authenticated.php';
-class Units extends Authenticated
+class Groups extends Authenticated
 {
 	/**
 	 * @var string
 	 */
 
-	public $menu = 'Units';
+	public $menu = 'Groups';
 
 	/**
 	 * Welcome constructor.
@@ -16,10 +16,7 @@ class Units extends Authenticated
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('UnitsModel', 'units');
-		$this->load->model('AreasModel', 'areas');
 		$this->load->model('GroupsModel', 'groups');
-
 	}
 
 	/**
@@ -27,9 +24,7 @@ class Units extends Authenticated
 	 */
 	public function index()
 	{
-        $data['areas'] = $this->areas->all();
-        $data['groups'] = $this->groups->all();
-		$this->load->view('datamaster/units/index',$data);
+		$this->load->view('datamaster/groups/index');
 	}
 
 }

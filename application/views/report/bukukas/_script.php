@@ -96,12 +96,14 @@ function initCariForm(){
 
     $('#area').select2({ placeholder: "Please select a area", width: '100%' });
     $('#unit').select2({ placeholder: "Please select a Unit", width: '100%' });
+    $('#permit').select2({ placeholder: "Please select a Permit", width: '100%' });
 
     //events
     $('#btncari').on('click',function(){
         $('.rowappend').remove();
         var area = $('[name="area"]').val();
         var unit = $('[name="id_unit"]').val();
+        var permit = $('[name="permit"]').val();
 		var dateStart = $('[name="date-start"]').val();
 		var dateEnd = $('[name="date-end"]').val();
         KTApp.block('#form_bukukas .kt-portlet__body', {});
@@ -109,7 +111,7 @@ function initCariForm(){
 			type : 'GET',
 			url : "<?php echo base_url("api/transactions/unitsdailycash/reportsaldoawal"); ?>",
 			dataType : "json",
-			data:{id_unit:unit,dateStart:dateStart,dateEnd:dateEnd, area:area},
+			data:{id_unit:unit,permit:permit,dateStart:dateStart,dateEnd:dateEnd, area:area},
 			success : function(response,status){
 				KTApp.unblockPage();
 				console.log(response.data);
@@ -153,7 +155,7 @@ function initCariForm(){
 					});
 
                     template += '<tr class="rowappend">';
-                    template +='<td colspan="6" class="text-right"><b>Total</b></td>';                    
+                    template +='<td colspan="7" class="text-right"><b>Total</b></td>';                    
                     template +='<td class="text-right"><b>'+convertToRupiah(TotSaldoIn)+'</b></td>';
                     template +='<td class="text-right"><b>'+convertToRupiah(TotSaldoOut)+'</b></td>';
                     template +='<td class="text-right"><b>'+convertToRupiah(currentSaldo)+'</b></td>';

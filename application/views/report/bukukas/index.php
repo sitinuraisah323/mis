@@ -92,8 +92,8 @@ $this->load->view('temp/MenuBar.php');
 						</select>
                     </div>
                 <?php else:?>
+                   <div class="col-lg-2">
                     <label class="col-form-label">Area</label>
-                    <div class="col-lg-2">
                         <select class="form-control select2" name="area" id="area">
                             <option value="0">All</option>
                             <?php
@@ -105,21 +105,32 @@ $this->load->view('temp/MenuBar.php');
                             ?>
                         </select>
                     </div>                    
-					<label class="col-form-label">Unit</label>
                     <div class="col-lg-2">
+                    <label class="col-form-label">Unit</label>
 						<select class="form-control select2" name="id_unit" id="unit">
 							<option value="0">All</option>
 						</select>
                     </div>
                 <?php endif ;?>
-                    <label class="col-lg-1 col-form-label">Tanggal</label>
+                    <div class="col-lg-2">
+						<label class="col-form-label">Status</label>
+						<select class="form-control" name="permit">
+							<?php foreach (array('All' => 'All','OJK' => 'OJK','NON-OJK'=>'NON OJK') as $key => $value):?>
+								<option value="<?php echo $key;?>"><?php echo $value;?></option>
+							<?php endforeach;?>
+						</select>
+					</div>
+                    
 					<div class="col-lg-2">
+                        <label class="col-lg-1 col-form-label">Tanggal</label>
 						<input type="date" class="form-control" name="date-start" value="<?php echo date('Y-m-01');?>">
 					</div>
 					<div class="col-lg-2">
+                        <label class="col-lg-1 col-form-label">&nbsp</label>
 						<input type="date" class="form-control" name="date-end" value="<?php echo date('Y-m-d');?>">
 					</div>
-                    <div class="col-lg-1">
+                    <div class="col-lg-2">
+                        <label class="col-lg-1 col-form-label">&nbsp&nbsp</label>
                         <button type="button" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>
                         <button type="submit" class="btn btn-danger btn-icon" name="btnexport_csv" id="btnexport_csv"><i class="fa fa-file-excel"></i></button>
                     </div>

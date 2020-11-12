@@ -192,6 +192,14 @@
 											</a>
 										</li>
 									<?php endif;?>
+									<?php if(read_access('datamaster/groups')):?>
+										<li class="kt-menu__item "  aria-haspopup="true">
+											<a  href="<?php echo base_url('datamaster/groups'); ?>" class="kt-menu__link ">
+												<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>
+												<span class="kt-menu__link-text">Group</span>
+											</a>
+										</li>
+									<?php endif;?>
 									<?php if(read_access('datamaster/areas')):?>
 										<li class="kt-menu__item "  aria-haspopup="true">
 											<a  href="<?php echo base_url('datamaster/areas'); ?>" class="kt-menu__link ">
