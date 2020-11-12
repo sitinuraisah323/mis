@@ -299,17 +299,37 @@
 														</a>
 													</li>
 												<?php endif;?>
-												<?php if(read_access('datamaster/stocks')):?>
-													<li class="kt-menu__item "  aria-haspopup="true">
-														<a  href="<?php echo base_url('datamaster/stocks'); ?>" class="kt-menu__link ">
-															<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
-															<span class="kt-menu__link-text">stocks</span>
+												<li class="kt-menu__item  kt-menu__item--submenu"  data-ktmenu-submenu-toggle="hover" aria-haspopup="true">
+														<a  href="javascript:;" class="kt-menu__link kt-menu__toggle">
+													<span class="kt-menu__link-icon">
+													<i class="fa fa-copy"><span></span></i>
+													</span>
+															<span class="kt-menu__link-text">Stocks</span><i class="kt-menu__hor-arrow la la-angle-right"></i><i class="kt-menu__ver-arrow la la-angle-right"></i>
 														</a>
+														<div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--right">
+															<ul class="kt-menu__subnav">
+																<?php if(read_access('datamaster/stocks')):?>
+																	<li class="kt-menu__item "  aria-haspopup="true">
+																		<a  href="<?php echo base_url('datamaster/stocks/'); ?>" class="kt-menu__link ">
+																			<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+																			<span class="kt-menu__link-text">Transaksi</span>
+																		</a>
+																	</li>
+																<?php endif;?>
+																<?php if(read_access('datamaster/stocks/grams')):?>
+																	<li class="kt-menu__item "  aria-haspopup="true">
+																		<a  href="<?php echo base_url('datamaster/stocks/grams'); ?>" class="kt-menu__link ">
+																			<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+																			<span class="kt-menu__link-text">Gram</span>
+																		</a>
+																	</li>
+																<?php endif;?>
+															</ul>
+														</div>
 													</li>
-												<?php endif;?>
-											</ul>
-										</div>
-									</li>
+															</ul>
+														</div>
+													</li>
 
 									<?php if(read_access('datamaster/users')):?>
 										<li class="kt-menu__item "  aria-haspopup="true">
@@ -371,8 +391,36 @@
 												<span class="kt-menu__link-text">BAP kas</span>
 											</a>
 										</li>
-									<?php endif;?>									
-
+									<?php endif;?>		
+																
+									<li class="kt-menu__item  kt-menu__item--submenu"  data-ktmenu-submenu-toggle="hover" aria-haspopup="true">
+										<a  href="javascript:;" class="kt-menu__link kt-menu__toggle">
+									<span class="kt-menu__link-icon">
+									<i class="fa fa-copy"><span></span></i>
+									</span>
+											<span class="kt-menu__link-text">Logam Mulia</span><i class="kt-menu__hor-arrow la la-angle-right"></i><i class="kt-menu__ver-arrow la la-angle-right"></i>
+										</a>
+										<div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--right">
+											<ul class="kt-menu__subnav">											
+												<?php if(read_access('transactions/stocks')):?>
+													<li class="kt-menu__item "  aria-haspopup="true">
+														<a  href="<?php echo base_url('transactions/stocks'); ?>" class="kt-menu__link ">
+															<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+															<span class="kt-menu__link-text">Transaksi</span>
+														</a>
+													</li>
+												<?php endif;?>	
+												<?php if(read_access('transactions/stocks/grams')):?>
+													<li class="kt-menu__item "  aria-haspopup="true">
+														<a  href="<?php echo base_url('transactions/stocks/grams'); ?>" class="kt-menu__link ">
+															<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+															<span class="kt-menu__link-text">Grams</span>
+														</a>
+													</li>
+												<?php endif;?>	
+											</ul>
+										</div>
+									</li>		
 								</ul>
 							</div>
 						</li>
@@ -706,7 +754,7 @@
 									<li class="kt-menu__item "  aria-haspopup="true">
 										<a  href="<?php echo base_url('lm/grams'); ?>" class="kt-menu__link ">
 											<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>
-											<span class="kt-menu__link-text">Logam Mulya</span>
+											<span class="kt-menu__link-text">Logam Mulia</span>
 										</a>
 									</li>
 									<li class="kt-menu__item "  aria-haspopup="true">

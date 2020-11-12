@@ -15,6 +15,8 @@ $this->load->view('temp/MenuBar.php');
 	</div>
 	<!--begin::Form-->
 	<form class="kt-form form-input">
+	<input type="hidden" name="id_unit" value="<?php echo $this->session->userdata('user')->id_unit;?>">
+			
 		<div class="kt-portlet__body">
 		   <div class="row">
 		   		<div class="col-md-12">

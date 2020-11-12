@@ -12,7 +12,7 @@ $this->load->view('temp/MenuBar.php');
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container ">
         <div class="kt-subheader__main">            
-            <h3 class="kt-subheader__title">Data Master</h3>            
+            <h3 class="kt-subheader__title">Transaction</h3>            
             <span class="kt-subheader__separator kt-subheader__separator--v"></span>            
             <span class="kt-subheader__desc">Stocks</span>
         </div>
@@ -104,7 +104,7 @@ $this->load->view('temp/MenuBar.php');
 </div>
 
 <?php 
-$this->load->view('datamaster/stocks/_add.php');
+$this->load->view('transactions/stocks/_add.php');
 $this->load->view('temp/Footer.php');
-$this->load->view('datamaster/stocks/_script.php');
+$this->load->view('transactions/stocks/_script.php');
 ?>

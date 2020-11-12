@@ -118,9 +118,6 @@ class Transactions extends Authenticated
 		}
 
 		$this->model->db
-			->select('units.name as unit, employees.fullname as name, position')
-			->join('employees','employees.id = lm_transactions.id_employee')
-			->join('units','units.id = employees.id_unit')
 			->order_by('lm_transactions.id','desc');
 		$data = $this->model->all();
 
@@ -128,6 +125,20 @@ class Transactions extends Authenticated
 		$grams = $this->grams->all();
 		if($data){
 			foreach ($data as $datum){
+				if($datum->id_employee){
+					$getEmployee = $this->model->db
+						->select('fullname as name, position, units.name as unit')
+						->from('employees')
+						->join('units','units.id = employees.id_unit')
+						->where('employees.id',$datum->id_employee)
+						->get()->row();
+					$datum->name = $getEmployee->name;
+					$datum->position = $getEmployee->position;
+					$datum->unit = $getEmployee->unit;
+				}else{
+					$datum->position = '';
+					$datum->unit = '';
+				}
 				foreach ($grams as $gram){
 					$find = $this->modelgrams->find(array(
 						'id_lm_transaction'	=> $datum->id,

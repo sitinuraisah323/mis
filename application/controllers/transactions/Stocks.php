@@ -26,7 +26,7 @@ class Stocks extends Authenticated
 	 */
 	public function index()
 	{
-		$this->load->view('datamaster/stocks/index',array(
+		$this->load->view('transactions/stocks/index',array(
 		));
 	}
 
@@ -36,6 +36,7 @@ class Stocks extends Authenticated
 		$date3 = date('Y-m-d', strtotime($this->input->get('date_end').' -2 days'));
 		$date2 = date('Y-m-d', strtotime($this->input->get('date_end').' -1 days'));
 		$date1 = date('Y-m-d', strtotime($this->input->get('date_end')));
+		$idUnit = $this->input->get('id_unit');
 
 		$this->load->library('PHPExcel');
 
@@ -64,9 +65,9 @@ class Stocks extends Authenticated
 		foreach ($grams  as $row)
 		{
 			$objPHPExcel->getActiveSheet()->setCellValue('A'.$no, $row->weight.' grams');
-			$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, $this->stock->byGrams($row->id, $date1));
-			$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, $this->stock->byGrams($row->id, $date1));
-			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no, $this->stock->byGrams($row->id, $date1));
+			$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, $this->stock->byGrams($row->id, $idUnit,$date1));
+			$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, $this->stock->byGrams($row->id,$idUnit, $date1));
+			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no, $this->stock->byGrams($row->id,$idUnit, $date1));
 			$no++;
 		}
 
@@ -84,7 +85,7 @@ class Stocks extends Authenticated
 
 	public function grams()
 	{
-		$this->load->view('datamaster/stocks/grams',array(
+		$this->load->view('transactions/stocks/grams',array(
 		));
 	}
 }

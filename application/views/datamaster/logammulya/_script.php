@@ -123,7 +123,7 @@ function initCariForm(){
 					html += `<td>${buildTenor(tenor, method)}</td>`;
 					grams.forEach(weight=>html += `<td>${weight}</td>`);
 					html += `<td>${convertToRupiah(total)}</td>`
-					html += `<td><a href="<?php echo base_url('datamaster/logammulya/invoice/');?>/${id}"><i class="flaticon-eye"></i> ${code}</a></td>`
+					html += `<td><a href="<?php echo base_url('datamaster/logammulya/invoice');?>/${id}"><i class="flaticon-eye"></i> ${code}</a></td>`
 					html += `<td><select name="change-status" data-code="${code}" class="form-control" onchange="change(this)">`;
 					logs.forEach(log=>{
 						const {item,value}	= log;
