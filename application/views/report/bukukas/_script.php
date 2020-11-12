@@ -111,13 +111,8 @@ function initCariForm(){
 			type : 'GET',
 			url : "<?php echo base_url("api/transactions/unitsdailycash/reportsaldoawal"); ?>",
 			dataType : "json",
-<<<<<<< HEAD
-			data:{id_unit:unit,dateStart:dateStart,dateEnd:dateEnd, area:area},
-			success : function(response){
-=======
 			data:{id_unit:unit,permit:permit,dateStart:dateStart,dateEnd:dateEnd, area:area},
 			success : function(response,status){
->>>>>>> 7102847a008754c90d01a4131a3634b6ef5865a4
 				KTApp.unblockPage();
                 console.log(response.data);
 				if(response.data.length > 0){
