@@ -63,6 +63,7 @@ class Employees extends ApiController
 			$this->form_validation->set_rules('blood_group', 'Golongan Darah', 'required');
 			$this->form_validation->set_rules('address', 'Alamat', 'required');
 			$this->form_validation->set_rules('position', 'Jabatan', 'required');
+			$this->form_validation->set_rules('group', 'Group', 'required');
 
 			if ($this->form_validation->run() == FALSE)
 			{
@@ -75,24 +76,25 @@ class Employees extends ApiController
 			else
 			{
 				$data = array(
-					'marital'	=> $post['marital'],
-					'nik'	=> $post['nik'],
-					'id_unit'	=> array_key_exists("id_unit",$post) ? $post['id_unit'] : '',
-					'fullname'	=> $post['fullname'],
+					'marital'		=> $post['marital'],
+					'nik'			=> $post['nik'],
+					'id_unit'		=> array_key_exists("id_unit",$post) ? $post['id_unit'] : '',
+					'id_group'		=> $post['group'],
+					'fullname'		=> $post['fullname'],
 					'birth_place'	=> $post['birth_place'],
 					'birth_date'	=> $post['birth_date'],
-					'gender'	=> $post['gender'],
-					'mobile'	=> $post['mobile'],
+					'gender'		=> $post['gender'],
+					'mobile'		=> $post['mobile'],
 					'blood_group'	=> $post['blood_group'],
-					'address'	=> $post['address'],
-					'position'	=> $post['position'],
-					'no_rek'	=> $post['no_rek'],
+					'address'		=> $post['address'],
+					'position'		=> $post['position'],
+					'no_rek'		=> $post['no_rek'],
 					'masa_kerja'	=> $post['masa_kerja'],
-					'join_date'	=> $post['join_date'],
+					'join_date'		=> $post['join_date'],
 					'no_employment'	=> $post['no_employment'],
-					'bpjs_tk'	=> $post['bpjs_tk'],
-					'bpjs_kesehatan'	=> $post['bpjs_kesehatan'],
-					'last_education'	=> $post['last_education'],
+					'bpjs_tk'		=> $post['bpjs_tk'],
+					'bpjs_kesehatan'=> $post['bpjs_kesehatan'],
+					'last_education'=> $post['last_education'],
 					'user_create'	=> $this->session->userdata('user')->id,
 					'user_update'	=> $this->session->userdata('user')->id,
 				);
@@ -123,6 +125,7 @@ class Employees extends ApiController
 			$this->form_validation->set_rules('mobile', 'No Hp', 'required');
 			$this->form_validation->set_rules('blood_group', 'Golongan Darah', 'required');
 			$this->form_validation->set_rules('address', 'Alamat', 'required');
+			$this->form_validation->set_rules('group', 'Group', 'required');
 
 			if ($this->form_validation->run() == FALSE)
 			{
@@ -138,6 +141,7 @@ class Employees extends ApiController
 					'id_unit'	=>  array_key_exists("id_unit",$post) ? $post['id_unit'] : '',
 					'fullname'	=> $post['fullname'],
 					'nik'	=> $post['nik'],
+					'id_group'		=> $post['group'],
 					'birth_place'	=> $post['birth_place'],
 					'birth_date'	=> $post['birth_date'],
 					'gender'	=> $post['gender'],

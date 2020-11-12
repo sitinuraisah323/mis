@@ -20,7 +20,7 @@ function initDTEvents(){
                 KTApp.blockPage();
                 $.ajax({
                     type : 'GET',
-                    url : "<?php echo base_url("api/datamaster/units/delete"); ?>",
+                    url : "<?php echo base_url("api/datamaster/groups/delete"); ?>",
                     data : {id:targetId},
                     dataType : "json",
                     success : function(data,status){
@@ -46,7 +46,7 @@ function initDTEvents(){
         KTApp.blockPage();
         $.ajax({
             type : 'GET',
-            url : "<?php echo base_url("api/datamaster/units/get_byid"); ?>",
+            url : "<?php echo base_url("api/datamaster/groups/get_byid"); ?>",
             data : {id:targetId},
             dataType : "json",
             success : function(response,status){
@@ -76,7 +76,7 @@ function initDataTable(){
             type: 'remote',
             source: {
               read: {
-                url: '<?php echo base_url("api/datamaster/units"); ?>',
+                url: '<?php echo base_url("api/datamaster/groups"); ?>',
                 map: function(raw) {
                   // sample data mapping
                   var dataSet = raw;
@@ -107,31 +107,7 @@ function initDataTable(){
             }, 
             {
                 field: 'group',
-                title: 'Groups',
-                sortable: 'asc',
-                textAlign: 'left',
-            },
-            {
-                field: 'area',
-                title: 'Area',
-                sortable: 'asc',
-                textAlign: 'left',
-            }, 
-            {
-                field: 'code',
-                title: 'Code',
-                sortable: 'asc',
-                textAlign: 'left',
-            }, 
-            {
-                field: 'name',
-                title: 'Unit',
-                sortable: 'asc',
-                textAlign: 'left',
-            }, 
-            {
-                field: 'date_open',
-                title: 'Tanggal Buka',
+                title: 'Group',
                 sortable: 'asc',
                 textAlign: 'left',
             }, 
@@ -239,10 +215,7 @@ function initCreateForm(){
     var validator = $( "#form_add" ).validate({
         ignore:[],
         rules: {
-            area: {
-                required: true,
-            },
-            unit: {
+            group: {
                 required: true,
             }
         },
@@ -250,16 +223,6 @@ function initCreateForm(){
             KTUtil.scrollTop();
         }
     });   
-
-    $('#add_area').select2({
-        placeholder: "Please select a Area",
-        width: '100%'
-    });
-
-    $('#add_group').select2({
-        placeholder: "Please select a Group",
-        width: '100%'
-    });
     
     //events
     $("#btn_add_submit").on("click",function(){
@@ -268,7 +231,7 @@ function initCreateForm(){
         KTApp.block('#modal_add .modal-content', {});
         $.ajax({
             type : 'POST',
-            url : "<?php echo base_url("api/datamaster/units/insert"); ?>",
+            url : "<?php echo base_url("api/datamaster/groups/insert"); ?>",
             data : $('#form_add').serialize(),
             dataType : "json",
             success : function(data,status){
@@ -280,9 +243,6 @@ function initCreateForm(){
                 }else{
                     AlertUtil.showFailedDialogAdd(data.message);
                 }                
-            },
-            complete: function(){
-                clearForm()
             },
             error: function (jqXHR, textStatus, errorThrown){
                 KTApp.unblock('#modal_add .modal-content');
@@ -306,24 +266,15 @@ function initEditForm(){
     var validator = $( "#form_edit" ).validate({
         ignore:[],
         rules: {
-            area_name: {
+            group_name: {
                 required: true,
             }
         },
         invalidHandler: function(event, validator) {   
             KTUtil.scrollTop();
         }
-    });  
+    });   
 
-    $('#edit_area').select2({
-        placeholder: "Please select a Area",
-        width: '100%'
-    }); 
-
-    $('#edit_group').select2({
-        placeholder: "Please select a Group",
-        width: '100%'
-    });
     //events
     $("#btn_edit_submit").on("click",function(){
       var isValid = $( "#form_edit" ).valid();
@@ -331,7 +282,7 @@ function initEditForm(){
         KTApp.block('#modal_edit .modal-content', {});
         $.ajax({
             type : 'POST',
-            url : "<?php echo base_url("api/datamaster/units/update"); ?>",
+            url : "<?php echo base_url("api/datamaster/groups/update"); ?>",
             data : $('#form_edit').serialize(),
             dataType : "json",
             success : function(data,status){
@@ -343,9 +294,6 @@ function initEditForm(){
                 }else{
                     AlertUtil.showFailed(data.message);
                 }                
-            },
-            complete: function(){
-                clearForm()
             },
             error: function (jqXHR, textStatus, errorThrown){
                 KTApp.unblock('#modal_edit .modal-content');
@@ -361,20 +309,10 @@ function initEditForm(){
     })
 
     var populateForm = function(groupObject){
-        $("#edit_unit_id").val(groupObject.id);
-        $("#edit_unit_name").val(groupObject.name);
-        $("#edit_code_unit").val(groupObject.code);
-        $("#edit_group").val(groupObject.id_group);
-        $("[name='date_open']").val(groupObject.date_open);
-        $("#edit_group").trigger('change');
-    }
-
-    const  clearForm = function(){
-        $("#edit_unit_id").val('');
-        $("#edit_unit_name").val('');
-        $("#edit_code_unit").val('');
-        $("#edit_area").val('');
-        $("#date_open").val('');
+        $("#edit_group_id").val(groupObject.id);
+        $("#edit_group_name").val(groupObject.group);
+        //$("#edit_group_level").val(groupObject.group_level);
+        //$("#edit_group_level").trigger('change');
     }
     
     return {

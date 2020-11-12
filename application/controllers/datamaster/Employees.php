@@ -20,6 +20,7 @@ class Employees extends Authenticated
 		$this->load->model('UnitsModel', 'units');
 		$this->load->model('LevelsModel', 'levels');
 		$this->load->model('AreasModel', 'areas');
+		$this->load->model('GroupsModel', 'groups');
 	}
 
 	/**
@@ -28,9 +29,10 @@ class Employees extends Authenticated
 	public function index()
 	{
 		$this->load->view('datamaster/employees/index', array(
-			'units'	=> $this->units->all(),
+			'units'		=> $this->units->all(),
 			'levels'	=> $this->levels->all(),
-			'areas'	=> $this->areas->all(),
+			'areas'		=> $this->areas->all(),
+			'groups'	=> $this->groups->all(),
 		));
 	}
 

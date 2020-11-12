@@ -46,7 +46,7 @@
             <td align="center" width="80">Kredit</td>
             <td align="center" width="80">Ticket Size</td>
             </tr>
-            <?php $no=0;
+            <?php $no_=0;
                   $totalNoaOstYesterday = 0;
                   $totalNoaOstToday = 0;
                   $totalUpOstToday = 0;
@@ -59,10 +59,10 @@
                   $totalDisbureNoa = 0;
                   $totalDisbureUp = 0;
                   $totalDisbureTicket = 0;
-            foreach($outstanding as $data): $no++;?>
+            foreach($outstanding as $data): $no_++;?>
             <?php if($data->area=='Jawa Barat'){ ?>
             <tr>
-                <td align="center"><?php echo $no;?></td>
+                <td align="center"><?php echo $no_;?></td>
                 <td align="left"><?php echo $data->name;?></td>
                 <!-- <td align="center">-</td>
                 <td align="center">-</td> -->
@@ -157,7 +157,7 @@
             <td align="center" width="80">Kredit</td>
             <td align="center" width="80">Ticket Size</td>
             </tr>
-            <?php $no=0;
+            <?php $no1=0;
                   $totalNoaOstYesterday = 0;
                   $totalNoaOstToday = 0;
                   $totalUpOstToday = 0;
@@ -170,10 +170,10 @@
                   $totalDisbureNoa = 0;
                   $totalDisbureUp = 0;
                   $totalDisbureTicket = 0;
-            foreach($outstanding as $data): $no++;?>
+            foreach($outstanding as $data): $no1++;?>
             <?php if($data->area=='Jawa Timur'){ ?>
             <tr>
-                <td align="center"><?php echo $no;?></td>
+                <td align="center"><?php echo $no1;?></td>
                 <td align="left"><?php echo $data->name;?></td>
                 <!-- <td align="center">-</td>
                 <td align="center">-</td> -->
@@ -268,7 +268,7 @@
             <td align="center" width="80">Kredit</td>
             <td align="center" width="80">Ticket Size</td>
             </tr>
-            <?php $no=0;
+            <?php $no2=0;
                   $totalNoaOstYesterday = 0;
                   $totalNoaOstToday = 0;
                   $totalUpOstToday = 0;
@@ -281,10 +281,10 @@
                   $totalDisbureNoa = 0;
                   $totalDisbureUp = 0;
                   $totalDisbureTicket = 0;
-            foreach($outstanding as $data): $no++;?>
+            foreach($outstanding as $data): $no2++;?>
             <?php if($data->area=='NTB'){ ?>
             <tr>
-                <td align="center"><?php echo $no;?></td>
+                <td align="center"><?php echo $no2;?></td>
                 <td align="left"><?php echo $data->name;?></td>
                 <!-- <td align="center">-</td>
                 <td align="center">-</td> -->
@@ -379,7 +379,7 @@
             <td align="center" width="80">Kredit</td>
             <td align="center" width="80">Ticket Size</td>
             </tr>
-            <?php $no=0;
+            <?php $no3=0;
                   $totalNoaOstYesterday = 0;
                   $totalNoaOstToday = 0;
                   $totalUpOstToday = 0;
@@ -392,10 +392,10 @@
                   $totalDisbureNoa = 0;
                   $totalDisbureUp = 0;
                   $totalDisbureTicket = 0;
-            foreach($outstanding as $data): $no++;?>
+            foreach($outstanding as $data): $no3++;?>
             <?php if($data->area=='NTT'){ ?>
             <tr>
-                <td align="center"><?php echo $no;?></td>
+                <td align="center"><?php echo $no3;?></td>
                 <td align="left"><?php echo $data->name;?></td>
                 <!-- <td align="center">-</td>
                 <td align="center">-</td> -->

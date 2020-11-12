@@ -484,6 +484,9 @@ class Unitsdailycash extends ApiController
 			if($get['id_unit']!='all' && $get['id_unit'] != 0){
 				$this->unitsdailycash->db->where('id_unit', $get['id_unit']);
 			}
+			if($get['permit']!='All'){
+				$this->unitsdailycash->db->where('permit', $get['permit']);
+			}
 			if($this->input->get('area')){
 				$this->unitsdailycash->db->where('id_area', $get['area']);
 			}
