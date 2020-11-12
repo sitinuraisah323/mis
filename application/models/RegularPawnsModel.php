@@ -218,8 +218,10 @@ class RegularpawnsModel extends Master
 	public function getTotalDisburse($idUnit, $year = null, $month = null, $date = null)
 	{
 
-		if(!is_null($date)){
-			$this->db->where('date_sbk',implode('-',array($year,zero_fill($month,2),$date)));
+		if(is_array($date)){
+			$this->db->where('date_sbk',implode('-',$date));
+		}else if($date){
+			$this->db->where('date_sbk <=',$date);
 		}else{
 			if(!is_null($year)){
 				$this->db->where('YEAR(date_sbk)',$year);
@@ -236,8 +238,10 @@ class RegularpawnsModel extends Master
 	   //var_dump($this->db->last_query());
 	   //exit();
 
-		if(!is_null($date)){
-			$this->db->where('date_sbk',implode('-',array($year,$month,$date)));
+		if(is_array($date)){
+			$this->db->where('date_sbk',implode('-',$date));
+		}else if($date){
+			$this->db->where('date_sbk <=',$date);
 		}else{
 			if(!is_null($year)){
 				$this->db->where('YEAR(date_sbk)',$year);

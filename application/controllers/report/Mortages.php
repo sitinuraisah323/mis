@@ -98,6 +98,9 @@ class Mortages extends Authenticated
 			if($post['status']=="1"){$status=["N"];}
 			if($post['status']=="2"){$status=["L"];}
 			if($post['status']=="3"){$status=[""];} 
+			if($area){
+				$this->mortages->db->where('units.id_area', $area);
+			}
 			$this->mortages->db
 				//->where('units_mortages.date_sbk >=', $post['date-start'])
 				->where('units_mortages.date_sbk <=', $post['date-end'])

@@ -117,10 +117,11 @@ class Bukukas extends Authenticated
 		}
 
 		$this->saldo->db
-			->select('sum(amount) as amount, cut_off')
-			->from('units_saldo')
-			->group_by('cut_off')
-			->join('units','units.id = units_saldo.id_unit');
+				->select('sum(amount) as amount, cut_off')
+				->select('units.name')
+				->from('units_saldo')
+				->group_by('cut_off')
+				->join('units','units.id = units_saldo.id_unit');
 		$getSaldo = $this->saldo->db->get()->row();
 		if($getSaldo){
 			$totalsaldoawal = (int) $getSaldo->amount;
@@ -142,7 +143,7 @@ class Bukukas extends Authenticated
 		}
 
 		if($dateStart){
-			$this->saldo->db->where('date <=', $dateStart);
+			$this->saldo->db->where('date <', $dateStart);
 		}
 
 		$this->unitsdailycash->db
@@ -172,7 +173,7 @@ class Bukukas extends Authenticated
 
 		if($get = $this->input->post()){
 			$this->unitsdailycash->db
-				->where('date >', $get['date-start'])
+				->where('date >=', $get['date-start'])
 				->where('date <=', $get['date-end']);
 			if($get['id_unit']!='all' && $get['id_unit'] != 0){
 				$this->unitsdailycash->db->where('id_unit', $get['id_unit']);

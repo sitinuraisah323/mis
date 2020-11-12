@@ -282,17 +282,41 @@
 											</ul>
 										</div>
 									</li>
-									<li class="kt-menu__item "  aria-haspopup="true">
-										<a  href="<?php echo base_url('datamaster/logammulya'); ?>" class="kt-menu__link ">
-											<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>
-											<span class="kt-menu__link-text">Logam Mulya</span>
+									<li class="kt-menu__item  kt-menu__item--submenu"  data-ktmenu-submenu-toggle="hover" aria-haspopup="true">
+										<a  href="javascript:;" class="kt-menu__link kt-menu__toggle">
+									<span class="kt-menu__link-icon">
+									<i class="fa fa-copy"><span></span></i>
+									</span>
+											<span class="kt-menu__link-text">Logam Mulya</span><i class="kt-menu__hor-arrow la la-angle-right"></i><i class="kt-menu__ver-arrow la la-angle-right"></i>
 										</a>
-									</li>
-									<li class="kt-menu__item "  aria-haspopup="true">
-										<a  href="<?php echo base_url('datamaster/grams'); ?>" class="kt-menu__link ">
-											<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>
-											<span class="kt-menu__link-text">Grams</span>
-										</a>
+										<div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--right">
+											<ul class="kt-menu__subnav">
+												<?php if(read_access('datamaster/grams')):?>
+													<li class="kt-menu__item "  aria-haspopup="true">
+														<a  href="<?php echo base_url('datamaster/grams'); ?>" class="kt-menu__link ">
+															<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+															<span class="kt-menu__link-text">grams</span>
+														</a>
+													</li>
+												<?php endif;?>
+												<?php if(read_access('datamaster/logammulya')):?>
+													<li class="kt-menu__item "  aria-haspopup="true">
+														<a  href="<?php echo base_url('datamaster/logammulya'); ?>" class="kt-menu__link ">
+															<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+															<span class="kt-menu__link-text">Transaksi</span>
+														</a>
+													</li>
+												<?php endif;?>
+												<?php if(read_access('datamaster/stocks')):?>
+													<li class="kt-menu__item "  aria-haspopup="true">
+														<a  href="<?php echo base_url('datamaster/stocks'); ?>" class="kt-menu__link ">
+															<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+															<span class="kt-menu__link-text">stocks</span>
+														</a>
+													</li>
+												<?php endif;?>
+											</ul>
+										</div>
 									</li>
 
 									<?php if(read_access('datamaster/users')):?>
