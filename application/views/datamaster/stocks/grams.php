@@ -80,6 +80,37 @@ $this->load->view('temp/MenuBar.php');
             <div class="kt-portlet__body">
             <div class="col-md-12" >
                 <div class="form-group row">
+                <?php if($this->session->userdata('user')->level == 'unit'):?>
+                    <input type="hidden" name="id_unit" value="<?php echo $this->session->userdata('user')->id_unit;?>">
+                <?php elseif($this->session->userdata('user')->level == 'area'):?>
+                    <input type="hidden" name="area" value="<?php echo $this->session->userdata('user')->id_area;?>">
+                    <label class="col-form-label">Unit</label>
+                    <div class="col-lg-2">
+						<select class="form-control select2" name="id_unit" id="unit">
+							<option value="0">All</option>
+						</select>
+                    </div>
+                <?php else:?>
+                   <div class="col-lg-2">
+                    <label class="col-form-label">Area</label>
+                        <select class="form-control select2" name="area" id="area">
+                            <option value="0">All</option>
+                            <?php
+                                if (!empty($areas)){
+                                    foreach($areas as $row){
+                                       echo "<option value=".$row->id.">".$row->area."</option>";
+                                    }
+                                }
+                            ?>
+                        </select>
+                    </div>                    
+                    <div class="col-lg-2">
+                    <label class="col-form-label">Unit</label>
+						<select class="form-control select2" name="id_unit" id="unit">
+							<option value="0">All</option>
+						</select>
+                    </div>
+                <?php endif ;?>
                     <div class="col-lg-2">
 						<label class="col-form-label">Tanggal</label>
                         <input class="form-control" type="date" name="date_start" value="<?php echo date('Y-m-01');?>" id="date-start">
@@ -104,6 +135,7 @@ $this->load->view('temp/MenuBar.php');
 						<table class="table">
 						  	<thead class="thead-light">
 						    	<tr>
+                                    <th>Unit</th>
 									<th>Weight</th>
                                     <th>Stock Awal</th>
                                     <th>Barang Masuk</th>
@@ -114,6 +146,7 @@ $this->load->view('temp/MenuBar.php');
 						  	</thead>
 						  	<tbody>
                                 <tr data-template="item" class="d-none">
+                                    <td><span data-post="unit"></span></td>
                                     <td><span data-post="weight"></span></td>
                                     <td><span data-post="stock_begin"></span></td>
                                     <td><span data-post="stock_in"></span></td>

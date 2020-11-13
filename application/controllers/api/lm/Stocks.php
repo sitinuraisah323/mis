@@ -7,6 +7,7 @@ class Stocks extends ApiController
 	{
 		parent::__construct();
 		$this->load->model('LmStocksModel', 'model');
+		$this->load->model('UnitsModel', 'units');
 	}
 
 	public function index()
@@ -109,11 +110,36 @@ class Stocks extends ApiController
 
 	public function grams()
 	{
+		$result = [];
+		
 		$dateStart = $this->input->get('date_start');
 		$dateEnd = $this->input->get('date_end');
 		$idUnit = $this->input->get('id_unit');
-		$data = $this->model->gramsUnits($idUnit, $dateStart, $dateEnd);
-		return $this->sendMessage($data,'Successfully get stocks',200);
+		$idArea = $this->input->get('id_area');
+		if($idArea !== null){
+			if($idUnit){
+				$this->units->db->where('id', $idUnit);
+			}
+			if($idArea){
+				$this->units->db->where('id_area', $idArea);
+			}
+			$units = $this->units->all();
+			foreach($units as $unit){
+				$grams =  $this->model->gramsUnits($unit->id, $dateStart, $dateEnd);
+				if($grams){
+					foreach($grams as $gram){
+						$gram->unit = $unit->name;
+						$result[] = $gram;
+					}
+				}
+			}
+		}else{
+			$result = $this->model->gramsUnits($idUnit, $dateStart, $dateEnd);
+		}
+
+
+
+		return $this->sendMessage($result,'Successfully get stocks',200);
 	}
 
 
