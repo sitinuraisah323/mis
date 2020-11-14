@@ -8,6 +8,7 @@ class Transactions extends ApiController
 		$this->load->model('LmTransactionsModel', 'model');
 		$this->load->model('LmTransactionsGramsModel', 'gram');
 		$this->load->model('LmTransactionsLogsModel', 'logs');
+		$this->load->model('LmStocksModel', 'stock');
 		$this->load->model('LmGramsModel', 'master');
 	}
 
@@ -18,7 +19,7 @@ class Transactions extends ApiController
 				$this->model->db->where('units.id_area', $idArea);
 			}
 			if($idUnit = $this->input->get('id_unit')){
-				$this->model->db->where('units.id', $idUnit);
+				$this->model->db->where('id_unit', $idUnit);
 			}
 			if($log =  $this->input->get('statusrpt')){
 				$this->model->db->where('last_log', $log);
@@ -82,6 +83,7 @@ class Transactions extends ApiController
 			else
 			{
 				$data = array(
+					'id_unit'	=> $post['id_unit'],
 					'id_employee'	=> $post['id_employee'],
 					'date'	=> $post['date'],
 					'code'	=> $post['code'],
@@ -147,6 +149,7 @@ class Transactions extends ApiController
 			else
 			{
 				$data = array(
+					'id_unit'	=> $post['id_unit'],
 					'id_employee'	=> $post['id_employee'],
 					'date'	=> $post['date'],
 					'code'	=> $post['code'],
@@ -212,6 +215,49 @@ class Transactions extends ApiController
 			if($findTransaction = $this->model->find(array(
 				'code'	=>  $this->input->post('code')
 			))){
+			
+				if($this->input->post('status') === 'APPROVED'){
+					$grams = $this->gram->findWhere(array(
+						'id_lm_transaction'	=> $findTransaction->id
+					));
+					foreach($grams as $gram){
+						$stock = $this->stock->find(array(
+							'reference_id'	=> $findTransaction->code,
+							'id_lm_gram'	=> $gram->id_lm_gram
+						));
+						if($stock == null){
+							$this->stock->insert(array(
+								'id_unit'	=> $findTransaction->id_unit,
+								'id_lm_gram'	=> $gram->id_lm_gram,
+								'amount'	=> $gram->amount,
+								'reference_id'	=> $findTransaction->code,
+								'status'	=> 'PUBLISH',
+								'type'	=> 'CREDIT',
+								'date_receive'	=> $findTransaction->date,
+								'description'	=> 'pembelian'
+							));
+						}else{
+							$this->stock->update(array(
+								'status'	=> 'PUBLISH',
+							), $stock->id);
+						}
+					}
+				}else{
+					$grams = $this->gram->findWhere(array(
+						'id_lm_transaction'	=> $findTransaction->id
+					));
+					foreach($grams as $gram){
+						$stock = $this->stock->find(array(
+							'reference_id'	=> $findTransaction->code,
+							'id_lm_gram'	=> $gram->id_lm_gram
+						));
+						if($stock){
+							$this->stock->update(array(
+								'status'	=> 'UNPUBLISH',
+							), $stock->id);
+						}
+					}
+				}
 				$this->model->db->trans_start();
 				$this->model->update(array(
 					'last_log'	=> $this->input->post('status')

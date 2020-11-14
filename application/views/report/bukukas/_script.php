@@ -114,14 +114,16 @@ function initCariForm(){
 			data:{id_unit:unit,permit:permit,dateStart:dateStart,dateEnd:dateEnd, area:area},
 			success : function(response,status){
 				KTApp.unblockPage();
-				console.log(response.data);
-				if(response.status == true){
+                console.log(response.data);
+				if(response.data.length > 0){
 					var template = '';
                     var currentSaldo = 0;
                     var TotSaldoIn = 0;
                     var TotSaldoOut = 0;
                     var no = 0;
+                    console.log(response.data);
 					$.each(response.data, function (index, data) {
+                      
 						var cashin=0;
 						var cashout=0;
 						if(data.type=='CASH_IN'){cashin= data.amount; currentSaldo +=  parseInt(data.amount); TotSaldoIn +=  parseInt(data.amount);}

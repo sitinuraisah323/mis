@@ -22,6 +22,7 @@
                                 <label for="type2">Barang Keluar</label>
                             </div>
                         </div>
+                        <input type="hidden" name="id_unit" value="<?php echo $this->session->userdata('user')->id_unit;?>">
                         <div class="row">
                             <div class="col-md-12">
                                 <label>Lm</label>
@@ -46,7 +47,7 @@
                                 <input type="date" name="date_receive" class="form-control"/>
                             </div>
                             <div class="col-md-6">
-                                <label>Status</label>
+                                <label>No Referensi</label>
                                 <select name="status" class="form-control" required>
                                     <option value="PUBLISH">Publish</option>
                                     <option value="UNPUBLISH">Unpublish</option>

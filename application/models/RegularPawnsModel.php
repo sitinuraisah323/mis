@@ -423,10 +423,19 @@ class RegularpawnsModel extends Master
 		);
 	}
 
-	public function getSummaryRate($idUnit)
+	public function getSummaryRate($idUnit = 0, $month = 0, $year = 0)
 	{
+		if($month){
+			$this->db->where('month(date_sbk)', $month);
+		}
+		if($year){
+			$this->db->where('year(date_sbk)', $year);
+		}
+		if($idUnit){
+			$this->db->where('id_unit', $idUnit);
+		}
 		$summary = $this->db->select('sum(amount) as up,sum(capital_lease) as rate,MIN(capital_lease) as min_rate,Max(capital_lease) as max_rate,count(*) as noa')->from('units_regularpawns')
-			->where('id_unit', $idUnit)
+		
 			->where('date_sbk IS NOT NULL')
 			->where('status_transaction', 'N')->get()->row();
 			//->where('date_sbk >=', $sdate)
@@ -615,16 +624,26 @@ class RegularpawnsModel extends Master
 		$result = array();
 		$months = months();
 		foreach($months as $key => $index){
-			if($key <= date('n')){
+			if($key < date('n')){
 				$result['booking'][$index] = $this->getBookingMontly($key, $year);
 				$result['pendapatan'][$index] = $this->getPendapatanMontly($key, $year);
 				$result['pengeluaran'][$index] = $this->getPengeluaranMontly($key, $year);
 				$result['repayment'][$index] = $this->getRepaymentMontly($key, $year);
 				$result['dpd'][$index] = $this->getDPDMontly($key, $year);
 				$result['outstanding'][$index] = $this->getOstMontly($key, $year);
+				$result['rate'][$index] = $this->getSummaryRate(0, $key, $year);
 			}
 		}
 		return $result;
+	}
+
+	public function getRateMontly($month, $year)
+	{
+		$this->db
+			->select('COALESCE(sum(money_loan),0) as avg')
+ 			->where('month(date_sbk)', $month)
+ 			->where('year(date_sbk)', $year);
+ 		return $this->db->get('units_repayments')->row()->avg;
 	}
 
 	public function getRepaymentMontly($month, $year)
