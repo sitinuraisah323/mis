@@ -3,7 +3,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Input Groups</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Group Area</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 </button>
             </div>
@@ -11,6 +11,21 @@
                 <form action="#" id="form_add" class="form-horizontal">
                     <div class="form-body">
                         <div class="row">    
+                            <div class="col-md-12">
+                            <div class="form-group">
+                                    <label>Area</label>
+                                    <select class="form-control select2" name="area" id="add_area">
+                                    <?php 
+                                        if (!empty($areas)){
+                                            foreach($areas as $row){
+                                               echo "<option value=".$row->id.">".$row->area."</option>";
+                                            }
+                                        }
+                                    ?>
+                                    </select>
+                                </div>
+                            </div> 
+
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Group</label>

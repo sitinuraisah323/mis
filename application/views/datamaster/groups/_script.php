@@ -104,7 +104,13 @@ function initDataTable(){
                 sortable: 'asc',
                 width:60,
                 textAlign: 'center',
-            }, 
+            },
+            {
+                field: 'area',
+                title: 'Area',
+                sortable: 'asc',
+                textAlign: 'left',
+            },  
             {
                 field: 'group',
                 title: 'Group',
@@ -223,6 +229,11 @@ function initCreateForm(){
             KTUtil.scrollTop();
         }
     });   
+
+    $('#add_area').select2({
+        placeholder: "Please select a Area",
+        width: '100%'
+    });
     
     //events
     $("#btn_add_submit").on("click",function(){
@@ -275,6 +286,11 @@ function initEditForm(){
         }
     });   
 
+    $('#edit_area').select2({
+        placeholder: "Please select a Area",
+        width: '100%'
+    });
+
     //events
     $("#btn_edit_submit").on("click",function(){
       var isValid = $( "#form_edit" ).valid();
@@ -311,8 +327,8 @@ function initEditForm(){
     var populateForm = function(groupObject){
         $("#edit_group_id").val(groupObject.id);
         $("#edit_group_name").val(groupObject.group);
-        //$("#edit_group_level").val(groupObject.group_level);
-        //$("#edit_group_level").trigger('change');
+        $("#edit_area").val(groupObject.id_area);
+        $("#edit_area").trigger('change');
     }
     
     return {

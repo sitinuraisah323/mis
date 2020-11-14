@@ -5,31 +5,22 @@ var AlertUtil;
 var createForm;
 var editForm;
 
-
-// function convertToRupiah(angka)
-// {
-// 	var rupiah = '';		
-// 	var angkarev = angka.toString().split('').reverse().join('');
-// 	for(var i = 0; i < angkarev.length; i++) if(i%3 == 0) rupiah += angkarev.substr(i,3)+'.';
-// 	return rupiah.split('',rupiah.length-1).reverse().join('');
-// }
-
 function initDTEvents(){
     $(".btn_delete").on("click",function(){
         var targetId = $(this).data("id");
         //alert(targetId);
         swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this",
+            title: 'Anda Yakin?',
+            text: "Akan menghapus data ini",
             type: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Yes, delete it'
+            confirmButtonText: 'Ya, Hapus'
         }).then(function(result) {
             if (result.value) {
                 KTApp.blockPage();
                 $.ajax({
                     type : 'GET',
-                    url : "<?php echo base_url("api/datamaster/unitstarget/delete"); ?>",
+                    url : "<?php echo base_url("api/datamaster/cabang/delete"); ?>",
                     data : {id:targetId},
                     dataType : "json",
                     success : function(data,status){
@@ -55,7 +46,7 @@ function initDTEvents(){
         KTApp.blockPage();
         $.ajax({
             type : 'GET',
-            url : "<?php echo base_url("api/datamaster/unitstarget/get_byid"); ?>",
+            url : "<?php echo base_url("api/datamaster/cabang/get_byid"); ?>",
             data : {id:targetId},
             dataType : "json",
             success : function(response,status){
@@ -85,7 +76,7 @@ function initDataTable(){
             type: 'remote',
             source: {
               read: {
-                url: '<?php echo base_url("api/datamaster/unitstarget"); ?>',
+                url: '<?php echo base_url("api/datamaster/cabang"); ?>',
                 map: function(raw) {
                   // sample data mapping
                   var dataSet = raw;
@@ -113,60 +104,30 @@ function initDataTable(){
                 sortable: 'asc',
                 width:60,
                 textAlign: 'center',
-            }, 
+            },
             {
                 field: 'area',
                 title: 'Area',
                 sortable: 'asc',
                 textAlign: 'left',
-            }, 
+            },  
             {
-                field: 'name',
-                title: 'Unit',
+                field: 'group',
+                title: 'Group',
                 sortable: 'asc',
                 textAlign: 'left',
-            },
-            {
-                field: 'periode',
-                title: 'Periode',
-                sortable: 'asc',
-                textAlign: 'left',
-                template: function (row) {
-                            var result = "<div class='date-td'>";
-                            var month = moment(row.month).format('MMM');
-                            result = result + '<div>' + month + ' - ' + row.year + '</div> ';
-                            result = result + "</div>";
-                            return result;
-                        }
             }, 
             {
-                field: 'amount_booking',
-                title: 'Booking',
+                field: 'cabang',
+                title: 'Cabang',
                 sortable: 'asc',
-                textAlign: 'right',
-                template: function (row) {
-                    var result ="";
-                        result = row.amount_booking;
-                    return result;
-                } 
-            },
-            {
-                field: 'amount_outstanding',
-                title: 'Outstanding',
-                sortable: 'asc',
-                textAlign: 'right',
-                template: function (row) {
-                    var result ="";
-                        result = row.amount_outstanding;
-                        
-                    return result;
-                } 
+                textAlign: 'left',
             }, 
             {
                 field: 'status',
                 title: 'Status',
                 sortable: 'asc',
-                textAlign: 'center',
+                textAlign: 'left',
             }, 
             {
                 field: 'action',
@@ -266,36 +227,22 @@ function initCreateForm(){
     var validator = $( "#form_add" ).validate({
         ignore:[],
         rules: {
-            unit: {
-                required: true,
-            },
-            month: {
-                required: true,
-            },
-            year: {
-                required: true,
-            },
-            amount: {
+            group: {
                 required: true,
             }
         },
         invalidHandler: function(event, validator) {   
             KTUtil.scrollTop();
         }
-    });
-
-    $('#add_unit').select2({
-        placeholder: "Please select a Unit",
-        width: '100%'
     });   
 
-    $('#add_month').select2({
-        placeholder: "Please select a Month",
+    $('#add_area').select2({
+        placeholder: "Please select a Area",
         width: '100%'
     });
 
-    $('#add_year').select2({
-        placeholder: "Please select a Year",
+    $('#add_group').select2({
+        placeholder: "Please select a Group",
         width: '100%'
     });
     
@@ -306,7 +253,7 @@ function initCreateForm(){
         KTApp.block('#modal_add .modal-content', {});
         $.ajax({
             type : 'POST',
-            url : "<?php echo base_url("api/datamaster/unitstarget/insert"); ?>",
+            url : "<?php echo base_url("api/datamaster/cabang/insert"); ?>",
             data : $('#form_add').serialize(),
             dataType : "json",
             success : function(data,status){
@@ -341,38 +288,20 @@ function initEditForm(){
     var validator = $( "#form_edit" ).validate({
         ignore:[],
         rules: {
-            unit: {
-                required: true,
-            },
-            month: {
-                required: true,
-            },
-            year: {
-                required: true,
-            },
-            amount: {
+            group_name: {
                 required: true,
             }
         },
         invalidHandler: function(event, validator) {   
             KTUtil.scrollTop();
         }
-    });  
-
-    $('#edit_unit').select2({
-        placeholder: "Please select a Unit",
-        width: '100%'
     });   
 
-    $('#edit_month').select2({
-        placeholder: "Please select a Month",
+    $('#edit_area').select2({
+        placeholder: "Please select a Area",
         width: '100%'
     });
 
-    $('#edit_year').select2({
-        placeholder: "Please select a Year",
-        width: '100%'
-    });
     //events
     $("#btn_edit_submit").on("click",function(){
       var isValid = $( "#form_edit" ).valid();
@@ -380,7 +309,7 @@ function initEditForm(){
         KTApp.block('#modal_edit .modal-content', {});
         $.ajax({
             type : 'POST',
-            url : "<?php echo base_url("api/datamaster/unitstarget/update"); ?>",
+            url : "<?php echo base_url("api/datamaster/cabang/update"); ?>",
             data : $('#form_edit').serialize(),
             dataType : "json",
             success : function(data,status){
@@ -407,15 +336,10 @@ function initEditForm(){
     })
 
     var populateForm = function(groupObject){
-        $("#edit_unitstarget_id").val(groupObject.id);
-        $("#edit_unit").val(groupObject.id_unit);
-        $("#edit_month").val(groupObject.month);
-        $("#edit_year").val(groupObject.year);
-        $("#edit_booking").val(groupObject.amount_booking);
-        $("#edit_outstanding").val(groupObject.amount_outstanding);
-        $("#edit_unit").trigger('change');
-        $("#edit_month").trigger('change');
-        $("#edit_year").trigger('change');
+        $("#edit_cabang").val(groupObject.id);
+        $("#edit_cabang").val(groupObject.cabang);
+        $("#edit_group").val(groupObject.id_group);
+        $("#edit_group").trigger('change');
     }
     
     return {
@@ -425,15 +349,10 @@ function initEditForm(){
 }
 
 jQuery(document).ready(function() { 
-    
     initDataTable();
-    //createForm = initCreateForm();
+    createForm = initCreateForm();
     editForm = initEditForm();
     initAlert();
-    $('#unit').select2({
-        placeholder: "Please select a Unit",
-        width: '100%'
-    });   
 });
 
 </script>

@@ -14,7 +14,7 @@ $this->load->view('temp/MenuBar.php');
         <div class="kt-subheader__main">            
             <h3 class="kt-subheader__title">Data Master</h3>            
             <span class="kt-subheader__separator kt-subheader__separator--v"></span>            
-            <span class="kt-subheader__desc">Group</span>            
+            <span class="kt-subheader__desc">Group Area</span>            
         </div>
         <div class="kt-subheader__toolbar">
             <div class="kt-subheader__wrapper">                              
@@ -33,7 +33,7 @@ $this->load->view('temp/MenuBar.php');
                         <i class="kt-font-brand fa fa-align-justify"></i>
                     </span>
                     <h3 class="kt-portlet__head-title">
-                       Data Group
+                       Data Group Area
                     </h3>
                 </div>
                 <div class="kt-portlet__head-toolbar">
