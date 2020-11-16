@@ -532,6 +532,68 @@ $currmonth = date('Y-m-d');
         <div class="row">
             <div class="col-xl-12 col-lg-12">
                 <!--begin:: Widgets-->
+                <form id="form_lm" class="form-horizontal">
+                <div class="kt-portlet kt-portlet--height-fluid">
+                    <div class="kt-widget14">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="kt-widget14__header kt-margin-b-30">
+                                <h3 class="kt-widget14__title">
+                                <i class="fa fa-chart-bar"></i> LM Monitoring 
+                                    <hr/>            
+                                </h3>
+                                    <div class="kt-widget14__legends">
+                                        <div class="kt-widget14__legend">
+                                            <span class="kt-widget14__bullet kt-bg-success"></span>
+                                            <span class="kt-widget14__stats"><?php  echo "Stock(on IDR) "; ?> : <span class="total-target"></span></span>
+                                            <span class="kt-widget14__bullet kt-bg-info"></span>
+                                            <span class="kt-widget14__stats"><?php  echo "Sale(on IDR) "; ?> : <span class="total-realisasi"></span></span>
+                                        </div>
+                                    </div>	
+                            </div>                       
+                        </div>
+                    </div>
+                        <div class="kt-widget11">
+                            <!-- <div id="graphTarBooking" style="height:300px;"></div>   -->
+                            <canvas id="graphLM" style="height:300px;"></canvas>                         
+                        </div>
+                        <hr/>
+                        <!--begin::Accordion-->
+                        <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
+                            <div class="card">
+                                <div class="card-header" id="headingLM">
+                                    <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseLM" aria-expanded="true" aria-controls="collapseLM">
+                                        View Detail
+                                    </div>
+                                </div>
+                                <div id="collapseLM" class="collapse" aria-labelledby="headingLM" data-parent="#accordionExample3">
+                                    <div class="card-body">
+                                        <table class="table" id="tblLM">
+                                        <tr>
+                                            <td class="text-left"><b>Area</b></td>
+                                            <td class="text-left"><b>Unit</b></td>
+                                            <td class="text-right"><b>Stock</b></td>
+                                            <td class="text-right"><b>Sale</b></td>
+                                            <td class="text-right"><b>Percentage</b></td>
+                                        </tr>                                        
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>                           
+                        </div>
+                        <!--end::Accordion--> 
+                    </div>
+                </div>	        
+                </form>	        
+                <!--end:: Widgets-->    
+            </div>
+        </div>
+    </div>
+
+    <div class="kt-container  kt-grid__item kt-grid__item--fluid">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12">
+                <!--begin:: Widgets-->
                 <form id="form_tarBook" class="form-horizontal">
                 <div class="kt-portlet kt-portlet--height-fluid">
                     <div class="kt-widget14">

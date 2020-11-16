@@ -883,6 +883,50 @@ class Dashboards extends ApiController
 		return $this->sendMessage($data,'Get Unit Booking');
 	}
 
+	public function lm()
+	{
+        if($this->input->get('year')){
+            $year = $this->input->get('year');
+        }else{
+            $year = date('Y');
+        }
+
+        if($this->input->get('month')){
+            $month = $this->input->get('month');
+        }else{
+            $month = date('n');
+        }
+
+        if($area = $this->input->get('area')){
+            $this->units->db->where('id_area', $area);
+        }else if($this->session->userdata('user')->level === 'area'){
+            $this->units->db->where('id_area', $this->session->userdata('user')->id_area);
+        }
+
+        if($this->session->userdata('user')->level === 'unit'){
+            $this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
+        }else if($unit = $this->input->get('id_unit')){
+            $this->units->db->where('units.id', $unit);
+        }
+		$this->units->db->select('units.id, name, areas.area')
+			->join('areas','areas.id = units.id_area');	
+        $units = $this->units->db->get('units')->result();
+
+        if($units){
+			$percentage =0;
+            foreach($units as $unit){              
+				$unit->lm = $this->unitsdailycash->getlmunits($unit->id);
+				if($unit->lm->stock!=0){
+					$percentage = ($unit->lm->sales/$unit->lm->stock)*100;
+				}else{
+					$percentage =$percentage;
+				}
+				$unit->percentage =number_format($percentage,2);
+            }
+        }
+        return $this->sendMessage($units,'Successfully get report realisasi');		
+	}
+
 	public function unitprofit()
 	{
 		$idUnit = $this->session->userdata('user')->id_unit;
