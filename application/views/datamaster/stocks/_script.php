@@ -110,6 +110,12 @@ function initDataTable(){
                 width:60,
                 textAlign: 'center',
             },
+            {
+				  field: 'unit',
+				  title: 'Unit',
+				  width:60,
+				  textAlign: 'center',
+			  },
               {
 				  field: 'amount',
 				  title: 'Amount',
@@ -148,6 +154,12 @@ function initDataTable(){
 				  title: 'description',
 				  width:60,
 				  textAlign: 'center',
+			  },
+              {
+				  field: 'price',
+				  title: 'Price',
+				  width:60,
+				  textAlign: 'right',
 			  },
               {
 				  field: 'status',

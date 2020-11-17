@@ -13,7 +13,8 @@ class Stocks extends ApiController
 	public function index()
 	{
 		$this->model->db->join('lm_grams','lm_grams.id = lm_stocks.id_lm_gram')
-						->select('lm_grams.image, lm_grams.weight');
+						->join('units','units.id = lm_stocks.id_unit')
+						->select('lm_grams.image, lm_grams.weight, units.name as unit');
 		if($this->session->userdata('user')->level == 'unit'){
 			$this->model->db->where('id_unit', $this->session->userdata('user')->id_unit);
 		}

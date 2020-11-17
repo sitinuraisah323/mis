@@ -37,10 +37,11 @@
                                 <input type="number" name="amount" class="form-control"/>
                             </div>
                             <div class="col-md-6">
-                                <label>No Referensi</label>
-                                <input type="text" name="reference_id" class="form-control"/>
+                                <label>Harga</label>
+                                <input type="text" name="price" class="form-control"/>
                             </div>
                         </div>
+                        <input type="hidden" name="status" value="PUBLISH"/>
                         <div class="row">
                             <div class="col-md-6">
                                 <label>Date</label>
@@ -48,10 +49,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label>No Referensi</label>
-                                <select name="status" class="form-control" required>
-                                    <option value="PUBLISH">Publish</option>
-                                    <option value="UNPUBLISH">Unpublish</option>
-                                </select>
+                                <input type="text" name="reference_id" class="form-control"/>
                             </div>
                         </div>
                         <div class="row">

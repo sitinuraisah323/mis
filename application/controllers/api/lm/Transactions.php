@@ -24,6 +24,7 @@ class Transactions extends ApiController
 			if($log =  $this->input->get('statusrpt')){
 				$this->model->db->where('last_log', $log);
 			}
+			$this->model->db->join('units','units.id = lm_transactions.id_unit');
 		}
 		$this->model->db
 			->order_by('lm_transactions.id','desc');
@@ -216,48 +217,48 @@ class Transactions extends ApiController
 				'code'	=>  $this->input->post('code')
 			))){
 			
-				if($this->input->post('status') === 'APPROVED'){
-					$grams = $this->gram->findWhere(array(
-						'id_lm_transaction'	=> $findTransaction->id
-					));
-					foreach($grams as $gram){
-						$stock = $this->stock->find(array(
-							'reference_id'	=> $findTransaction->code,
-							'id_lm_gram'	=> $gram->id_lm_gram
-						));
-						if($stock == null){
-							$this->stock->insert(array(
-								'id_unit'	=> $findTransaction->id_unit,
-								'id_lm_gram'	=> $gram->id_lm_gram,
-								'amount'	=> $gram->amount,
-								'reference_id'	=> $findTransaction->code,
-								'status'	=> 'PUBLISH',
-								'type'	=> 'CREDIT',
-								'date_receive'	=> $findTransaction->date,
-								'description'	=> 'pembelian'
-							));
-						}else{
-							$this->stock->update(array(
-								'status'	=> 'PUBLISH',
-							), $stock->id);
-						}
-					}
-				}else{
-					$grams = $this->gram->findWhere(array(
-						'id_lm_transaction'	=> $findTransaction->id
-					));
-					foreach($grams as $gram){
-						$stock = $this->stock->find(array(
-							'reference_id'	=> $findTransaction->code,
-							'id_lm_gram'	=> $gram->id_lm_gram
-						));
-						if($stock){
-							$this->stock->update(array(
-								'status'	=> 'UNPUBLISH',
-							), $stock->id);
-						}
-					}
-				}
+				// if($this->input->post('status') === 'APPROVED'){
+				// 	$grams = $this->gram->findWhere(array(
+				// 		'id_lm_transaction'	=> $findTransaction->id
+				// 	));
+				// 	foreach($grams as $gram){
+				// 		$stock = $this->stock->find(array(
+				// 			'reference_id'	=> $findTransaction->code,
+				// 			'id_lm_gram'	=> $gram->id_lm_gram
+				// 		));
+				// 		if($stock == null){
+				// 			$this->stock->insert(array(
+				// 				'id_unit'	=> $findTransaction->id_unit,
+				// 				'id_lm_gram'	=> $gram->id_lm_gram,
+				// 				'amount'	=> $gram->amount,
+				// 				'reference_id'	=> $findTransaction->code,
+				// 				'status'	=> 'PUBLISH',
+				// 				'type'	=> 'CREDIT',
+				// 				'date_receive'	=> $findTransaction->date,
+				// 				'description'	=> 'pembelian'
+				// 			));
+				// 		}else{
+				// 			$this->stock->update(array(
+				// 				'status'	=> 'PUBLISH',
+				// 			), $stock->id);
+				// 		}
+				// 	}
+				// }else{
+				// 	$grams = $this->gram->findWhere(array(
+				// 		'id_lm_transaction'	=> $findTransaction->id
+				// 	));
+				// 	foreach($grams as $gram){
+				// 		$stock = $this->stock->find(array(
+				// 			'reference_id'	=> $findTransaction->code,
+				// 			'id_lm_gram'	=> $gram->id_lm_gram
+				// 		));
+				// 		if($stock){
+				// 			$this->stock->update(array(
+				// 				'status'	=> 'UNPUBLISH',
+				// 			), $stock->id);
+				// 		}
+				// 	}
+				// }
 				$this->model->db->trans_start();
 				$this->model->update(array(
 					'last_log'	=> $this->input->post('status')
