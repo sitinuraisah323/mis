@@ -885,29 +885,32 @@ class Dashboards extends ApiController
 
 	public function lm()
 	{
-        if($this->input->get('year')){
-            $year = $this->input->get('year');
+        if($this->input->get('date')){
+            $date = $this->input->get('date');
         }else{
-            $year = date('Y');
-        }
-
-        if($this->input->get('month')){
-            $month = $this->input->get('month');
-        }else{
-            $month = date('n');
+            $date = date('Y-m-d');
         }
 
         if($area = $this->input->get('area')){
             $this->units->db->where('id_area', $area);
         }else if($this->session->userdata('user')->level === 'area'){
             $this->units->db->where('id_area', $this->session->userdata('user')->id_area);
-        }
+		}
+		
+		if($code = $this->input->get('unit')){
+			if($code!='all'){
+			$this->units->db->where('units.id', $code);
+			}
+		}else if($this->session->userdata('user')->level == 'unit'){
+			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
+		}		
 
         if($this->session->userdata('user')->level === 'unit'){
             $this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
         }else if($unit = $this->input->get('id_unit')){
             $this->units->db->where('units.id', $unit);
-        }
+		}
+		
 		$this->units->db->select('units.id, name, areas.area')
 			->join('areas','areas.id = units.id_area');	
         $units = $this->units->db->get('units')->result();
@@ -915,9 +918,9 @@ class Dashboards extends ApiController
         if($units){
 			$percentage =0;
             foreach($units as $unit){              
-				$unit->lm = $this->unitsdailycash->getlmunits($unit->id);
-				if($unit->lm->stock!=0){
-					$percentage = ($unit->lm->sales/$unit->lm->stock)*100;
+				$unit->lm = $this->unitsdailycash->getlmunits($unit->id,$date);
+				if($unit->lm->purchase!=0){
+					$percentage = ($unit->lm->sales/$unit->lm->purchase)*100;
 				}else{
 					$percentage =$percentage;
 				}
