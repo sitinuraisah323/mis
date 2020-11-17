@@ -109,10 +109,9 @@ function initCariForm(){
 			success : function(response,status){
 				var html = '';
 				const logs = [
-					{item:"APPROVED_BY_AREa",value:"Wait Approved Pusat"},
-					{item:"APPROVED",value:"Approved"},
-					{item:"DECLINED",value:"Declined"},
-					{item:"ON_PROGRESS",value:"On Progress"}
+					{item:"ON_PROGRESS",value:"On Proses"},
+					{item:"READY_ON_DELIVERY",value:"Siap di kirim"},
+					{item:"STOCK_READY",value:"Stock ready"},
 				];
 				response.data.forEach(data=>{
 					const {id, name, unit, position,grams, last_log, method,tenor, total,code } = data;

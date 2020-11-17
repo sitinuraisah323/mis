@@ -55,6 +55,7 @@ function initDTEvents(){
                 $('#modal_add').find('[name="status"]').val(response.data.status);
                 $('#modal_add').find('[name="description"]').val(response.data.description);
                 $('#modal_add').find('[name="reference_id"]').val(response.data.reference_id);
+                $('#modal_add').find('[name="price"]').val(response.data.price);
                 const types =    document.querySelector('#modal_add').querySelectorAll('[name="type"]');
                 types.forEach(el=>{
                     if(response.data.type == el.value){
@@ -150,6 +151,12 @@ function initDataTable(){
 				  textAlign: 'center',
 			  },
               {
+				  field: 'price',
+				  title: 'Price',
+				  width:60,
+				  textAlign: 'center',
+			  },
+              {
 				  field: 'status',
 				  title: 'status',
 				  width:60,
@@ -196,6 +203,7 @@ var clearForm = function(){
     $('[name="amount"]').val('');
     $('[name="reference_id"]').val('');
     $('[name="date_receive"]').val('');
+    $('[name="price"]').val('');
 }
     
 function submitHandler(event){

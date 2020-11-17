@@ -47,7 +47,7 @@ class LmStocksModel extends Master
 	public function gramsUnits($idUnit, $dateStart, $dateEnd)
 	{
 		$this->db->select('lg.*')
-		->select('(select price_perpcs from lm_grams_prices order by date desc limit 1) as price')
+		->select('(select price_perpcs from lm_grams_prices where  lm_grams_prices.id_lm_gram = lg.id order by date desc limit 1) as price')
 		->select('(select COALESCE(( 
 			sum(CASE WHEN lm_stocks.type = "DEBIT" THEN `amount` ELSE 0 END) - 	sum(CASE WHEN type = "CREDIT" THEN `amount` ELSE 0 END)
 		),0) from lm_stocks where date_receive < "'.$dateStart.'" and lm_stocks.id_lm_gram = lg.id and status="PUBLISH" and id_unit = "'.$idUnit.'") as stock_begin')

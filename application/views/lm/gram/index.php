@@ -36,7 +36,7 @@ $this->load->view('temp/MenuBar.php');
 							<span class="kt-pricing-1__price">LM</span>
 							<h2 class="kt-pricing-1__subtitle">Berat <?php echo $gram->weight;?> Gram</h2>
 							<div class="kt-pricing-1__btn">
-								<a href="<?php echo base_url('lm/grams/purchase?choice='.$gram->id);?>" class="btn btn-brand btn-custom btn-pill btn-wide btn-uppercase btn-bolder btn-sm">Jual Sekarang</a>
+								<a href="<?php echo base_url('lm/grams/purchase?choice='.$gram->id);?>" class="btn btn-brand btn-custom btn-pill btn-wide btn-uppercase btn-bolder btn-sm">Order Sekarang</a>
 							</div>
 						</div>
 					<?php endforeach;?>
