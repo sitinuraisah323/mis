@@ -1722,6 +1722,240 @@ function pendapatan() {
 	});
 }
 
+function lm(){
+
+	var stock 	 	= [];
+	var totstock 	= 0;
+	var sales 	 	= [];
+	var totsales 	= 0;
+	var percentage 	= [];
+	var unitlabel 	= [];
+	KTApp.block('#form_lm .kt-widget14', {});
+	$.ajax({
+		url:"<?php echo base_url('api/dashboards/lm');?>",
+		type:"GET",
+		dataType:"JSON",
+		data:{
+			area:'',
+			month:currmonth,
+		},
+		success:function (response) {
+
+			var Tempjabar 		= "";
+			var totjabarstock 	= 0;
+			var totjabarsale 	= 0;
+
+			var Tempjatim		= "";
+			var totjatimstock 	= 0;
+			var totjatimsale 	= 0;
+
+			var Tempntt		= "";
+			var totnttstock = 0;
+			var totnttsale 	= 0;
+
+			var Tempntb		= "";
+			var totntbstock = 0;
+			var totntbsale 	= 0;
+
+			var Tempall		= "";
+			var totjatim 	= 0;
+			var totjatimreal= 0;
+			var totntb 		= 0;
+			var totntbreal	= 0;
+			var totntt 		= 0;
+			var totnttreal	= 0;
+			var totall 		= 0;
+			var status		="";
+
+			$.each(response.data, function (index,unit) {
+				unitlabel.push(unit.name);
+				stock.push(unit.lm.stock);		
+				sales.push(unit.lm.sales);
+				//percentage.push(unit.booking.percentage);
+
+				totstock += parseInt(unit.lm.stock);			
+				totsales += parseInt(unit.lm.sales);	
+
+				if(unit.area=='Jawa Barat')
+				{
+					Tempjabar += "<tr class='rowappendjabar'>";
+					Tempjabar += "<td class='text-left'><b>"+unit.area+"</b></td>";
+					Tempjabar += "<td class='text-left'><b>"+unit.name+"</b></td>";					
+					Tempjabar += "<td class='text-right'><b>"+convertToRupiah(unit.lm.stock)+"</b></td>";
+					Tempjabar += "<td class='text-right'><b>"+convertToRupiah(unit.lm.sales)+"</b></td>";
+					Tempjabar += "<td class='text-right'><b>"+unit.percentage+"</b></td>";
+					Tempjabar += '</tr>';
+					totjabarstock += parseInt(unit.lm.stock);
+					totjabarsale += parseInt(unit.lm.sales);
+				}
+
+				if(unit.area=='Jawa Timur')
+				{
+					Tempjatim += "<tr class='rowappendjabar'>";
+					Tempjatim += "<td class='text-left'><b>"+unit.area+"</b></td>";
+					Tempjatim += "<td class='text-left'><b>"+unit.name+"</b></td>";					
+					Tempjatim += "<td class='text-right'><b>"+convertToRupiah(unit.lm.stock)+"</b></td>";
+					Tempjatim += "<td class='text-right'><b>"+convertToRupiah(unit.lm.sales)+"</b></td>";
+					Tempjatim += "<td class='text-right'><b>"+unit.percentage+"</b></td>";
+					Tempjatim += '</tr>';
+					totjatimstock += parseInt(unit.lm.stock);
+					totjatimsale += parseInt(unit.lm.sales);
+				}
+
+				if(unit.area=='NTB')
+				{
+					Tempntb += "<tr class='rowappendjabar'>";
+					Tempntb += "<td class='text-left'><b>"+unit.area+"</b></td>";
+					Tempntb += "<td class='text-left'><b>"+unit.name+"</b></td>";					
+					Tempntb += "<td class='text-right'><b>"+convertToRupiah(unit.lm.stock)+"</b></td>";
+					Tempntb += "<td class='text-right'><b>"+convertToRupiah(unit.lm.sales)+"</b></td>";
+					Tempntb += "<td class='text-right'><b>"+unit.percentage+"</b></td>";
+					Tempntb += '</tr>';
+					totntbstock += parseInt(unit.lm.stock);
+					totntbsale += parseInt(unit.lm.sales);
+				}
+
+				if(unit.area=='NTT')
+				{
+					Tempntt += "<tr class='rowappendjabar'>";
+					Tempntt += "<td class='text-left'><b>"+unit.area+"</b></td>";
+					Tempntt += "<td class='text-left'><b>"+unit.name+"</b></td>";					
+					Tempntt += "<td class='text-right'><b>"+convertToRupiah(unit.lm.stock)+"</b></td>";
+					Tempntt += "<td class='text-right'><b>"+convertToRupiah(unit.lm.sales)+"</b></td>";
+					Tempntt += "<td class='text-right'><b>"+unit.percentage+"</b></td>";
+					Tempntt += '</tr>';
+					totnttstock += parseInt(unit.lm.stock);
+					totnttsale += parseInt(unit.lm.sales);
+				}		
+			});
+
+			if(Tempjabar){
+				Tempjabar += "<tr class='rowappendjabar'>";
+				Tempjabar += "<td class='text-right' colspan='2'> Total Jawa Barat </td>";
+				Tempjabar += "<td class='text-right'><b>"+convertToRupiah(totjabarstock)+"</b></td>";
+				Tempjabar += "<td class='text-right'><b>"+convertToRupiah(totjabarsale)+"</b></td>";
+				Tempjabar += "<td class='text-right'><b></b></td>";
+				Tempjabar += '</tr>';
+			}
+
+			if(Tempjatim){
+				Tempjatim += "<tr class='rowappendjabar'>";
+				Tempjatim += "<td class='text-right' colspan='2'> Total Jawa Barat </td>";
+				Tempjatim += "<td class='text-right'><b>"+convertToRupiah(totjatimstock)+"</b></td>";
+				Tempjatim += "<td class='text-right'><b>"+convertToRupiah(totjatimsale)+"</b></td>";
+				Tempjatim += "<td class='text-right'><b></b></td>";
+				Tempjatim += '</tr>';
+			}
+
+			if(Tempntt){
+				Tempntt += "<tr class='rowappendjabar'>";
+				Tempntt += "<td class='text-right' colspan='2'> Total Jawa Barat </td>";
+				Tempntt += "<td class='text-right'><b>"+convertToRupiah(totnttstock)+"</b></td>";
+				Tempntt += "<td class='text-right'><b>"+convertToRupiah(totnttsale)+"</b></td>";
+				Tempntt += "<td class='text-right'><b></b></td>";
+				Tempntt += '</tr>';
+			}
+
+			if(Tempntb){
+				Tempntb += "<tr class='rowappendjabar'>";
+				Tempntb += "<td class='text-right' colspan='2'> Total Jawa Barat </td>";
+				Tempntb += "<td class='text-right'><b>"+convertToRupiah(totntbstock)+"</b></td>";
+				Tempntb += "<td class='text-right'><b>"+convertToRupiah(totntbsale)+"</b></td>";
+				Tempntb += "<td class='text-right'><b></b></td>";
+				Tempntb += '</tr>';
+			}
+
+			var realtotal =0;
+			totall = parseInt(totjabarstock)+parseInt(totjatimstock)+parseInt(totnttstock)+parseInt(totntbstock);
+			realtotal = parseInt(totjabarsale)+parseInt(totjatimsale)+parseInt(totnttsale)+parseInt(totntbsale);
+			if(totall){
+				Tempall += "<tr class='rowappendjabar'>";
+				Tempall += "<td class='text-right' colspan='2'> Total </td>";
+				Tempall += "<td class='text-right'><b>"+convertToRupiah(totall)+"</b></td>";
+				Tempall += "<td class='text-right'><b>"+convertToRupiah(realtotal)+"</b></td>";
+				Tempall += '</tr>';
+			}				
+
+			$('#tblLM').append(Tempjabar);
+			$('#tblLM').append(Tempjatim);
+			$('#tblLM').append(Tempntb);
+			$('#tblLM').append(Tempntt);
+			$('#tblLM').append(Tempall);
+
+		},
+		complete:function () {
+			$('#form_lm').find('.total-target').text(convertToRupiah(totstock));
+			$('#form_lm').find('.total-realisasi').text(convertToRupiah(totsales));			
+			//var datapercentage 	= percentage;
+			var datastock 		= stock;
+			var datasales 		= sales;
+			var dataunitlabel 	= unitlabel;
+
+			//console.log(unitlabel);
+			var data = [ {
+				label: 'Stock',
+				backgroundColor: '#7D3C98',
+				yAxisID: 'A',
+				data: datastock
+			}, {
+				label: 'Sale',
+				backgroundColor: '#28B463',
+				yAxisID: 'A',
+				data: datasales
+			}];
+			
+			
+			var options = {
+				tooltips: {
+					mode: 'label', 
+					label: 'mylabel', 
+					callbacks: { 
+					label: function(tooltipItem, data) { 
+					return tooltipItem.yLabel.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); }, },
+				},						
+				scales: {
+					xAxes: [{
+							stacked: false,
+							gridLines: {
+								display: false
+							}
+						}],
+					yAxes: [{
+							id: 'A',
+							stacked: false,						
+							ticks: {
+								beginAtZero: true,
+								callback: function (value) {
+									var suffixes = ["", "k", "m", "b","t"];
+									var suffixNum = Math.floor((""+value).length/3);
+									var shortValue = parseFloat((suffixNum != 0 ? (value / Math.pow(1000,suffixNum)) : value).toPrecision(2));
+									if (shortValue % 1 != 0) {
+										var shortNum = shortValue.toFixed(1);
+									}
+									return shortValue+suffixes[suffixNum];
+									// valuek = convertToRupiah(value) ;
+									// return valuek;
+								}
+							}
+						}]
+				}
+		};
+
+		var ctx = document.getElementById("graphLM");
+		var myChart = new Chart(ctx, {
+			type: 'bar',
+			data: {
+				labels: dataunitlabel,
+				datasets: data
+			},
+			options: options
+		});
+
+			KTApp.unblock('#form_lm .kt-widget14', {});
+		},
+	});
+}
+
 function targetBooking(){
 
 	var booking 	= [];
@@ -2249,12 +2483,12 @@ jQuery(document).ready(function() {
 	outstanding();
 	OSMortage();
 	disburse();
-	//pencairan();
 	pelunasan();
 	dpd();
 	saldo();
 	pengeluaran();
 	pendapatan();	
+	lm();
 	targetBooking();
 	targetOutstanding();
 });

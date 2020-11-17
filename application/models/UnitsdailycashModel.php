@@ -55,6 +55,28 @@ class UnitsdailycashModel extends Master
 		);
 	}
 
+	public function getlmunits($idUnit)
+	{
+		$coa = array('1110102','1110201','4120209');
+		$stock = $this->db->select('sum(amount) as amount, count(*) as noa')->from('units_dailycashs')
+						  ->where('type', 'CASH_IN')
+						  ->where_in('no_perk ', $coa)
+						  ->where('id_unit', $idUnit)->get()->row();
+		
+		$sales = $this->db->select('sum(amount) as amount, count(*) as noa')->from('units_dailycashs')
+						  ->where('type', 'CASH_OUT')
+						  ->where_in('no_perk ', $coa)
+						  ->where('id_unit', $idUnit)->get()->row();	
+
+		return (object)array(
+			'stock' => (int)$stock->amount,
+			'stock_noa' => (int)$stock->noa,
+			'sales' => (int)$sales->amount,
+			'sale_noa' => (int)$sales->noa,
+			//'percentage' => $percentage,
+		);
+	}
+
 	public function getSummaryCashoutPerk($date,$perk,$idUnit)
 	{
 		$data = $this->db->select('coa.name_perk,units_dailycashs.no_perk,sum(amount) as amount')

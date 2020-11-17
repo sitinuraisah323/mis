@@ -1,7 +1,7 @@
 <?php
 require_once 'Master.php';
-class GroupsModel extends Master
+class CabangModel extends Master
 {
-	public $table = 'areas_group';
+	public $table = 'cabang';
 	public $primary_key = 'id';
 }

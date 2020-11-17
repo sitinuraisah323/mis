@@ -1,13 +1,13 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once APPPATH.'controllers/Middleware/Authenticated.php';
-class Groups extends Authenticated
+class Cabang extends Authenticated
 {
 	/**
 	 * @var string
 	 */
 
-	public $menu = 'Groups';
+	public $menu = 'Cabang';
 
 	/**
 	 * Welcome constructor.
@@ -26,7 +26,8 @@ class Groups extends Authenticated
 	public function index()
 	{
 		$data['areas'] = $this->areas->all();
-		$this->load->view('datamaster/groups/index',$data);
+		$data['groups'] = $this->groups->all();
+		$this->load->view('datamaster/cabang/index',$data);
 	}
 
 }

@@ -1,29 +1,30 @@
 <?php
 
 require_once APPPATH.'controllers/api/ApiController.php';
-class Groups extends ApiController
+class Cabang extends ApiController
 {
 
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('GroupsModel', 'groups');
+		$this->load->model('CabangModel', 'cabang');
 	}
 
 	public function index()
 	{
         //$data = $this->groups->all();
-        $data = $this->db->select('areas_group.id,areas_group.group,areas_group.status,areas.area')
-                         ->from('areas_group')
+        $data = $this->db->select('cabang.id,cabang.cabang,cabang.status,areas_group.group,areas.area')
+                         ->from('cabang')
+                         ->join('areas_group','areas_group.id=cabang.id_group')
                          ->join('areas','areas.id=areas_group.id_area')
                          ->get()->result();
 		if($post = $this->input->post()){
 			if(is_array($post['query'])){
 				$value = $post['query']['generalSearch'];
-                $this->groups->db
+                $this->cabang->db
                 ->or_like('name', $value)
                 ->or_like('name',strtoupper($value));					
-				$data = $this->groups->all();
+				$data = $this->cabang->all();
 			}
 		}        
 		echo json_encode(array(
@@ -36,7 +37,7 @@ class Groups extends ApiController
     public function get_byid()
 	{
 		echo json_encode(array(
-			'data'	=> 	$this->groups->find($this->input->get("id")),
+			'data'	=> 	$this->cabang->find($this->input->get("id")),
 			'status'	=> true,
 			'message'	=> 'Successfully Get Data Users'
 		));
@@ -46,10 +47,11 @@ class Groups extends ApiController
 	{
 		if($post = $this->input->post()){
 
-            $data['group'] = $this->input->post('group');	
-            $data['id_area'] = $this->input->post('area');	
+            $data['id_group'] = $this->input->post('group');	
+            $data['cabang'] = $this->input->post('cabang');	
+
             $db = false;
-            $db = $this->groups->insert($data);
+            $db = $this->cabang->insert($data);
             if($db=true){
                 echo json_encode(array(
                     'data'	=> 	true,
@@ -71,10 +73,11 @@ class Groups extends ApiController
 		if($post = $this->input->post()){
 
             $id = $this->input->post('id');	
-            $data['group'] = $this->input->post('group');	
-            $data['id_area'] = $this->input->post('area');
+            $data['id_group'] = $this->input->post('group');	
+            $data['cabang'] = $this->input->post('cabang');
+
             $db = false;
-            $db = $this->groups->update($data,$id);
+            $db = $this->cabang->update($data,$id);
             if($db=true){
                 echo json_encode(array(
                     'data'	=> 	true,
@@ -97,7 +100,7 @@ class Groups extends ApiController
 
             $data['id'] = $this->input->get('id');	
             $db = false;
-            $db = $this->groups->delete($data);
+            $db = $this->cabang->delete($data);
             if($db=true){
                 echo json_encode(array(
                     'data'	=> 	true,
