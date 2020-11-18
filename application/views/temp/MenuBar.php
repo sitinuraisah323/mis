@@ -474,14 +474,14 @@
 										</li>
 									<?php endif;?>
 
-									<?php if(read_access('report/modalkerja')):?>
+									<!-- <?php if(read_access('report/modalkerja')):?>
 										<li class="kt-menu__item "  aria-haspopup="true">
 											<a  href="<?php echo base_url('report/modalkerja'); ?>" class="kt-menu__link ">
 												<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>
 												<span class="kt-menu__link-text">Modal Kerja</span>
 											</a>
 										</li>
-									<?php endif;?>									
+									<?php endif;?>									 -->
 
 									<li class="kt-menu__item  kt-menu__item--submenu"  data-ktmenu-submenu-toggle="hover" aria-haspopup="true">
 										<a  href="javascript:;" class="kt-menu__link kt-menu__toggle">
@@ -698,6 +698,43 @@
 														</a>
 													</li>
 												<?php endif;?>
+												<?php if(read_access('report/modalkerja')):?>
+													<li class="kt-menu__item "  aria-haspopup="true">
+														<a  href="<?php echo base_url('report/modalkerja'); ?>" class="kt-menu__link ">
+															<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+															<span class="kt-menu__link-text">Modal Kerja</span>
+														</a>
+													</li>
+												<?php endif;?>
+											</ul>
+										</div>
+									</li>
+
+									<li class="kt-menu__item  kt-menu__item--submenu"  data-ktmenu-submenu-toggle="hover" aria-haspopup="true">
+										<a  href="javascript:;" class="kt-menu__link kt-menu__toggle">
+									<span class="kt-menu__link-icon">
+									<i class="fa fa-copy"><span></span></i>
+									</span>
+											<span class="kt-menu__link-text">LM Siscab</span><i class="kt-menu__hor-arrow la la-angle-right"></i><i class="kt-menu__ver-arrow la la-angle-right"></i>
+										</a>
+										<div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--right">
+											<ul class="kt-menu__subnav">			
+												<?php if(read_access('report/lm/transaction')):?>
+													<li class="kt-menu__item "  aria-haspopup="true">
+														<a  href="<?php echo base_url('report/lm/transaction'); ?>" class="kt-menu__link ">
+															<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+															<span class="kt-menu__link-text">Transaksi</span>
+														</a>
+													</li>
+												<?php endif;?>								
+												<?php if(read_access('report/lm/summary')):?>
+													<li class="kt-menu__item "  aria-haspopup="true">
+														<a  href="<?php echo base_url('report/lm/summary'); ?>" class="kt-menu__link ">
+															<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+															<span class="kt-menu__link-text">Summary</span>
+														</a>
+													</li>
+												<?php endif;?>																					
 											</ul>
 										</div>
 									</li>
@@ -728,14 +765,14 @@
 										</li>
 									<?php endif;?>	
 
-									<?php if(read_access('report/customermis')):?>
+									<!-- <?php //if(read_access('report/customermis')):?>
 										<li class="kt-menu__item "  aria-haspopup="true">
-											<a  href="<?php echo base_url('report/customermis'); ?>" class="kt-menu__link ">
+											<a  href="<?php //echo base_url('report/customermis'); ?>" class="kt-menu__link ">
 												<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>
 												<span class="kt-menu__link-text">Transaksi Selisih</span>
 											</a>
 										</li>
-									<?php endif;?>
+									<?php //endif;?> -->
 
 									<li class="kt-menu__item  kt-menu__item--submenu"  data-ktmenu-submenu-toggle="hover" aria-haspopup="true">
 										<a  href="javascript:;" class="kt-menu__link kt-menu__toggle">
@@ -745,7 +782,15 @@
 											<span class="kt-menu__link-text">Manual Check</span><i class="kt-menu__hor-arrow la la-angle-right"></i><i class="kt-menu__ver-arrow la la-angle-right"></i>
 										</a>
 										<div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--right">
-											<ul class="kt-menu__subnav">											
+											<ul class="kt-menu__subnav">			
+												<?php if(read_access('report/customermis')):?>
+													<li class="kt-menu__item "  aria-haspopup="true">
+														<a  href="<?php echo base_url('report/customermis'); ?>" class="kt-menu__link ">
+															<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+															<span class="kt-menu__link-text">Transaksi Selisih</span>
+														</a>
+													</li>
+												<?php endif;?>								
 												<?php if(read_access('report/konversi/outstanding')):?>
 													<li class="kt-menu__item "  aria-haspopup="true">
 														<a  href="<?php echo base_url('report/konversi/outstanding'); ?>" class="kt-menu__link ">
@@ -761,7 +806,7 @@
 															<span class="kt-menu__link-text">Saldo</span>
 														</a>
 													</li>
-												<?php endif;?>												
+												<?php endif;?>										
 											</ul>
 										</div>
 									</li>
@@ -812,7 +857,6 @@
 								</div>
 							</li>
 						<?php endif;?>
-
 				</ul>
 			</div>
 

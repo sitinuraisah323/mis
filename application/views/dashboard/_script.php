@@ -1769,11 +1769,11 @@ function lm(){
 
 			$.each(response.data, function (index,unit) {
 				unitlabel.push(unit.name);
-				stock.push(unit.lm.stock);		
+				stock.push(unit.lm.purchase);		
 				sales.push(unit.lm.sales);
 				//percentage.push(unit.booking.percentage);
 
-				totstock += parseInt(unit.lm.stock);			
+				totstock += parseInt(unit.lm.purchase);			
 				totsales += parseInt(unit.lm.sales);	
 
 				if(unit.area=='Jawa Barat')
@@ -1781,11 +1781,11 @@ function lm(){
 					Tempjabar += "<tr class='rowappendjabar'>";
 					Tempjabar += "<td class='text-left'><b>"+unit.area+"</b></td>";
 					Tempjabar += "<td class='text-left'><b>"+unit.name+"</b></td>";					
-					Tempjabar += "<td class='text-right'><b>"+convertToRupiah(unit.lm.stock)+"</b></td>";
+					Tempjabar += "<td class='text-right'><b>"+convertToRupiah(unit.lm.purchase)+"</b></td>";
 					Tempjabar += "<td class='text-right'><b>"+convertToRupiah(unit.lm.sales)+"</b></td>";
 					Tempjabar += "<td class='text-right'><b>"+unit.percentage+"</b></td>";
 					Tempjabar += '</tr>';
-					totjabarstock += parseInt(unit.lm.stock);
+					totjabarstock += parseInt(unit.lm.purchase);
 					totjabarsale += parseInt(unit.lm.sales);
 				}
 
@@ -1794,11 +1794,11 @@ function lm(){
 					Tempjatim += "<tr class='rowappendjabar'>";
 					Tempjatim += "<td class='text-left'><b>"+unit.area+"</b></td>";
 					Tempjatim += "<td class='text-left'><b>"+unit.name+"</b></td>";					
-					Tempjatim += "<td class='text-right'><b>"+convertToRupiah(unit.lm.stock)+"</b></td>";
+					Tempjatim += "<td class='text-right'><b>"+convertToRupiah(unit.lm.purchase)+"</b></td>";
 					Tempjatim += "<td class='text-right'><b>"+convertToRupiah(unit.lm.sales)+"</b></td>";
 					Tempjatim += "<td class='text-right'><b>"+unit.percentage+"</b></td>";
 					Tempjatim += '</tr>';
-					totjatimstock += parseInt(unit.lm.stock);
+					totjatimstock += parseInt(unit.lm.purchase);
 					totjatimsale += parseInt(unit.lm.sales);
 				}
 
@@ -1807,11 +1807,11 @@ function lm(){
 					Tempntb += "<tr class='rowappendjabar'>";
 					Tempntb += "<td class='text-left'><b>"+unit.area+"</b></td>";
 					Tempntb += "<td class='text-left'><b>"+unit.name+"</b></td>";					
-					Tempntb += "<td class='text-right'><b>"+convertToRupiah(unit.lm.stock)+"</b></td>";
+					Tempntb += "<td class='text-right'><b>"+convertToRupiah(unit.lm.purchase)+"</b></td>";
 					Tempntb += "<td class='text-right'><b>"+convertToRupiah(unit.lm.sales)+"</b></td>";
 					Tempntb += "<td class='text-right'><b>"+unit.percentage+"</b></td>";
 					Tempntb += '</tr>';
-					totntbstock += parseInt(unit.lm.stock);
+					totntbstock += parseInt(unit.lm.purchase);
 					totntbsale += parseInt(unit.lm.sales);
 				}
 
@@ -1820,11 +1820,11 @@ function lm(){
 					Tempntt += "<tr class='rowappendjabar'>";
 					Tempntt += "<td class='text-left'><b>"+unit.area+"</b></td>";
 					Tempntt += "<td class='text-left'><b>"+unit.name+"</b></td>";					
-					Tempntt += "<td class='text-right'><b>"+convertToRupiah(unit.lm.stock)+"</b></td>";
+					Tempntt += "<td class='text-right'><b>"+convertToRupiah(unit.lm.purchase)+"</b></td>";
 					Tempntt += "<td class='text-right'><b>"+convertToRupiah(unit.lm.sales)+"</b></td>";
 					Tempntt += "<td class='text-right'><b>"+unit.percentage+"</b></td>";
 					Tempntt += '</tr>';
-					totnttstock += parseInt(unit.lm.stock);
+					totnttstock += parseInt(unit.lm.purchase);
 					totnttsale += parseInt(unit.lm.sales);
 				}		
 			});
@@ -1893,12 +1893,12 @@ function lm(){
 
 			//console.log(unitlabel);
 			var data = [ {
-				label: 'Stock',
+				label: 'Purchase',
 				backgroundColor: '#7D3C98',
 				yAxisID: 'A',
 				data: datastock
 			}, {
-				label: 'Sale',
+				label: 'Sales',
 				backgroundColor: '#28B463',
 				yAxisID: 'A',
 				data: datasales

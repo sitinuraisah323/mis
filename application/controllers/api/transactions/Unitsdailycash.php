@@ -15,6 +15,7 @@ class Unitsdailycash extends ApiController
 
 	public function index()
 	{
+
 	}
 
 	public function get_unitsdailycash()
@@ -501,6 +502,42 @@ class Unitsdailycash extends ApiController
 			'status'=>true,
 			'message'	=> 'Successfull Delete Data Area'
 		));
+	}
+
+	public function lmtransaction()
+	{	
+		if($area = $this->input->get('area')){
+            $this->units->db->where('id_area', $area);
+        }else if($this->session->userdata('user')->level === 'area'){
+            $this->units->db->where('id_area', $this->session->userdata('user')->id_area);
+		}
+		
+		if($code = $this->input->get('unit')){
+			if($code!='0'){
+			$this->units->db->where('units.id', $code);
+			}
+		}else if($this->session->userdata('user')->level == 'unit'){
+			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
+		}	
+		$dateStart = $this->input->get('dateStart');
+		$dateEnd = $this->input->get('dateEnd');
+
+        if($this->session->userdata('user')->level === 'unit'){
+            $this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
+        }else if($unit = $this->input->get('id_unit')){
+            $this->units->db->where('units.id', $unit);
+		}
+		
+		$this->units->db->select('units.id, name, areas.area')
+						 ->join('areas','areas.id = units.id_area')
+						 ->select('no_perk,date,description,amount,type,permit')
+						 ->join('units_dailycashs','units.id = units_dailycashs.id_unit')
+						 ->where('date >=',$dateStart)
+						 ->where('date <=',$dateEnd)
+						 ->where('no_perk ','1110102');
+        $units = $this->units->db->get('units')->result();			
+
+		return $this->sendMessage($units,'Successfully get report realisasi');
 	}
 
 	public function coc()

@@ -55,24 +55,27 @@ class UnitsdailycashModel extends Master
 		);
 	}
 
-	public function getlmunits($idUnit)
+	public function getlmunits($idUnit,$date)
 	{
-		$coa = array('1110102','1110201','4120209');
-		$stock = $this->db->select('sum(amount) as amount, count(*) as noa')->from('units_dailycashs')
-						  ->where('type', 'CASH_IN')
-						  ->where_in('no_perk ', $coa)
-						  ->where('id_unit', $idUnit)->get()->row();
-		
-		$sales = $this->db->select('sum(amount) as amount, count(*) as noa')->from('units_dailycashs')
+		//$coa = array('1110102','1110201','4120209');
+		$purchase 	= $this->db->select('sum(amount) as amount, count(*) as noa')->from('units_dailycashs')
 						  ->where('type', 'CASH_OUT')
-						  ->where_in('no_perk ', $coa)
+						  ->where_in('no_perk ','1110102')
+						  ->where('date <=',$date)
 						  ->where('id_unit', $idUnit)->get()->row();	
+		
+		$sales 	= $this->db->select('sum(amount) as amount, count(*) as noa')->from('units_dailycashs')
+						  ->where('type', 'CASH_IN')
+						  ->where_in('no_perk ','1110102')
+						  ->where('date <=',$date)
+						  ->where('id_unit', $idUnit)->get()->row();
+
 
 		return (object)array(
-			'stock' => (int)$stock->amount,
-			'stock_noa' => (int)$stock->noa,
+			'purchase' => (int)$purchase->amount,
+			'purchase_noa' => (int)$purchase->noa,
 			'sales' => (int)$sales->amount,
-			'sale_noa' => (int)$sales->noa,
+			'sales_noa' => (int)$sales->noa,
 			//'percentage' => $percentage,
 		);
 	}

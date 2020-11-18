@@ -545,7 +545,7 @@ $currmonth = date('Y-m-d');
                                     <div class="kt-widget14__legends">
                                         <div class="kt-widget14__legend">
                                             <span class="kt-widget14__bullet kt-bg-success"></span>
-                                            <span class="kt-widget14__stats"><?php  echo "Stock(on IDR) "; ?> : <span class="total-target"></span></span>
+                                            <span class="kt-widget14__stats"><?php  echo "Purchase(on IDR) "; ?> : <span class="total-target"></span></span>
                                             <span class="kt-widget14__bullet kt-bg-info"></span>
                                             <span class="kt-widget14__stats"><?php  echo "Sale(on IDR) "; ?> : <span class="total-realisasi"></span></span>
                                         </div>
@@ -572,7 +572,7 @@ $currmonth = date('Y-m-d');
                                         <tr>
                                             <td class="text-left"><b>Area</b></td>
                                             <td class="text-left"><b>Unit</b></td>
-                                            <td class="text-right"><b>Stock</b></td>
+                                            <td class="text-right"><b>Purchase</b></td>
                                             <td class="text-right"><b>Sale</b></td>
                                             <td class="text-right"><b>Percentage</b></td>
                                         </tr>                                        
