@@ -143,5 +143,13 @@ class Stocks extends ApiController
 		return $this->sendMessage($result,'Successfully get stocks',200);
 	}
 
+	public function unit($id)
+	{
+		$dateStart = date('Y-m-01');
+		$dateEnd = date('Y-m-d');
+		$result = $this->model->gramsUnits($id, $dateStart, $dateEnd);
+		return $this->sendMessage($result, 'Successfully get stock by units');
+	}
+
 
 }
