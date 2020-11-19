@@ -143,6 +143,9 @@ function initDataTable(){
 				  title: 'type',
 				  width:60,
 				  textAlign: 'center',
+                  template:function(row){
+                      return row.type === 'CREDIT' ? 'Pengurangan' : 'Penambahan' 
+                  }
 			  },
               {
 				  field: 'description',

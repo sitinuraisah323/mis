@@ -33,6 +33,65 @@ class Stocks extends Authenticated
 		));
 	}
 
+	public function pdf()
+	{		
+		$this->load->library('pdf');
+		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		require_once APPPATH.'controllers/pdf/header.php';
+		$lm = $this->lm();
+		$pdf->AddPage('L');
+		$view = $this->load->view('datamaster/stocks/pdf',[
+			'grams'=>$lm->grams,
+			'data'=>$lm->data,
+		],true);
+		$pdf->writeHTML($view);
+				//download
+		// $pdf->Output('GHAnet_Summary_'.date('d_m_Y').'.pdf', 'D');
+		if($this->input->get('date')){
+			$date = $this->input->get('date');
+		}else{
+			$date = date('Y-m-d');
+		}
+		$pdf->Output('GHAnet_Summary_'.$date.'.pdf', 'D');
+	}
+
+	public function lm()
+	{
+		
+		if($this->input->get('date')){
+			$date = $this->input->get('date');
+		}else{
+			$date = date('Y-m-d');
+		}
+		$idUnit = $this->input->get('id_unit');
+		if($idUnit){
+			$this->units->db->where('id', $idUnit);
+		}
+
+		$idArea = $this->input->get('id_area');
+		if($idArea){
+			$this->units->db->where('id_area', $idArea);
+		}
+
+		$units = $this->units->db
+					->select('units.id, units.name')
+					->get('units')->result();
+
+		$grams = $this->grams->db
+				->select('lm_grams.id, lm_grams.weight')
+				->get('lm_grams')->result();
+		foreach($units as $unit){
+			foreach ($grams  as $index => $row)
+			{
+				$unit->{$row->weight} =  $this->stock->byGrams($row->id, $unit->id,$date);
+			}
+		}
+		return (object) [
+			'grams' => $grams,
+			'data'	=> $units,
+		];
+	}
+
 	public function export()
 	{
 		//load our new PHPExcel library
