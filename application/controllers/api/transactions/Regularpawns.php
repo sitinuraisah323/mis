@@ -323,7 +323,7 @@ class Regularpawns extends ApiController
 	{
 		$date = date('Y-m-d');
 		$this->regulars->db
-			->select("customers.name as customer_name, ROUND(units_regularpawns.capital_lease * 4 * amount) as tafsiran_sewa,
+			->select("customers.name as customer_name,address, mobile, ROUND(units_regularpawns.capital_lease * 4 * amount) as tafsiran_sewa,
 				CASE WHEN amount <=1000000 THEN 9000
 				WHEN amount <= 2500000 THEN 20000
 				WHEN amount <= 5000000 THEN 27000
@@ -340,7 +340,6 @@ class Regularpawns extends ApiController
 				")
 			->join('customers','units_regularpawns.id_customer = customers.id')
 			->join('units','units.id = units_regularpawns.id_unit')
-			->where('deadline <',$this->input->get('dateEnd') ? $this->input->get('dateEnd') : date('Y-m-d'))
 			->where('units_regularpawns.status_transaction ', 'N');
 			// ->where("DATEDIFF('$date', units_regularpawns.deadline) >", 30);
 		if($get = $this->input->get()){
@@ -359,17 +358,27 @@ class Regularpawns extends ApiController
 				if($packet === '120-135'){
 					$this->regulars->db
 						->where("DATEDIFF('$date', units_regularpawns.deadline) >=", 0)
-						->where("DATEDIFF('$date', units_regularpawns.deadline) <=", 15);
+						->where("DATEDIFF('$date', units_regularpawns.deadline) <=", 15)
+					->where('deadline <',$this->input->get('dateEnd') ? $this->input->get('dateEnd') : date('Y-m-d'));
 				}
 				if($packet === '136-150'){
 					$this->regulars->db
 					->where("DATEDIFF('$date', units_regularpawns.deadline) >=", 16)
-					->where("DATEDIFF('$date', units_regularpawns.deadline) <=", 30);
+					->where("DATEDIFF('$date', units_regularpawns.deadline) <=", 30)
+					->where('deadline <',$this->input->get('dateEnd') ? $this->input->get('dateEnd') : date('Y-m-d'));
 				}
 				if($packet === '>150'){
-					$this->regulars->db
+					$this->regulars->db				
 					->where("DATEDIFF('$date', units_regularpawns.deadline) >=", 31);
 				}
+				if($packet === '-7'){
+					$this->regulars->db
+					->where("DATEDIFF('$date', units_regularpawns.deadline) >=", -7)
+					->where("DATEDIFF('$date', units_regularpawns.deadline) <=", 0);
+				}
+			}else{
+				$this->regulars->db
+				->where('deadline <',$this->input->get('dateEnd') ? $this->input->get('dateEnd') : date('Y-m-d'));
 			}
 		}
 		$this->regulars->db->order_by('dpd','DESC');

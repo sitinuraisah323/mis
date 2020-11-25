@@ -24,9 +24,11 @@ class Transactions extends ApiController
 			if($log =  $this->input->get('statusrpt')){
 				$this->model->db->where('last_log', $log);
 			}
-			$this->model->db->join('units','units.id = lm_transactions.id_unit');
+		
 		}
+		$this->model->db->join('units','units.id = lm_transactions.id_unit');
 		$this->model->db
+			->select('units.name as unit')
 			->order_by('lm_transactions.id','desc');
 		$data = $this->model->all();
 		$this->master->db->order_by('weight','asc');
@@ -35,18 +37,19 @@ class Transactions extends ApiController
 			foreach ($data as $datum){
 				if($datum->id_employee){
 					$getEmployee = $this->model->db
-						->select('fullname as name, position, units.name as unit')
+						->select('fullname as name, position')
 						->from('employees')
 						->join('units','units.id = employees.id_unit')
 						->where('employees.id',$datum->id_employee)
 						->get()->row();
 					$datum->name = $getEmployee->name;
 					$datum->position = $getEmployee->position;
-					$datum->unit = $getEmployee->unit;
+				
 				}else{
 					$datum->position = '';
-					$datum->unit = '';
 				}
+				
+				$datum->unit = $datum->unit;
 				foreach ($grams as $gram){
 					$find = $this->gram->find(array(
 						'id_lm_transaction'	=> $datum->id,

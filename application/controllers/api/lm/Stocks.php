@@ -12,8 +12,15 @@ class Stocks extends ApiController
 
 	public function index()
 	{
+		if($query = $this->input->post('query')){
+			if($general = $query['generalSearch']){
+				$this->model->db->like('units.name', $general)
+					->or_like('areas.area', $general);
+			}
+		}
 		$this->model->db->join('lm_grams','lm_grams.id = lm_stocks.id_lm_gram')
 						->join('units','units.id = lm_stocks.id_unit')
+						->join('areas','areas.id = units.id_area')
 						->select('lm_grams.image, lm_grams.weight, units.name as unit');
 		if($this->session->userdata('user')->level == 'unit'){
 			$this->model->db->where('id_unit', $this->session->userdata('user')->id_unit);

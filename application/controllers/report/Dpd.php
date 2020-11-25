@@ -59,32 +59,36 @@ class Dpd extends Authenticated
 		$objPHPExcel->getActiveSheet()->getColumnDimension('D');
 		$objPHPExcel->getActiveSheet()->setCellValue('D1', 'Nasabah');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('E');
-		$objPHPExcel->getActiveSheet()->setCellValue('E1', 'Tanggal Kredit');
+		$objPHPExcel->getActiveSheet()->setCellValue('E1', 'Phone');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('F');
-		$objPHPExcel->getActiveSheet()->setCellValue('F1', 'Tanggal Jatuh Tempo');
+		$objPHPExcel->getActiveSheet()->setCellValue('F1', 'Address');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('G');
-		$objPHPExcel->getActiveSheet()->setCellValue('G1', 'Tanggal Lunas');
+		$objPHPExcel->getActiveSheet()->setCellValue('G1', 'Tanggal Kredit');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('H');
-		$objPHPExcel->getActiveSheet()->setCellValue('H1', 'Sewa Modal');
+		$objPHPExcel->getActiveSheet()->setCellValue('H1', 'Tanggal Jatuh Tempo');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('I');
-		$objPHPExcel->getActiveSheet()->setCellValue('I1', 'Taksiran');
+		$objPHPExcel->getActiveSheet()->setCellValue('I1', 'Tanggal Lunas');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('J');
-		$objPHPExcel->getActiveSheet()->setCellValue('J1', 'Admin');
+		$objPHPExcel->getActiveSheet()->setCellValue('J1', 'Sewa Modal');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('K');
-		$objPHPExcel->getActiveSheet()->setCellValue('K1', 'UP');
+		$objPHPExcel->getActiveSheet()->setCellValue('K1', 'Taksiran');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('L');
-		$objPHPExcel->getActiveSheet()->setCellValue('L1', 'DPD');
+		$objPHPExcel->getActiveSheet()->setCellValue('L1', 'Admin');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('M');
-		$objPHPExcel->getActiveSheet()->setCellValue('M1', 'Sewa Modal(4-Bulanan)');
+		$objPHPExcel->getActiveSheet()->setCellValue('M1', 'UP');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('N');
-		$objPHPExcel->getActiveSheet()->setCellValue('N1', 'Denda');
+		$objPHPExcel->getActiveSheet()->setCellValue('N1', 'DPD');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('O');
-		$objPHPExcel->getActiveSheet()->setCellValue('O1', 'Pelunasan');
+		$objPHPExcel->getActiveSheet()->setCellValue('O1', 'Sewa Modal(4-Bulanan)');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('P');
+		$objPHPExcel->getActiveSheet()->setCellValue('P1', 'Denda');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('Q');
+		$objPHPExcel->getActiveSheet()->setCellValue('Q1', 'Pelunasan');
 		
 		if($post = $this->input->post()){
 			$date = date('Y-m-d');
 			$this->regulars->db
-			->select("customers.name as customer_name, ROUND(units_regularpawns.capital_lease * 4 * amount) as tafsiran_sewa,
+			->select("customers.name as customer_name,mobile, address, ROUND(units_regularpawns.capital_lease * 4 * amount) as tafsiran_sewa,
 				CASE WHEN amount <=1000000 THEN 9000
 				WHEN amount <= 2500000 THEN 20000
 				WHEN amount <= 5000000 THEN 27000
@@ -103,7 +107,6 @@ class Dpd extends Authenticated
 				")
 			->join('customers','units_regularpawns.id_customer = customers.id')
 			->join('units','units.id = units_regularpawns.id_unit')
-			->where('deadline <=',$this->input->post('date-end') ? $this->input->post('date-end') : date('Y-m-d'))
 			->where('units_regularpawns.status_transaction ', 'N')
 			->order_by('dpd', 'DESC');
 			$this->regulars->db
@@ -119,19 +122,27 @@ class Dpd extends Authenticated
 			}
 			if($packet = $this->input->post('packet')){
 				if($packet === '120-135'){
-					$this->regulars->db
+					$this->regulars->db				
 						->where("DATEDIFF('$date', units_regularpawns.deadline) >=", 0)
 						->where("DATEDIFF('$date', units_regularpawns.deadline) <=", 15);
 				}
 				if($packet === '136-150'){
-					$this->regulars->db
+					$this->regulars->db			
 					->where("DATEDIFF('$date', units_regularpawns.deadline) >=", 16)
 					->where("DATEDIFF('$date', units_regularpawns.deadline) <=", 30);
 				}
 				if($packet === '>150'){
-					$this->regulars->db
+					$this->regulars->db				
 					->where("DATEDIFF('$date', units_regularpawns.deadline) >=", 31);
 				}
+				if($packet === '-7'){
+					$this->regulars->db
+					->where("DATEDIFF('$date', units_regularpawns.deadline) >=", -7)
+					->where("DATEDIFF('$date', units_regularpawns.deadline) <=", 0);
+				}
+			}else{
+				$this->regulars->db->where('deadline <=',$this->input->post('date-end') ? $this->input->post('date-end') : date('Y-m-d'));
+			
 			}
 			$data = $this->regulars->all();
 		}
@@ -160,18 +171,20 @@ class Dpd extends Authenticated
 			$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, $row->unit_name);	
 			$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, $row->no_sbk);				  	
 			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no, $row->customer_name);				  	
-			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no, date('d/m/Y',strtotime($row->date_sbk)));				 
-			$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, date('d/m/Y',strtotime($row->deadline)));				 
-			$objPHPExcel->getActiveSheet()->setCellValue('G'.$no,  '-');				 
-			$objPHPExcel->getActiveSheet()->setCellValue('H'.$no, $row->capital_lease);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('I'.$no, $row->estimation);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('J'.$no, $row->new_admin);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('K'.$no, $row->amount);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('L'.$no, $dpd);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('M'.$no, $row->tafsiran_sewa );				 
-			$objPHPExcel->getActiveSheet()->setCellValue('N'.$no, $this->calculateDenda($row->amount,$dpd));
+			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no, $row->mobile);				  	
+			$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, $row->address);				  	
+			$objPHPExcel->getActiveSheet()->setCellValue('G'.$no, date('d/m/Y',strtotime($row->date_sbk)));				 
+			$objPHPExcel->getActiveSheet()->setCellValue('H'.$no, date('d/m/Y',strtotime($row->deadline)));				 
+			$objPHPExcel->getActiveSheet()->setCellValue('I'.$no,  '-');				 
+			$objPHPExcel->getActiveSheet()->setCellValue('J'.$no, $row->capital_lease);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('K'.$no, $row->estimation);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('L'.$no, $row->new_admin);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('M'.$no, $row->amount);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('N'.$no, $dpd);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('O'.$no, $row->tafsiran_sewa );				 
+			$objPHPExcel->getActiveSheet()->setCellValue('P'.$no, $this->calculateDenda($row->amount,$dpd));
 			$calcup =  $row->tafsiran_sewa + $this->calculateDenda($row->amount,$dpd) + $row->amount;				 
-			$objPHPExcel->getActiveSheet()->setCellValue('O'.$no, $calcup);				 	 
+			$objPHPExcel->getActiveSheet()->setCellValue('Q'.$no, $calcup);				 	 
 			$no++;
 		}
 

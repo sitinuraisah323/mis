@@ -135,6 +135,7 @@ $this->load->view('temp/MenuBar.php');
                                 <option value="120-135">1 (120 > 135)</option>
                                 <option value="136-150">2 (136 > 150)</option>
                                 <option value=">150">3 (> 150)</option>
+                                <option value="-7">4 (-7)</option>
                         </select>
                 	</div>
                     <div class="col-lg-1">
@@ -149,7 +150,7 @@ $this->load->view('temp/MenuBar.php');
             </div>
 
             <div class="col-md-12">
-                <div class="kt-section__content">
+                <div class="kt-section__content table-responsive">
 						<table class="table">
 						  	<thead class="thead-light">
 						    	<tr>
@@ -159,6 +160,8 @@ $this->load->view('temp/MenuBar.php');
 									<th class="text-center">Tanggal Tempo</th>
 									<th class="text-center">Tanggal Lunas</th>
 						      		<th>Nasabah</th>
+						      		<th>Alamat</th>
+						      		<th>No Telp</th>
 									<th class="text-center">Sewa Modal</th>
 									<th class='text-right'>Tafsiran</th>
 									<th class='text-right'>Admin</th>

@@ -456,6 +456,9 @@ class Unitsdailycash extends ApiController
 			$this->saldo->db->where('date <', $dateStart);
 		}
 
+		if($this->input->get('permit') != 'All'){
+			$this->unitsdailycash->db->where('permit',$this->input->get('permit'));
+		}
 		$this->unitsdailycash->db
 			->select('
 			 (sum(CASE WHEN type = "CASH_IN" THEN `amount` ELSE 0 END) - sum(CASE WHEN type = "CASH_OUT" THEN `amount` ELSE 0 END)) as amount
@@ -463,6 +466,7 @@ class Unitsdailycash extends ApiController
 			->from('units_dailycashs')
 			->join('units','units.id = units_dailycashs.id_unit');
 		$saldo = (int) $this->unitsdailycash->db->get()->row()->amount;
+
 		$total = $saldo + $totalsaldoawal;
 
 
