@@ -40,7 +40,7 @@ class Stocks extends ApiController
 			$this->form_validation->set_rules('amount', 'Amount', 'required|integer');
 			$this->form_validation->set_rules('type', 'Type', 'required');
 			$this->form_validation->set_rules('date_receive', 'Date receive', 'required');
-			$this->form_validation->set_rules('status', 'Status', 'required');
+			$this->form_validation->set_rules('status', 'Status', 'required');		
 
 
 			if ($this->form_validation->run() == FALSE)
@@ -49,6 +49,18 @@ class Stocks extends ApiController
 			}
 			else
 			{
+				$sum = 0;
+				$total = $this->model->byGrams($this->input->post('id_lm_gram'), $this->input->post('id_unit'));
+				if($this->input->post('type') == 'DEBIT'){
+					$sum = $total + $this->input->post('amount');
+				}else{
+					$sum = $total - $this->input->post('amount');
+				}
+				if($sum < 0){
+					return $this->sendMessage(false, [
+						'Jumlah menjadi minus harap periksa inputan anda'
+					]);
+				}
 				if($this->model->insert($post)){
 					return $this->sendMessage(true,'Successfull Insert Data Menu');
 				}else{
@@ -83,8 +95,21 @@ class Stocks extends ApiController
 			}
 			else
 			{
+
 				$id = $post['id'];
 				$data = $post;
+				$sum = 0;
+				$total = $this->model->byGrams($this->input->post('id_lm_gram'), $this->input->post('id_unit'), null, $id);
+				if($this->input->post('type') == 'DEBIT'){
+					$sum = $total + $this->input->post('amount');
+				}else{
+					$sum = $total - $this->input->post('amount');
+				}
+				if($sum < 0){
+					return $this->sendMessage(false, [
+						'Jumlah menjadi minus harap periksa inputan anda'
+					]);
+				}
 				if($this->model->update($data, $id)){
 					return $this->sendMessage(true,'Successfully update',500 );
 				}else{

@@ -73,14 +73,16 @@ class LmStocksModel extends Master
 	return $this->db->get()->result();
 	}
 
-	public function byGrams($idGrams, $idUnit = 0, $date = null)
+	public function byGrams($idGrams, $idUnit = 0, $date = null, $escape = null)
 	{
 		if($date == null){
 			$date = date('Y-m-d');
 		}
 		$query = $this->db->query('select COALESCE(( 
 			sum(CASE WHEN lm_stocks.type = "DEBIT" THEN `amount` ELSE 0 END) - 	sum(CASE WHEN type = "CREDIT" THEN `amount` ELSE 0 END)
-		),0) as total from lm_stocks where date_receive <= "'.$date.'" and id_unit = "'.$idUnit.'" and status="PUBLISH" and id_lm_gram = "'.$idGrams.'" ');
+		),0) as total from lm_stocks where date_receive <= "'.$date.'" and id_unit = "'.$idUnit.'" and status="PUBLISH" and id_lm_gram = "'.$idGrams.'" 
+		and id != "'.$escape.'"
+		');
 		return $query->row()->total;
 	}
 }

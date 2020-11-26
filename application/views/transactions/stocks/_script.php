@@ -175,8 +175,10 @@ function initDataTable(){
                 autoHide: false,
                 template: function (row) {
                     var result ="";
+                     if(formatDate(row.created_at) == '<?php echo date('Y-m-d');?>'){
                         result = result + '<span data-id="' + row.id + '" href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md btn_edit" title="Edit" ><i class="flaticon-edit-1" style="cursor:pointer;"></i></span>';
                         result = result + '<span data-id="' + row.id + '" href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md btn_delete" title="Delete" ><i class="flaticon2-trash" style="cursor:pointer;"></i></span>';
+                   }
                     return result;
                 }                        
             }
@@ -195,6 +197,20 @@ function initDataTable(){
 const showModal = ()=>{
     clearForm();
     $('#modal_add').modal('show');
+}
+
+function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
 }
 
 
