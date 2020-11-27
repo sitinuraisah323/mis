@@ -134,6 +134,16 @@ class Unitsdailycash extends ApiController
             }
         }	
 	}
+
+	public function cekfirst($idUnit, $permit)
+	{
+		return $this->unitsdailycash->db
+			->select('date')
+			->where('id_unit', $idUnit)
+			->where('permit', $permit)
+			->order_by('date', 'asc')
+			->get('units_dailycashs')->row()->date;
+	}
 	
 	public function report()
 	{
@@ -442,6 +452,7 @@ class Unitsdailycash extends ApiController
 		}
 
 
+
 		if($area > 0){
 			$this->saldo->db->where('id_area', $area);
 		}
@@ -467,7 +478,18 @@ class Unitsdailycash extends ApiController
 			->join('units','units.id = units_dailycashs.id_unit');
 		$saldo = (int) $this->unitsdailycash->db->get()->row()->amount;
 
+	
 		$total = $saldo + $totalsaldoawal;
+
+		if($this->input->get('permit') != 'All'){
+			$cekFirst = $this->cekfirst($idUnit, $this->input->get('permit'));
+			if($cekFirst > $dateStart){
+				$total  = $saldo;
+			}else{
+				$total  = $saldo + $totalsaldoawal;
+			}
+		
+		}
 
 
 		$data = (object) array(

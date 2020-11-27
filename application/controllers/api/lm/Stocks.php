@@ -79,7 +79,7 @@ class Stocks extends ApiController
 		if($post = $this->input->post()){
 
 			$this->load->library('form_validation');
-			$this->form_validation->set_rules('id_unit', 'id lm gram', 'required|integer');
+			$this->form_validation->set_rules('id_unit', 'id unit gram', 'required|integer');
 			$this->form_validation->set_rules('id', 'id', 'required|integer');
 			$this->form_validation->set_rules('id_lm_gram', 'id lm gram', 'required|integer');
 			$this->form_validation->set_rules('amount', 'Amount', 'required|integer');
