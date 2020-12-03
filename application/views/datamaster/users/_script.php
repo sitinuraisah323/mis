@@ -88,8 +88,7 @@ function initDTEvents(){
 
 					setTimeout(function(){  
                         //var cabangid =  $('#cabang_id').val(); 
-						//$("#cabang").val(cabangid).trigger('change');
-						
+						//$("#cabang").val(cabangid).trigger('change');						
                     }, 800);
 
 				}else{
