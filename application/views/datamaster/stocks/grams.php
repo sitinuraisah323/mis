@@ -124,6 +124,7 @@ $this->load->view('temp/MenuBar.php');
                         <div class="position-relative">
                         <button type="submit" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>
                         <button type="button" onclick="excel(event)" class="btn btn-danger btn-icon" name="btnexport_csv" id="btnexport_csv"><i class="fa fa-file-excel"></i></button>
+                        <button type="button" onclick="pdf(event)" class="btn btn-info btn-icon" name="btnexport_csv" id="btnexport_csv"><i class="fa fa-file-pdf"></i></button>
                         </div>
                     </div>                  
 				</div>

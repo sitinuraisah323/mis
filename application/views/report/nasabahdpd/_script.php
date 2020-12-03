@@ -143,6 +143,8 @@ function initCariForm(){
                         if(data.date_repayment!=null){ var DateRepayment = moment(data.date_repayment).format('DD-MM-YYYY');}else{ var DateRepayment = "-";}
 						template += "<td class='text-center'>"+DateRepayment+"</td>";
 						template += "<td>"+data.customer_name+"</td>";
+						template += "<td>"+data.address+"</td>";
+						template += "<td>"+data.mobile+"</td>";
 						template += "<td class='text-center'>"+data.capital_lease+"</td>";
 						template += "<td class='text-right'>"+convertToRupiah(data.estimation)+"</td>";
 						template += "<td class='text-right'>"+convertToRupiah(data.admin)+"</td>";
@@ -165,7 +167,7 @@ function initCariForm(){
 						totalDPD += parseInt(date_between(data.deadline,"<?php echo date('Y/m/d');?>"));
 					});
 					template += "<tr class='rowappend'>";
-					template += "<td colspan='8' class='text-right'>Total</td>";
+					template += "<td colspan='10' class='text-right'>Total</td>";
 					template += "<td class='text-right'>"+convertToRupiah(admin)+"</td>";
 					template += "<td class='text-right'>"+convertToRupiah(amount)+"</td>";
 					template += "<td class='text-right'>"+totalDPD+"</td>";

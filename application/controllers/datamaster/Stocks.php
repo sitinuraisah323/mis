@@ -33,6 +33,65 @@ class Stocks extends Authenticated
 		));
 	}
 
+	public function pdf()
+	{		
+		$this->load->library('pdf');
+		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		require_once APPPATH.'controllers/pdf/header.php';
+		$lm = $this->lm();
+		$pdf->AddPage('L');
+		$view = $this->load->view('datamaster/stocks/pdf',[
+			'grams'=>$lm->grams,
+			'data'=>$lm->data,
+		],true);
+		$pdf->writeHTML($view);
+				//download
+		// $pdf->Output('GHAnet_Summary_'.date('d_m_Y').'.pdf', 'D');
+		if($this->input->get('date')){
+			$date = $this->input->get('date');
+		}else{
+			$date = date('Y-m-d');
+		}
+		$pdf->Output('GHAnet_Summary_'.$date.'.pdf', 'D');
+	}
+
+	public function lm()
+	{
+		
+		if($this->input->get('date')){
+			$date = $this->input->get('date');
+		}else{
+			$date = date('Y-m-d');
+		}
+		$idUnit = $this->input->get('id_unit');
+		if($idUnit){
+			$this->units->db->where('id', $idUnit);
+		}
+
+		$idArea = $this->input->get('id_area');
+		if($idArea){
+			$this->units->db->where('id_area', $idArea);
+		}
+
+		$units = $this->units->db
+					->select('units.id, units.name')
+					->get('units')->result();
+
+		$grams = $this->grams->db
+				->select('lm_grams.id, lm_grams.weight')
+				->get('lm_grams')->result();
+		foreach($units as $unit){
+			foreach ($grams  as $index => $row)
+			{
+				$unit->{$row->weight} =  $this->stock->byGrams($row->id, $unit->id,$date);
+			}
+		}
+		return (object) [
+			'grams' => $grams,
+			'data'	=> $units,
+		];
+	}
+
 	public function export()
 	{
 		//load our new PHPExcel library
@@ -54,41 +113,53 @@ class Stocks extends Authenticated
 			->setKeywords("phpExcel")
 			->setCategory("well Data");
 
-		$objPHPExcel->setActiveSheetIndex(0);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(25);
-		$objPHPExcel->getActiveSheet()->setCellValue('A1', 'Unit');
-		$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(25);
-		$objPHPExcel->getActiveSheet()->setCellValue('B1', 'Weight');
-		$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(25);
-		$objPHPExcel->getActiveSheet()->setCellValue('C1', $date1);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(25);
-		$objPHPExcel->getActiveSheet()->setCellValue('D1', $date2);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
-		$objPHPExcel->getActiveSheet()->setCellValue('E1', $date3);
-		
+
+		$this->grams->db->order_by('weight', 'asc');
 		$grams = $this->grams->all();
 		$no=2;
 		if($idArea !== null){
+			$objPHPExcel->setActiveSheetIndex(0);
+			$objPHPExcel->getActiveSheet()->setCellValue('A1', 'No');
+			$objPHPExcel->getActiveSheet()->setCellValue('B1', 'Unit');
 			if($idUnit){
 				$this->units->db->where('id', $idUnit);
 			}
 			if($idArea){
 				$this->units->db->where('id_area', $idArea);
 			}
+			$cel = ['C','D','E','F', 'G','H','I'];
+			foreach ($grams  as $index => $row)
+			{
+				$objPHPExcel->getActiveSheet()->setCellValue($cel[$index].'1', $row->weight);
+			}
+			$objPHPExcel->getActiveSheet()->setCellValue('J1', 'Total');
 			$units = $this->units->all();
 			foreach($units as $unit){
-				foreach ($grams  as $row)
+				$i = $no+1;
+				$objPHPExcel->getActiveSheet()->setCellValue('A'.$no,$i);
+				$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, $unit->name);
+				$total = 0;
+				foreach ($grams  as $index => $row)
 				{
-					$objPHPExcel->getActiveSheet()->setCellValue('A'.$no, $unit->name);
-					$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, $row->weight.' grams');
-					$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, $this->stock->byGrams($row->id, $unit->id,$date1));
-					$objPHPExcel->getActiveSheet()->setCellValue('D'.$no, $this->stock->byGrams($row->id, $unit->id, $date1));
-					$objPHPExcel->getActiveSheet()->setCellValue('E'.$no, $this->stock->byGrams($row->id, $unit->id, $date1));
-					$no++;
+					$stock =  $this->stock->byGrams($row->id, $unit->id,$date1);
+					$total += $stock;
+					$objPHPExcel->getActiveSheet()->setCellValue($cel[$index].$no, $stock);
 				}
+				$objPHPExcel->getActiveSheet()->setCellValue('J'.$no, $total);
+				$no++;
 			}
 		}else{
-
+			$objPHPExcel->setActiveSheetIndex(0);
+			$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(25);
+			$objPHPExcel->getActiveSheet()->setCellValue('A1', 'Unit');
+			$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(25);
+			$objPHPExcel->getActiveSheet()->setCellValue('B1', 'Weight');
+			$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(25);
+			$objPHPExcel->getActiveSheet()->setCellValue('C1', $date1);
+			$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(25);
+			$objPHPExcel->getActiveSheet()->setCellValue('D1', $date2);
+			$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
+			$objPHPExcel->getActiveSheet()->setCellValue('E1', $date3);
 			foreach ($grams  as $row)
 			{
 				$objPHPExcel->getActiveSheet()->setCellValue('A'.$no, $row->unit);

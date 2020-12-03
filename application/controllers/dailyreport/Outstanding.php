@@ -27,6 +27,8 @@ class Outstanding extends Authenticated
 		$this->load->model('MappingcaseModel', 'm_casing');
 		$this->load->model('OutstandingModel', 'outstanding');
 		$this->load->model('UnitsdailycashModel','dailycash');
+		$this->load->model('LmStocksModel','stock');
+		$this->load->model('LmGramsModel','grams');
 	}
 
 	public function target($date)
@@ -133,6 +135,7 @@ class Outstanding extends Authenticated
 			'coas'=>$coas	,
 			'datetrans'	=> $this->datetrans()
 		],true);
+
 		$pdf->writeHTML($view);
 		
 
@@ -144,7 +147,7 @@ class Outstanding extends Authenticated
 		],true);
 		$pdf->writeHTML($view);
 	
-
+	
 		//download
 		$pdf->Output('GHAnet_Summary_'.date('d_m_Y').'.pdf', 'D');
 		//view
@@ -646,5 +649,7 @@ class Outstanding extends Authenticated
 		return $data; //->sendMessage($data,'Successfully get Pendapatan');
 	}
 	
+
+
 
 }

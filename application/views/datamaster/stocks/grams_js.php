@@ -48,6 +48,12 @@
         window.location.href = `<?php echo base_url('datamaster/stocks/export');?>?date_start=${date_start}&date_end=${date_end}&id_area=${id_area}&id_unit=${id_unit}`
     }
 
+    const pdf = (event) =>{
+        const date = event.target.closest('form').querySelector('[name="date_end"]').value;
+        const id_unit = $('#unit').val();
+        const id_area = $('#area').val();
+        window.location.href = `<?php echo base_url('datamaster/stocks/pdf');?>?date=${date}&id_area=${id_area}&id_unit=${id_unit}`
+    }
     
     $('[name="area"]').on('change',function(){
             var area = $('[name="area"]').val();

@@ -811,6 +811,11 @@ class Dashboards extends Authenticated
 		$objWriter->save('php://output');
 
 	}
+
+	public function stocks()
+	{
+		$this->load->view('dashboard/stocks/index');
+	}
     
 
 }

@@ -12,8 +12,15 @@ class Stocks extends ApiController
 
 	public function index()
 	{
+		if($query = $this->input->post('query')){
+			if($general = $query['generalSearch']){
+				$this->model->db->like('units.name', $general)
+					->or_like('areas.area', $general);
+			}
+		}
 		$this->model->db->join('lm_grams','lm_grams.id = lm_stocks.id_lm_gram')
 						->join('units','units.id = lm_stocks.id_unit')
+						->join('areas','areas.id = units.id_area')
 						->select('lm_grams.image, lm_grams.weight, units.name as unit');
 		if($this->session->userdata('user')->level == 'unit'){
 			$this->model->db->where('id_unit', $this->session->userdata('user')->id_unit);
@@ -33,7 +40,7 @@ class Stocks extends ApiController
 			$this->form_validation->set_rules('amount', 'Amount', 'required|integer');
 			$this->form_validation->set_rules('type', 'Type', 'required');
 			$this->form_validation->set_rules('date_receive', 'Date receive', 'required');
-			$this->form_validation->set_rules('status', 'Status', 'required');
+			$this->form_validation->set_rules('status', 'Status', 'required');		
 
 
 			if ($this->form_validation->run() == FALSE)
@@ -42,6 +49,18 @@ class Stocks extends ApiController
 			}
 			else
 			{
+				$sum = 0;
+				$total = $this->model->byGrams($this->input->post('id_lm_gram'), $this->input->post('id_unit'));
+				if($this->input->post('type') == 'DEBIT'){
+					$sum = $total + $this->input->post('amount');
+				}else{
+					$sum = $total - $this->input->post('amount');
+				}
+				if($sum < 0){
+					return $this->sendMessage(false, [
+						'Jumlah menjadi minus harap periksa inputan anda'
+					]);
+				}
 				if($this->model->insert($post)){
 					return $this->sendMessage(true,'Successfull Insert Data Menu');
 				}else{
@@ -60,7 +79,7 @@ class Stocks extends ApiController
 		if($post = $this->input->post()){
 
 			$this->load->library('form_validation');
-			$this->form_validation->set_rules('id_unit', 'id lm gram', 'required|integer');
+			$this->form_validation->set_rules('id_unit', 'id unit gram', 'required|integer');
 			$this->form_validation->set_rules('id', 'id', 'required|integer');
 			$this->form_validation->set_rules('id_lm_gram', 'id lm gram', 'required|integer');
 			$this->form_validation->set_rules('amount', 'Amount', 'required|integer');
@@ -76,8 +95,21 @@ class Stocks extends ApiController
 			}
 			else
 			{
+
 				$id = $post['id'];
 				$data = $post;
+				$sum = 0;
+				$total = $this->model->byGrams($this->input->post('id_lm_gram'), $this->input->post('id_unit'), null, $id);
+				if($this->input->post('type') == 'DEBIT'){
+					$sum = $total + $this->input->post('amount');
+				}else{
+					$sum = $total - $this->input->post('amount');
+				}
+				if($sum < 0){
+					return $this->sendMessage(false, [
+						'Jumlah menjadi minus harap periksa inputan anda'
+					]);
+				}
 				if($this->model->update($data, $id)){
 					return $this->sendMessage(true,'Successfully update',500 );
 				}else{
@@ -141,6 +173,14 @@ class Stocks extends ApiController
 
 
 		return $this->sendMessage($result,'Successfully get stocks',200);
+	}
+
+	public function unit($id)
+	{
+		$dateStart = date('Y-m-01');
+		$dateEnd = date('Y-m-d');
+		$result = $this->model->gramsUnits($id, $dateStart, $dateEnd);
+		return $this->sendMessage($result, 'Successfully get stock by units');
 	}
 
 
