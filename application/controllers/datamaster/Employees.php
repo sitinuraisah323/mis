@@ -21,6 +21,7 @@ class Employees extends Authenticated
 		$this->load->model('LevelsModel', 'levels');
 		$this->load->model('AreasModel', 'areas');
 		$this->load->model('GroupsModel', 'groups');
+		$this->load->model('CabangModel', 'cabangs');
 	}
 
 	/**
@@ -33,6 +34,7 @@ class Employees extends Authenticated
 			'levels'	=> $this->levels->all(),
 			'areas'		=> $this->areas->all(),
 			'groups'	=> $this->groups->all(),
+			'cabangs'	=> $this->cabangs->all(),
 		));
 	}
 

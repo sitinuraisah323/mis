@@ -30,14 +30,15 @@
 
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Group</label>
-                                    <select class="form-control select2" name="group" id="edit_group">
+                                    <label>Cabang</label>
+                                    <input type="hidden" class="form-control" id="cabangid" name="cabangid">
+                                    <select class="form-control select2" name="cabang" id="edit_cabang">
                                     <?php 
-                                        if (!empty($groups)){
-                                            foreach($groups as $row){
-                                               echo "<option value=".$row->id.">".$row->group."</option>";
-                                            }
-                                        }
+                                        // if (!empty($cabang)){
+                                        //     foreach($cabang as $row){
+                                        //        echo "<option value=".$row->id.">".$row->cabang."</option>";
+                                        //     }
+                                        // }
                                     ?>
                                     </select>
                                 </div>

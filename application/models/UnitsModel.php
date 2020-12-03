@@ -8,9 +8,9 @@ class UnitsModel extends Master
 
 	public function get_units()
 	{
-		$this->db->select('a.id,a.date_open,c.group,b.area,a.name,a.code,a.status,a.date_create,a.date_update,a.user_create,a.user_update');		
+		$this->db->select('a.id,a.date_open,c.cabang,b.area,a.name,a.code,a.status,a.date_create,a.date_update,a.user_create,a.user_update');		
 		$this->db->join('areas as b','b.id=a.id_area');		
-		$this->db->join('groups as c','c.id=a.id_group','left');		
+		$this->db->join('cabang as c','c.id=a.id_cabang','left');		
 		$this->db->order_by('a.id','desc');		
 		return $this->db->get('units as a')->result();
 	}
@@ -20,6 +20,24 @@ class UnitsModel extends Master
 		$this->db->select('a.id,b.area,a.name, a.code');
 		$this->db->join('areas as b','b.id=a.id_area');		
 		$this->db->where('a.id_area',$area);		
+		$this->db->order_by('a.id','desc');		
+		return $this->db->get('units as a')->result();
+	}
+
+	public function get_unit_bycabang($cabang)
+	{
+		$this->db->select('a.id,b.cabang,a.name, a.code');
+		$this->db->join('cabang as b','b.id=a.id_cabang');		
+		$this->db->where('a.id_cabang',$cabang);		
+		$this->db->order_by('a.id','desc');		
+		return $this->db->get('units as a')->result();
+	}
+
+	public function get_unit()
+	{
+		$this->db->select('a.id,b.cabang,a.name, a.code,c.area');
+		$this->db->join('cabang as b','b.id=a.id_cabang');		
+		$this->db->join('areas as c','c.id=b.id_area');		
 		$this->db->order_by('a.id','desc');		
 		return $this->db->get('units as a')->result();
 	}

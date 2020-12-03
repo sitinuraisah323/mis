@@ -134,7 +134,7 @@ $this->load->view('temp/MenuBar.php');
 
             <div class="col-md-12">
                 <div class="kt-section__content">
-						<table class="table">
+						<table class="table" id="tbl1">
 						  	<thead class="thead-light">
 						    	<tr>
 						      		<th class="text-center">No</th>
@@ -148,6 +148,7 @@ $this->load->view('temp/MenuBar.php');
 									<th class='text-right'>Admin</th>
 									<th class='text-right'>UP</th>
 									<th class='text-right'>Status</th>
+									<th class='text-right'>#</th>
 									<th></th>
 						    	</tr>
 						  	</thead>
@@ -171,5 +172,6 @@ $this->load->view('temp/MenuBar.php');
 
 <?php
 $this->load->view('temp/Footer.php');
+$this->load->view('report/customers/_edit.php');
 $this->load->view('report/customers/_script.php');
 ?>

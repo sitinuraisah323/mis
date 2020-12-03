@@ -12,33 +12,39 @@ class Customers extends ApiController
 
 	public function index()
 	{
-		$this->customers->db->order_by('name','DESC');
-		$data = $this->customers->all();
+		$this->customers->db;
+			if($this->session->userdata('user')->level != 'administrator'){
+				$this->customers->db->where('id_unit', $this->session->userdata('user')->id_unit);
+			}
 		if($post = $this->input->post()){
 			if(is_array($post['query'])){
 				$value = $post['query']['generalSearch'];
 				$this->customers->db
-					->or_like('name', $value)
-					->or_like('city', strtoupper($value))
-					->or_like('province', strtoupper($value))
-					->or_like('mother_name', strtoupper($value))
-					->or_like('sibling_name', strtoupper($value))
-					->or_like('marital', strtoupper($value))
-					->or_like('gender', strtoupper($value))
-					->or_like('city', $value)
-					->or_like('mother_name', $value)
-					->or_like('marital', $value)
-					->or_like('sibling_name', $value)
-					->or_like('gender', $value)
-					->or_like('province', $value)
-					->or_like('name', strtoupper($value))
-					->order_by('name','ASC');
-				$data = $this->customers->all();
+					->or_like('name', $value);					
+					//->or_like('name', strtoupper($value));
+					//->or_like('customers.city', strtoupper($value))
+					// ->or_like('customers.province', strtoupper($value))
+					// ->or_like('mother_name', strtoupper($value))
+					// ->or_like('customers.sibling_name', strtoupper($value))
+					// ->or_like('customers.marital', strtoupper($value))
+					// ->or_like('customers.gender', strtoupper($value))
+					// ->or_like('customers.city', $value)
+					// ->or_like('customers.mother_name', $value)
+					// ->or_like('customers.marital', $value)
+					// ->or_like('customers.sibling_name', $value)
+					// ->or_like('customers.gender', $value)
+					// ->or_like('customers.province', $value)
+					//->order_by('name','ASC');
+					$data = $this->customers->all();
 			}
 		}
+		$data =  $this->customers->all();
+		// if($this->session->userdata('user')->level != 'administrator'){
+		// 	$this->customers->db->where('id_unit', $this->session->userdata('user')->id_unit);
+		// }
 		echo json_encode(array(
 			'data'	=> $data,
-			'message'	=> 'Successfully Get Data Users'
+			'message'	=> 'Successfully Get Data Regular Pawns'
 		));
 	}
 

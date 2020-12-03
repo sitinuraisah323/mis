@@ -1,4 +1,5 @@
 <script>
+
 	$('.upload').on('click', function (e) {
 		e.preventDefault();
 		$('#modal-upload').modal('show');
@@ -34,12 +35,14 @@
 				var data = response.data;
 				$('[name="id"]').val(data.id);
 				$('[name="no_cif"]').val(data.no_cif);
+				$('[name="nik"]').val(data.nik);
 				$('[name="name"]').val(data.name);
 				$('[name="mobile"]').val(data.mobile);
 				$('[name="birth_date"]').val(data.birth_date);
 				$('[name="birth_place"]').val(data.birth_place);
-				$('[name="gender"]').val(data.gender);
+				$('[name="gender"]').val(data.gender);				
 				$('[name="marital"]').val(data.marital);
+				$('[name="marital"]').trigger('change');
 				$('[name="province"]').val(data.province);
 				$('[name="city"]').val(data.city);
 				$('[name="address"]').val(data.address);
@@ -54,6 +57,9 @@
 				$('#modal-form').trigger('click');
 			}
 		});
+
+		
+
 	});
 
 	$('.btn-save').on('click', function (e) {
@@ -66,6 +72,20 @@
 				location.reload();
 			}
 		});
+	});
+
+	$('.btn-close').on('click', function (e) {
+		e.preventDefault();
+		// Coding
+		$('#modal-form').modal('toggle'); //or  $('#IDModal').modal('hide');
+		return false;
+	});
+
+	$('.close').on('click', function (e) {
+		e.preventDefault();
+		// Coding
+		$('#modal-form').modal('toggle'); //or  $('#IDModal').modal('hide');
+		return false;
 	});
 
 
@@ -103,6 +123,12 @@
 					sortable: 'asc',
 					width:60,
 					textAlign: 'center',
+				},
+				{
+					field: 'nik',
+					title: 'KTP',
+					sortable: 'asc',
+					textAlign: 'left',
 				},
 				{
 					field: 'name',

@@ -104,19 +104,19 @@ function initDataTable(){
                 sortable: 'asc',
                 width:60,
                 textAlign: 'center',
-            }, 
-            {
-                field: 'group',
-                title: 'Groups',
-                sortable: 'asc',
-                textAlign: 'left',
-            },
+            },             
             {
                 field: 'area',
                 title: 'Area',
                 sortable: 'asc',
                 textAlign: 'left',
             }, 
+            {
+                field: 'cabang',
+                title: 'Cabang',
+                sortable: 'asc',
+                textAlign: 'left',
+            },
             {
                 field: 'code',
                 title: 'Code',
@@ -236,6 +236,9 @@ function initAlert(){
 
 function initCreateForm(){
     //validator
+    //$('#add_area').val("val", "").trigger('change.select2');
+    //$('#add_cabang').val("val", "").trigger('change.select2');
+
     var validator = $( "#form_add" ).validate({
         ignore:[],
         rules: {
@@ -256,7 +259,7 @@ function initCreateForm(){
         width: '100%'
     });
 
-    $('#add_group').select2({
+    $('#add_cabang').select2({
         placeholder: "Please select a Group",
         width: '100%'
     });
@@ -303,6 +306,8 @@ function initCreateForm(){
 
 function initEditForm(){
     //validator
+    //$('#edit_area').val("val", "").trigger('change.select2');
+    //$('#edit_cabang').val("val", "").trigger('change.select2');
     var validator = $( "#form_edit" ).validate({
         ignore:[],
         rules: {
@@ -320,8 +325,8 @@ function initEditForm(){
         width: '100%'
     }); 
 
-    $('#edit_group').select2({
-        placeholder: "Please select a Group",
+    $('#edit_cabang').select2({
+        placeholder: "Please select a Cabang",
         width: '100%'
     });
     //events
@@ -362,11 +367,13 @@ function initEditForm(){
 
     var populateForm = function(groupObject){
         $("#edit_unit_id").val(groupObject.id);
+        $("#edit_area").val(groupObject.id_area);
+        $("#edit_area").trigger('change');
+        $("#cabangid").val(groupObject.id_cabang);
         $("#edit_unit_name").val(groupObject.name);
         $("#edit_code_unit").val(groupObject.code);
-        $("#edit_group").val(groupObject.id_group);
         $("[name='date_open']").val(groupObject.date_open);
-        $("#edit_group").trigger('change');
+       
     }
 
     const  clearForm = function(){
@@ -380,6 +387,69 @@ function initEditForm(){
     return {
         validator:validator,
         populateForm:populateForm
+    }
+}
+
+$('#add_area').on('change',function(){
+        var area = $(this).val();
+        //alert(area);
+        var cabangs =  document.getElementById('add_cabang');
+        var url_data = $('#url_get_unit').val() + '/' + area;
+        $.get(url_data, function (data, status) {
+            var response = JSON.parse(data);
+            if (status) {
+                $("#add_cabang").empty();
+				var opt = document.createElement("option");
+				opt.value = "0";
+				opt.text = "All";
+				cabangs.appendChild(opt);
+                for (var i = 0; i < response.data.length; i++) {
+                    var opt = document.createElement("option");
+                    opt.value = response.data[i].id;
+                    opt.text = response.data[i].cabang;
+                    cabangs.appendChild(opt);
+                }
+            }
+        });
+});
+
+$('#edit_area').on('change',function(){
+        var area = $('#edit_area').val();
+        //alert(area);
+        var cabangs =  document.getElementById('edit_cabang');
+              
+        var url_data = $('#url_get_unit').val() + '/' + area;
+        $.get(url_data, function (data, status) {
+            var response = JSON.parse(data);
+            if (status) {
+                $("#edit_cabang").empty();
+				var opt = document.createElement("option");
+				opt.value = "0";
+				opt.text = "All";
+				cabangs.appendChild(opt);
+                for (var i = 0; i < response.data.length; i++) {
+                    var opt = document.createElement("option");
+                    opt.value = response.data[i].id;
+                    opt.text = response.data[i].cabang;
+                    cabangs.appendChild(opt);
+                }               
+            }
+        });
+        setTimeout(function(){  
+            var valueToSet =  $('#cabangid').val(); 
+            $("#edit_cabang").val(valueToSet).trigger('change');
+            //var objSelect = document.getElementById("edit_cabang");
+            //setSelectedIndex(objSelect,valueToSet);
+        }, 800);
+});
+
+function setSelectedIndex(objSelect, valueToSet) {
+    for ( var i = 0; i < objSelect.options.length; i++ ) {
+        if ( objSelect.options[i].value == valueToSet ) {
+            objSelect.options[i].selected = true;
+            objSelect.onchange();
+            return;
+        }
     }
 }
 

@@ -17,8 +17,6 @@ class Dashboards extends ApiController
 		$this->load->model('MortagesModel', 'mortages');		
 	}
 
-	
-
 	public function getlastdatetransaction(){
 		$data = $this->regular->getLastDateTransaction();
 		$this->sendMessage($data, 'Get Data Outstanding');

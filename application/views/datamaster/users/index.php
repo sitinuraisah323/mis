@@ -117,54 +117,70 @@ $this->load->view('temp/MenuBar.php');
 			<div class="modal-body form">
 				<div class="form-horizontal">
 					<div class="form-body">
-						<div class="form-group">
-							<label>Employee *kosongkan jika tidak terkait dengan karyawan</label>
-							<select name="id_employee" id="id_employee" class="form-control">
-								<option value="0"></option>
-								<?php foreach ($employees as $employee):?>
-									<option value="<?php echo $employee->id;?>"><?php echo $employee->fullname;?></option>
-								<?php endforeach;?>
-							</select>
-						</div>
-						<div class="form-group">
-							<label>Level</label>
-							<select name="id_level" id="id_level" class="form-control">
-								<option value=""></option>
-								<?php foreach ($levels as $level):?>
-									<option value="<?php echo $level->id;?>"><?php echo $level->level;?></option>
-								<?php endforeach;?>
-							</select>
-						</div>
-						<div class="form-group d-none">
-							<label>Area</label>
-							<select  name="id_area" class="form-control" id="area">
-								<option  value=""></option>
-								<?php foreach ($areas as $area):?>
-									<option value="<?php echo $area->id;?>"><?php echo $area->area;?></option>
-								<?php endforeach;?>
-							</select>
-						</div>
-						<div class="form-group d-none">
-							<label>Unit</label>
-							<select  name="id_unit" class="form-control" id="id_unit">
-								<option  value=""></option>
-								<?php foreach ($units as $unit):?>
-									<option value="<?php echo $unit->id;?>" data-area="<?php echo $unit->id_area;?>"><?php echo $unit->name;?></option>
-								<?php endforeach;?>
-							</select>
+
+						<div class="row"> 
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>Employee *kosongkan jika tidak terkait dengan karyawan</label>
+								<select  name="id_employee" class="form-control" id="id_employee">
+									<option  value=""></option>
+									<?php foreach ($employees as $employee):?>
+										<option value="<?php echo $employee->id;?>"><?php echo $employee->fullname;?></option>
+									<?php endforeach;?>
+								</select>
+							</div>
+							<div class="form-group">
+								<label>Level</label>
+								<select name="id_level" id="id_level" class="form-control">
+									<option value=""></option>
+									<?php foreach ($levels as $level):?>
+										<option value="<?php echo $level->id;?>"><?php echo $level->level;?></option>
+									<?php endforeach;?>
+								</select>
+							</div>
+							<div class="form-group d-none">
+								<label>Area</label>
+								<select  name="id_area" class="form-control" id="area">
+									<option  value=""></option>
+									<?php foreach ($areas as $area):?>
+										<option value="<?php echo $area->id;?>"><?php echo $area->area;?></option>
+									<?php endforeach;?>
+								</select>
+							</div>
+							<div class="form-group d-none">
+								<label>Cabang</label>
+								<select  name="id_cabang" class="form-control" id="id_cabang">
+									<option  value=""></option>
+									<?php foreach ($cabangs as $cabang):?>
+										<option value="<?php echo $cabang->id;?>"><?php echo $cabang->area."->".$cabang->cabang;?></option>
+									<?php endforeach;?>
+								</select>
+							</div>
+							<div class="form-group d-none">
+								<label>Unit</label>
+								<select  name="id_unit" class="form-control" id="id_unit">
+									<option  value=""></option>
+									<?php foreach ($units as $unit):?>
+										<option value="<?php echo $unit->id;?>""><?php echo $unit->area."->".$unit->cabang."->".$unit->name;?></option>
+									<?php endforeach;?>
+								</select>
+							</div>
 						</div>
 
-						<div class="form-group">
-							<label>Username</label>
-							<input type="text" name="username" class="form-control">
-						</div>
-						<div class="form-group">
-							<label>Email</label>
-							<input type="text" name="email" class="form-control">
-						</div>
-						<div class="form-group">
-							<label>Password</label>
-							<input type="password" name="password" class="form-control">
+						<div class="col-md-6">							
+							<div class="form-group">
+								<label>Username</label>
+								<input type="text" name="username" class="form-control">
+							</div>
+							<div class="form-group">
+								<label>Email</label>
+								<input type="text" name="email" class="form-control">
+							</div>
+							<div class="form-group">
+								<label>Password</label>
+								<input type="password" name="password" class="form-control">
+							</div>
+						</div>						
 						</div>
 						<div class="kt-section">
 							<div class="kt-section__content">

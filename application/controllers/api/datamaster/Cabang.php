@@ -13,10 +13,9 @@ class Cabang extends ApiController
 	public function index()
 	{
         //$data = $this->groups->all();
-        $data = $this->db->select('cabang.id,cabang.cabang,cabang.status,areas_group.group,areas.area')
+        $data = $this->db->select('cabang.id,cabang.cabang,cabang.status,areas.area')
                          ->from('cabang')
-                         ->join('areas_group','areas_group.id=cabang.id_group')
-                         ->join('areas','areas.id=areas_group.id_area')
+                         ->join('areas','areas.id=cabang.id_area')
                          ->get()->result();
 		if($post = $this->input->post()){
 			if(is_array($post['query'])){
@@ -43,11 +42,21 @@ class Cabang extends ApiController
 		));
     }
 
+    public function get_cabang_byarea($area)
+	{
+        //$data = $this->cabang->db->where('')
+		echo json_encode(array(
+			'data'	    => 	$this->cabang->get_cabang_byarea($area),
+			'status'	=> true,
+			'message'	=> 'Successfully Get Data Units'
+		));
+    }
+
 	public function insert()
 	{
 		if($post = $this->input->post()){
 
-            $data['id_group'] = $this->input->post('group');	
+            $data['id_area'] = $this->input->post('area');	
             $data['cabang'] = $this->input->post('cabang');	
 
             $db = false;
@@ -73,7 +82,7 @@ class Cabang extends ApiController
 		if($post = $this->input->post()){
 
             $id = $this->input->post('id');	
-            $data['id_group'] = $this->input->post('group');	
+            $data['id_area'] = $this->input->post('area');	
             $data['cabang'] = $this->input->post('cabang');
 
             $db = false;

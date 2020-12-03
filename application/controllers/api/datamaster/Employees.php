@@ -15,7 +15,8 @@ class Employees extends ApiController
 	{
 		$this->employees->db
 			->select('name')
-			->join('units','units.id = employees.id_unit','left');
+			->join('units','units.id = employees.id_unit','left')
+			->order_by('id','desc');
 		if($post = $this->input->post()){
 			if(is_array($post['query'])){
 				$value = $post['query']['generalSearch'];
@@ -63,7 +64,7 @@ class Employees extends ApiController
 			$this->form_validation->set_rules('blood_group', 'Golongan Darah', 'required');
 			$this->form_validation->set_rules('address', 'Alamat', 'required');
 			$this->form_validation->set_rules('position', 'Jabatan', 'required');
-			$this->form_validation->set_rules('group', 'Group', 'required');
+			$this->form_validation->set_rules('id_cabang', 'Cabang', 'required');
 
 			if ($this->form_validation->run() == FALSE)
 			{
@@ -79,7 +80,7 @@ class Employees extends ApiController
 					'marital'		=> $post['marital'],
 					'nik'			=> $post['nik'],
 					'id_unit'		=> array_key_exists("id_unit",$post) ? $post['id_unit'] : '',
-					'id_group'		=> $post['group'],
+					'id_cabang'		=> $post['id_cabang'],
 					'fullname'		=> $post['fullname'],
 					'birth_place'	=> $post['birth_place'],
 					'birth_date'	=> $post['birth_date'],
@@ -125,7 +126,7 @@ class Employees extends ApiController
 			$this->form_validation->set_rules('mobile', 'No Hp', 'required');
 			$this->form_validation->set_rules('blood_group', 'Golongan Darah', 'required');
 			$this->form_validation->set_rules('address', 'Alamat', 'required');
-			$this->form_validation->set_rules('group', 'Group', 'required');
+			$this->form_validation->set_rules('id_cabang', 'Cabang', 'required');
 
 			if ($this->form_validation->run() == FALSE)
 			{
@@ -141,7 +142,7 @@ class Employees extends ApiController
 					'id_unit'	=>  array_key_exists("id_unit",$post) ? $post['id_unit'] : '',
 					'fullname'	=> $post['fullname'],
 					'nik'	=> $post['nik'],
-					'id_group'		=> $post['group'],
+					'id_cabang'		=> $post['id_cabang'],
 					'birth_place'	=> $post['birth_place'],
 					'birth_date'	=> $post['birth_date'],
 					'gender'	=> $post['gender'],
@@ -183,9 +184,17 @@ class Employees extends ApiController
 
 	public function show($id)
 	{
-		if($data = $this->employees->find(array(
-			'employees.id'	=> $id
-		))){
+		$data = $this->employees->db->select('*,employees.id as employee_id')
+						->select('units.name as unit_name')
+						->join('units','units.id = employees.id_unit')
+						->select('cabang.cabang as cabang')
+						->join('cabang','cabang.id = units.id_cabang')
+						->select('areas.id as id_area')
+						->join('areas','areas.id = cabang.id_area')
+						->where('employees.id', $id)
+						->get('employees')->row();
+
+		if($data){
 			echo json_encode(array(
 				'data'	=> 	$data,
 				'status'	=> true,

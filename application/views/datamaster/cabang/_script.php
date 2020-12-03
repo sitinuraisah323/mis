@@ -112,12 +112,6 @@ function initDataTable(){
                 textAlign: 'left',
             },  
             {
-                field: 'group',
-                title: 'Group',
-                sortable: 'asc',
-                textAlign: 'left',
-            }, 
-            {
                 field: 'cabang',
                 title: 'Cabang',
                 sortable: 'asc',
@@ -224,6 +218,7 @@ function initAlert(){
 
 function initCreateForm(){
     //validator
+    $('#add_area').val("val", "").trigger('change.select2');
     var validator = $( "#form_add" ).validate({
         ignore:[],
         rules: {
@@ -238,11 +233,6 @@ function initCreateForm(){
 
     $('#add_area').select2({
         placeholder: "Please select a Area",
-        width: '100%'
-    });
-
-    $('#add_group').select2({
-        placeholder: "Please select a Group",
         width: '100%'
     });
     
@@ -285,6 +275,7 @@ function initCreateForm(){
 
 function initEditForm(){
     //validator
+   
     var validator = $( "#form_edit" ).validate({
         ignore:[],
         rules: {
@@ -336,10 +327,10 @@ function initEditForm(){
     })
 
     var populateForm = function(groupObject){
-        $("#edit_cabang").val(groupObject.id);
+        $("#id_cabang").val(groupObject.id);
         $("#edit_cabang").val(groupObject.cabang);
-        $("#edit_group").val(groupObject.id_group);
-        $("#edit_group").trigger('change');
+        $("#edit_area").val(groupObject.id_area);
+        $("#edit_area").trigger('change');
     }
     
     return {

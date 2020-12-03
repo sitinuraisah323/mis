@@ -28,14 +28,14 @@
 
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Group</label>
-                                    <select class="form-control select2" name="group" id="add_group">
+                                    <label>Cabang</label>
+                                    <select class="form-control select2" name="cabang" id="add_cabang">
                                     <?php 
-                                        if (!empty($groups)){
-                                            foreach($groups as $row){
-                                               echo "<option value=".$row->id.">".$row->group."</option>";
-                                            }
-                                        }
+                                        // if (!empty($cabang)){
+                                        //     foreach($cabang as $row){
+                                        //        echo "<option value=".$row->id.">".$row->cabang."</option>";
+                                        //     }
+                                        // }
                                     ?>
                                     </select>
                                 </div>

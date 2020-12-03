@@ -18,6 +18,8 @@ class Units extends ApiController
                 $this->units->db
                 ->or_like('area', $value)
                 ->or_like('area',strtoupper($value))
+                ->or_like('cabang', $value)
+                ->or_like('cabang',strtoupper($value))
                 ->or_like('name', $value)
                 ->or_like('code', $value)
                 ->or_like('name',strtoupper($value));			
@@ -45,6 +47,15 @@ class Units extends ApiController
 	{
 		echo json_encode(array(
 			'data'	    => 	$this->units->get_units_byarea($area),
+			'status'	=> true,
+			'message'	=> 'Successfully Get Data Units'
+		));
+    }
+
+    public function get_unit_bycabang($cabang)
+	{
+		echo json_encode(array(
+			'data'	    => 	$this->units->get_unit_bycabang($cabang),
 			'status'	=> true,
 			'message'	=> 'Successfully Get Data Units'
 		));
@@ -89,7 +100,7 @@ class Units extends ApiController
 	{
 		if($post = $this->input->post()){
             $data['id_area']    = $this->input->post('area');	
-            $data['id_group']    = $this->input->post('group');	
+            $data['id_cabang']    = $this->input->post('cabang');	
             $data['name']       = $this->input->post('unit');	
             $data['code']       = $this->input->post('code_unit');	
             $data['date_open']       = $this->input->post('date_open');	
@@ -116,7 +127,7 @@ class Units extends ApiController
 		if($post = $this->input->post()){
             $id                 = $this->input->post('id');	
             $data['id_area']    = $this->input->post('area');	
-            $data['id_group']    = $this->input->post('group');	
+            $data['id_cabang']  = $this->input->post('cabang');		
             $data['name']       = $this->input->post('unit');	
             $data['code']       = $this->input->post('code_unit');		
             $data['date_open']       = $this->input->post('date_open');	
@@ -124,7 +135,7 @@ class Units extends ApiController
             $db = $this->units->update($data,$id);
             if($db=true){
                 echo json_encode(array(
-                    'data'	=> 	true,
+                    'data'	=> 	 $data['id_cabang'],
                     'status'=>true,
                     'message'	=> 'Successfull Update Data Area'
                 ));
