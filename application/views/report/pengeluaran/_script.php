@@ -338,4 +338,5 @@ var typecabang = $('[name="cabang"]').attr('type');
 if(typecabang == 'hidden'){
 	$('[name="cabang"]').trigger('change');
 }
+
 </script>
