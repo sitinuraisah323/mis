@@ -113,15 +113,15 @@ function initCariForm(){
 			dataType : "json",
 			data:{id_unit:unit,permit:permit,dateStart:dateStart,dateEnd:dateEnd, area:area},
 			success : function(response,status){
-				KTApp.unblockPage();
+                
                 console.log(response.data);
+				KTApp.unblockPage();
 				if(response.data.length > 0){
 					var template = '';
                     var currentSaldo = 0;
                     var TotSaldoIn = 0;
                     var TotSaldoOut = 0;
                     var no = 0;
-                    console.log(response.data);
 					$.each(response.data, function (index, data) {
                       
 						var cashin=0;

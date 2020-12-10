@@ -143,7 +143,6 @@ function initCariForm(){
 		},
 		success:function (response) {
 			$.each(response.data, function (index,unit) {
-				console.log(unit);
 				transaction.push({
 					y:unit.name,
 					a:unit.total_outstanding.up
@@ -151,7 +150,6 @@ function initCariForm(){
 			});
 		},
 		complete:function () {
-			console.log(transaction);
 			var data = transaction,
 					//config manager
 					config = {
@@ -206,7 +204,6 @@ function pencairan() {
 			});
 		},
 		complete:function () {
-			console.log(transaction);
 			var data = transaction,
 					//config manager
 					config = {

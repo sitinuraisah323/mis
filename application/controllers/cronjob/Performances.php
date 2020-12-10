@@ -33,13 +33,7 @@ class Performances extends Authenticated
         $currdate =date("Y-m-d");
         $lastdate = date('Y-m-d', strtotime('-1 days', strtotime($currdate)));
 
-      $date = date('Y-m-d');
-		$lastdate = $this->regular->getLastDateTransaction()->date;
-		if ($date > $lastdate){
-			$date = $lastdate;
-		}else{
-			$date= $date;
-      }
+		$date = $this->input->get('date');
 	  	$results = [];
         $units = $this->units->db->select('units.id, units.name, area')
 			->join('areas','areas.id = units.id_area')
@@ -184,32 +178,7 @@ class Performances extends Authenticated
 		foreach ($listperk as $value) {
 			array_push($category, $value->no_perk);
 		}
-		
-		if($this->input->get('area')){
-			$area = $this->input->get('area');
-			$this->units->db->where('id_area', $area);
-		}else if($this->session->userdata('user')->level == 'area'){
-			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
-		}
-		
-		if($this->input->get('code')){
-			$code = $this->input->get('code');
-			$this->units->db->where('code', $code);
-		}else if($this->session->userdata('user')->level == 'unit'){
-			$this->units->db->where('id_unit', $this->session->userdata('user')->id_unit);
-		}
-
-		if($this->input->get('date')){
-			$date = $this->input->get('date');
-			$this->units->db->where('date', $date);
-		}
-
-		if($this->input->get('month')){
-			$month = $this->input->get('month');
-			$this->units->db->where('MONTH(date)', $month);
-		}
-
-		$month = date('n', strtotime($this->datetrans()));
+		$month = date('n', strtotime($this->input->get('date')));
 
 		$this->units->db->select('units.name,areas.area, sum(amount) as amount')
 			->join('units','units.id = units_dailycashs.id_unit')
@@ -237,15 +206,7 @@ class Performances extends Authenticated
 
 	
 	public function datetrans(){
-		$date = date('Y-m-d');
-		$lastdate = $this->regular->getLastDateTransaction()->date;
-		if ($date > $lastdate){
-			$date = $lastdate;
-		}else{
-			$date= $date;
-		}
-
-		return date('d-m-Y',strtotime($date));
+		return $this->input->get('date');
 	}
 
 	public function pengeluaran()
@@ -255,32 +216,8 @@ class Performances extends Authenticated
 		foreach ($listperk as $value) {
 			array_push($category, $value->no_perk);
 		}
-		
-		if($this->input->get('area')){
-			$area = $this->input->get('area');
-			$this->units->db->where('id_area', $area);
-		}else if($this->session->userdata('user')->level == 'area'){
-			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
-		}
 
-		if($this->input->get('code')){
-			$code = $this->input->get('code');
-			$this->units->db->where('code', $code);
-		}else if($this->session->userdata('user')->level == 'unit'){
-			$this->units->db->where('id_unit', $this->session->userdata('user')->id_unit);
-		}
-
-		if($this->input->get('date')){
-			$date = $this->input->get('date');
-			$this->units->db->where('date', $date);
-		}
-
-		if($this->input->get('month')){
-			$month = $this->input->get('month');
-			$this->units->db->where('MONTH(date)', $month);
-		}
-
-		$month = date('n', strtotime($this->datetrans()));
+		$month = date('n', strtotime($this->input->get('date')));
 		
 		$this->units->db->select('units.name,areas.area, sum(amount) as amount')
 			->join('units','units.id = units_dailycashs.id_unit')

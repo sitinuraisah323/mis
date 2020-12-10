@@ -77,6 +77,15 @@ class Outstanding extends Authenticated
 		return $this->units->db->get('units')->result();
 	}
 
+	public function grouped($os)
+	{
+		$result = [];
+		foreach($os as $index =>  $data){
+			$result[$data->area][$index] = $data;
+		}
+		return $result;
+	}
+
 	/**
 	 * Welcome Index()
 	 */
@@ -85,9 +94,9 @@ class Outstanding extends Authenticated
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		require_once APPPATH.'controllers/pdf/header.php';
 		$os = $this->data();
+		$grouped = $this->grouped($os);
 		$pdf->AddPage('L');
-		$view = $this->load->view('dailyreport/outstanding/index.php',['outstanding'=>$os,'datetrans'=> $this->datetrans()],true);
-
+		$view = $this->load->view('dailyreport/outstanding/index.php',['outstanding'=>$grouped,'datetrans'=> $this->datetrans()],true);
 		$pdf->writeHTML($view);
 
 		$pdf->AddPage('L');
@@ -109,7 +118,8 @@ class Outstanding extends Authenticated
 		// $pdf->writeHTML($view);
 
 		$pdf->AddPage('L');
-		$view = $this->load->view('dailyreport/outstanding/rate.php',['rate'	=> $this->rate()],true);
+		$group = $this->grouped($this->rate());
+		$view = $this->load->view('dailyreport/outstanding/rate.php',['areas'	=> $group],true);
 		$pdf->writeHTML($view);
 
 		$pdf->AddPage('L');

@@ -140,6 +140,11 @@ class Dpd extends Authenticated
 					->where("DATEDIFF('$date', units_regularpawns.deadline) >=", -7)
 					->where("DATEDIFF('$date', units_regularpawns.deadline) <=", 0);
 				}
+				if($packet === '-10'){
+					$this->regulars->db
+					->where("DATEDIFF('$date', units_regularpawns.deadline) >=", -10)
+					->where("DATEDIFF('$date', units_regularpawns.deadline) <=", 0);
+				}
 			}else{
 				$this->regulars->db->where('deadline <=',$this->input->post('date-end') ? $this->input->post('date-end') : date('Y-m-d'));
 			

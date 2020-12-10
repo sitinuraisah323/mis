@@ -1,6 +1,6 @@
 <?php
 //error_reporting(0);
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH');
 require_once APPPATH.'controllers/Middleware/Authenticated.php';
 class Bukukas extends Authenticated
 {
@@ -145,7 +145,9 @@ class Bukukas extends Authenticated
 		if($dateStart){
 			$this->saldo->db->where('date <', $dateStart);
 		}
-
+		if($this->input->post('permit')!='All'){
+			$this->unitsdailycash->db->where('permit', $this->input->post('permit'));
+		}
 		$this->unitsdailycash->db
 			->select('
 			 units.name as unit_name, code,
@@ -156,6 +158,16 @@ class Bukukas extends Authenticated
 		$getSaldo =  $this->unitsdailycash->db->get()->row();
 		$saldo = (int) $getSaldo->amount;
 		$total = $saldo + $totalsaldoawal;
+
+		if($this->input->post('permit') != 'All'){
+			$cekFirst = $this->cekfirst($idUnit, $this->input->post('permit'));
+		
+			if($cekFirst > $dateStart){
+				$total  = $saldo;
+			}else{
+				$total  = $saldo + $totalsaldoawal;
+			}	
+		}
 
 
 		$data = (object) array(
@@ -178,7 +190,10 @@ class Bukukas extends Authenticated
 			if($get['id_unit']!='all' && $get['id_unit'] != 0){
 				$this->unitsdailycash->db->where('id_unit', $get['id_unit']);
 			}
-			if($this->input->get('area')){
+			if($get['permit']!='All'){
+				$this->unitsdailycash->db->where('permit', $get['permit']);
+			}
+			if($this->input->post('area')){
 				$this->unitsdailycash->db->where('id_area', $get['area']);
 			}
 		}
@@ -191,5 +206,24 @@ class Bukukas extends Authenticated
 		return $getCash;
 	}
 	
+	public function cekfirst($idUnit, $permit)
+	{
+		if($permit != 'ALL'){
+			$this->unitsdailycash->db
+			->where('permit', $permit);
+		}
+		$date =  $this->unitsdailycash->db
+			->select('date')
+			->where('id_unit', $idUnit)
+			->order_by('date', 'asc')
+			->get('units_dailycashs')->row();
+
+
+		if($date){
+			return $date->date;
+		}else{
+			return date('2000-m-d');
+		}
+	}
 	
 }
