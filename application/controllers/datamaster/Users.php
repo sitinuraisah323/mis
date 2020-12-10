@@ -21,6 +21,7 @@ class Users extends Authenticated
 		$this->load->model('AreasModel', 'areas');
 		$this->load->model('EmployeesModel', 'employees');
 		$this->load->model('UsersModel', 'users');
+		$this->load->model('CabangModel', 'cabang');
 	}
 
 	/**
@@ -44,9 +45,10 @@ class Users extends Authenticated
 			->order_by('employees.fullname','asc');
 		$this->load->view('datamaster/users/index',array(
 			'employees'	=> $this->employees->all(),
-			'units'	=> $this->units->all(),
+			'units'	=> $this->units->get_unit(),
 			'levels'	=> $this->levels->all(),
 			'areas'	=> $this->areas->all(),
+			'cabangs'	=> $this->cabang->get_cabang(),
 		));
 	}
 

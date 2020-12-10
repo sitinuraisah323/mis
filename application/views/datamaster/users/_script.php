@@ -51,7 +51,7 @@ function initDTEvents(){
 			success : function(response,status){
 				KTApp.unblockPage();
 				if(response.data){
-					const {id, id_unit, id_level,id_area, id_employee, email, username,fullname
+					const {id, id_unit,id_cabang ,id_level,id_area, id_employee, email, username,fullname
 					} = response.data;
 					const modal = $('#modal_add');
 					if(id_employee > 0){
@@ -60,6 +60,8 @@ function initDTEvents(){
 					modal.find('[name="id"]').val(id);
 					modal.find('[name="id_level"]').val(id_level);
 					modal.find('[name="id_area"]').val(id_area);
+					modal.find('[name="id_unit"]').val(id_unit);
+					modal.find('[name="id_cabang"]').val(id_cabang);
 					modal.find('[name="id_employee"]').val(id_employee);
 					modal.find('[name="email"]').val(email);
 					modal.find('[name="username"]').val(username);
@@ -67,18 +69,28 @@ function initDTEvents(){
 						modal.find('[name="id_level"]').trigger('change');
 						modal.find('[name="id_level"]').parents('.form-group').removeClass('d-none');
 					}
-					if(id_area > 0){
+					if(id_area > 0  && id_unit==0){
 						modal.find('[name="id_area"]').trigger('change');
 						modal.find('[name="id_area"]').parents('.form-group').removeClass('d-none');
 					}
-					if(id_unit > 0){
+					if(id_unit > 0 && id_level > 0){
 						modal.find('[name="id_unit"]').trigger('change');
 						modal.find('[name="id_unit"]').parents('.form-group').removeClass('d-none');
+					}
+					if(id_cabang > 0){
+						modal.find('[name="id_cabang"]').trigger('change');
+						modal.find('[name="id_cabang"]').parents('.form-group').removeClass('d-none');
 					}
 					modal.modal('show');
 					modal.find('[name="id_level"]').val(id_level);
 					modal.find('[name="id_area"]').val(id_area);
 					modal.find('[name="id_employee"]').val(id_employee);
+
+					setTimeout(function(){  
+                        //var cabangid =  $('#cabang_id').val(); 
+						//$("#cabang").val(cabangid).trigger('change');						
+                    }, 800);
+
 				}else{
 					AlertUtil.showFailed(response.data.message);
 					$('#modal_add').modal('show');
@@ -159,6 +171,8 @@ function initDataTable(){
                         level = 'Unit';
                     }else if(row.id_level==4){
                         level = 'Area';
+                    }else if(row.id_level==6){
+                        level = 'Cabang';
                     }
                     return level;
                 }
@@ -210,6 +224,12 @@ function initDataTable(){
 }
 
 function initCreate(){
+	$('#id_employee').select2({ placeholder: "Please select a Employee", width: '100%'});
+	$('#id_level').select2({ placeholder: "Please select a Level", width: '100%'});
+	$('#area').select2({ placeholder: "Please select a Area", width: '100%'});
+	$('#id_unit').select2({ placeholder: "Please select a Unit", width: '100%'});
+	$('#id_cabang').select2({ placeholder: "Please select a Cabang", width: '100%'});
+	
 	InitClear();
 	//events
 	$("#input-form").on("submit",function(e){
@@ -239,7 +259,7 @@ function initCreate(){
 				}else{
 					AlertUtil.showFailedDialogAdd(data.message);
 				}
-				getMenu();
+				//getMenu();
 			},
 			error: function (jqXHR, textStatus, errorThrown){
 				KTApp.unblock('#modal_add .modal-content');
@@ -341,29 +361,36 @@ $('[name="id_level"]').on('change', function(){
 	if($(this).find(':selected').text() == 'area'){
 		$('[name="id_area"]').parents('.form-group').removeClass('d-none');
 		$('[name="id_unit"]').val('').parents('.form-group').addClass('d-none');
+		$('[name="id_cabang"]').val('').parents('.form-group').addClass('d-none');
 	}else if($(this).find(':selected').text() == 'unit'){
-		$('[name="id_area"]').parents('.form-group').removeClass('d-none');
+		$('[name="id_unit"]').parents('.form-group').removeClass('d-none');
+		$('[name="id_area"]').val('').parents('.form-group').addClass('d-none');
+		$('[name="id_cabang"]').val('').parents('.form-group').addClass('d-none');
+	}else if($(this).find(':selected').text() == 'cabang'){
+		$('[name="id_cabang"]').parents('.form-group').removeClass('d-none');
+		$('[name="id_area"]').val('').parents('.form-group').addClass('d-none');
 		$('[name="id_unit"]').val('').parents('.form-group').addClass('d-none');
 	}else{
 		$('[name="id_unit"]').val('').parents('.form-group').addClass('d-none');
 		$('[name="id_area"]').val('').parents('.form-group').addClass('d-none');
+		$('[name="id_cabang"]').val('').parents('.form-group').addClass('d-none');
 	}
 });
 var options = '';
 
-$(document).on('change', '[name="id_area"]', function(){
-	var id_area = $(this).val();
-	if($('[name="id_level"]').find(':selected').text() == 'unit'){
-		$('[name="id_unit"]').append(options);
-		$.each($('[name="id_unit"]').find('option'), function(index, element){
-			if(id_area != $(this).data('area')){
-				options += '<option value="'+$(this).val()+'" data-area="'+$(this).data('area')+'">'+$(this).text()+'</option>';
-				$(this).remove();
-			}
-		});
-		$('[name="id_unit"]').parents('.form-group').removeClass('d-none');
-	};
-});
+// $(document).on('change', '[name="id_area"]', function(){
+// 	var id_area = $(this).val();
+// 	if($('[name="id_level"]').find(':selected').text() == 'unit'){
+// 		$('[name="id_unit"]').append(options);
+// 		$.each($('[name="id_unit"]').find('option'), function(index, element){
+// 			if(id_area != $(this).data('area')){
+// 				options += '<option value="'+$(this).val()+'" data-area="'+$(this).data('area')+'">'+$(this).text()+'</option>';
+// 				$(this).remove();
+// 			}
+// 		});
+// 		$('[name="id_unit"]').parents('.form-group').removeClass('d-none');
+// 	};
+// });
 
 
 </script>

@@ -22,6 +22,7 @@ class Customermis extends Authenticated
 		$this->load->model('AreasModel', 'areas');
 		$this->load->model('MapingcategoryModel', 'm_category');
 		$this->load->model('RegularPawnsModel', 'regulars');
+		$this->load->model('CustomersModel', 'customers');
 	}
 
 	/**
@@ -30,7 +31,8 @@ class Customermis extends Authenticated
 	public function index()
 	{
         $data['units'] = $this->units->all();
-        $data['areas'] = $this->areas->all();
+		$data['areas'] = $this->areas->all();
+		$data['customers'] = $this->customers->all();
 		$this->load->view('report/customers/index',$data);
 	}
 

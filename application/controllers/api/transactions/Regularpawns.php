@@ -235,6 +235,49 @@ class Regularpawns extends ApiController
 
 	}
 
+	public function updatecustomers()
+	{
+		if($post = $this->input->post()){
+
+			$this->load->library('form_validation');
+
+			$this->form_validation->set_rules('id_customer', 'customers', 'required|numeric');
+			if ($this->form_validation->run() == FALSE)
+			{
+				echo json_encode(array(
+					'data'	=> 	validation_errors(),
+					'message'	=> 'Failed Updated Data Users'
+				));
+			}
+			else
+			{
+				$id = $post['id'];
+				unset($post['id']);
+				if($this->regulars->update($post,$id)){
+					echo json_encode(array(
+						'data'	=> 	$this->regulars->db->last_query(),
+						'status'	=> 	true,
+						'message'	=> 'Successfull Updated Data Users'
+					));
+				}else{
+					exit;
+					echo json_encode(array(
+							'data'	=> 	false,
+							'status'	=> 	false,
+							'message'	=> 'Failed Updated Data Users')
+					);
+				}
+
+			}
+		}else{
+			echo json_encode(array(
+				'data'	=> 	false,
+				'message'	=> 'Request Error Should Method POst'
+			));
+		}
+
+	}
+
 	public function report()
 	{
 		$this->regulars->db
@@ -431,6 +474,18 @@ class Regularpawns extends ApiController
 	{
 
 		return $this->sendMessage($this->regulars->performance(),'Successfully get performance');
+	}
+
+	public function showbyid()
+	{		
+		$id = $this->input->get('id');
+		$unit = $this->input->get('unit');
+		$units = $this->db->select('*')
+						->where('id',$id)
+						->where('id_unit',$unit)
+						->from('units_regularpawns')
+						->get()->row();
+		$this->sendMessage($units, 'Get Data Regular Pawns');
 	}
 
 }

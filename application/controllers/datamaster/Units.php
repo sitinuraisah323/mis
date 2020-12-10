@@ -19,6 +19,7 @@ class Units extends Authenticated
 		$this->load->model('UnitsModel', 'units');
 		$this->load->model('AreasModel', 'areas');
 		$this->load->model('GroupsModel', 'groups');
+		$this->load->model('CabangModel', 'cabangs');
 
 	}
 
@@ -28,7 +29,8 @@ class Units extends Authenticated
 	public function index()
 	{
         $data['areas'] = $this->areas->all();
-        $data['groups'] = $this->groups->all();
+		$data['cabang'] = $this->cabangs->all();
+		//$data['groups'] = $this->groups->all();
 		$this->load->view('datamaster/units/index',$data);
 	}
 

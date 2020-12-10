@@ -25,6 +25,8 @@ class UsersModel extends Master
 			->join('levels','levels.id = users.id_level','left')
 			->select('units.name as unit_name')
 			->join('units','units.id = users.id_unit','left')
+			->select('cabang.cabang as cabang_name')
+			->join('cabang','cabang.id = users.id_cabang','left')
 			->select('areas.area as area_name')
 			->join('areas','areas.id = users.id_area','left');
 		if($user = $this->find(array('username'=>$username,'email'=>$username))){

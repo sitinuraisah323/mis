@@ -99,7 +99,8 @@ $this->load->view('temp/MenuBar.php');
         </div>
     </div>
     <!-- end:: Content -->
-	
+    <input type="hidden" name="url_get_unit" id="url_get_unit" value="<?php echo base_url('api/datamaster/cabang/get_cabang_byarea') ?>"/>
+
 </div>
 </div>
 

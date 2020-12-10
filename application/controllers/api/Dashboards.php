@@ -17,8 +17,6 @@ class Dashboards extends ApiController
 		$this->load->model('MortagesModel', 'mortages');		
 	}
 
-	
-
 	public function getlastdatetransaction(){
 		$data = $this->regular->getLastDateTransaction();
 		$this->sendMessage($data, 'Get Data Outstanding');
@@ -98,6 +96,13 @@ class Dashboards extends ApiController
 		}else if($this->session->userdata('user')->level == 'area'){
 			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
 		}
+
+		if($cabang = $this->input->get('cabang')){
+			$this->units->db->where('id_cabang', $cabang);
+		}else if($this->session->userdata('user')->level == 'cabang'){
+			$this->units->db->where('id_cabang', $this->session->userdata('user')->id_cabang);
+		}
+
 		if($id_unit = $this->input->get('id_unit')){
 			$this->units->db->where('units.id', $id_unit);
 		}else if($code = $this->input->get('code')){
@@ -160,6 +165,13 @@ class Dashboards extends ApiController
 		}else if($this->session->userdata('user')->level == 'area'){
 			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
 		}
+
+		if($cabang = $this->input->get('cabang')){
+			$this->units->db->where('id_cabang', $cabang);
+		}else if($this->session->userdata('user')->level == 'cabang'){
+			$this->units->db->where('id_cabang', $this->session->userdata('user')->id_cabang);
+		}
+
 		if($id_unit = $this->input->get('id_unit')){
 			$this->units->db->where('units.id', $id_unit);
 		}else if($code = $this->input->get('code')){
@@ -302,6 +314,14 @@ class Dashboards extends ApiController
 		}else if($this->session->userdata('user')->level == 'area'){
 			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
 		}
+
+		
+		if($cabang = $this->input->get('cabang')){
+			$this->units->db->where('id_cabang', $cabang);
+		}else if($this->session->userdata('user')->level == 'cabang'){
+			$this->units->db->where('id_cabang', $this->session->userdata('user')->id_cabang);
+		}
+
 		if($code = $this->input->get('code')){
 			$this->units->db->where('code', $code);
 		}else if($this->session->userdata('user')->level == 'unit'){
@@ -417,6 +437,13 @@ class Dashboards extends ApiController
 		}else if($this->session->userdata('user')->level == 'area'){
 			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
 		}
+
+		
+		if($cabang = $this->input->get('cabang')){
+			$this->units->db->where('id_cabang', $cabang);
+		}else if($this->session->userdata('user')->level == 'cabang'){
+			$this->units->db->where('id_cabang', $this->session->userdata('user')->id_cabang);
+		}
 		
 		if($this->input->get('code')){
 			$code = $this->input->get('code');
@@ -495,6 +522,13 @@ class Dashboards extends ApiController
 			$this->units->db->where('id_area', $area);
 		}else if($this->session->userdata('user')->level == 'area'){
 			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
+		}
+
+		
+		if($cabang = $this->input->get('cabang')){
+			$this->units->db->where('id_cabang', $cabang);
+		}else if($this->session->userdata('user')->level == 'cabang'){
+			$this->units->db->where('id_cabang', $this->session->userdata('user')->id_cabang);
 		}
 
 		if($this->input->get('code')){
@@ -616,6 +650,13 @@ class Dashboards extends ApiController
 			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
 		}
 
+		
+		if($cabang = $this->input->get('cabang')){
+			$this->units->db->where('id_cabang', $cabang);
+		}else if($this->session->userdata('user')->level == 'cabang'){
+			$this->units->db->where('id_cabang', $this->session->userdata('user')->id_cabang);
+		}
+
 		if($this->input->get('code')){
 			$code = $this->input->get('code');
 			$this->units->db->where('code', $code);
@@ -644,6 +685,14 @@ class Dashboards extends ApiController
 		}else if($this->session->userdata('user')->level == 'area'){
 			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
 		}
+
+		
+		if($cabang = $this->input->get('cabang')){
+			$this->units->db->where('id_cabang', $cabang);
+		}else if($this->session->userdata('user')->level == 'cabang'){
+			$this->units->db->where('id_cabang', $this->session->userdata('user')->id_cabang);
+		}
+
 		if($code = $this->input->get('code')){
 			$this->units->db->where('code', $code);
 		}else if($this->session->userdata('user')->level == 'unit'){
@@ -897,6 +946,12 @@ class Dashboards extends ApiController
             $this->units->db->where('id_area', $this->session->userdata('user')->id_area);
 		}
 		
+		if($cabang = $this->input->get('cabang')){
+			$this->units->db->where('id_cabang', $cabang);
+		}else if($this->session->userdata('user')->level == 'cabang'){
+			$this->units->db->where('id_cabang', $this->session->userdata('user')->id_cabang);
+		}
+		
 		if($code = $this->input->get('unit')){
 			if($code!='all'){
 			$this->units->db->where('units.id', $code);
@@ -989,6 +1044,12 @@ class Dashboards extends ApiController
 			$this->units->db->where('id_area', $area);
 		}else if($this->session->userdata('user')->level == 'area'){
 			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
+		}
+		
+		if($cabang = $this->input->get('cabang')){
+			$this->units->db->where('id_cabang', $cabang);
+		}else if($this->session->userdata('user')->level == 'cabang'){
+			$this->units->db->where('id_cabang', $this->session->userdata('user')->id_cabang);
 		}
 		if($code = $this->input->get('id_unit')){
 			$this->units->db->where('id_unit', $code);

@@ -98,9 +98,12 @@ $this->load->view('temp/MenuBar.php');
         </div>
     </div>
     <!-- end:: Content -->
+    <input type="hidden" name="url_get_cabang" id="url_get_cabang" value="<?php echo base_url('api/datamaster/cabang/get_cabang_byarea') ?>"/>
+    <input type="hidden" name="url_get_unit" id="url_get_unit" value="<?php echo base_url('api/datamaster/units/get_unit_bycabang') ?>"/>
 
 </div>
 </div>
+
 <!--begin::Modal-->
 <div class="modal fade" id="modal_add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg" role="document">
@@ -116,7 +119,8 @@ $this->load->view('temp/MenuBar.php');
 				<div class="form-horizontal">
 					<div class="form-body">
 						<div class="row">
-							<div class="col-md-6">
+
+							<div class="col-md-4">
 								<div class="form-group">
 									<label>Area</label>
 									<select  name="id_area" class="form-control" id="area">
@@ -128,34 +132,33 @@ $this->load->view('temp/MenuBar.php');
 								</div>
 
 								<div class="form-group">
-									<label>Group</label>
-									<select  name="group" class="form-control" id="group">
-									<option  value=""></option>
-										<?php foreach ($groups as $row):?>
-											<option value="<?php echo $row->id;?>"><?php echo $row->group;?></option>
-										<?php endforeach;?>
+									<label>Cabang</label>
+									<input type="hidden" name="cabang_id" id="cabang_id" class="form-control">
+									<select  name="id_cabang" class="form-control" id="cabang">
+										<!-- <option  value=""></option> -->
+										<?php foreach ($cabangs as $cabang):?>
+											<option value="<?php echo $cabang->id;?>"><?php echo $cabang->cabang;?></option>
+										<?php endforeach;?>									
 									</select>
 								</div>
 
-								<div class="form-group d-none">
+								<!-- <div class="form-group d-none"> -->
+								<div class="form-group">
 									<label>Unit</label>
+									<input type="hidden" name="unit_id" id="unit_id" class="form-control">
 									<select  name="id_unit" class="form-control" id="id_unit">
-									<option  value=""></option>
+									<!-- <option  value=""></option> -->
 										<?php foreach ($units as $unit):?>
-											<option value="<?php echo $unit->id;?>" data-area="<?php echo $unit->id_area;?>"><?php echo $unit->name;?></option>
+											<option value="<?php echo $unit->id;?>"><?php echo $unit->name;?></option>
 										<?php endforeach;?>
 									</select>
 								</div>
 								<div class="form-group">
 									<label>NIK</label>
 									<input type="text" name="nik" class="form-control">
-								</div>
+								</div>								
 								<div class="form-group">
-									<label>No Rekening</label>
-									<input type="text" name="no_rek" class="form-control">
-								</div>
-								<div class="form-group">
-									<label>No Karyakawan</label>
+									<label>NIP</label>
 									<input type="text" name="no_employment" class="form-control">
 								</div>
 								<div class="form-group">
@@ -165,7 +168,10 @@ $this->load->view('temp/MenuBar.php');
 								<div class="form-group">
 									<label>Tempat Lahir</label>
 									<input type="text" name="birth_place" class="form-control">
-								</div>
+								</div>																
+							</div>
+
+							<div class="col-md-4">
 								<div class="form-group">
 									<label>Tanggal Lahir</label>
 									<input type="date" name="birth_date" class="form-control">
@@ -178,34 +184,7 @@ $this->load->view('temp/MenuBar.php');
 											<option value="<?php echo $value;?>"><?php echo $label;?></option>
 										<?php endforeach;?>
 									</select>
-								</div>
-								<div class="form-group">
-									<label>No Hp</label>
-									<input type="text" name="mobile" class="form-control">
-								</div>
-							</div>
-
-							<div class="col-md-6">
-								<div class="form-group">
-									<label>Join Date</label>
-									<input type="date" name="join_date" class="form-control">
-								</div>
-								<div class="form-group">
-									<label>Masa Kerja</label>
-									<input type="text" name="masa_kerja" class="form-control">
-								</div>
-								<div class="form-group">
-									<label>Pendidikan Terakhir</label>
-									<input type="text" name="last_education" class="form-control">
-								</div>
-								<div class="form-group">
-									<label>No Bpjs Kesehatan</label>
-									<input type="text" name="bpjs_kesehatan" class="form-control">
-								</div>
-								<div class="form-group">
-									<label>No Bpjs Ketenagakerjaaan</label>
-									<input type="text" name="bpjs_tk" class="form-control">
-								</div>
+								</div>																							
 								<div class="form-group">
 									<label>Status Kawin</label>
 									<select  name="marital" id="marital" class="form-control">
@@ -225,12 +204,44 @@ $this->load->view('temp/MenuBar.php');
 									</select>
 								</div>
 								<div class="form-group">
-									<label>Alamat</label>
-									<input type="text" name="address" class="form-control">
-								</div>
-								<div class="form-group">
 									<label>Jabatan</label>
 									<input type="text" name="position" class="form-control">
+								</div>
+								<div class="form-group">
+									<label>Alamat</label>
+									<textarea class="form-control" name="address"></textarea>
+								</div>
+								
+							</div>
+
+							<div class="col-md-4">
+								<div class="form-group">
+									<label>Join Date</label>
+									<input type="date" name="join_date" class="form-control">
+								</div>
+								<div class="form-group">
+									<label>Masa Kerja</label>
+									<input type="text" name="masa_kerja" class="form-control">
+								</div>								
+								<div class="form-group">
+									<label>No Hp</label>
+									<input type="text" name="mobile" class="form-control">
+								</div>
+								<div class="form-group">
+									<label>Pendidikan Terakhir</label>
+									<input type="text" name="last_education" class="form-control">
+								</div>	
+								<div class="form-group">
+									<label>No Rekening</label>
+									<input type="text" name="no_rek" class="form-control">
+								</div>
+								<div class="form-group">
+									<label>No Bpjs Kesehatan</label>
+									<input type="text" name="bpjs_kesehatan" class="form-control">
+								</div>
+								<div class="form-group">
+									<label>No Bpjs Ketenagakerjaaan</label>
+									<input type="text" name="bpjs_tk" class="form-control">
 								</div>
 							</div>
 

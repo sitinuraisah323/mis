@@ -9,7 +9,7 @@
             </div>
             <div class="modal-body form">
                 <form action="#" id="form_edit" class="form-horizontal">
-                    <input type="hidden" id="edit_group_id" name="id"/>
+                    <input type="hidden" id="id_cabang" name="id"/>
                     <div class="form-body">
                         <div class="row">  
                         <div class="col-md-12">
@@ -29,8 +29,8 @@
 
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Group</label>
-                                    <input type="text" class="form-control" id="edit_group_name" name="group">	                            		
+                                    <label>Cabang</label>
+                                    <input type="text" class="form-control" id="edit_cabang" name="cabang">	                            		
                                 </div>
                             </div>  
                               

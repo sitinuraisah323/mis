@@ -61,8 +61,8 @@ function initDTEvents(){
             success : function(response,status){
                 KTApp.unblockPage();
                 if(response.status == true){
-                	const {id, fullname, id_unit, nik,birth_date, birth_place,
-                	gender, mobile, marital,blood_group, address,position, masa_kerja,
+                	const {id,employee_id, fullname,id_cabang,id_area,id_unit, nik,birth_date, birth_place,
+                	        gender, mobile, marital,blood_group, address,position, masa_kerja,
 							no_rek, last_education, bpjs_kesehatan, bpjs_tk,
 							no_employment,join_date
                 	} = response.data;
@@ -71,8 +71,10 @@ function initDTEvents(){
 						modal.find('[name="id_unit"]').parents('.form-group').removeClass('d-none');
 					}
 					modal.find('[name="fullname"]').val(fullname);
-					modal.find('[name="id"]').val(id);
-					modal.find('[name="id_unit"]').val(id_unit);
+					modal.find('[name="id"]').val(employee_id);
+					modal.find('[name="id_area"]').val(id_area).trigger('change');
+					modal.find('[name="unit_id"]').val(id_unit);
+					modal.find('[name="cabang_id"]').val(id_cabang);
 					modal.find('[name="nik"]').val(nik);
 					modal.find('[name="birth_date"]').val(birth_date);
 					modal.find('[name="birth_place"]').val(birth_place);
@@ -97,12 +99,15 @@ function initDTEvents(){
             },
 			complete:function(xhr){
 				const modal = $('.modal');
-				modal.find('#id_unit').trigger('change');
 				modal.find('#gender').trigger('change');
 				modal.find('#marital').trigger('change');
 				modal.find('#blood_group').trigger('change');
-				modal.find('#id_level').select2('refresh');
-			},
+                modal.find('#id_level').select2('refresh');
+                setTimeout(function(){  
+                        var cabangid =  $('#cabang_id').val(); 
+                        $("#cabang").val(cabangid).trigger('change');
+                    }, 800);
+            },
             error: function (jqXHR, textStatus, errorThrown){
                 KTApp.unblockPage();
                 AlertUtil.showFailed("Cannot communicate with server please check your internet connection");
@@ -110,7 +115,6 @@ function initDTEvents(){
         });
     });
 }
-
 
 function initDataTable(){
     var option = {
@@ -347,6 +351,12 @@ function initAlert(){
 
 function initCreate(){
      InitClear();
+     $('#area').select2({ placeholder: "Please select a Area",width: '100%'});
+    //  $('#cabang').select2({ placeholder: "Please select a Cabang",width: '100%'});
+    //  $('#id_unit').select2({ placeholder: "Please select a Unit",width: '100%'});
+    //  $('#gender').select2({ placeholder: "Please select a Gender",width: '100%'});
+    // $('#marital').select2({ placeholder: "Please select a Status",width: '100%'});
+    // $('#blood_group').select2({ placeholder: "Please select a Blood Group",width: '100%'});
      //events
      $("#input-form").on("submit",function(e){
     	e.preventDefault();
@@ -385,7 +395,7 @@ function initCreate(){
 
 }
    
-	function getMenu(){
+function getMenu(){
 		$.ajax({
 			type : 'POST',
 			url : '<?php echo base_url('api/datamaster/employees');?>',
@@ -399,30 +409,78 @@ function initCreate(){
 				});
 			},
 		});
-	}
+}
 
-    function getSelect2(){
-        $('#id_unit').select2({ placeholder: "Please select a Unit",width: '100%'});
-        $('#gender').select2({ placeholder: "Please select a Gender",width: '100%'});
-        $('#marital').select2({ placeholder: "Please select a Status",width: '100%'});
-        $('#blood_group').select2({ placeholder: "Please select a Blood Group",width: '100%'});
-        $('#id_level').select2({ placeholder: "Please select a Level",width: '100%'});
-    }
- 	var options = '';
+function getSelect2(){
+    $('#cabang').select2({ placeholder: "Please select a cabang",width: '100%'});
+    $('#id_unit').select2({ placeholder: "Please select a Unit",width: '100%'});
+    $('#gender').select2({ placeholder: "Please select a Gender",width: '100%'});
+    $('#marital').select2({ placeholder: "Please select a Status",width: '100%'});
+    $('#blood_group').select2({ placeholder: "Please select a Blood Group",width: '100%'});
+    $('#id_level').select2({ placeholder: "Please select a Level",width: '100%'});
+}
 
-    $(document).on('change', '[name="id_area"]', function(){
-        var id_area = $(this).val();
-		$('[name="id_unit"]').append(options);
-		$.each($('[name="id_unit"]').find('option'), function(index, element){
-			if(id_area != $(this).data('area')){
-				options += '<option value="'+$(this).val()+'" data-area="'+$(this).data('area')+'">'+$(this).text()+'</option>';
-				$(this).remove();
-			}
-		});
-		$('[name="id_unit"]').parents('.form-group').removeClass('d-none');
+var options = '';
+// $(document).on('change', '[name="id_area"]', function(){
+//     var id_area = $(this).val();
+//     $('[name="id_unit"]').append(options);
+//     $.each($('[name="id_unit"]').find('option'), function(index, element){
+//         if(id_area != $(this).data('area')){
+//             options += '<option value="'+$(this).val()+'" data-area="'+$(this).data('area')+'">'+$(this).text()+'</option>';
+//             $(this).remove();
+//         }
+//     });
+//     $('[name="id_unit"]').parents('.form-group').removeClass('d-none');
+// });
+
+$(document).on('change', '[name="id_area"]', function(){
+    var id = $('#area').val();
+    var cabangs =  document.getElementById('cabang');
+    var url_data = $('#url_get_cabang').val() + '/' + id;
+    $.get(url_data, function (data, status) {
+        var response = JSON.parse(data);
+        if (status) {
+            $("#cabang").empty();
+            var opt = document.createElement("option");
+            opt.value = "0";
+            opt.text = "All";
+            cabangs.appendChild(opt);
+            for (var i = 0; i < response.data.length; i++) {
+                var opt = document.createElement("option");
+                opt.value = response.data[i].id;
+                opt.text = response.data[i].cabang;
+                cabangs.appendChild(opt);
+            }
+        }
     });
+});
 
-
+$(document).on('change', '[name="id_cabang"]', function(){
+    var id = $('#cabang').val();
+    var units =  document.getElementById('id_unit');
+    var url_data = $('#url_get_unit').val() + '/' + id;
+    $.get(url_data, function (data, status) {
+        var response = JSON.parse(data);
+        if (status) {
+            $("#id_unit").empty();
+            var opt = document.createElement("option");
+            opt.value = "0";
+            opt.text = "All";
+            units.appendChild(opt);
+            for (var i = 0; i < response.data.length; i++) {
+                var opt = document.createElement("option");
+                opt.value = response.data[i].id;
+                opt.text = response.data[i].name;
+                units.appendChild(opt);
+            }
+        }
+    });
+    setTimeout(function(){  
+        var unitid =  $('#unit_id').val(); 
+        $("#id_unit").val(unitid).trigger('change');
+        //alert(unitid);
+    }, 800);
+});
 
 jQuery(document).ready(function() {
     initDataTable();

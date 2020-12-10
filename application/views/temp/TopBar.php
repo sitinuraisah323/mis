@@ -99,7 +99,10 @@
                 $label = "Area : ".$this->session->userdata('user')->area_name;
             }else if($level=='unit'){
                 $label = "Unit : ".$this->session->userdata('user')->unit_name;
-            }        
+            }else if($level=='cabang'){
+                $label = "Cabang : ".$this->session->userdata('user')->cabang_name;
+            } 
+            //var_dump($this->session->userdata('user'));        
         ?>
         <div class="kt-user-card__badge">
             <span class="btn btn-success btn-sm btn-bold btn-font-md"><?php echo $label; ?></span>

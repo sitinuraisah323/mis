@@ -38,9 +38,9 @@ $this->load->view('temp/MenuBar.php');
 				</div>
 				<div class="kt-portlet__head-toolbar">
 					<div class="kt-portlet__head-wrapper">
-						<button type="button" class="btn btn-brand btn-icon-sm upload" >
+						<!-- <button type="button" class="btn btn-brand btn-icon-sm upload" >
 							<i class="flaticon2-plus"></i> Upload
-						</button>
+						</button> -->
 					</div>
 				</div>
 			</div>
@@ -91,6 +91,11 @@ $this->load->view('temp/MenuBar.php');
 					<!--end: Search Form -->
 				</div>
 				<?php //print_r($areas); ?>
+				<?php if($this->session->userdata('user')->level == 'unit'){ ?>
+                    <input type="hidden" name="id_unit" value="<?php echo $this->session->userdata('user')->id_unit;?>">
+				<?php }else{ ?>
+					<input type="hidden" name="id_unit" value="0">
+				<?php } ?>
 				<!--begin: Datatable -->
 				<table class="kt-datatable" id="kt_datatable" width="100%">
 				</table>
@@ -102,11 +107,12 @@ $this->load->view('temp/MenuBar.php');
 
 </div>
 </div>
+
 <div class="modal" id="modal-upload" tabindex="-1" role="dialog">
 	<form class="modal-dialog form-input" role="document" method="post" enctype="multipart/form-data">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title">Upload File Customers</h5>
+				<h5 class="modal-title">Customers</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
@@ -126,107 +132,127 @@ $this->load->view('temp/MenuBar.php');
 </div>
 
 
-<form class="modal form-modal" id="modal-form" tabindex="-2" role="dialog">
-	<div class="modal-dialog"  role="document">
+<form class="modal form-modal" id="modal-form" tabindex="-2" role="dialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg"  role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title">Upload File Customers</h5>
+				<h5 class="modal-title">Customers</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
+                </button>
 			</div>
 			<div class="modal-body">
-				<div class="form-group">
-					<input type="hidden" name="id">
-					<label for="file">No Cif</label>
-					<input type="text" class="form-control" name="no_cif" required readonly>
-				</div>
-				<div class="form-group">
-					<label for="file">Nama</label>
-					<input type="text" class="form-control" name="name" required>
-				</div>
-				<div class="form-group">
-					<label for="file">No Hp/telp</label>
-					<input type="text" class="form-control" name="mobile" >
-				</div>
-				<div class="form-group">
-					<label for="file">Tempat Lahir</label>
-					<input type="text" class="form-control" name="birth_place" >
-				</div>
-				<div class="form-group">
-					<label for="file">Tanggal Lahir</label>
-					<input type="date" class="form-control" name="birth_date" >
-				</div>
-				<div class="form-group">
-					<label for="file">Jenis Kelamin</label>
-					<select name="gender" class="form-control" >
-						<option value="">--Select Gender--</option>
-						<?php foreach (array('MALE' => 'Pria', 'FEMALE' => 'Wanita') as $value => $key):?>
-							<option value="<?php echo $value;?>"><?php echo $key;?></option>
-						<?php endforeach;?>
-					</select>
-				</div>
-				<div class="form-group">
-					<label for="file">Status Kawin</label>
-					<select name="gender" class="form-control" >
-						<option value="">--Select Marital--</option>
-						<?php foreach (array('SINGLE' => 'Belum Kawin', 'MARRIED' => 'Kawin','DISVORCED' => 'Cerai') as $value => $key):?>
-							<option value="<?php echo $value;?>"><?php echo $key;?></option>
-						<?php endforeach;?>
-					</select>
-				</div>
-				<div class="form-group">
-					<label for="file">Provinsi</label>
-					<input type="text" class="form-control" name="province" >
-				</div>
-				<div class="form-group">
-					<label for="file">Kota</label>
-					<input type="text" class="form-control" name="city" >
-				</div>
-				<div class="form-group">
-					<label for="file">Alamat</label>
-					<input type="text" class="form-control" name="address" >
-				</div>
-				<div class="form-group">
-					<label for="file">Pekerjaan</label>
-					<input type="text" class="form-control" name="job" >
-				</div>
-				<div class="form-group">
-					<label for="file">Nama Ibu</label>
-					<input type="text" class="form-control" name="mother_name" >
-				</div>
-				<div class="form-group">
-					<label for="file">Nama Saudara</label>
-					<input type="text" class="form-control" name="sibling_name" >
-				</div>
-				<div class="form-group">
-					<label for="file">Tempat lahir Saudara</label>
-					<input type="text" class="form-control" name="sibling_birth_place" >
-				</div>
-				<div class="form-group">
-					<label for="file">Tanggal lahir Saudara</label>
-					<input type="date" class="form-control" name="sibling_birth_date" >
-				</div>
-				<div class="form-group">
-					<label for="file">Pekerjaan Saudara</label>
-					<input type="text" class="form-control" name="sibling_job" >
-				</div>
-				<div class="form-group">
-					<label for="file">Hubungan Saudara</label>
-					<input type="text" class="form-control" name="sibling_relation" >
-				</div>
-				<div class="form-group">
-					<label for="file">Alamat Saudara</label>
-					<input type="text" class="form-control" name="sibling_address_1" >
-				</div>
+
+				<div class="row"> 
+					<div class="col-md-4">  
+						<div class="form-group">
+							<input type="hidden" name="id">
+							<label for="file">No Cif</label>
+							<input type="text" class="form-control" name="no_cif" required readonly>
+						</div>
+						<div class="form-group">
+							<input type="hidden" name="id">
+							<label for="file">No KTP</label>
+							<input type="text" class="form-control" name="nik" required>
+						</div>
+						<div class="form-group">
+							<label for="file">Nama</label>
+							<input type="text" class="form-control" name="name" required>
+						</div>
+						<div class="form-group">
+							<label for="file">No Hp/telp</label>
+							<input type="text" class="form-control" name="mobile" >
+						</div>
+						<div class="form-group">
+							<label for="file">Tempat Lahir</label>
+							<input type="text" class="form-control" name="birth_place" >
+						</div>
+						<div class="form-group">
+							<label for="file">Tanggal Lahir</label>
+							<input type="date" class="form-control" name="birth_date" >
+						</div>
+					</div>
+
+					<div class="col-md-4">  
+
+						<div class="form-group">
+							<label for="file">Jenis Kelamin</label>
+							<select name="gender" class="form-control" >
+								<option value="">--Select Gender--</option>
+								<?php foreach (array('MALE' => 'Pria', 'FEMALE' => 'Wanita') as $value => $key):?>
+									<option value="<?php echo $value;?>"><?php echo $key;?></option>
+								<?php endforeach;?>
+							</select>
+						</div>
+
+						<div class="form-group">
+							<label for="file">Status Kawin</label>
+							<select name="gender" class="form-control" >
+								<option value="">--Select Marital--</option>
+								<?php foreach (array('SINGLE' => 'Belum Kawin', 'MARRIED' => 'Kawin','DISVORCED' => 'Cerai') as $value => $key):?>
+									<option value="<?php echo $value;?>"><?php echo $key;?></option>
+								<?php endforeach;?>
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="file">Provinsi</label>
+							<input type="text" class="form-control" name="province" >
+						</div>
+						<div class="form-group">
+							<label for="file">Kota</label>
+							<input type="text" class="form-control" name="city" >
+						</div>
+						<div class="form-group">
+							<label for="file">Alamat</label>
+							<input type="text" class="form-control" name="address" >
+						</div>
+						<div class="form-group">
+							<label for="file">Pekerjaan</label>
+							<input type="text" class="form-control" name="job" >
+						</div>						
+
+					</div>
+
+					<div class="col-md-4">
+						<div class="form-group">
+							<label for="file">Nama Ibu</label>
+							<input type="text" class="form-control" name="mother_name" >
+						</div>
+						<div class="form-group">
+							<label for="file">Nama Saudara</label>
+							<input type="text" class="form-control" name="sibling_name" >
+						</div>
+						<div class="form-group">
+							<label for="file">Tempat lahir Saudara</label>
+							<input type="text" class="form-control" name="sibling_birth_place" >
+						</div>
+						<div class="form-group">
+							<label for="file">Tanggal lahir Saudara</label>
+							<input type="date" class="form-control" name="sibling_birth_date" >
+						</div>
+						<div class="form-group">
+							<label for="file">Pekerjaan Saudara</label>
+							<input type="text" class="form-control" name="sibling_job" >
+						</div>
+						<div class="form-group">
+							<label for="file">Hubungan Saudara</label>
+							<input type="text" class="form-control" name="sibling_relation" >
+						</div>
+						<div class="form-group">
+							<label for="file">Alamat Saudara</label>
+							<input type="text" class="form-control" name="sibling_address_1" >
+						</div>
+					</div>
+
+				</div>			
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-primary btn-save">Save changes</button>
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-secondary btn-close" data-dismiss="modal">Close</button>
 			</div>
 		</div>
 	</div>
 </form>
+
 <?php
 $this->load->view('temp/Footer.php', array(
 	'js'	=> 'customers/js'

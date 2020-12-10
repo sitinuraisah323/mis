@@ -433,17 +433,19 @@ class Loaninstallments extends ApiController
 		}
 	}
 
-	public function data_customer($id_path, $path)
+	public function data_customer($id_unit, $path)
 	{
 		$excelreader = new PHPExcel_Reader_Excel2007();
 		$loadexcel = $excelreader->load($path); // Load file yang telah diupload ke folder excel
 		$customers = $loadexcel->getActiveSheet()->toArray(null, true, true ,true);
+		$unit = $id_unit;
 		if($customers){
 			$batchInsert = array();
 			$batchUpdate = array();
 			foreach ($customers as $key => $customer){
 				if($key > 1){
 					$data = array(
+						'id_unit'		=> $unit,
 						'no_cif'	=> zero_fill($customer['A'], 5),
 						'name'	=> $customer['B'],
 						'birth_date'	=> date('Y-m-d', strtotime($customer['E'])),
@@ -469,8 +471,8 @@ class Loaninstallments extends ApiController
 					if($findCustomer = $this->customers->find(array(
 						'nik'	=> $customer['I']
 					))){
-						$data['id'] = $findCustomer->id;
-						$batchUpdate[] = $data;
+						//$data['id'] = $findCustomer->id;
+						//$batchUpdate[] = $data;
 					}else{
 						$batchInsert[] = $data;
 					}
@@ -638,6 +640,7 @@ class Loaninstallments extends ApiController
 							'installment'	=>  $transaction['V'],
 							'status_transaction'	=>  $status,
 							'id_customer'	=> $customer->id,
+							'ktp'			=>$transaction['M'],
 							'type_bmh'	=> $transaction['X'],
 							'id_unit'	=> $id_unit,
 							'user_create'	=> $this->session->userdata('user')->id,
