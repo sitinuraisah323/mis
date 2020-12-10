@@ -129,13 +129,14 @@ $this->load->view('temp/MenuBar.php');
 						<input type="date" class="form-control" name="date-end" value="<?php echo date('Y-m-d');?>">
 					</div>
                     <div class="col-lg-2">
-						<label class="col-form-label">Paket</label>
+						<label class="col-form-label">Buket</label>
                         <select name="packet" class="form-control">
                                 <option value="all">All</option>
                                 <option value="120-135">1 (120 > 135)</option>
                                 <option value="136-150">2 (136 > 150)</option>
                                 <option value=">150">3 (> 150)</option>
                                 <option value="-7">4 (-7)</option>
+                                <option value="-10">5 (-10)</option>
                         </select>
                 	</div>
                     <div class="col-lg-1">

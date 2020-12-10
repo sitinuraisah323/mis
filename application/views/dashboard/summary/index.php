@@ -109,6 +109,45 @@ $this->load->view('temp/MenuBar.php');
         </div>
     </div>
     <div class="row">
+        <div class="col-md-12">
+        <div class="kt-portlet kt-portlet--height-fluid">
+            <div class="kt-portlet__body">
+                <div class="kt-widget14">
+                    <div class="kt-widget14__header kt-margin-b-30">
+                        <h3 class="kt-widget14__title">
+                            <a href="<?php echo base_url('dailyreport/performances');?>">Download Performance</a>          
+                        </h3>
+                    </div>
+                    <div class="kt-section__content">                    
+                        <div class="table-responsive table-performance">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Januari</th>
+                                        <th>Februari</th>
+                                        <th>Maret</th>
+                                        <th>April</th>
+                                        <th>Mei</th>
+                                        <th>Juni</th>
+                                        <th>Juli</th>
+                                        <th>Agustus</th>
+                                        <th>September</th>
+                                        <th>Oktober</th>
+                                        <th>November</th>
+                                        <th>Desember</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>	  
+        </div>
+    </div>
+    <div class="row">
     <div class="col-md-6">
             <form id="booking" class="form-horizontal">
                 <div class="kt-container  kt-grid__item kt-grid__item--fluid">

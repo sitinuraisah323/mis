@@ -137,12 +137,20 @@ class Unitsdailycash extends ApiController
 
 	public function cekfirst($idUnit, $permit)
 	{
-		return $this->unitsdailycash->db
+		if($permit != 'ALL'){
+			$this->unitsdailycash->db
+			->where('permit', $permit);
+		}
+		$date =  $this->unitsdailycash->db
 			->select('date')
 			->where('id_unit', $idUnit)
-			->where('permit', $permit)
 			->order_by('date', 'asc')
-			->get('units_dailycashs')->row()->date;
+			->get('units_dailycashs')->row();
+		if($date){
+			return $date->date;
+		}else{
+			return date('2000-m-d');
+		}
 	}
 	
 	public function report()
@@ -487,8 +495,7 @@ class Unitsdailycash extends ApiController
 				$total  = $saldo;
 			}else{
 				$total  = $saldo + $totalsaldoawal;
-			}
-		
+			}		
 		}
 
 
