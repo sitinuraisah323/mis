@@ -15,25 +15,41 @@ class Regularpawns extends ApiController
 
 	public function index()
 	{
-		$this->regulars->db->select('customers.name, units.name as unit')
-			->join('customers','customers.id = units_regularpawns.id_customer')
-			->join('units','units.id = units_regularpawns.id_unit');
-		if($post = $this->input->post()){
-			if(is_array($post['query'])){
-				$value = $post['query']['generalSearch'];
-				$this->regulars->db
-					->or_like('no_sbk',$value)
-					->or_like('nic',$value)
-					->or_like('description_1',$value)
-					->or_like('description_2',$value)
-					->or_like('description_3',$value)
-					->or_like('description_4',$value)
-					->or_like('customers.name',$value);
-			}
+
+		if($this->session->userdata('user')->level == 'unit'){
+			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
 		}
-		$data =  $this->regulars->all();
+
+		if($this->session->userdata('user')->level == 'cabang'){
+			$this->units->db->where('units.id_cabang', $this->session->userdata('user')->id_cabang);
+		}
+
+		$units = $this->units->db->select('*')
+		->from('units')
+		->join('areas','areas.id=units.id_area')
+		->join('units_regularpawns','units_regularpawns.id_unit=units.id')
+		->get()->result();
+
+		// $this->regulars->db->select('customers.name, units.name as unit')
+		// 	->join('customers','customers.id = units_regularpawns.id_customer')
+		// 	->join('units','units.id = units_regularpawns.id_unit');
+		// if($post = $this->input->post()){
+		// 	if(is_array($post['query'])){
+		// 		$value = $post['query']['generalSearch'];
+		// 		$this->regulars->db
+		// 			->or_like('no_sbk',$value)
+		// 			->or_like('nic',$value)
+		// 			->or_like('description_1',$value)
+		// 			->or_like('description_2',$value)
+		// 			->or_like('description_3',$value)
+		// 			->or_like('description_4',$value)
+		// 			->or_like('customers.name',$value);
+		// 	}
+		// }
+		// $data =  $this->regulars->all();
+
 		echo json_encode(array(
-			'data'	=> $data,
+			'data'		=> $units,
 			'message'	=> 'Successfully Get Data Regular Pawns'
 		));
 	}
@@ -284,6 +300,7 @@ class Regularpawns extends ApiController
 			->select('units.name as unit, customers.name as customer_name,customers.nik as nik, (select date_repayment from units_repayments where units_repayments.no_sbk = units_regularpawns.no_sbk and units_repayments.id_unit = units_regularpawns.id_unit and units_repayments.permit = units_regularpawns.permit limit 1 ) as date_repayment')
 			->join('customers','units_regularpawns.id_customer = customers.id')
 			->join('units','units.id = units_regularpawns.id_unit');
+
 		if($get = $this->input->get()){
 			$status =null;
 			$nasabah = $get['nasabah'];
@@ -291,9 +308,30 @@ class Regularpawns extends ApiController
 			if($get['statusrpt']=="1"){$status=["N"];}
 			if($get['statusrpt']=="2"){$status=["L"];}
 			if($get['statusrpt']=="3"){$status=[""];}
+
+			// if($area = $this->input->get('area')){
+			// 	$this->regulars->db->where('id_area', $area);
+			// }
+
 			if($area = $this->input->get('area')){
 				$this->regulars->db->where('id_area', $area);
+			}else if($this->session->userdata('user')->level == 'area'){
+				$this->regulars->db->where('id_area', $this->session->userdata('user')->id_area);
 			}
+	
+			
+			if($cabang = $this->input->get('cabang')){
+				$this->regulars->db->where('id_cabang', $cabang);
+			}else if($this->session->userdata('user')->level == 'cabang'){
+				$this->regulars->db->where('id_cabang', $this->session->userdata('user')->id_cabang);
+			}
+	
+			if($unit = $this->input->get('unit')){
+				$this->regulars->db->where('id_unit', $unit);
+			}else if($this->session->userdata('user')->level == 'unit'){
+				$this->regulars->db->where('units.id', $this->session->userdata('user')->id_unit);
+			}
+
 			$this->regulars->db
 				->where('units_regularpawns.date_sbk >=', $get['dateStart'])
 				->where('units_regularpawns.date_sbk <=', $get['dateEnd'])
@@ -312,6 +350,7 @@ class Regularpawns extends ApiController
 				$this->regulars->db->order_by('units_regularpawns.'.$sortBy, $this->input->get('sort_method'));
 			}
 		}
+
 		$data = $this->regulars->all();
 		echo json_encode(array(
 			'data'	=> $data,

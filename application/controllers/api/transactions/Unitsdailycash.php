@@ -20,11 +20,26 @@ class Unitsdailycash extends ApiController
 
 	public function get_unitsdailycash()
 	{
+		if($this->session->userdata('user')->level == 'unit'){
+			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
+		}
+
+		if($this->session->userdata('user')->level == 'cabang'){
+			$this->units->db->where('units.id_cabang', $this->session->userdata('user')->id_cabang);
+		}
+
+		$units = $this->units->db->select('units_dailycashs.id,units.id as id_unit,units.name,units.id_area,areas.area,units_dailycashs.cash_code,units_dailycashs.amount,units_dailycashs.date,units_dailycashs.description,units_dailycashs.status,units_dailycashs.date_create,units_dailycashs.date_update,units_dailycashs.user_create,units_dailycashs.user_update')
+			->from('units')
+			->join('areas','areas.id=units.id_area')
+			->join('units_dailycashs','units_dailycashs.id_unit=units.id')
+			->get()->result();
+
 		echo json_encode(array(
-			'data'	=> 	$this->unitsdailycash->get_unitsdailycash(),
+			'data'	=> 	$units,
 			'status'	=> true,
 			'message'	=> 'Successfully Get Data Users'
 		));
+
     }
 
 	public function upload()

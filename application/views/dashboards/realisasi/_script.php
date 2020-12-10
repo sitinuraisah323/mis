@@ -3,11 +3,37 @@
 var area = "<?php echo $area?>";
 var month = '<?php echo $month?>';
 var year = '<?php echo $year;?>';
+
+$('[name="cabang"]').on('change',function(){
+	var cabang = $('[name="cabang"]').val();
+	var units =  $('[name="id_unit"]');
+	var url_data = $('#url_get_units').val() + '/' + cabang;
+	$.get(url_data, function (data, status) {
+		var response = JSON.parse(data);
+		if (status) {
+			$("#unit").empty();
+			units.append('<option value="0">All</option>');
+			for (var i = 0; i < response.data.length; i++) {
+				var opt = document.createElement("option");
+				opt.value = response.data[i].id;
+				opt.text = response.data[i].name;
+				units.append(opt);
+			}
+		}
+	});
+});
+
+var typecabang = $('[name="cabang"]').attr('type');
+if(typecabang == 'hidden'){
+	$('[name="cabang"]').trigger('change');
+}
+
 $(document).ready(function(){
 	targetBooking();
 })
 
 $('#area').select2({ placeholder: "Select Area", width: '100%' });
+$('#unit').select2({ placeholder: "Select Area", width: '100%' });
 $('#month').select2({ placeholder: "Select Month", width: '100%' });
 $('#tahun').select2({ placeholder: "Select Year", width: '100%' });
 

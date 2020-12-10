@@ -90,8 +90,15 @@ $this->load->view('temp/MenuBar.php');
 								<option value="0">All</option>
 							</select>
 						</div>
-					<?php else:?>
-                    
+                    <?php elseif($this->session->userdata('user')->level == 'cabang'):?>
+                        <input type="hidden" name="cabang" value="<?php echo $this->session->userdata('user')->id_cabang;?>">
+						<label class="col-form-label">Unit</label>
+						<div class="col-lg-2">
+							<select class="form-control select2" name="id_unit" id="unit">
+								<option value="0">All</option>
+							</select>
+						</div>
+					<?php else:?>                    
 					<label class="col-form-label">Area</label>
                         <div class="col-lg-2">
                             <select class="form-control select2" name="area" id="area">
@@ -136,6 +143,7 @@ $this->load->view('temp/MenuBar.php');
     </div>
     <!-- end:: Content -->
 	<input type="hidden" name="url_get" id="url_get" value="<?php echo base_url('api/report/bukukas/get_transaksi_unit') ?>"/>
+    <input type="hidden" name="url_get_units" id="url_get_units" value="<?php echo base_url('api/datamaster/units/get_unit_bycabang') ?>"/>
 	<input type="hidden" name="url_get_unit" id="url_get_unit" value="<?php echo base_url('api/datamaster/units/get_units_byarea') ?>"/>
 </div>
 </div>

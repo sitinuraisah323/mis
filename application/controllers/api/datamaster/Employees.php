@@ -184,11 +184,14 @@ class Employees extends ApiController
 
 	public function show($id)
 	{
-		$data = $this->employees->db->select('*,employees.id as employee_id')
+		$data = $this->employees->db->select('employees.id, fullname,employees.id_cabang,units.id_area,employees.id_unit, nik,birth_date, birth_place,
+		gender, mobile, marital,blood_group, address,position, masa_kerja,
+		no_rek, last_education, bpjs_kesehatan, bpjs_tk,
+		no_employment,join_date')
 						->select('units.name as unit_name')
 						->join('units','units.id = employees.id_unit')
 						->select('cabang.cabang as cabang')
-						->join('cabang','cabang.id = units.id_cabang')
+						->join('cabang','cabang.id = units.id_cabang','left')
 						->select('areas.id as id_area')
 						->join('areas','areas.id = cabang.id_area')
 						->where('employees.id', $id)

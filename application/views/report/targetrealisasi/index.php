@@ -14,7 +14,7 @@ $this->load->view('temp/MenuBar.php');
         <div class="kt-subheader__main">
             <h3 class="kt-subheader__title">Report</h3>
             <span class="kt-subheader__separator kt-subheader__separator--v"></span>
-            <span class="kt-subheader__desc">Outstanding Nasional</span>
+            <span class="kt-subheader__desc">BAP Kas</span>
         </div>
         <div class="kt-subheader__toolbar">
             <div class="kt-subheader__wrapper">
@@ -33,7 +33,7 @@ $this->load->view('temp/MenuBar.php');
                         <i class="kt-font-brand fa fa-align-justify"></i>
                     </span>
                     <h3 class="kt-portlet__head-title">
-                       Data Outstanding Nasional(Gadai Reguler)
+                       Data BAP Kas
                     </h3>
                 </div>
                 <div class="kt-portlet__head-toolbar">
@@ -76,7 +76,7 @@ $this->load->view('temp/MenuBar.php');
             </table> -->
             <!--end: Datatable -->
 
-            <form id="form_bukukas" class="form-horizontal" method="post" action="<?php echo base_url("report/outstanding/export"); ?>">
+            <form id="form_bukukas" class="form-horizontal" method="post" action="<?php echo base_url("report/bapkas/export"); ?>">
             <div class="kt-portlet__body">
             <div class="col-md-12" >
                 <div class="form-group row">
@@ -88,17 +88,9 @@ $this->load->view('temp/MenuBar.php');
 						<div class="col-lg-2">
 							<label class="col-form-label">Unit</label>
 							<select class="form-control select2" name="id_unit" id="unit">
-								<option value="all">All</option>
+								<option value="0">All</option>
 							</select>
 						</div>
-                    <?php elseif($this->session->userdata('user')->level == 'cabang'):?>
-                        <input type="hidden" name="cabang" value="<?php echo $this->session->userdata('user')->id_cabang;?>">
-                        <div class="col-lg-2">
-                        <label class="col-form-label">Unit</label>
-                            <select class="form-control select2" name="id_unit" id="unit">
-                                <option value="0">All</option>
-                            </select>
-                        </div>
 					<?php else:?>
 						<div class="col-lg-2">
 							<label class="col-form-label">Area</label>
@@ -120,15 +112,19 @@ $this->load->view('temp/MenuBar.php');
 							</select>
 						</div>
 					<?php endif ;?>
-					
 					<div class="col-lg-2">
 						<label class="col-form-label">Tanggal</label>
-						<input type="date" class="form-control" name="date" value="<?php echo date('Y-m-d');?>">
-					</div>                 
+						<input type="date" class="form-control" name="date-start" value="<?php echo date('Y-m-01');?>">
+					</div>
+					<div class="col-lg-2">
+						<label class="col-form-label">Sampai</label>
+						<input type="date" class="form-control" name="date-end" value="<?php echo date('Y-m-d');?>">
+					</div>                    
                     <div class="col-lg-2">
                         <label class="col-form-label">&nbsp</label>
                         <div class="position-relative">
                         <button type="button" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>
+                        <!-- <button type="submit" class="btn btn-success btn-icon" name="btnexport" id="btnexport" onclick="export_xls()"><i class="fa fa-file-excel"></i></button> -->
                         <button type="submit" class="btn btn-danger btn-icon" name="btnexport_csv" id="btnexport_csv"><i class="fa fa-file-excel"></i></button>
                         </div>
                     </div>                  
@@ -142,15 +138,36 @@ $this->load->view('temp/MenuBar.php');
 						  	<thead class="thead-light">
 						    	<tr>
 						      		<th class="text-center">No</th>
-									<th class="text-left">Unit</th>
-									<th class='text-left'>Area</th>
-									<th class='text-center'>Noa</th>
-									<th class='text-right'>Outstanding <div id="dateos"></div></th>
+									<th class="text-left">Units</th>
+									<!-- <th class="text-left">Kasir</th> -->
+									<th class="text-center">Tanggal</th>
+									<th class='text-right'>Saldo Awal</th>
+									<th class='text-right'>Penerimaan</th>
+									<th class='text-right'>Pengeluaran</th>
+									<th class='text-right'>Saldo Akhir</th>
+                                    <th class='text-right'>Selisih</th>
+									<th class='text-right'>OS. Regular</th>
+									<th class='text-right'>OS. Cicilah</th>
+									<th class='text-right'>Total OS</th>									
+                                    <th class='text-center'>#</th>
 									<th></th>
 						    	</tr>
 						  	</thead>
 						  	<tbody>
 						  	</tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="3" class="text-right">Total</th>
+                                    <th class="saldoawal text-right"></th>
+                                    <th class="penerimaan text-right"></th>
+                                    <th class="pengeluaran text-right"></th>
+                                    <th class="saldoakhir text-right"></th>
+                                    <th class="selisih text-right"></th>
+                                    <th class="osreg text-right"></th>
+                                    <th class="osnonreg text-right"></th>
+                                    <th class="totos text-right"></th>
+                                </tr>
+                            </tfoot>
 						</table>
 				</div>
             </div>
@@ -164,12 +181,10 @@ $this->load->view('temp/MenuBar.php');
     <!-- end:: Content -->
 	<input type="hidden" name="url_get" id="url_get" value="<?php echo base_url('api/report/bukukas/get_transaksi_unit') ?>"/>
 	<input type="hidden" name="url_get_unit" id="url_get_unit" value="<?php echo base_url('api/datamaster/units/get_units_byarea') ?>"/>
-    <input type="hidden" name="url_get_units" id="url_get_units" value="<?php echo base_url('api/datamaster/units/get_unit_bycabang') ?>"/>
-
 </div>
 </div>
 
 <?php
 $this->load->view('temp/Footer.php');
-$this->load->view('report/os/_script.php');
+$this->load->view('report/targetrealisasi/_script.php');
 ?>

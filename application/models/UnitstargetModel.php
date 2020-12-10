@@ -63,4 +63,36 @@ class UnitstargetModel extends Master
 		return $this->db->get('units_mortages')->row();
 	}
 
+	public function get_realisasitarget($idUnit, $month,$year)
+	{
+		// $target 	= $this->db->select('amount_booking, amount_outstanding')
+		// 			 ->from('units_targets')
+		// 			 ->where('id_unit',$idUnit)
+		// 			 ->where('month',$month)
+		// 			 ->where('year',$year)
+		// 			 ->get()->row();
+
+		$regular 	= $this->db->select('SUM(amount) as up,COUNT(*) as noa')
+					 ->from('units_regularpawns')
+					 ->where('status_transaction','N')
+					 ->where('id_unit',$idUnit)
+					 ->where('MONTH(date_sbk)',$month)
+					 ->where('YEAR(date_sbk)',$year)
+					 ->get()->row();					 
+
+		$mortages = $this->db->select('SUM(amount_loan) AS up,COUNT(*) as noa')
+						->from('units_mortages')
+						->where('units_mortages.status_transaction ','N')
+						->where('units_mortages.id_unit ', $idUnit)						
+						->where('MONTH(date_sbk)',$month)
+						->where('YEAR(date_sbk)',$year)
+						->get()->row();	
+
+			return (object)array(
+							"target"	=>0,
+							"realisasi"	=>(int) $regular->up + $mortages->up,
+							"noa"		=>(int) $regular->noa + $mortages->noa
+						);
+	}
+
 }

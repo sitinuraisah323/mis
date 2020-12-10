@@ -17,12 +17,19 @@ class Bookcash extends ApiController
 	public function index()
 	{
 		$this->model->db
-			->select('units.name')
+			->select('units.name,cabang.cabang')
 			->join('units','units.id = units_cash_book.id_unit')
-		    ->order_by('id','DESC');
-		if($this->session->userdata('user')->level != 'administrator'){
+			->join('cabang','cabang.id=units.id_cabang')
+			->order_by('id','DESC');
+		
+		if($this->session->userdata('user')->level == 'cabang'){
+				$this->model->db->where('units.id_cabang', $this->session->userdata('user')->id_cabang);
+			}
+			
+		if($this->session->userdata('user')->level == 'unit'){
 			$this->model->db->where('units.id', $this->session->userdata('user')->id_unit);
 		}
+
 		if($post = $this->input->post()){
 			if(is_array($post['query'])){
 				$value = $post['query']['generalSearch'];
@@ -397,7 +404,14 @@ class Bookcash extends ApiController
 		}else if($this->session->userdata('user')->level == 'area'){
 			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
 		}
-		if($code = $this->input->get('id_unit')){
+
+		if($cabang = $this->input->get('cabang')){
+			$this->units->db->where('id_cabang', $cabang);
+		}else if($this->session->userdata('user')->level == 'cabang'){
+			$this->units->db->where('units.id_cabang', $this->session->userdata('user')->id_cabang);
+		}
+
+		if($unit = $this->input->get('unit')){
 			$this->units->db->where('id', $code);
 		}else if($this->session->userdata('user')->level == 'unit'){
 			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);

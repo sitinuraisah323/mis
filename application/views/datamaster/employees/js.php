@@ -61,7 +61,7 @@ function initDTEvents(){
             success : function(response,status){
                 KTApp.unblockPage();
                 if(response.status == true){
-                	const {id,employee_id, fullname,id_cabang,id_area,id_unit, nik,birth_date, birth_place,
+                	const {id, fullname,id_cabang,id_area,id_unit, nik,birth_date, birth_place,
                 	        gender, mobile, marital,blood_group, address,position, masa_kerja,
 							no_rek, last_education, bpjs_kesehatan, bpjs_tk,
 							no_employment,join_date
@@ -69,9 +69,10 @@ function initDTEvents(){
                 	const modal = $('#modal_add');
                 	if(id_unit){
 						modal.find('[name="id_unit"]').parents('.form-group').removeClass('d-none');
-					}
+                    }
+                    //alert(employee_id);
 					modal.find('[name="fullname"]').val(fullname);
-					modal.find('[name="id"]').val(employee_id);
+					modal.find('[name="id"]').val(id);
 					modal.find('[name="id_area"]').val(id_area).trigger('change');
 					modal.find('[name="unit_id"]').val(id_unit);
 					modal.find('[name="cabang_id"]').val(id_cabang);

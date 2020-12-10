@@ -13,9 +13,16 @@ class Customers extends ApiController
 	public function index()
 	{
 		$this->customers->db;
-			if($this->session->userdata('user')->level != 'administrator'){
+			if($this->session->userdata('user')->level == 'unit'){
 				$this->customers->db->where('id_unit', $this->session->userdata('user')->id_unit);
 			}
+
+			if($this->session->userdata('user')->level == 'cabang'){
+				$this->customers->db
+								->join('units','units.id=customers.id_unit')
+								->where('units.id_cabang', $this->session->userdata('user')->id_cabang);
+			}
+
 		if($post = $this->input->post()){
 			if(is_array($post['query'])){
 				$value = $post['query']['generalSearch'];
@@ -42,6 +49,7 @@ class Customers extends ApiController
 		// if($this->session->userdata('user')->level != 'administrator'){
 		// 	$this->customers->db->where('id_unit', $this->session->userdata('user')->id_unit);
 		// }
+		$listdata = $this->session->userdata('user');
 		echo json_encode(array(
 			'data'	=> $data,
 			'message'	=> 'Successfully Get Data Regular Pawns'

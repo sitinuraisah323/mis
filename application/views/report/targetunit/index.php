@@ -102,17 +102,7 @@ $this->load->view('temp/MenuBar.php');
                             </select>
                     </div>
 
-                    <div class="col-lg-2">
-                    <label class="col-form-label">Target</label>                   
-                    <select class="form-control select2" name="target" id="target">
-                            <option></option>
-                            <option value="all">All</option>                           
-                            <option value="Booking">Booking</option>                           
-                            <option value="Outstanding">Outstanding</option>                           
-                            </select>
-                    </div>
-
-                    <div class="col-lg-2">
+                    <!-- <div class="col-lg-2">
                     <label class="col-form-label">Ijin</label>                    						
 						<select class="form-control" name="permit" id="permit">
 							<option value="">Select Ijin</option>
@@ -120,10 +110,11 @@ $this->load->view('temp/MenuBar.php');
 								<option value="<?php echo $key;?>"><?php echo $value;?></option>
 							<?php endforeach;?>
 						</select>
-					</div>
+					</div> -->
+
                     <div class="col-lg-2">
                     <label class="col-form-label">Bulan</label>					
-						<input type="date" class="form-control" name="date-start" value="<?php echo date('Y-m-d');?>">
+						<input type="date" class="form-control" name="date" value="<?php echo date('Y-m-d');?>">
 					</div>
                     <div class="col-lg-1">
                         <label class="col-form-label">&nbsp</label>
@@ -138,18 +129,20 @@ $this->load->view('temp/MenuBar.php');
 
             <div class="col-md-12">
                 <div class="kt-section__content">
-						<table class="table" id="tblmodalkerjapusat">
+						<table class="table" id="tbltarget">
 						  	<thead class="thead-light">
 						    	<tr>
 						      		<th class="text-center">No</th>
 						      		<th>Area</th>
 						      		<th>Unit</th>
+						      		<th class="text-center">Month</th>
+						      		<th class="text-center">Year</th>
 						      		<th class="text-right">Target</th>
 						      		<th class="text-right">Realisasi</th>
-						      		<th class="text-center">%</th>
+						      		<!-- <th class="text-center">%</th>
                                     <th class="text-right">Selisih</th>
-						      		<th class="text-center">%</th>
-                                    <th>Keterangan</th>
+						      		<th class="text-center">%</th> -->
+                                    <!-- <th>Keterangan</th> -->
 						    	</tr>
 						  	</thead>
 						  	<tbody>						    					    	
