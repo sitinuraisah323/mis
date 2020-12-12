@@ -102,6 +102,7 @@ function initCariForm(){
     $('#btncari').on('click',function(){
         $('.rowappend').remove();
         var area = $('[name="area"]').val();
+        var cabang = $('[name="cabang"]').val();
         var unit = $('[name="id_unit"]').val();
         var permit = $('[name="permit"]').val();
 		var dateStart = $('[name="date-start"]').val();
@@ -111,7 +112,7 @@ function initCariForm(){
 			type : 'GET',
 			url : "<?php echo base_url("api/transactions/unitsdailycash/lmtransaction"); ?>",
 			dataType : "json",
-			data:{area:area,unit:unit,dateStart:dateStart,dateEnd:dateEnd,permit:permit},
+			data:{area:area,cabang:cabang,unit:unit,dateStart:dateStart,dateEnd:dateEnd,permit:permit},
 			success : function(response,status){
 				KTApp.unblockPage();
                 console.log(response.data);
@@ -197,6 +198,31 @@ $('[name="area"]').on('change',function(){
 var type = $('[name="area"]').attr('type');
 if(type == 'hidden'){
     $('[name="area"]').trigger('change');
+}
+
+
+$('[name="cabang"]').on('change',function(){
+	var cabang = $('[name="cabang"]').val();
+	var units =  $('[name="id_unit"]');
+	var url_data = $('#url_get_units').val() + '/' + cabang;
+	$.get(url_data, function (data, status) {
+		var response = JSON.parse(data);
+		if (status) {
+			$("#unit").empty();
+			units.append('<option value="0">All</option>');
+			for (var i = 0; i < response.data.length; i++) {
+				var opt = document.createElement("option");
+				opt.value = response.data[i].id;
+				opt.text = response.data[i].name;
+				units.append(opt);
+			}
+		}
+	});
+});
+
+var typecabang = $('[name="cabang"]').attr('type');
+if(typecabang == 'hidden'){
+	$('[name="cabang"]').trigger('change');
 }
 
 </script>

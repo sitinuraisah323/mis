@@ -370,27 +370,48 @@ class Regularpawns extends ApiController
 			->join('areas','areas.id = units.id_area');
 			
 		if($get = $this->input->get()){
-			$units = $get['id_unit'];
-			if(!empty($units)){$units=$units;}else{$units=$idUnit;}
+			//$units = $get['unit'];
+			//if(!empty($units)){$units=$units;}else{$units=$idUnit;}
 			//$area = $get['area'];
 			$status =null;
 			if($get['statusrpt']=="0"){$status=["N","L"];}
 			if($get['statusrpt']=="1"){$status=["N"];}
 			if($get['statusrpt']=="2"){$status=["L"];}
 			if($get['statusrpt']=="3"){$status=[""];}
+
 			$this->regulars->db
 				->where_in('units_regularpawns.status_transaction ', $status)
 				->where('units_regularpawns.id_customer', '0')
 				->order_by('units_regularpawns.id_unit', 'asc');
+			
+				if($area = $this->input->get('area')){
+					$this->regulars->db->where('units.id_area', $area);
+				}else if($this->session->userdata('user')->level == 'area'){
+					$this->regulars->db->where('units.id_area', $this->session->userdata('user')->id_area);
+				}
+		
+				
+				if($cabang = $this->input->get('cabang')){
+					$this->regulars->db->where('units.id_cabang', $cabang);
+				}else if($this->session->userdata('user')->level == 'cabang'){
+					$this->regulars->db->where('units.id_cabang', $this->session->userdata('user')->id_cabang);
+				}
+		
+				if($unit = $this->input->get('unit')){
+					$this->regulars->db->where('units.id', $unit);
+				}else if($this->session->userdata('user')->level == 'unit'){
+					$this->regulars->db->where('units.id', $this->session->userdata('user')->id_unit);
+				}
+
 				// if($area){
 				// 	if($area != 'all'){
 				// 		$this->regulars->db->where('areas.id', $area);
 				// 	}	
 				// }				
-				if($units!='all' || $units != 0){
-					$this->regulars->db->where('units_regularpawns.id_unit', $units);
+				// if($units!='all' || $units != 0){
+				// 	$this->regulars->db->where('units_regularpawns.id_unit', $units);
 
-				}
+				// }
 		}
 
 		$data = $this->regulars->all();
@@ -405,7 +426,7 @@ class Regularpawns extends ApiController
 	{
 		$date = date('Y-m-d');
 		$this->regulars->db
-			->select("customers.name as customer_name,address, mobile, ROUND(units_regularpawns.capital_lease * 4 * amount) as tafsiran_sewa,
+			->select("customers.name as customer_name,address,units.name, mobile, ROUND(units_regularpawns.capital_lease * 4 * amount) as tafsiran_sewa,
 				CASE WHEN amount <=1000000 THEN 9000
 				WHEN amount <= 2500000 THEN 20000
 				WHEN amount <= 5000000 THEN 27000
@@ -427,12 +448,38 @@ class Regularpawns extends ApiController
 		if($get = $this->input->get()){
 			$this->regulars->db
 				->where('units_regularpawns.deadline >=', $this->input->get('dateStart'));
-			if($this->input->get('id_unit')){
-				$this->regulars->db->where('units_regularpawns.id_unit', $get['id_unit']);
+
+			// if($this->input->get('area')){
+			// 	$this->regulars->db->where('units.id_area', $get['area']);
+			// }
+
+			// if($this->input->get('cabang')){
+			// 	$this->regulars->db->where('units.id_cabang', $get['cabang']);
+			// }
+
+			// if($this->input->get('unit')){
+			// 	$this->regulars->db->where('units_regularpawns.id_unit', $get['unit']);
+			// }
+
+			if($area = $this->input->get('area')){
+				$this->regulars->db->where('units.id_area', $area);
+			}else if($this->session->userdata('user')->level == 'area'){
+				$this->regulars->db->where('units.id_area', $this->session->userdata('user')->id_area);
 			}
-			if($this->input->get('area')){
-				$this->regulars->db->where('units.id_area', $get['area']);
+	
+			
+			if($cabang = $this->input->get('cabang')){
+				$this->regulars->db->where('units.id_cabang', $cabang);
+			}else if($this->session->userdata('user')->level == 'cabang'){
+				$this->regulars->db->where('units.id_cabang', $this->session->userdata('user')->id_cabang);
 			}
+	
+			if($unit = $this->input->get('unit')){
+				$this->regulars->db->where('units.id', $unit);
+			}else if($this->session->userdata('user')->level == 'unit'){
+				$this->regulars->db->where('units.id', $this->session->userdata('user')->id_unit);
+			}			
+
 			if($permit = $this->input->get('permit')){
 				$this->regulars->db->where('units_regularpawns.permit', $permit);
 			}

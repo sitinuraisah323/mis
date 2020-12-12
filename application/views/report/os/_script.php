@@ -100,6 +100,8 @@ function initCariForm(){
     $('#btncari').on('click',function(){
         $('.rowappend').remove();
         var area = $('[name="area"]').val();
+        var cabang = $('[name="cabang"]').val();
+        var unit = $('[name="id_unit"]').val();
 		var date = $('[name="date"]').val();
 		var lastdate ="";
         KTApp.block('#form_bukukas .kt-portlet__body', {});
@@ -107,7 +109,7 @@ function initCariForm(){
 			type : 'GET',
 			url : "<?php echo base_url("api/report/outstanding"); ?>",
 			dataType : "json",
-			data:{area:area,date:date},
+			data:{area:area,cabang:cabang,unit:unit,date:date},
 			success : function(response,status){
 				KTApp.unblockPage();
 				if(response.status == true){

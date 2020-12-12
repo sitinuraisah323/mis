@@ -100,17 +100,18 @@ function initCariForm(){
     $('#btncari').on('click',function(){
         $('.rowappend').remove();
         var area = $('[name="area"]').val();
-        var unit = $('[name="unit"]').val();
+        var cabang = $('[name="cabang"]').val();
+        var unit = $('[name="id_unit"]').val();
 		var date = $('[name="date"]').val();
         KTApp.block('#form_bukukas .kt-portlet__body', {});
 		$.ajax({
 			type : 'GET',
 			url : "<?php echo base_url("api/dashboards/pencairandashboard"); ?>",
 			dataType : "json",
-			data:{area:area,unit:unit,date:date},
+			data:{area:area,cabang:cabang,unit:unit,date:date},
 			success : function(response,status){
 				KTApp.unblockPage();
-				if(response.status == true){
+				//if(response.status == true){
 					var template = '';
 					var no = 1;
 					var totNoa = 0;
@@ -132,7 +133,7 @@ function initCariForm(){
                     template +='</tr>';
 
 					$('.kt-section__content table').append(template);
-				}
+				//}
 			},
 			error: function (jqXHR, textStatus, errorThrown){
 				KTApp.unblockPage();

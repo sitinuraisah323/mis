@@ -108,6 +108,7 @@ function initCariForm(){
     $('#btncari').on('click',function(){
         $('.rowappend').remove();
         var area = $('[name="area"]').val();
+        var cabang = $('[name="cabang"]').val();
         var unit = $('[name="id_unit"]').val();
         var statusrpt = $('#status').val();
 		var dateStart = $('[name="date-start"]').val();
@@ -119,7 +120,7 @@ function initCariForm(){
 			type : 'GET',
 			url : "<?php echo base_url("api/transactions/regularpawns/reportdpd"); ?>",
 			dataType : "json",
-			data:{area:area,id_unit:unit,dateStart:dateStart,dateEnd:dateEnd,permit:permit, packet},
+			data:{area:area,cabang:cabang,unit:unit,dateStart:dateStart,dateEnd:dateEnd,permit:permit, packet},
 			success : function(response,status){
 				KTApp.unblockPage();
 				if(response.status == true){
@@ -137,6 +138,7 @@ function initCariForm(){
 						var dpd = parseInt(date_between(`${data.deadline}`,"<?php echo date('Y/m/d');?>"));
 						template += "<tr class='rowappend'>";
 						template += "<td class='text-center'>"+no+"</td>";
+						template += "<td class='text-center'>"+data.name+"</td>";
 						template += "<td class='text-center'>"+data.no_sbk+"</td>";
 						template += "<td class='text-center'>"+moment(data.date_sbk).format('DD-MM-YYYY')+"</td>";
                         template += "<td class='text-center'>"+moment(data.deadline).format('DD-MM-YYYY')+"</td>";
@@ -221,6 +223,30 @@ $('[name="area"]').on('change',function(){
 var type = $('[name="area"]').attr('type');
 if(type == 'hidden'){
     $('[name="area"]').trigger('change');
+}
+
+$('[name="cabang"]').on('change',function(){
+	var cabang = $('[name="cabang"]').val();
+	var units =  $('[name="id_unit"]');
+	var url_data = $('#url_get_units').val() + '/' + cabang;
+	$.get(url_data, function (data, status) {
+		var response = JSON.parse(data);
+		if (status) {
+			$("#unit").empty();
+			units.append('<option value="0">All</option>');
+			for (var i = 0; i < response.data.length; i++) {
+				var opt = document.createElement("option");
+				opt.value = response.data[i].id;
+				opt.text = response.data[i].name;
+				units.append(opt);
+			}
+		}
+	});
+});
+
+var typecabang = $('[name="cabang"]').attr('type');
+if(typecabang == 'hidden'){
+	$('[name="cabang"]').trigger('change');
 }
 
 function date_between(start, end){

@@ -245,6 +245,7 @@ class Unitsdailycash extends ApiController
 		$ignore = array('1110000');
 		if($get = $this->input->get()){
 			$category = $get['category'];
+
 			if($this->input->get('dateEnd')){
 				$this->unitsdailycash->db->where('date <=', $get['dateEnd']);
 			}
@@ -259,6 +260,7 @@ class Unitsdailycash extends ApiController
 				if($category=='0'){
 					$this->unitsdailycash->db->where('no_perk', '1110000');
 				}
+				
 				if($category=='1'){
 					$this->unitsdailycash->db
 					->where('SUBSTRING(no_perk,1,5) =','11100')
@@ -266,6 +268,7 @@ class Unitsdailycash extends ApiController
 					->where_not_in('no_perk', $ignore);
 				}
 		}
+
 		$this->unitsdailycash->db
 			->select('units.name as unit')
 			->join('units','units.id = units_dailycashs.id_unit');
@@ -559,6 +562,12 @@ class Unitsdailycash extends ApiController
         }else if($this->session->userdata('user')->level === 'area'){
             $this->units->db->where('id_area', $this->session->userdata('user')->id_area);
 		}
+
+		if($cabang = $this->input->get('cabang')){
+            $this->units->db->where('units.id_cabang', $cabang);
+        }else if($this->session->userdata('user')->level === 'cabang'){
+            $this->units->db->where('units.id_cabang', $this->session->userdata('user')->id_cabang);
+		}
 		
 		if($code = $this->input->get('unit')){
 			if($code!='0'){
@@ -567,6 +576,7 @@ class Unitsdailycash extends ApiController
 		}else if($this->session->userdata('user')->level == 'unit'){
 			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
 		}	
+
 		$dateStart = $this->input->get('dateStart');
 		$dateEnd = $this->input->get('dateEnd');
 

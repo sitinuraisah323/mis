@@ -183,6 +183,13 @@ class UnitsdailycashModel extends Master
 					$this->db->where('u.id_area', $gets['area']);
 				}
 			}
+
+			if(key_exists('cabang', $gets)){
+				if($gets['cabang']){
+					$this->db->where('u.id_cabang', $gets['cabang']);
+				}
+			}
+
 			if(key_exists('unit', $gets)){
 				if($gets['unit']){
 					$this->db->where('u.id', $gets['unit']);

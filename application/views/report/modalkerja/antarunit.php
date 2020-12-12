@@ -143,6 +143,8 @@ $this->load->view('temp/MenuBar.php');
     </div>
     <!-- end:: Content -->
 	<input type="hidden" name="url_get_unit" id="url_get_unit" value="<?php echo base_url('api/datamaster/units/get_units_byarea') ?>"/>
+    <input type="hidden" name="url_get_units" id="url_get_units" value="<?php echo base_url('api/datamaster/units/get_unit_bycabang') ?>"/>
+
 </div>
 </div>
 

@@ -48,7 +48,7 @@ class BookCashModel extends Master
 	public function getUnitBapKas($idUnit, $date)
 	{
 		$bapkas = $this->db->select('*')->from('units_cash_book')
-			->where('id_unit', $idUnit)
+			->where('units_cash_book.id_unit', $idUnit)
 			->where('date', $date)->get()->row();
 			return $bapkas;
 	}

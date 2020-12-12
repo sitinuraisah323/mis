@@ -79,11 +79,19 @@ class UnitsModel extends Master
 		}else if($this->session->userdata('user')->level == 'area'){
 			$this->db->where('id_area', $this->session->userdata('user')->id_area);
 		}
-		if($code = $this->input->get('unit')){
-			$this->db->where('units.id', $code);
+
+		if($cabang = $this->input->get('cabang')){
+			$this->db->where('units.id_cabang', $cabang);
+		}else if($this->session->userdata('user')->level == 'unit'){
+			$this->db->where('units.id_cabang', $this->session->userdata('user')->id_cabang);
+		}
+
+		if($unit = $this->input->get('unit')){
+			$this->db->where('units.id', $unit);
 		}else if($this->session->userdata('user')->level == 'unit'){
 			$this->db->where('units.id', $this->session->userdata('user')->id_unit);
 		}
+
 		return $this->db->select("units.id, units.name, area,
 			(
 				select sum(amount) from units_regularpawns where capital_lease < 0.0149
