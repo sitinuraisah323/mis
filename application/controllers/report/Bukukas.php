@@ -52,19 +52,21 @@ class Bukukas extends Authenticated
 		$objPHPExcel->getActiveSheet()->getColumnDimension('B');
 		$objPHPExcel->getActiveSheet()->setCellValue('B1', 'Unit');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('C');
-        $objPHPExcel->getActiveSheet()->setCellValue('C1', 'Tanggal');
-        $objPHPExcel->getActiveSheet()->getColumnDimension('D');
-		$objPHPExcel->getActiveSheet()->setCellValue('D1', 'Bulan');
-		$objPHPExcel->getActiveSheet()->getColumnDimension('E');
-		$objPHPExcel->getActiveSheet()->setCellValue('E1', 'Tahun');
+        $objPHPExcel->getActiveSheet()->setCellValue('C1', 'NO PERK');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('D');
+        $objPHPExcel->getActiveSheet()->setCellValue('D1', 'Tanggal');
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E');
+		$objPHPExcel->getActiveSheet()->setCellValue('E1', 'Bulan');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('F');
-		$objPHPExcel->getActiveSheet()->setCellValue('F1', 'Uraian');
+		$objPHPExcel->getActiveSheet()->setCellValue('F1', 'Tahun');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('G');
-		$objPHPExcel->getActiveSheet()->setCellValue('G1', 'Penerimaan');
+		$objPHPExcel->getActiveSheet()->setCellValue('G1', 'Uraian');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('H');
-		$objPHPExcel->getActiveSheet()->setCellValue('H1', 'Pengeluaran');
+		$objPHPExcel->getActiveSheet()->setCellValue('H1', 'Penerimaan');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('I');
-		$objPHPExcel->getActiveSheet()->setCellValue('I1', 'Saldo');
+		$objPHPExcel->getActiveSheet()->setCellValue('I1', 'Pengeluaran');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('J');
+		$objPHPExcel->getActiveSheet()->setCellValue('J1', 'Saldo');
 
 		$data = $this->reportsaldoawal();	
 
@@ -74,19 +76,37 @@ class Bukukas extends Authenticated
 		$currentSaldo=0;
 		$TotSaldoIn =0;
 		$TotSaldoOut =0;		
-		foreach ($data as $row) 
+		foreach ($data as $index => $row) 
 		{
 			$objPHPExcel->getActiveSheet()->setCellValue('A'.$no, $row->code);	
 			$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, $row->unit_name);	
-			$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, date('d/m/Y',strtotime($row->date)));				  	
-			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no, date('F',strtotime($row->date)));				  	
-			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no, date('Y',strtotime($row->date)));				 
-			$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, $row->description);
+			
+			$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, $row->no_perk);	
+			if($index == 0){
+				$objPHPExcel->getActiveSheet()->setCellValue('D'.$no, '');					
+				$objPHPExcel->getActiveSheet()->setCellValue('E'.$no, '');				  	
+				$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, '');	
+			}else{				
+				$objPHPExcel->getActiveSheet()->setCellValue('E'.$no, date('F',strtotime($row->date)));				  	
+				$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, date('Y',strtotime($row->date)));	
+				$objPHPExcel->getActiveSheet()->setCellValue('D'.$no, date('d/m/Y',strtotime($row->date)));	
+			}
+					  				 
+			$objPHPExcel->getActiveSheet()->setCellValue('G'.$no, $row->description);
 			if($row->type =="CASH_IN"){$cashin= $row->amount; $currentSaldo += $row->amount; $TotSaldoIn +=  $row->amount;}else{$cashin=$cashin;}
 			if($row->type =="CASH_OUT"){$cashout= $row->amount; $currentSaldo -=  $row->amount; $TotSaldoOut +=  $row->amount;}else{$cashout=$cashout;}		 
-			$objPHPExcel->getActiveSheet()->setCellValue('G'.$no, $cashin);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('H'.$no, $cashout);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('I'.$no, $currentSaldo);				 
+			if($row->type == "CASH_IN" && $index != 0){
+				$objPHPExcel->getActiveSheet()->setCellValue('H'.$no, $cashin);		
+			}else{
+				$objPHPExcel->getActiveSheet()->setCellValue('H'.$no, 0);	
+			}
+			if($row->type == "CASH_OUT" && $index != 0){
+				$objPHPExcel->getActiveSheet()->setCellValue('I'.$no, $cashout);
+			}else{
+				$objPHPExcel->getActiveSheet()->setCellValue('I'.$no, 0);
+			}
+						 
+			$objPHPExcel->getActiveSheet()->setCellValue('J'.$no, $currentSaldo);				 
 			$no++;
 		}
 

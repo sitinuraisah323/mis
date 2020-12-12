@@ -435,7 +435,7 @@ class RegularpawnsModel extends Master
 			$this->db->where('id_unit', $idUnit);
 		}
 		$summary = $this->db->select('sum(amount) as up,sum(capital_lease) as rate,MIN(capital_lease) as min_rate,Max(capital_lease) as max_rate,count(*) as noa')->from('units_regularpawns')
-		
+			->where('amount !=',0)
 			->where('date_sbk IS NOT NULL')
 			->where('status_transaction', 'N')->get()->row();
 			//->where('date_sbk >=', $sdate)
@@ -668,8 +668,9 @@ class RegularpawnsModel extends Master
 		$this->db->where('year', $year);
 		$this->db->where('month', $month);
 	
-		$this->db->select('COALESCE(sum(amount),0) as amount')
-			->from('performances');
+		$this->db->select('amount')
+			->from('performances')
+			->where('type','PENGELUARAN');
 		return $this->db->get()->row()->amount;
 	}
 

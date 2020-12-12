@@ -83,7 +83,7 @@ class Performances extends Authenticated
         }
 
 		//Redirect output to a client’s WBE browser (Excel5)
-		$filename ="Buku_Kas_".date('Y-m-d H:i:s');
+		$filename ="Performances".date('Y-m-d H:i:s');
 		header('Content-Type: application/vnd.ms-excel');
 		header('Content-Disposition: attachment;filename="'.$filename.'.xls"');
 		header('Cache-Control: max-age=0');
