@@ -9,30 +9,45 @@ class Mortages extends ApiController
 		parent::__construct();
 		$this->load->model('MortagesModel', 'mortages');
 		$this->load->model('CustomersModel', 'customers');
+		$this->load->model('UnitsModel', 'units');
 	}
 
 	public function index()
 	{
-		$this->mortages->db->select('customers.name, units.name as unit')
-			->join('customers','customers.id = units_mortages.id_customer')
-			->join('units','units.id = units_mortages.id_unit');
-		if($post = $this->input->post()){
-			if(is_array($post['query'])){
-				$value = $post['query']['generalSearch'];
-				$this->mortages->db
-					->or_like('no_sbk',$value)
-					->or_like('nic',$value)
-					->or_like('description_1',$value)
-					->or_like('description_2',$value)
-					->or_like('description_3',$value)
-					->or_like('description_4',$value)
-					->or_like('name',$value);
-			}
+		if($this->session->userdata('user')->level == 'unit'){
+			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
 		}
-		
-		$data = $this->mortages->all();
+
+		if($this->session->userdata('user')->level == 'cabang'){
+			$this->units->db->where('units.id_cabang', $this->session->userdata('user')->id_cabang);
+		}
+
+		$units = $this->units->db->select('*')
+					  ->from('units')
+					  ->join('areas','areas.id=units.id_area')
+					  ->join('units_mortages','units_mortages.id_unit=units.id')
+					  ->get()->result();
+
+		// $this->mortages->db->select('customers.name, units.name as unit')
+		// 	->join('customers','customers.id = units_mortages.id_customer')
+		// 	->join('units','units.id = units_mortages.id_unit');
+		// if($post = $this->input->post()){
+		// 	if(is_array($post['query'])){
+		// 		$value = $post['query']['generalSearch'];
+		// 		$this->mortages->db
+		// 			->or_like('no_sbk',$value)
+		// 			->or_like('nic',$value)
+		// 			->or_like('description_1',$value)
+		// 			->or_like('description_2',$value)
+		// 			->or_like('description_3',$value)
+		// 			->or_like('description_4',$value)
+		// 			->or_like('name',$value);
+		// 	}
+		// }		
+		// $data = $this->mortages->all();
+
 		echo json_encode(array(
-			'data'	=> $data,
+			'data'	=> $units,
 			'message'	=> 'Successfully Get Data Users'
 		));
 	}
@@ -252,12 +267,32 @@ class Mortages extends ApiController
 				//->where('units_mortages.date_sbk >=', $get['dateStart'])
 				->where('units_mortages.date_sbk <=', $get['dateEnd'])
 				->where_in('units_mortages.status_transaction ', $status);
-			if($idUnit = $this->input->get('id_unit')){
-				$this->mortages->db->where('units_mortages.id_unit', $idUnit);
-			}
+
+			// if($idUnit = $this->input->get('id_unit')){
+			// 	$this->mortages->db->where('units_mortages.id_unit', $idUnit);
+			// }
+			// if($area = $this->input->get('area')){
+			// 	$this->mortages->db->where('id_area', $area);
+			// }
 			if($area = $this->input->get('area')){
 				$this->mortages->db->where('id_area', $area);
+			}else if($this->session->userdata('user')->level == 'area'){
+				$this->mortages->db->where('id_area', $this->session->userdata('user')->id_area);
 			}
+	
+			
+			if($cabang = $this->input->get('cabang')){
+				$this->mortages->db->where('id_cabang', $cabang);
+			}else if($this->session->userdata('user')->level == 'cabang'){
+				$this->mortages->db->where('id_cabang', $this->session->userdata('user')->id_cabang);
+			}
+	
+			if($unit = $this->input->get('unit')){
+				$this->mortages->db->where('id_unit', $unit);
+			}else if($this->session->userdata('user')->level == 'unit'){
+				$this->mortages->db->where('units.id', $this->session->userdata('user')->id_unit);
+			}
+
 			if($permit = $get['permit']){
 				$this->mortages->db->where('permit', $permit);
 			}

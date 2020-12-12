@@ -100,7 +100,8 @@ function initCariForm(){
     $('#btncari').on('click',function(){
         $('.rowappend').remove();
         var area = $('[name="area"]').val();
-        var unit = $('[name="unit"]').val();
+        var cabang = $('[name="cabang"]').val();
+        var unit = $('[name="id_unit"]').val();
 		var date = $('[name="date"]').val();
         var dt = new Date(date);
 		var dmonth = dt.getMonth();
@@ -109,10 +110,10 @@ function initCariForm(){
 			type : 'GET',
 			url : "<?php echo base_url("api/dashboards/saldounit"); ?>",
 			dataType : "json",
-			data:{area:area,month:dmonth},
+			data:{area:area,cabang:cabang,unit:unit,month:dmonth},
 			success : function(response,status){
 				KTApp.unblockPage();
-				if(response.status == 200){
+				//if(response.status == 200){
 					var template = '';
 					var no = 1;
 					var totNoa = 0;
@@ -122,10 +123,10 @@ function initCariForm(){
 						template += "<td class='text-center'>"+no+"</td>";
 						template += "<td class='text-left'>"+data.name+"</td>";
 						template += "<td class='text-left'>"+data.area+"</td>";
-						template += "<td class='text-right'>"+convertToRupiah(data.amount)+"</td>";
+						template += "<td class='text-right'>"+convertToRupiah(data.today.saldo)+"</td>";
 						template += '</tr>';
 						no++;
-                        total +=data.amount;
+                        total +=data.today.saldo;
                         //totNoa +=data.noa;
 					});
                     template += '<tr class="rowappend">';
@@ -134,7 +135,7 @@ function initCariForm(){
                     template +='</tr>';
 					console.log(template);
 					$('.table').find('tbody').append(template);
-				}
+				//}
 			},
 			error: function (jqXHR, textStatus, errorThrown){
 				KTApp.unblockPage();
@@ -150,36 +151,60 @@ function initCariForm(){
     }
 }
 
-    $('[name="area"]').on('change',function(){
-        var area = $(this).val();
-        var units =  document.getElementById('unit');
-        var url_data = $('#url_get_unit').val() + '/' + area;
-        $.get(url_data, function (data, status) {
-            var response = JSON.parse(data);
-            if (status) {
-                $("#unit").empty();
+$('[name="area"]').on('change',function(){
+    var area = $(this).val();
+    var units =  document.getElementById('unit');
+    var url_data = $('#url_get_unit').val() + '/' + area;
+    $.get(url_data, function (data, status) {
+        var response = JSON.parse(data);
+        if (status) {
+            $("#unit").empty();
+            var opt = document.createElement("option");
+                opt.value = "all";
+                opt.text ="All";
+                units.appendChild(opt);
+            for (var i = 0; i < response.data.length; i++) {
                 var opt = document.createElement("option");
-                    opt.value = "all";
-                    opt.text ="All";
-                    units.appendChild(opt);
-                for (var i = 0; i < response.data.length; i++) {
-                    var opt = document.createElement("option");
-                    opt.value = response.data[i].id;
-                    opt.text = response.data[i].name;
-                    units.appendChild(opt);
-                }
+                opt.value = response.data[i].id;
+                opt.text = response.data[i].name;
+                units.appendChild(opt);
             }
-        });
+        }
     });
-
-jQuery(document).ready(function() {
-    initCariForm();
 });
-
 
 var type = $('[name="area"]').attr('type');
 if(type == 'hidden'){
 	$('[name="area"]').trigger('change');
 }
+
+
+$('[name="cabang"]').on('change',function(){
+	var cabang = $('[name="cabang"]').val();
+	var units =  $('[name="id_unit"]');
+	var url_data = $('#url_get_units').val() + '/' + cabang;
+	$.get(url_data, function (data, status) {
+		var response = JSON.parse(data);
+		if (status) {
+			$("#unit").empty();
+			units.append('<option value="0">All</option>');
+			for (var i = 0; i < response.data.length; i++) {
+				var opt = document.createElement("option");
+				opt.value = response.data[i].id;
+				opt.text = response.data[i].name;
+				units.append(opt);
+			}
+		}
+	});
+});
+
+var typecabang = $('[name="cabang"]').attr('type');
+if(typecabang == 'hidden'){
+	$('[name="cabang"]').trigger('change');
+}
+
+jQuery(document).ready(function() {
+    initCariForm();
+});
 
 </script>

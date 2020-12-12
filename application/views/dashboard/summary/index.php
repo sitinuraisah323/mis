@@ -25,9 +25,9 @@ $this->load->view('temp/MenuBar.php');
                         <i class="flaticon-download-1"></i>
                     </a>
 
-                    <a href="<?php echo base_url('dailyreport/outstanding/generatereport'); ?>" title="New Summary" class="btn kt-subheader__btn-primary btn-icon">
+                    <!-- <a href="<?php echo base_url('dailyreport/outstanding/generatereport'); ?>" title="New Summary" class="btn kt-subheader__btn-primary btn-icon">
                         <i class="flaticon-download-1"></i>
-                    </a>
+                    </a> -->
 
 				</div>
 			</div>

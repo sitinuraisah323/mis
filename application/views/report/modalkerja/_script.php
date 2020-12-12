@@ -102,17 +102,17 @@ function initCariModalKerjaPusatForm(){
     $('#btncari').on('click',function(){
         $('.rowappend').remove();
         var area = $('[name="area"]').val();
+        var cabang = $('[name="cabang"]').val();
         var unit = $('[name="id_unit"]').val();
-        console.log(unit);
         var category = $('#categori').val();
-		//var dateStart = $('[name="date-start"]').val();
+		var dateStart = $('[name="date-start"]').val();
 		var dateEnd = $('[name="date-end"]').val();
         KTApp.block('#form_bukukas .kt-portlet__body', {});
 		$.ajax({
 			type : 'GET',
 			url : "<?php echo base_url("api/transactions/unitsdailycash/modal_kerja_pusat"); ?>",
 			dataType : "json",
-			data:{id_unit:unit,category:category,dateEnd:dateEnd},
+			data:{area:area,cabang:cabang,unit:unit,category:category,dateStart:dateStart,dateEnd:dateEnd},
 			success : function(response,status){
 				KTApp.unblockPage();
 				if(response.status == true){
@@ -185,8 +185,10 @@ function initCariModalKerjaMutasiUnitForm(){
     //events
     $('#btncariMutasiUnit').on('click',function(){
         $('.rowappend').remove();
-        var area = $('#area').val();
-        var unit = $('#unit').val();
+        var area = $('[name="area"]').val();
+        var cabang = $('[name="cabang"]').val();
+        var unit = $('[name="id_unit"]').val();
+        var category = $('#categori').val();
 		var dateStart = $('[name="date-start"]').val();
 		var dateEnd = $('[name="date-end"]').val();
         KTApp.block('#form_bukukas .kt-portlet__body', {});
@@ -194,7 +196,7 @@ function initCariModalKerjaMutasiUnitForm(){
 			type : 'GET',
 			url : "<?php echo base_url("api/transactions/unitsdailycash/modal_kerja_mutasi_unit"); ?>",
 			dataType : "json",
-			data:{id_unit:unit,dateStart:dateStart,dateEnd:dateEnd},
+			data:{area:area,cabang:cabang,unit:unit,category:category,dateStart:dateStart,dateEnd:dateEnd},
 			success : function(response,status){
 				KTApp.unblockPage();
 				if(response.status == true){
@@ -241,6 +243,7 @@ function initCariModalKerjaMutasiUnitForm(){
         validator:validator
     }
 }
+
 $('[name="area"]').on('change',function(){
         var area = $('[name="area"]').val();
         var units =  $('[name="id_unit"]');
@@ -263,13 +266,38 @@ $('[name="area"]').on('change',function(){
         });
 });
 
-jQuery(document).ready(function() {     
-    initCariModalKerjaPusatForm();  
-    initCariModalKerjaMutasiUnitForm();
-});
-
 var type = $('[name="area"]').attr('type');
 if(type == 'hidden'){
     $('[name="area"]').trigger('change');
 }
+
+
+$('[name="cabang"]').on('change',function(){
+	var cabang = $('[name="cabang"]').val();
+	var units =  $('[name="id_unit"]');
+	var url_data = $('#url_get_units').val() + '/' + cabang;
+	$.get(url_data, function (data, status) {
+		var response = JSON.parse(data);
+		if (status) {
+			$("#unit").empty();
+			units.append('<option value="0">All</option>');
+			for (var i = 0; i < response.data.length; i++) {
+				var opt = document.createElement("option");
+				opt.value = response.data[i].id;
+				opt.text = response.data[i].name;
+				units.append(opt);
+			}
+		}
+	});
+});
+
+var typecabang = $('[name="cabang"]').attr('type');
+if(typecabang == 'hidden'){
+	$('[name="cabang"]').trigger('change');
+}
+
+jQuery(document).ready(function() {     
+    initCariModalKerjaPusatForm();  
+    initCariModalKerjaMutasiUnitForm();
+});
 </script>

@@ -241,19 +241,22 @@ class Dashboards extends ApiController
 	{
 		if($area = $this->input->get('area')){
 			$this->units->db->where('id_area', $area);
-		}else if($this->session->userdata('user')->level == 'area'){
-			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
 		}
-		if($code = $this->input->get('code')){
-			$this->units->db->where('units.id', $code);
-		}else if($this->session->userdata('user')->level == 'unit'){
-			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
+
+		if($cabang = $this->input->get('cabang')){
+			$this->units->db->where('units.id_cabang', $cabang);
 		}
+
+		if($unit = $this->input->get('unit')){
+			$this->units->db->where('units.id', $unit);
+		}
+
 		if($this->input->get('date')){
 			$date = $this->input->get('date');
 		}else{
 			$date = date('Y-m-d');
 		}
+
 		$date = date('Y-m-d', strtotime($date.' +1 days'));
 		$begin = new DateTime( $date );
 		$end = new DateTime($date);
@@ -288,11 +291,19 @@ class Dashboards extends ApiController
 		}else if($this->session->userdata('user')->level == 'area'){
 			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
 		}
-		if($code = $this->input->get('code')){
-			$this->units->db->where('code', $code);
+
+		if($cabang = $this->input->get('cabang')){
+			$this->units->db->where('units.id_cabang', $cabang);
+		}else if($this->session->userdata('user')->level == 'unit'){
+			$this->units->db->where('units.id_cabang', $this->session->userdata('user')->id_cabang);
+		}
+
+		if($unit = $this->input->get('unit')){
+			$this->units->db->where('units.id', $unit);
 		}else if($this->session->userdata('user')->level == 'unit'){
 			$this->units->db->where('id_unit', $this->session->userdata('user')->id_unit);
 		}
+
 		if($this->input->get('date')){
 			$date = $this->input->get('date');
 		}else{
@@ -327,6 +338,8 @@ class Dashboards extends ApiController
 		}else if($this->session->userdata('user')->level == 'unit'){
 			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
 		}
+
+		
 		if($this->input->get('date')){
 			$date = $this->input->get('date');
 		}else{
@@ -358,6 +371,7 @@ class Dashboards extends ApiController
 		}else if($this->session->userdata('user')->level == 'unit'){
 			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
 		}
+
 		if($this->input->get('date')){
 			$date = $this->input->get('date');
 		}else{
@@ -385,12 +399,15 @@ class Dashboards extends ApiController
 		if($area = $this->input->get('area')){
 			$this->units->db->where('id_area', $area);
 		}
-		if($code = $this->input->get('code')){
-			$this->units->db->where('units.id', $code);
+
+		if($cabang = $this->input->get('cabang')){
+			$this->units->db->where('units.id_cabang', $cabang);
 		}
-		if($id_unit = $this->input->get('id_unit')){
-			$this->units->db->where('units.id', $id_unit);
+
+		if($unit = $this->input->get('unit')){
+			$this->units->db->where('units.id', $unit);
 		}
+
 		if($this->input->get('date')){
 			$date = $this->input->get('date');
 		}else{
@@ -693,11 +710,12 @@ class Dashboards extends ApiController
 			$this->units->db->where('id_cabang', $this->session->userdata('user')->id_cabang);
 		}
 
-		if($code = $this->input->get('code')){
-			$this->units->db->where('code', $code);
+		if($unit = $this->input->get('unit')){
+			$this->units->db->where('id', $unit);
 		}else if($this->session->userdata('user')->level == 'unit'){
 			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
 		}
+		
 		if($this->input->get('year')){
 			$year = $this->input->get('year');
 		}else{
@@ -1051,8 +1069,9 @@ class Dashboards extends ApiController
 		}else if($this->session->userdata('user')->level == 'cabang'){
 			$this->units->db->where('id_cabang', $this->session->userdata('user')->id_cabang);
 		}
-		if($code = $this->input->get('id_unit')){
-			$this->units->db->where('id_unit', $code);
+		
+		if($code = $this->input->get('unit')){
+			$this->units->db->where('units.id', $code);
 		}else if($this->session->userdata('user')->level == 'unit'){
 			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
 		}
@@ -1237,17 +1256,21 @@ class Dashboards extends ApiController
 		if($area = $this->input->get('area')){
 			$this->units->db->where('id_area', $area);
 		}
-		if($code = $this->input->get('code')){
-			$this->units->db->where('units.id', $code);
+
+		if($cabang = $this->input->get('cabang')){
+			$this->units->db->where('units.id_cabang', $cabang);
 		}
-		if($id_unit = $this->input->get('id_unit')){
-			$this->units->db->where('units.id', $id_unit);
+
+		if($unit = $this->input->get('unit')){
+			$this->units->db->where('units.id', $unit);
 		}
+
 		if($this->input->get('date')){
 			$date = $this->input->get('date');
 		}else{
 			$date = date('Y-m-d');
 		}
+
 		$date = date('Y-m-d', strtotime($date. ' +1 days'));
 		$begin = new DateTime( $date );
 		$end = new DateTime($date);

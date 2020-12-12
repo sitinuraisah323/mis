@@ -101,14 +101,15 @@ function initCariForm(){
     $('#btncari').on('click',function(){
         $('.rowappend').remove();
         var area = $('[name="area"]').val();
-        var code = $('[name="id_unit"]').val();
-		var dateStart = $('[name="date"]').val();
+        var cabang = $('[name="cabang"]').val();
+        var unit = $('[name="id_unit"]').val();
+		var date = $('[name="date"]').val();
         KTApp.block('#form_bukukas .kt-portlet__body', {});
 		$.ajax({
 			type : 'GET',
 			url : "<?php echo base_url("api/dashboards/outstanding"); ?>",
 			dataType : "json",
-			data:{area:area,date:dateStart,code:code},
+			data:{area:area,cabang:cabang,unit:unit,date:date},
 			success : function(response,status){
 				KTApp.unblockPage();
 				var html = '';
@@ -206,6 +207,30 @@ $('[name="area"]').on('change',function(){
 var type = $('[name="area"]').attr('type');
 if(type == 'hidden'){
 	$('[name="area"]').trigger('change');
+}
+
+$('[name="cabang"]').on('change',function(){
+	var cabang = $('[name="cabang"]').val();
+	var units =  $('[name="id_unit"]');
+	var url_data = $('#url_get_units').val() + '/' + cabang;
+	$.get(url_data, function (data, status) {
+		var response = JSON.parse(data);
+		if (status) {
+			$("#unit").empty();
+			units.append('<option value="0">All</option>');
+			for (var i = 0; i < response.data.length; i++) {
+				var opt = document.createElement("option");
+				opt.value = response.data[i].id;
+				opt.text = response.data[i].name;
+				units.append(opt);
+			}
+		}
+	});
+});
+
+var typecabang = $('[name="cabang"]').attr('type');
+if(typecabang == 'hidden'){
+	$('[name="cabang"]').trigger('change');
 }
 
 jQuery(document).ready(function() {

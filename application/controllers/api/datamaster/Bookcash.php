@@ -17,12 +17,37 @@ class Bookcash extends ApiController
 	public function index()
 	{
 		$this->model->db
-			->select('units.name')
+			->select('units.name,cabang.cabang')
 			->join('units','units.id = units_cash_book.id_unit')
-		    ->order_by('id','DESC');
-		if($this->session->userdata('user')->level != 'administrator'){
-			$this->model->db->where('units.id', $this->session->userdata('user')->id_unit);
+			->join('cabang','cabang.id=units.id_cabang')
+			->order_by('id','DESC');
+		
+		// if($this->session->userdata('user')->level == 'cabang'){
+		// 		$this->model->db->where('units.id_cabang', $this->session->userdata('user')->id_cabang);
+		// 	}
+			
+		// if($this->session->userdata('user')->level == 'unit'){
+		// 	$this->model->db->where('id_unit', $this->session->userdata('user')->id_unit);
+		// }
+
+		if($area = $this->input->get('area')){
+            $this->model->db->where('units.id_area', $area);
+        }else if($this->session->userdata('user')->level === 'area'){
+            $this->model->db->where('units.id_area', $this->session->userdata('user')->id_area);
 		}
+		
+		if($cabang = $this->input->get('cabang')){
+			$this->model->db->where('units.id_cabang', $cabang);
+		}else if($this->session->userdata('user')->level == 'cabang'){
+			$this->model->db->where('units.id_cabang', $this->session->userdata('user')->id_cabang);
+		}
+		
+		if($unit = $this->input->get('unit')){
+			$this->model->db->where('units.id', $unit);
+		}else if($this->session->userdata('user')->level == 'unit'){
+			$this->model->db->where('units.id', $this->session->userdata('user')->id_unit);
+		}	
+
 		if($post = $this->input->post()){
 			if(is_array($post['query'])){
 				$value = $post['query']['generalSearch'];
@@ -397,24 +422,31 @@ class Bookcash extends ApiController
 		}else if($this->session->userdata('user')->level == 'area'){
 			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
 		}
-		if($code = $this->input->get('id_unit')){
-			$this->units->db->where('id', $code);
+
+		if($cabang = $this->input->get('cabang')){
+			$this->units->db->where('id_cabang', $cabang);
+		}else if($this->session->userdata('user')->level == 'cabang'){
+			$this->units->db->where('units.id_cabang', $this->session->userdata('user')->id_cabang);
+		}
+
+		if($unit = $this->input->get('unit')){
+			$this->units->db->where('units.id', $unit);
 		}else if($this->session->userdata('user')->level == 'unit'){
 			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
 		}
 
-		if($this->input->get('date')){
-			$date = $this->input->get('date');
+		if($this->input->get('dateStart')){
+			$date = $this->input->get('dateStart');
 		}else{
 			$date = date('Y-m-d');
 		}
 		
-		$units = $this->db->select('units.id, units.name, areas.area')
+		$units = $this->db->select('units.id as id_unit, units.name, areas.area')
 			->from('units')
 			->join('areas','areas.id = units.id_area')
 			->get()->result();	
 		foreach ($units as $unit) {
-			$unit->bapkas = $this->model->getUnitBapKas($unit->id,$date);
+			$unit->bapkas = $this->model->getUnitBapKas($unit->id_unit,$date);
 		}
 			
 		echo json_encode(array(

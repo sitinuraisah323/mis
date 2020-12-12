@@ -22,20 +22,41 @@ class Konversi extends ApiController
 	}
 
 	public function outstanding(){
+
+		// if($area = $this->input->get('area')){
+		// 	if($area!='all'){
+		// 		$this->units->db->where('id_area', $area);
+		// 	}
+		// }else if($this->session->userdata('user')->level == 'area'){
+		// 	$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
+		// }
+
+		// if($code = $this->input->get('unit')){
+		// 	if($code!='all'){
+		// 	$this->units->db->where('units.id', $code);
+		// 	}
+		// }else if($this->session->userdata('user')->level == 'unit'){
+		// 	$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
+		// }
+
 		if($area = $this->input->get('area')){
-			if($area!='all'){
-				$this->units->db->where('id_area', $area);
-			}
-		}else if($this->session->userdata('user')->level == 'area'){
-			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
+            $this->units->db->where('id_area', $area);
+        }else if($this->session->userdata('user')->level === 'area'){
+            $this->units->db->where('id_area', $this->session->userdata('user')->id_area);
 		}
-		if($code = $this->input->get('unit')){
-			if($code!='all'){
-			$this->units->db->where('units.id', $code);
-			}
+		
+		if($cabang = $this->input->get('cabang')){
+			$this->units->db->where('id_cabang', $cabang);
+		}else if($this->session->userdata('user')->level == 'cabang'){
+			$this->units->db->where('id_cabang', $this->session->userdata('user')->id_cabang);
+		}
+		
+		if($unit = $this->input->get('unit')){
+			$this->units->db->where('units.id', $unit);
 		}else if($this->session->userdata('user')->level == 'unit'){
 			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
 		}
+
 		if($this->input->get('date')){
 			$date = $this->input->get('date');
 		}else{
@@ -81,20 +102,39 @@ class Konversi extends ApiController
 	}
 
 	public function saldo(){
+		// if($area = $this->input->get('area')){
+		// 	if($area!='all'){
+		// 		$this->units->db->where('id_area', $area);
+		// 	}
+		// }else if($this->session->userdata('user')->level == 'area'){
+		// 	$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
+		// }
+		// if($code = $this->input->get('unit')){
+		// 	if($code!='all'){
+		// 	$this->units->db->where('units.id', $code);
+		// 	}
+		// }else if($this->session->userdata('user')->level == 'unit'){
+		// 	$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
+		// }
+
 		if($area = $this->input->get('area')){
-			if($area!='all'){
-				$this->units->db->where('id_area', $area);
-			}
-		}else if($this->session->userdata('user')->level == 'area'){
-			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
+            $this->units->db->where('id_area', $area);
+        }else if($this->session->userdata('user')->level === 'area'){
+            $this->units->db->where('id_area', $this->session->userdata('user')->id_area);
 		}
-		if($code = $this->input->get('unit')){
-			if($code!='all'){
-			$this->units->db->where('units.id', $code);
-			}
+		
+		if($cabang = $this->input->get('cabang')){
+			$this->units->db->where('id_cabang', $cabang);
+		}else if($this->session->userdata('user')->level == 'cabang'){
+			$this->units->db->where('id_cabang', $this->session->userdata('user')->id_cabang);
+		}
+		
+		if($unit = $this->input->get('unit')){
+			$this->units->db->where('units.id', $unit);
 		}else if($this->session->userdata('user')->level == 'unit'){
 			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
 		}
+
 		if($this->input->get('date')){
 			$date = $this->input->get('date');
 		}else{

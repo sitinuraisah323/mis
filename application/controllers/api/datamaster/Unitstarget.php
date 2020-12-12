@@ -155,6 +155,7 @@ class Unitstarget extends ApiController
             $year   =  date('Y',strtotime($get['dateStart']));
             $stardate = $year."-".$month."-01";
             $enddate  = date("Y-m-t", strtotime($stardate));
+
             $targets = $this->u_target->db
             ->select('units_targets.id, units_targets.id_unit,month,year,units_targets.amount_booking,units_targets.amount_outstanding')
             ->select('units.name as unit')
@@ -188,6 +189,50 @@ class Unitstarget extends ApiController
                        "amount"=>$amount
                     );                    
         $this->sendMessage($data, 'Get Data Outstanding');
+    }
+
+    public function tergetrealisasi(){
+
+        if($area = $this->input->get('area')){
+			$this->units->db->where('id_area', $area);
+		}else if($this->session->userdata('user')->level == 'area'){
+			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
+        }
+        
+		if($code = $this->input->get('id_unit')){
+			$this->units->db->where('id', $code);
+		}else if($this->session->userdata('user')->level == 'unit'){
+			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
+		}
+
+		if( $date = $this->input->get('date')){
+            $month  =  date('m',strtotime($date));
+            $year   =  date('Y',strtotime($date));
+            $stardate = $year."-".$month."-01";
+            $enddate  = date("Y-m-t", strtotime($date));
+		}else{
+            $date = date('Y-m-d');
+            $month  =  date('m',strtotime($date));
+            $year   =  date('Y',strtotime($date));
+            $stardate = $year."-".$month."-01";
+            $enddate  = date("Y-m-t", strtotime($date));
+		}
+		
+		$units = $this->db->select('units.id, units.name, areas.area')
+			->from('units')
+			->join('areas','areas.id = units.id_area')
+			->order_by('areas.code_area','asc')
+			->order_by('units.id','asc')
+			->get()->result();	
+		foreach ($units as $unit) {
+            $unit->targetreal = $this->u_target->get_realisasitarget($unit->id,$month,$year);            
+		}
+			
+		echo json_encode(array(
+			'data'	=> $units,
+			'status'	=> true,
+			'message'	=> 'Successfully Get Data Regular Pawns'
+		));
     }
 
     public function reportreal()

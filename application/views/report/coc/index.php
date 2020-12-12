@@ -14,7 +14,7 @@ $this->load->view('temp/MenuBar.php');
         <div class="kt-subheader__main">            
             <h3 class="kt-subheader__title">Report</h3>            
             <span class="kt-subheader__separator kt-subheader__separator--v"></span>            
-            <span class="kt-subheader__desc">Unit Coc</span>            
+            <span class="kt-subheader__desc">Coc</span>            
         </div>
         <div class="kt-subheader__toolbar">
             <div class="kt-subheader__wrapper">                              
@@ -90,6 +90,14 @@ $this->load->view('temp/MenuBar.php');
 						<select class="form-control select2" name="id_unit" id="unit">
 							<option value="0">All</option>
 						</select>
+                    </div>
+                <?php elseif($this->session->userdata('user')->level == 'cabang'):?>
+                    <input type="hidden" name="cabang" value="<?php echo $this->session->userdata('user')->id_cabang;?>">
+                    <div class="col-lg-2">
+                    <label class="col-form-label">Unit</label>
+                        <select class="form-control select2" name="id_unit" id="unit">
+                            <option value="0">All</option>
+                        </select>
                     </div>
                 <?php else:?>
                     <div class="col-lg-2">
@@ -215,6 +223,8 @@ $this->load->view('temp/MenuBar.php');
     </div>
     <!-- end:: Content -->
 	<input type="hidden" name="url_get_unit" id="url_get_unit" value="<?php echo base_url('api/datamaster/units/get_units_byarea') ?>"/>
+    <input type="hidden" name="url_get_units" id="url_get_units" value="<?php echo base_url('api/datamaster/units/get_unit_bycabang') ?>"/>
+
 </div>
 </div>
 

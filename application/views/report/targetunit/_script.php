@@ -111,48 +111,61 @@ function initCariForm(){
         var area = $('#area').val();
         var unit = $('#unit').val();
         var target = $('#target').val();
-		var dateStart = $('[name="date-start"]').val();
+		var date = $('[name="date"]').val();
 		//var dateEnd = $('[name="date-end"]').val();
 		var permit = $('[name="permit"]').val();
         KTApp.block('#form_bukukas .kt-portlet__body', {});
 		$.ajax({
 			type : 'GET',
-			url : "<?php echo base_url("api/datamaster/unitstarget/get_booking"); ?>",
+			url : "<?php echo base_url("api/datamaster/unitstarget/tergetrealisasi"); ?>",
 			dataType : "json",
-			data:{id_unit:unit,target:target,permit:permit,dateStart:dateStart},
+			data:{area:area,unit:unit,date:date},
 			success : function(response,status){
 				KTApp.unblockPage();
 				if(response.status == true){
 					var template = '';
 					var no = 1;
-					var amount = 0;
+					var target = 0;
+					var realisasi = 0;
 					var PercentRealisasi = 0;
 					var PercentSelisih = 0;
 					var Selisih = 0;
                     var status="";
                     console.log(response.id);
 					$.each(response.data, function (index, data) {
+                        var month = moment(date).format('MMMM');
+                        var year = moment(date).format('Y');
 						template += "<tr class='rowappend'>";
-						template += "<td>"+no+"</td>";
+						template += "<td class='text-center'>"+no+"</td>";
 						template += "<td>"+data.area+"</td>";
-						template += "<td>"+data.unit+"</td>";                        
-                        if(target=="Booking"){ tar_amount = data.amount_booking;}else if(target=="Outstanding"){tar_amount = data.amount_outstanding;}
-                        PercentRealisasi = (data.amount/tar_amount)*100;
-                        Selisih = tar_amount - data.amount;
-                        PercentSelisih = (Selisih/tar_amount)*100;
-                        if(PercentRealisasi < 100){status="<span class='kt-widget4__number kt-font-danger kt-font-bold'> Dibawah Target</span>";}
-                        else if(PercentRealisasi > 100){status="<span class='kt-widget4__number kt-font-primary kt-font-bold'> Melebihi Target</span>";}
-                        else if(PercentRealisasi == 100){status="<span class='kt-widget4__number kt-font-success kt-font-bold'> Sesuai Target</span>";}
-						template += "<td class='text-right'>"+convertToRupiah(tar_amount)+"</td>";
-                        template += "<td class='text-right'>"+convertToRupiah(data.amount)+"</td>";
-						template += "<td class='text-center'>"+PercentRealisasi.toFixed(2)+"</td>";
-						template += "<td class='text-right'>"+convertToRupiah(Selisih) +"</td>";
-						template += "<td class='text-center'>"+PercentSelisih.toFixed(2)+"</td>";
-						template += "<td class='text-left'>"+status+"</td>";
-						template += '</tr>';
+						template += "<td>"+data.name+"</td>";                        
+                        // if(target=="Booking"){ tar_amount = data.amount_booking;}else if(target=="Outstanding"){tar_amount = data.amount_outstanding;}
+                        // PercentRealisasi = (data.amount/tar_amount)*100;
+                        // Selisih = tar_amount - data.amount;
+                        // PercentSelisih = (Selisih/tar_amount)*100;
+                        // if(PercentRealisasi < 100){status="<span class='kt-widget4__number kt-font-danger kt-font-bold'> Dibawah Target</span>";}
+                        // else if(PercentRealisasi > 100){status="<span class='kt-widget4__number kt-font-primary kt-font-bold'> Melebihi Target</span>";}
+                        // else if(PercentRealisasi == 100){status="<span class='kt-widget4__number kt-font-success kt-font-bold'> Sesuai Target</span>";}
+						//template += "<td class='text-right'>"+convertToRupiah(tar_amount)+"</td>";
+                        //template += "<td class='text-right'>"+convertToRupiah(data.amount)+"</td>";
+						//template += "<td class='text-center'>"+PercentRealisasi.toFixed(2)+"</td>";
+						//template += "<td class='text-right'>"+convertToRupiah(Selisih) +"</td>";
+						//template += "<td class='text-center'>"+PercentSelisih.toFixed(2)+"</td>";
+						template += "<td class='text-center'>"+month+"</td>";
+						template += "<td class='text-center'>"+year+"</td>";
+						template += "<td class='text-right'>0</td>";
+						template += "<td class='text-right'>"+convertToRupiah(data.targetreal.realisasi)+"</td>";
+                        template += '</tr>';
+                        realisasi +=  parseInt(data.targetreal.realisasi);
 						no++;
-					});
-					$('.kt-section__content #tblmodalkerjapusat').append(template);
+                    });
+
+                    template += '<tr class="rowappend">';
+                    template +='<td colspan="5" class="text-right"><b>Total</b></td>';                    
+                    template +='<td class="text-right"><b>0</b></td>';
+                    template +='<td class="text-right"><b>'+convertToRupiah(realisasi)+'</b></td>';
+                    template +='</tr>';
+					$('.kt-section__content #tbltarget').append(template);
 				}
 			},
 			error: function (jqXHR, textStatus, errorThrown){
@@ -178,6 +191,10 @@ function initGetUnit(){
             var response = JSON.parse(data);
             if (status) {
                 $("#unit").empty();
+                var opt = document.createElement("option");
+				opt.value = "0";
+				opt.text = "All";
+				units.appendChild(opt);
                 for (var i = 0; i < response.data.length; i++) {
                     var opt = document.createElement("option");
                     opt.value = response.data[i].id;

@@ -15,17 +15,23 @@ class Outstanding extends ApiController
 	public function index()
 	{
 		if($area = $this->input->get('area')){
-			if($area!='all'){
-				$this->units->db->where('id_area', $area);
-			}
+			$this->units->db->where('id_area', $area);
 		}else if($this->session->userdata('user')->level == 'area'){
 			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
 		}
-		if($code = $this->input->get('code')){
-			$this->units->db->where('code', $code);
+
+		if($cabang = $this->input->get('cabang')){
+			$this->units->db->where('id_cabang', $cabang);
+		}else if($this->session->userdata('user')->level == 'cabang'){
+			$this->units->db->where('units.id', $this->session->userdata('user')->id_cabang);
+		}
+
+		if($unit = $this->input->get('unit')){
+			$this->units->db->where('id', $unit);
 		}else if($this->session->userdata('user')->level == 'unit'){
 			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
 		}
+
 		if($this->input->get('date')){
 			$date = $this->input->get('date');
 		}else{
@@ -40,8 +46,6 @@ class Outstanding extends ApiController
 			$date= $date;
 		}
 
-		
-
 		//$date = date('Y-m-d');
 		$nextdate = date('Y-m-d', strtotime('+1 days', strtotime($date)));
 		$units = $this->units->db->select('units.id, units.name, area')
@@ -49,12 +53,6 @@ class Outstanding extends ApiController
 			->get('units')->result();
 		foreach ($units as $unit){
 
-			// $dateEnd = $this->regular->getLastDateTransactionUnit($unit->id)->date;
-			// if ($date > $dateEnd){
-			// 	$date = $dateEnd;
-			// }else{
-			// 	$date= $date;
-			// }
 			 $unit->ost_yesterday = $this->regular->getOstYesterday($unit->id, $date);
 			 $unit->credit_today = $this->regular->getCreditToday($unit->id, $date);
 			 $unit->repayment_today = $this->regular->getRepaymentToday($unit->id, $date);

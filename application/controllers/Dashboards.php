@@ -106,6 +106,7 @@ class Dashboards extends Authenticated
 	
 	public function pencairan()
 	{
+		
         $this->load->view("dashboard/pencairan/index",array(
         	'areas'	=> $this->areas->all()
 		));
