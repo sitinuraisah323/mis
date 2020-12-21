@@ -4,7 +4,7 @@ var cariForm;
 
 function convertToRupiah(angka)
 {
-	var rupiah = '';		
+	var rupiah = '';
 	var angkarev = angka.toString().split('').reverse().join('');
 	for(var i = 0; i < angkarev.length; i++) if(i%3 == 0) rupiah += angkarev.substr(i,3)+'.';
 	return rupiah.split('',rupiah.length-1).reverse().join('');
@@ -89,129 +89,103 @@ function initCariForm(){
                 required: true,
             }
         },
-        invalidHandler: function(event, validator) {   
+        invalidHandler: function(event, validator) {
             KTUtil.scrollTop();
         }
-    });   
+    });
 
-    $('#area').select2({ placeholder: "Please select a area", width: '100%' });
-    $('#unit').select2({ placeholder: "Please select a Unit", width: '100%' });
-    $('#permit').select2({ placeholder: "Please select a Permit", width: '100%' });
-
+    $('#area').select2({ placeholder: "Select Area", width: '100%' });
+    $('#unit').select2({ placeholder: "Select Unit", width: '100%' });
     //events
     $('#btncari').on('click',function(){
         $('.rowappend').remove();
         var area = $('[name="area"]').val();
+        var cabang = $('[name="cabang"]').val();
         var unit = $('[name="id_unit"]').val();
-        var permit = $('[name="permit"]').val();
-		var dateStart = $('[name="date-start"]').val();
-		var dateEnd = $('[name="date-end"]').val();
+		var date = $('[name="date"]').val();
+		var lastdate ="";
         KTApp.block('#form_bukukas .kt-portlet__body', {});
 		$.ajax({
 			type : 'GET',
-			url : "<?php echo base_url("api/transactions/unitsdailycash/reportsaldoawal"); ?>",
+			url : "<?php echo base_url("api/yogadai/outstanding"); ?>",
 			dataType : "json",
-			data:{id_unit:unit,permit:permit,dateStart:dateStart,dateEnd:dateEnd, area:area},
+			data:{area:area,cabang:cabang,unit:unit,date:date},
 			success : function(response,status){
-                
-                console.log(response.data);
 				KTApp.unblockPage();
-				if(response.data.length > 0){
+				//if(response.status == true){
 					var template = '';
-                    var currentSaldo = 0;
-                    var TotSaldoIn = 0;
-                    var TotSaldoOut = 0;
-                    var no = 0;
+					var no = 1;
+					var totNoa = 0;
+					var total = 0;
 					$.each(response.data, function (index, data) {
-                      
-						var cashin=0;
-						var cashout=0;
-						if(data.type=='CASH_IN'){cashin= data.amount; currentSaldo +=  parseInt(data.amount); TotSaldoIn +=  parseInt(data.amount);}
-						if(data.type=='CASH_OUT'){cashout= data.amount; currentSaldo -=  parseInt(data.amount); TotSaldoOut +=  parseInt(data.amount);}
-
+						template += "<tr class='rowappend'>";
+                        template += "<td class='text-center'>"+no+"</td>";
+                        template += "<td class='text-left'>"+data.area_name+"</td>";
+						template += "<td class='text-left'>"+data.name+"</td>";
+						template += "<td class='text-left'>"+data.credit_today.up_reguler+"</td>";
+						template += "<td class='text-left'>"+data.repayment_today.up+"</td>";
+						template += "<td class='text-right'>"+convertToRupiah(data.total_outstanding.up)+"</td>";
+						template += '</tr>';
 						no++;
-                        if(index == 0){
-							var date = '';
-							var month = '';
-							var year = '';
-							cashin = 0;
-							cashout = 0;
-							currentSaldo = data.amount;
-						}else{
-							var date = moment(data.date).format('DD-MM-YYYY');
-							var month = moment(data.date).format('MMMM');
-							var year = moment(data.date).format('YYYY');
-						}
-                    template += '<tr class="rowappend">';
-                    template +='<td class="text-center">'+no+'</td>';
-                    template +='<td class="text-center">'+data.name+'</td>';
-                    template +='<td class="text-center">'+data.no_perk+'</td>';
-                    template +='<td>'+date+'</td>';
-                    template +='<td class="text-center">'+month+'</td>';
-                    template +='<td class="text-center">'+year+'</td>';
-                    if(data.description=='pelunasan cicilan pinj. bte 00'){
-                        template +='<td>pelunasan cicilan bte-'+data.code_trans+'</td>';
-                    }else{
-                        template +='<td>'+data.description+'</td>';
-                    }
-                    template +='<td class="text-right">'+convertToRupiah(cashin)+'</td>';
-                    template +='<td class="text-right">'+convertToRupiah(cashout)+'</td>';
-                    template +='<td class="text-right">'+convertToRupiah(currentSaldo)+'</td>';
-                    template +='</tr>';
+                        total +=data.total_outstanding.up;
+                        totNoa +=data.total_outstanding.noa;
+                        lastdate = data.lastdate;
 					});
-
                     template += '<tr class="rowappend">';
-                    template +='<td colspan="7" class="text-right"><b>Total</b></td>';                    
-                    template +='<td class="text-right"><b>'+convertToRupiah(TotSaldoIn)+'</b></td>';
-                    template +='<td class="text-right"><b>'+convertToRupiah(TotSaldoOut)+'</b></td>';
-                    template +='<td class="text-right"><b>'+convertToRupiah(currentSaldo)+'</b></td>';
+                    template +='<td colspan="4" class="text-right"><b>Total</b></td>';                    
+                    template +='<td class="text-center"><b>'+totNoa+'</b></td>';                    
+                    template +='<td class="text-right"><b>'+convertToRupiah(total)+'</b></td>';                    
                     template +='</tr>';
-					$('.kt-section__content #tblbukukas').append(template);
-				}
+
+					$('.kt-section__content table').append(template);
+				//}
 			},
 			error: function (jqXHR, textStatus, errorThrown){
 				KTApp.unblockPage();
 			},
 			complete:function () {
+                //var date =  moment(lastdate).format('DD-MM-YYYY');
+				//document.getElementById("dateos").innerHTML="(Last Date Transaction in " + date + ")";
 				KTApp.unblock('#form_bukukas .kt-portlet__body', {});
 			}
 		});
     })
-    
+
     return {
         validator:validator
     }
 }
 
-jQuery(document).ready(function() {     
-    initCariForm();  
-});
-
-$('[name="area"]').on('change',function(){
-        var area = $('[name="area"]').val();
-        var units =  $('[name="id_unit"]');
+    $('[name="area"]').on('change',function(){
+        var area = $(this).val();
+        var units =  document.getElementById('unit');
         var url_data = $('#url_get_unit').val() + '/' + area;
         $.get(url_data, function (data, status) {
             var response = JSON.parse(data);
             if (status) {
                 $("#unit").empty();
-				var opt = document.createElement("option");
-				opt.value = "0";
-				opt.text = "All";
-				units.append(opt)
+                var opt = document.createElement("option");
+                    opt.value = "all";
+                    opt.text ="All";
+                    units.appendChild(opt);
                 for (var i = 0; i < response.data.length; i++) {
                     var opt = document.createElement("option");
                     opt.value = response.data[i].id;
                     opt.text = response.data[i].name;
-                    units.append(opt);
+                    units.appendChild(opt);
                 }
             }
         });
+    });
+
+jQuery(document).ready(function() {
+    initCariForm();
 });
+
 
 var type = $('[name="area"]').attr('type');
 if(type == 'hidden'){
-    $('[name="area"]').trigger('change');
+	$('[name="area"]').trigger('change');
 }
 
 $('[name="cabang"]').on('change',function(){

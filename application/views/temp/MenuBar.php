@@ -487,12 +487,43 @@
 									<?php endif;?>
 
 									<?php if(read_access('report/mortages')):?>
-										<li class="kt-menu__item "  aria-haspopup="true">
+										<!-- <li class="kt-menu__item "  aria-haspopup="true">
 											<a  href="<?php echo base_url('report/mortages'); ?>" class="kt-menu__link ">
 												<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>
 												<span class="kt-menu__link-text">Gadai Cicilan</span>
 											</a>
-										</li>
+										</li>										 -->
+
+									<li class="kt-menu__item  kt-menu__item--submenu"  data-ktmenu-submenu-toggle="hover" aria-haspopup="true">
+										<a  href="javascript:;" class="kt-menu__link kt-menu__toggle">
+									<span class="kt-menu__link-icon">
+									<i class="fa fa-copy"><span></span></i>
+									</span>
+											<span class="kt-menu__link-text">Gadai Cicilan</span><i class="kt-menu__hor-arrow la la-angle-right"></i><i class="kt-menu__ver-arrow la la-angle-right"></i>
+										</a>
+										<div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--right">
+											<ul class="kt-menu__subnav">			
+												<?php if(read_access('report/mortages')):?>
+													<li class="kt-menu__item "  aria-haspopup="true">
+														<a  href="<?php echo base_url('report/mortages/kredit'); ?>" class="kt-menu__link ">
+															<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+															<span class="kt-menu__link-text">Kredit Gadai</span>
+														</a>
+													</li>
+												<?php endif;?>								
+												<?php if(read_access('report/mortages')):?>
+													<li class="kt-menu__item "  aria-haspopup="true">
+														<a  href="<?php echo base_url('report/mortages/angsuran'); ?>" class="kt-menu__link ">
+															<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+															<span class="kt-menu__link-text">Kredit Gadai Angsuran</span>
+														</a>
+													</li>
+												<?php endif;?>																					
+											</ul>
+										</div>
+									</li>
+
+										
 									<?php endif;?>
 
 									<!-- <?php if(read_access('report/modalkerja')):?>
@@ -761,6 +792,35 @@
 														<a  href="<?php echo base_url('report/lm/summary'); ?>" class="kt-menu__link ">
 															<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
 															<span class="kt-menu__link-text">Summary</span>
+														</a>
+													</li>
+												<?php endif;?>																					
+											</ul>
+										</div>
+									</li>
+
+									<li class="kt-menu__item  kt-menu__item--submenu"  data-ktmenu-submenu-toggle="hover" aria-haspopup="true">
+										<a  href="javascript:;" class="kt-menu__link kt-menu__toggle">
+									<span class="kt-menu__link-icon">
+									<i class="fa fa-copy"><span></span></i>
+									</span>
+											<span class="kt-menu__link-text">YoGadai</span><i class="kt-menu__hor-arrow la la-angle-right"></i><i class="kt-menu__ver-arrow la la-angle-right"></i>
+										</a>
+										<div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--right">
+											<ul class="kt-menu__subnav">			
+												<?php if(read_access('report/yogadai/outstanding')):?>
+													<li class="kt-menu__item "  aria-haspopup="true">
+														<a  href="<?php echo base_url('report/yogadai/outstanding'); ?>" class="kt-menu__link ">
+															<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+															<span class="kt-menu__link-text">Outstanding</span>
+														</a>
+													</li>
+												<?php endif;?>								
+												<?php if(read_access('report/yogadai/pencairan')):?>
+													<li class="kt-menu__item "  aria-haspopup="true">
+														<a  href="<?php echo base_url('report/yogadai/pencairan'); ?>" class="kt-menu__link ">
+															<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+															<span class="kt-menu__link-text">Pencairan</span>
 														</a>
 													</li>
 												<?php endif;?>																					

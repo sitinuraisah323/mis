@@ -817,6 +817,11 @@ class Dashboards extends Authenticated
 	{
 		$this->load->view('dashboard/stocks/index');
 	}
+
+	public function reach()
+	{
+		$this->load->view('dashboard/reach/index');
+	}
     
 
 }

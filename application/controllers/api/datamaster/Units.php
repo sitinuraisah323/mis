@@ -70,6 +70,15 @@ class Units extends ApiController
 		));
     }    
 
+    public function get_units_sbk($unit)
+	{
+		echo json_encode(array(
+			'data'	    => 	$this->units->get_units_sbk($unit),
+			'status'	=> true,
+			'message'	=> 'Successfully Get Data Units'
+		));
+    }
+
     public function get_customers_gr_byunit()
 	{
         if($get = $this->input->get()){

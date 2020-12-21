@@ -170,10 +170,6 @@ $this->load->view('temp/MenuBar.php');
 							<label for="file">Tanggal Lahir</label>
 							<input type="date" class="form-control" name="birth_date" >
 						</div>
-					</div>
-
-					<div class="col-md-4">  
-
 						<div class="form-group">
 							<label for="file">Jenis Kelamin</label>
 							<select name="gender" class="form-control" >
@@ -193,6 +189,30 @@ $this->load->view('temp/MenuBar.php');
 								<?php endforeach;?>
 							</select>
 						</div>
+					</div>
+
+					<div class="col-md-4"> 
+						
+						<div class="form-group">
+							<label for="file">RT</label>
+							<input type="text" class="form-control" name="rt" >
+						</div>
+						<div class="form-group">
+							<label for="file">RW</label>
+							<input type="text" class="form-control" name="rw" >
+						</div>
+						<div class="form-group">
+							<label for="file">Kelurahan</label>
+							<input type="text" class="form-control" name="kelurahan" >
+						</div>
+						<div class="form-group">
+							<label for="file">Kecamatan</label>
+							<input type="text" class="form-control" name="kecamatan" >
+						</div>
+						<div class="form-group">
+							<label for="file">Kode Pos</label>
+							<input type="text" class="form-control" name="kodepos" >
+						</div>
 						<div class="form-group">
 							<label for="file">Provinsi</label>
 							<input type="text" class="form-control" name="province" >
@@ -204,15 +224,14 @@ $this->load->view('temp/MenuBar.php');
 						<div class="form-group">
 							<label for="file">Alamat</label>
 							<input type="text" class="form-control" name="address" >
-						</div>
-						<div class="form-group">
-							<label for="file">Pekerjaan</label>
-							<input type="text" class="form-control" name="job" >
-						</div>						
-
+						</div>											
 					</div>
 
 					<div class="col-md-4">
+						<div class="form-group">
+							<label for="file">Pekerjaan</label>
+							<input type="text" class="form-control" name="job" >
+						</div>
 						<div class="form-group">
 							<label for="file">Nama Ibu</label>
 							<input type="text" class="form-control" name="mother_name" >

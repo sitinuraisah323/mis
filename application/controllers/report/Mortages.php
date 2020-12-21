@@ -34,6 +34,20 @@ class Mortages extends Authenticated
         $data['areas'] = $this->areas->all();
 		$this->load->view('report/mortages/index',$data);
 	}
+
+	public function kredit()
+	{
+        $data['units'] = $this->units->all();
+        $data['areas'] = $this->areas->all();
+		$this->load->view('report/mortages/kredit/index',$data);
+	}
+
+	public function angsuran()
+	{
+        $data['units'] = $this->units->all();
+        $data['areas'] = $this->areas->all();
+		$this->load->view('report/mortages/angsuran/index',$data);
+	}
 	
 	public function export()
 	{		
