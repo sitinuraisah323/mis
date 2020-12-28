@@ -529,9 +529,10 @@ class Regularpawns extends ApiController
 					->where("DATEDIFF('$date', units_regularpawns.deadline) >=", -10)
 					->where("DATEDIFF('$date', units_regularpawns.deadline) <=", 0);
 				}
-			}else{
-				$this->regulars->db
-				->where('deadline <',$this->input->get('dateEnd') ? $this->input->get('dateEnd') : date('Y-m-d'));
+				if($packet === 'all'){
+					$this->regulars->db
+					->where('deadline <', date('Y-m-d'));			
+				}
 			}
 		}
 		$this->regulars->db->order_by('dpd','DESC');

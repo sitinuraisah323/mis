@@ -76,3 +76,7 @@ function years(){
 	}
 	return $data;
 }
+
+function asset_url(){
+	return 'http://fixasset.test';
+}

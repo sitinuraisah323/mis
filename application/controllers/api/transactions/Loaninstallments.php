@@ -656,8 +656,10 @@ class Loaninstallments extends ApiController
 							'id_unit'	=> $id_unit,
 							'permit'	=> $jok
 						))){
-							$data['id'] = $findTransaction->id;
-							$batchUpdate[] = $data;
+							if($status !== 'L'){
+								$data['id'] = $findTransaction->id;
+								$batchUpdate[] = $data;
+							}
 						}else{
 							$batchInsert[] 	= $data;
 						}

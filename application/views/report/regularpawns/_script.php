@@ -100,6 +100,7 @@ function initCariForm(){
     $('#nasabah').select2({ placeholder: "Select a Nasabah", width: '100%' });
     $('#sort_method').select2({ placeholder: "Select a Sort", width: '100%' });
     $('#sort_by').select2({ placeholder: "Select a Sort", width: '100%' });
+    $('#no_sbk').select2({ placeholder: "Select a No SBK", width: '100%' });
     //events
     $('#btncari').on('click',function(){
         $('.rowappend').remove();
@@ -112,12 +113,13 @@ function initCariForm(){
 		var permit = $('[name="permit"]').val();
         var sort_by = $('[name="sort_by"]').val();
         var sort_method = $('[name="sort_method"]').val();
+        var no_sbk = $('[name="no_sbk"]').val();
         KTApp.block('#form_bukukas .kt-portlet__body', {});
 		$.ajax({
 			type : 'GET',
 			url : "<?php echo base_url("api/transactions/regularpawns/report"); ?>",
 			dataType : "json",
-			data:{area:area,id_unit:unit,statusrpt:statusrpt,nasabah:nasabah,dateStart:dateStart,dateEnd:dateEnd,permit:permit, sort_by, sort_method},
+			data:{no_sbk,area:area,id_unit:unit,statusrpt:statusrpt,nasabah:nasabah,dateStart:dateStart,dateEnd:dateEnd,permit:permit, sort_by, sort_method},
 			success : function(response,status){
 				KTApp.unblockPage();
 				if(response.status == true){
@@ -204,6 +206,9 @@ $('[name="cabang"]').on('change',function(){
 	var cabang = $('[name="cabang"]').val();
 	var units =  $('[name="id_unit"]');
 	var url_data = $('#url_get_units').val() + '/' + cabang;
+
+
+
 	$.get(url_data, function (data, status) {
 		var response = JSON.parse(data);
 		if (status) {
@@ -228,7 +233,27 @@ function initGetNasabah(){
     $("#unit").on('change',function(){
         var area = $('#area').val();
         var unit = $('#unit').val(); 
-        var customers =  document.getElementById('nasabah');     
+        var customers =  document.getElementById('nasabah');   
+        var dateStart = $('[name="date-start"]').val();
+		var dateEnd = $('[name="date-end"]').val();
+        $.ajax({
+            type:"GET",
+            url:"<?php echo base_url('api/transactions/regularpawns');?>",
+            dataType: "JSON",
+            data:{unit, dateStart, dateEnd},
+            success:function(res){
+                if(res.data.length > 0){
+                    res.data.forEach(data=>{
+                        const opt = document.createElement('option');
+                        opt.value = data.no_sbk;
+                        opt.textContent = `${data.no_sbk}-${data.customer}`;
+                        $('#no_sbk').append(opt);
+                    })
+                }
+            }
+        })
+
+
         //alert(unit);
         $.ajax({
 			type : 'GET',

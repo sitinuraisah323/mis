@@ -169,6 +169,11 @@ $this->load->view('temp/MenuBar.php');
 						</select>
                     </div>
                     <div class="col-lg-2">
+                        <label class="col-form-label">No Sbk</label>
+						<select class="form-control select2" name="no_sbk" id="no_sbk">
+                        </select>
+					</div>
+                    <div class="col-lg-2">
                         <label class="col-form-label">&nbsp</label>
                         <div class="position-relative">
                         <button type="button" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>

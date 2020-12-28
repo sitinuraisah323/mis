@@ -48,19 +48,19 @@
             <td align="center" width="80">Ticket Size</td>
             </tr>
             <?php
-                    $totalNoaOstYesterdayArea += 0;
-                    $totalNoaOstTodayArea += 0;
-                    $totalUpOstTodayArea += 0;
-                    $totalUpaOstYesterdayArea += 0;
-                    $totalRepaymentTodayUpArea += 0;
-                    $totalRepaymentTodayNoaArea += 0;
-                    $totalOstNoaArea += 0;
-                    $totalOstUpArea += 0;
-                    $totalOstTicketArea += 0;
-                    $totalDisbureNoaArea += 0;
-                    $totalDisbureUpArea += 0;
-                    $totalDisbureTicketArea += 0;
-                ?>
+                $totalNoaOstYesterdayArea = 0;
+                $totalNoaOstTodayArea = 0;
+                $totalUpOstTodayArea = 0;
+                $totalUpaOstYesterdayArea = 0;
+                $totalRepaymentTodayUpArea = 0;
+                $totalRepaymentTodayNoaArea = 0;
+                $totalOstNoaArea = 0;
+                $totalOstUpArea = 0;
+                $totalOstTicketArea = 0;
+                $totalDisbureNoaArea = 0;
+                $totalDisbureUpArea = 0;
+                $totalDisbureTicketArea = 0;
+            ?>
             <?php foreach($datas as $data): $no_++;?>
             <?php
                     $totalNoaOstYesterday += $data->ost_yesterday->noa;
