@@ -25,7 +25,7 @@ $this->load->view('temp/MenuBar.php');
 <!-- end:: Content Head -->
 
  <!-- begin:: Content -->
-
+    
  <!-- end:: Content -->
 	
 </div>

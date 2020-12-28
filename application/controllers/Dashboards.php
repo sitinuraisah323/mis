@@ -153,6 +153,11 @@ class Dashboards extends Authenticated
 		$this->load->view("dashboards/units/index");
 	}
 
+	public function penaksir()
+	{
+		$this->load->view("dashboards/penaksir/index");
+	}
+
 	public function realisasi()
 	{
 		$year = $this->input->get('year') ?  $this->input->get('year') : date('Y');

@@ -14,7 +14,7 @@ $this->load->view('temp/MenuBar.php');
         <div class="kt-subheader__main">
             <h3 class="kt-subheader__title">Report</h3>
             <span class="kt-subheader__separator kt-subheader__separator--v"></span>
-            <span class="kt-subheader__desc">Gadai Cicilan(Pelunasan Angsuran Kredit)</span>
+            <span class="kt-subheader__desc">Gadai Reguler</span>
         </div>
         <div class="kt-subheader__toolbar">
             <div class="kt-subheader__wrapper">
@@ -33,11 +33,12 @@ $this->load->view('temp/MenuBar.php');
                         <i class="kt-font-brand fa fa-align-justify"></i>
                     </span>
                     <h3 class="kt-portlet__head-title">
-                       Data Gadai Cicilan(Pelunasan Angsuran Kredit)
+                       Data Gadai Reguler
                     </h3>
                 </div>
                 <div class="kt-portlet__head-toolbar">
                     <div class="kt-portlet__head-wrapper">
+
                     </div>
                 </div>
             </div>
@@ -75,11 +76,13 @@ $this->load->view('temp/MenuBar.php');
             </table> -->
             <!--end: Datatable -->
 
-            <form id="form_bukukas" class="form-horizontal" method="post" action="<?php echo base_url("report/mortages/export"); ?>">
+            <form id="form_bukukas" class="form-horizontal" method="post" action="<?php echo base_url("report/regularpawns/export"); ?>">
             <div class="kt-portlet__body">
             <div class="col-md-12" >
                 <div class="form-group row">
                 <?php if($this->session->userdata('user')->level == 'unit'):?>
+                    <input type="hidden" name="id_unit" value="<?php echo $this->session->userdata('user')->id_unit;?>">
+                <?php elseif($this->session->userdata('user')->level == 'penaksir'):?>
                     <input type="hidden" name="id_unit" value="<?php echo $this->session->userdata('user')->id_unit;?>">
                 <?php elseif($this->session->userdata('user')->level == 'area'):?>
                     <input type="hidden" name="area" value="<?php echo $this->session->userdata('user')->id_area;?>">
@@ -88,7 +91,7 @@ $this->load->view('temp/MenuBar.php');
 						<select class="form-control select2" name="id_unit" id="unit">
 							<option value="0">All</option>
 						</select>
-                    </div>
+                    </div>                
                 <?php elseif($this->session->userdata('user')->level == 'cabang'):?>
                 <input type="hidden" name="cabang" value="<?php echo $this->session->userdata('user')->id_cabang;?>">
                 <div class="col-lg-2">
@@ -118,60 +121,89 @@ $this->load->view('temp/MenuBar.php');
 						</select>
                     </div>
                 <?php endif ;?>
-
                     <!-- <div class="col-lg-2">
 						<label class="col-form-label">Status</label>
                         <select class="form-control select2" name="status" id="status">
-                            <option></option>                                                         
+                            <option value=""></option>
                             <option value="0">All</option>
                             <option value="1">Aktif</option>
                             <option value="2">Lunas</option>
-                            <option value="3">Perpanjangan</option>                            
+                            <option value="3">Perpanjangan</option>
                         </select>
                     </div> -->
-					<!-- <div class="col-lg-2">
+					<div class="col-lg-2">
 						<label class="col-form-label">Ijin</label>
 						<select class="form-control" name="permit" id="permit">
-                        <option value="">Select Ijin</option>
-							<?php foreach (array('OJK' =>'OJK','NON-OJK' => 'Non OJK') as $value => $item):?>
-								<option value="<?php echo $value;?>"><?php echo $item;?></option>
+							<option value=""></option>
+							<?php foreach (array('OJK' => 'OJK','NON-OJK'=>'Non Ojk') as $key => $value):?>
+								<option value="<?php echo $key;?>"><?php echo $value;?></option>
 							<?php endforeach;?>
 						</select>
-					</div>                     -->
+					</div>
 					<div class="col-lg-2">
 						<label class="col-form-label">Tanggal</label>
 						<input type="date" class="form-control" name="date-start" value="<?php echo date('Y-m-01');?>">
 					</div>
 					<div class="col-lg-2">
-						<label class="col-form-label">Sampai</label>
+						<label class="col-form-label">Tanggal</label>
 						<input type="date" class="form-control" name="date-end" value="<?php echo date('Y-m-d');?>">
-					</div>                 
-                    
+					</div>
+                    <div class="col-lg-2">
+						<label class="col-form-label">Nasabah</label>
+                        <select class="form-control select2" name="nasabah" id="nasabah">
+							<option value=""></option>
+                            <option value="all">All</option>
+						</select>
+                    </div>
+                    <div class="col-lg-2">
+						<label class="col-form-label">Sort By</label>
+                        <select class="form-control select2" name="sort_by" id="sort_by">
+							<option value="0">Pilih</option>
+                            <option value="no_sbk">No Sbk</option>
+                            <option value="date_sbk">Tanggal Sbk</option>
+						</select>
+                    </div>
+                    <div class="col-lg-2">
+                      <label class="col-form-label">Sort Method</label>
+                        <select class="form-control select2" name="sort_method" id="sort_method">
+							<option value="asc">Ascending</option>
+                            <option value="desc">Descending</option>
+						</select>
+                    </div>
                     <div class="col-lg-2">
                         <label class="col-form-label">&nbsp</label>
                         <div class="position-relative">
                         <button type="button" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>
+                        <!-- <button type="submit" class="btn btn-success btn-icon" name="btnexport" id="btnexport" onclick="export_xls()"><i class="fa fa-file-excel"></i></button> -->
                         <button type="submit" class="btn btn-danger btn-icon" name="btnexport_csv" id="btnexport_csv"><i class="fa fa-file-excel"></i></button>
                         </div>
-                    </div> 
+                    </div>                  
 				</div>
 
             </div>
 
             <div class="col-md-12">
                 <div class="kt-section__content">
-						<table class="table" id="tblcicilan">
+						<table class="table">
 						  	<thead class="thead-light">
 						    	<tr>
-						      		<th class='text-center'>No</th>
-                                    <th class="text-left">Unit</th>
+						      		<th class="text-center">No</th>
+									<th class="text-left">Unit</th>
 									<th class="text-center">NIC</th>
-									<th class='text-center'>No. SBK</th>
-									<th class='text-center'>Tanggal Kredit</th>
-									<th class='text-center'>Tanggal jatuh Tempo</th>
+									<th class="text-center">No. SBK</th>
+									<th class="text-center">Tanggal SBK</th>
+									<!-- <th class="text-center">Tanggal Tempo</th> -->
 						      		<th>Nasabah</th>
-									<th class='text-right'>UP</th>
-									<th class='text-right'>Angsuran</th>
+                                    <th class='text-left'>Jenis</th>
+									<th class='text-left'>Tipe</th>
+									<!-- <th class='text-right'>Taksiran</th> -->
+									<th class='text-right'>UP</th>									
+									<th class='text-center'>Jumlah</th>
+									<th class='text-center'>Karatase</th>
+									<th class='text-center'>Berat Kotor</th>
+									<th class='text-center'>Berat Bersih</th>
+									<th class='text-right'>STLE</th>
+									<th class='text-center'>Description</th>
 									<th></th>
 						    	</tr>
 						  	</thead>
@@ -190,12 +222,11 @@ $this->load->view('temp/MenuBar.php');
     <!-- end:: Content -->
 	<input type="hidden" name="url_get" id="url_get" value="<?php echo base_url('api/report/bukukas/get_transaksi_unit') ?>"/>
     <input type="hidden" name="url_get_units" id="url_get_units" value="<?php echo base_url('api/datamaster/units/get_unit_bycabang') ?>"/>
-	<input type="hidden" name="url_get_unit" id="url_get_unit" value="<?php echo base_url('api/datamaster/units/get_units_cicilan_byarea') ?>"/>
-	<input type="hidden" name="url_get_sbk" id="url_get_sbk" value="<?php echo base_url('api/datamaster/units/get_units_sbk') ?>"/>
+	<input type="hidden" name="url_get_unit" id="url_get_unit" value="<?php echo base_url('api/datamaster/units/get_units_byarea') ?>"/>
 </div>
 </div>
 
 <?php
 $this->load->view('temp/Footer.php');
-$this->load->view('report/mortages/angsuran/_script.php');
+$this->load->view('report/penaksir/regular/_script.php');
 ?>

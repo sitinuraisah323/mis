@@ -60,16 +60,26 @@
 									<?php endif;?>
 								<?php endif;?>
 
-								<?php if($this->session->userdata('user')->level == 'unit'):?>
-									<?php if(read_access('dashboards/unit')):?>
-									<li class="kt-menu__item "  aria-haspopup="true">
-											<a  href="<?php echo base_url('dashboards/unit'); ?>" class="kt-menu__link ">
-												<span class="kt-menu__link-icon"><i class="fa fa-chart-bar"><span></span></i></span>
-												<span class="kt-menu__link-text">Dashboard</span>
-											</a>
+									<?php if($this->session->userdata('user')->level == 'unit'):?>
+										<?php if(read_access('dashboards/unit')):?>
+										<li class="kt-menu__item "  aria-haspopup="true">
+												<a  href="<?php echo base_url('dashboards/unit'); ?>" class="kt-menu__link ">
+													<span class="kt-menu__link-icon"><i class="fa fa-chart-bar"><span></span></i></span>
+													<span class="kt-menu__link-text">Dashboard</span>
+												</a>
 										</li>
 										<?php endif;?>
-								<?php endif;?>								
+									<?php endif;?>	
+									<?php if($this->session->userdata('user')->level == 'penaksir'):?>
+										<?php if(read_access('dashboards/penaksir')):?>
+										<li class="kt-menu__item "  aria-haspopup="true">
+												<a  href="<?php echo base_url('dashboards/penaksir'); ?>" class="kt-menu__link ">
+													<span class="kt-menu__link-icon"><i class="fa fa-chart-bar"><span></span></i></span>
+													<span class="kt-menu__link-text">Dashboard</span>
+												</a>
+										</li>
+										<?php endif;?>
+									<?php endif;?>						
 									<?php if($this->session->userdata('user')->level == 'pusat' || $this->session->userdata('user')->level == 'area'):?>
 									<?php if(read_access('dashboards')):?>
 										<li class="kt-menu__item "  aria-haspopup="true">
@@ -120,18 +130,22 @@
 											</a>
 										</li>
 									<?php endif;?>
+									<?php if(read_access('dashboards/realisasi')):?>
 									<li class="kt-menu__item "  aria-haspopup="true">
 										<a  href="<?php echo base_url('dashboards/realisasi'); ?>" class="kt-menu__link ">
 											<span class="kt-menu__link-icon"><i class="fa fa-chart-bar"><span></span></i></span>
 											<span class="kt-menu__link-text">Realisasi</span>
 										</a>
 									</li>
+									<?php endif;?>
+									<?php if(read_access('dashboards/pendapatan')):?>
 									<li class="kt-menu__item "  aria-haspopup="true">
 										<a  href="<?php echo base_url('dashboards/pendapatan'); ?>" class="kt-menu__link ">
 											<span class="kt-menu__link-icon"><i class="fa fa-chart-bar"><span></span></i></span>
 											<span class="kt-menu__link-text">Pendapatan</span>
 										</a>
-									</li>									
+									</li>	
+									<?php endif;?>								
 								</ul>
 							</div>
 						</li>
@@ -384,7 +398,16 @@
 														<span class="kt-menu__link-text">Currency</span>
 													</a>
 												</li>
-											<?php endif;?>									
+											<?php endif;?>	
+
+											<?php if(read_access('datamaster/type')):?>
+												<li class="kt-menu__item "  aria-haspopup="true">
+													<a  href="<?php echo base_url('datamaster/type'); ?>" class="kt-menu__link ">
+														<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>
+														<span class="kt-menu__link-text">Tipe Produk</span>
+													</a>
+												</li>
+											<?php endif;?>								
 
 								</ul>
 							</div>
@@ -471,6 +494,32 @@
 						</li>
 					<?php endif;?>
 
+					<?php if(read_access('penaksir')):?>
+						<li class="kt-menu__item  kt-menu__item--submenu kt-menu__item--rel"  data-ktmenu-submenu-toggle="click" aria-haspopup="true">
+							<a  href="javascript:;" class="kt-menu__link kt-menu__toggle"><span class="kt-menu__link-text">Penaksir</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
+							<div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--left">
+								<ul class="kt-menu__subnav">
+								<?php if(read_access('penaksir/regular')):?>
+									<li class="kt-menu__item "  aria-haspopup="true">
+										<a  href="<?php echo base_url('penaksir/penaksir/regular'); ?>" class="kt-menu__link ">
+											<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>
+											<span class="kt-menu__link-text">Regular</span>
+										</a>
+									</li>
+									<?php endif;?>
+									<?php if(read_access('penaksir/penaksir/regular')):?>
+									<li class="kt-menu__item "  aria-haspopup="true">
+										<a  href="<?php echo base_url('penaksir/penaksir/mortages'); ?>" class="kt-menu__link ">
+											<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>
+											<span class="kt-menu__link-text">Mortages</span>
+										</a>
+									</li>
+									<?php endif;?>
+								</ul>
+							</div>
+						</li>
+					<?php endif;?>
+
 					<?php if(read_access('report')):?>
 						<li class="kt-menu__item  kt-menu__item--submenu kt-menu__item--rel"  data-ktmenu-submenu-toggle="click" aria-haspopup="true">
 							<a  href="javascript:;" class="kt-menu__link kt-menu__toggle"><span class="kt-menu__link-text">Report</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
@@ -505,17 +554,25 @@
 											<ul class="kt-menu__subnav">			
 												<?php if(read_access('report/mortages')):?>
 													<li class="kt-menu__item "  aria-haspopup="true">
-														<a  href="<?php echo base_url('report/mortages/kredit'); ?>" class="kt-menu__link ">
+														<a  href="<?php echo base_url('report/mortages'); ?>" class="kt-menu__link ">
 															<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
-															<span class="kt-menu__link-text">Kredit Gadai</span>
+															<span class="kt-menu__link-text">Gadai Cicilan</span>
 														</a>
 													</li>
-												<?php endif;?>								
+												<?php endif;?>	
+												<?php if(read_access('report/mortages')):?>
+													<li class="kt-menu__item "  aria-haspopup="true">
+														<a  href="<?php echo base_url('report/mortages/kredit'); ?>" class="kt-menu__link ">
+															<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+															<span class="kt-menu__link-text">Summary Gadai Cicilan</span>
+														</a>
+													</li>
+												<?php endif;?>							
 												<?php if(read_access('report/mortages')):?>
 													<li class="kt-menu__item "  aria-haspopup="true">
 														<a  href="<?php echo base_url('report/mortages/angsuran'); ?>" class="kt-menu__link ">
 															<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
-															<span class="kt-menu__link-text">Kredit Gadai Angsuran</span>
+															<span class="kt-menu__link-text">Angsuran Gadai Cicilan</span>
 														</a>
 													</li>
 												<?php endif;?>																					
@@ -535,6 +592,7 @@
 										</li>
 									<?php endif;?>									 -->
 
+									<?php if(read_access('report/jurnal')):?>	
 									<li class="kt-menu__item  kt-menu__item--submenu"  data-ktmenu-submenu-toggle="hover" aria-haspopup="true">
 										<a  href="javascript:;" class="kt-menu__link kt-menu__toggle">
 									<span class="kt-menu__link-icon">
@@ -684,7 +742,10 @@
 												<?php endif;?>
 											</ul>
 										</div>
-									</li>			
+									</li>	
+									<?php endif;?>
+
+									<?php if(read_access('report/executivesummary')):?>
 									<li class="kt-menu__item  kt-menu__item--submenu"  data-ktmenu-submenu-toggle="hover" aria-haspopup="true">
 										<a  href="javascript:;" class="kt-menu__link kt-menu__toggle">
 									<span class="kt-menu__link-icon">
@@ -769,7 +830,40 @@
 											</ul>
 										</div>
 									</li>
+									<?php endif;?>
+									
+									<?php if(read_access('report/penaksir')):?>
+									<li class="kt-menu__item  kt-menu__item--submenu"  data-ktmenu-submenu-toggle="hover" aria-haspopup="true">
+										<a  href="javascript:;" class="kt-menu__link kt-menu__toggle">
+									<span class="kt-menu__link-icon">
+									<i class="fa fa-copy"><span></span></i>
+									</span>
+											<span class="kt-menu__link-text">Penaksir</span><i class="kt-menu__hor-arrow la la-angle-right"></i><i class="kt-menu__ver-arrow la la-angle-right"></i>
+										</a>
+										<div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--right">
+											<ul class="kt-menu__subnav">			
+												<?php if(read_access('report/penaksir/regular')):?>
+													<li class="kt-menu__item "  aria-haspopup="true">
+														<a  href="<?php echo base_url('report/penaksir/regular'); ?>" class="kt-menu__link ">
+															<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+															<span class="kt-menu__link-text">Regular</span>
+														</a>
+													</li>
+												<?php endif;?>								
+												<?php if(read_access('report/penaksir/mortages')):?>
+													<li class="kt-menu__item "  aria-haspopup="true">
+														<a  href="<?php echo base_url('report/penaksir/mortages'); ?>" class="kt-menu__link ">
+															<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+															<span class="kt-menu__link-text">Mortages</span>
+														</a>
+													</li>
+												<?php endif;?>																					
+											</ul>
+										</div>
+									</li>
+									<?php endif;?>	
 
+									<?php if(read_access('report/lmsiscab')):?>
 									<li class="kt-menu__item  kt-menu__item--submenu"  data-ktmenu-submenu-toggle="hover" aria-haspopup="true">
 										<a  href="javascript:;" class="kt-menu__link kt-menu__toggle">
 									<span class="kt-menu__link-icon">
@@ -798,7 +892,9 @@
 											</ul>
 										</div>
 									</li>
-
+									<?php endif;?>
+									
+									<?php if(read_access('report/yogadai')):?>
 									<li class="kt-menu__item  kt-menu__item--submenu"  data-ktmenu-submenu-toggle="hover" aria-haspopup="true">
 										<a  href="javascript:;" class="kt-menu__link kt-menu__toggle">
 									<span class="kt-menu__link-icon">
@@ -827,6 +923,7 @@
 											</ul>
 										</div>
 									</li>
+									<?php endif;?>
 
 									<?php if(read_access('report/bapkas')):?>
 										<li class="kt-menu__item "  aria-haspopup="true">
@@ -862,7 +959,7 @@
 											</a>
 										</li>
 									<?php //endif;?> -->
-
+									<?php if(read_access('report/manualcheck')):?>
 									<li class="kt-menu__item  kt-menu__item--submenu"  data-ktmenu-submenu-toggle="hover" aria-haspopup="true">
 										<a  href="javascript:;" class="kt-menu__link kt-menu__toggle">
 									<span class="kt-menu__link-icon">
@@ -899,12 +996,14 @@
 											</ul>
 										</div>
 									</li>
+									<?php endif;?>
 
 								</ul>
 							</div>
 						</li>
 					<?php endif;?>
 
+					<?php if(read_access('lm')):?>
 						<li class="kt-menu__item  kt-menu__item--submenu kt-menu__item--rel"  data-ktmenu-submenu-toggle="click" aria-haspopup="true">
 							<a  href="javascript:;" class="kt-menu__link kt-menu__toggle"><span class="kt-menu__link-text">Lm</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
 							<div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--left">
@@ -924,28 +1023,29 @@
 								</ul>
 							</div>
 						</li>
+					<?php endif;?>
 
-						<?php if($this->session->userdata('user')->level=='administrator'):?>
-							<li class="kt-menu__item  kt-menu__item--submenu kt-menu__item--rel"  data-ktmenu-submenu-toggle="click" aria-haspopup="true">
-								<a  href="javascript:;" class="kt-menu__link kt-menu__toggle"><span class="kt-menu__link-text">Processing Data</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
-								<div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--left">
-									<ul class="kt-menu__subnav">
-										<li class="kt-menu__item "  aria-haspopup="true">
-											<a  href="<?php echo base_url('api/transactions/loaninstallments/calculation'); ?>" target="_blank" class="kt-menu__link ">
-												<span class="kt-menu__link-icon"><i class="fab fa-google-play"><span></span></i></span>
-												<span class="kt-menu__link-text">RUN OJK</span>
-											</a>
-										</li>
-										<li class="kt-menu__item "  aria-haspopup="true">
-											<a  href="<?php echo base_url('api/transactions/loaninstallments/calculation?ojk=NON-OJK'); ?>" target="_blank" class="kt-menu__link ">
-												<span class="kt-menu__link-icon"><i class="fab fa-google-play"><span></span></i></span>
-												<span class="kt-menu__link-text">RUN NON OJK</span>
-											</a>
-										</li>
-									</ul>
-								</div>
-							</li>
-						<?php endif;?>
+					<?php if($this->session->userdata('user')->level=='administrator'):?>
+						<li class="kt-menu__item  kt-menu__item--submenu kt-menu__item--rel"  data-ktmenu-submenu-toggle="click" aria-haspopup="true">
+							<a  href="javascript:;" class="kt-menu__link kt-menu__toggle"><span class="kt-menu__link-text">Processing Data</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
+							<div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--left">
+								<ul class="kt-menu__subnav">
+									<li class="kt-menu__item "  aria-haspopup="true">
+										<a  href="<?php echo base_url('api/transactions/loaninstallments/calculation'); ?>" target="_blank" class="kt-menu__link ">
+											<span class="kt-menu__link-icon"><i class="fab fa-google-play"><span></span></i></span>
+											<span class="kt-menu__link-text">RUN OJK</span>
+										</a>
+									</li>
+									<li class="kt-menu__item "  aria-haspopup="true">
+										<a  href="<?php echo base_url('api/transactions/loaninstallments/calculation?ojk=NON-OJK'); ?>" target="_blank" class="kt-menu__link ">
+											<span class="kt-menu__link-icon"><i class="fab fa-google-play"><span></span></i></span>
+											<span class="kt-menu__link-text">RUN NON OJK</span>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</li>
+					<?php endif;?>
 				</ul>
 			</div>
 

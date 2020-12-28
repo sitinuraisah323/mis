@@ -15,41 +15,36 @@ class Regularpawns extends ApiController
 
 	public function index()
 	{
+		$this->regulars->db->select('*,units.name as unit_name,customers.name as customer')
+			 ->join('units','units.id=units_regularpawns.id_unit')
+			 ->join('customers','customers.id=units_regularpawns.id_customer')
+			 ->join('units_regularpawns_summary', 'units_regularpawns_summary.id_unit=units_regularpawns.id_unit AND units_regularpawns_summary.no_sbk=units_regularpawns.no_sbk','left')
+			 ->where('units_regularpawns.amount !=','0')
+			 ->order_by('units_regularpawns.no_sbk','asc');
 
 		if($this->session->userdata('user')->level == 'unit'){
-			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
+			$this->regulars->db->where('units.id', $this->session->userdata('user')->id_unit);
+		}
+
+		if($this->session->userdata('user')->level == 'penaksir'){
+			$this->regulars->db->where('units.id', $this->session->userdata('user')->id_unit);
+			$this->regulars->db->where('units_regularpawns_summary.model',null);
 		}
 
 		if($this->session->userdata('user')->level == 'cabang'){
-			$this->units->db->where('units.id_cabang', $this->session->userdata('user')->id_cabang);
+			$this->regulars->db->where('units.id_cabang', $this->session->userdata('user')->id_cabang);
 		}
 
-		$units = $this->units->db->select('*')
-		->from('units')
-		->join('areas','areas.id=units.id_area')
-		->join('units_regularpawns','units_regularpawns.id_unit=units.id')
-		->get()->result();
-
-		// $this->regulars->db->select('customers.name, units.name as unit')
-		// 	->join('customers','customers.id = units_regularpawns.id_customer')
-		// 	->join('units','units.id = units_regularpawns.id_unit');
-		// if($post = $this->input->post()){
-		// 	if(is_array($post['query'])){
-		// 		$value = $post['query']['generalSearch'];
-		// 		$this->regulars->db
-		// 			->or_like('no_sbk',$value)
-		// 			->or_like('nic',$value)
-		// 			->or_like('description_1',$value)
-		// 			->or_like('description_2',$value)
-		// 			->or_like('description_3',$value)
-		// 			->or_like('description_4',$value)
-		// 			->or_like('customers.name',$value);
-		// 	}
-		// }
-		// $data =  $this->regulars->all();
+		if($post = $this->input->post()){
+			if(is_array($post['query'])){
+				$value = $post['query']['generalSearch'];
+				$this->regulars->db->like('customers.name',$value);
+			}
+		}
+		$data =  $this->regulars->all();
 
 		echo json_encode(array(
-			'data'		=> $units,
+			'data'		=> $data,
 			'message'	=> 'Successfully Get Data Regular Pawns'
 		));
 	}
@@ -186,6 +181,30 @@ class Regularpawns extends ApiController
 			}
 		}
 	}
+
+	public function get_byid()
+	{
+		$id = $this->input->get("id");
+		$data = $this->regulars->db->select('*')
+								   ->from('units_regularpawns')
+								   ->join('customers', 'customers.id=units_regularpawns.id_customer')
+								   ->where('units_regularpawns.id',$id)
+								   ->get()->row();
+								   
+		if($data){
+			echo json_encode(array(
+				'data'	=> $data,
+				'status'	=> true,
+				'message'	=> 'Successfully Get Data Regular Pawns'
+			));
+		}else{
+			echo json_encode(array(
+				'data'	=> false,
+				'status'	=> false,
+				'message'	=> 'Successfully Get Data Regular Pawns'
+			));
+		}
+    }
 
 	public function show($id)
 	{

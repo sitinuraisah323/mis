@@ -14,7 +14,8 @@ class Dashboards extends ApiController
 		$this->load->model('MappingcaseModel', 'm_casing');
 		$this->load->model('OutstandingModel', 'outstanding');
 		$this->load->model('UnitsdailycashModel', 'unitsdailycash');
-		$this->load->model('MortagesModel', 'mortages');		
+		$this->load->model('MortagesModel', 'mortages');	
+		$this->load->model('RegularpawnsSummaryModel', 'penaksir');			
 	}
 
 	public function getlastdatetransaction(){
@@ -29,11 +30,13 @@ class Dashboards extends ApiController
 		}else if($this->session->userdata('user')->level == 'area'){
 			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
 		}
+
 		if($unit = $this->input->get('unit')){
 			$this->units->db->where('id_unit', $unit);
 		}else if($this->session->userdata('user')->level == 'unit'){
 			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
 		}
+
 		if($this->input->get('year')){
 			$year = $this->input->get('year');
 		}else{
@@ -1202,6 +1205,16 @@ class Dashboards extends ApiController
 					->where('units_regularpawns.id_unit',$idUnit)
 					->get()->row();
 
+		$gr_regular = $this->db->select('SUM(bruto) as gramasi')
+					->from('units_regularpawns_summary')
+					->where('id_unit',$idUnit)
+					->get()->row();
+		
+	   $gr_mortages = $this->db->select('SUM(bruto) as gramasi')
+					->from('units_mortages_summary')
+					->where('id_unit',$idUnit)
+					->get()->row();
+
 		$data = array("saldo"=>(int) $saldo->amount_balance_final,
 			  		  "saldounit"=>(int) $unitsaldo->saldo,
 					  "outstanding"=>(int) $regular->up + (int) $mortages_ojk->saldocicilan + (int) $mortages_nonojk->saldocicilan,
@@ -1220,6 +1233,9 @@ class Dashboards extends ApiController
 					  "unreg_saldo_nonojk"=>(int) $mortages_nonojk->saldocicilan,
 					  "unreg_noa_nonojk"=>(int) $mortages_nonojk->noa,
 					  "dpd"=>(int) $dpd->up,
+					  "gr_regular"=>(int) $gr_regular->gramasi,
+					  "gr_mortages"=>(int) $gr_mortages->gramasi,
+					  "gramasi"=>(int) $gr_regular->gramasi + (int) $gr_mortages->gramasi,
 					  "noadpd"=>(int) $dpd->noa);		
 		return $this->sendMessage($data,'Get Book Cash Daily');
 	}
@@ -1297,4 +1313,59 @@ class Dashboards extends ApiController
 		}
 		$this->sendMessage($result, 'Get Data Pendaptan');
 	}
+
+	public function karatase()
+	{
+		if($area = $this->input->get('area')){
+			$this->units->db->where('id_area', $area);
+		}else if($this->session->userdata('user')->level == 'area'){
+			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
+		}
+
+		if($cabang = $this->input->get('cabang')){
+			$this->units->db->where('id_cabang', $cabang);
+		}else if($this->session->userdata('user')->level == 'cabang'){
+			$this->units->db->where('id_cabang', $this->session->userdata('user')->id_cabang);
+		}
+
+		if($unit = $this->input->get('unit')){
+			$this->units->db->where('units.id', $unit);
+		}else if($this->session->userdata('user')->level == 'unit'){
+			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
+		}
+
+		if($penaksir = $this->input->get('penaksir')){
+			$this->units->db->where('units.id', $penaksir);
+		}else if($this->session->userdata('user')->level == 'penaksir'){
+			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
+		}
+
+		if($this->input->get('date')){
+			$date = $this->input->get('date');
+		}else{
+			$date = date('Y-m-d');
+		}
+
+		//$karat = 10;
+		$karatase = array();
+		for($karat = 10; $karat <=24; $karat++){
+			$karatase[] =  $karat;
+		}
+
+		$result[] = array('labelkaratase'=>$karatase);
+		$units = $this->units->db->select('units.id, units.name, areas.area as area')
+					  ->join('areas','areas.id = units.id_area')
+					  ->get('units')->result();
+		foreach ($units as $unit){
+			$karatase = array();
+			for($karat = 10; $karat <=24; $karat++){
+				$karatase[] =  $this->penaksir->getKaratase($unit->id, $karat);
+			}
+			$unit->karatase = $karatase;
+			//$unit->lblkaratase = $karat;
+			//$result[] = $unit;
+		}
+		$this->sendMessage($unit, 'Get Data karatase');
+	}
+
 }

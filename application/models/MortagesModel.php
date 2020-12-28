@@ -61,6 +61,11 @@ class MortagesModel extends Master
 			->order_by('date_kredit', 'asc')
 			->get()->result();
 	}
+
+	public function get_angsuran($sbk,$idunit)
+	{
+		
+	}
 	
 	
 }

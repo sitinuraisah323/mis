@@ -14,40 +14,35 @@ class Mortages extends ApiController
 
 	public function index()
 	{
+		$this->mortages->db->select('*,units.name as unit_name,customers.name as customer')
+			 ->join('units','units.id=units_mortages.id_unit')
+			 ->join('customers','customers.id=units_mortages.id_customer')
+			 ->join('units_mortages_summary', 'units_mortages_summary.id_unit=units_mortages.id_unit AND units_mortages_summary.no_sbk=units_mortages.no_sbk','left')
+			 ->order_by('units_mortages.id','asc');
+
 		if($this->session->userdata('user')->level == 'unit'){
-			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
+			$this->mortages->db->where('units.id', $this->session->userdata('user')->id_unit);
+		}
+
+		if($this->session->userdata('user')->level == 'penaksir'){
+			$this->mortages->db->where('units_mortages_summary.model',null)
+							   ->where('units.id', $this->session->userdata('user')->id_unit);
 		}
 
 		if($this->session->userdata('user')->level == 'cabang'){
-			$this->units->db->where('units.id_cabang', $this->session->userdata('user')->id_cabang);
+			$this->mortages->db->where('units.id_cabang', $this->session->userdata('user')->id_cabang);
 		}
 
-		$units = $this->units->db->select('*')
-					  ->from('units')
-					  ->join('areas','areas.id=units.id_area')
-					  ->join('units_mortages','units_mortages.id_unit=units.id')
-					  ->get()->result();
+		if($post = $this->input->post()){
+			if(is_array($post['query'])){
+				$value = $post['query']['generalSearch'];
+				$this->mortages->db->like('customers.name',$value);
+			}
+		}		
 
-		// $this->mortages->db->select('customers.name, units.name as unit')
-		// 	->join('customers','customers.id = units_mortages.id_customer')
-		// 	->join('units','units.id = units_mortages.id_unit');
-		// if($post = $this->input->post()){
-		// 	if(is_array($post['query'])){
-		// 		$value = $post['query']['generalSearch'];
-		// 		$this->mortages->db
-		// 			->or_like('no_sbk',$value)
-		// 			->or_like('nic',$value)
-		// 			->or_like('description_1',$value)
-		// 			->or_like('description_2',$value)
-		// 			->or_like('description_3',$value)
-		// 			->or_like('description_4',$value)
-		// 			->or_like('name',$value);
-		// 	}
-		// }		
-		// $data = $this->mortages->all();
-
+		$data = $this->mortages->all();
 		echo json_encode(array(
-			'data'	=> $units,
+			'data'	=> $data,
 			'message'	=> 'Successfully Get Data Users'
 		));
 	}
@@ -185,6 +180,30 @@ class Mortages extends ApiController
 			unlink($path);
 		}
 	}
+
+	public function get_byid()
+	{
+		$id = $this->input->get("id");
+		$data = $this->mortages->db->select('*')
+								   ->from('units_mortages')
+								   ->join('customers', 'customers.id=units_mortages.id_customer')
+								   ->where('units_mortages.id',$id)
+								   ->get()->row();
+								   
+		if($data){
+			echo json_encode(array(
+				'data'	=> $data,
+				'status'	=> true,
+				'message'	=> 'Successfully Get Data Cicilan'
+			));
+		}else{
+			echo json_encode(array(
+				'data'	=> false,
+				'status'	=> false,
+				'message'	=> 'Successfully Get Data Cicilan'
+			));
+		}
+    }
 
 	public function show($id)
 	{
@@ -368,15 +387,6 @@ class Mortages extends ApiController
 		}else if($this->session->userdata('user')->level == 'unit'){
 			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
 		}
-
-		// if($status = $this->input->get('status')){
-		// 	$state =null;
-		// 	$nasabah = $get['nasabah'];
-		// 	if($status=="0"){$state=["N","L"];}
-		// 	if($status=="1"){$state=["N"];}
-		// 	if($status=="2"){$state=["L"];}
-		// 	if($status=="3"){$state=[""];} 
-		// }
 		
 		if($this->input->get('dateStart')){
 			$sdate = $this->input->get('dateStart');
@@ -407,6 +417,34 @@ class Mortages extends ApiController
 								->order_by('units_repayments_mortage.date_kredit','asc')
 								->get('units')->result();
 		$this->sendMessage($units, 'Get Data kredit angsuran');
+	}
+
+	public function get_kreditangsuran(){
+
+		$query ="SELECT units_mortages.`id_unit` AS unit_id,units.`name` AS unit_name,customers.`name` AS cust_name,units_mortages.`no_sbk`,units_mortages.`nic`,units_mortages.`date_sbk` AS date_kredit,
+							units_mortages.`deadline` AS date_deadline,units_mortages.`amount_loan` AS up,'0' AS angsuran 
+							FROM units_mortages 
+							INNER JOIN units ON units.`id`=units_mortages.`id_unit`
+							INNER JOIN customers ON customers.`id`= units_mortages.`id_customer`
+							WHERE units_mortages.id_unit='1'
+					UNION ALL
+					SELECT units_repayments_mortage.`id_unit` AS unit_id,units.`name` AS unit_name,customers.`name` AS cust_name,units_repayments_mortage.`no_sbk` AS no_sbk,units_mortages.`nic` AS nic,units_repayments_mortage.`date_kredit` AS date_kredit,
+							units_repayments_mortage.date_installment AS date_deadline,0 AS up,units_repayments_mortage.`amount` AS angsuran 
+							FROM units_repayments_mortage 
+							INNER JOIN units ON units.`id`=units_repayments_mortage.`id_unit`
+							INNER JOIN units_mortages ON units_mortages.`no_sbk`=units_repayments_mortage.`no_sbk` AND units_mortages.`id_unit`=units_repayments_mortage.`id_unit`
+							INNER JOIN customers ON customers.id=units_mortages.`id_customer`
+							WHERE units_repayments_mortage.`id_unit`='1'
+					ORDER BY date_kredit ASC";
+		if($unit = $this->input->get('unit')){
+			$this->db->where('unit_id', $unit);
+		}else if($this->session->userdata('user')->level == 'unit'){
+			$this->db->where('unit_id', $this->session->userdata('user')->id_unit);
+		}
+
+		$result = $this->db->query($query)->result();
+		//return $result;
+		$this->sendMessage($result, 'Get Data kredit angsuran');
 	}
 
 }

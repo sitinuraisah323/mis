@@ -284,6 +284,41 @@ class Outstanding extends Authenticated
 		$pdf->Output('GHAnet_Summary_'.date('d_m_Y').'.pdf', 'I');
 	}
 
+	public function yogadai(){
+		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		require_once APPPATH.'controllers/pdf/header.php';
+
+		$os = $this->yg_outstanding();
+		$pdf->AddPage('L');
+		$view = $this->load->view('dailyreport/yogadai/index.php',['outstanding'=>$os],true);
+		$pdf->writeHTML($view);
+
+		//view
+		$pdf->Output('GHAnet_Summary_'.date('d_m_Y').'.pdf', 'I');
+	}
+
+	public function yg_outstanding(){
+		$this->load->helper("curl_helper");
+		$url 		= $this->config->item('url_outstanding');
+		$username 	= $this->config->item('api_username');
+		$password 	= $this->config->item('api_password');
+
+		$response = basic_auth_post($url,$username,$password,array());
+		$response = array($response);
+		//return 
+		$array = json_decode(json_encode($response), true);
+		echo "<pre/>";
+		print_r($array);
+		//var_dump($response);
+		//return json_decode($response); //$response;
+		//echo "<prev/>";
+		//print_r($response);
+		// foreach ($response as $data){
+		// 	//var_dump($data);
+		// 		print_r($data);
+		// }
+	}
+
 	public function rate()
 	{
 		$units = $this->units->typerates();
@@ -657,8 +692,6 @@ class Outstanding extends Authenticated
 		$data = $this->units->db->get()->result();
 		return $data; //->sendMessage($data,'Successfully get Pendapatan');
 	}
-	
-
 
 
 }
