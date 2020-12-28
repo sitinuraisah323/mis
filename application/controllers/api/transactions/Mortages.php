@@ -311,4 +311,102 @@ class Mortages extends ApiController
 		));
 	}
 
+	public function getcredit()
+	{
+		if($area = $this->input->get('area')){
+			$this->units->db->where('units.id_area', $area);
+		}else if($this->session->userdata('user')->level == 'area'){
+			$this->units->db->where('units.id_area', $this->session->userdata('user')->id_area);
+		}
+
+		if($unit = $this->input->get('unit')){
+			$this->units->db->where('units.id', $unit);
+		}else if($this->session->userdata('user')->level == 'unit'){
+			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
+		}
+		
+		if($sdate =$this->input->get('dateStart')){
+			$this->units->db->where('units_mortages.date_sbk >=', $sdate);
+		}
+
+		if($edate = $this->input->get('dateEnd')){
+			$this->units->db->where('units_mortages.date_sbk <=', $edate);
+		}
+		
+		if($sbk = $this->input->get('sbk')){
+			$this->units->db->where('units_mortages.no_sbk', $sbk);
+		}
+
+		if($status = $this->input->get('status')){
+			$this->units->db->where('units_mortages.status_transaction', $status);
+		}
+
+		$units = $this->units->db->select('units.name as unit_name,customers.name as cust_name,units_mortages.id_unit,units_mortages.nic,units_mortages.no_sbk,units_mortages.date_sbk,
+										   units_mortages.deadline,units_mortages.amount_loan,units_mortages.interest,units_mortages.status_transaction,
+										   units_mortages.capital_lease,units_mortages.description_1,units_mortages.description_2,units_mortages.description_3,units_mortages.description_4')
+				->join('areas','areas.id = units.id_area')
+				->join('units_mortages','units_mortages.id_unit = units.id')
+				->join('customers','customers.id = units_mortages.id_customer')
+				->get('units')->result();
+		foreach ($units as $unit){
+				//get_credit
+				$unit->payments = $this->mortages->get_payment_mortages($unit->no_sbk,$unit->id_unit);
+			}
+		$this->sendMessage($units, 'Get Data kredit angsuran');
+	}
+
+	public function get_angsuran()
+	{
+		if($area = $this->input->get('area')){
+			$this->units->db->where('units.id_area', $area);
+		}else if($this->session->userdata('user')->level == 'area'){
+			$this->units->db->where('units.id_area', $this->session->userdata('user')->id_area);
+		}
+
+		if($unit = $this->input->get('unit')){
+			$this->units->db->where('units.id', $unit);
+		}else if($this->session->userdata('user')->level == 'unit'){
+			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
+		}
+
+		// if($status = $this->input->get('status')){
+		// 	$state =null;
+		// 	$nasabah = $get['nasabah'];
+		// 	if($status=="0"){$state=["N","L"];}
+		// 	if($status=="1"){$state=["N"];}
+		// 	if($status=="2"){$state=["L"];}
+		// 	if($status=="3"){$state=[""];} 
+		// }
+		
+		if($this->input->get('dateStart')){
+			$sdate = $this->input->get('dateStart');
+		}else{
+			$sdate = date('Y-m-d');
+		}
+
+		if($this->input->get('dateEnd')){
+			$edate = $this->input->get('dateEnd');
+		}else{
+			$edate = date('Y-m-d');
+		}
+        
+        if($this->input->get('permit')){
+			$permit = $this->input->get('permit');
+		}else{
+			$permit = null;
+		}
+
+		$units = $this->units->db->distinct()
+								->select('units.name,areas.area,units_repayments_mortage.no_sbk,units_repayments_mortage.date_kredit,units_repayments_mortage.date_installment,units_repayments_mortage.amount,units_repayments_mortage.capital_lease,units_repayments_mortage.fine,units_repayments_mortage.saldo,units_repayments_mortage.permit,units_mortages.nic,customers.name as customer')
+								->join('areas','areas.id = units.id_area')
+								->join('units_repayments_mortage','units_repayments_mortage.id_unit = units.id')
+								->join('units_mortages','units_mortages.no_sbk = units_repayments_mortage.no_sbk','units_mortages.id_unit = units_repayments_mortage.id_unit')
+								->join('customers','customers.id = units_mortages.id_customer')
+								->where('units_repayments_mortage.date_kredit >=',$sdate)
+								->where('units_repayments_mortage.date_kredit <=',$edate)
+								->order_by('units_repayments_mortage.date_kredit','asc')
+								->get('units')->result();
+		$this->sendMessage($units, 'Get Data kredit angsuran');
+	}
+
 }

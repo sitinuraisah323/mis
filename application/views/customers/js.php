@@ -54,6 +54,11 @@
 				$('[name="sibling_job"]').val(data.sibling_job);
 				$('[name="sibling_relation"]').val(data.sibling_relation);
 				$('[name="sibling_address_1"]').val(data.sibling_address_1);
+				$('[name="rt"]').val(data.rt);
+				$('[name="rw"]').val(data.rw);
+				$('[name="kelurahan"]').val(data.kelurahan);
+				$('[name="kecamatan"]').val(data.kecamatan);
+				$('[name="kodepos"]').val(data.kodepos);
 				$('#modal-form').trigger('click');
 			}
 		});
@@ -187,6 +192,34 @@
 					textAlign: 'left',
 				},
 				{
+					field: 'rt',
+					title: 'RT',
+					sortable: 'asc',
+					textAlign: 'left',
+				},
+				{
+					field: 'rw',
+					title: 'RW',
+					sortable: 'asc',
+					textAlign: 'left',
+				},
+				{
+					field: 'kelurahan',
+					title: 'Kelurahan',
+					sortable: 'asc',
+					textAlign: 'left',
+				},
+				{
+					field: 'kecamatan',
+					title: 'Kecamatan',
+					sortable: 'asc',
+					textAlign: 'left',
+				},{
+					field: 'kodepos',
+					title: 'Kode Pos',
+					sortable: 'asc',
+					textAlign: 'left',
+				},{
 					field: 'province',
 					title: 'Provinsi',
 					sortable: 'asc',

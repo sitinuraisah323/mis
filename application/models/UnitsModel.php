@@ -52,6 +52,19 @@ class UnitsModel extends Master
 		return $this->db->get('units_mortages')->result();
 	}
 
+	public function get_units_sbk($unit)
+	{
+		$this->db->select('DISTINCT(units_mortages.no_sbk) as no_sbk,units_mortages.id,customers.name as cust_name');		
+		$this->db->join('units ','units_mortages.id_unit=units.id');		
+		$this->db->join('areas ','units.id_area=areas.id');		
+		$this->db->join('customers ','customers.id=units_mortages.id_customer');		
+		$this->db->where('units_mortages.id_unit',$unit);		
+		$this->db->order_by('units_mortages.id','asc');		
+		return $this->db->get('units_mortages')->result();
+	}
+
+	
+
 	public function get_customers_gadaireguler_byunit($unit)
 	{
 		$this->db->distinct();

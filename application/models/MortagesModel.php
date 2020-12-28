@@ -44,6 +44,23 @@ class MortagesModel extends Master
 			'saldo' 			=> $upaMortages->saldo
 		);
 	} 
+
+	public function get_credit($idunit)
+	{
+		return $this->db->select('*')->from($this->table)
+			->where('id_unit', $idunit)
+			->order_by('date_sbk', 'desc')
+			->get()->result();
+	}
+
+	public function get_payment_mortages($sbk,$idunit)
+	{
+		return $this->db->select('*')->from('units_repayments_mortage')
+			->where('no_sbk', $sbk)
+			->where('id_unit', $idunit)
+			->order_by('date_kredit', 'asc')
+			->get()->result();
+	}
 	
 	
 }

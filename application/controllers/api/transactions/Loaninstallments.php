@@ -465,14 +465,19 @@ class Loaninstallments extends ApiController
 						'sibling_birth_date'	=> date('Y-m-d', strtotime($customer['K'])),
 						'sibling_birth_place'	=> $customer['J'],
 						'gender'	=> $customer['Z'] == 'L' ? 'MALE' : 'FEMALE',
+						'rt'	=> $customer['L'],
+						'rw'	=> $customer['M'],
+						'kelurahan'	=> $customer['X'],
+						'kecamatan'	=> $customer['R'],
+						'kodepos'	=> $customer['Y'],
 						'user_create'	=> $this->session->userdata('user')->id,
 						'user_update'	=> $this->session->userdata('user')->id,
 					);
 					if($findCustomer = $this->customers->find(array(
 						'nik'	=> $customer['I']
 					))){
-						//$data['id'] = $findCustomer->id;
-						//$batchUpdate[] = $data;
+						$data['id'] = $findCustomer->id;
+						$batchUpdate[] = $data;
 					}else{
 						$batchInsert[] = $data;
 					}
