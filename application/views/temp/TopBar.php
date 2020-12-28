@@ -127,6 +127,19 @@
                 </div>
             </div>
         </a>          
+        <a href="<?php echo base_url('profile') ?>" class="kt-notification__item">
+            <div class="kt-notification__item-icon">
+                <i class="flaticon2-calendar-3 kt-font-success"></i>
+            </div>
+            <div class="kt-notification__item-details">
+                <div class="kt-notification__item-title kt-font-bold">
+                    Fixed Asset
+                </div>
+                <div class="kt-notification__item-time">
+                    Application Fixed Asset
+                </div>
+            </div>
+        </a>        
         <div class="kt-notification__custom kt-space-between">
             <a href="<?php echo base_url('login/signout');?>" class="btn btn-label btn-label-brand btn-sm btn-bold">Sign Out</a>
         </div>

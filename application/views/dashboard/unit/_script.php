@@ -333,6 +333,7 @@ var KTDashboard = function() {
                     if(parseInt(unit.dpd)>0 && parseInt(unit.dpd) <=15){
                         totpacket1 += parseInt(unit.amount);
                         Temppaket1 += "<tr class='rowappendpk1'>";
+					    Temppaket1 += "<td class='text-left'><b>"+unit.no_sbk+"</b></td>";
 					    Temppaket1 += "<td class='text-left'><b>"+unit.customer_name+"</b></td>";
 					    Temppaket1 += "<td class='text-center'><b>"+unit.date_sbk+"</b></td>";
 					    Temppaket1 += "<td class='text-center'><b>"+unit.deadline+"</b></td>";
@@ -344,6 +345,7 @@ var KTDashboard = function() {
                     if(parseInt(unit.dpd) >= 16 && parseInt(unit.dpd) <=30){
                         totpacket2 += parseInt(unit.amount);
                         Temppaket2 += "<tr class='rowappendpk1'>";
+					    Temppaket2 += "<td class='text-left'><b>"+unit.no_sbk+"</b></td>";
 					    Temppaket2 += "<td class='text-left'><b>"+unit.customer_name+"</b></td>";
 					    Temppaket2 += "<td class='text-center'><b>"+unit.date_sbk+"</b></td>";
 					    Temppaket2 += "<td class='text-center'><b>"+unit.deadline+"</b></td>";
@@ -354,6 +356,7 @@ var KTDashboard = function() {
                     if(parseInt(unit.dpd) > 31){
                         totpacket3 += parseInt(unit.amount);
                         Temppaket3 += "<tr class='rowappendpk1'>";
+					    Temppaket3 += "<td class='text-left'><b>"+unit.no_sbk+"</b></td>";
 					    Temppaket3 += "<td class='text-left'><b>"+unit.customer_name+"</b></td>";
 					    Temppaket3 += "<td class='text-center'><b>"+unit.date_sbk+"</b></td>";
 					    Temppaket3 += "<td class='text-center'><b>"+unit.deadline+"</b></td>";

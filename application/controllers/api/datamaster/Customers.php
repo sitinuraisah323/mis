@@ -199,6 +199,17 @@ class Customers extends ApiController
 		}
 	}
 
+	public function current()
+	{
+		$permit = $this->input->get('permit');
+		$area = $this->input->get('area');
+		if(!$permit && !$area){
+			return $this->sendMessage(false, 'permit and area should request',400);
+		}
+		$data = $this->customers->current($permit, $area);
+		return $this->sendMessage($data, 'Successfully get customer current');
+	}
+
 	public function update()
 	{
 		if($post = $this->input->post()){

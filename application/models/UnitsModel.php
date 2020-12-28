@@ -100,6 +100,12 @@ class UnitsModel extends Master
 				and amount != 0
 			) as small_then_up ,
 			(
+				select sum(amount*capital_lease) from units_regularpawns where 
+				units_regularpawns.id_unit = units.id
+				and units_regularpawns.status_transaction = 'N'
+				and amount != 0
+			) as average ,
+			(
 				select count(distinct(amount)) from units_regularpawns where capital_lease < 0.0149
 				and units_regularpawns.id_unit = units.id
 				and units_regularpawns.status_transaction = 'N'

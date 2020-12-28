@@ -255,6 +255,7 @@ $this->load->view('temp/MenuBar.php');
                                         <div class="card-body">
                                             <table class="table" id="tbldpd"> 
                                             <tr>
+                                                <td class="text-left"><b>No SBK</b></td>
                                                 <td class="text-left"><b>Customer</b></td>
                                                 <td class="text-center"><b>Tanggal Kredit</b></td>
                                                 <td class="text-center"><b>Tanggal Deadline</b></td>

@@ -884,7 +884,7 @@ class Dashboards extends ApiController
 		$date = date('Y-m-d');
 		$data = $this->db
 					 ->select("customers.name as customer_name,date_sbk,deadline,amount,ROUND(units_regularpawns.capital_lease * 4 * amount) AS tafsiran_sewa,
-						status_transaction,
+						status_transaction, no_sbk,
 						DATEDIFF('$date', units_regularpawns.deadline) AS dpd")
 					 ->from("units_regularpawns")
 					 ->join('customers','units_regularpawns.id_customer = customers.id')
