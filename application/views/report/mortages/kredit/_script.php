@@ -131,78 +131,41 @@ function initCariForm(){
 						template += "<tr class='rowappend' bgcolor='#F7F9F9' >";
 						template += "<td class='text-center'>"+no+"</td>";
 						template += "<td class='text-left'>"+data.unit_name+"</td>";
-						template += "<td class='text-left'>"+data.cust_name+"</td>";
+                        template += "<td class='text-left'>"+data.cust_name+"</td>";
+                        template += "<td class='text-center'>"+data.no_sbk+"</td>";
 						template += "<td class='text-center'>"+data.nic+"</td>";
-						template += "<td class='text-center'>"+data.no_sbk+"</td>";
 						template += "<td class='text-center'>"+moment(data.date_sbk).format('DD-MM-YYYY')+"</td>";
 						template += "<td class='text-center'>"+moment(data.deadline).format('DD-MM-YYYY')+"</td>";
                         template += "<td class='text-right'>"+convertToRupiah(data.amount_loan)+"</td>";
-                        template += "<td class='text-right'>"+convertToRupiah(data.interest)+"</td>";
-                        template += "<td class='text-right'>"+ data.capital_lease +"</td>";
+                        template += "<td class='text-right'> - </td>";
                         if(data.status_transaction=='L'){status='Lunas';}else{status='Aktif';}
                         template += "<td class='text-center'>"+status+"</td>";
-                        template += "<td class='text-left'>";
-                        if(data.description_1!=null){template += "- " + data.description_1;}
-                        if(data.description_2!=null){template += "<br>- " + data.description_2;}
-                        if(data.description_3!=null){template += "<br>- " + data.description_3;}
-                        if(data.description_4!=null){template += "<br>- " + data.description_4;}
-                        template +="</td>";
                         template += '</tr>'; 
                         if(data.payments!=""){
                             var amountMortages  =0;
                             var sewaMortages    =0;
                             var dendaMortages   =0;
-                            template +="<tr class='rowappend' bgcolor='#F9E79F'>";
-                            template +="<td colspan='4'></td>";
-                            template +="<td class='text-center'>No. SBK</td>";
-                            template +="<td colspan='2'>Kredit</td>";
-                            template +="<td colspan='2'>Deadline</td>";
-                            template +="<td>Angsuran</td>";
-                            template +="<td>Sewa</td>";
-                            template +="<td>Denda</td>";
-                            template += '</tr>';
                             $.each(data.payments, function (index, payments) {
                                 if(payments.date_installment ==null || payments.date_installment =="1970-01-01"){ var datePayment=" Pelunasan"; }else{ var datePayment = moment(payments.date_installment).format('DD-MM-YYYY');}
                                 template +="<tr class='rowappend'>";
-                                template +="<td colspan='4'></td>";
+                                template +="<td></td>";
+                                template += "<td class='text-left'>"+data.unit_name+"</td>";
+                                template += "<td class='text-left'>"+data.cust_name+"</td>";
                                 template +="<td class='text-center'>"+payments.no_sbk+"</td>";
-                                template +="<td colspan='2'>"+moment(payments.date_kredit).format('DD-MM-YYYY')+"</td>";
-                                template +="<td colspan='2'>"+datePayment+"</td>";
-                                template +="<td class='text-left'>"+convertToRupiah(payments.amount)+"</td>";
-                                template +="<td class='text-left'>"+convertToRupiah(payments.capital_lease)+"</td>";
-                                template +="<td class='text-left'>"+payments.fine+"</td>";                               
+                                template +="<td class='text-center'>"+data.nic+"</td>";
+                                template +="<td class='text-center'>"+moment(payments.date_kredit).format('DD-MM-YYYY')+"</td>";
+                                template +="<td class='text-center'>"+datePayment+"</td>";
+                                template +="<td class='text-center'></td>";
+                                template +="<td class='text-right'>"+convertToRupiah(payments.amount)+"</td>";
+                                template +="<td class='text-left'></td>";                               
                                 template += '</tr>';
                                 amountMortages +=parseInt(payments.amount);
                                 sewaMortages +=parseInt(payments.capital_lease);
                                 dendaMortages +=parseInt(payments.fine);
                             }); 
-                            template += "<tr class='rowappend'>";
-                            template += "<td colspan='9' class='text-right'><b>Total</b></td>";
-                            template += "<td class='text-left'><b>"+convertToRupiah(amountMortages)+"</b></td>";
-                            template += "<td class='text-left'><b>"+convertToRupiah(sewaMortages)+"</b></td>";
-                            template += "<td class='text-left'><b>"+convertToRupiah(dendaMortages)+"</b></td>";
-                            template += '</tr>';                          
-                        }
-                        // else
-                        // {
-                        //     template +="<tr class='rowappend'>";
-                        //     template +="<td colspan='12' class='text-center'>belum ada cicilan</td>";
-                        //     template += '</tr>';
-                        // }                       
+                        }                    
                         no++;                        
-						// amount      += parseInt(data.amount_loan);
-                        // admin       += parseInt(data.amount_admin);
-                        // totcicilan  +=parseInt(saldocicilan);
 					});
-					// template += "<tr class='rowappend'>";
-					// template += "<td colspan='9' class='text-right'>Total</td>";
-					// template += "<td class='text-right'>"+convertToRupiah(admin)+"</td>";
-					// template += "<td class='text-right'>"+convertToRupiah(amount)+"</td>";
-					// template += "<td class='text-right'></td>";
-					// template += "<td class='text-right'>"+convertToRupiah(totcicilan)+"</td>";
-					// template += "<td class='text-right'></td>";
-					// template += "<td class='text-right'></td>";
-					// template += '</tr>';
 					$('.kt-section__content .table').append(template);
 				//}
 			},

@@ -99,6 +99,8 @@
                 $label = "Area : ".$this->session->userdata('user')->area_name;
             }else if($level=='unit'){
                 $label = "Unit : ".$this->session->userdata('user')->unit_name;
+            }else if($level=='penaksir'){
+                $label = "Unit : ".$this->session->userdata('user')->unit_name;
             }else if($level=='cabang'){
                 $label = "Cabang : ".$this->session->userdata('user')->cabang_name;
             } 

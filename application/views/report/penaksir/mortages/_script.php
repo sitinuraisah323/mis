@@ -94,62 +94,84 @@ function initCariForm(){
         }
     });
 
-    $('#area').select2({ placeholder: "Select a area", width: '100%' });
-    $('#unit').select2({ placeholder: "Select a Unit", width: '100%' });
+    $('#area').select2({ placeholder: "Select Area", width: '100%' });
+    $('#permit').select2({ placeholder: "Select Permit", width: '100%' });
+    $('#unit').select2({ placeholder: "Select Unit", width: '100%' });
     $('#status').select2({ placeholder: "Select a Status", width: '100%' });
-    //$('#sort_method').select2({ placeholder: "Select a Sort", width: '100%' });
-    //$('#sort_by').select2({ placeholder: "Select a Sort", width: '100%' });
+    $('#nasabah').select2({ placeholder: "Select a Nasabah", width: '100%' });
+    $('#sort_method').select2({ placeholder: "Select a Sort", width: '100%' });
+    $('#sort_by').select2({ placeholder: "Select a Sort", width: '100%' });
     //events
     $('#btncari').on('click',function(){
         $('.rowappend').remove();
         var area = $('[name="area"]').val();
-        var cabang = $('[name="cabang"]').val();
         var unit = $('[name="id_unit"]').val();
-        var status = $('#status').val();
+        var nasabah = $('#nasabah').val();
+        //var statusrpt = $('#status').val();
 		var dateStart = $('[name="date-start"]').val();
 		var dateEnd = $('[name="date-end"]').val();
 		var permit = $('[name="permit"]').val();
-        //var sort_by = $('[name="sort_by"]').val();
-        //var sort_method = $('[name="sort_method"]').val();
-        console.log(unit);
+        var sort_by = $('[name="sort_by"]').val();
+        var sort_method = $('[name="sort_method"]').val();
         KTApp.block('#form_bukukas .kt-portlet__body', {});
 		$.ajax({
 			type : 'GET',
-			url : "<?php echo base_url("api/transactions/mortages/get_kreditangsuran"); ?>",
+			url : "<?php echo base_url("api/transactions/mortagesummary"); ?>",
 			dataType : "json",
-			data:{area:area,cabang:cabang,unit:unit,status:status,dateStart:dateStart,dateEnd:dateEnd,permit:permit},
+			data:{area:area,id_unit:unit,nasabah:nasabah,dateStart:dateStart,dateEnd:dateEnd,permit:permit, sort_by, sort_method},
 			success : function(response,status){
 				KTApp.unblockPage();
-				//if(response.status == true){
+				if(response.status == true){
 					var template = '';
 					var no = 1;
 					var amount = 0;
-                    var admin = 0;
-                    var totcicilan = 0;
-                    var jumcicilan=0;
-                    var saldocicilan=0;
-					var status = "";
+					var net = 0;
+					var bruto = 0;
+					var karatase = 0;
+					var qty = 0;
+                    var status="";
 					$.each(response.data, function (index, data) {
 						template += "<tr class='rowappend'>";
-                        template += "<td class='text-center'>"+no+"</td>";
-                        template += "<td class='text-left'>"+data.unit_name+"</td>";
-                        template += "<td class='text-center'>"+data.nic+"</td>";
+						template += "<td class='text-center'>"+no+"</td>";
+						template += "<td class='text-left'>"+data.unit_name+"</td>";
+						template += "<td class='text-center'>"+data.nic+"</td>";
 						template += "<td class='text-center'>"+data.no_sbk+"</td>";
-						template += "<td class='text-center'>"+moment(data.date_kredit).format('DD-MM-YYYY')+"</td>";
-						template += "<td class='text-center'>"+moment(data.date_deadline).format('DD-MM-YYYY')+"</td>";
-						template += "<td>"+data.cust_name+"</td>";
-						template += "<td class='text-right'>"+convertToRupiah(data.up)+"</td>";						 
-						template += "<td class='text-right'>"+convertToRupiah(data.angsuran)+"</td>";						 
-                        template += '</tr>';
-                        amount +=  parseInt(data.up);
-						no++;						
+						template += "<td class='text-center'>"+moment(data.date_sbk).format('DD-MM-YYYY')+"</td>";
+                        template += "<td class='text-left'>"+data.customer+"</td>";
+                        template += "<td class='text-left'>"+data.model+"</td>";
+						template += "<td class='text-left'>"+data.type+"</td>";
+						template += "<td class='text-center'>"+convertToRupiah(data.amount_loan)+"</td>";
+						template += "<td class='text-center'>"+data.qty+"</td>";
+						template += "<td class='text-center'>"+data.karatase+"</td>";
+						template += "<td class='text-center'>"+data.bruto+"</td>";
+						template += "<td class='text-center'>"+data.net+"</td>";
+						template += "<td class='text-right'>"+convertToRupiah(data.stle)+"</td>";
+                        template += "<td class='text-right'>";
+                        if(data.description_1!=null){template += "- " + data.description_1;}
+                        if(data.description_2!=null){template += "<br>- " + data.description_2;}
+                        if(data.description_3!=null){template += "<br>- " + data.description_3;}
+                        if(data.description_4!=null){template += "<br>- " + data.description_4;}
+                        template +="</td>";
+						template += '</tr>';
+						no++;
+						amount += parseInt(data.amount_loan);
+						net += parseFloat(data.net);
+						bruto += parseFloat(data.bruto);
+						qty += parseInt(data.qty);
+						karatase += parseInt(data.karatase);
 					});
 					template += "<tr class='rowappend'>";
-					template += "<td colspan='7' class='text-right'><b>Total</b></td>";
-					template += "<td class='text-right'><b>"+convertToRupiah(amount)+"</b></td>";
+					template += "<td colspan='8' class='text-right'>Total</td>";
+					template += "<td class='text-center'>"+convertToRupiah(amount)+"</td>";
+					template += "<td class='text-center'>"+convertToRupiah(qty)+"</td>";
+					template += "<td class='text-center'>"+convertToRupiah(karatase)+"</td>";
+					template += "<td class='text-center'>"+bruto+"</td>";
+					template += "<td class='text-center'>"+net+"</td>";
+					template += "<td class='text-right'></td>";
+					template += "<td class='text-right'></td>";
 					template += '</tr>';
-					$('.kt-section__content .table').append(template);
-				//}
+					$('.kt-section__content table').append(template);
+				}
 			},
 			error: function (jqXHR, textStatus, errorThrown){
 				KTApp.unblockPage();
@@ -335,30 +357,6 @@ $('[name="cabang"]').on('change',function(){
 var typecabang = $('[name="cabang"]').attr('type');
 if(typecabang == 'hidden'){
 	$('[name="cabang"]').trigger('change');
-}
-
-$('[name="id_unit"]').on('change',function(){
-	var unit = $('[name="id_unit"]').val();
-	var sbk =  $('[name="sbk"]');
-	var url_data = $('#url_get_sbk').val() + '/' + unit;
-	$.get(url_data, function (data, status) {
-		var response = JSON.parse(data);
-		if (status) {
-			$("#sbk").empty();
-			sbk.append('<option value="0">All</option>');
-			for (var i = 0; i < response.data.length; i++) {
-				var opt = document.createElement("option");
-				opt.value = response.data[i].no_sbk;
-				opt.text = response.data[i].no_sbk+' - '+ response.data[i].cust_name;
-				sbk.append(opt);
-			}
-		}
-	});
-});
-
-var typeunit = $('[name="id_unit"]').attr('type');
-if(typeunit == 'hidden'){
-	$('[name="id_unit"]').trigger('change');
 }
 
 jQuery(document).ready(function() {

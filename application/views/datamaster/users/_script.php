@@ -173,6 +173,8 @@ function initDataTable(){
                         level = 'Area';
                     }else if(row.id_level==6){
                         level = 'Cabang';
+                    }else if(row.id_level==7){
+                        level = 'Penaksir';
                     }
                     return level;
                 }
@@ -363,6 +365,10 @@ $('[name="id_level"]').on('change', function(){
 		$('[name="id_unit"]').val('').parents('.form-group').addClass('d-none');
 		$('[name="id_cabang"]').val('').parents('.form-group').addClass('d-none');
 	}else if($(this).find(':selected').text() == 'unit'){
+		$('[name="id_unit"]').parents('.form-group').removeClass('d-none');
+		$('[name="id_area"]').val('').parents('.form-group').addClass('d-none');
+		$('[name="id_cabang"]').val('').parents('.form-group').addClass('d-none');
+	}else if($(this).find(':selected').text() == 'penaksir'){
 		$('[name="id_unit"]').parents('.form-group').removeClass('d-none');
 		$('[name="id_area"]').val('').parents('.form-group').addClass('d-none');
 		$('[name="id_cabang"]').val('').parents('.form-group').addClass('d-none');

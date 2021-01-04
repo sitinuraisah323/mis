@@ -102,6 +102,8 @@ var KTLoginGeneral = function() {
 					if(response.data){
                         if(response.message == 'unit'){
                             location.href = url+'dashboards/unit';
+                        }else if(response.message == 'penaksir'){
+                            location.href = url+'dashboards/penaksir';
                         }else{
                             location.href = url+'dashboards';
                         }

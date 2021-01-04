@@ -14,7 +14,7 @@ $this->load->view('temp/MenuBar.php');
         <div class="kt-subheader__main">
             <h3 class="kt-subheader__title">Report</h3>
             <span class="kt-subheader__separator kt-subheader__separator--v"></span>
-            <span class="kt-subheader__desc">Gadai Cicilan(Kredit Angsuran)</span>
+            <span class="kt-subheader__desc">Summary Gadai Cicilan</span>
         </div>
         <div class="kt-subheader__toolbar">
             <div class="kt-subheader__wrapper">
@@ -33,7 +33,7 @@ $this->load->view('temp/MenuBar.php');
                         <i class="kt-font-brand fa fa-align-justify"></i>
                     </span>
                     <h3 class="kt-portlet__head-title">
-                       Data Gadai Cicilan(Kredit Angsuran)
+                        Summary Gadai Cicilan
                     </h3>
                 </div>
                 <div class="kt-portlet__head-toolbar">
@@ -172,20 +172,17 @@ $this->load->view('temp/MenuBar.php');
 						      		<th class='text-center'>No</th>
                                     <th class="text-left">Unit</th>
                                     <th>Nasabah</th>
+                                    <th class='text-center'>No. SBK</th>
 									<th class="text-center">NIC</th>
-									<th class='text-center'>No. SBK</th>
-									<th class='text-center'>Tanggal SBK</th>
-									<th class='text-center'>Tanggal Tempo</th>
-									<!-- <th class='text-right'>Tafsiran</th>
-									<th class='text-right'>Admin</th> -->
+									<th class='text-center'>Tanggal SBK & Angsuran</th>
+									<th class='text-center'>Tanggal Jatuh Tempo</th>
 									<th class='text-right'>UP</th>
-                                    <th class='text-center'>Sewa Modal</th>
-                                    <th class='text-center'>Rate</th>
-									<!-- <th class='text-center'>Cicilan(x)</th> -->
-									<!-- <th class='text-right'>Saldo</th> -->
+									<th class='text-right'>Angsuran</th>
+                                    <!-- <th class='text-center'>Sewa Modal</th>
+                                    <th class='text-center'>Rate</th> -->
                                     <th class='text-center'>Status</th>
-									<th class='text-left'>Description</th>
-									<th></th>
+									<!-- <th class='text-left'>Description</th> -->
+									<!-- <th></th> -->
 						    	</tr>
 						  	</thead>
 						  	<tbody>

@@ -5,7 +5,7 @@ if ( ! function_exists('basic_auth_post'))
     function basic_auth_post($url,$username,$password,$params)
     {
         //Initialize Header
-        $headers = array("Authorization: Bearer hRSjNFHsrSmXD3VhS1h0gV6ibO_DCTSCkqLftYccrmI");
+        $headers = array("Authorization: Bearer P4FoN20PeeJQb3zoySj92UBOV4-7uHtmdhstq5vO3e0");
         //$headers = array("Authorization: Bearer ".$token."");
 
         //Initialize cURL

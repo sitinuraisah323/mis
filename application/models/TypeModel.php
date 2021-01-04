@@ -1,10 +1,8 @@
 <?php
 require_once 'Master.php';
-class AreasModel extends Master
+class TypeModel extends Master
 {
-	public $table = 'areas';
+	public $table = 'type';
 	public $primary_key = 'id';
 
 }
-
-
