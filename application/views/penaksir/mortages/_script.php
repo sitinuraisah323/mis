@@ -42,6 +42,7 @@ function initDTEvents(){
     });
 
     $(".btn_edit").on("click",function(){
+        $('.rowspand').remove();
 		var targetId = $(this).data("id");
 		//alert(targetId);
         KTApp.blockPage();
@@ -443,6 +444,68 @@ $('[name="jenis"]').on('change',function(){
 		//filter selected option
 		filterSelectOptions($("#karatase"), "data-attribute", $(this).val());
 });
+
+
+const addItem = (event) => {
+    const template = document.querySelector('#tblpenaksir').querySelector('[data-template="item"]').cloneNode(true);
+    template.classList.remove('d-none');
+    template.setAttribute('data-template','item-cloned');
+    template.setAttribute('class','rowspand');
+    template.querySelector('.jenis').setAttribute('name', 'jenis[]');
+    template.querySelector('.jenis').setAttribute('required', true);
+    template.querySelector('.tipe').setAttribute('name', 'tipe[]');
+    template.querySelector('.tipe').setAttribute('required', true);
+    template.querySelector('.karatase').setAttribute('name', 'karatase[]');
+    template.querySelector('.karatase').setAttribute('required', true);
+    template.querySelector('.qty').setAttribute('name', 'qty[]');
+    template.querySelector('.qty').setAttribute('required', true);
+    template.querySelector('.net').setAttribute('name', 'net[]');
+    template.querySelector('.net').setAttribute('required', true);
+    template.querySelector('.bruto').setAttribute('name', 'bruto[]');
+    template.querySelector('.bruto').setAttribute('required', true);
+    template.querySelector('.stle').setAttribute('name', 'stle[]');
+    template.querySelector('.stle').setAttribute('required', true);
+    template.querySelector('.description').setAttribute('name', 'description[]');
+    document.querySelector('#tblpenaksir').querySelector('tbody').appendChild(template);
+}
+
+$(document).on('change', '.jenis', function(){
+    var thisElement = $(this);
+    var jenis = thisElement.parents('tr').find('.jenis').val();
+    //filtering karatase
+    filterSelectOptions($(thisElement.parents('tr').find('.karatase')), "data-attribute", jenis);
+
+    //get filter type
+    var tipe = thisElement.parents('tr').find('.tipe');
+    var option = document.createElement("option");
+        $.ajax({
+			type : 'GET',
+			url : "<?php echo base_url("api/datamaster/types/get_byjenis"); ?>",
+			dataType : "json",
+			data:{jenis:jenis},
+			success : function(response,status){
+				if(response.status == true){
+                    tipe.empty();
+                    option.value = "";
+                    option.text = "All";
+                    tipe.append(option);
+					$.each(response.data, function (index, data) {
+                        var opt = document.createElement("option");
+                        opt.value = data.type;
+                        opt.text = data.type;
+                        tipe.append(opt);
+					});					
+				}
+			}
+		});
+});
+
+
+
+const deleteItem = (event) => {
+    event.target.closest('tr').remove();
+}
+
 
 jQuery(document).ready(function() { 
     initDataTable();

@@ -49,6 +49,32 @@ class Regularpawns extends ApiController
 		));
 	}
 
+	public function getcustomers()
+	{
+		$this->regulars->db->select('*,units.name as unit_name,customers.name as customer')
+			 ->join('units','units.id=units_regularpawns.id_unit')
+			 ->join('customers','customers.id=units_regularpawns.id_customer')
+			 ->where('units_regularpawns.amount !=','0')
+			 ->where('units_regularpawns.status_transaction ','N')
+			 ->order_by('units_regularpawns.ktp','asc');
+
+			 if($area = $this->input->get('area')){
+				$this->regulars->db->where('units.id_area', $area);
+			}else if($this->session->userdata('user')->level == 'area'){
+				$this->regulars->db->where('units.id_area', $this->session->userdata('user')->id_area);
+			}
+
+			if($permit = $this->input->get('permit')){
+				$this->regulars->db->where('units_regularpawns.permit', $permit);
+			}	
+		
+		$data =  $this->regulars->all();
+		echo json_encode(array(
+			'data'		=> $data,
+			'message'	=> 'Successfully Get Data Regular Pawns'
+		));
+	}
+
 	public function insert()
 	{
 		if($post = $this->input->post()){

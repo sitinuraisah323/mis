@@ -80,51 +80,79 @@ class Regularpawnssummary extends ApiController
 
 	public function insert()
 	{
-		if($post = $this->input->post()){
-
-            $data['no_sbk']     = $this->input->post('no_sbk');	
-            $data['id_unit']    = $this->input->post('id_unit');	
-            $data['nic']     = $this->input->post('nic');	
-            $data['id_customer']= $this->input->post('id_customer');	
-            $data['model']      = $this->input->post('jenis');	
-            $data['type']       = $this->input->post('tipe');	
-            $data['qty']       = $this->input->post('qty');	
-            $data['karatase']   = $this->input->post('karatase');	
-            $data['bruto']      = $this->input->post('bruto');
-            $data['net']        = $this->input->post('net');
-            $data['stle']       = $this->input->post('stle');
-            $data['user_create']= $this->session->userdata('user')->id;
-
-            if($find = $this->regularSummary->find(array(
-                'no_sbk'	    =>$data['no_sbk'],
-                'id_unit'	    =>$data['id_unit'],
-                'nic'	        =>$data['nic'],
-                'id_customer'   =>$data['id_customer'],
-            )));
-
-            if($find){
+		if($post = $this->input->post()){            
+            $db = false;
+            $CountData = count($this->input->post('jenis'));
+            for($i=0; $i < $CountData; $i++){
+                if(!empty($this->input->post('jenis')[$i])){
+                    $data['no_sbk']         = $this->input->post('no_sbk');	
+                    $data['id_unit']        = $this->input->post('id_unit');	
+                    $data['nic']            = $this->input->post('nic');	
+                    $data['id_customer']    = $this->input->post('id_customer');
+                    $data['model']          = $this->input->post('jenis')[$i];	
+                    $data['type']           = $this->input->post('tipe')[$i];	
+                    $data['qty']            = $this->input->post('qty')[$i];	
+                    $data['karatase']       = $this->input->post('karatase')[$i];	
+                    $data['bruto']          = $this->input->post('bruto')[$i];
+                    $data['net']            = $this->input->post('net')[$i];
+                    $data['stle']           = $this->input->post('stle')[$i];
+                    $data['stle']           = $this->input->post('stle')[$i];
+                    $data['description']    = $this->input->post('description')[$i];
+                    $data['user_create']= $this->session->userdata('user')->id;               
+                    $db = $this->regularSummary->insert($data);         
+                }          
+            } 
+            
+            if($db=true){
+                echo json_encode(array(
+                    'data'	=> 	true,
+                    'status'=>true,
+                    'message'	=> 'Successfull Insert Data regular'
+                ));
+            }else{
                 echo json_encode(array(
                     'data'	=> 	false,
                     'status'=>false,
-                    'message'	=> 'Data already exist'
+                    'message'	=> 'Failed Insert Data regular'
                 ));
-            }else{
-                $db = false;
-                $db = $this->regularSummary->insert($data);    
-                if($db=true){
-                    echo json_encode(array(
-                        'data'	=> 	true,
-                        'status'=>true,
-                        'message'	=> 'Successfull Insert Data Area'
-                    ));
-                }else{
-                    echo json_encode(array(
-                        'data'	=> 	false,
-                        'status'=>false,
-                        'message'	=> 'Failed Insert Data Area'
-                    ));
-                }
-            }            
+            }
+
+            // echo json_encode(array(
+            //     'data'	=> 	$data,
+            //     'status'=>false,
+            //     'message'	=> 'Failed Insert Data Area'
+            // ));
+
+            // if($find = $this->regularSummary->find(array(
+            //     'no_sbk'	    =>$data['no_sbk'],
+            //     'id_unit'	    =>$data['id_unit'],
+            //     'nic'	        =>$data['nic'],
+            //     'id_customer'   =>$data['id_customer'],
+            // )));
+
+            // if($find){
+            //     echo json_encode(array(
+            //         'data'	=> 	false,
+            //         'status'=>false,
+            //         'message'	=> 'Data already exist'
+            //     ));
+            // }else{
+            //     $db = false;
+            //     $db = $this->regularSummary->insert($data);    
+            //     if($db=true){
+            //         echo json_encode(array(
+            //             'data'	=> 	true,
+            //             'status'=>true,
+            //             'message'	=> 'Successfull Insert Data Area'
+            //         ));
+            //     }else{
+            //         echo json_encode(array(
+            //             'data'	=> 	false,
+            //             'status'=>false,
+            //             'message'	=> 'Failed Insert Data Area'
+            //         ));
+            //     }
+            // }            
         }	
     }
     

@@ -976,6 +976,14 @@
 															<span class="kt-menu__link-text">Pengkinian</span>
 														</a>
 													</li>
+												<?php endif;?>	
+												<?php if(read_access('report/nasabah/transaksi')):?>
+													<li class="kt-menu__item "  aria-haspopup="true">
+														<a  href="<?php echo base_url('report/nasabah/transaksi'); ?>" class="kt-menu__link ">
+															<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+															<span class="kt-menu__link-text">Transaksi</span>
+														</a>
+													</li>
 												<?php endif;?>										
 											</ul>
 										</div>

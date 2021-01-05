@@ -132,6 +132,74 @@ function initCariForm(){
 			}
 		});
     })
+
+    //events
+    $('#btncarinasabah').on('click',function(){
+        $('.rowappend').remove();
+        var area = $('[name="area"]').val();
+        var unit = $('[name="id_unit"]').val();
+        var permit = $('[name="permit"]').val();
+        KTApp.block('#form_bukukas .kt-portlet__body', {});
+		$.ajax({
+			type : 'GET',
+			url : "<?php echo base_url("api/transactions/regularpawns/getcustomers"); ?>",
+			dataType : "json",
+            data:{permit:permit, area:area},
+            
+            success : function(response,status){
+				KTApp.unblockPage();
+				//if(response.status == true){
+					var template ="";
+					var no =1;
+					$.each(response.data, function (index, data) {
+
+						template += "<tr class='rowappend' bgcolor='#F7F9F9' >";
+						template += "<td class='text-center'>"+no+"</td>";
+						template += "<td class='text-left'>"+data.unit_name+"</td>";
+                        template += "<td class='text-center'>"+data.no_cif+"</td>";
+                        template += "<td class='text-left'>"+data.ktp+"</td>";
+                        template += "<td class='text-left'>"+data.customer+"</td>";
+						template += "<td class='text-center'>"+data.no_sbk+"</td>";
+                        template += "<td class='text-right'>"+convertToRupiah(data.amount)+"</td>";
+                        template += "<td class='text-left'>"+data.job+"</td>";
+
+                        // template += '</tr>'; 
+                        // if(data.payments!=""){
+                        //     var amountMortages  =0;
+                        //     var sewaMortages    =0;
+                        //     var dendaMortages   =0;
+                        //     $.each(data.payments, function (index, payments) {
+                        //         if(payments.date_installment ==null || payments.date_installment =="1970-01-01"){ var datePayment=" Pelunasan"; }else{ var datePayment = moment(payments.date_installment).format('DD-MM-YYYY');}
+                        //         template +="<tr class='rowappend'>";
+                        //         template +="<td></td>";
+                        //         template += "<td class='text-left'>"+data.unit_name+"</td>";
+                        //         template += "<td class='text-left'>"+data.cust_name+"</td>";
+                        //         template +="<td class='text-center'>"+payments.no_sbk+"</td>";
+                        //         template +="<td class='text-center'>"+data.nic+"</td>";
+                        //         template +="<td class='text-center'>"+moment(payments.date_kredit).format('DD-MM-YYYY')+"</td>";
+                        //         template +="<td class='text-center'>"+datePayment+"</td>";
+                        //         template +="<td class='text-center'></td>";
+                        //         template +="<td class='text-right'>"+convertToRupiah(payments.amount)+"</td>";
+                        //         template +="<td class='text-left'></td>";                               
+                        //         template += '</tr>';
+                        //         amountMortages +=parseInt(payments.amount);
+                        //         sewaMortages +=parseInt(payments.capital_lease);
+                        //         dendaMortages +=parseInt(payments.fine);
+                        //     }); 
+                        // }                    
+                        no++;                        
+					});
+					$('.kt-section__content .table').append(template);
+				//}
+			},
+			error: function (jqXHR, textStatus, errorThrown){
+				KTApp.unblockPage();
+			},
+			complete:function () {
+				KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+			}
+		});
+    })
     
     return {
         validator:validator
