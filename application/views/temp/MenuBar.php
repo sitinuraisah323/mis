@@ -503,7 +503,7 @@
 									<li class="kt-menu__item "  aria-haspopup="true">
 										<a  href="<?php echo base_url('penaksir/penaksir/regular'); ?>" class="kt-menu__link ">
 											<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>
-											<span class="kt-menu__link-text">Regular</span>
+											<span class="kt-menu__link-text">Gadai Regular</span>
 										</a>
 									</li>
 									<?php endif;?>
@@ -511,7 +511,7 @@
 									<li class="kt-menu__item "  aria-haspopup="true">
 										<a  href="<?php echo base_url('penaksir/penaksir/mortages'); ?>" class="kt-menu__link ">
 											<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>
-											<span class="kt-menu__link-text">Mortages</span>
+											<span class="kt-menu__link-text">Gadai Cicilan</span>
 										</a>
 									</li>
 									<?php endif;?>
@@ -846,7 +846,7 @@
 													<li class="kt-menu__item "  aria-haspopup="true">
 														<a  href="<?php echo base_url('report/penaksir/regular'); ?>" class="kt-menu__link ">
 															<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
-															<span class="kt-menu__link-text">Regular</span>
+															<span class="kt-menu__link-text">Gadai Regular</span>
 														</a>
 													</li>
 												<?php endif;?>								
@@ -854,7 +854,7 @@
 													<li class="kt-menu__item "  aria-haspopup="true">
 														<a  href="<?php echo base_url('report/penaksir/mortages'); ?>" class="kt-menu__link ">
 															<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
-															<span class="kt-menu__link-text">Mortages</span>
+															<span class="kt-menu__link-text">Gadai Cicilan</span>
 														</a>
 													</li>
 												<?php endif;?>																					
