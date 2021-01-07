@@ -39,10 +39,8 @@ class Regularpawnssummary extends ApiController
             
             if($penaksir = $this->input->get('penaksir')){
                 $this->regularSummary->db->where('id_unit', $unit);
-                $this->regularSummary->db->where('units_regularpawns.status_transaction', 'N');
 			}else if($this->session->userdata('user')->level == 'unit'){
 				$this->regularSummary->db->where('units.id', $this->session->userdata('user')->id_unit);
-				$this->regularSummary->db->where('units_regularpawns.status_transaction', 'N');
             }
             
             if($permit =  $this->input->get('permit')){

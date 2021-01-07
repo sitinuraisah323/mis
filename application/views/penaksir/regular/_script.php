@@ -355,7 +355,7 @@ function initDataTable(){
 				textAlign: 'left',
 				template: function (row) {
 					var result;
-					if(row.type_item == 'L'){
+					if(row.status_transaction == 'L'){
 						result = 'Lunas';
 					}else{
 						result = 'Aktif';

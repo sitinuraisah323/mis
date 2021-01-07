@@ -312,23 +312,23 @@ function initDataTable(){
 				width:60,
 				textAlign: 'left',
 			},
-			{
-				field: 'amount_admin',
-				title: 'Admin',
-				sortable: 'asc',
-				width:60,
-				textAlign: 'left',
-			},				
-			{
-				field: 'capital_lease',
-				title: 'SEWAMODAL',
-				sortable: 'asc',
-				width:60,
-				textAlign: 'left',
-			},				
+			// {
+			// 	field: 'amount_admin',
+			// 	title: 'Admin',
+			// 	sortable: 'asc',
+			// 	width:60,
+			// 	textAlign: 'left',
+			// },				
+			// {
+			// 	field: 'capital_lease',
+			// 	title: 'SEWAMODAL',
+			// 	sortable: 'asc',
+			// 	width:60,
+			// 	textAlign: 'left',
+			// },				
 			{
 				field: 'type_item',
-				title: 'Jenis Barang',
+				title: 'Jenis BJ',
 				sortable: 'asc',
 				width:60,
 				textAlign: 'left',
@@ -342,10 +342,25 @@ function initDataTable(){
 					return result;
 				}
 			},{
+				field: 'status_transaction',
+				title: 'Status',
+				sortable: 'asc',
+				width:60,
+				textAlign: 'left',
+				template: function (row) {
+					var result;
+					if(row.status_transaction == 'L'){
+						result = 'Lunas';
+					}else{
+						result = 'Aktif';
+					}
+					return result;
+				}
+			},{
 				field: 'description_1',
 				title: 'Description',
 				sortable: 'asc',
-				width:60,
+				width:200,
 				textAlign: 'left',
 				template: function (row) {
 					var result ="";

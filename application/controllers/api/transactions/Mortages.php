@@ -26,7 +26,9 @@ class Mortages extends ApiController
 
 		if($this->session->userdata('user')->level == 'penaksir'){
 			$this->mortages->db->where('units_mortages_summary.model',null)
+							   ->where('units_mortages.status_transaction','N')
 							   ->where('units.id', $this->session->userdata('user')->id_unit);
+
 		}
 
 		if($this->session->userdata('user')->level == 'cabang'){

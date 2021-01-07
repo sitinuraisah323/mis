@@ -27,8 +27,10 @@ class Regularpawns extends ApiController
 		}
 
 		if($this->session->userdata('user')->level == 'penaksir'){
-			$this->regulars->db->where('units.id', $this->session->userdata('user')->id_unit);
 			$this->regulars->db->where('units_regularpawns_summary.model',null);
+			$this->regulars->db->where('units_regularpawns.status_transaction','N');
+			$this->regulars->db->where('units.id', $this->session->userdata('user')->id_unit);
+
 		}
 
 		if($this->session->userdata('user')->level == 'cabang'){
