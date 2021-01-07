@@ -18,6 +18,7 @@ class Penaksir extends Authenticated
 		parent::__construct();
 		$this->load->model('MortagesModel', 'mortages');
 		$this->load->model('UnitsModel', 'units');
+		$this->load->model('TypeModel', 'types');
 	}
 
 	/**
@@ -32,12 +33,14 @@ class Penaksir extends Authenticated
 
 	public function regular()
 	{
-		$this->load->view('penaksir/regular/index');
+		$data['types'] = $this->types->all();
+		$this->load->view('penaksir/regular/index',$data);
     }
     
     public function mortages()
 	{
-		$this->load->view('penaksir/mortages/index');
+		$data['types'] = $this->types->all();
+		$this->load->view('penaksir/mortages/index',$data);
 	}
 
 

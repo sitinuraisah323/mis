@@ -78,6 +78,46 @@ class Mortagesummary extends ApiController
 		// ));
     }
 
+    public function get_customers()
+	{
+        $idunit     = $this->input->get('idunit');
+        $customer   = $this->input->get('customer');
+        $data = $this->mortageSummary->db->distinct('units_mortages_summary.no_sbk,units_mortages_summary.id_unit')
+                                         ->select('units_mortages_summary.no_sbk,units_mortages_summary.id_unit,customers.name as customer')
+                                         ->from('units_mortages_summary')
+                                         ->join('units_mortages','units_mortages.no_sbk=units_mortages_summary.no_sbk AND units_mortages.id_unit=units_mortages_summary.id_unit')
+                                         ->join('customers','customers.id=units_mortages.id_customer')
+                                         ->where('units_mortages_summary.id_unit',$idunit)
+                                         ->where('customers.id',$customer)
+                                         ->get()->result();
+		echo json_encode(array(
+			'data'	=> 	$data,
+			'status'	=> true,
+			'message'	=> 'Successfully Get Data Users'
+		));
+    }
+
+    public function get_mortages(){
+
+        $no_sbk = $this->input->get('no_sbk');
+        $idunit = $this->input->get('idunit');
+
+        $units = $this->mortageSummary->db->select('*')
+                          ->from('units_mortages')
+                          ->join('customers','customers.id = units_mortages.id_customer')
+                          ->where('units_mortages.id_unit',$idunit)
+                          ->where('units_mortages.no_sbk',$no_sbk)
+                          ->get('units')->row();
+         $units->summary = $this->mortageSummary->get_mortagessummary($idunit,$no_sbk);
+        
+        echo json_encode(array(
+        'data'	=> 	$units,
+        'status'	=> true,
+        'message'	=> 'Successfully Get Data Users'
+        ));
+
+    }
+
 	public function insert()
 	{
 		if($post = $this->input->post()){
@@ -89,14 +129,15 @@ class Mortagesummary extends ApiController
                     $data['id_unit']        = $this->input->post('id_unit');	
                     $data['nic']            = $this->input->post('nic');	
                     $data['id_customer']    = $this->input->post('id_customer');
+                    $data['status_sbk']    = $this->input->post('status');
+                    $data['ref_sbk']        = $this->input->post('no_referensi');
                     $data['model']          = $this->input->post('jenis')[$i];	
                     $data['type']           = $this->input->post('tipe')[$i];	
                     $data['qty']            = $this->input->post('qty')[$i];	
                     $data['karatase']       = $this->input->post('karatase')[$i];	
                     $data['bruto']          = $this->input->post('bruto')[$i];
                     $data['net']            = $this->input->post('net')[$i];
-                    $data['stle']           = $this->input->post('stle')[$i];
-                    $data['stle']           = $this->input->post('stle')[$i];
+                    //$data['stle']           = $this->input->post('stle')[$i];
                     $data['description']    = $this->input->post('description')[$i];
                     $data['user_create']= $this->session->userdata('user')->id;               
                     $db = $this->mortageSummary->insert($data); 
