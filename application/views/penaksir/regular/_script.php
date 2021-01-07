@@ -45,7 +45,8 @@ function initDTEvents(){
     $(".btn_edit").on("click",function(){
 
         $('.rowspand').remove();
-        $('.rowappend_ref').remove();        
+        $('.rowappend_ref').remove(); 
+        $("#status").val("").trigger( "change" );     
         var targetId = $(this).data("id");
 		//alert(targetId);
         KTApp.blockPage();

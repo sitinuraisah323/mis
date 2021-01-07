@@ -8,7 +8,7 @@ class Regularpawnssummary extends ApiController
 	{
 		parent::__construct();
 		$this->load->model('RegularpawnsSummaryModel', 'regularSummary');
-		$this->load->model('RegularpawnsModel', 'regulars');
+		$this->load->model('RegularPawnsModel', 'regulars');
 	}
 
 	public function index()

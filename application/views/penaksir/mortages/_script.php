@@ -43,6 +43,8 @@ function initDTEvents(){
 
     $(".btn_edit").on("click",function(){
         $('.rowspand').remove();
+        $('.rowappend_ref').remove();
+        $("#status").val("").trigger( "change" ); 
 		var targetId = $(this).data("id");
 		//alert(targetId);
         KTApp.blockPage();
@@ -162,7 +164,7 @@ function initEditForm(){
         KTApp.block('#modal_edit .modal-content', {});
         $.ajax({
             type : 'POST',
-            url : "<?php echo base_url("api/transactions/mortageSummary/insert"); ?>",
+            url : "<?php echo base_url("api/transactions/mortagesummary/insert"); ?>",
             data : $('#form_edit').serialize(),
             dataType : "json",
             success : function(data,status){

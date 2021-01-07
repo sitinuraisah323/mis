@@ -39,6 +39,17 @@ class Types extends ApiController
 		));
     }
 
+    public function get_byid()
+	{
+        $id = $this->input->get('id');    
+        echo json_encode(array(
+            'data'	 => $this->types->db->select('*')->from('type')->where('id',$id)->get()->row(),
+            'status' => true,
+			'message'=> 'Successfully Get Data Type'
+		));
+    }
+
+
 	public function insert()
 	{
 		if($post = $this->input->post()){
