@@ -42,6 +42,9 @@ function initDTEvents(){
     });
 
     $(".btn_edit").on("click",function(){
+        $('.rowspand').remove();
+        $('.rowappend_ref').remove();
+        $("#status").val("").trigger( "change" ); 
 		var targetId = $(this).data("id");
 		//alert(targetId);
         KTApp.blockPage();
@@ -142,19 +145,7 @@ function initEditForm(){
     var validator = $( "#form_edit" ).validate({
         ignore:[],
         rules: {
-            jenis: {
-                required: true,
-            }, tipe: {
-                required: true,
-            }, qty: {
-                required: true,
-            }, karatase: {
-                required: true,
-            }, bruto: {
-                required: true,
-            }, net: {
-                required: true,
-            }, stle: {
+            status: {
                 required: true,
             }
         },
@@ -163,20 +154,8 @@ function initEditForm(){
         }
 	});   
 	
-	$('#jenis').select2({
-        placeholder: "Pilih Jenis Jaminan",
-        width: '100%'
-    }); 
-
-    $('#tipe').select2({
-        placeholder: "Pilih Tipe Jaminan",
-        width: '100%'
-	});
-	
-	$('#karatase').select2({
-        placeholder: "Pilih Karatase",
-        width: '100%'
-    });
+    $('#no_referensi').select2({ placeholder: "Pilih Nomor BTE", width: '100%' });
+    $('#status').select2({ placeholder: "Pilih Status", width: '100%' }); 
 
     //events
     $("#btn_edit_submit").on("click",function(){
@@ -185,7 +164,7 @@ function initEditForm(){
         KTApp.block('#modal_edit .modal-content', {});
         $.ajax({
             type : 'POST',
-            url : "<?php echo base_url("api/transactions/mortageSummary/insert"); ?>",
+            url : "<?php echo base_url("api/transactions/mortagesummary/insert"); ?>",
             data : $('#form_edit').serialize(),
             dataType : "json",
             success : function(data,status){
@@ -213,6 +192,9 @@ function initEditForm(){
         $("#id_unit").val(groupObject.id_unit);
         $("#nic").val(groupObject.nic);
         $("#id_customer").val(groupObject.id_customer);
+
+        //get customers
+        customersList(groupObject.id_unit,groupObject.id_customer);
 
 		//table description
 		$('.rowappend_mdl').remove();
@@ -332,23 +314,23 @@ function initDataTable(){
 				width:60,
 				textAlign: 'left',
 			},
-			{
-				field: 'amount_admin',
-				title: 'Admin',
-				sortable: 'asc',
-				width:60,
-				textAlign: 'left',
-			},				
-			{
-				field: 'capital_lease',
-				title: 'SEWAMODAL',
-				sortable: 'asc',
-				width:60,
-				textAlign: 'left',
-			},				
+			// {
+			// 	field: 'amount_admin',
+			// 	title: 'Admin',
+			// 	sortable: 'asc',
+			// 	width:60,
+			// 	textAlign: 'left',
+			// },				
+			// {
+			// 	field: 'capital_lease',
+			// 	title: 'SEWAMODAL',
+			// 	sortable: 'asc',
+			// 	width:60,
+			// 	textAlign: 'left',
+			// },				
 			{
 				field: 'type_item',
-				title: 'Jenis Barang',
+				title: 'Jenis BJ',
 				sortable: 'asc',
 				width:60,
 				textAlign: 'left',
@@ -362,10 +344,25 @@ function initDataTable(){
 					return result;
 				}
 			},{
+				field: 'status_transaction',
+				title: 'Status',
+				sortable: 'asc',
+				width:60,
+				textAlign: 'left',
+				template: function (row) {
+					var result;
+					if(row.status_transaction == 'L'){
+						result = 'Lunas';
+					}else{
+						result = 'Aktif';
+					}
+					return result;
+				}
+			},{
 				field: 'description_1',
 				title: 'Description',
 				sortable: 'asc',
-				width:60,
+				width:200,
 				textAlign: 'left',
 				template: function (row) {
 					var result ="";
@@ -443,6 +440,154 @@ $('[name="jenis"]').on('change',function(){
 		//filter selected option
 		filterSelectOptions($("#karatase"), "data-attribute", $(this).val());
 });
+
+$('[name="no_referensi"]').on('change',function(){
+	var no_sbk = $('[name="no_referensi"]').val();
+    var idunit = $('[name="id_unit"]').val();
+    //console.log(no_sbk,idunit);		
+        $.ajax({
+			type : 'GET',
+			url : "<?php echo base_url("api/transactions/mortagesummary/get_mortages"); ?>",
+			dataType : "json",
+			data:{idunit:idunit,no_sbk:no_sbk},
+			success : function(response,status){
+				if(response.status == true){
+                    //console.log(response.data);
+                    $('.rowappend_ref').remove();
+                    var template = '';
+                    var type = '';
+                    //$.each(response.data, function (index, data) {
+                        template += "<tr class='rowappend_ref' bgcolor='#EAFAF1'>";
+                        template += "<td class='text-center'>"+response.data.no_sbk+"</td>";
+                        template += "<td class='text-center'>"+response.data.name+"</td>";
+                        template += "<td class='text-center'>"+convertToRupiah(response.data.estimation)+"</td>";
+                        template += "<td class='text-center'>"+convertToRupiah(response.data.amount_loan)+"</td>";
+                        if(response.data.type_item == 'P'){ type = 'Perhiasan'; }else{type = 'Latakan';}
+                        template += "<td class='text-right'>"+type+"</td>";
+                        template += "<td class='text-right'>";
+                        if(response.data.description_1!=null){template += "- " + response.data.description_1;}
+                        if(response.data.description_2!=null){template += "<br>- " + response.data.description_2;}
+                        if(response.data.description_3!=null){template += "<br>- " + response.data.description_3;}
+                        if(response.data.description_4!=null){template += "<br>- " + response.data.description_4;}
+                        template += "</td>";
+                        template += '</tr>';
+                    //});
+                    $('.kt-portlet__body #mdl_vwcicilan').append(template);   
+                    editItems(response.data.summary);    
+                    //getType();                   
+				}
+			}
+        });
+});
+
+const editItems=(data)=>{
+    $('.rowspand').remove();    
+    $.each(data, function (index, data) {
+        const template = document.querySelector('#tblpenaksir').querySelector('[data-template="item"]').cloneNode(true);
+        template.classList.remove('d-none');
+        template.setAttribute('data-template','item-cloned');
+        template.setAttribute('class','rowspand');
+        template.querySelector('.jenis').setAttribute('name', 'jenis[]');
+        template.querySelector('.jenis').value = data.model;       
+         template.querySelector('.tipe').setAttribute('name', 'tipe[]');
+        template.querySelector('.tipe').value = data.type;
+        template.querySelector('.karatase').setAttribute('name', 'karatase[]');
+        template.querySelector('.karatase').value = data.karatase;
+        template.querySelector('.qty').setAttribute('name', 'qty[]');
+        template.querySelector('.qty').value = data.qty;
+        template.querySelector('.net').setAttribute('name', 'net[]');
+        template.querySelector('.net').value = data.net;
+        template.querySelector('.bruto').setAttribute('name', 'bruto[]');
+        template.querySelector('.bruto').value = data.bruto;
+        template.querySelector('.description').setAttribute('name', 'description[]');
+        template.querySelector('.description').value = data.description;       
+        document.querySelector('#tblpenaksir').querySelector('tbody').appendChild(template);
+    });
+}
+
+const addItem = (event) => {
+    const template = document.querySelector('#tblpenaksir').querySelector('[data-template="item"]').cloneNode(true);
+    template.classList.remove('d-none');
+    template.setAttribute('data-template','item-cloned');
+    template.setAttribute('class','rowspand');
+    template.querySelector('.jenis').setAttribute('name', 'jenis[]');
+    template.querySelector('.jenis').setAttribute('required', true);
+    template.querySelector('.tipe').setAttribute('name', 'tipe[]');
+    template.querySelector('.tipe').setAttribute('required', true);
+    template.querySelector('.karatase').setAttribute('name', 'karatase[]');
+    template.querySelector('.karatase').setAttribute('required', true);
+    template.querySelector('.qty').setAttribute('name', 'qty[]');
+    template.querySelector('.qty').setAttribute('required', true);
+    template.querySelector('.net').setAttribute('name', 'net[]');
+    template.querySelector('.net').setAttribute('required', true);
+    template.querySelector('.bruto').setAttribute('name', 'bruto[]');
+    template.querySelector('.bruto').setAttribute('required', true);
+    // template.querySelector('.stle').setAttribute('name', 'stle[]');
+    // template.querySelector('.stle').setAttribute('required', true);
+    template.querySelector('.description').setAttribute('name', 'description[]');
+    document.querySelector('#tblpenaksir').querySelector('tbody').appendChild(template);
+}
+
+$(document).on('change', '.jenis', function(){
+    var thisElement = $(this);
+    var jenis = thisElement.parents('tr').find('.jenis').val();
+    //filtering karatase
+    filterSelectOptions($(thisElement.parents('tr').find('.karatase')), "data-attribute", jenis);
+
+    //get filter type
+    var tipe = thisElement.parents('tr').find('.tipe');
+    var option = document.createElement("option");
+        $.ajax({
+			type : 'GET',
+			url : "<?php echo base_url("api/datamaster/types/get_byjenis"); ?>",
+			dataType : "json",
+			data:{jenis:jenis},
+			success : function(response,status){
+				if(response.status == true){
+                    tipe.empty();
+                    option.value = "";
+                    option.text = "All";
+                    tipe.append(option);
+					$.each(response.data, function (index, data) {
+                        var opt = document.createElement("option");
+                        opt.value = data.type;
+                        opt.text = data.type;
+                        tipe.append(opt);
+					});					
+				}
+			}
+		});
+});
+
+const deleteItem = (event) => {
+    event.target.closest('tr').remove();
+}
+
+const customersList =(idunit,customer) => {
+    //get filter type
+    var no_referensi =  $('[name="no_referensi"]');
+    var option = document.createElement("option");
+        $.ajax({
+			type : 'GET',
+			url : "<?php echo base_url("api/transactions/mortagesummary/get_customers"); ?>",
+			dataType : "json",
+			data:{idunit:idunit,customer:customer},
+			success : function(response,status){
+				if(response.status == true){
+                    no_referensi.empty();
+                    option.value = "";
+                    option.text = "All";
+                    no_referensi.append(option);
+					$.each(response.data, function (index, data) {
+                        var opt = document.createElement("option");
+                        opt.value = data.no_sbk;
+                        opt.text = data.no_sbk +" - " + data.customer;
+                        no_referensi.append(opt);
+					});					
+				}
+			}
+		});
+}
 
 jQuery(document).ready(function() { 
     initDataTable();

@@ -19,6 +19,13 @@ class RegularpawnsSummaryModel extends Master
 		return $karataseaMortages + $karataseRegular;
 	}
 
+	public function get_regularssummary($idUnit,$no_sbk){
+		$this->db->select('*')->from($this->table)
+				->where('id_unit', $idUnit)
+				->where('no_sbk', $no_sbk);
+		return	$this->db->get()->result();
+	}
+
 
 }
 

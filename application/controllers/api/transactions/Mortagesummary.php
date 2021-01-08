@@ -78,52 +78,84 @@ class Mortagesummary extends ApiController
 		// ));
     }
 
+    public function get_customers()
+	{
+        $idunit     = $this->input->get('idunit');
+        $customer   = $this->input->get('customer');
+        $data = $this->mortageSummary->db->distinct('units_mortages_summary.no_sbk,units_mortages_summary.id_unit')
+                                         ->select('units_mortages_summary.no_sbk,units_mortages_summary.id_unit,customers.name as customer')
+                                         ->from('units_mortages_summary')
+                                         ->join('units_mortages','units_mortages.no_sbk=units_mortages_summary.no_sbk AND units_mortages.id_unit=units_mortages_summary.id_unit')
+                                         ->join('customers','customers.id=units_mortages.id_customer')
+                                         ->where('units_mortages_summary.id_unit',$idunit)
+                                         ->where('customers.id',$customer)
+                                         ->get()->result();
+		echo json_encode(array(
+			'data'	=> 	$data,
+			'status'	=> true,
+			'message'	=> 'Successfully Get Data Users'
+		));
+    }
+
+    public function get_mortages(){
+
+        $no_sbk = $this->input->get('no_sbk');
+        $idunit = $this->input->get('idunit');
+
+        $units = $this->mortageSummary->db->select('*')
+                          ->from('units_mortages')
+                          ->join('customers','customers.id = units_mortages.id_customer')
+                          ->where('units_mortages.id_unit',$idunit)
+                          ->where('units_mortages.no_sbk',$no_sbk)
+                          ->get('units')->row();
+         $units->summary = $this->mortageSummary->get_mortagessummary($idunit,$no_sbk);
+        
+        echo json_encode(array(
+        'data'	=> 	$units,
+        'status'	=> true,
+        'message'	=> 'Successfully Get Data Users'
+        ));
+
+    }
+
 	public function insert()
 	{
 		if($post = $this->input->post()){
-
-            $data['no_sbk']     = $this->input->post('no_sbk');	
-            $data['id_unit']    = $this->input->post('id_unit');
-            $data['nic']     = $this->input->post('nic');	
-            $data['id_customer']= $this->input->post('id_customer');	
-            $data['model']      = $this->input->post('jenis');	
-            $data['type']       = $this->input->post('tipe');	
-            $data['qty']       = $this->input->post('qty');	
-            $data['karatase']   = $this->input->post('karatase');	
-            $data['bruto']      = $this->input->post('bruto');
-            $data['net']        = $this->input->post('net');
-            $data['stle']       = $this->input->post('stle');
-            $data['user_create']= $this->session->userdata('user')->id;
-
-            if($find = $this->mortageSummary->find(array(
-                'no_sbk'	    =>$data['no_sbk'],
-                'id_unit'	    =>$data['id_unit'],
-                'nic'	        =>$data['nic'],
-                'id_customer'   =>$data['id_customer'],
-            )));
-
-            if($find){
+            $db = false;
+            $CountData = count($this->input->post('jenis'));
+            for($i=0; $i < $CountData; $i++){
+                if(!empty($this->input->post('jenis')[$i])){
+                    $data['no_sbk']         = $this->input->post('no_sbk');	
+                    $data['id_unit']        = $this->input->post('id_unit');	
+                    $data['nic']            = $this->input->post('nic');	
+                    $data['id_customer']    = $this->input->post('id_customer');
+                    $data['status_sbk']    = $this->input->post('status');
+                    $data['ref_sbk']        = $this->input->post('no_referensi');
+                    $data['model']          = $this->input->post('jenis')[$i];	
+                    $data['type']           = $this->input->post('tipe')[$i];	
+                    $data['qty']            = $this->input->post('qty')[$i];	
+                    $data['karatase']       = $this->input->post('karatase')[$i];	
+                    $data['bruto']          = $this->input->post('bruto')[$i];
+                    $data['net']            = $this->input->post('net')[$i];
+                    //$data['stle']           = $this->input->post('stle')[$i];
+                    $data['description']    = $this->input->post('description')[$i];
+                    $data['user_create']= $this->session->userdata('user')->id;               
+                    $db = $this->mortageSummary->insert($data); 
+                }          
+            } 
+            
+            if($db=true){
                 echo json_encode(array(
-                    'data'	    => false,
-                    'status'    => false,
-                    'message'	=> 'Data already exist'
+                    'data'	=> 	true,
+                    'status'=>true,
+                    'message'	=> 'Successfull Insert Data regular'
                 ));
             }else{
-                $db = false;
-                $db = $this->mortageSummary->insert($data);    
-                if($db=true){
-                    echo json_encode(array(
-                        'data'	=> 	true,
-                        'status'=>true,
-                        'message'	=> 'Successfull Insert Data Area'
-                    ));
-                }else{
-                    echo json_encode(array(
-                        'data'	=> 	false,
-                        'status'=>false,
-                        'message'	=> 'Failed Insert Data Area'
-                    ));
-                }
+                echo json_encode(array(
+                    'data'	=> 	false,
+                    'status'=>false,
+                    'message'	=> 'Failed Insert Data regular'
+                ));
             }            
         }	
     }
