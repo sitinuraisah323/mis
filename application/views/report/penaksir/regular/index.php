@@ -202,7 +202,7 @@ $this->load->view('temp/MenuBar.php');
 									<th class='text-center'>Karatase</th>
 									<th class='text-center'>Berat Kotor</th>
 									<th class='text-center'>Berat Bersih</th>
-									<th class='text-right'>STLE</th>
+									<!-- <th class='text-right'>STLE</th> -->
 									<th class='text-center'>Description</th>
 									<th></th>
 						    	</tr>

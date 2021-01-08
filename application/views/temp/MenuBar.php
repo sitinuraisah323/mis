@@ -535,14 +535,7 @@
 										</li>
 									<?php endif;?>
 
-									<?php if(read_access('report/mortages')):?>
-										<!-- <li class="kt-menu__item "  aria-haspopup="true">
-											<a  href="<?php echo base_url('report/mortages'); ?>" class="kt-menu__link ">
-												<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>
-												<span class="kt-menu__link-text">Gadai Cicilan</span>
-											</a>
-										</li>										 -->
-
+									<?php if(read_access('report/regularpawns')):?>
 									<li class="kt-menu__item  kt-menu__item--submenu"  data-ktmenu-submenu-toggle="hover" aria-haspopup="true">
 										<a  href="javascript:;" class="kt-menu__link kt-menu__toggle">
 									<span class="kt-menu__link-icon">
@@ -552,7 +545,7 @@
 										</a>
 										<div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--right">
 											<ul class="kt-menu__subnav">			
-												<?php if(read_access('report/mortages')):?>
+												<?php if(read_access('report/regularpawns')):?>
 													<li class="kt-menu__item "  aria-haspopup="true">
 														<a  href="<?php echo base_url('report/mortages'); ?>" class="kt-menu__link ">
 															<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
@@ -560,7 +553,7 @@
 														</a>
 													</li>
 												<?php endif;?>	
-												<?php if(read_access('report/mortages')):?>
+												<?php if(read_access('report/regularpawns')):?>
 													<li class="kt-menu__item "  aria-haspopup="true">
 														<a  href="<?php echo base_url('report/mortages/kredit'); ?>" class="kt-menu__link ">
 															<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
@@ -568,7 +561,7 @@
 														</a>
 													</li>
 												<?php endif;?>							
-												<?php if(read_access('report/mortages')):?>
+												<?php if(read_access('report/regularpawns')):?>
 													<li class="kt-menu__item "  aria-haspopup="true">
 														<a  href="<?php echo base_url('report/mortages/angsuran'); ?>" class="kt-menu__link ">
 															<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>

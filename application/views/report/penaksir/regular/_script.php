@@ -145,7 +145,7 @@ function initCariForm(){
 						template += "<td class='text-center'>"+data.karatase+"</td>";
 						template += "<td class='text-center'>"+data.bruto+"</td>";
 						template += "<td class='text-center'>"+data.net+"</td>";
-						template += "<td class='text-right'>"+convertToRupiah(data.stle)+"</td>";
+						//template += "<td class='text-right'>"+convertToRupiah(data.stle)+"</td>";
                         template += "<td class='text-right'>";
                         if(data.description_1!=null){template += "- " + data.description_1;}
                         if(data.description_2!=null){template += "<br>- " + data.description_2;}
@@ -161,7 +161,7 @@ function initCariForm(){
 						karatase += parseInt(data.karatase);
 					});
 					template += "<tr class='rowappend'>";
-					template += "<td colspan='8' class='text-right'>Total</td>";
+					template += "<td colspan='7' class='text-right'>Total</td>";
 					template += "<td class='text-right'>"+convertToRupiah(amount)+"</td>";
 					template += "<td class='text-center'>"+convertToRupiah(qty)+"</td>";
 					template += "<td class='text-center'>"+convertToRupiah(karatase)+"</td>";
