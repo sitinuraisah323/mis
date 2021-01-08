@@ -69,7 +69,7 @@ class Performances extends Authenticated
         $data = $this->regulars->performance();
         $no=2;
         $months = ['Jan.'=>'B','Feb.'=>'C','Mar.'=>'D','Apr.'=>'E','May'=>'F',
-            'Jun.'=>'G','Jul.'=>'H','Aug.'=>'I','Sep.'=>'J','Oct.'=>'K','Nov.'=>'L'];
+            'Jun.'=>'G','Jul.'=>'H','Aug.'=>'I','Sep.'=>'J','Oct.'=>'K','Nov.'=>'L', 'Dec.'=>'M'];
 		foreach ($data as $param =>  $row) 
 		{
             if($param != 'rate'){

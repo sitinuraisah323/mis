@@ -894,6 +894,15 @@
 									</li>
 									<?php endif;?>
 									
+									<?php if(read_access('report/insentif')):?>
+										<li class="kt-menu__item "  aria-haspopup="true">
+											<a  href="<?php echo base_url('report/insentif'); ?>" class="kt-menu__link ">
+												<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>
+												<span class="kt-menu__link-text">Perhitungan Insentif</span>
+											</a>
+										</li>
+									<?php endif;?>
+									
 									<?php if(read_access('report/yogadai')):?>
 									<li class="kt-menu__item  kt-menu__item--submenu"  data-ktmenu-submenu-toggle="hover" aria-haspopup="true">
 										<a  href="javascript:;" class="kt-menu__link kt-menu__toggle">
@@ -1017,8 +1026,7 @@
 											</ul>
 										</div>
 									</li>
-									<?php endif;?>
-
+									<?php endif;?>				
 								</ul>
 							</div>
 						</li>
