@@ -34,7 +34,11 @@
                                     </div>
                                     <label class="col-lg-4 col-form-label">Tanggal</label>
                                     <div class="col-lg-8">
+                                    <?php if($this->session->userdata('user')->level == 'administrator'):?> 
+                                        <input type="date" class="form-control form-control-sm" id="e_date" name="e_date">
+                                    <?php else:?> 
                                         <input type="text" class="form-control form-control-sm" id="e_date" name="e_date" style="background-color:grey; color:white;">
+                                    <?php endif;?> 
                                     </div>
                                     <label class="col-lg-4 col-form-label">Sisa OS UP Unit</label>
                                     <div class="col-lg-8">
