@@ -621,10 +621,15 @@ class RegularpawnsModel extends Master
 		if($year === null){
 			$year = date('Y');
 		}
+		$month = date('n');
+		if($month == 1){
+		    $month = 13;
+		    $year = $year-1;
+		}
 		$result = array();
 		$months = months();
 		foreach($months as $key => $index){
-			if($key < date('n')){
+			if($key < $month){
 				$result['booking'][$index] = $this->getBookingMontly($key, $year);
 				$result['pendapatan'][$index] = $this->getPendapatanMontly($key, $year);
 				$result['pengeluaran'][$index] = $this->getPengeluaranMontly($key, $year);
@@ -723,6 +728,94 @@ class RegularpawnsModel extends Master
 			->where('month(date_sbk)', $month)
 			->where('year(date_sbk)', $year)
 			->get('units_mortages')->row()->amount;
+	}
+
+	public function calculation_insentif(int $month, int $year)
+	{
+		$getMonth = $month-1 === 0 ? 12 : $month-1; 
+		$getYear = $month-1 === 0 ? $year-1 : $year;
+
+		$query = $this->db
+					->select('u.id, u.name, a.area as area, 
+					(
+						
+					(
+						select count(*) from units_regularpawns where id_unit = u.id 
+						and month(date_sbk) = "'.$getMonth.'"
+						and year(date_sbk) = "'.$getYear.'"
+					)
+					+
+					(
+						select count(*) from units_mortages where id_unit = u.id 
+						and month(date_sbk) = "'.$getMonth.'"
+						and year(date_sbk) = "'.$getYear.'"
+					)					
+					) as noa,
+					(
+						(select COALESCE(sum(units_regularpawns.estimation), 0) from units_regularpawns where id_unit = u.id 
+					and month(date_sbk) = "'.$getMonth.'"
+					and year(date_sbk) = "'.$getYear.'"		)
+						+	
+						(select COALESCE(sum(units_mortages.estimation), 0) from units_mortages
+						 where id_unit = u.id 
+					and month(date_sbk) = "'.$getMonth.'"
+					and year(date_sbk) = "'.$getYear.'"		)		
+					) as estimation,
+					(
+						(select COALESCE(sum(units_regularpawns.admin), 0) from units_regularpawns where id_unit = u.id 
+					and month(date_sbk) = "'.$getMonth.'"
+					and year(date_sbk) = "'.$getYear.'"	)
+					+	
+					(select COALESCE(sum(units_mortages.amount_admin), 0) from units_mortages where id_unit = u.id 
+					and month(date_sbk) = "'.$getMonth.'"
+					and year(date_sbk) = "'.$getYear.'"	)			
+					) as admin,
+					(
+						(select COALESCE(sum(units_regularpawns.amount), 0) from units_regularpawns where id_unit = u.id 
+					and month(date_sbk) = "'.$getMonth.'"
+					and year(date_sbk) = "'.$getYear.'"	)+
+					(select COALESCE(sum(units_mortages.amount_loan), 0) from units_mortages where id_unit = u.id 
+					and month(date_sbk) = "'.$getMonth.'"
+					and year(date_sbk) = "'.$getYear.'"	)						
+					) as up
+					')
+					->from('units u')
+					->join('areas a','a.id = u.id_area')
+					->get()->result();
+		return [
+			'details'	=> $query,
+		];
+	}
+
+	public function get_transaction($idUnit, $month, $year)
+	{
+		$getMonth = $month-1 === 0 ? 12 : $month-1; 
+		$getYear = $month-1 === 0 ? $year-1 : $year;
+
+		$getRegular = $this->db
+				->select('units_regularpawns.id, no_sbk, date_sbk, nic, units.name as unit, customers.name as customer, estimation, admin, amount')
+				->from('units_regularpawns')
+				->join('units','units.id = units_regularpawns.id_unit')
+				->join('customers','customers.id = units_regularpawns.id_customer')
+				->where('units_regularpawns.id_unit', $idUnit)
+				->where('month(units_regularpawns.date_sbk)', $getMonth)
+				->where('year(units_regularpawns.date_sbk)', $getYear)
+				->get()->result();
+
+		$getMortages = $this->db
+				->select('units_mortages.id, no_sbk, nic,date_sbk, units.name as unit, customers.name as customer, estimation, amount_admin as admin, amount_loan as amount')
+				->from('units_mortages')
+				->join('units','units.id = units_mortages.id_unit')
+				->join('customers','customers.id = units_mortages.id_customer')
+				->where('units_mortages.id_unit', $idUnit)
+				->where('month(units_mortages.date_sbk)', $getMonth)
+				->where('year(units_mortages.date_sbk)', $getYear)
+				->get()->result();
+		return (object) [
+			'regulars' => $getRegular,
+			'mortages' => $getMortages,
+		];
+
 	}
 
 }

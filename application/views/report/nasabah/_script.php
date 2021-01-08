@@ -113,9 +113,6 @@ function initCariForm(){
 			success : function(response,status){
                 $('#tblcurrent').find('tbody').find('tr').remove();
                 const {details, transaction_bigger, transaction_smaller, customer_per_person} = response.data;
-                console.log(details.transaction_bigger.length);                
-                console.log(details.transaction_smaller.length);
-                console.log(details.customer_per_person.length);
                 let tr = '<tr>';
                 tr += `<td class="text-center">1</td>`;
                 tr += `<td class="text-center">${customer_per_person}</td>`;

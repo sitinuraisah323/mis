@@ -619,7 +619,17 @@ class Regularpawns extends ApiController
 						->where('id_unit',$unit)
 						->from('units_regularpawns')
 						->get()->row();
-		$this->sendMessage($units, 'Get Data Regular Pawns');
+		return $this->sendMessage($units, 'Get Data Regular Pawns');
+	}
+
+	public function insentif()
+	{
+		$getMonth = $this->input->get('month');
+		$getYear = $this->input->get('year');
+		if($getMonth || $getYear){
+			return $this->sendMessage($this->regulars->calculation_insentif($getMonth, $getYear), 'Successfully get Insentif');
+		}
+		return $this->sendMessage([],'Month and Year Request Should');
 	}
 
 }
