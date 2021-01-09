@@ -632,4 +632,85 @@ class Regularpawns extends ApiController
 		return $this->sendMessage([],'Month and Year Request Should');
 	}
 
+	public function kpi()
+	{
+		$result = [];
+		$getMonth = $this->input->get('month');
+		$getYear = $this->input->get('year');
+		$id_unit = $this->input->get('id_unit');
+
+		$month = $getMonth-1 === 0 ? 12 : $getMonth-1; 
+		$year = $getMonth-1 === 0 ? $getYear-1 : $getYear;
+
+		if($getMonth && $getYear && $id_unit){
+			$result['unit'] = $this->regulars->db
+							->select('units.name, code, date_open, area')
+							->from('units')
+							->join('areas','areas.id = units.id_area')
+							->where('units.id', $id_unit)
+							->get()->row();
+			$getTarget = $this->regulars->db
+							->select('amount_booking, amount_outstanding, month, year')
+							->from('units_targets')
+							->where('units_targets.id_unit', $id_unit)
+							->where('month', $month)
+							->where('year', $year)
+							->get()->row();
+
+			$getOs = $this->regulars->db
+							->select('os')
+							->from('units_outstanding')
+							->where('units_outstanding.id_unit', $id_unit)
+							->where('month(date)', $month)
+							->where('year(date)', $year)
+							->order_by('date','desc')
+							->get()->row();
+			$regularBooking =  $this->regulars->db
+											->select('COALESCE(sum(amount), 0) as amount')
+											->from('units_regularpawns')
+											->where('units_regularpawns.id_unit', $id_unit)
+											->where('month(date_sbk)', $month)
+											->where('year(date_sbk)', $year)
+											->order_by('date_sbk','desc')
+											->get()->row()->amount;
+			$mortageBooking = $this->regulars->db
+											->select('COALESCE(sum(amount_loan), 0) as amount')
+											->from('units_mortages')
+											->where('units_mortages.id_unit', $id_unit)
+											->where('month(date_sbk)', $month)
+											->where('year(date_sbk)', $year)
+											->order_by('date_sbk','desc')
+											->get()->row()->amount;
+			$getBooking = $regularBooking + $mortageBooking;
+
+			$pencapaianOs = round(100 * ($getOs->os / $getTarget->amount_outstanding), 2);
+
+			$scalaOs = $pencapaianOs*30/100;
+			$pencapaianBooking = round(100 * ($getBooking / $getTarget->amount_booking), 2);
+
+			$scalaBooking= $pencapaianBooking*20/100;
+
+			$result['factors'] = [
+				0	=> [
+					'aspek'	=> 'OS',
+					'target'	=> '100('.$getTarget->amount_outstanding.')',
+					'nilai'	=> '30%',
+					'bobot'	=> '30%',
+					'scala'	=> $scalaOs,
+					'pencapaian'	=> $pencapaianOs.'('.$getOs->os.')'
+				],
+				1	=> [
+					'aspek'	=> 'Booking',
+					'target'	=> '100('.$getTarget->amount_booking.')',
+					'nilai'	=> '20%',
+					'bobot'	=> '20%',
+					'scala'	=> $scalaBooking,
+					'pencapaian'	=> $pencapaianBooking.'('.$getBooking.')'
+				],
+			];
+			return $this->sendMessage($result, 'Successfully get Insentif');
+		}
+		return $this->sendMessage([],'Id Unit, Month and Year Request Should');
+	}
+
 }

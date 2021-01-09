@@ -8,6 +8,7 @@ class Stocks extends ApiController
 		parent::__construct();
 		$this->load->model('LmStocksModel', 'model');
 		$this->load->model('UnitsModel', 'units');
+		$this->load->model('LmGramsModel', 'grams');
 	}
 
 	public function index()
@@ -41,6 +42,8 @@ class Stocks extends ApiController
 			$this->form_validation->set_rules('type', 'Type', 'required');
 			$this->form_validation->set_rules('date_receive', 'Date receive', 'required');
 			$this->form_validation->set_rules('status', 'Status', 'required');		
+			$this->form_validation->set_rules('price', 'Price', 'required|integer');			
+			$this->form_validation->set_rules('description', 'Description', 'required');
 
 
 			if ($this->form_validation->run() == FALSE)
@@ -51,11 +54,9 @@ class Stocks extends ApiController
 			{
 				$sum = 0;
 				$total = $this->model->byGrams($this->input->post('id_lm_gram'), $this->input->post('id_unit'));
-				if($this->input->post('type') == 'DEBIT'){
-					$sum = $total + $this->input->post('amount');
-				}else{
-					$sum = $total - $this->input->post('amount');
-				}
+			
+				$sum = $this->input->post('type') == 'DEBIT' ? $sum = $total + $this->input->post('amount'): $sum = $total - $this->input->post('amount');
+			
 				if($sum < 0){
 					return $this->sendMessage(false, [
 						'Jumlah menjadi minus harap periksa inputan anda'
@@ -83,7 +84,10 @@ class Stocks extends ApiController
 			$this->form_validation->set_rules('id', 'id', 'required|integer');
 			$this->form_validation->set_rules('id_lm_gram', 'id lm gram', 'required|integer');
 			$this->form_validation->set_rules('amount', 'Amount', 'required|integer');
+			$this->form_validation->set_rules('price', 'Price', 'required|integer');			
+			$this->form_validation->set_rules('description', 'Description', 'required');
 			$this->form_validation->set_rules('type', 'Type', 'required');
+			$this->form_validation->set_rules('description', 'Description', 'required');
 			$this->form_validation->set_rules('date_receive', 'Date receive', 'required');
 			$this->form_validation->set_rules('status', 'Status', 'required');
 
@@ -181,6 +185,20 @@ class Stocks extends ApiController
 		$dateEnd = date('Y-m-d');
 		$result = $this->model->gramsUnits($id, $dateStart, $dateEnd);
 		return $this->sendMessage($result, 'Successfully get stock by units');
+	}
+
+	public function sales()
+	{
+		$month = $this->input->get('month') ? $this->input->get('month') : date('n');
+		$year =  $this->input->get('year') ? $this->input->get('year') : date('Y');	
+
+		$idUnit = $this->input->get('id_unit');
+
+		$idArea = $this->input->get('id_area');
+
+		$getUnits = $this->model->sales($idUnit, $idArea, $month, $year);
+
+		return $this->sendMessage($getUnits,'successfully get data sales', 200);
 	}
 
 

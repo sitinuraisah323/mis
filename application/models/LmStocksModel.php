@@ -85,4 +85,45 @@ class LmStocksModel extends Master
 		');
 		return $query->row()->total;
 	}
+
+	public function sales($idUnit, $idArea, $month, $year)
+	{
+
+		if($idUnit){
+			$this->units->db->where('units.id', $idUnit);
+		}
+
+		if($idArea){
+			$this->units->db->where('units.id_area', $idArea);
+		}
+		
+		$getUnits = $this->units->db->select('units.id, units.name')
+						->from('units')
+						->get()->result();
+		$grams = $this->grams->db
+							->select('lm_grams.id, weight')
+							->from('lm_grams')							
+							->order_by('weight','asc')
+							->get()
+							->result();
+		foreach($getUnits as $unit){
+			foreach($grams as $index => $gram){	
+				$amount =  $this->db->select('sum(amount) as amount')
+						->from($this->table)
+						->where('type','CREDIT')
+						->where('month(date_receive)', $month)
+						->where('year(date_receive)', $year)
+						->where('id_unit', $unit->id)
+						->where('id_lm_gram', $gram->id)
+						->get()
+						->row()->amount;
+				$unit->grams[$index] = (object) [
+					'id'	=> $gram->id,
+					'weight'	=> $gram->weight, 
+					'amount'	=> (int) $amount
+				];
+			}
+		}
+		return $getUnits;
+	}
 }

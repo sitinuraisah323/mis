@@ -253,7 +253,17 @@ const details = (id_unit, month, year) => {
 }
 
 
-const kpidetail = (id_unit, month, year)
+const kpidetail = (id_unit, month, year) =>{
+    $.ajax({
+        url:`<?php echo base_url();?>api/transaction/regularpawns/kpi`,
+        data:{id_unit, month, year},
+        type:"GET",
+        dataType:"JSON",
+        success:function(res)=>{
+            console.log(res);
+        }
+    })
+}
 
 
 </script>
