@@ -43,6 +43,12 @@ class Lm extends Authenticated
 		$this->load->view('report/lmsummary/index',$data);
 	}
 
+	public function penjualan()
+	{
+        $data['areas'] = $this->areas->all();
+		$this->load->view('report/lmpenjualan/index',$data);
+	}
+
 	public function export()
 	{		
 		//load our new PHPExcel library

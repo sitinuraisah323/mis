@@ -598,6 +598,51 @@ class Unitsdailycash extends ApiController
 		return $this->sendMessage($units,'Successfully get report realisasi');
 	}
 
+	public function lmtsales()
+	{	
+		if($area = $this->input->get('area')){
+            $this->units->db->where('id_area', $area);
+        }else if($this->session->userdata('user')->level === 'area'){
+            $this->units->db->where('id_area', $this->session->userdata('user')->id_area);
+		}
+
+		if($cabang = $this->input->get('cabang')){
+            $this->units->db->where('units.id_cabang', $cabang);
+        }else if($this->session->userdata('user')->level === 'cabang'){
+            $this->units->db->where('units.id_cabang', $this->session->userdata('user')->id_cabang);
+		}
+		
+		if($code = $this->input->get('unit')){
+			if($code!='0'){
+			$this->units->db->where('units.id', $code);
+			}
+		}else if($this->session->userdata('user')->level == 'unit'){
+			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
+		}	
+
+		$dateStart = $this->input->get('dateStart');
+		$dateEnd = $this->input->get('dateEnd');
+
+        if($this->session->userdata('user')->level === 'unit'){
+            $this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
+        }else if($unit = $this->input->get('id_unit')){
+            $this->units->db->where('units.id', $unit);
+		}
+		
+		$this->units->db->select('units.id, name, areas.area,no_perk,date,units_dailycashs.description,units_dailycashs.amount,units_dailycashs.type,permit,weight,lm_stocks.amount as qty,lm_stocks.type as type_stock,price,date_receive,lm_stocks.description as stock_description')
+						 ->join('areas','areas.id = units.id_area')
+						 //->select('')
+						 ->join('units_dailycashs','units.id = units_dailycashs.id_unit')
+						 ->join('lm_stocks','lm_stocks.id_unit = units_dailycashs.id_unit and lm_stocks.date_receive=units_dailycashs.date')
+						 ->join('lm_grams','lm_grams.id = lm_stocks.id_lm_gram')
+						 ->where('date >=',$dateStart)
+						 ->where('date <=',$dateEnd);
+						 //->where('no_perk ','1110102');
+        $units = $this->units->db->get('units')->result();			
+
+		return $this->sendMessage($units,'Successfully get report realisasi');
+	}
+
 	public function coc()
 	{
 		return $this->sendMessage($this->unitsdailycash->getCoc($this->input->get(), $this->input->get('percentage'), $this->input->get('month'), $this->input->get('year'), $this->input->get('period_month'), $this->input->get('period_year')), 'Successfully get Coc');
