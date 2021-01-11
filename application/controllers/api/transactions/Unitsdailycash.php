@@ -636,8 +636,9 @@ class Unitsdailycash extends ApiController
 						 ->join('lm_stocks','lm_stocks.id_unit = units_dailycashs.id_unit and lm_stocks.date_receive=units_dailycashs.date')
 						 ->join('lm_grams','lm_grams.id = lm_stocks.id_lm_gram')
 						 ->where('date >=',$dateStart)
-						 ->where('date <=',$dateEnd);
-						 //->where('no_perk ','1110102');
+						 ->where('date <=',$dateEnd)
+						 ->where('lm_stocks.type ','CREDIT')
+						 ->where('no_perk ','1110102');
         $units = $this->units->db->get('units')->result();			
 
 		return $this->sendMessage($units,'Successfully get report realisasi');
