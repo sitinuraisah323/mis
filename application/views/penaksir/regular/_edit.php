@@ -18,15 +18,6 @@
 
                         <div class="row"> 
 
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Pilih Nomer BTE Perpanjangan</label>
-                                        <select class="form-control" name="no_referensi" id="no_referensi">
-                                            <option value=""></option>                                            
-                                        </select> 	                            		
-                                </div>
-                            </div>
-                            
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Status</label>
@@ -38,12 +29,27 @@
                                 </div>
                             </div>
 
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Pilih Nomer BTE Perpanjangan</label>
+                                        <select class="form-control" name="no_referensi" id="no_referensi">
+                                            <option value=""></option>                                            
+                                        </select> 	                            		
+                                </div>
+                            </div>    
+
+                             <div class="col-md-3">
+                             
+                             </div>                      
+
                             <div class="col-md-12">
                                 <table class="table" id="mdl_vwcicilan">
                                     <thead class="thead-light">
                                         <tr>
                                             <th class='text-center'>No.SBK</th>
                                             <th class='text-center'>Customers</th>
+                                            <th class='text-center'>Date SBK</th>
+                                            <th class='text-center'>Deadline</th>
                                             <th class='text-center'>Taksiran</th>
                                             <th class='text-right'>UP</th>
                                             <th class='text-right'>Jenis Barang</th>
@@ -65,8 +71,8 @@
                                             <td>Tipe</td>
                                             <td>Karatase</td>
                                             <td>Jumlah</td>
-                                            <td>Berat Bersih</td>
                                             <td>Berat Kotor</td>
+                                            <td>Berat Bersih</td>
                                             <!-- <td>STLE</td> -->
                                             <td>Keterangan</td>
                                             <td>Hapus</td>
@@ -110,8 +116,8 @@
                                                 </select>
                                             </td>
                                             <td><input type="text" class="form-control qty"></td>
-                                            <td> <input type="text" class="form-control net"></td>
                                             <td> <input type="text" class="form-control bruto"></td>
+                                            <td> <input type="text" class="form-control net"></td>
                                             <!-- <td> <input type="text" class="form-control stle"></td> -->
                                             <td> <input type="text" class="form-control description"></td>
                                             <td><button class="btn btn-danger btn-sm" type="button" onclick="deleteItem(event)"><i class="flaticon2-trash"></i></button></td>

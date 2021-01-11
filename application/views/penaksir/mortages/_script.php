@@ -194,7 +194,7 @@ function initEditForm(){
         $("#id_customer").val(groupObject.id_customer);
 
         //get customers
-        customersList(groupObject.id_unit,groupObject.id_customer);
+        //customersList(groupObject.id_unit,groupObject.id_customer);
 
 		//table description
 		$('.rowappend_mdl').remove();
@@ -203,6 +203,8 @@ function initEditForm(){
 		template += "<tr class='rowappend_mdl'>";
 		template += "<td class='text-center'>"+groupObject.no_sbk+"</td>";
 		template += "<td class='text-center'>"+groupObject.name+"</td>";
+		template += "<td class='text-center'>"+groupObject.date_sbk+"</td>";
+		template += "<td class='text-center'>"+groupObject.deadline+"</td>";
 		template += "<td class='text-center'>"+convertToRupiah(groupObject.estimation)+"</td>";
 		template += "<td class='text-center'>"+convertToRupiah(groupObject.amount_loan)+"</td>";
 		if(groupObject.type_item == 'P'){ type = 'Perhiasan'; }else{type = 'Latakan';}
@@ -460,6 +462,8 @@ $('[name="no_referensi"]').on('change',function(){
                         template += "<tr class='rowappend_ref' bgcolor='#EAFAF1'>";
                         template += "<td class='text-center'>"+response.data.no_sbk+"</td>";
                         template += "<td class='text-center'>"+response.data.name+"</td>";
+                        template += "<td class='text-center'>"+response.data.date_sbk+"</td>";
+                        template += "<td class='text-center'>"+response.data.deadline+"</td>";
                         template += "<td class='text-center'>"+convertToRupiah(response.data.estimation)+"</td>";
                         template += "<td class='text-center'>"+convertToRupiah(response.data.amount_loan)+"</td>";
                         if(response.data.type_item == 'P'){ type = 'Perhiasan'; }else{type = 'Latakan';}
@@ -478,6 +482,20 @@ $('[name="no_referensi"]').on('change',function(){
 				}
 			}
         });
+});
+
+$('[name="status"]').on('change',function(){
+    var idunit = $('[name="id_unit"]').val();
+    var customer = $('[name="id_customer"]').val(); 
+    var status = $('[name="status"]').val(); 
+    if(status==="Perpanjangan"){
+        customersList(idunit,customer);
+    }else{
+        $("#no_referensi").empty(); 
+        $('.rowspand').remove();
+        $('.rowappend_ref').remove();
+        //alert('test');
+    }
 });
 
 const editItems=(data)=>{
