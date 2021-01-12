@@ -125,7 +125,7 @@ function initCariForm(){
 					$.each(response.data, function (index, data) {
                             no++;    
                             totharga = parseInt(data.qty) * parseInt(data.price);                  
-                            selisih = parseInt(data.amount) * parseInt(totharga);                  
+                            selisih = parseInt(data.amount) - parseInt(totharga);                  
                             template += '<tr class="rowappend">';
                             template +='<td class="text-center">'+no+'</td>';
                             template +='<td class="text-center">'+data.name+'</td>';
