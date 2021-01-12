@@ -118,23 +118,12 @@ function initCariForm(){
                 console.log(response.data);
 				if(response.data.length > 0){
 					var template = '';
-                    var currentSaldo = 0;
-                    var TotSaldoIn = 0;
-                    var TotSaldoOut = 0;
+                    var totharga = 0;
                     var no = 0;
                     console.log(response.data);
 					$.each(response.data, function (index, data) {
-                      
-						var cashin=0;
-						var cashout=0;
-						if(data.type=='CASH_IN'){cashin= data.amount; currentSaldo +=  parseInt(data.amount); TotSaldoIn +=  parseInt(data.amount);}
-						if(data.type=='CASH_OUT'){cashout= data.amount; currentSaldo -=  parseInt(data.amount); TotSaldoOut +=  parseInt(data.amount);}
-
-						no++;
-                       
-							var date = moment(data.date).format('DD-MM-YYYY');
-							var month = moment(data.date).format('MMMM');
-							var year = moment(data.date).format('YYYY');						
+                            no++;    
+                            totharga = parseInt(data.qty) * parseInt(data.price);                  
                             template += '<tr class="rowappend">';
                             template +='<td class="text-center">'+no+'</td>';
                             template +='<td class="text-center">'+data.name+'</td>';
@@ -142,6 +131,7 @@ function initCariForm(){
                             template +='<td>'+data.weight+'</td>';
                             template +='<td class="text-center">'+data.qty+'</td>';
                             template +='<td class="text-center">'+convertToRupiah(data.price)+'</td>';
+                            template +='<td class="text-center">'+convertToRupiah(totharga)+'</td>';
                             template +='<td class="text-center">'+convertToRupiah(data.amount)+'</td>';
                             template +='<td>'+data.stock_description+'</td>';
                             template +='<td>'+data.description+'</td>';
