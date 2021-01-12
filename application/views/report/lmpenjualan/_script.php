@@ -119,11 +119,13 @@ function initCariForm(){
 				if(response.data.length > 0){
 					var template = '';
                     var totharga = 0;
+                    var selisih = 0;
                     var no = 0;
                     console.log(response.data);
 					$.each(response.data, function (index, data) {
                             no++;    
                             totharga = parseInt(data.qty) * parseInt(data.price);                  
+                            selisih = parseInt(data.amount) * parseInt(totharga);                  
                             template += '<tr class="rowappend">';
                             template +='<td class="text-center">'+no+'</td>';
                             template +='<td class="text-center">'+data.name+'</td>';
@@ -133,6 +135,7 @@ function initCariForm(){
                             template +='<td class="text-center">'+convertToRupiah(data.price)+'</td>';
                             template +='<td class="text-center">'+convertToRupiah(totharga)+'</td>';
                             template +='<td class="text-center">'+convertToRupiah(data.amount)+'</td>';
+                            template +='<td class="text-center">'+convertToRupiah(selisih)+'</td>';
                             template +='<td>'+data.stock_description+'</td>';
                             template +='<td>'+data.description+'</td>';
                             template +='</tr>';

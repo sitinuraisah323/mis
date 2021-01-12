@@ -157,8 +157,9 @@ $this->load->view('temp/MenuBar.php');
 						      		<th class="text-center">Gramasi</th>
 						      		<th class="text-center">Qty</th>
 						      		<th class="text-center">Harga LM</th>
-                                      <th class="text-center">Total</th>
+                                    <th class="text-center">Total</th>
 						      		<th class="text-center">Harga Penjualan</th>
+                                      <th class="text-center">Selisih</th>
 						      		<th class="text-center">Keterangan Stock</th>
 						      		<th class="text-center">Keterangan Buku Kas</th>						      							      		
 						    	</tr>
