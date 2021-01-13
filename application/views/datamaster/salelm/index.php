@@ -14,7 +14,7 @@ $this->load->view('temp/MenuBar.php');
         <div class="kt-subheader__main">
             <h3 class="kt-subheader__title">Data Master</h3>
             <span class="kt-subheader__separator kt-subheader__separator--v"></span>
-            <span class="kt-subheader__desc">Logam Mulia Order</span>
+            <span class="kt-subheader__desc">Penjualan Logam Mulia</span>
         </div>
         <div class="kt-subheader__toolbar">
             <div class="kt-subheader__wrapper">
@@ -33,7 +33,7 @@ $this->load->view('temp/MenuBar.php');
                         <i class="kt-font-brand fa fa-align-justify"></i>
                     </span>
                     <h3 class="kt-portlet__head-title">
-                         Logam Mulia Order
+                        Penjualan Logam Mulia
                     </h3>
                 </div>
                 <div class="kt-portlet__head-toolbar">
@@ -76,10 +76,18 @@ $this->load->view('temp/MenuBar.php');
             </table> -->
             <!--end: Datatable -->
 
-            <form id="form_bukukas" class="form-horizontal" method="post" action="<?php echo base_url("datamaster/logammulya/export?type_transaction=ORDER"); ?>">
+            <form id="form_bukukas" class="form-horizontal" method="post" action="<?php echo base_url("datamaster/salelm/export?type_transaction=ORDER"); ?>">
             <div class="kt-portlet__body">
             <div class="col-md-12" >
                 <div class="form-group row">
+                <div class="col-lg-2">
+                    <label class="col-form-label">Tanggal</label>
+                    <input type="date" name="date_start" value="<?php echo date('Y-m-01');?>"  class="form-control"/>
+                </div>
+                <div class="col-lg-2">
+                    <label class="col-form-label">S/d</label>
+                    <input type="date" name="date_end" value="<?php echo date('Y-m-d');?>" class="form-control"/>
+                </div>
                 <?php if($this->session->userdata('user')->level == 'unit'):?>
                     <input type="hidden" name="id_unit" value="<?php echo $this->session->userdata('user')->id_unit;?>">
                 <?php elseif($this->session->userdata('user')->level == 'area'):?>
@@ -112,19 +120,6 @@ $this->load->view('temp/MenuBar.php');
                     </div>
                 <?php endif ;?>
                     <div class="col-lg-2">
-						<label class="col-form-label">Status</label>
-                        <select class="form-control select2" name="status" id="status">
-                            <option value=""></option>
-                            <option value="APPROVED">Approved</option>
-                            <option value="DECLINED">Declined</option>
-                            <option value="ON_PROGRESS">On Progress</option>
-                        </select>
-                    </div>
-<!--					<div class="col-lg-2">-->
-<!--						<label class="col-form-label">Tanggal</label>-->
-<!--						<input type="date" class="form-control" name="date" value="">-->
-<!--					</div>-->
-                    <div class="col-lg-2">
                         <label class="col-form-label">&nbsp</label>
                         <div class="position-relative">
                         <button type="button" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>
@@ -141,19 +136,15 @@ $this->load->view('temp/MenuBar.php');
 						<table class="table">
 						  	<thead class="thead-light">
 						    	<tr>
-									<th class="text-left" rowspan="2">Unit</th>
-									<th class="text-left" rowspan="2">Metode</th>
-									<th class="text-left" colspan="<?php echo count($grams);?>">Order(Gram)</th>
-									<th rowspan="2">Total</th>
-									<th rowspan="2">Invoice</th>
-									<th rowspan="2">aksi</th>
-									<th rowspan="2"></th>
+									<th>Tanggal</th>
+									<th>Unit</th>
+									<th>Pembeli</th>
+									<th>Series</th>
+									<th>Jumlah</th>
+									<th>Harga</th>
+									<th>Total</th>
+									<th></th>
 						    	</tr>
-								<tr>
-									<?php foreach ($grams as $gram):?>
-										<th class="text-left"><?php echo $gram->weight;?></th>
-									<?php endforeach;?>
-								</tr>
 						  	</thead>
 						  	<tbody>
 						  	</tbody>
@@ -175,5 +166,5 @@ $this->load->view('temp/MenuBar.php');
 
 <?php
 $this->load->view('temp/Footer.php');
-$this->load->view('datamaster/logammulya/_script.php');
+$this->load->view('datamaster/salelm/_script.php');
 ?>

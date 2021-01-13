@@ -70,6 +70,7 @@
 			template.querySelector('.amount').setAttribute('name','gram['+sum+'][amount]');
 			template.querySelector('.amount').value=1;
 			template.querySelector('.amount').setAttribute('onKeyup','(new Store()).calculate()');
+			template.querySelector('.price_perpcs').setAttribute('onKeyup','(new Store()).calculate()');
 			template.querySelector('.total').setAttribute('name','gram['+sum+'][total]');
 			template.querySelector('[data-post="id_lm_gram"]').textContent = weight;
 			template.querySelector('.id_lm_gram').setAttribute('name','gram['+sum+'][id_lm_gram]');

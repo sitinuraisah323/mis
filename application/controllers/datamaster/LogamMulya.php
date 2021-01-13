@@ -47,7 +47,13 @@ class Logammulya extends Authenticated
 			}
 		}
 
+		if($type_transaction = $this->input->get('type_transaction')){
+			$this->model->db->where('type_transaction', $type_transaction);
+		}
+
 		$this->model->db
+			->select('units.name as unit')
+			->join('units','units.id = lm_transactions.id_unit')
 			->order_by('lm_transactions.id','desc');
 		$data = $this->model->all();
 
@@ -67,7 +73,6 @@ class Logammulya extends Authenticated
 					$datum->unit = $getEmployee->unit;
 				}else{
 					$datum->position = '';
-					$datum->unit = '';
 				}
 				foreach ($grams as $gram){
 					$find = $this->modelgrams->find(array(
@@ -154,29 +159,6 @@ class Logammulya extends Authenticated
 		// if($post = $this->input->post()){
 		// 	echo $post['area'];
 		// }
-	}
-	
-	public function invoice($id)
-	{
-		$this->model->db
-			->select('employees.fullname, position')
-			->join('employees','employees.id = lm_transactions.id_employee');
-		$transaction = $this->model->find(array(
-			'lm_transactions.id'	=> $id
-		));
-		if($transaction == null){
-			redirect('datamaster/logammulya');
-		}
-		$this->modelgrams->db
-			->select('lm_grams.weight')
-			->join('lm_grams','lm_grams.id = lm_transactions_grams.id_lm_gram');
-		$transactionGrams = $this->modelgrams->findWhere(array(
-			'lm_transactions_grams.id_lm_transaction'	=> $id
-		));
-		$this->load->view('datamaster/logammulya/invoice', array(
-			'transaction'	=> $transaction,
-			'items'	=> $transactionGrams
-		));
 	}
 
 }

@@ -161,8 +161,8 @@ $this->load->view('temp/MenuBar.php');
 							<tr data-template="choice" class="d-none">
 								<th><input type="hidden" class="id_lm_gram"><span data-post="id_lm_gram"></span></th>
 								<td>
-									<input type="hidden"  class="price_perpcs">
-									<input type="text"  class="price_buyback_perpcs form-control">
+									<input type="text"  class="price_perpcs form-control">
+									<input type="hidden"  class="price_buyback_perpcs">
 								
 								</td>
 								<td>

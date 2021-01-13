@@ -306,4 +306,14 @@ class Transactions extends ApiController
 		return $this->sendMessage(false,'method should post', 500);
 	}
 
+	public function sales()
+	{
+		$idUnit = $this->input->get('id_unit');
+		$idArea = $this->input->get('id_area');
+		$dateStart = $this->input->get('date_start');
+		$dateEnd = $this->input->get('date_end');
+
+		return $this->sendMessage($this->model->sales($idArea, $idUnit, $dateStart, $dateEnd),'Successfully get sales',200);
+	}
+
 }

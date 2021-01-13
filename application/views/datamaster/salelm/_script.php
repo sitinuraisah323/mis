@@ -89,51 +89,31 @@ function initCariForm(){
     $('#area').select2({ placeholder: "Select Area", width: '100%' });
     $('#unit').select2({ placeholder: "Select Unit", width: '100%' });
     $('#status').select2({ placeholder: "Select a Status", width: '100%' });
-    $('#nasabah').select2({ placeholder: "Select a Nasabah", width: '100%' });
     //events
     $('#btncari').on('click',function(){
         $('.rowappend').remove();
-        var area = $('[name="area"]').val();
-        var unit = $('[name="id_unit"]').val();
-        var nasabah = $('#nasabah').val();
-        var statusrpt = $('#status').val();
-		var dateStart = $('[name="date-start"]').val();
-		var dateEnd = $('[name="date-end"]').val();
-		var permit = $('[name="permit"]').val();
         KTApp.block('#form_bukukas .kt-portlet__body', {});
+        const id_unit = $('#unit').val();
+        const id_area = $('[name="area"]').val();
+        const date_start = $('[name="date_start"]').val();
+        const date_end = $('[name="date_end"]').val();
 		$.ajax({
 			type : 'GET',
-			url : "<?php echo base_url("api/lm/transactions"); ?>",
+			url : "<?php echo base_url("api/lm/transactions/sales"); ?>",
+            data:{id_unit,id_area, date_start,date_end},
 			dataType : "json",
-			data:{area:area,id_unit:unit,statusrpt:statusrpt,nasabah:nasabah,dateStart:dateStart,dateEnd:dateEnd,permit:permit, type_transaction:'ORDER'},
 			success : function(response,status){
 				var html = '';
-				const logs = [
-					{item:"ON_PROGRESS",value:"On Proses"},
-					{item:"READY_ON_DELIVERY",value:"Siap di kirim"},
-					{item:"STOCK_READY",value:"Stock ready"},
-				];
 				response.data.forEach(data=>{
-					const {id, name, unit, position,grams, last_log, method,tenor, total,code } = data;
-					html += `<tr>`;
-					html += `<td>${unit}</td>`;
-					html += `<td>${buildTenor(tenor, method)}</td>`;
-					grams.forEach(weight=>html += `<td>${weight}</td>`);
-					html += `<td>${convertToRupiah(total)}</td>`
-					html += `<td><a href="<?php echo base_url('datamaster/logammulya/invoice');?>/${id}"><i class="flaticon-eye"></i> ${code}</a></td>`
-					html += `<td><select name="change-status" data-code="${code}" class="form-control" onchange="change(this)">`;
-					logs.forEach(log=>{
-						const {item,value}	= log;
-						if(item == last_log){
-							html += `<option value="${item}" selected >${value}</option>`;
-						}else{
-							html += `<option value="${item}">${value}</option>`;
-						}
-					})
-					html +=		`</select></td>`;
-					html += `<td>
-<button type="button" onclick="deleted(${id})" class="btn btn-sm btn-clean btn-icon btn-icon-md btn_delete"><i class="flaticon2-trash" style="cursor:pointer;"></button></td>`;
-					html += `</tr>`;
+					html += '<tr>'
+                    html += `<td>${data.date}</td>`
+                    html += `<td>${data.unit}</td>`
+                    html += `<td>${data.pembeli}</td>`
+                    html += `<td>${data.series}</td>`
+                    html += `<td>${data.amount}</td>`
+                    html += `<td>${data.price_perpcs}</td>`
+                    html += `<td>${data.total}</td>`
+					html += '/<tr>'
 				})
 				$('tbody').find('tr').remove();
 				$('tbody').append(html);
@@ -174,92 +154,13 @@ $('[name="area"]').on('change',function(){
         });
 });
 
-function buildTenor(tenor,method){
-	if(method !== 'INSTALLMENT'){
-		return method;
-	}
-	return `installment ${tenor}x`
-}
 
-function initGetNasabah(){
-    $("#unit").on('change',function(){
-        var area = $('#area').val();
-        var unit = $('#unit').val();
-        var customers =  document.getElementById('nasabah');
-        //alert(unit);
-        $.ajax({
-			type : 'GET',
-			url : "<?php echo base_url("api/datamaster/units/get_customers_gr_byunit"); ?>",
-			dataType : "json",
-			data:{unit:unit},
-			success : function(response,status){
-				KTApp.unblockPage();
-				if(response.status == true){
-                    $("#nasabah").empty();
-                    var option = document.createElement("option");
-                    option.value = "all";
-                    option.text = "All";
-                    customers.appendChild(option);
-					$.each(response.data, function (index, data) {
-                        //console.log(data);
-                        var opt = document.createElement("option");
-                        opt.value = data.nik;
-                        opt.text = data.name;
-                        customers.appendChild(opt);
-					});
 
-				}
-			},
-			error: function (jqXHR, textStatus, errorThrown){
-				KTApp.unblockPage();
-			},
-			complete:function () {
-				KTApp.unblock('#form_bukukas .kt-portlet__body', {});
-			}
-		});
 
-    });
-}
-
-function initUnitNasabah(){
-        var unit=$('[name="id_unit"]').val();
-        var customers =  document.getElementById('nasabah');
-        $.ajax({
-			type : 'GET',
-			url : "<?php echo base_url("api/datamaster/units/get_customers_gr_byunit"); ?>",
-			dataType : "json",
-			data:{unit:unit},
-			success : function(response,status){
-				KTApp.unblockPage();
-				if(response.status == true){
-                    $("#nasabah").empty();
-                    var option = document.createElement("option");
-                    option.value = "all";
-                    option.text = "All";
-                    customers.appendChild(option);
-					$.each(response.data, function (index, data) {
-                        //console.log(data);
-                        var opt = document.createElement("option");
-                        opt.value = data.nik;
-                        opt.text = data.name;
-                        customers.appendChild(opt);
-					});
-				}
-			},
-			error: function (jqXHR, textStatus, errorThrown){
-				KTApp.unblockPage();
-			},
-			complete:function () {
-				KTApp.unblock('#form_bukukas .kt-portlet__body', {});
-			}
-		});
-}
 
 
 jQuery(document).ready(function() {
     initCariForm();
-    initGetNasabah();
-    initUnitNasabah();
     initAlert();
 
 	$('#btncari').trigger('click');
