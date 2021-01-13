@@ -865,7 +865,15 @@
 											<span class="kt-menu__link-text">LM Siscab</span><i class="kt-menu__hor-arrow la la-angle-right"></i><i class="kt-menu__ver-arrow la la-angle-right"></i>
 										</a>
 										<div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--right">
-											<ul class="kt-menu__subnav">			
+											<ul class="kt-menu__subnav">		
+											<?php if(read_access('report/lm/penjualan')):?>
+													<li class="kt-menu__item "  aria-haspopup="true">
+														<a  href="<?php echo base_url('report/lm/penjualan'); ?>" class="kt-menu__link ">
+															<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+															<span class="kt-menu__link-text">Penjualan</span>
+														</a>
+													</li>
+												<?php endif;?>	
 												<?php if(read_access('report/lm/transaction')):?>
 													<li class="kt-menu__item "  aria-haspopup="true">
 														<a  href="<?php echo base_url('report/lm/transaction'); ?>" class="kt-menu__link ">
