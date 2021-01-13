@@ -1041,13 +1041,19 @@
 									<li class="kt-menu__item "  aria-haspopup="true">
 										<a  href="<?php echo base_url('lm/grams'); ?>" class="kt-menu__link ">
 											<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>
-											<span class="kt-menu__link-text">Order</span>
+											<span class="kt-menu__link-text">Order Lm untuk Unit</span>
 										</a>
 									</li>
 									<li class="kt-menu__item "  aria-haspopup="true">
 										<a  href="<?php echo base_url('lm/transactions'); ?>" class="kt-menu__link ">
 											<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>
-											<span class="kt-menu__link-text">Transaksi</span>
+											<span class="kt-menu__link-text">List Order Untuk Unit</span>
+										</a>
+									</li>
+									<li class="kt-menu__item "  aria-haspopup="true">
+										<a  href="<?php echo base_url('lm/sales'); ?>" class="kt-menu__link ">
+											<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>
+											<span class="kt-menu__link-text">Penjualan Unit</span>
 										</a>
 									</li>
 								</ul>

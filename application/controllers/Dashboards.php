@@ -804,7 +804,7 @@ class Dashboards extends Authenticated
 			$objPHPExcel->getActiveSheet()->setCellValue('J'.$no, $unit->dpd_repayment_today->ost);				 
 			$objPHPExcel->getActiveSheet()->setCellValue('K'.$no, $unit->total_dpd->noa);				 
 			$objPHPExcel->getActiveSheet()->setCellValue('L'.$no, $unit->total_dpd->ost);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('M'.$no, $unit->percentage);				 				 
+			$objPHPExcel->getActiveSheet()->setCellValue('M'.$no, round($unit->percentage*100, 3));				 				 
 			$no++;
 		}
 

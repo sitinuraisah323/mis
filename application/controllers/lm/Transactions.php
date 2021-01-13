@@ -116,6 +116,10 @@ class Transactions extends Authenticated
 				$this->model->db->where('last_log', $log);
 			}
 		}
+		
+		if($typeTransaction =$this->input->get('type_transaction')){
+			$this->model->db->where('type_transaction', $typeTransaction);
+		}
 
 		$this->model->db
 			->order_by('lm_transactions.id','desc');

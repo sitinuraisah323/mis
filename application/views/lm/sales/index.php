@@ -12,9 +12,9 @@ $this->load->view('temp/MenuBar.php');
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">Lm</h3>
+            <h3 class="kt-subheader__title">LM</h3>
             <span class="kt-subheader__separator kt-subheader__separator--v"></span>
-            <span class="kt-subheader__desc">List Order Unit</span>
+            <span class="kt-subheader__desc">List Penjualan Unit</span>
         </div>
         <div class="kt-subheader__toolbar">
             <div class="kt-subheader__wrapper">
@@ -33,12 +33,12 @@ $this->load->view('temp/MenuBar.php');
                         <i class="kt-font-brand fa fa-align-justify"></i>
                     </span>
                     <h3 class="kt-portlet__head-title">
-                      List Order Unit
+                         List Penjualan Unit
                     </h3>
                 </div>
                 <div class="kt-portlet__head-toolbar">
                     <div class="kt-portlet__head-wrapper">
-						<a href="<?php echo base_url('lm/grams/purchase');?>" class="btn btn-info">Add</a>
+						<a href="<?php echo base_url('lm/sales/form');?>" class="btn btn-info">Add</a>
 					</div>
                 </div>
             </div>
@@ -76,7 +76,7 @@ $this->load->view('temp/MenuBar.php');
             </table> -->
             <!--end: Datatable -->
 
-            <form id="form_bukukas" class="form-horizontal" method="post" action="<?php echo base_url("lm/transactions/export?type_transaction=ORDER"); ?>">
+            <form id="form_bukukas" class="form-horizontal" method="post" action="<?php echo base_url("lm/transactions/export?type_transaction=SALE"); ?>">
             <div class="kt-portlet__body">
             <div class="col-md-12" >
                 <div class="form-group row">
@@ -112,19 +112,10 @@ $this->load->view('temp/MenuBar.php');
                     </div>
                 <?php endif ;?>
                     <div class="col-lg-2">
-						<label class="col-form-label">Status</label>
-                        <select class="form-control select2" name="status" id="status">
-                            <option value=""></option>
-                            <option value="APPROVED">Approved</option>
-                            <option value="DECLINED">Declined</option>
-                            <option value="ON_PROGRESS">On Progress</option>
-                        </select>
-                    </div>
-                    <div class="col-lg-2">
                         <label class="col-form-label">&nbsp</label>
                         <div class="position-relative">
                         <button type="button" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>
-                        <!--
+                         <!--
                          <button type="submit" class="btn btn-success btn-icon" name="btnexport" id="btnexport" onclick="export_xls()"><i class="fa fa-file-excel"></i></button>
                         -->
                      </div>
@@ -138,11 +129,12 @@ $this->load->view('temp/MenuBar.php');
 						<table class="table">
 						  	<thead class="thead-light">
 						    	<tr>
+									<th rowspan="2">Tanggal</th>
+									<th rowspan="2">Pembeli</th>
 									<th rowspan="2">Unit</th>
 									<th rowspan="2">Metode</th>
-									<th colspan="<?php echo count($grams);?>">Order(Gram)</th>
+									<th colspan="<?php echo count($grams);?>">Penjualan Unit(Gram)</th>
 									<th rowspan="2" class="text-right">Total</th>
-									<th rowspan="2">Status</th>
 									<?php if($this->session->userdata('user')->level == 'area'):?>
 									<th rowspan="2">Aksi</th>
 									<?php endif;?>
@@ -173,5 +165,5 @@ $this->load->view('temp/MenuBar.php');
 
 <?php
 $this->load->view('temp/Footer.php');
-$this->load->view('lm/transactions/_script.php');
+$this->load->view('lm/sales/_script.php');
 ?>

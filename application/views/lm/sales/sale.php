@@ -9,7 +9,7 @@ $this->load->view('temp/MenuBar.php');
 	<div class="kt-portlet__head">
 		<div class="kt-portlet__head-label">
 			<h3 class="kt-portlet__head-title">
-				Unit Order
+				Form Penjualan Unit * Setelah di submit akan langsung mengurangi stock
 			</h3>
 		</div>
 	</div>
@@ -18,13 +18,12 @@ $this->load->view('temp/MenuBar.php');
 	<input type="hidden" name="id_unit" value="<?php echo $this->session->userdata('user')->id_unit;?>">
 			
 		<div class="kt-portlet__body">
-		<!--
 		   <div class="row">
 		   		<div class="col-md-12">
 				   <div class="form-group row">
 				   		<label class="col-md-2">Tipe Pembeli</label>
 						<div class="col-md-10">
-							<select name="type_buyer" id="" class="form-control">
+							<select name="type_buyer" id="" class="form-control" required>
 								<option value="">Pilih Tipe Pembeli</option>
 								<option value="employee">Karyawan</option>
 								<option value="customer">Pelanggan</option>
@@ -33,16 +32,14 @@ $this->load->view('temp/MenuBar.php');
 				   </div>   
 				</div>
 		   </div>
-		   -->
-		   <input type="hidden" name="type_buyer" value="unit"/>
-		   <input type="hidden" name="type_transaction" value="ORDER"/>
+		   <input type="hidden" name="type_transaction" value="SALE"/>
 			<div class="row d-none type-employee">
 				<div class="col-md-12">
 					<div class="form-group row">
 						<label class="col-md-2">Karyawan</label>
 						<div class="col-md-10">
-							<select class="custom-select form-control" name="id_employee" required>
-								<option value="0">Karyawan</option>
+							<select class="custom-select form-control" name="id_employee">
+								<option value="">Karyawan</option>
 								<?php if($employees):?>
 									<?php foreach ($employees as $employee):?>
 										<option value="<?php echo $employee->id;?>"><?php echo implode('-', array($employee->fullname, $employee->unit));?></option>
@@ -153,7 +150,9 @@ $this->load->view('temp/MenuBar.php');
 							<tr>
 								<th>Weight</th>
 								<th>Harga Perpcs</th>
+								<th>Stock</th>
 								<th>Amount</th>
+								<th>Series</th>
 								<th>Total</th>
 								<th></th>
 							</tr>
@@ -163,10 +162,19 @@ $this->load->view('temp/MenuBar.php');
 								<th><input type="hidden" class="id_lm_gram"><span data-post="id_lm_gram"></span></th>
 								<td>
 									<input type="hidden"  class="price_perpcs">
-									<input type="hidden" class="price_buyback_perpcs">
-									<span data-post="price_perpcs"></span>
+									<input type="text"  class="price_buyback_perpcs form-control">
+								
 								</td>
-								<td><input type="text" value="0" class="form-control amount"></td>
+								<td>
+									<input type="hidden"  class="stock">
+									<span data-post="stock"></span>
+								</td>
+								<td><input type="text" value="0" onchange="checkStock()" class="form-control amount"></td>
+								<td>
+									<select data-post="series" class="form-control">
+										<option value="">Pilih Series LM</option>
+									</select>
+								</td>
 								<td><input type="hidden" class="total"><span data-post="total">0</span></td>
 								<td><button type="button" class="btn btn-default btn_delete"><i class="fas fa-trash"></i></button></td>
 							</tr>
@@ -192,5 +200,5 @@ $this->load->view('temp/MenuBar.php');
 </div>
 <?php
 $this->load->view('temp/Footer.php');
-$this->load->view('lm/gram/js.php');
+$this->load->view('lm/sales/js.php');
 ?>

@@ -109,9 +109,9 @@ function initCariForm(){
         KTApp.block('#form_bukukas .kt-portlet__body', {});
 		$.ajax({
 			type : 'GET',
-			url : "<?php echo base_url("api/lm/transactions"); ?>",
+			url : "<?php echo base_url("api/lm/transactions"); ?>?type_transaction=SALE",
 			dataType : "json",
-			data:{area:area,id_unit:unit,statusrpt:statusrpt,nasabah:nasabah,dateStart:dateStart,dateEnd:dateEnd,permit:permit, type_transaction:'ORDER'},
+			data:{area:area,id_unit:unit,statusrpt:statusrpt,nasabah:nasabah,dateStart:dateStart,dateEnd:dateEnd,permit:permit},
 			success : function(response,status){
 				var html = '';
 				const logs = [
@@ -120,13 +120,14 @@ function initCariForm(){
 					{item:"ON_PROGRESS",value:"On Progress"}
 				];
 				response.data.forEach(data=>{
-					const { unit, grams, last_log, method,tenor, total,code } = data;
+					const { name, date, unit, grams, last_log, method,tenor, total,code } = data;
 					html += `<tr>`;
+					html += `<td>${date}</td>`;
+					html += `<td>${name}</td>`;
 					html += `<td>${unit}</td>`;
 					html += `<td>${buildTenor(tenor, method)}</td>`;
 					grams.forEach(weight=>html += `<td>${weight}</td>`);
-					html += `<td>${convertToRupiah(total)}</td>`
-					html += `<td>${last_log}</td>`
+					html += `<td class="text-right">${convertToRupiah(total)}</td>`
 					<?php if($this->session->userdata('user')->level === 'area'):?>
 						if(last_log === 'ON_PROGRESS'){
 							html += `<td><select name="change-status" data-code="${code}" class="form-control" onchange="change(this)">`;

@@ -208,6 +208,7 @@ class UnitsdailycashModel extends Master
 			->join('areas a','a.id = u.id_area')
 			->where('MONTH(ud.date)', $month)
 			->where('YEAR(ud.date)', $year)
+			->where('no_perk !=','1110099')
 			->where_in('SUBSTRING(no_perk, 1, 4)',array('1110', '1120'))
 			->where("`description` IN (SELECT `description` FROM $this->table where description like '%penerimaan bank%' or description like '%penerimaan kas kantor pusat%')  ", NULL, FALSE)
 			->order_by('a.id','ASC')

@@ -24,6 +24,9 @@ class Transactions extends ApiController
 			if($log =  $this->input->get('statusrpt')){
 				$this->model->db->where('last_log', $log);
 			}
+			if($typeTransaction = $this->input->get('type_transaction')){
+				$this->model->db->where('type_transaction', $typeTransaction);
+			}
 		
 		}
 		$this->model->db->join('units','units.id = lm_transactions.id_unit');
@@ -87,20 +90,21 @@ class Transactions extends ApiController
 			else
 			{
 				$data = array(
-					'id_unit'	=> $post['id_unit'],
-					'id_employee'	=> $post['id_employee'],
-					'date'	=> $post['date'],
-					'code'	=> $post['code'],
-					'total'	=> $post['total'],
-					'tenor'	=> $post['tenor'],
-					'method'	=> $post['method'],
-					'name'	=> $post['name'],
-					'nik'	=> $post['nik'],
-					'mobile'	=> $post['mobile'],
-					'address'	=> $post['address'],
-					'type_buyer'	=> $post['type_buyer'],
+					'id_unit'	=> $this->input->post('id_unit'),
+					'id_employee'	=>  (int) $this->input->post('id_employee'),
+					'date'	=> date('Y-m-d', strtotime( $this->input->post('date'))),
+					'code'	=> $this->input->post('code'),
+					'total'	=>  $this->input->post('total'),
+					'tenor'	=>  $this->input->post('tenor'),
+					'method'	=>  $this->input->post('method'),
+					'name'	=>  $this->input->post('name'),
+					'nik'	=> $this->input->post('nik'),
+					'mobile'	=> $this->input->post('mobile'),
+					'address'	=>  $this->input->post('address'),
+					'type_buyer'	=>  $this->input->post('type_buyer'),
 					'user_create'	=> $this->session->userdata('user')->id,
 					'user_update'	=> $this->session->userdata('user')->id,
+					'type_transaction'	=>  $this->input->post('type_transaction')
 				);
 				$this->model->db->trans_begin();
 				$this->model->insert($data);
@@ -112,11 +116,26 @@ class Transactions extends ApiController
 						$data[$index] = array(
 							'id_lm_transaction'	=> $find->id,
 							'id_lm_gram'	=> $value['id_lm_gram'],
+							'id_series'	=> $value['id_series'],
 							'price_perpcs'	=> $value['price_perpcs'],
 							'price_buyback_perpcs'	=> $value['price_buyback_perpcs'],
 							'amount'	=> $value['amount'],
 							'total'	=> $value['total'],
 						);
+						if($this->input->post('type_transaction') === 'SALE'){
+							$this->stock->insert(array(
+								'id_series'	=> $value['id_series'],
+								'id_unit'	=> $this->input->post('id_unit'),
+								'id_lm_gram'	=> $value['id_lm_gram'],
+								'amount'	=> $value['amount'],
+								'type'	=> 'CREDIT',
+								'date_receive'	=> date('Y-m-d', strtotime($this->input->post('date'))),
+								'status'	=> 'PUBLISH',
+								'price'	=> (int) $value['price_buyback_perpcs'],
+								'description' => 'Penjualan Pada Tanggal '.date('D, d M Y', strtotime($this->input->post('date'))).' dengan code '.$this->input->post('code'),
+								'reference_id'	=>  $this->input->post('code'),
+							));
+						}
 					}
 					$this->model->db->insert_batch('lm_transactions_grams', $data);
 				}
@@ -139,7 +158,6 @@ class Transactions extends ApiController
 	{
 		if($post = $this->input->post()){
 			$this->load->library('form_validation');
-			$this->form_validation->set_rules('id_employee', 'id_employee', 'required');
 			$this->form_validation->set_rules('date', 'date', 'required');
 			$this->form_validation->set_rules('code', 'code', 'required');
 			$this->form_validation->set_rules('total', 'total', 'required');
@@ -153,22 +171,24 @@ class Transactions extends ApiController
 			else
 			{
 				$data = array(
-					'id_unit'	=> $post['id_unit'],
-					'id_employee'	=> $post['id_employee'],
-					'date'	=> $post['date'],
-					'code'	=> $post['code'],
-					'total'	=> $post['total'],
-					'method'	=> $post['method'],
-					'tenor'	=> $post['tenor'],
-					'name'	=> $post['name'],
-					'nik'	=> $post['nik'],
-					'mobile'	=> $post['mobile'],
-					'address'	=> $post['address'],
-					'type_buyer'	=> $post['type_buyer'],
+					'id_unit'	=> $this->input->post('id_unit'),
+					'id_employee'	=> (int) $this->input->post('id_employee'),
+					'date'	=> date('Y-m-d', strtotime( $this->input->post('date'))),
+					'code'	=>  $this->input->post('code'),
+					'total'	=>  $this->input->post('total'),
+					'method'	=>  $this->input->post('method'),
+					'tenor'	=>  $this->input->post('tenor'),
+					'name'	=>  $this->input->post('name'),
+					'type_transaction'	=>  $this->input->post('type_transaction'),
+					'nik'	=>  $this->input->post('nik'),
+					'mobile'	=>  $this->input->post('mobile'),
+					'address'	=>  $this->input->post('address'),
+					'type_buyer'	=>  $this->input->post('type_buyer'),
 					'user_create'	=> $this->session->userdata('user')->id,
 					'user_update'	=> $this->session->userdata('user')->id,
 				);
 				if($this->model->update($post['id'], $data)){
+
 					$find = $this->model->find($post['id']);
 					return $this->sendMessage($find, 'successfully Update data');
 				}

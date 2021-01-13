@@ -7,6 +7,7 @@ class Grams extends ApiController
 	{
 		parent::__construct();
 		$this->load->model('LmGramsModel', 'model');
+		$this->load->model('LmStocksModel', 'stocks');
 		$this->load->model('LmGramsPricesModel', 'prices');
 	}
 
@@ -29,6 +30,9 @@ class Grams extends ApiController
 					$gram->price_buyback_pergram = $prices->price_buyback_pergram;
 					$gram->price_pergram_customer = $prices->price_pergram_customer;
 					$gram->price_perpcs_customer = $prices->price_perpcs_customer;
+				}
+				if($idUnit = $this->input->get('id_unit')){
+					$gram->stock = $this->stocks->byGrams($gram->id, $idUnit);
 				}
 			}
 		}

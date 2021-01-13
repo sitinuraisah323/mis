@@ -21,6 +21,7 @@ class Stocks extends ApiController
 		}
 		$this->model->db->join('lm_grams','lm_grams.id = lm_stocks.id_lm_gram')
 						->join('units','units.id = lm_stocks.id_unit')
+						->order_by('lm_stocks.id','desc')
 						->join('areas','areas.id = units.id_area')
 						->select('lm_grams.image, lm_grams.weight, units.name as unit');
 		if($this->session->userdata('user')->level == 'unit'){
@@ -44,7 +45,7 @@ class Stocks extends ApiController
 			$this->form_validation->set_rules('status', 'Status', 'required');		
 			$this->form_validation->set_rules('price', 'Price', 'required|integer');			
 			$this->form_validation->set_rules('description', 'Description', 'required');
-
+			$post['date_receive'] = date('Y-m-d', strtotime($post['date_receive']));
 
 			if ($this->form_validation->run() == FALSE)
 			{
@@ -90,6 +91,7 @@ class Stocks extends ApiController
 			$this->form_validation->set_rules('description', 'Description', 'required');
 			$this->form_validation->set_rules('date_receive', 'Date receive', 'required');
 			$this->form_validation->set_rules('status', 'Status', 'required');
+			$post['date_receive'] = date('Y-m-d', strtotime($post['date_receive']));
 
 
 
