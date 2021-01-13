@@ -26,6 +26,15 @@ class Regularpawns extends ApiController
 			$this->regulars->db->where('units.id', $this->session->userdata('user')->id_unit);
 		}
 
+		if($dateStart = $this->input->get('dateStart')){
+			$this->regulars->db->where('units_regularpawns.date_sbk >=',$dateStart);
+		}
+		if($dateEnd = $this->input->get('dateEnd')){
+			$this->regulars->db->where('units_regularpawns.date_sbk <=',$dateEnd);
+		}
+		if($id_unit = $this->input->get('unit')){
+			$this->regulars->db->where('units.id',$id_unit);
+		}
 		if($this->session->userdata('user')->level == 'penaksir'){
 			$this->regulars->db->where('units_regularpawns_summary.model',null);
 			$this->regulars->db->where('units_regularpawns.status_transaction','N');
@@ -396,6 +405,9 @@ class Regularpawns extends ApiController
 			if($sortBy = $this->input->get('sort_by')){
 				$this->regulars->db->order_by('units_regularpawns.'.$sortBy, $this->input->get('sort_method'));
 			}
+		}
+		if($no_sbk = $this->input->get('no_sbk')){
+			$this->regulars->db->where('units_regularpawns.no_sbk',  $no_sbk);
 		}
 
 		$data = $this->regulars->all();
