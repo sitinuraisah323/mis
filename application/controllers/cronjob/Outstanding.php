@@ -131,7 +131,7 @@ class Outstanding extends Authenticated
         
 	}
 
-	public function generate(){
+	public function generate_old(){
 		if($date = $this->input->get('date')){
 			$date = $date;
 		}else{
@@ -185,7 +185,7 @@ class Outstanding extends Authenticated
 		);
 	}
 
-	public function generatereport(){
+	public function generate(){
 
 		if($date = $this->input->get('date')){
 			$date = $date;
@@ -198,6 +198,11 @@ class Outstanding extends Authenticated
 		$totalNoa = 0;
 		$totalPelunasan = 0;
 		$totalPencairan = 0;
+
+		$totalUpMortages = 0;
+		$totalNoaMortages = 0;
+		$totalPelunasanMortages = 0;
+		$totalPencairanMortages = 0;
 
 		$units = $this->units->db->select('units.id, units.name, area')
 			->join('areas','areas.id = units.id_area')
@@ -230,15 +235,39 @@ class Outstanding extends Authenticated
 				'os_mortage'			=> $getOS->os_mortage,
 			);
 
-			echo "<pre/>";
-			print_r($transaction);
+			$totalUp +=  $getOS->os_regular;
+			$totalNoa +=  $getOS->noa_os_regular;
+			$totalPelunasan +=  $repaymentToday->up_regular;
+			$totalPencairan +=  $creditToday->up_regular;
+
+			$totalUpMortages +=  $getOS->os_mortage;
+			$totalNoaMortages +=   $getOS->noa_os_mortage;
+			$totalPelunasanMortages +=  $repaymentToday->up_mortage;
+			$totalPencairanMortages +=  $creditToday->up_mortage;
+
+
+			//echo "<pre/>";
+			//print_r($transaction);
 			$check = $this->db->get_where('units_outstanding',array('id_unit' => $unit->id,'date'=>$date));
 			if($check->num_rows() > 0){
 				$this->db->update('units_outstanding', $transaction, array('id_unit' => $unit->id,'date'=>$date));
 			}else{
 				$this->db->insert('units_outstanding', $transaction);
-			}
+			}			
 		}
+
+		echo json_encode(
+			array(
+				'Noa Regular'	=> number_format($totalNoa,0).'<br>',
+				'Outstanding Regular'	=> number_format($totalUp,0).'<br>',
+				'Booking Regular'	=> number_format($totalPencairan,0).'<br>',
+				'Pelunasan Regular'	=>  number_format($totalPelunasan,0).'<br>',
+				'Noa Cicilan'	=> number_format($totalNoaMortages,0).'<br>',
+				'Outstanding Cicilan'	=> number_format($totalUpMortages,0).'<br>',
+				'Booking Cicilan'	=> number_format($totalPencairanMortages,0).'<br>',
+				'Pelunasan Cicilan'	=>  number_format($totalPelunasanMortages,0).'<br>',
+			)
+		);
 	}
 
 }
