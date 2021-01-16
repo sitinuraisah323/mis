@@ -99,6 +99,12 @@ class Outstanding extends Authenticated
 		$view = $this->load->view('dailyreport/outstanding/index.php',['outstanding'=>$grouped,'datetrans'=> $this->datetrans()],true);
 		$pdf->writeHTML($view);
 
+		$osmortages = $this->dataMortages();
+		$groupedMortages = $this->grouped($osmortages);
+		$pdf->AddPage('L');
+		$view = $this->load->view('dailyreport/outstanding/mortages.php',['outstanding'=>$groupedMortages,'datetrans'=> $this->datetrans()],true);
+		$pdf->writeHTML($view);
+
 		$pdf->AddPage('L');
 		$view = $this->load->view('dailyreport/outstanding/dpd.php',['dpd'=>$os],true);
 		$pdf->writeHTML($view);
