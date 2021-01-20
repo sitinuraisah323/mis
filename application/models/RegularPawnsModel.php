@@ -257,9 +257,12 @@ class RegularpawnsModel extends Master
 		$upRegular = (int)$dataRegular->up;
 
 		return (object)array(
-			'noa' => (int)$noaMortages + $noaRegular,
-			'credit' => (int)$upMortages + $upRegular,
-			'tiket' => (int)$upMortages + $upRegular > 0 ? ($upMortages + $upRegular) / ($noaMortages + $noaRegular) : 0,
+			'noa' => (int)$noaRegular,
+			'credit' => (int) $upRegular,
+			'tiket' => (int)$upRegular > 0 ? ($upRegular) / ($noaRegular) : 0,
+			'noa_mortage' => (int)$noaMortages,
+			'credit_mortage' => (int)$upMortages,
+			'tiket_mortage' => (int)$upMortages > 0 ? ($upMortages) / ($noaMortages) : 0,
 		);
 	}
 

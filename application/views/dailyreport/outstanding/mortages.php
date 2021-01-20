@@ -1,4 +1,4 @@
-<h3>Outstanding Nasional(Reguler) <?php echo date('d-m-Y'); ?></h3>
+<h3>Outstanding Nasional(Ciciclan) <?php echo date('d-m-Y'); ?></h3>
 <hr/>
     <?php 
     $totalNoaOstYesterday = 0;
@@ -17,6 +17,7 @@
     $dateLastOST = date('d-m-Y', strtotime('-1 days', strtotime($datetrans)))
 
     ?>
+    <?php //print_r($outstanding); ?>
     <?php foreach($outstanding as $area => $datas):?>
     <table class="table" border="1">
             <tr bgcolor="#aaaa55">
@@ -64,30 +65,30 @@
             <?php foreach($datas as $data): $no_++;?>
             <?php
                     $totalNoaOstYesterday += $data->ost_yesterday->noa;
-                    $totalNoaOstToday += $data->credit_today->noa;
-                    $totalUpOstToday += $data->credit_today->up;
+                    $totalNoaOstToday += $data->credit_today->noa_mortage;
+                    $totalUpOstToday += $data->credit_today->up_mortage;
                     $totalUpaOstYesterday += $data->ost_yesterday->up;
-                    $totalRepaymentTodayUp += $data->repayment_today->up;
-                    $totalRepaymentTodayNoa += $data->repayment_today->noa;
+                    $totalRepaymentTodayUp += $data->repayment_today->up_mortage;
+                    $totalRepaymentTodayNoa += $data->repayment_today->noa_mortage;
                     $totalOstNoa += $data->total_outstanding->noa;
                     $totalOstUp += $data->total_outstanding->up;
                     $totalOstTicket += $data->total_outstanding->tiket;
-                    $totalDisbureNoa += $data->total_disburse->noa;
-                    $totalDisbureUp += $data->total_disburse->credit;
-                    $totalDisbureTicket += $data->total_disburse->tiket;
+                    $totalDisbureNoa += $data->total_disburse->noa_mortage;
+                    $totalDisbureUp += $data->total_disburse->credit_mortage;
+                    $totalDisbureTicket += $data->total_disburse->tiket_mortage;
 
                     $totalNoaOstYesterdayArea += $data->ost_yesterday->noa;
                     $totalNoaOstTodayArea += $data->credit_today->noa;
-                    $totalUpOstTodayArea += $data->credit_today->up;
+                    $totalUpOstTodayArea += $data->credit_today->up_mortage;
                     $totalUpaOstYesterdayArea += $data->ost_yesterday->up;
-                    $totalRepaymentTodayUpArea += $data->repayment_today->up;
-                    $totalRepaymentTodayNoaArea += $data->repayment_today->noa;
+                    $totalRepaymentTodayUpArea += $data->repayment_today->up_mortage;
+                    $totalRepaymentTodayNoaArea += $data->repayment_today->noa_mortage;
                     $totalOstNoaArea += $data->total_outstanding->noa;
                     $totalOstUpArea += $data->total_outstanding->up;
                     $totalOstTicketArea += $data->total_outstanding->tiket;
-                    $totalDisbureNoaArea += $data->total_disburse->noa;
-                    $totalDisbureUpArea += $data->total_disburse->credit;
-                    $totalDisbureTicketArea += $data->total_disburse->tiket;
+                    $totalDisbureNoaArea += $data->total_disburse->noa_mortage;
+                    $totalDisbureUpArea += $data->total_disburse->credit_mortage;
+                    $totalDisbureTicketArea += $data->total_disburse->tiket_mortage;
             ?>
                 <tr>
                     <td align="center"><?php echo $no_;?></td>
@@ -96,20 +97,20 @@
                     <td align="center">-</td> -->
                     <td align="center"><?php echo $data->ost_yesterday->noa;?></td>
                     <td align="right"><?php echo number_format($data->ost_yesterday->up,0);?></td>
-                    <td align="center"><?php echo $data->credit_today->noa;?></td>
-                    <td align="right"><?php echo number_format($data->credit_today->up,0);?></td>
-                    <td align="center"><?php echo $data->repayment_today->noa;?></td>
-                    <td align="right"><?php echo number_format($data->repayment_today->up,0);?></td>
+                    <td align="center"><?php echo $data->credit_today->noa_mortage;?></td>
+                    <td align="right"><?php echo number_format($data->credit_today->up_mortage,0);?></td>
+                    <td align="center"><?php echo $data->repayment_today->noa_mortage;?></td>
+                    <td align="right"><?php echo number_format($data->repayment_today->up_mortage,0);?></td>
                     <td align="center"><?php echo $data->total_outstanding->noa;?></td>
                     <td align="right"><?php echo number_format($data->total_outstanding->up,0);?></td>
                     <td align="right"><?php echo number_format($data->total_outstanding->tiket,0);?></td>
-                    <td align="center"><?php echo $data->total_disburse->noa;?></td>
-                    <td align="right"><?php echo number_format($data->total_disburse->credit,0);?></td>
-                    <td align="right"><?php echo number_format($data->total_disburse->tiket,0);?></td>
+                    <td align="center"><?php echo $data->total_disburse->noa_mortage;?></td>
+                    <td align="right"><?php echo number_format($data->total_disburse->credit_mortage,0);?></td>
+                    <td align="right"><?php echo number_format($data->total_disburse->tiket_mortage,0);?></td>
                 
                 </tr>
             <?php endforeach ?>
-                 <tr>
+                 <!-- <tr>
                     <td align="right" colspan="2"> </td>
                     <td align="center"><?php echo $totalNoaOstYesterdayArea; ?></td>
                     <td align="right"><?php echo number_format($totalUpaOstYesterdayArea,0); ?></td>
@@ -123,13 +124,11 @@
                     <td align="center"><?php echo $totalDisbureNoaArea; ?></td>
                     <td align="right"><?php echo number_format($totalDisbureUpArea,0); ?></td>
                     <td align="right"><?php echo number_format(round($totalDisbureUpArea/$totalDisbureNoaArea),0); ?></td>
-                </tr> 
+                </tr>  -->
            </table>
 
             <br/><br/>
     <?php endforeach;?>
-
-
 
 <table class="table" border="1">            
     <tr bgcolor="#ffff00">

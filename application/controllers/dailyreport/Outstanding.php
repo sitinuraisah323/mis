@@ -99,6 +99,12 @@ class Outstanding extends Authenticated
 		$view = $this->load->view('dailyreport/outstanding/index.php',['outstanding'=>$grouped,'datetrans'=> $this->datetrans()],true);
 		$pdf->writeHTML($view);
 
+		$osmortages = $this->dataMortages();
+		$groupedMortages = $this->grouped($osmortages);
+		$pdf->AddPage('L');
+		$view = $this->load->view('dailyreport/outstanding/mortages.php',['outstanding'=>$groupedMortages,'datetrans'=> $this->datetrans()],true);
+		$pdf->writeHTML($view);
+
 		$pdf->AddPage('L');
 		$view = $this->load->view('dailyreport/outstanding/dpd.php',['dpd'=>$os],true);
 		$pdf->writeHTML($view);
@@ -168,9 +174,9 @@ class Outstanding extends Authenticated
 	{
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		require_once APPPATH.'controllers/pdf/header.php';
-
+		$os = $this->data();
 		$pdf->AddPage('L', 'A3');
-		$view = $this->load->view('dailyreport/outstanding/generate.php',['outstanding'=> $this->dataoutstanding()],true);
+		$view = $this->load->view('dailyreport/outstanding/generate.php',['outstanding'=> $this->data()],true);
 		$pdf->writeHTML($view);
 
 		//view
@@ -180,7 +186,7 @@ class Outstanding extends Authenticated
 	public function dataoutstanding()
 	{
 
-		//$date = '2020-10-30';
+		$date = '2021-01-14';
 		$date = date('Y-m-d');
 		$lastdate = $this->regular->getLastDateTransaction()->date;
 		if ($date > $lastdate){
@@ -238,47 +244,21 @@ class Outstanding extends Authenticated
 	}
 
 	public function test(){
+
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		require_once APPPATH.'controllers/pdf/header.php';
 
+		// $os = $this->data();
+		// $grouped = $this->grouped($os);
+		// $pdf->AddPage('L');
+		// $view = $this->load->view('dailyreport/outstanding/index.php',['outstanding'=>$grouped,'datetrans'=> $this->datetrans()],true);
+		// $pdf->writeHTML($view);
+
+		$os = $this->dataMortages();
+		$grouped = $this->grouped($os);
 		$pdf->AddPage('L');
-		$view = $this->load->view('dailyreport/outstanding/rate.php',['rate'	=> $this->rate()],true);
+		$view = $this->load->view('dailyreport/outstanding/mortages.php',['outstanding'=>$grouped,'datetrans'=> $this->datetrans()],true);
 		$pdf->writeHTML($view);
-
-		// $pdf->AddPage('L');
-		// $view = $this->load->view('dailyreport/outstanding/index.php',['outstanding'=> $this->data()],true);
-		// $pdf->writeHTML($view);
-
-		// $pdf->AddPage('L');
-		// $view = $this->load->view('dailyreport/outstanding/dpd.php',['dpd'=> $this->data()],true);
-		// $pdf->writeHTML($view);
-
-		// $pdf->AddPage('L');
-		// $view = $this->load->view('dailyreport/outstanding/pencairan.php',['pencairan'	=> $this->pencairan()],true);
-		// $pdf->writeHTML($view);
-
-		// $pdf->AddPage('L');
-		// $view = $this->load->view('dailyreport/outstanding/pelunasan.php',['pelunasan'	=> $this->pelunasan()],true);
-		// $pdf->writeHTML($view);
-
-		// $pdf->AddPage('L');
-		// $view = $this->load->view('dailyreport/outstanding/saldo.php',['saldo'	=> $this->saldounit()],true);
-		// $pdf->writeHTML($view);
-
-		// $pdf->AddPage('L');
-		// $view = $this->load->view('dailyreport/outstanding/pendapatan.php',['pendapatan'	=> $this->pendapatan()],true);
-		// $pdf->writeHTML($view);
-
-		// $view = $this->load->view('dailyreport/outstanding/index.php',['outstanding'=> $this->data()],true);
-		// $pdf->writeHTML($view);
-
-		// $pdf->AddPage('L');
-		// $view = $this->load->view('dailyreport/outstanding/pengeluaran.php',['pengeluaran'	=> $this->pengeluaran()],true);
-		// $pdf->writeHTML($view);
-
-		//$pdf->AddPage('L');
-		//$view = $this->load->view('dailyreport/outstanding/rate.php',['rate'	=> $this->rate()],true);
-		//$pdf->writeHTML($view);
 
 		//view
 		$pdf->Output('GHAnet_Summary_'.date('d_m_Y').'.pdf', 'I');
@@ -529,6 +509,7 @@ class Outstanding extends Authenticated
 		// 	$date = date('Y-m-d');
 		// }
 
+		//$date = '2021-01-15';
 		$date = date('Y-m-d');
 		$lastdate = $this->regular->getLastDateTransaction()->date;
 		if ($date > $lastdate){
@@ -552,7 +533,9 @@ class Outstanding extends Authenticated
 				->get()->row();
 			$unit->ost_yesterday = (object) array(
 				'noa'	=> $getOstYesterday->noa,
-				'up'	=> $getOstYesterday->os
+				'up'	=> $getOstYesterday->os,
+				'noa_mortages'	=> $getOstYesterday->noa_os_mortage,
+				'up_mortages'	=> $getOstYesterday->os_mortage
 			);
 			$unit->credit_today = $this->regular->getCreditToday($unit->id, $date);
 			$unit->repayment_today = $this->regular->getRepaymentToday($unit->id, $date);
@@ -588,6 +571,52 @@ class Outstanding extends Authenticated
 				'ost'	=> $unit->dpd_today->ost + $unit->dpd_yesterday->ost - $unit->dpd_repayment_today->ost,
 			);
 			$unit->percentage = ($unit->total_dpd->ost > 0) && ($unit->total_outstanding->up > 0) ? round($unit->total_dpd->ost / $unit->total_outstanding->up, 4) : 0;
+		}
+		return $units;
+	}
+
+	public function dataMortages()
+	{	
+
+		//$date = '2021-01-15';
+		$date = date('Y-m-d');
+		$lastdate = $this->regular->getLastDateTransaction()->date;
+		if ($date > $lastdate){
+			$date = $lastdate;
+		}else{
+			$date= $date;
+		}
+		$nextdate = date('Y-m-d', strtotime('+1 days', strtotime($date)));
+		$year = date('Y', strtotime('+1 days', strtotime($date)));
+		$month = date('n', strtotime('+1 days', strtotime($date)));
+		// $date = date('Y-m-d', strtotime('+1 days', strtotime($date)));
+		$units = $this->units->db->select('units.id, units.name, area')
+			->join('areas','areas.id = units.id_area')
+			->get('units')->result();
+		foreach ($units as $unit){
+			$getOstYesterday = $this->regular->db
+				->where('date <', $date)
+				->from('units_outstanding')
+				->where('id_unit', $unit->id)
+				->order_by('date','DESC')
+				->get()->row();
+			$unit->ost_yesterday = (object) array(
+				'noa'	=> $getOstYesterday->noa_os_mortage,
+				'up'	=> $getOstYesterday->os_mortage
+			);
+
+			$unit->credit_today = $this->regular->getCreditToday($unit->id, $date);
+			$unit->repayment_today = $this->regular->getRepaymentToday($unit->id, $date);
+			$totalNoa = (int) $unit->ost_yesterday->noa + $unit->credit_today->noa_mortage - $unit->repayment_today->noa_mortage;
+			$totalUp = (int) $unit->ost_yesterday->up + $unit->credit_today->up_mortage - $unit->repayment_today->up_mortage;
+		
+	
+			$unit->total_outstanding = (object) array(
+				'noa'	=> $totalNoa,
+				'up'	=> $totalUp,
+				'tiket'	=> round($totalUp > 0 ? $totalUp /$totalNoa : 0)
+			);
+			$unit->total_disburse = $this->regular->getTotalDisburse($unit->id, null, null, $date);
 		}
 		return $units;
 	}
