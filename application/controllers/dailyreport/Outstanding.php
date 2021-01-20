@@ -580,8 +580,8 @@ class Outstanding extends Authenticated
 				'tiket'	=> round($totalUp > 0 ? $totalUp /$totalNoa : 0)
 			);
 			$unit->total_disburse = $this->regular->getTotalDisburse($unit->id, null, null, $date);
-			$unit->dpd_yesterday = $this->regular->getDpdYesterday($unit->id, $date);
-			$unit->dpd_today = $this->regular->getDpdToday($unit->id, $date);
+			$unit->dpd_yesterday = $this->regular->getDpdYesterday($unit->id,  date('Y', strtotime('-1 days', strtotime($getOstYesterday->date))));
+			$unit->dpd_today = $this->regular->getDpdToday($unit->id, $getOstYesterday->date);
 			$unit->dpd_repayment_today = $this->regular->getDpdRepaymentToday($unit->id,$date);
 			$unit->total_dpd = (object) array(
 				'noa'	=> $unit->dpd_today->noa + $unit->dpd_yesterday->noa - $unit->dpd_repayment_today->noa,

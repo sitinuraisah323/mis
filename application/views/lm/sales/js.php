@@ -5,6 +5,40 @@
 	let sum = 0;
 	let getDates =  '';
 	const id_unit = document.querySelector('[name="id_unit"]').value;
+	const checkStock = () =>{
+		const trs = document.querySelector('[ data-append="choice"]').querySelectorAll('[ data-template="choice-cloned" ]');
+		trs.forEach(el=>{
+			const getStock = parseInt(el.querySelector('.stock').value);
+			const getAmount = parseInt(el.querySelector('.amount').value);
+			const checkStock = getAmount > getStock;
+			if(checkStock){
+				el.querySelector('.amount').value = 0;
+				swal.fire('Jumlah Persanan Melebihi Stocks');
+			}
+		})
+	}
+
+	const initSelectSeries = () =>{
+		console.log(1234);
+		const select = document.querySelector('[data-post="series"]');
+		if(select){
+			$.ajax({
+				url:"<?php echo base_url();?>/api/lm/series",
+				type:"get",
+				dataType:"JSON",
+				success:function(response){
+					console.log(response);
+					response.data.forEach(data=>{
+						const seriesOption = document.createElement('option');
+						seriesOption.value = data.id;
+						seriesOption.textContent = data.series;
+						select.appendChild(seriesOption)
+					})
+				}
+			});
+		}
+	}
+	initSelectSeries();
 	class Store{
 		getGrams(){
 			$.ajax({
@@ -188,38 +222,6 @@
 
 	document.querySelector('[name="type_buyer"]').addEventListener('change', (event) => (new Store()).handleType(event));
 
-	const checkStock = () =>{
-		const trs = document.querySelector('[ data-append="choice"]').querySelectorAll('[ data-template="choice-cloned" ]');
-		trs.forEach(el=>{
-			const getStock = parseInt(el.querySelector('.stock').value);
-			const getAmount = parseInt(el.querySelector('.amount').value);
-			const checkStock = getAmount > getStock;
-			if(checkStock){
-				el.querySelector('.amount').value = 0;
-				swal.fire('Jumlah Persanan Melebihi Stocks');
-			}
-		})
-	}
 
-	const initSelectSeries = () =>{
-		const select = document.querySelector('[data-post="series"]');
-		if(select){
-			$.ajax({
-				url:"<?php echo base_url();?>/api/lm/series",
-				type:"get",
-				dataType:"JSON",
-				success:function(response){
-					console.log(response);
-					response.data.forEach(data=>{
-						const seriesOption = document.createElement('option');
-						seriesOption.value = data.id;
-						seriesOption.textContent = data.series;
-						select.appendChild(seriesOption)
-					})
-				}
-			});
-		}
-	}
-	document.addEventListener('DOMOnload',	initSelectSeries());
 
 </script>

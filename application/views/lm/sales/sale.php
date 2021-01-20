@@ -23,7 +23,7 @@ $this->load->view('temp/MenuBar.php');
 				   <div class="form-group row">
 				   		<label class="col-md-2">Tipe Pembeli</label>
 						<div class="col-md-10">
-							<select name="type_buyer" id="" class="form-control" required>
+							<select name="type_buyer" id="" class="form-control">
 								<option value="">Pilih Tipe Pembeli</option>
 								<option value="employee">Karyawan</option>
 								<option value="customer">Pelanggan</option>

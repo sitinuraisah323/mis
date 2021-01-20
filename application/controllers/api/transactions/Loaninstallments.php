@@ -476,8 +476,6 @@ class Loaninstallments extends ApiController
 					if($findCustomer = $this->customers->find(array(
 						'nik'	=> $customer['I']
 					))){
-						$data['id'] = $findCustomer->id;
-						$batchUpdate[] = $data;
 					}else{
 						$batchInsert[] = $data;
 					}
@@ -655,14 +653,17 @@ class Loaninstallments extends ApiController
 							'no_sbk'	=>zero_fill( $transaction['A'], 5),
 							'id_unit'	=> $id_unit,
 							'permit'	=> $jok
-						))){
-							if($status !== 'L'){
-								$data['id'] = $findTransaction->id;
-								$batchUpdate[] = $data;
+						))){							
+							if($findTransaction->status_transaction !== 'L'){
+								if($status !== 'L'){
+									$data['id'] = $findTransaction->id;
+									$batchUpdate[] = $data;
+								}
 							}
 						}else{
 							$batchInsert[] 	= $data;
 						}
+
 					}
 				}
 			}
@@ -718,8 +719,6 @@ class Loaninstallments extends ApiController
 							'no_sbk'		=> zero_fill($repayment['A'], 5),
 							'permit'	=> $jok
 						))){
-							$data['id']	= $findrepayment->id;
-							$bathUpdate[] = $data;
 					}else{
 							$bathInsert[] = $data;
 						}
@@ -793,8 +792,10 @@ class Loaninstallments extends ApiController
 						'id_unit'	=> $id_unit,
 						'permit'	=> $jok
 					))){
-						$data['id'] = $findTransaction->id;
-						$bathUpdate[] = $data;
+						if($findTransaction->status_transaction !== 'L'){
+							$data['id'] = $findTransaction->id;
+							$bathUpdate[] = $data;
+						}
 					}else{
 						$bathInsert[] = $data;
 					}
