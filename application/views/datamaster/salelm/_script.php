@@ -218,4 +218,12 @@ function deleted(id) {
 		}
 	});
 }
+
+const export_xls = () =>{
+    const date_end = $('[name="date_end"]').val();
+    const date_start = $('[name="date_start"]').val();
+    const id_unit = $('[name="id_unit"]').val();
+    const id_area = $('[name="area"]').val();
+    return window.location.href = `<?php echo base_url();?>datamaster/salelm/export_excel?id_unit=${id_unit}&id_area=${id_area}&date_start=${date_start}&date_end=${date_end}`;
+}
 </script>

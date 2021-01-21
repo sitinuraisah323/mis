@@ -243,6 +243,11 @@ function initGetNasabah(){
             data:{unit, dateStart, dateEnd},
             success:function(res){
                 if(res.data.length > 0){
+                    $("#no_sbk").empty();
+                    var option = document.createElement("option");
+                    option.value = "0";
+                    option.text = "All";
+                    $('#no_sbk').append(option);
                     res.data.forEach(data=>{
                         const opt = document.createElement('option');
                         opt.value = data.no_sbk;

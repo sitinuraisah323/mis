@@ -60,6 +60,52 @@ class Regularpawns extends ApiController
 		));
 	}
 
+	public function account_coc()
+	{
+		$result = $this->regulars->db->select('units_regularpawns.*,  (select date_repayment from units_repayments where units_repayments.no_sbk = units_regularpawns.no_sbk and units_repayments.id_unit = units_regularpawns.id_unit and units_repayments.permit = units_regularpawns.permit limit 1 ) as date_repayment')
+			->from('units_regularpawns')
+			->where('month(units_regularpawns.date_sbk)', 10)
+			->where('year(units_regularpawns.date_sbk)', 2020)
+			->where('id_unit', 1)
+			->get()->result();
+		if($result){
+			foreach($result as $res){
+				$calculate = $this->calculate($res);
+				$res->coc = $calculate->coc;
+				$res->pay_capital_lease = $calculate->pay_capital_lease;
+				$res->provit = $calculate->provit;
+			}
+		}
+		return $this->sendMessage($result, 'Successfully get account coc', 200);
+	}
+
+	public function calculate($data)
+	{
+		$date1=date_create($data->date_sbk);
+		$date2=date_create($data->date_repayment ? $data->date_repayment : date('Y-m-d'));
+		$days=date_diff($date1,$date2)->days;
+		$up = $data->amount;
+
+		$capital_lease = $data->capital_lease /2;
+
+		$modulus = $days % 15;
+
+		$capital_lease_days = ($days-$modulus) / 15;
+
+		if($modulus > 0){
+			$capital_lease_days++;
+		}
+
+
+		$coc = round($up * $days/365 * 11/100);
+		$pay_capital_lease = ($up*$capital_lease)*$capital_lease_days;
+		return (object) [
+			'coc'	=> $coc, 
+			'pay_capital_lease'	=> $pay_capital_lease,
+			'provit'	=> $pay_capital_lease - $coc,
+		];
+	}
+
 	public function getcustomers()
 	{
 		$this->regulars->db->select('*,units.name as unit_name,customers.name as customer')
