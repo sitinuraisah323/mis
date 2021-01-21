@@ -1,4 +1,4 @@
-<h3>Outstanding Nasional(Ciciclan) <?php echo date('d-m-Y'); ?></h3>
+<h3>Outstanding Nasional(Gadai Cicilan) <?php echo date('d-m-Y'); ?></h3>
 <hr/>
     <?php 
     $totalNoaOstYesterday = 0;
@@ -110,7 +110,7 @@
                 
                 </tr>
             <?php endforeach ?>
-                 <!-- <tr>
+                 <tr>
                     <td align="right" colspan="2"> </td>
                     <td align="center"><?php echo $totalNoaOstYesterdayArea; ?></td>
                     <td align="right"><?php echo number_format($totalUpaOstYesterdayArea,0); ?></td>
@@ -124,7 +124,7 @@
                     <td align="center"><?php echo $totalDisbureNoaArea; ?></td>
                     <td align="right"><?php echo number_format($totalDisbureUpArea,0); ?></td>
                     <td align="right"><?php echo number_format(round($totalDisbureUpArea/$totalDisbureNoaArea),0); ?></td>
-                </tr>  -->
+                </tr> 
            </table>
 
             <br/><br/>

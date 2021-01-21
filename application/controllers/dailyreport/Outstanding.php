@@ -107,9 +107,7 @@ class Outstanding extends Authenticated
 
 		$pdf->AddPage('L');
 		$view = $this->load->view('dailyreport/outstanding/dpd.php',['dpd'=>$os],true);
-		$pdf->writeHTML($view);
-
-		
+		$pdf->writeHTML($view);		
 
 		$pdf->AddPage('L');
 		$view = $this->load->view('dailyreport/outstanding/target.php',['data'=>$this->target($this->datetrans()),'datetrans'=> $this->datetrans()],true);
@@ -248,16 +246,20 @@ class Outstanding extends Authenticated
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		require_once APPPATH.'controllers/pdf/header.php';
 
-		// $os = $this->data();
+		$os = $this->data();
 		// $grouped = $this->grouped($os);
 		// $pdf->AddPage('L');
 		// $view = $this->load->view('dailyreport/outstanding/index.php',['outstanding'=>$grouped,'datetrans'=> $this->datetrans()],true);
 		// $pdf->writeHTML($view);
 
-		$os = $this->dataMortages();
-		$grouped = $this->grouped($os);
+		// $os = $this->dataMortages();
+		// $grouped = $this->grouped($os);
+		// $pdf->AddPage('L');
+		// $view = $this->load->view('dailyreport/outstanding/mortages.php',['outstanding'=>$grouped,'datetrans'=> $this->datetrans()],true);
+		// $pdf->writeHTML($view);
+
 		$pdf->AddPage('L');
-		$view = $this->load->view('dailyreport/outstanding/mortages.php',['outstanding'=>$grouped,'datetrans'=> $this->datetrans()],true);
+		$view = $this->load->view('dailyreport/outstanding/dpd_new.php',['dpd'=>$os,'datetrans'=> $this->datetrans()],true);
 		$pdf->writeHTML($view);
 
 		//view
@@ -517,10 +519,12 @@ class Outstanding extends Authenticated
 		}else{
 			$date= $date;
 		}
+
 		$nextdate = date('Y-m-d', strtotime('+1 days', strtotime($date)));
 		$year = date('Y', strtotime('+1 days', strtotime($date)));
 		$month = date('n', strtotime('+1 days', strtotime($date)));
 		// $date = date('Y-m-d', strtotime('+1 days', strtotime($date)));
+
 		$units = $this->units->db->select('units.id, units.name, area')
 			->join('areas','areas.id = units.id_area')
 			->get('units')->result();
@@ -563,6 +567,7 @@ class Outstanding extends Authenticated
 				'tiket'	=> round($totalUp > 0 ? $totalUp /$totalNoa : 0)
 			);
 			$unit->total_disburse = $this->regular->getTotalDisburse($unit->id, null, null, $date);
+
 			$unit->dpd_yesterday = $this->regular->getDpdYesterday($unit->id, $date);
 			$unit->dpd_today = $this->regular->getDpdToday($unit->id, $date);
 			$unit->dpd_repayment_today = $this->regular->getDpdRepaymentToday($unit->id,$date);

@@ -486,8 +486,8 @@ function OSMortage() {
 			//console.log(permit);
 			$('#form_cicilan').find('.total-today').text('Rp. '+convertToRupiah(today));
 			$('#form_cicilan').find('.date-today').text(currdate);
-			//$('#form_outstanding').find('.total-yesterday').text('Rp. '+convertToRupiah(yesterday));
-			//$('#form_outstanding').find('.date-yesterday').text(lastdate);
+			$('#form_cicilan').find('.total-yesterday').text('Rp. '+convertToRupiah(yesterday));
+			$('#form_cicilan').find('.date-yesterday').text(lastdate);
 			var data = transaction,
 					//config manager
 					config = {

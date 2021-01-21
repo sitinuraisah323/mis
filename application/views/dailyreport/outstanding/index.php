@@ -1,4 +1,4 @@
-<h3>Outstanding Nasional(Reguler) <?php echo date('d-m-Y'); ?></h3>
+<h3>Outstanding Nasional(Gadai Regular) <?php echo date('d-m-Y'); ?></h3>
 <hr/>
     <?php 
     $totalNoaOstYesterday = 0;
