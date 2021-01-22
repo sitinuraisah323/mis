@@ -570,7 +570,7 @@ class Outstanding extends Authenticated
 		}
 
 		$nextdate = date('Y-m-d', strtotime('+1 days', strtotime($date)));
-		$mindate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
+		$dpdlasdate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
 		$year = date('Y', strtotime('+1 days', strtotime($date)));
 		$month = date('n', strtotime('+1 days', strtotime($date)));
 		// $date = date('Y-m-d', strtotime('+1 days', strtotime($date)));
@@ -618,14 +618,16 @@ class Outstanding extends Authenticated
 			);
 
 			$unit->total_disburse = $this->regular->getTotalDisburse($unit->id, null, null, $date);
-			$unit->dpd_yesterday = $this->regular->getDpdYesterday($unit->id, $mindate);
-			$unit->dpd_today = $this->regular->getDpdToday($unit->id, $getOstYesterday->date);
+			$unit->dpd_yesterday = $this->regular->getDpdYesterday($unit->id, $date);
+			$unit->dpd_today = $this->regular->getDpdToday($unit->id, $date);
 			$unit->dpd_repayment_today = $this->regular->getDpdRepaymentToday($unit->id,$date);
 			$unit->total_dpd = (object) array(
-				'noa'	=> $unit->dpd_today->noa + $unit->dpd_yesterday->noa,
-				'ost'	=> $unit->dpd_today->ost + $unit->dpd_yesterday->ost,
-				//'noa'	=> $unit->dpd_today->noa + $unit->dpd_yesterday->noa - $unit->dpd_repayment_today->noa,
-				//'ost'	=> $unit->dpd_today->ost + $unit->dpd_yesterday->ost - $unit->dpd_repayment_today->ost,
+				//'noa'	=> $unit->dpd_today->noa + $unit->dpd_yesterday->noa,
+				//'ost'	=> $unit->dpd_today->ost + $unit->dpd_yesterday->ost,
+				'noa_today'	=> $unit->dpd_today->noa + $unit->dpd_repayment_today->noa,
+				'ost_today'	=> $unit->dpd_today->ost + $unit->dpd_repayment_today->ost,
+				'noa'	=> ($unit->dpd_today->noa + $unit->dpd_yesterday->noa +$unit->dpd_repayment_today->noa) - $unit->dpd_repayment_today->noa,
+				'ost'	=> ($unit->dpd_today->ost + $unit->dpd_yesterday->ost +$unit->dpd_repayment_today->ost) - $unit->dpd_repayment_today->ost,
 			);
 			$unit->percentage = ($unit->total_dpd->ost > 0) && ($unit->total_outstanding->up > 0) ? round($unit->total_dpd->ost / $unit->total_outstanding->up, 4) : 0;
 		}

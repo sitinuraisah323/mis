@@ -51,8 +51,8 @@
 			<td align="center">-</td> -->
 			<td align="center" width="40"><?php echo $data->dpd_yesterday->noa;?></td>
 			<td align="right" width="90"><?php echo number_format($data->dpd_yesterday->ost,0);?></td>
-			<td align="center" width="40"><?php echo $data->dpd_today->noa;?></td>
-			<td align="right" width="90"><?php echo number_format($data->dpd_today->ost,0);?></td>
+			<td align="center" width="40"><?php echo $data->total_dpd->noa_today;?></td>
+			<td align="right" width="90"><?php echo number_format($data->total_dpd->ost_today,0);?></td>
 			<td align="center" width="40"><?php echo $data->dpd_repayment_today->noa;?></td>
 			<td align="right" width="90"><?php echo number_format($data->dpd_repayment_today->ost,0);?></td>
 			<td align="center" width="40"><?php echo $data->total_dpd->noa;?></td>
@@ -63,8 +63,8 @@
 			$totalOs += $data->total_outstanding->up;
 			$dpdYesterdayNoa +=$data->dpd_yesterday->noa;
 			$dpdYesterdayUp +=$data->dpd_yesterday->ost;
-			$dpdTodayNoa +=$data->dpd_today->noa;
-			$dpdTodayUp+=$data->dpd_today->ost;
+			$dpdTodayNoa +=$data->total_dpd->noa_today;
+			$dpdTodayUp+=$data->total_dpd->ost_today;
 			$dpdRepaymentNoa+=$data->dpd_repayment_today->noa;
 			$dpdRepaymenUp+=$data->dpd_repayment_today->ost;
 			$dpdTotalNoa+=$data->total_dpd->noa;
