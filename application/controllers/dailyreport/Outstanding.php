@@ -178,9 +178,9 @@ class Outstanding extends Authenticated
 		$view = $this->load->view('dailyreport/outstanding/dpd.php',['dpd'=>$os,'datetrans'=> $this->datetrans()],true);
 		$pdf->writeHTML($view);
 
-		$pdf->AddPage('L');
-		$view = $this->load->view('dailyreport/outstanding/dpd_new.php',['dpd'=>$os,'datetrans'=> $this->datetrans()],true);
-		$pdf->writeHTML($view);
+		// $pdf->AddPage('L');
+		// $view = $this->load->view('dailyreport/outstanding/dpd_new.php',['dpd'=>$os,'datetrans'=> $this->datetrans()],true);
+		// $pdf->writeHTML($view);
 
 		//view
 		$pdf->Output('GHAnet_Summary_'.date('d_m_Y').'.pdf', 'I');
@@ -570,6 +570,7 @@ class Outstanding extends Authenticated
 		}
 
 		$nextdate = date('Y-m-d', strtotime('+1 days', strtotime($date)));
+		$mindate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
 		$year = date('Y', strtotime('+1 days', strtotime($date)));
 		$month = date('n', strtotime('+1 days', strtotime($date)));
 		// $date = date('Y-m-d', strtotime('+1 days', strtotime($date)));
@@ -617,7 +618,7 @@ class Outstanding extends Authenticated
 			);
 
 			$unit->total_disburse = $this->regular->getTotalDisburse($unit->id, null, null, $date);
-			$unit->dpd_yesterday = $this->regular->getDpdYesterday($unit->id,  date('Y', strtotime('-1 days', strtotime($getOstYesterday->date))));
+			$unit->dpd_yesterday = $this->regular->getDpdYesterday($unit->id, $mindate);
 			$unit->dpd_today = $this->regular->getDpdToday($unit->id, $getOstYesterday->date);
 			$unit->dpd_repayment_today = $this->regular->getDpdRepaymentToday($unit->id,$date);
 			$unit->total_dpd = (object) array(
