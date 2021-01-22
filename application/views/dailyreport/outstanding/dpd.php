@@ -1,4 +1,7 @@
 <h3><br/>DPD Nasional <?php echo date('d-m-Y'); ?></h3>
+<?php 	$dateOST = date('d-m-Y',strtotime($datetrans));
+		$dateLastOST = date('d-m-Y', strtotime('-1 days', strtotime($datetrans)));
+?>
 <table class="table" border="1">
 	<thead class="thead-light">
 	<tr  bgcolor="#cccccc">
@@ -7,11 +10,11 @@
 		<th rowspan="2" align="center" width="100">Area</th>
 		<!-- <th rowspan="2" align="center">Open</th>
 		<th rowspan="2" align="center">Ijin Ojk</th> -->
-		<th colspan="2" align="center" width="130">DPD Kemarin</th>
-		<th colspan="2" align="center" width="130">DPD Hari Ini</th>
-		<th colspan="2" align="center" width="130">Pelunasan DPD Hari Ini</th>
-		<th colspan="2" align="center" width="130">Total DPD</th>
-		<th align="right" width="130">Total OST</th>
+		<th colspan="2" align="center" width="130">DPD Sebelumnya <?php echo "<br/>".$dateLastOST; ?></th>
+		<th colspan="2" align="center" width="130">DPD <?php echo "<br/>".$dateOST; ?></th>
+		<th colspan="2" align="center" width="130">Pelunasan DPD <?php echo "<br/>".$dateOST; ?></th>
+		<th colspan="2" align="center" width="130">Total DPD <?php echo "<br/>".$dateOST; ?> </th>
+		<th align="right" width="130">Total OST <?php echo "<br/>".$dateOST; ?></th>
 		<th align="right" width="100">%</th>
 	</tr>
 	<tr  bgcolor="#cccccc">
@@ -40,7 +43,7 @@
 	$percentage=0;
 	$totalOs = 0;
 	foreach($dpd as $data): $no++;?>
-		<tr <?php echo $data->percentage*100 > 2.5 ? ' bgcolor="red" ' : '';?> >
+		<tr <?php echo $data->percentage*100 >= 3 ? ' bgcolor="red" ' : '';?> >
 			<td align="center" width="20"><?php echo $no;?></td>
 			<td align="left" width="120"> <?php echo $data->name;?></td>
 			<td align="center" width="100"><?php echo $data->area;?></td>
@@ -70,7 +73,7 @@
 			?>
 		</tr>
 	<?php endforeach ?>
-		<tr <?php echo $percentage/$no*100 > 2.5 ? ' bgcolor="red" ' : '';?>>
+		<tr <?php echo $percentage/$no*100 >= 3.0 ? ' bgcolor="red" ' : '';?>>
 			<td align="right" colspan="3">Total </td>
 			<td align="center"><?php echo $dpdYesterdayNoa?></td>
 			<td align="right"><?php echo number_format($dpdYesterdayUp,0);?></td>

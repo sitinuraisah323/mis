@@ -10,7 +10,7 @@
 		<th rowspan="2" align="center" width="100">Area</th>
 		<!-- <th rowspan="2" align="center">Open</th>
 		<th rowspan="2" align="center">Ijin Ojk</th> -->
-		<th colspan="2" align="center" width="130">DPD <?php echo "<br/>".$dateLastOST; ?></th>
+		<th colspan="2" align="center" width="130">DPD Sebelumnya <?php echo "<br/>".$dateLastOST; ?></th>
 		<th colspan="2" align="center" width="130">DPD <?php echo "<br/>".$dateOST; ?></th>
 		<th colspan="2" align="center" width="130">Pelunasan DPD <?php echo "<br/>".$dateOST; ?></th>
 		<th colspan="2" align="center" width="130">Total DPD <?php echo "<br/>".$dateOST; ?> </th>
@@ -43,7 +43,7 @@
 	$percentage=0;
 	$totalOs = 0;	
 	foreach($dpd as $data): $no++;?>
-		<tr <?php echo $data->percentage*100 > 2.5 ? ' bgcolor="red" ' : '';?> >
+		<tr <?php echo $data->percentage*100 > 3 ? ' bgcolor="red" ' : '';?> >
 			<td align="center" width="20"><?php echo $no;?></td>
 			<td align="left" width="120"> <?php echo $data->name;?></td>
 			<td align="center" width="100"><?php echo $data->area;?></td>
