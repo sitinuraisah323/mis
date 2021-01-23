@@ -688,7 +688,7 @@ class Dashboards extends ApiController
 			->join('units','units.id = units_regularpawns.id_unit')
 			->join('areas','areas.id = units.id_area')
 			->from('units_regularpawns')
-			->where('deadline <=',$date_end)
+			->where('deadline <',$date_end)
 			->where('units_regularpawns.date_sbk <=', $date_end)
 			->where('units_regularpawns.status_transaction','N')
 			->group_by('units.name')

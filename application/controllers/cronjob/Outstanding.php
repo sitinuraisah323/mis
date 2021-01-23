@@ -131,7 +131,7 @@ class Outstanding extends Authenticated
         
 	}
 
-	public function generate_old(){
+	public function generate(){
 		if($date = $this->input->get('date')){
 			$date = $date;
 		}else{
@@ -185,7 +185,7 @@ class Outstanding extends Authenticated
 		);
 	}
 
-	public function generate(){
+	public function generate_x(){
 
 		if($date = $this->input->get('date')){
 			$date = $date;
@@ -213,6 +213,21 @@ class Outstanding extends Authenticated
 			$creditToday 	= $this->regular->getCreditToday($unit->id, $date);
 			$repaymentToday = $this->regular->getRepaymentToday($unit->id, $date);
 			$getOS 			= $this->regular->getOutstanding($unit->id, $date);
+
+			$totalOstToday = array(
+				'noa'	=> $getOstYesterday->noa+$creditToday->noa-$repaymentToday->noa,
+				'up'	=> $getOstYesterday->os+$creditToday->up-$repaymentToday->up
+			);
+			$totalUp += $getOstYesterday->os+$creditToday->up-$repaymentToday->up;
+			$totalNoa += $getOstYesterday->noa+$creditToday->noa-$repaymentToday->noa;
+			$totalPelunasan += $repaymentToday->up;
+			$totalPencairan += $creditToday->up;
+			$data = array(
+				'date'	=> $date,
+				'noa'	=> $totalOstToday['noa'],
+				'os'	=> $totalOstToday['up'],
+				'id_unit'	=> $unit->id
+			);
 			
 			$transaction = array(
 				//'area'					=> $unit->area,
@@ -226,6 +241,8 @@ class Outstanding extends Authenticated
 				'repyment_regular'		=> $repaymentToday->up_regular,
 				'noa_os_regular'		=> $getOS->noa_os_regular,
 				'os_regular'			=> $getOS->os_regular,
+				'noa'				    => $getOS->noa_os_regular,
+				'os'				    => $getOS->os_regular,
 				//cicilan
 				'noa_mortage'			=> $creditToday->noa_mortage,
 				'up_mortage'			=> $creditToday->up_mortage,
@@ -244,7 +261,6 @@ class Outstanding extends Authenticated
 			$totalNoaMortages +=   $getOS->noa_os_mortage;
 			$totalPelunasanMortages +=  $repaymentToday->up_mortage;
 			$totalPencairanMortages +=  $creditToday->up_mortage;
-
 
 			//echo "<pre/>";
 			//print_r($transaction);

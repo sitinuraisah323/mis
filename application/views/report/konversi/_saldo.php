@@ -129,7 +129,7 @@ function initCariForm(){
 			success : function(response,status){
 				KTApp.unblockPage();
                 //console.log('test');
-				if(response.status == true){
+				//if(response.status === true){
                     //console.log('test');
 					var template = '';
 					var no = 1;
@@ -160,7 +160,7 @@ function initCariForm(){
 						template += "<td class='text-right'>"+convertToRupiah(totselisih)+"</td>";
 						template += '</tr>';
                     $('.kt-section__content table').append(template);
-				}
+				//}
 			},
 			error: function (jqXHR, textStatus, errorThrown){
 				KTApp.unblockPage();

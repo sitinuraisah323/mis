@@ -130,7 +130,9 @@ class Konversi extends ApiController
 		}
 		
 		if($unit = $this->input->get('unit')){
-			$this->units->db->where('units.id', $unit);
+			if($unit!='all'){
+				$this->units->db->where('units.id', $unit);
+			}
 		}else if($this->session->userdata('user')->level == 'unit'){
 			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
 		}
