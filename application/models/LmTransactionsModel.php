@@ -7,7 +7,7 @@ class LmTransactionsModel extends Master
 
 	public function saleGrams($idGram, $idUnit, $dateStart, $dateEnd)
 	{
-		return (int) $this->db->select('sum(amount) as amount')
+		$amount =  (int) $this->db->select('sum(amount) as amount')
 			->from('lm_transactions_grams')
 			->join('lm_transactions','lm_transactions.id = lm_transactions_grams.id_lm_transaction')
 			->join('series','series.id = lm_transactions_grams.id_series')
@@ -18,6 +18,23 @@ class LmTransactionsModel extends Master
 			->where('units.id', $idUnit)
 			->where('lm_grams.id', $idGram)
 			->where('lm_transactions.type_transaction','SALE')->get()->row()->amount;
+		$get =  $this->db->select('lm_transactions_grams.price_perpcs,lm_transactions_grams.price_buyback_perpcs ')
+			->from('lm_transactions_grams')
+			->join('lm_transactions','lm_transactions.id = lm_transactions_grams.id_lm_transaction')
+			->join('series','series.id = lm_transactions_grams.id_series')
+			->join('lm_grams','lm_grams.id = lm_transactions_grams.id_lm_gram')
+			->join('units','units.id = lm_transactions.id_unit')
+			->where('lm_transactions.date >=', $dateStart)
+			->where('lm_transactions.date <=', $dateEnd)
+			->where('units.id', $idUnit)
+			->where('lm_grams.id', $idGram)
+			->where('lm_transactions.type_transaction','SALE')->get()->row();
+		
+		return (object) [
+			'amount'	=> $amount,
+			'price_perpcs' => $amount ? $get->price_perpcs : '0',
+			'price_buyback_perpcs' => $amount ? $get->price_buyback_perpcs : '0',
+		];
 	}
 
 	public function saleByDateUnit($idArea, $idUnit, $dateStart, $dateEnd)
