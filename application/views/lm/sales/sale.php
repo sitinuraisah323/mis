@@ -149,7 +149,8 @@ $this->load->view('temp/MenuBar.php');
 						<thead class="thead-light">
 							<tr>
 								<th>Weight</th>
-								<th>Harga Perpcs</th>
+								<th>Harga Pokok</th>
+								<th>Harga Jual</th>
 								<th>Stock</th>
 								<th>Amount</th>
 								<th>Series</th>
@@ -160,9 +161,10 @@ $this->load->view('temp/MenuBar.php');
 						<tbody data-append="choice">
 							<tr data-template="choice" class="d-none">
 								<th><input type="hidden" class="id_lm_gram"><span data-post="id_lm_gram"></span></th>
+								<th>	<input type="text"  class="price_buyback_perpcs form-control"></th>
 								<td>
 									<input type="text"  class="price_perpcs form-control">
-									<input type="hidden"  class="price_buyback_perpcs">
+								
 								
 								</td>
 								<td>

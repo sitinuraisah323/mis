@@ -119,10 +119,14 @@ class Regularpawns extends ApiController
 		if($days > 120){
 			$days_credit = 120;
 		}
-
-
 		$coc = round($up * $days/365 * 11/100);
 		$pay_capital_lease = ($up*$capital_lease)*$days_credit;
+		if($days > 130){
+			if($days > 150){
+				$days_credit = 150;
+			}
+			$pay_capital_lease += ($up*$capital_lease)*$days_credit-130/20;
+		}
 		return (object) [
 			'coc'	=> $coc, 
 			'pay_capital_lease'	=> $pay_capital_lease,
