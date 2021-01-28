@@ -542,6 +542,14 @@
 											</a>
 										</li>
 									<?php endif;?>
+									<?php if(read_access('report/regulercoc')):?>
+										<li class="kt-menu__item "  aria-haspopup="true">
+											<a  href="<?php echo base_url('report/regulercoc'); ?>" class="kt-menu__link ">
+												<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>
+												<span class="kt-menu__link-text">Coc Gadai Reguler</span>
+											</a>
+										</li>
+									<?php endif;?>
 
 									<?php if(read_access('report/regularpawns')):?>
 									<li class="kt-menu__item  kt-menu__item--submenu"  data-ktmenu-submenu-toggle="hover" aria-haspopup="true">

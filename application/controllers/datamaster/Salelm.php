@@ -117,7 +117,9 @@ class Salelm extends Authenticated
 
 	public function export_excel()
 	{
-		//load our new PHPExcel library
+		$this->load->library('pdf');
+		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		require_once APPPATH.'controllers/pdf/header.php';
 		$dateStart = $this->input->get('date_start');
 		$dateEnd = $this->input->get('date_end');
 		$idArea = $this->input->get('id_area');
@@ -125,30 +127,9 @@ class Salelm extends Authenticated
 
 		$this->load->library('PHPExcel');
 
-		// Create new PHPExcel object
-		$objPHPExcel = new PHPExcel();
-		$objPHPExcel->getProperties()->setCreator("O'nur")
-			->setLastModifiedBy("O'nur")
-			->setTitle("Reports")
-			->setSubject("Widams")
-			->setDescription("widams report ")
-			->setKeywords("phpExcel")
-			->setCategory("well Data");
-
-
 		$this->grams->db->order_by('weight', 'asc');
 		$grams = $this->grams->all();
 		$no=2;
-		$objPHPExcel->setActiveSheetIndex(0);
-		$objPHPExcel->getActiveSheet()->setCellValue('A1', 'No');
-		$objPHPExcel->getActiveSheet()->setCellValue('B1', 'Unit');
-
-		$cel = ['C','D','E','F', 'G','H','I'];
-		foreach ($grams  as $index => $row)
-		{
-			$objPHPExcel->getActiveSheet()->setCellValue($cel[$index].'1', $row->weight);
-		}
-		$objPHPExcel->getActiveSheet()->setCellValue('J1', 'Total');
 		if($idUnit){
 			$this->units->db->where('units.id', $idUnit);
 		}
@@ -159,29 +140,26 @@ class Salelm extends Authenticated
 		}
 		$units = $this->units->all();
 		foreach($units as $unit){
-			$i = $no+1;
-			$objPHPExcel->getActiveSheet()->setCellValue('A'.$no,$i);
-			$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, $unit->name);
 			$total = 0;
+			$this->grams->db->order_by('weight', 'asc');
+			$grams = $this->grams->all();
 			foreach ($grams  as $index => $row)
 			{
-				$amount =  $this->model->saleGrams($row->id, $unit->id,$dateStart, $dateEnd);
-				$total += $amount;
-				$objPHPExcel->getActiveSheet()->setCellValue($cel[$index].$no, $amount);
+				$sale =  $this->model->saleGrams($row->id, $unit->id,$dateStart, $dateEnd);
+				$row->sales = $sale;
 			}
-			$objPHPExcel->getActiveSheet()->setCellValue('J'.$no, $total);
-			$no++;
+			
+			$unit->grams = $grams;
 		}
-
-		//Redirect output to a client’s WBE browser (Excel5)
-		$filename ='Ghanet Penjualan Lm'.$dateStart.' sampani '.$dateEnd.'.pdf';
-		header('Content-Type: application/vnd.ms-excel');
-		header('Content-Disposition: attachment;filename="'.$filename.'.xls"');
-		header('Cache-Control: max-age=0');
-		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-		$objWriter->save('php://output');
-		// if($post = $this->input->post()){
-		// 	echo $post['area'];
-		// }
+		$pdf->AddPage('L');
+		$view = $this->load->view('datamaster/salelm/pdf1.php',[
+			'units'=>$units	,
+			'dateStart'=>$dateStart,
+			'dateEnd'=>$dateEnd,
+			'grams'	=> $grams
+		],true);
+		$pdf->writeHTML($view);
+		//download
+		$pdf->Output('Ghanet Penjualan Lm'.$dateStart.' sampani '.$dateEnd.'.pdf', 'D');
 	}
 }

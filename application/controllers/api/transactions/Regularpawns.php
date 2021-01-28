@@ -62,11 +62,36 @@ class Regularpawns extends ApiController
 
 	public function account_coc()
 	{
-		$result = $this->regulars->db->select('units_regularpawns.*,  (select date_repayment from units_repayments where units_repayments.no_sbk = units_regularpawns.no_sbk and units_repayments.id_unit = units_regularpawns.id_unit and units_repayments.permit = units_regularpawns.permit limit 1 ) as date_repayment')
-			->from('units_regularpawns')
-			->where('month(units_regularpawns.date_sbk)', 10)
-			->where('year(units_regularpawns.date_sbk)', 2020)
-			->where('id_unit', 1)
+		$dateStart = $this->input->get('dateStart');
+		$dateEnd = $this->input->get('dateEnd');
+		$idUnit = $this->input->get('id_unit');
+		$area = $this->input->get('area');
+		$status = $this->input->get('status');
+		if($status){
+			$this->regulars->db->where('status_transaction', $status);
+		}
+		if($idUnit){
+			$this->regulars->db->where('units.id', $idUnit);
+		}
+		if($area){
+			$this->regulars->db->where('units.id_area', $area);
+		}
+		$result = $this->regulars->db->select('units_regularpawns.id,
+		units_regularpawns.date_sbk, units_regularpawns.no_sbk,
+		units_regularpawns.deadline, customers.name as customer,
+		units_regularpawns.capital_lease,
+		units_regularpawns.estimation,
+		units_regularpawns.amount, 
+		units_regularpawns.admin, 
+		units_regularpawns.status_transaction,
+		capital_lease,
+		units.name as unit
+		,  (select date_repayment from units_repayments where units_repayments.no_sbk = units_regularpawns.no_sbk and units_repayments.id_unit = units_regularpawns.id_unit and units_repayments.permit = units_regularpawns.permit limit 1 ) as date_repayment')
+			->from('units_regularpawns') 
+			->where('units_regularpawns.date_sbk >=', $dateStart)
+			->where('units_regularpawns.date_sbk <=', $dateEnd)
+			->join('units','units.id = units_regularpawns.id_unit')
+			->join('customers','customers.id = units_regularpawns.id_customer')
 			->get()->result();
 		if($result){
 			foreach($result as $res){
@@ -74,6 +99,7 @@ class Regularpawns extends ApiController
 				$res->coc = $calculate->coc;
 				$res->pay_capital_lease = $calculate->pay_capital_lease;
 				$res->provit = $calculate->provit;
+				$res->days_credit = $calculate->days_credit;
 			}
 		}
 		return $this->sendMessage($result, 'Successfully get account coc', 200);
@@ -86,23 +112,26 @@ class Regularpawns extends ApiController
 		$days=date_diff($date1,$date2)->days;
 		$up = $data->amount;
 
-		$capital_lease = $data->capital_lease /2;
+		$capital_lease = $data->capital_lease /30;
 
-		$modulus = $days % 15;
+		$days_credit = $days;
 
-		$capital_lease_days = ($days-$modulus) / 15;
-
-		if($modulus > 0){
-			$capital_lease_days++;
+		if($days > 120){
+			$days_credit = 120;
 		}
-
-
 		$coc = round($up * $days/365 * 11/100);
-		$pay_capital_lease = ($up*$capital_lease)*$capital_lease_days;
+		$pay_capital_lease = ($up*$capital_lease)*$days_credit;
+		if($days > 130){
+			if($days > 150){
+				$days_credit = 150;
+			}
+			$pay_capital_lease += ($up*$capital_lease)*$days_credit-130/20;
+		}
 		return (object) [
 			'coc'	=> $coc, 
 			'pay_capital_lease'	=> $pay_capital_lease,
 			'provit'	=> $pay_capital_lease - $coc,
+			'days_credit'	=> $days
 		];
 	}
 
