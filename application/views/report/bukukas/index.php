@@ -138,7 +138,7 @@ $this->load->view('temp/MenuBar.php');
 						<input type="date" class="form-control" name="date-end" value="<?php echo date('Y-m-d');?>">
 					</div>
                     <div class="col-lg-2">
-                        <label class="col-lg-1 col-form-label">&nbsp&nbsp</label>
+                        <label class="col-lg-1 col-form-label">&nbsp</label>
                         <button type="button" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>
                         <button type="submit" class="btn btn-danger btn-icon" name="btnexport_csv" id="btnexport_csv"><i class="fa fa-file-excel"></i></button>
                     </div>
