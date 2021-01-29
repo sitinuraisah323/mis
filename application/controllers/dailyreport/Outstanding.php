@@ -99,11 +99,11 @@ class Outstanding extends Authenticated
 		$view = $this->load->view('dailyreport/outstanding/index.php',['outstanding'=>$grouped,'datetrans'=> $this->datetrans()],true);
 		$pdf->writeHTML($view);
 
-		$osmortages = $this->dataMortages();
-		$groupedMortages = $this->grouped($osmortages);
-		$pdf->AddPage('L');
-		$view = $this->load->view('dailyreport/outstanding/mortages.php',['outstanding'=>$groupedMortages,'datetrans'=> $this->datetrans()],true);
-		$pdf->writeHTML($view);
+		// $osmortages = $this->dataMortages();
+		// $groupedMortages = $this->grouped($osmortages);
+		// $pdf->AddPage('L');
+		// $view = $this->load->view('dailyreport/outstanding/mortages.php',['outstanding'=>$groupedMortages,'datetrans'=> $this->datetrans()],true);
+		// $pdf->writeHTML($view);
 
 		$pdf->AddPage('L');
 		$view = $this->load->view('dailyreport/outstanding/dpd.php',['dpd'=>$os,'datetrans'=> $this->datetrans()],true);
@@ -174,9 +174,15 @@ class Outstanding extends Authenticated
 		require_once APPPATH.'controllers/pdf/header.php';
 
 		$os = $this->data();
+		$grouped = $this->grouped($os);
 		$pdf->AddPage('L');
-		$view = $this->load->view('dailyreport/outstanding/dpd.php',['dpd'=>$os,'datetrans'=> $this->datetrans()],true);
+		$view = $this->load->view('dailyreport/outstanding/index.php',['outstanding'=>$grouped,'datetrans'=> $this->datetrans()],true);
 		$pdf->writeHTML($view);
+
+		// $os = $this->data();
+		// $pdf->AddPage('L');
+		// $view = $this->load->view('dailyreport/outstanding/dpd.php',['dpd'=>$os,'datetrans'=> $this->datetrans()],true);
+		// $pdf->writeHTML($view);
 
 		// $pdf->AddPage('L');
 		// $view = $this->load->view('dailyreport/outstanding/dpd_new.php',['dpd'=>$os,'datetrans'=> $this->datetrans()],true);

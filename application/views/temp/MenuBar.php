@@ -1090,6 +1090,12 @@
 							<a  href="javascript:;" class="kt-menu__link kt-menu__toggle"><span class="kt-menu__link-text">Processing Data</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
 							<div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--left">
 								<ul class="kt-menu__subnav">
+								<li class="kt-menu__item "  aria-haspopup="true">
+										<a  href="<?php echo base_url('api/transactions/loaninstallments/calculation?ojk=OJK-1'); ?>" target="_blank" class="kt-menu__link ">
+											<span class="kt-menu__link-icon"><i class="fab fa-google-play"><span></span></i></span>
+											<span class="kt-menu__link-text">RUN OJK BARU</span>
+										</a>
+									</li>
 									<li class="kt-menu__item "  aria-haspopup="true">
 										<a  href="<?php echo base_url('api/transactions/loaninstallments/calculation'); ?>" target="_blank" class="kt-menu__link ">
 											<span class="kt-menu__link-icon"><i class="fab fa-google-play"><span></span></i></span>
