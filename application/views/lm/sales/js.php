@@ -13,7 +13,7 @@
 			const checkStock = getAmount > getStock;
 			if(checkStock){
 				el.querySelector('.amount').value = 0;
-				swal.fire('Jumlah Persanan Melebihi Stocks');
+				swal.fire('stock kurang atau tidak tersedia.. silahkan cek stock anda.');
 			}
 		})
 	}

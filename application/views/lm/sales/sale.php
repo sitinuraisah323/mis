@@ -21,7 +21,7 @@ $this->load->view('temp/MenuBar.php');
 		   <div class="row">
 		   		<div class="col-md-12">
 				   <div class="form-group row">
-				   		<label class="col-md-2">Tipe Pembeli</label>
+				   		<label class="col-md-2">Tipe Pembeli <span class="text-danger text-sm-center">*tidak wajib isi</span></label>
 						<div class="col-md-10">
 							<select name="type_buyer" id="" class="form-control">
 								<option value="">Pilih Tipe Pembeli</option>
@@ -36,10 +36,10 @@ $this->load->view('temp/MenuBar.php');
 			<div class="row d-none type-employee">
 				<div class="col-md-12">
 					<div class="form-group row">
-						<label class="col-md-2">Karyawan</label>
+						<label class="col-md-2">Karyawan <span class="text-danger text-sm-center">*wajib isi</span></label>
 						<div class="col-md-10">
 							<select class="custom-select form-control" name="id_employee">
-								<option value="">Karyawan</option>
+								<option value="">Karyawan </option>
 								<?php if($employees):?>
 									<?php foreach ($employees as $employee):?>
 										<option value="<?php echo $employee->id;?>"><?php echo implode('-', array($employee->fullname, $employee->unit));?></option>
@@ -53,7 +53,7 @@ $this->load->view('temp/MenuBar.php');
 			<div class="row d-none type-customer">
 				<div class="col-md-6">
 					<div class="form-group row">
-						<label class="col-md-2">Nama</label>
+						<label class="col-md-2">Nama <span class="text-danger text-sm-center">*wajib isi</span></label>
 						<div class="col-md-10">
 							<input type="text" class="form-control" name="name"/>
 						</div>
@@ -61,7 +61,7 @@ $this->load->view('temp/MenuBar.php');
 				</div>
 				<div class="col-md-6">
 					<div class="form-group row">
-						<label class="col-md-2">No Ktp</label>
+						<label class="col-md-2">No Ktp <span class="text-danger text-sm-center">*tidak wajib isi</span></label>
 						<div class="col-md-10">
 							<input type="text" class="form-control" name="nik"/>
 						</div>
@@ -69,7 +69,7 @@ $this->load->view('temp/MenuBar.php');
 				</div>
 				<div class="col-md-6">
 					<div class="form-group row">
-						<label class="col-md-2">Alamat</label>
+						<label class="col-md-2">Alamat <span class="text-danger text-sm-center">*tidak wajib isi</span></label>
 						<div class="col-md-10">
 							<textarea class="form-control" name="address"></textarea>
 						</div>
@@ -77,7 +77,7 @@ $this->load->view('temp/MenuBar.php');
 				</div>
 				<div class="col-md-6">
 					<div class="form-group row">
-						<label class="col-md-2">No Telp</label>
+						<label class="col-md-2">No Telp <span class="text-danger text-sm-center">*tidak wajib isi</span></label>
 						<div class="col-md-10">
 							<input type="text" class="form-control" name="mobile"/>
 						</div>
@@ -148,11 +148,11 @@ $this->load->view('temp/MenuBar.php');
 					<table class="table">
 						<thead class="thead-light">
 							<tr>
-								<th>Weight</th>
+								<th>Gramasi</th>
 								<th>Harga Pokok</th>
 								<th>Harga Jual</th>
-								<th>Stock</th>
-								<th>Amount</th>
+								<th>Stock Yang Tersedia</th>
+								<th>Pieces</th>
 								<th>Series</th>
 								<th>Total</th>
 								<th></th>

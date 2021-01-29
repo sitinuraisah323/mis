@@ -113,7 +113,7 @@ function initDataTable(){
             },
               {
 				  field: 'amount',
-				  title: 'Amount',
+				  title: 'Pieces',
 				  width:60,
 				  textAlign: 'center',
 			  },
@@ -128,20 +128,20 @@ function initDataTable(){
 			  },
 			  {
 				  field: 'weight',
-				  title: 'weight',
+				  title: 'Gramasi',
 				  width:60,
 				  textAlign: 'center',
 			  },
 			  {
 				  field: 'date_receive',
 				  title: 'Tanggal',
-				  width:60,
+				  width:90,
 				  textAlign: 'center',
 			  },
               {
 				  field: 'type',
 				  title: 'type',
-				  width:60,
+				  width:90,
 				  textAlign: 'center',
                   template:function(row){
                       return row.type === 'CREDIT' ? 'Pengurangan' : 'Penambahan' 

@@ -123,8 +123,8 @@ $this->load->view('temp/MenuBar.php');
                         <label class="col-form-label">&nbsp</label>
                         <div class="position-relative">
                         <button type="button" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>                        
-                        <button type="submit" class="btn btn-danger btn-icon" name="btnexport_csv" id="btnexport_csv"><i class="fa fa-file-excel"></i></button>
-                        <button type="button" class="btn btn-success btn-icon" name="btnexport" id="btnexport" onclick="export_xls()"><i class="fa fa-file-excel"></i></button> 
+                         <button type="submit" class="btn btn-danger btn-icon" name="btnexport_csv" id="btnexport_csv"><i class="fa fa-file-excel"></i></button>
+                        <button type="button" class="btn btn-success btn-icon" name="btnexport" id="btnexport" onclick="export_xls()"><i class="fa fa-file-pdf"></i></button> 
                         </div>
                     </div>                  
 				</div>
@@ -141,7 +141,8 @@ $this->load->view('temp/MenuBar.php');
 									<th>Pembeli</th>
 									<th>Series</th>
 									<th>Jumlah</th>
-									<th>Harga</th>
+									<th>HJ/Pieces</th>
+									<th>HP/Pieces</th>
 									<th>Total</th>
 									<th></th>
 						    	</tr>
