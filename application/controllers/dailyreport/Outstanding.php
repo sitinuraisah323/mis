@@ -93,10 +93,17 @@ class Outstanding extends Authenticated
 	{		
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		require_once APPPATH.'controllers/pdf/header.php';
-		$os = $this->data();
-		$grouped = $this->grouped($os);
-		$pdf->AddPage('L');
-		$view = $this->load->view('dailyreport/outstanding/index.php',['outstanding'=>$grouped,'datetrans'=> $this->datetrans()],true);
+
+		//$os = $this->data();
+		// $grouped = $this->grouped($os);
+		// $pdf->AddPage('L');
+		// $view = $this->load->view('dailyreport/outstanding/index.php',['outstanding'=>$grouped,'datetrans'=> $this->datetrans()],true);
+		// $pdf->writeHTML($view);
+
+		$newos = $this->reportoutstanding();
+		$grouped = $this->grouped($newos);
+		$pdf->AddPage('L', 'A3');
+		$view = $this->load->view('dailyreport/outstanding/generate.php',['outstanding'=>$grouped,'datetrans'=> $this->datetrans()],true);
 		$pdf->writeHTML($view);
 
 		// $osmortages = $this->dataMortages();
@@ -104,7 +111,7 @@ class Outstanding extends Authenticated
 		// $pdf->AddPage('L');
 		// $view = $this->load->view('dailyreport/outstanding/mortages.php',['outstanding'=>$groupedMortages,'datetrans'=> $this->datetrans()],true);
 		// $pdf->writeHTML($view);
-
+		$os = $this->data();
 		$pdf->AddPage('L');
 		$view = $this->load->view('dailyreport/outstanding/dpd.php',['dpd'=>$os,'datetrans'=> $this->datetrans()],true);
 		$pdf->writeHTML($view);		
@@ -173,10 +180,10 @@ class Outstanding extends Authenticated
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		require_once APPPATH.'controllers/pdf/header.php';
 
-		$os = $this->data();
+		$os = $this->reportoutstanding();
 		$grouped = $this->grouped($os);
-		$pdf->AddPage('L');
-		$view = $this->load->view('dailyreport/outstanding/index.php',['outstanding'=>$grouped,'datetrans'=> $this->datetrans()],true);
+		$pdf->AddPage('L', 'A3');
+		$view = $this->load->view('dailyreport/outstanding/generate.php',['outstanding'=>$grouped,'datetrans'=> $this->datetrans()],true);
 		$pdf->writeHTML($view);
 
 		// $os = $this->data();
@@ -196,6 +203,7 @@ class Outstanding extends Authenticated
 	{
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		require_once APPPATH.'controllers/pdf/header.php';
+
 		$os = $this->data();
 		$pdf->AddPage('L', 'A3');
 		$view = $this->load->view('dailyreport/outstanding/generate.php',['outstanding'=> $this->data()],true);
@@ -639,6 +647,90 @@ class Outstanding extends Authenticated
 		}
 		return $units;
 	}
+
+	public function reportoutstanding()
+	{
+		//$date = '2021-01-15';
+		$date = date('Y-m-d');
+		$lastdate = $this->regular->getLastDateTransaction()->date;
+		if ($date > $lastdate){
+			$date = $lastdate;
+		}else{
+			$date= $date;
+		}
+
+		//$nextdate = date('Y-m-d', strtotime('+1 days', strtotime($date)));
+		$lasdate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
+		//$year = date('Y', strtotime('+1 days', strtotime($date)));
+		//$month = date('n', strtotime('+1 days', strtotime($date)));
+
+		$units = $this->units->db->select('units.id, units.name, area')
+			->join('areas','areas.id = units.id_area')
+			->get('units')->result();
+		foreach ($units as $unit){
+
+			$getOstYesterday = $this->regular->db
+								->where('date <', $date)
+								->from('units_outstanding')
+								->where('id_unit', $unit->id)
+								->order_by('date','DESC')
+								->get()->row();
+
+			$unit->ost_yesterday = (object) array(
+				'noa_os_reguler'	=> $getOstYesterday->noa_os_regular,
+				'os_reguler'		=> $getOstYesterday->os_regular,
+				'noa_os_mortages'	=> $getOstYesterday->noa_os_mortage,
+				'os_mortages'		=> $getOstYesterday->os_mortage
+			);
+
+			$getOstToday = $this->regular->db
+								->where('date <=', $date)
+								->from('units_outstanding')
+								->where('id_unit', $unit->id)
+								->order_by('date','DESC')
+								->get()->row();
+			
+			$unit->ost_today = (object) array(
+				'noa_reguler'		=> $getOstToday->noa_regular,
+				'up_reguler'		=> $getOstToday->up_regular,
+				'noa_rep_reguler'	=> $getOstToday->noa_repyment_regular,
+				'up_rep_reguler'	=> $getOstToday->repyment_regular,
+				'noa_mortages'		=> $getOstToday->noa_mortage,
+				'up_mortages'		=> $getOstToday->up_mortage,
+				'noa_rep_mortages'	=> $getOstToday->noa_repayment_mortage,
+				'up_rep_mortages'	=> $getOstToday->repayment_mortage
+			);
+
+			// $unit->credit_today = $this->regular->getCreditToday($unit->id, $date);
+			// $unit->repayment_today = $this->regular->getRepaymentToday($unit->id, $date);
+			// $totalNoa = (int) $unit->ost_yesterday->noa + $unit->credit_today->noa - $unit->repayment_today->noa;
+			// $totalUp = (int) $unit->ost_yesterday->up + $unit->credit_today->up - $unit->repayment_today->up;
+				
+			// $unit->total_outstanding = (object) array(
+			// 	'noa'	=> $totalNoa,
+			// 	'up'	=> $totalUp,
+			// 	'tiket'	=> round($totalUp > 0 ? $totalUp /$totalNoa : 0)
+			// );
+
+			$unit->total_disburse = $this->regular->getTotalDisburse($unit->id, null, null, $date);
+			// $unit->dpd_yesterday = $this->regular->getDpdYesterday($unit->id, $date);
+			// $unit->dpd_today = $this->regular->getDpdToday($unit->id, $date);
+			// $unit->dpd_repayment_today = $this->regular->getDpdRepaymentToday($unit->id,$date);
+			// $unit->total_dpd = (object) array(
+			// 	//'noa'	=> $unit->dpd_today->noa + $unit->dpd_yesterday->noa,
+			// 	//'ost'	=> $unit->dpd_today->ost + $unit->dpd_yesterday->ost,
+			// 	'noa_today'	=> $unit->dpd_today->noa + $unit->dpd_repayment_today->noa,
+			// 	'ost_today'	=> $unit->dpd_today->ost + $unit->dpd_repayment_today->ost,
+			// 	'noa'	=> ($unit->dpd_today->noa + $unit->dpd_yesterday->noa +$unit->dpd_repayment_today->noa) - $unit->dpd_repayment_today->noa,
+			// 	'ost'	=> ($unit->dpd_today->ost + $unit->dpd_yesterday->ost +$unit->dpd_repayment_today->ost) - $unit->dpd_repayment_today->ost,
+			// );
+			// $unit->percentage = ($unit->total_dpd->ost > 0) && ($unit->total_outstanding->up > 0) ? round($unit->total_dpd->ost / $unit->total_outstanding->up, 4) : 0;
+		}
+		//echo "<pre/>";
+		//print_r($units);
+		return $units;
+	}
+
 
 	public function dataMortages()
 	{	

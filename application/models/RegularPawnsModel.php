@@ -187,7 +187,7 @@ class RegularpawnsModel extends Master
 					 ->where('date_sbk <=',$today)
 					 ->get()->row();					 
 
-		$mortages = $this->db->select('SUM(amount_loan) AS up,SUM(amount_loan - (SELECT COUNT(DISTINCT(date_kredit)) FROM units_repayments_mortage WHERE units_repayments_mortage.no_sbk =units_mortages.no_sbk AND units_repayments_mortage.id_unit =units_mortages.id_unit) * installment) AS saldocicilan,COUNT(*) AS noa')
+		$mortages = $this->db->select('SUM(amount_loan) AS up,COUNT(amount_loan) AS noa,SUM(amount_loan - (SELECT COUNT(DISTINCT(date_kredit)) FROM units_repayments_mortage WHERE units_repayments_mortage.no_sbk =units_mortages.no_sbk AND units_repayments_mortage.id_unit =units_mortages.id_unit) * installment) AS saldocicilan')
 						->from('units_mortages')
 						->join('customers','units_mortages.id_customer = customers.id')			
 						->where('units_mortages.status_transaction ','N')
