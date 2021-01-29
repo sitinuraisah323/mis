@@ -18,6 +18,7 @@ class Stocks extends Authenticated
 		parent::__construct();
 		$this->load->model('LmStocksModel','stock');
 		$this->load->model('LmGramsModel','grams');
+		$this->load->model('UnitsModel','units');
 
 	}
 
@@ -30,6 +31,33 @@ class Stocks extends Authenticated
 		));
 	}
 
+	public function pdf()
+	{
+		$this->load->library('pdf');
+		$dateStart = $this->input->get('date_start');
+		$dateEnd = $this->input->get('date_end');
+		$idUnit = $this->input->get('id_unit');
+
+		$unit = $this->units->find($idUnit);
+
+		$result = $this->stock->gramsUnits($idUnit, $dateStart, $dateEnd);
+		
+
+		$this->load->library('PHPExcel');
+
+		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		require_once APPPATH.'controllers/pdf/header.php';
+	
+		$pdf->AddPage('L');
+		$view = $this->load->view('transactions/stocks/pdf.php',[
+			'data'=>$result	,
+			'unit'	=> $unit
+		],true);
+		$pdf->writeHTML($view);
+		//download
+		// $pdf->Output('Ghanet_stocks'.date('d_m_Y').'.pdf', 'D');
+		$pdf->Output('Ghanet_stocks'.date('d_m_Y').'.pdf', 'I');
+	}
 	public function export()
 	{
 		//load our new PHPExcel library

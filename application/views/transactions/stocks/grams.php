@@ -94,6 +94,7 @@ $this->load->view('temp/MenuBar.php');
                         <div class="position-relative">
                         <button type="submit" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>
                         <button type="button" onclick="excel(event)" class="btn btn-danger btn-icon" name="btnexport_csv" id="btnexport_csv"><i class="fa fa-file-excel"></i></button>
+                        <button type="button" onclick="pdf(event)" class="btn btn-danger btn-icon" name="btnexport_csv" id="btnexport_csv"><i class="fa fa-file-pdf"></i></button>
                         </div>
                     </div>                  
 				</div>
@@ -105,12 +106,12 @@ $this->load->view('temp/MenuBar.php');
 						<table class="table">
 						  	<thead class="thead-light">
 						    	<tr>
-									<th>Weight</th>
+									<th>Gramasi</th>
                                     <th>Stock Awal</th>
                                     <th>Barang Masuk</th>
                                     <th>Barang Keluar</th>
-                                    <th>Total</th>
-                                    <th>Harga</th>
+                                    <th>Jumlah Pieces</th>
+                                    <th>Jumlah Gramasi</th>
 						    	</tr>
 						  	</thead>
 						  	<tbody>
@@ -120,7 +121,7 @@ $this->load->view('temp/MenuBar.php');
                                     <td><span data-post="stock_in"></span></td>
                                     <td><span data-post="stock_out"></span></td>
                                     <td><span data-post="total"></span></td>
-                                    <td><span data-post="price"></span></td>
+                                    <td><span data-post="total-weight"></span></td>
                                 </tr>
 						  	</tbody>
 						</table>

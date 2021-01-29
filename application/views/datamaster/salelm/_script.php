@@ -112,6 +112,7 @@ function initCariForm(){
                     html += `<td>${data.series}</td>`
                     html += `<td>${data.amount}</td>`
                     html += `<td>${data.price_perpcs}</td>`
+                    html += `<td>${data.price_buyback_perpcs}</td>`
                     html += `<td>${data.total}</td>`
 					html += '/<tr>'
 				})
