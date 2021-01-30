@@ -131,7 +131,7 @@ class Outstanding extends Authenticated
         
 	}
 
-	public function generate(){
+	public function generate_old(){
 		
 		if($date = $this->input->get('date')){
 			$date = $date;
@@ -194,7 +194,7 @@ class Outstanding extends Authenticated
 		);
 	}
 
-	public function generate_x(){
+	public function generate(){
 
 		if($date = $this->input->get('date')){
 			$date = $date;

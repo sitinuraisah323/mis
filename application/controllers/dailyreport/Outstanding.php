@@ -112,11 +112,11 @@ class Outstanding extends Authenticated
 		// $view = $this->load->view('dailyreport/outstanding/mortages.php',['outstanding'=>$groupedMortages,'datetrans'=> $this->datetrans()],true);
 		// $pdf->writeHTML($view);
 		$os = $this->data();
-		$pdf->AddPage('L');
+		$pdf->AddPage('L','A4');
 		$view = $this->load->view('dailyreport/outstanding/dpd.php',['dpd'=>$os,'datetrans'=> $this->datetrans()],true);
 		$pdf->writeHTML($view);		
 
-		$pdf->AddPage('L');
+		$pdf->AddPage('L','A4');
 		$view = $this->load->view('dailyreport/outstanding/target.php',['data'=>$this->target($this->datetrans()),'datetrans'=> $this->datetrans()],true);
 		$pdf->writeHTML($view);
 
@@ -128,30 +128,30 @@ class Outstanding extends Authenticated
 		// $view = $this->load->view('dailyreport/outstanding/pelunasan.php',['pelunasan'	=> $this->pelunasan()],true);
 		// $pdf->writeHTML($view);
 
-		$pdf->AddPage('L');
+		$pdf->AddPage('L','A4');
 		$group = $this->grouped($this->rate());
 		$view = $this->load->view('dailyreport/outstanding/rate.php',['areas'	=> $group],true);
 		$pdf->writeHTML($view);
 
-		$pdf->AddPage('L');
+		$pdf->AddPage('L','A4');
 		$view = $this->load->view('dailyreport/outstanding/saldo.php',[
 			'saldo'	=> $this->saldounit($this->datetrans()),
 			'datetrans'=> $this->datetrans()],true);
 		$pdf->writeHTML($view);
 
-		$pdf->AddPage('L');
+		$pdf->AddPage('L','A4');
 		$view = $this->load->view('dailyreport/outstanding/pendapatan.php',['pendapatan'	=> $this->pendapatan(),
 		'datetrans'=> $this->datetrans()],true);
 		$pdf->writeHTML($view);
 
-		$pdf->AddPage('L');
+		$pdf->AddPage('L','A4');
 		$view = $this->load->view('dailyreport/outstanding/pengeluaran.php',['pengeluaran'	=> $this->pengeluaran(),
 		'datetrans'=> $this->datetrans()],true);
 		$pdf->writeHTML($view);
 
 		$coas = $this->dailycash->pengeluaran_perk($this->datetrans());
 
-		$pdf->AddPage('L');
+		$pdf->AddPage('L','A4');
 		$view = $this->load->view('dailyreport/outstanding/pengeluaran_operasi',[
 			'coas'=>$coas	,
 			'datetrans'	=> $this->datetrans()
@@ -161,7 +161,7 @@ class Outstanding extends Authenticated
 		
 
 		$areas = $this->dailycash-> getCocCalcutation(null,  11,date('n', strtotime($this->datetrans())), date('Y', strtotime($this->datetrans())),  0,  0);
-		$pdf->AddPage('L');
+		$pdf->AddPage('L','A4');
 		$view = $this->load->view('report/coc/pdf.php',[
 			'areas'=>$areas	,
 			'datetrans'	=> $this->datetrans()
