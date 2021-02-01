@@ -34,6 +34,8 @@ class Regulercoc extends Authenticated
 		if($this->session->userdata('user')->level=='unit'){
 			$data['customers'] = $this->units->get_customers_gadaireguler_byunit($this->session->userdata('user')->id_unit);
 		}
+        $data['years'] = years();
+        $data['months'] = months();
         $data['areas'] = $this->areas->all();
 		$this->load->view('report/regulercoc/index',$data);
 	}
@@ -157,10 +159,28 @@ class Regulercoc extends Authenticated
 
 	public function calculate($data)
 	{
-		$date1=date_create($data->date_sbk);
-		$date2=date_create($data->date_repayment ? $data->date_repayment : date('Y-m-d'));
-		$days=date_diff($date1,$date2)->days;
+		$periodeYear = $this->input->post('period_year') ?  $this->input->post('period_year') : date('Y');
+		$periodeMonth = $this->input->post('period_month') ?  $this->input->post('period_month') : date('n');
+		$dayEnd = $this->input->post('period_month') > 0 ?   cal_days_in_month(CAL_GREGORIAN,$periodeMonth,$periodeYear) : '01' ;
+	
+		$periodeStart = date('Y-m-d', strtotime($periodeYear.'-'.$periodeMonth.'-01'));
+		$periodeEnd = date('Y-m-d', strtotime($periodeYear.'-'.$periodeMonth.'-'.$dayEnd));
+	
+		if($data->date_sbk > $periodeStart){
+			$periodeStart = $data->date_sbk;
+		}
+		if($data->date_repayment){
+			$periodeEnd = $data->date_repayment;
+		}
+		
+		$date1=date_create($periodeStart);
+		$date2=date_create($periodeEnd);
+		$days=date_diff($date1,$date2)->days+1;
 		$up = $data->amount;
+
+		if($data->date_repayment < $periodeStart && $data->date_repayment){
+			$days = 0;
+		}
 
 		$capital_lease = $data->capital_lease /30;
 
@@ -169,10 +189,14 @@ class Regulercoc extends Authenticated
 		if($days > 120){
 			$days_credit = 120;
 		}
-
-
 		$coc = round($up * $days/365 * 11/100);
 		$pay_capital_lease = ($up*$capital_lease)*$days_credit;
+		if($days > 130){
+			if($days > 150){
+				$days_credit = 150;
+			}
+			$pay_capital_lease += ($up*$capital_lease)*$days_credit-130/20;
+		}
 		return (object) [
 			'coc'	=> $coc, 
 			'pay_capital_lease'	=> $pay_capital_lease,

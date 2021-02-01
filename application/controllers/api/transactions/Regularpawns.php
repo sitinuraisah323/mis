@@ -107,10 +107,28 @@ class Regularpawns extends ApiController
 
 	public function calculate($data)
 	{
-		$date1=date_create($data->date_sbk);
-		$date2=date_create($data->date_repayment ? $data->date_repayment : date('Y-m-d'));
-		$days=date_diff($date1,$date2)->days;
+		$periodeYear = $this->input->get('period_year') ?  $this->input->get('period_year') : date('Y');
+		$periodeMonth = $this->input->get('period_month') ?  $this->input->get('period_month') : date('n');
+		$dayEnd = $this->input->get('period_month') > 0 ?   cal_days_in_month(CAL_GREGORIAN,$periodeMonth,$periodeYear) : '01' ;
+	
+		$periodeStart = date('Y-m-d', strtotime($periodeYear.'-'.$periodeMonth.'-01'));
+		$periodeEnd = date('Y-m-d', strtotime($periodeYear.'-'.$periodeMonth.'-'.$dayEnd));
+	
+		if($data->date_sbk > $periodeStart){
+			$periodeStart = $data->date_sbk;
+		}
+		if($data->date_repayment){
+			$periodeEnd = $data->date_repayment;
+		}
+		
+		$date1=date_create($periodeStart);
+		$date2=date_create($periodeEnd);
+		$days=date_diff($date1,$date2)->days+1;
 		$up = $data->amount;
+
+		if($data->date_repayment < $periodeStart && $data->date_repayment){
+			$days = 0;
+		}
 
 		$capital_lease = $data->capital_lease /30;
 

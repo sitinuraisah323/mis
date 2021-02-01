@@ -114,12 +114,15 @@ function initCariForm(){
         var sort_by = $('[name="sort_by"]').val();
         var sort_method = $('[name="sort_method"]').val();
         var no_sbk = $('[name="no_sbk"]').val();
+        var period_month = $('[name="period_month"]').val();
+        var period_year = $('[name="period_year"]').val();
         KTApp.block('#form_bukukas .kt-portlet__body', {});
 		$.ajax({
 			type : 'GET',
 			url : "<?php echo base_url("api/transactions/regularpawns/account_coc"); ?>",
 			dataType : "json",
-			data:{no_sbk,area:area,id_unit:unit,status:statusrpt,nasabah:nasabah,dateStart:dateStart,dateEnd:dateEnd,permit:permit, sort_by, sort_method},
+			data:{no_sbk,area:area,id_unit:unit,status:statusrpt,nasabah:nasabah,dateStart:dateStart,dateEnd:dateEnd,permit:permit, sort_by, sort_method,
+                period_year, period_month},
 			success : function(response,status){
 				KTApp.unblockPage();
 				if(response.status == 200){

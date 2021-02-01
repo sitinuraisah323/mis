@@ -19,7 +19,7 @@ class Grams extends ApiController
 				if($gram->image){
 					$gram->avatar = base_url('storage/lm/'.$gram->image);
 				}
-				$this->prices->db->order_by('lm_grams_prices.id','desc');
+				$this->prices->db->order_by('lm_grams_prices.date','desc');
 				$prices = $this->prices->find(array(
 					'id_lm_gram'	=> $gram->id
 				));
@@ -178,7 +178,7 @@ class Grams extends ApiController
 	public function show($id)
 	{
 		if($data = $this->model->find($id)){
-			$this->prices->db->order_by('lm_grams_prices.id','desc');
+			$this->prices->db->order_by('lm_grams_prices.date','desc');
 			$prices = $this->prices->find(array(
 				'id_lm_gram'	=> $data->id
 			));

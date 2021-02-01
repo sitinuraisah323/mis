@@ -142,9 +142,27 @@ $this->load->view('temp/MenuBar.php');
 						<input type="date" class="form-control" name="date-start" value="<?php echo date('Y-m-01');?>">
 					</div>
 					<div class="col-lg-2">
-						<label class="col-form-label">Tanggal</label>
+						<label class="col-form-label">Sampai Tanggal</label>
 						<input type="date" class="form-control" name="date-end" value="<?php echo date('Y-m-d');?>">
 					</div>
+                    <div class="col-lg-2">
+						<label class="col-form-label">Periode Pembayaran Bulan</label>
+						<select class="form-control" name="period_month">
+							<option value="0">Tanggal Bulan Sekarang</option>
+                            <?php foreach($months as $key => $value):?>
+                                <option value="<?php echo zero_fill($key,2);?>"><?php echo $value;?></option>
+                            <?php endforeach;?>
+						</select>
+                    </div>
+                    <div class="col-lg-2">
+						<label class="col-form-label">Periode Pembayaran Tahun</label>
+						<select class="form-control" name="period_year">
+							<option value="0">All</option>
+                            <?php foreach($years as $key => $value):?>
+                                <option value="<?php echo $value;?>" <?php echo $value === date('Y') ? 'selected' : ''?> ><?php echo $value;?></option>
+                            <?php endforeach;?>
+						</select>
+                    </div>
                     <!-- <div class="col-lg-2">
 						<label class="col-form-label">Nasabah</label>
                         <select class="form-control select2" name="nasabah" id="nasabah">
