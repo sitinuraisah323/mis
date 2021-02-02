@@ -35,10 +35,14 @@ class Salelm extends Authenticated
 		));
 	}
 
-	public function _export()
+	public function export_excel()
 	{
 		//load our new PHPExcel library
 		$this->load->library('PHPExcel');
+		$columns = array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V',
+		'W','X','Y','Z','AA','AB','AC','AD','AF','AG','AH','AI','AJ','AK','AL','AM','AN','AO','AP','AQ','AR','AS','AR',
+		'AS','AT','AU','AV','AW','AX','AY','AZ'
+			);
 		// Create new PHPExcel object
 		$objPHPExcel = new PHPExcel();
 		$objPHPExcel->getProperties()->setCreator("O'nur")
@@ -50,37 +54,71 @@ class Salelm extends Authenticated
 			->setCategory("well Data");
 
 		$objPHPExcel->setActiveSheetIndex(0);
-		$objPHPExcel->getActiveSheet()->setCellValue('A1', 'Tanggal');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(25);
+		$objPHPExcel->getActiveSheet()->setCellValue('A1', 'No');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(25);
 		$objPHPExcel->getActiveSheet()->setCellValue('B1', 'Unit');
-		$objPHPExcel->getActiveSheet()->setCellValue('C1', 'Pembeli');
-		$objPHPExcel->getActiveSheet()->setCellValue('D1', 'Gramasi');
-		$objPHPExcel->getActiveSheet()->setCellValue('E1', 'Series');
-		$objPHPExcel->getActiveSheet()->setCellValue('F1', 'Jumlah');
-		$objPHPExcel->getActiveSheet()->setCellValue('G1', 'Harga');
-		$objPHPExcel->getActiveSheet()->setCellValue('H1', 'Total');
+		$i = 2;
+		$datagrams = $this->model->db->select('id, weight')->from('lm_grams')->get()->result();
+		foreach ($datagrams as $index => $grams){
+			for($j=0;$j<3;$j++){
+				if($j === 0){
+					$objPHPExcel->getActiveSheet()->setCellValue($columns[$i].'1','Jumlah '.$grams->weight.' Grams');
+				}
+				if($j === 1){					
+					$objPHPExcel->getActiveSheet()->setCellValue($columns[$i].'1','Harga Jual'.$grams->weight.' Grams');
+				}
+				if($j === 2){		
+					$objPHPExcel->getActiveSheet()->setCellValue($columns[$i].'1','Harga Pokok'.$grams->weight.' Grams');
+				
+				}							
+				$i++;
+			}
+		}
+		$objPHPExcel->getActiveSheet()->getColumnDimension($columns[$i])->setWidth(20);
+		$objPHPExcel->getActiveSheet()->setCellValue($columns[$i].'1', 'Total');
 
-		$dateStart = $this->input->post('date_start');
-		$dateEnd = $this->input->post('date_end');
-		$idUnit = $this->input->post('id_unit');
-		$idArea = $this->input->post('area');
+		$i++;
+		$objPHPExcel->getActiveSheet()->getColumnDimension($columns[$i])->setWidth(20);
+		$objPHPExcel->getActiveSheet()->setCellValue($columns[$i].'1', 'Status');
+
+		$dateStart = $this->input->get('date_start');
+		$dateEnd = $this->input->get('date_end');
+		$idArea = $this->input->get('id_area');
+		$idUnit = $this->input->get('id_unit');
+		
+		if($idUnit){
+			$this->units->db->where('units.id', $idUnit);
+		}
+		if($idArea){
+			$this->units->db
+				->join('areas','areas.id = units.id_area')
+				->where('areas.id', $idArea);
+		}
+		$units = $this->units->all();
 
 		$no=2;
-		$sales = $this->model->sales($idArea,$idUnit,$dateStart,$dateEnd);
-		foreach ($sales as $row)
+		$incriment = 1;
+		foreach ($units as $row)
 		{
-			$objPHPExcel->getActiveSheet()->setCellValue('A'.$no, $row->date);
-			$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, $row->unit);
-			$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, $row->pembeli);
-			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no, $row->weight);
-			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no, $row->series);
-			$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, $row->amount);
-			$objPHPExcel->getActiveSheet()->setCellValue('G'.$no, $row->price_perpcs);
-			$objPHPExcel->getActiveSheet()->setCellValue('H'.$no, $row->total);
+			$objPHPExcel->getActiveSheet()->setCellValue('A'.$no, $incriment);
+			$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, $row->name);
+			$i = 2;
+			foreach ($datagrams as $grams){
+				$sale =  $this->model->saleGrams($grams->id, $row->id,$dateStart, $dateEnd);
+				$objPHPExcel->getActiveSheet()->setCellValue($columns[$i].$no,$sale->amount);
+				$i++;
+				$objPHPExcel->getActiveSheet()->setCellValue($columns[$i].$no,$sale->price_perpcs);
+				$i++;
+				$objPHPExcel->getActiveSheet()->setCellValue($columns[$i].$no,$sale->price_buyback_perpcs);
+				$i++;
+			}
 			$no++;
+			$incriment++;
 		}
 
 		//Redirect output to a client’s WBE browser (Excel5)
-		$filename ="Report  Penjualan Dari ".$dateStart.' sampai'.$dateEnd;
+		$filename ="Report Penjualan LM Ghanet ".date('Y-m-d H:i:s');
 		header('Content-Type: application/vnd.ms-excel');
 		header('Content-Disposition: attachment;filename="'.$filename.'.xls"');
 		header('Cache-Control: max-age=0');
@@ -96,40 +134,19 @@ class Salelm extends Authenticated
 		$this->load->library('pdf');
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		require_once APPPATH.'controllers/pdf/header.php';
-		$idArea = $this->input->post('area') ?  $this->input->post('area') : null;
-		$idUnit = $this->input->post('id_unit') ?  $this->input->post('id_unit') : null;
-		$dateStart = $this->input->post('date_start');
-		$dateEnd = $this->input->post('date_end');
-		$units = $this->model->saleByDateUnit($idArea, $idUnit, $dateStart, $dateEnd);
 	
-		$pdf->AddPage('L');
-		$grams = $this->model->db->select('id, weight')->from('lm_grams')->get()->result();
-		$view = $this->load->view('datamaster/salelm/pdf.php',[
-			'units'=>$units	,
-			'dateStart'=>$dateStart,
-			'dateEnd'=>$dateEnd,
-			'grams'	=> $grams
-		],true);
-		$pdf->writeHTML($view);
-		//download
-		$pdf->Output('Ghanet Penjualan Lm'.$dateStart.' sampani '.$dateEnd.'.pdf', 'D');
-	}
-
-	public function export_excel()
-	{
-		$this->load->library('pdf');
-		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-		require_once APPPATH.'controllers/pdf/header.php';
-		$dateStart = $this->input->get('date_start');
-		$dateEnd = $this->input->get('date_end');
-		$idArea = $this->input->get('id_area');
-		$idUnit = $this->input->get('id_unit');
 
 		$this->load->library('PHPExcel');
 
 		$this->grams->db->order_by('weight', 'asc');
 		$grams = $this->grams->all();
 		$no=2;
+
+		$dateStart = $this->input->get('date_start');
+		$dateEnd = $this->input->get('date_end');
+		$idArea = $this->input->get('id_area');
+		$idUnit = $this->input->get('id_unit');
+
 		if($idUnit){
 			$this->units->db->where('units.id', $idUnit);
 		}

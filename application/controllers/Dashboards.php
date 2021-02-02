@@ -827,6 +827,70 @@ class Dashboards extends Authenticated
 	{
 		$this->load->view('dashboard/reach/index');
 	}
+
+	public function pendapatan_pdf()
+	{
+		$this->load->library('pdf');
+		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		require_once APPPATH.'controllers/pdf/header.php';
+	
+		$pdf->AddPage('L', 'A4');
+		$view = $this->load->view('dashboard/pendapatan/pdf.php',[
+			'units'=>$this->pendapatan_daily(),
+		],true);
+		$pdf->writeHTML($view);
+	
+	
+		//download
+		$pdf->Output('GHNet_Pendapatan'.date('d_m_Y').'.pdf', 'D');
+	}
+
+	public function pendapatan_daily()
+	{
+		if($area = $this->input->get('area')){
+			$this->units->db->where('id_area', $area);
+		}
+
+		if($cabang = $this->input->get('cabang')){
+			$this->units->db->where('units.id_cabang', $cabang);
+		}
+
+		if($unit = $this->input->get('unit')){
+			$this->units->db->where('units.id', $unit);
+		}
+
+		if($this->input->get('date')){
+			$date = $this->input->get('date');
+		}else{
+			$date = date('Y-m-d');
+		}
+
+		$date = date('Y-m-d', strtotime($date. ' +1 days'));
+		$begin = new DateTime( $date );
+		$end = new DateTime($date);
+		$end = $end->modify( '-6 day' );
+		$interval = new DateInterval('P1D');
+		$daterange = new DatePeriod($end, $interval ,$begin);
+
+		$dates = array();
+		foreach($daterange as $date){
+			$dates[] =  $date->format('Y-m-d');
+		}
+
+		$result[] = array('no' => 'No','unit'=> 'Unit','area'=>'Area','dates'=>$dates);
+		$units = $this->units->db->select('units.id, units.name, areas.area as area')
+			->join('areas','areas.id = units.id_area')
+			->get('units')->result();
+		foreach ($units as $unit){
+			$dates = array();
+			foreach($daterange as $date){
+				$dates[] =  (int) $this->regular->getPendapatan($unit->id, $date->format('Y-m-d'), $this->input->get('method'))->up;
+			}
+			$unit->dates = $dates;
+			$result[] = $unit;
+		}
+		return $result;
+	}
     
 
 }

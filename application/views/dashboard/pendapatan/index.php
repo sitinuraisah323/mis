@@ -76,7 +76,7 @@ $this->load->view('temp/MenuBar.php');
             </table> -->
             <!--end: Datatable -->
 
-            <form id="form_bukukas" class="form-horizontal">
+            <form id="form_bukukas" method="get" action="<?php echo base_url('dashboards/pendapatan_pdf');?>" class="form-horizontal">
             <div class="kt-portlet__body">
             <div class="col-md-12" >
                 <div class="form-group row">
@@ -94,7 +94,7 @@ $this->load->view('temp/MenuBar.php');
 					<label class="col-form-label">Area</label>
                     <div class="col-lg-2">
                         <select class="form-control select2" name="area" id="area">
-                            <option></option>
+                            <option value="0">All</option>
                             <?php
                                 if (!empty($areas)){
                                     foreach($areas as $row){
@@ -117,6 +117,7 @@ $this->load->view('temp/MenuBar.php');
 						<input type="date" class="form-control" name="date-start" value="<?php echo date('Y-m-d');?>">
 					</div>
 					<button type="button" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>
+					<button type="submit" class="btn btn-danger" name="btncari" id="btncari"><i class="fa fa-file-pdf"></i></button>
 				</div>
 
             </div>

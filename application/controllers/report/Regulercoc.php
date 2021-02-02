@@ -161,14 +161,11 @@ class Regulercoc extends Authenticated
 	{
 		$periodeYear = $this->input->post('period_year') ?  $this->input->post('period_year') : date('Y');
 		$periodeMonth = $this->input->post('period_month') ?  $this->input->post('period_month') : date('n');
-		$dayEnd = $this->input->post('period_month') > 0 ?   cal_days_in_month(CAL_GREGORIAN,$periodeMonth,$periodeYear) : '01' ;
+		$dayEnd = $this->input->post('period_month') > 0 ?   cal_days_in_month(CAL_GREGORIAN,$periodeMonth,$periodeYear) : date('d') ;
 	
-		$periodeStart = date('Y-m-d', strtotime($periodeYear.'-'.$periodeMonth.'-01'));
 		$periodeEnd = date('Y-m-d', strtotime($periodeYear.'-'.$periodeMonth.'-'.$dayEnd));
 	
-		if($data->date_sbk > $periodeStart){
-			$periodeStart = $data->date_sbk;
-		}
+		$periodeStart = $data->date_sbk;
 		if($data->date_repayment){
 			$periodeEnd = $data->date_repayment;
 		}
@@ -201,7 +198,7 @@ class Regulercoc extends Authenticated
 			'coc'	=> $coc, 
 			'pay_capital_lease'	=> $pay_capital_lease,
 			'provit'	=> $pay_capital_lease - $coc,
-			'days_credit'	=> $days
+			'days_credit'	=> $days_credit
 		];
 	}
 	

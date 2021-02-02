@@ -680,6 +680,7 @@ class Loaninstallments extends ApiController
 		}
 	}
 
+	
 	public function data_transaction_repayment($id_unit, $path, $jok = 'NON-OJK')
 	{
 		$excelreader = new PHPExcel_Reader_Excel2007();
@@ -689,8 +690,7 @@ class Loaninstallments extends ApiController
 		if($repayments){
 			$bathInsert = array();
 			$bathUpdate = array();
-			foreach ($repayments as $key => $repayment){
-				if($key > 1){
+			foreach ($data as $key => $repayment){
 					$findcustomer = $this->customers->find(array('name'=> $repayment['B']));
 					if(is_null($findcustomer)){
 						$findcustomer = (object) array(
@@ -723,8 +723,6 @@ class Loaninstallments extends ApiController
 							$bathInsert[] = $data;
 						}
 					}
-
-				}
 			}
 			if(count($bathInsert)){
 				$this->repayments->db->insert_batch('units_repayments', $bathInsert);
@@ -824,6 +822,7 @@ class Loaninstallments extends ApiController
 		if($repaymentmortage){
 			$bathInsert = array();
 			$bathUpdate = array();
+
 			foreach ($repaymentmortage as $key => $repmortage){
 				if($key > 1){
 					//$findcustomer = $this->customers->find(array('name'=> $repayment['B']));

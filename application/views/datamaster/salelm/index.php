@@ -76,7 +76,7 @@ $this->load->view('temp/MenuBar.php');
             </table> -->
             <!--end: Datatable -->
 
-            <form id="form_bukukas" class="form-horizontal" method="post" action="<?php echo base_url("datamaster/salelm/export?type_transaction=ORDER"); ?>">
+            <form id="form_bukukas" class="form-horizontal" method="get" action="<?php echo base_url("datamaster/salelm/export?type_transaction=ORDER"); ?>">
             <div class="kt-portlet__body">
             <div class="col-md-12" >
                 <div class="form-group row">
