@@ -148,7 +148,7 @@ function initCariForm(){
 					html += '<td  class="text-right">'+convertToRupiah(data.dpd_repayment_today.ost)+'</td>';
 					html += '<td  class="text-center">'+data.total_dpd.noa+'</td>';
 					html += '<td  class="text-right">'+convertToRupiah(data.total_dpd.ost)+'</td>';
-					html += '<td  class="text-center">'+parseFloat(data.percentage*100).toFixed(3)+'</td>';
+					html += '<td  class="text-center">'+parseFloat(data.percentage*100).toFixed(2)+'</td>';
 					html += '</tr>';
 					int++;
 				});
@@ -162,7 +162,7 @@ function initCariForm(){
 				tfoot += '<td  class="text-right">'+convertToRupiah(dpdRepaymentUp)+'</td>';
 				tfoot += '<td  class="text-center">'+dpdTotalNoa+'</td>';
 				tfoot += '<td  class="text-right">'+convertToRupiah(dpdTotalUp)+'</td>';
-				tfoot += '<td  class="text-center">'+parseFloat(percentage*100).toFixed(3)+'</td>';
+				tfoot += '<td  class="text-center">'+parseFloat(percentage*100).toFixed(2)+'</td>';
 				tfoot += '</tr>';
 
 				$('.table').find('tbody').find('tr').remove();
