@@ -663,13 +663,13 @@ class Dashboards extends ApiController
 		}else{
 			$date_end = date('Y-m-d');
 		}
+
 		if($this->input->get('area')){
 			$area = $this->input->get('area');
 			$this->units->db->where('id_area', $area);
 		}else if($this->session->userdata('user')->level == 'area'){
 			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
 		}
-
 		
 		if($cabang = $this->input->get('cabang')){
 			$this->units->db->where('id_cabang', $cabang);
@@ -683,11 +683,12 @@ class Dashboards extends ApiController
 		}else if($this->session->userdata('user')->level == 'unit'){
 			$this->units->db->where('id_unit', $this->session->userdata('user')->id_unit);
 		}
-
+		$sdate = date('Y-m-d', strtotime($date_end.' -120 days'));
 		$this->units->db->select('name,area,sum(amount) as up')
 			->join('units','units.id = units_regularpawns.id_unit')
 			->join('areas','areas.id = units.id_area')
 			->from('units_regularpawns')
+			->where('deadline >',$sdate)
 			->where('deadline <',$date_end)
 			->where('units_regularpawns.date_sbk <=', $date_end)
 			->where('units_regularpawns.status_transaction','N')
