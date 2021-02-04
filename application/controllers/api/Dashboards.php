@@ -1281,8 +1281,8 @@ class Dashboards extends ApiController
 			$this->units->db->where('units.id', $unit);
 		}
 
-		if($this->input->get('date-start')){
-			$date = $this->input->get('date-start');
+		if($this->input->get('date')){
+			$date = $this->input->get('date');
 		}else{
 			$date = date('Y-m-d');
 		}

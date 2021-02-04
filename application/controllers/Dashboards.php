@@ -845,6 +845,68 @@ class Dashboards extends Authenticated
 		$pdf->Output('GHNet_Pendapatan'.date('d_m_Y').'.pdf', 'D');
 	}
 
+	public function pendapatan_excel()
+	{
+		//load our new PHPExcel library
+		$this->load->library('PHPExcel');
+		$columns = array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V',
+		'W','X','Y','Z','AA','AB','AC','AD','AF','AG','AH','AI','AJ','AK','AL','AM','AN','AO','AP','AQ','AR','AS','AR',
+		'AS','AT','AU','AV','AW','AX','AY','AZ'
+			);
+		// Create new PHPExcel object
+		$objPHPExcel = new PHPExcel();
+		$objPHPExcel->getProperties()->setCreator("O'nur")
+			->setLastModifiedBy("O'nur")
+			->setTitle("Reports")
+			->setSubject("Widams")
+			->setDescription("widams report ")
+			->setKeywords("phpExcel")
+			->setCategory("well Data");
+
+		$objPHPExcel->setActiveSheetIndex(0);
+		$units = $this->pendapatan_daily();
+		$no = 1;
+		foreach ($units as $index => $row)
+		{
+			if($index == 0){		
+				$i = 0;
+				$objPHPExcel->getActiveSheet()->setCellValue($columns[$i].$no, $row['no']);
+				$i++;
+				$objPHPExcel->getActiveSheet()->setCellValue($columns[$i].$no, $row['unit']);
+				$i++;
+				$objPHPExcel->getActiveSheet()->setCellValue($columns[$i].$no, $row['unit']);
+				$i++;
+				foreach($row['dates'] as $date){
+					$objPHPExcel->getActiveSheet()->setCellValue($columns[$i].$no, $date);
+					$i++;
+				}
+			}else{
+				$i = 0;
+				$objPHPExcel->getActiveSheet()->setCellValue($columns[$i].$no, $row->id);
+				$i++;
+				$objPHPExcel->getActiveSheet()->setCellValue($columns[$i].$no, $row->name);
+				$i++;
+				$objPHPExcel->getActiveSheet()->setCellValue($columns[$i].$no, $row->area);
+				$i++;
+				foreach($row->dates as $date){
+					$objPHPExcel->getActiveSheet()->setCellValue($columns[$i].$no, $date);
+					$i++;
+				}
+			}
+			$no++;
+		}
+
+		//Redirect output to a client’s WBE browser (Excel5)
+		$filename ="Report Pendatan Ghanet ".date('Y-m-d H:i:s');
+		header('Content-Type: application/vnd.ms-excel');
+		header('Content-Disposition: attachment;filename="'.$filename.'.xls"');
+		header('Cache-Control: max-age=0');
+		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+		$objWriter->save('php://output');
+		// if($post = $this->input->post()){
+		// 	echo $post['area'];
+		// }
+	}
 	public function pendapatan_daily()
 	{
 		if($area = $this->input->get('area')){
@@ -859,8 +921,8 @@ class Dashboards extends Authenticated
 			$this->units->db->where('units.id', $unit);
 		}
 
-		if($this->input->get('date')){
-			$date = $this->input->get('date');
+		if($this->input->get('date-start')){
+			$date = $this->input->get('date-start');
 		}else{
 			$date = date('Y-m-d');
 		}

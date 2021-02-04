@@ -223,6 +223,14 @@ if(typecabang == 'hidden'){
 	$('[name="cabang"]').trigger('change');
 }
 
+const excel = ()=>{
+	const id_unit = $('#unit').val() ? $('#unit').val() : '';
+	const area = $('#area').val();
+	const method = $('#method').val();
+	const date = $('[name="date-start"]').val();
+	window.location.href = `<?php echo base_url();?>/dashboards/pendapatan_excel?date-start=${date}&id_unit=${id_unit}&area=${area}&method=${method}`;
+}
+
 jQuery(document).ready(function() {
     initCariForm();
 });
