@@ -120,7 +120,7 @@ function initCariForm(){
 					{item:"ON_PROGRESS",value:"On Progress"}
 				];
 				response.data.forEach(data=>{
-					const { name, date, unit, grams, last_log, method,tenor, total,code } = data;
+					const { id, name, date, unit, grams, last_log, method,tenor, total,code } = data;
 					html += `<tr>`;
 					html += `<td>${date}</td>`;
 					html += `<td>${name}</td>`;
@@ -144,6 +144,7 @@ function initCariForm(){
 							html += `<td></td>`;
 						}
 					<?php endif;?>
+                    html += `<td><a href="<?php echo base_url();?>/lm/sales/form/${id}"><i class="flaticon-edit-1"></i></a></td>`;
 					html += `</tr>`;
 				})
 				$('tbody').find('tr').remove();

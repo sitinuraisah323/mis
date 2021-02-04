@@ -5,40 +5,7 @@
 	let sum = 0;
 	let getDates =  '';
 	const id_unit = document.querySelector('[name="id_unit"]').value;
-	const checkStock = () =>{
-		const trs = document.querySelector('[ data-append="choice"]').querySelectorAll('[ data-template="choice-cloned" ]');
-		trs.forEach(el=>{
-			const getStock = parseInt(el.querySelector('.stock').value);
-			const getAmount = parseInt(el.querySelector('.amount').value);
-			const checkStock = getAmount > getStock;
-			if(checkStock){
-				el.querySelector('.amount').value = 0;
-				swal.fire('stock kurang atau tidak tersedia.. silahkan cek stock anda.');
-			}
-		})
-	}
 
-	const initSelectSeries = () =>{
-		console.log(1234);
-		const select = document.querySelector('[data-post="series"]');
-		if(select){
-			$.ajax({
-				url:"<?php echo base_url();?>/api/lm/series",
-				type:"get",
-				dataType:"JSON",
-				success:function(response){
-					console.log(response);
-					response.data.forEach(data=>{
-						const seriesOption = document.createElement('option');
-						seriesOption.value = data.id;
-						seriesOption.textContent = data.series;
-						select.appendChild(seriesOption)
-					})
-				}
-			});
-		}
-	}
-	initSelectSeries();
 	class Store{
 		getGrams(){
 			$.ajax({
@@ -92,7 +59,7 @@
 			checkStock();
 		}
 		appendChoice(data){
-			const {id, price_buyback_perpcs, price_perpcs, weight, stock} = data;
+			const {id, price_buyback_perpcs, price_perpcs, weight, stock, amount, id_series} = data;
 			const append = document.querySelector('[data-append="choice"]');
 			const template = document.querySelector('[data-template="choice"]').cloneNode(true);
 			template.setAttribute('data-template','choice-cloned');
@@ -102,7 +69,7 @@
 			template.querySelector('.price_buyback_perpcs').value = price_buyback_perpcs;
 			template.querySelector('.price_buyback_perpcs').setAttribute('name','gram['+sum+'][price_buyback_perpcs]');
 			template.querySelector('.amount').setAttribute('name','gram['+sum+'][amount]');
-			template.querySelector('.amount').value=1;
+			template.querySelector('.amount').value=amount ? amount : 1;
 			template.querySelector('.amount').setAttribute('onKeyup','(new Store()).calculate()');
 			template.querySelector('.price_perpcs').setAttribute('onKeyup','(new Store()).calculate()');
 			template.querySelector('.total').setAttribute('name','gram['+sum+'][total]');
@@ -112,6 +79,7 @@
 			template.querySelector('.stock').value =stock;
 			template.querySelector('[data-post="series"]').setAttribute('required', true);
 			template.querySelector('[data-post="series"]').setAttribute('name', 'gram['+sum+'][id_series]');
+			id_series ? 	template.querySelector('[data-post="series"]').value = id_series : '';
 			template.classList.remove('d-none');
 			append.append(template);
 			sum++;
@@ -164,7 +132,41 @@
 			append.innerHTML = template;
 		}
 	}
-	document.addEventListener('DOMOnload', (new Store()).getGrams())
+	
+	document.addEventListener('DOMOnload', (new Store()).getGrams());
+	const checkStock = () =>{
+		const trs = document.querySelector('[ data-append="choice"]').querySelectorAll('[ data-template="choice-cloned" ]');
+		trs.forEach(el=>{
+			const getStock = parseInt(el.querySelector('.stock').value);
+			const getAmount = parseInt(el.querySelector('.amount').value);
+			const checkStock = getAmount > getStock;
+			if(checkStock){
+				el.querySelector('.amount').value = 0;
+				swal.fire('stock kurang atau tidak tersedia.. silahkan cek stock anda.');
+			}
+		})
+	}
+
+	const initSelectSeries = () =>{
+		const select = document.querySelector('[data-post="series"]');
+		if(select){
+			$.ajax({
+				url:"<?php echo base_url();?>/api/lm/series",
+				type:"get",
+				dataType:"JSON",
+				success:function(response){
+					response.data.forEach(data=>{
+						const seriesOption = document.createElement('option');
+						seriesOption.value = data.id;
+						seriesOption.textContent = data.series;
+						select.appendChild(seriesOption)
+					})
+				}
+			});
+		}
+	}
+	initSelectSeries();
+
 
 	document.querySelector('.search-purchase').addEventListener('change', (e)=>{
 		const id = e.target.value;
@@ -198,8 +200,11 @@
 		if(document.querySelector('[name="total"]').value == 0){
 			alert('pilih lm ')
 		}else{
+			const id = document.querySelector('[name="id"]').value;
 			$.ajax({
-				url:"<?php echo base_url();?>/api/lm/transactions/insert",
+				url:id > 0 ?
+				"<?php echo base_url();?>/api/lm/transactions/update"
+				 : "<?php echo base_url();?>/api/lm/transactions/insert",
 				data:data,
 				type:"POST",
 				success:function(response){
@@ -222,6 +227,51 @@
 
 	document.querySelector('[name="type_buyer"]').addEventListener('change', (event) => (new Store()).handleType(event));
 
+	$(document).ready(function(){
+		const id = document.querySelector('[name="id"]').value;
+		if(id >0){
+			$.ajax({
+				url:"<?php echo base_url();?>/api/lm/transactions/show/"+id,
+				type:"GET",
+				dataType:"JSON",
+				success:function(res){
+					const { address, code, id_employee, id_unit, method, mobile, name, nik, tenor, total, 
+					 type_buyer, type_transaction, details
+					 } = res.data;
+					 document.querySelector('[name="address"]').value = address;
+					 document.querySelector('[name="code"]').value = code;
+					 document.querySelector('[name="id_employee"]').value = id_employee;
+					 document.querySelector('[name="id_unit"]').value = id_unit;
+					 document.querySelector('[name="method"]').value = method;
+					 document.querySelector('[name="mobile"]').value = mobile;
+					 document.querySelector('[name="name"]').value = name;
+					 document.querySelector('[name="nik"]').value = nik;
+					 document.querySelector('[name="tenor"]').value = tenor;
+					 document.querySelector('[name="total"]').value = total;
+					 document.querySelector('[name="type_buyer"]').value = type_buyer;
+					 document.querySelector('[name="type_transaction"]').value = type_transaction;
+					 document.querySelector('[name="type_buyer"]').dispatchEvent(new Event('change'));
+					 document.querySelector('[name="tenor"]').dispatchEvent(new Event('change'));
+				},
+				complete:function(res){
+					const { details } = res.responseJSON.data;	
+					if(details.length > 0){
+						details.forEach(data=>{
+							const getGramById = grams.find(gram=>{
+								return gram.id == data.id_lm_gram
+							});
+							getGramById.amount = data.amount;
+							getGramById.price_buyback_perpcs = data.price_buyback_perpcs;
+							getGramById.price_perpcs = data.price_perpcs;
+							getGramById.id_series = data.id_series;
+							getGramById.stock = parseInt(data.amount)+parseInt(getGramById.stock);
+							new Store().appendChoice(getGramById);
+						})
+					}
+				}
+			})
+		}
+	})
 
 
 </script>

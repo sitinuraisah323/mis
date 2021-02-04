@@ -16,6 +16,7 @@ $this->load->view('temp/MenuBar.php');
 	<!--begin::Form-->
 	<form class="kt-form form-input">
 	<input type="hidden" name="id_unit" value="<?php echo $this->session->userdata('user')->id_unit;?>">
+	<input type="hidden" name="id" value="<?php echo $id;?>">
 			
 		<div class="kt-portlet__body">
 		   <div class="row">
@@ -108,6 +109,7 @@ $this->load->view('temp/MenuBar.php');
 						<label class="col-md-3">Tenor</label>
 						<div class="col-md-9">
 							<select name="tenor" class="form-control">
+							<option value="<?php echo 0;?>">Pilih berapa bulan</option>
 								<?php foreach (array(1,3,6,9,12,15,18,21,24) as $value):?>
 									<option value="<?php echo $value;?>"><?php echo $value;?></option>
 								<?php endforeach;?>

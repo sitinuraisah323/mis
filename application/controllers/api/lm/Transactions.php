@@ -187,9 +187,41 @@ class Transactions extends ApiController
 					'user_create'	=> $this->session->userdata('user')->id,
 					'user_update'	=> $this->session->userdata('user')->id,
 				);
-				if($this->model->update($post['id'], $data)){
-
+				if($this->model->update($data, $post['id'])){
 					$find = $this->model->find($post['id']);
+					$data = array();
+					$this->model->db->delete('lm_transactions_grams', [
+						'id_lm_transaction'	=> $find->id
+					]);
+					$this->stock->delete(array(
+						'reference_id'	=> $this->input->post('code'),
+					));
+					foreach ($post['gram'] as $index => $value){
+						$data[$index] = array(
+							'id_lm_transaction'	=> $find->id,
+							'id_lm_gram'	=> $value['id_lm_gram'],
+							'id_series'	=> $value['id_series'],
+							'price_perpcs'	=> $value['price_perpcs'],
+							'price_buyback_perpcs'	=> $value['price_buyback_perpcs'],
+							'amount'	=> $value['amount'],
+							'total'	=> $value['total'],
+						);
+						if($this->input->post('type_transaction') === 'SALE'){
+							$this->stock->insert(array(
+								'id_series'	=> $value['id_series'],
+								'id_unit'	=> $this->input->post('id_unit'),
+								'id_lm_gram'	=> $value['id_lm_gram'],
+								'amount'	=> $value['amount'],
+								'type'	=> 'CREDIT',
+								'date_receive'	=> date('Y-m-d', strtotime($this->input->post('date'))),
+								'status'	=> 'PUBLISH',
+								'price'	=> (int) $value['price_buyback_perpcs'],
+								'description' => 'Penjualan Pada Tanggal '.date('D, d M Y', strtotime($this->input->post('date'))).' dengan code '.$this->input->post('code'),
+								'reference_id'	=>  $this->input->post('code'),
+							));
+						}
+					}
+					$this->model->db->insert_batch('lm_transactions_grams', $data);
 					return $this->sendMessage($find, 'successfully Update data');
 				}
 				return $this->sendMessage(false, 'failed Update data');
@@ -203,6 +235,9 @@ class Transactions extends ApiController
 	public function show($id)
 	{
 		if($data = $this->model->find($id)){
+			$data->details = $this->gram->findWhere([
+				'id_lm_transaction'	=> $data->id
+			]);
 			echo json_encode(array(
 				'data'	=> 	$data,
 				'status'	=> true,

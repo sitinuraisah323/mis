@@ -163,6 +163,54 @@ class Regulercoc extends Authenticated
 		$periodeMonth = $this->input->post('period_month') ?  $this->input->post('period_month') : date('n');
 		$dayEnd = $this->input->post('period_month') > 0 ?   cal_days_in_month(CAL_GREGORIAN,$periodeMonth,$periodeYear) : date('d') ;
 	
+		$periodeStart = date('Y-m-d', strtotime($periodeYear.'-'.$periodeMonth.'-01'));
+		$periodeEnd = date('Y-m-d', strtotime($periodeYear.'-'.$periodeMonth.'-'.$dayEnd));
+	
+		if($data->date_sbk > $periodeStart){
+			$periodeStart = $data->date_sbk;
+		}
+		if($data->date_repayment){
+			$periodeEnd = $data->date_repayment;
+		}
+		
+		$date1=date_create($periodeStart);
+		$date2=date_create($periodeEnd);
+		$days=date_diff($date1,$date2)->days+1;
+		$up = $data->amount;
+
+		if($data->date_repayment < $periodeStart && $data->date_repayment){
+			$days = 0;
+		}
+
+		$capital_lease = $data->capital_lease /30;
+
+		$days_credit = $days;
+
+		if($days > 120){
+			$days_credit = 120;
+		}
+		$coc = round($up * $days/365 * 11/100);
+		$pay_capital_lease = ($up*$capital_lease)*$days_credit;
+		if($days > 130){
+			if($days > 150){
+				$days_credit = 150;
+			}
+			$pay_capital_lease += ($up*$capital_lease)*$days_credit-130/20;
+		}
+		return (object) [
+			'coc'	=> $coc, 
+			'pay_capital_lease'	=> $pay_capital_lease,
+			'provit'	=> $pay_capital_lease - $coc,
+			'days_credit'	=> $days
+		];
+	}
+
+	public function _calculate($data)
+	{
+		$periodeYear = $this->input->post('period_year') ?  $this->input->post('period_year') : date('Y');
+		$periodeMonth = $this->input->post('period_month') ?  $this->input->post('period_month') : date('n');
+		$dayEnd = $this->input->post('period_month') > 0 ?   cal_days_in_month(CAL_GREGORIAN,$periodeMonth,$periodeYear) : date('d') ;
+	
 		$periodeEnd = date('Y-m-d', strtotime($periodeYear.'-'.$periodeMonth.'-'.$dayEnd));
 	
 		$periodeStart = $data->date_sbk;

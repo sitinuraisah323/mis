@@ -36,7 +36,7 @@ class Sales extends Authenticated
 		));
 	}
 
-	public function form()
+	public function form($id = null)
 	{
 		$getCode = $this->grams->db
 			->select('count(*)+1 as no')
@@ -59,7 +59,8 @@ class Sales extends Authenticated
 
 		$this->load->view("lm/sales/sale",array(
 			'employees'	=> $employees,
-			'code'	=> $code
+			'code'	=> $code,
+			'id'	=> $id
 		));
 	}
 

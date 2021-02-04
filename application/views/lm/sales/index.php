@@ -135,9 +135,7 @@ $this->load->view('temp/MenuBar.php');
 									<th rowspan="2">Metode</th>
 									<th colspan="<?php echo count($grams);?>">Penjualan Unit(Gram)</th>
 									<th rowspan="2" class="text-right">Total</th>
-									<?php if($this->session->userdata('user')->level == 'area'):?>
-									<th rowspan="2">Aksi</th>
-									<?php endif;?>
+                                    <th rowspan="2">Aksi</th>
 						    	</tr>
 								<tr>
 									<?php foreach ($grams as $gram):?>
