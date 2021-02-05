@@ -32,8 +32,14 @@ class Customermis extends Authenticated
 	{
         $data['units'] = $this->units->all();
 		$data['areas'] = $this->areas->all();
-		$data['customers'] = $this->customers->all();
+		if($this->session->userdata('user')->level=='unit'){
+			$data['customers'] = $this->customers->db->from('customers')->where('id_unit',$this->session->userdata('user')->id_unit)->get()->result();
+		}else{
+			$data['customers'] = $this->customers->all();
+
+		}
 		$this->load->view('report/customers/index',$data);
+		//print_r($this->session->userdata('user')->id_unit);
 	}
 
 	public function export()

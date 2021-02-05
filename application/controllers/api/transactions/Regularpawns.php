@@ -9,6 +9,7 @@ class Regularpawns extends ApiController
 		parent::__construct();
 		$this->load->model('RegularPawnsModel', 'regulars');
 		$this->load->model('CustomersModel', 'customers');
+		$this->load->model('regularpawnshistoryModel', 'customerrepair');
 		$this->load->model('UnitsModel', 'units');
 
 	}
@@ -416,7 +417,9 @@ class Regularpawns extends ApiController
 			}
 			else
 			{
-				$id = $post['id'];
+				$id = $post['id'];				
+				$reff_id = $post['id'];				
+				$id_customer = $post['id_customer'];				
 				unset($post['id']);
 				if($this->regulars->update($post,$id)){
 					echo json_encode(array(
@@ -432,6 +435,18 @@ class Regularpawns extends ApiController
 							'message'	=> 'Failed Updated Data Users')
 					);
 				}
+
+				$iddata['reff_id'] 				=  $id;
+				$cusrepair['reff_id'] 			=  $reff_id;
+				$cusrepair['customers_id'] 		= $id_customer;
+				//$this->customersrepair->insert($cusrepair);
+				$updt = $this->customerrepair->db->where('reff_id',$id)->from('units_regularpawns_history')->get()->row();
+				if($updt){
+					$this->customerrepair->update($cusrepair,$iddata);
+				}else{
+					$this->customerrepair->insert($cusrepair);
+				}
+
 
 			}
 		}else{

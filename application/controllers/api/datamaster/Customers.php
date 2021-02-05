@@ -8,6 +8,7 @@ class Customers extends ApiController
 	{
 		parent::__construct();
 		$this->load->model('CustomersModel', 'customers');
+		$this->load->model('CustomersrepairModel', 'customersrepair');
 	}
 
 	public function index()
@@ -208,7 +209,9 @@ class Customers extends ApiController
 			}
 			else
 			{
-				$id = $post['id'];
+				$id  = $post['id'];
+				$ktp = $post['nik'];
+
 				unset($post['id']);
 				if($this->customers->update($post,$id)){
 					echo json_encode(array(
@@ -224,6 +227,16 @@ class Customers extends ApiController
 					);
 				}
 
+				$iddata['reff_customers'] 		=  $id;
+				$cusrepair['reff_customers'] 	=  $id;
+				$cusrepair['ktp_customers'] 	= $ktp;
+				//$this->customersrepair->insert($cusrepair);
+				$updt = $this->customersrepair->db->where('reff_customers',$id)->from('customers_history')->get()->row();
+				if($updt){
+					$this->customersrepair->update($cusrepair,$iddata);
+				}else{
+					$this->customersrepair->insert($cusrepair);
+				}
 			}
 		}else{
 			echo json_encode(array(

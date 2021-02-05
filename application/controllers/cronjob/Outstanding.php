@@ -21,7 +21,10 @@ class Outstanding extends Authenticated
 		$this->load->model('AreasModel', 'areas');
 		$this->load->model('AreasModel', 'model');
 		$this->load->model('RegularPawnsModel', 'regular');
-		$this->load->model('MortagesModel', 'mortages');		
+		$this->load->model('regularpawnshistoryModel', 'regularrepair');
+		$this->load->model('MortagesModel', 'mortages');
+		$this->load->model('CustomersModel', 'customers');
+		$this->load->model('CustomersrepairModel', 'customersrepair');		
 	}
 
 	/**
@@ -194,6 +197,25 @@ class Outstanding extends Authenticated
 		);
 	}
 
+	public function repairtransaction(){
+		$db = false;
+		$mastercustomer = $this->customersrepair->all();
+		foreach ($mastercustomer as $customer){
+			$id['id'] 		= $customer->reff_customers;
+			$data['nik'] 	= $customer->ktp_customers;
+			$db = $this->customers->update($data,$id);
+		}
+
+		$mastertransactions = $this->regularrepair->all();
+		foreach ($mastertransactions as $regular){
+			$idreg['id'] 		= $regular->reff_id;
+			$reg['id_customer'] = $regular->customers_id;
+			$db = $this->regular->update($reg,$idreg);
+		}
+
+		if($db){ echo "Success repair data";}
+	}
+
 	public function generate(){
 
 		if($date = $this->input->get('date')){
@@ -296,6 +318,11 @@ class Outstanding extends Authenticated
 				'Pelunasan Cicilan'	=>  number_format($totalPelunasanMortages,0).'<br>',
 			)
 		);
+
+		echo "<br/>";
+		$this->repairtransaction();
+
+
 	}
 
 }
