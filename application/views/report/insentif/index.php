@@ -126,10 +126,13 @@ $this->load->view('temp/MenuBar.php');
 						      		<th class="text-center">No</th>
 						      		<th class="text-left">Area</th>
 						      		<th class="text-left">Unit</th>
-						      		<th class="text-left">Noa</th>
-						      		<th class="text-right">Taksiran</th>
-                                    <th class="text-right">Admin</th>
-                                    <th class="text-right">Up</th>
+						      		<th class="text-Right">Admin</th>
+						      		<th class="text-right">Booking</th>
+                                    <th class="text-right">Target Booking</th>
+                                    <th class="text-right">Realisasi Booking</th>
+                                    <th class="text-right">Oustanding</th>
+                                    <th class="text-right">Target Oustanding</th>
+                                    <th class="text-right">Realisasi Oustanding</th>
                                     <th></th>
 						    	</tr>
 						  	</thead>

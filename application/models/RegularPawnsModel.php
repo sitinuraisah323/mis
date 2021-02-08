@@ -758,30 +758,6 @@ class RegularpawnsModel extends Master
 		$query = $this->db
 					->select('u.id, u.name, a.area as area, 
 					(
-						
-					(
-						select count(*) from units_regularpawns where id_unit = u.id 
-						and month(date_sbk) = "'.$getMonth.'"
-						and year(date_sbk) = "'.$getYear.'"
-					)
-					+
-					(
-						select count(*) from units_mortages where id_unit = u.id 
-						and month(date_sbk) = "'.$getMonth.'"
-						and year(date_sbk) = "'.$getYear.'"
-					)					
-					) as noa,
-					(
-						(select COALESCE(sum(units_regularpawns.estimation), 0) from units_regularpawns where id_unit = u.id 
-					and month(date_sbk) = "'.$getMonth.'"
-					and year(date_sbk) = "'.$getYear.'"		)
-						+	
-						(select COALESCE(sum(units_mortages.estimation), 0) from units_mortages
-						 where id_unit = u.id 
-					and month(date_sbk) = "'.$getMonth.'"
-					and year(date_sbk) = "'.$getYear.'"		)		
-					) as estimation,
-					(
 						(select COALESCE(sum(units_regularpawns.admin), 0) from units_regularpawns where id_unit = u.id 
 					and month(date_sbk) = "'.$getMonth.'"
 					and year(date_sbk) = "'.$getYear.'"	)
@@ -797,8 +773,26 @@ class RegularpawnsModel extends Master
 					(select COALESCE(sum(units_mortages.amount_loan), 0) from units_mortages where id_unit = u.id 
 					and month(date_sbk) = "'.$getMonth.'"
 					and year(date_sbk) = "'.$getYear.'"	)						
-					) as up
+					) as booking
 					')
+					->select('(
+						select amount_booking from units_targets where 
+						month = "'.$getMonth.'"
+						and year = "'.$getYear.'"		
+						and u.id = 		units_targets.id_unit
+					) as target_booking')
+					->select('(
+						select amount_outstanding from units_targets where 
+						month = "'.$getMonth.'"
+						and year = "'.$getYear.'"		
+						and u.id = 		units_targets.id_unit limit 1
+					) as target_os')
+					->select('(
+						select units_outstanding.os from units_outstanding where 
+						month(date) = "'.$getMonth.'"
+						and year(date) = "'.$getYear.'"		
+						and u.id = 		units_outstanding.id_unit limit 1
+					) as outstanding')
 					->from('units u')
 					->join('areas a','a.id = u.id_area')
 					->get()->result();

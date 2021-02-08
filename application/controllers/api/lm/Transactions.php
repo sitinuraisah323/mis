@@ -51,7 +51,7 @@ class Transactions extends ApiController
 				}else{
 					$datum->position = '';
 				}
-				
+				$total_buyback = 0;
 				$datum->unit = $datum->unit;
 				foreach ($grams as $gram){
 					$find = $this->gram->find(array(
@@ -59,11 +59,13 @@ class Transactions extends ApiController
 						'id_lm_gram'	=> $gram->id
 					));
 					if($find){
+						$total_buyback += $find->price_buyback_perpcs * $find->amount;
 						$datum->grams[] = $find->amount;
 					}else{
 						$datum->grams[] = 0;
 					}
 				}
+				$datum->total_buyback = $total_buyback;
 			}
 		}
 		return $this->sendMessage($data,'Successfully Get Data Levels');

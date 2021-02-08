@@ -130,14 +130,13 @@ function initCariForm(){
                     tr += `<td>${i}</td>`;
                     tr += `<td>${data.area}</td>`;
                     tr += `<td>${data.name}</td>`;
-                    tr += `<td>${data.noa}</td>`;
-                    tr += `<td class="text-right">${convertToRupiah(data.estimation)}</td>`;
                     tr += `<td class="text-right">${convertToRupiah(data.admin)}</td>`;
-                    tr += `<td class="text-right">${convertToRupiah(data.up)}</td>`;
-                    tr += `<td>
-                    <button class="btn btn-info" onclick="details(${data.id},${month},${year})" type="button">Detail</button>
-                    <button class="btn btn-success" onclick="kpidetail(${data.id},${month},${year})" type="button">Kpi</button>
-                    </td>`;
+                    tr += `<td class="text-right">${convertToRupiah(data.booking)}</td>`;
+                    tr += `<td class="text-right">${convertToRupiah(data.target_booking)}</td>`;
+                    tr += `<td class="text-right">${(data.booking/data.target_booking*100).toFixed(2)} %</td>`;
+                    tr += `<td class="text-right">${convertToRupiah(data.outstanding)}</td>`;
+                    tr += `<td class="text-right">${convertToRupiah(data.target_os)}</td>`;
+                    tr += `<td class="text-right">${(data.outstanding/data.target_os*100).toFixed(2)} %</td>`;
                     tr += '<tr/>';
                     i++;
                     admin += parseInt(data.admin);
