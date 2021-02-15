@@ -166,7 +166,9 @@ class Insentif extends Authenticated
 		$objPHPExcel->getActiveSheet()->getColumnDimension('N');
 		$objPHPExcel->getActiveSheet()->setCellValue('N1', 'Ijin');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('O');
-		$objPHPExcel->getActiveSheet()->setCellValue('O1', 'Deskripsi 1');
+		$objPHPExcel->getActiveSheet()->setCellValue('O1', 'Nasabah');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('P');
+		$objPHPExcel->getActiveSheet()->setCellValue('P1', 'Deskripsi 1');
 
 		$getMonth = $this->input->get('month')-1 === 0 ? 12 : $this->input->get('month')-1; 
 		$getYear = $this->input->get('month')-1 === 0 ? $this->input->get('year')-1 : $this->input->get('year');
@@ -174,6 +176,9 @@ class Insentif extends Authenticated
 		$this->model->db
 						->select('units.name as unit, areas.area, cabang.cabang, no_sbk, nic, date_sbk, deadline,
 						amount, date_auction,estimation,admin,capital_lease, status_transaction, permit,
+						(
+							select customers.name from customers where customers.id = units_regularpawns.id_customer
+						) as customer, 
 						description_1')
 						->from('units_regularpawns')
 						->join('units','units.id = units_regularpawns.id_unit')
@@ -182,6 +187,7 @@ class Insentif extends Authenticated
 						->where('month(date_sbk)', $getMonth)
 						->where('year(date_sbk)', $getYear);
 		$transactions = $this->model->db->get()->result();
+		
 		
 		$i = 1;
 			
@@ -210,7 +216,8 @@ class Insentif extends Authenticated
 			$objPHPExcel->getActiveSheet()->setCellValue('M'.$no, $transaction->status_transaction);
 			$objPHPExcel->getActiveSheet()->setCellValue('N'.$no, $transaction->permit);
 
-			$objPHPExcel->getActiveSheet()->setCellValue('O'.$no, $transaction->description_1);
+			$objPHPExcel->getActiveSheet()->setCellValue('O'.$no, $transaction->customer);
+			$objPHPExcel->getActiveSheet()->setCellValue('P'.$no, $transaction->description_1);
 
 			$no++;
 		}
@@ -270,7 +277,9 @@ class Insentif extends Authenticated
 		$objPHPExcel->getActiveSheet()->getColumnDimension('N');
 		$objPHPExcel->getActiveSheet()->setCellValue('N1', 'Ijin');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('O');
-		$objPHPExcel->getActiveSheet()->setCellValue('O1', 'Deskripsi 1');
+		$objPHPExcel->getActiveSheet()->setCellValue('O1', 'Nasabah');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('P');
+		$objPHPExcel->getActiveSheet()->setCellValue('P1', 'Deskripsi 1');
 
 		$getMonth = $this->input->get('month')-1 === 0 ? 12 : $this->input->get('month')-1; 
 		$getYear = $this->input->get('month')-1 === 0 ? $this->input->get('year')-1 : $this->input->get('year');
@@ -278,8 +287,12 @@ class Insentif extends Authenticated
 		$this->model->db
 						->select('units.name as unit, areas.area, cabang.cabang, no_sbk, nic, date_sbk, deadline,
 						amount_loan, date_auction,estimation,amount_admin,capital_lease, status_transaction, permit,
-						description_1')
+						description_1,
+						(
+							select customers.name from customers where customers.id = units_regularpawns.id_customer
+						) as customer')
 						->from('units_mortages')
+						->join('customers','customers.id = units_mortages.id_customer')
 						->join('units','units.id = units_mortages.id_unit')
 						->join('areas','areas.id = units.id_area')
 						->join('cabang','cabang.id = units.id_cabang')
@@ -314,7 +327,8 @@ class Insentif extends Authenticated
 			$objPHPExcel->getActiveSheet()->setCellValue('M'.$no, $transaction->status_transaction);
 			$objPHPExcel->getActiveSheet()->setCellValue('N'.$no, $transaction->permit);
 
-			$objPHPExcel->getActiveSheet()->setCellValue('O'.$no, $transaction->description_1);
+			$objPHPExcel->getActiveSheet()->setCellValue('O'.$no, $transaction->customer);
+			$objPHPExcel->getActiveSheet()->setCellValue('P'.$no, $transaction->description_1);
 
 			$no++;
 		}

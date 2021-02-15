@@ -137,6 +137,9 @@ function initCariForm(){
                     tr += `<td class="text-right">${convertToRupiah(data.outstanding)}</td>`;
                     tr += `<td class="text-right">${convertToRupiah(data.target_os)}</td>`;
                     tr += `<td class="text-right">${(data.outstanding/data.target_os*100).toFixed(2)} %</td>`;
+					      tr += `<td>
+                    <button class="btn btn-info" onclick="details(${data.id},${month},${year})" type="button">Detail</button>
+                    </td>`;
                     tr += '<tr/>';
                     i++;
                     admin += parseInt(data.admin);

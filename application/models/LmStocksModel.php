@@ -86,6 +86,31 @@ class LmStocksModel extends Master
 		return $query->row()->total;
 	}
 
+	public function byGramsResult($idGrams, $idUnit = 0, $date = null, $escape = null)
+	{
+		if($date == null){
+			$date = date('Y-m-d');
+		}
+		$query = $this->db->query('select COALESCE(( 
+			sum(CASE WHEN lm_stocks.type = "DEBIT" THEN `amount` ELSE 0 END) - 	sum(CASE WHEN type = "CREDIT" THEN `amount` ELSE 0 END)
+		),0) as total,
+		(
+		select price_buyback_perpcs from lm_grams_prices where lm_grams_prices.id_lm_gram = lm_stocks.id_lm_gram
+		order by lm_grams_prices.date desc limit 1
+		) as hp,
+		(
+			select price_perpcs from lm_grams_prices where lm_grams_prices.id_lm_gram = lm_stocks.id_lm_gram
+			order by lm_grams_prices.date desc limit 1
+		) as hj,
+		(
+			select weight from lm_grams where lm_grams.id = lm_stocks.id_lm_gram
+		) as weight
+		from lm_stocks where date_receive <= "'.$date.'" and id_unit = "'.$idUnit.'" and status="PUBLISH" and id_lm_gram = "'.$idGrams.'" 
+		and id != "'.$escape.'"
+		');
+		return $query->row();
+	}
+
 	public function sales($idUnit, $idArea, $month, $year)
 	{
 
