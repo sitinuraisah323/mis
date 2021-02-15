@@ -50,9 +50,10 @@
 
     const pdf = (event) =>{
         const date = event.target.closest('form').querySelector('[name="date_end"]').value;
+        const date_start = event.target.closest('form').querySelector('[name="date_start"]').value;
         const id_unit = $('#unit').val();
         const id_area = $('#area').val();
-        window.location.href = `<?php echo base_url('datamaster/stocks/pdf');?>?date=${date}&id_area=${id_area}&id_unit=${id_unit}`
+        window.location.href = `<?php echo base_url('datamaster/stocks/pdf');?>?date=${date}&date_start=${date_start}&id_area=${id_area}&id_unit=${id_unit}`
     }
     
     $('[name="area"]').on('change',function(){

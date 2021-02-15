@@ -114,6 +114,7 @@ function initCariForm(){
                     html += `<td>${data.price_perpcs}</td>`
                     html += `<td>${data.price_buyback_perpcs}</td>`
                     html += `<td>${data.total}</td>`
+                    html += `<td>${parseInt(data.amount) * parseInt(data.price_buyback_perpcs)}</td>`
 					html += '/<tr>'
 				})
 				$('tbody').find('tr').remove();

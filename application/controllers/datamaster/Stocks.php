@@ -20,6 +20,7 @@ class Stocks extends Authenticated
 		$this->load->model('LmGramsModel','grams');
 		$this->load->model('AreasModel','area');
 		$this->load->model('UnitsModel','units');
+		$this->load->model('LmTransactionsModel','model');
 
 	}
 
@@ -33,18 +34,58 @@ class Stocks extends Authenticated
 		));
 	}
 
+	public function salelm($pdf)
+	{
+		$dateStart = $this->input->get('date_start');
+		$dateEnd = $this->input->get('date');
+		$idArea = $this->input->get('id_area');
+		$idUnit = $this->input->get('id_unit');
+
+		if($idUnit){
+			$this->units->db->where('units.id', $idUnit);
+		}
+		if($idArea){
+			$this->units->db
+				->join('areas','areas.id = units.id_area')
+				->where('areas.id', $idArea);
+		}
+		$units = $this->units->all();
+		foreach($units as $unit){
+			$total = 0;
+			$this->grams->db->order_by('weight', 'asc');
+			$grams = $this->grams->all();
+			foreach ($grams  as $index => $row)
+			{
+				$sale =  $this->model->saleGrams($row->id, $unit->id,$dateStart, $dateEnd);
+				$row->sales = $sale;
+			}
+			
+			$unit->grams = $grams;
+		}
+		$pdf->AddPage('L', 'A3');
+		$view = $this->load->view('datamaster/salelm/pdf1.php',[
+			'units'=>$units	,
+			'dateStart'=>$dateStart,
+			'dateEnd'=>$dateEnd,
+			'grams'	=> $grams
+		],true);
+		$pdf->writeHTML($view);
+	}
 	public function pdf()
 	{		
 		$this->load->library('pdf');
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		require_once APPPATH.'controllers/pdf/header.php';
 		$lm = $this->lm();
-		$pdf->AddPage('L');
+		$pdf->AddPage('L', 'A3');
 		$view = $this->load->view('datamaster/stocks/pdf',[
 			'grams'=>$lm->grams,
 			'data'=>$lm->data,
 		],true);
 		$pdf->writeHTML($view);
+
+		// $this->salelm($pdf);
+
 				//download
 		// $pdf->Output('GHAnet_Summary_'.date('d_m_Y').'.pdf', 'D');
 		if($this->input->get('date')){
@@ -52,7 +93,7 @@ class Stocks extends Authenticated
 		}else{
 			$date = date('Y-m-d');
 		}
-		$pdf->Output('GHAnet_Summary_'.$date.'.pdf', 'D');
+		$pdf->Output('GHAnet_Summary_Stocks'.$date.'.pdf', 'D');
 	}
 
 	public function lm()
@@ -84,6 +125,7 @@ class Stocks extends Authenticated
 			foreach ($grams  as $index => $row)
 			{
 				$unit->{$row->weight} =  $this->stock->byGrams($row->id, $unit->id,$date);
+				$unit->grams[$index] =  $this->stock->byGramsResult($row->id, $unit->id,$date);
 			}
 		}
 		return (object) [

@@ -130,13 +130,15 @@ function initCariForm(){
                     tr += `<td>${i}</td>`;
                     tr += `<td>${data.area}</td>`;
                     tr += `<td>${data.name}</td>`;
-                    tr += `<td>${data.noa}</td>`;
-                    tr += `<td class="text-right">${convertToRupiah(data.estimation)}</td>`;
                     tr += `<td class="text-right">${convertToRupiah(data.admin)}</td>`;
-                    tr += `<td class="text-right">${convertToRupiah(data.up)}</td>`;
-                    tr += `<td>
+                    tr += `<td class="text-right">${convertToRupiah(data.booking)}</td>`;
+                    tr += `<td class="text-right">${convertToRupiah(data.target_booking)}</td>`;
+                    tr += `<td class="text-right">${(data.booking/data.target_booking*100).toFixed(2)} %</td>`;
+                    tr += `<td class="text-right">${convertToRupiah(data.outstanding)}</td>`;
+                    tr += `<td class="text-right">${convertToRupiah(data.target_os)}</td>`;
+                    tr += `<td class="text-right">${(data.outstanding/data.target_os*100).toFixed(2)} %</td>`;
+					      tr += `<td>
                     <button class="btn btn-info" onclick="details(${data.id},${month},${year})" type="button">Detail</button>
-                    <button class="btn btn-success" onclick="kpidetail(${data.id},${month},${year})" type="button">Kpi</button>
                     </td>`;
                     tr += '<tr/>';
                     i++;
@@ -230,26 +232,26 @@ jQuery(document).ready(function() {
 const getExcel = () => {
     const year = $('[name="year"]').val();
     const month = $('[name="month"]').val();
-    return window.location.href = `<?php echo base_url('report/insentif/export');?>?year=${year}&month=${month}`
+    return window.location.href = `<?php echo base_url('report/insentif/export');?>?year=${year}&month=${month}`;
 }
 
 const getRegExcel = () =>{
     const year = $('[name="year"]').val();
     const month = $('[name="month"]').val();
-    return window.location.href = `<?php echo base_url('report/insentif/export_regular');?>?year=${year}&month=${month}`
+    return window.location.href = `<?php echo base_url('report/insentif/export_regular');?>?year=${year}&month=${month}`;
 
 }
 
 const getCicilExcel = () =>{
     const year = $('[name="year"]').val();
     const month = $('[name="month"]').val();
-    return window.location.href = `<?php echo base_url('report/insentif/export_cicilan');?>?year=${year}&month=${month}`
+    return window.location.href = `<?php echo base_url('report/insentif/export_cicilan');?>?year=${year}&month=${month}`;
 
 }
 
 
 const details = (id_unit, month, year) => {
-    return window.location.href = `<?php echo base_url('report/insentif/export_detail');?>?id_unit=${id_unit}&year=${year}&month=${month}`
+    return window.location.href = `<?php echo base_url('report/insentif/export_detail');?>?id_unit=${id_unit}&year=${year}&month=${month}`;
 }
 
 
@@ -259,7 +261,7 @@ const kpidetail = (id_unit, month, year) =>{
         data:{id_unit, month, year},
         type:"GET",
         dataType:"JSON",
-        success:function(res)=>{
+        success:function(res){
             console.log(res);
         }
     })

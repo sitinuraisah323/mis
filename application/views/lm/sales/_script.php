@@ -120,14 +120,15 @@ function initCariForm(){
 					{item:"ON_PROGRESS",value:"On Progress"}
 				];
 				response.data.forEach(data=>{
-					const { id, name, date, unit, grams, last_log, method,tenor, total,code } = data;
+					const { id, name, date, unit, grams, last_log, method,tenor, total,code, total_buyback } = data;
 					html += `<tr>`;
 					html += `<td>${date}</td>`;
 					html += `<td>${name}</td>`;
 					html += `<td>${unit}</td>`;
 					html += `<td>${buildTenor(tenor, method)}</td>`;
 					grams.forEach(weight=>html += `<td>${weight}</td>`);
-					html += `<td class="text-right">${convertToRupiah(total)}</td>`
+					html += `<td class="text-right">${convertToRupiah(total)}</td>`;
+					html += `<td class="text-right">${convertToRupiah(total_buyback)}</td>`;
 					<?php if($this->session->userdata('user')->level === 'area'):?>
 						if(last_log === 'ON_PROGRESS'){
 							html += `<td><select name="change-status" data-code="${code}" class="form-control" onchange="change(this)">`;

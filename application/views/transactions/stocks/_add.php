@@ -17,7 +17,7 @@
                                 <input type="radio" name="type"  value="DEBIT" id="type1" checked/>
                                 <label for="type1">Barang Masuk</label>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6 d-none">
                                 <input type="radio" name="type"  value="CREDIT" id="type2" />
                                 <label for="type2">Barang Keluar</label>
                             </div>

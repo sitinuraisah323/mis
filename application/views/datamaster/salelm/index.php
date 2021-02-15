@@ -143,7 +143,8 @@ $this->load->view('temp/MenuBar.php');
 									<th>Jumlah</th>
 									<th>HJ/Pieces</th>
 									<th>HP/Pieces</th>
-									<th>Total</th>
+									<th>Total HJ</th>
+									<th>Total HP</th>
 									<th></th>
 						    	</tr>
 						  	</thead>

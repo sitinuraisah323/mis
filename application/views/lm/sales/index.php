@@ -134,7 +134,8 @@ $this->load->view('temp/MenuBar.php');
 									<th rowspan="2">Unit</th>
 									<th rowspan="2">Metode</th>
 									<th colspan="<?php echo count($grams);?>">Penjualan Unit(Gram)</th>
-									<th rowspan="2" class="text-right">Total</th>
+									<th rowspan="2" class="text-right">Total Hr/JL</th>
+									<th rowspan="2" class="text-right">Total Hr/PK</th>
                                     <th rowspan="2">Aksi</th>
 						    	</tr>
 								<tr>

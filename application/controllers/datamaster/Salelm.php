@@ -168,7 +168,7 @@ class Salelm extends Authenticated
 			
 			$unit->grams = $grams;
 		}
-		$pdf->AddPage('L');
+		$pdf->AddPage('L', 'A3');
 		$view = $this->load->view('datamaster/salelm/pdf1.php',[
 			'units'=>$units	,
 			'dateStart'=>$dateStart,
