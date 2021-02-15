@@ -111,10 +111,25 @@ class Dashboards extends Authenticated
         	'areas'	=> $this->areas->all()
 		));
 	}
+
+	public function pencairanmonthly()
+	{
+		
+        $this->load->view("dashboard/pencairan/monthly/index",array(
+        	'areas'	=> $this->areas->all()
+		));
+	}
 	
 	public function pelunasan()
 	{
         $this->load->view("dashboard/pelunasan/index",array(
+        	'areas'	=> $this->areas->all()
+		));
+	}
+
+	public function pelunasanmonthly()
+	{
+        $this->load->view("dashboard/pelunasan/monthly/index",array(
         	'areas'	=> $this->areas->all()
 		));
 	}

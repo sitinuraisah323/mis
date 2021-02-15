@@ -526,6 +526,99 @@ class Regularpawns extends ApiController
 		));
 	}
 
+	public function reportpencairan()
+	{
+		$this->regulars->db
+			->select('units.name as unit, customers.name as customer_name,customers.nik as nik, (select date_repayment from units_repayments where units_repayments.no_sbk = units_regularpawns.no_sbk and units_repayments.id_unit = units_regularpawns.id_unit and units_repayments.permit = units_regularpawns.permit limit 1 ) as date_repayment')
+			->join('customers','units_regularpawns.id_customer = customers.id')
+			->join('units','units.id = units_regularpawns.id_unit');
+
+		if($get = $this->input->get()){
+
+			if($area = $this->input->get('area')){
+				$this->regulars->db->where('id_area', $area);
+			}else if($this->session->userdata('user')->level == 'area'){
+				$this->regulars->db->where('id_area', $this->session->userdata('user')->id_area);
+			}
+	
+			if($cabang = $this->input->get('cabang')){
+				$this->regulars->db->where('id_cabang', $cabang);
+			}else if($this->session->userdata('user')->level == 'cabang'){
+				$this->regulars->db->where('id_cabang', $this->session->userdata('user')->id_cabang);
+			}
+	
+			if($unit = $this->input->get('unit')){
+				$this->regulars->db->where('id_unit', $unit);
+			}else if($this->session->userdata('user')->level == 'unit'){
+				$this->regulars->db->where('units.id', $this->session->userdata('user')->id_unit);
+			}
+
+			$this->regulars->db
+				->where('units_regularpawns.date_sbk >=', $get['dateStart'])
+				->where('units_regularpawns.date_sbk <=', $get['dateEnd']);
+			if($get['id_unit']){
+				$this->regulars->db
+					->where('units_regularpawns.id_unit', $get['id_unit']);
+			}
+			if($permit = $get['permit']){
+				$this->regulars->db->where('units_regularpawns.permit', $permit);
+			}		
+		}
+		$data = $this->regulars->all();
+		echo json_encode(array(
+			'data'	=> $data,
+			'status'	=> true,
+			'message'	=> 'Successfully Get Data Regular Pawns'
+		));
+	}
+
+	public function reportpelunasan()
+	{
+		$this->regulars->db
+			->select('units.name as unit, customers.name as customer_name,customers.nik as nik,date_repayment')
+			->join('customers','units_regularpawns.id_customer = customers.id')
+			->join('units_repayments','units_repayments.no_sbk = units_regularpawns.no_sbk AND units_repayments.id_unit = units_regularpawns.id_unit')
+			->join('units','units.id = units_regularpawns.id_unit');
+
+		if($get = $this->input->get()){
+
+			if($area = $this->input->get('area')){
+				$this->regulars->db->where('id_area', $area);
+			}else if($this->session->userdata('user')->level == 'area'){
+				$this->regulars->db->where('id_area', $this->session->userdata('user')->id_area);
+			}
+	
+			if($cabang = $this->input->get('cabang')){
+				$this->regulars->db->where('id_cabang', $cabang);
+			}else if($this->session->userdata('user')->level == 'cabang'){
+				$this->regulars->db->where('id_cabang', $this->session->userdata('user')->id_cabang);
+			}
+	
+			if($unit = $this->input->get('unit')){
+				$this->regulars->db->where('id_unit', $unit);
+			}else if($this->session->userdata('user')->level == 'unit'){
+				$this->regulars->db->where('units.id', $this->session->userdata('user')->id_unit);
+			}
+
+			$this->regulars->db
+				->where('units_repayments.date_repayment >=', $get['dateStart'])
+				->where('units_repayments.date_repayment <=', $get['dateEnd']);
+			if($get['id_unit']){
+				$this->regulars->db
+					->where('units_regularpawns.id_unit', $get['id_unit']);
+			}
+			if($permit = $get['permit']){
+				$this->regulars->db->where('units_regularpawns.permit', $permit);
+			}		
+		}
+		$data = $this->regulars->all();
+		echo json_encode(array(
+			'data'	=> $data,
+			'status'	=> true,
+			'message'	=> 'Successfully Get Data Regular Pawns'
+		));
+	}
+
 	public function reportcustomers()
 	{
 		$idUnit = $this->session->userdata('user')->id_unit;
