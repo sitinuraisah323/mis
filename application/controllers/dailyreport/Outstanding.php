@@ -120,6 +120,10 @@ class Outstanding extends Authenticated
 		$view = $this->load->view('dailyreport/outstanding/target.php',['data'=>$this->target($this->datetrans()),'datetrans'=> $this->datetrans()],true);
 		$pdf->writeHTML($view);
 
+		$pdf->AddPage('L','A4');
+		$view = $this->load->view('dailyreport/outstanding/target_os.php',['data'=>$newos,'datetrans'=> $this->datetrans()],true);
+		$pdf->writeHTML($view);
+
 		// $pdf->AddPage('L');
 		// $view = $this->load->view('dailyreport/outstanding/pencairan.php',['pencairan'	=> $this->pencairan()],true);
 		// $pdf->writeHTML($view);
@@ -612,17 +616,28 @@ class Outstanding extends Authenticated
 			
 			//target
 			$target = $this->regular->db
-				->select('amount_booking')
+				->select('amount_booking, amount_outstanding')
 				->where('month', date('n', strtotime($date)))
 				->where('year', date('Y', strtotime($date)))
 				->where('id_unit', $unit->id)
 				->get('units_targets')->row();
-			
+
+			if($target){
+				$targetos = $target->amount_outstanding;
+				$unit->target_os = $targetos;
+			}else{
+				$targetos = 0;
+				$unit->target_os = $targetos;
+			}
+
 			if($target){
 				$target = $target->amount_booking;
 			}else{
 				$target = 0;
 			}
+
+		
+
 		
 	
 			$unit->total_outstanding = (object) array(
@@ -700,6 +715,22 @@ class Outstanding extends Authenticated
 				'noa_rep_mortages'	=> $getOstToday->noa_repayment_mortage,
 				'up_rep_mortages'	=> $getOstToday->repayment_mortage
 			);
+
+			$target = $this->regular->db
+					->select('amount_booking, amount_outstanding')
+					->where('month', date('n', strtotime($date)))
+					->where('year', date('Y', strtotime($date)))
+					->where('id_unit', $unit->id)
+					->get('units_targets')->row();
+			$totalNoaReg = ($unit->ost_yesterday->noa_os_reguler + $unit->ost_today->noa_reguler)-($unit->ost_today->noa_rep_reguler);
+			$totalUpReg = ($unit->ost_yesterday->os_reguler+ $unit->ost_today->up_reguler)-($unit->ost_today->up_rep_reguler);
+			$totalNoaMor = ($unit->ost_yesterday->noa_os_mortages + $unit->ost_today->noa_mortages)-($unit->ost_today->noa_rep_mortages);
+			$totalUpMor = ($unit->ost_yesterday->os_mortages+ $unit->ost_today->up_mortages)-($unit->ost_today->up_rep_mortages);
+			$totalOut = $totalUpReg + $totalUpMor; 
+			$unit->target_os = (int) $target->amount_outstanding;
+			$unit->total_outstanding = (object) [
+				'up'	=> 	$totalOut
+			];
 
 			// $unit->credit_today = $this->regular->getCreditToday($unit->id, $date);
 			// $unit->repayment_today = $this->regular->getRepaymentToday($unit->id, $date);

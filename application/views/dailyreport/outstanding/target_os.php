@@ -1,11 +1,11 @@
-<h3>Pencapaian Target Booking <?php echo date('d-m-Y'); ?></h3>
+<h3>Pencapaian Target Outstanding <?php echo date('d-m-Y'); ?></h3>
 <table class="table" border="1">
 	<thead class="thead-light">
 	<tr  bgcolor="#cccccc">
 		<th align="center" width="5%"> No </th>
 		<th width="20%"> Unit</th>
 		<th width="20%"> Area</th>
-		<th width="20%" align="right"> Data Pencairan/Booking  </th>
+		<th width="20%" align="right"> Data Outstanding </th>
 		<th width="20%" align="right"> Target </th>
 		<th width="15%" align="center"> Persentas (%) </th>
 
@@ -21,12 +21,11 @@
 			<td width="5%" align="center"> <?php echo $no;?></td>
 			<td width="20%" align="left"> <?php echo $data->name;?></td>
 			<td width="20%" align="left"> <?php echo $data->area;?></td>
-			<td width="20%" align="right"> <?php echo number_format($data->booking,0);?> </td>
-			<td width="20%" align="right"> <?php echo number_format($data->up,0);?> </td>
-			<td width="15%" align="center"> <?php echo $data->persentase ? round($data->persentase * 100) : 0;?> </td>
-            <?php $totalCredit +=$data->booking; ?>
-            <?php $totalUp +=$data->up; ?>
-            <?php $totalPersent +=$data->persentase; ?>
+			<td width="20%" align="right"> <?php echo number_format($data->total_outstanding->up,0);?> </td>
+			<td width="20%" align="right"> <?php echo number_format($data->target_os,0);?> </td>
+			<td width="15%" align="center"> <?php echo  round($data->total_outstanding->up /$data->target_os, 2)*100 ;?> </td>
+            <?php $totalCredit +=$data->total_outstanding->up; ?>
+            <?php $totalUp +=$data->target_os; ?>
 		</tr>
 	<?php endforeach ?>
     <tr>
