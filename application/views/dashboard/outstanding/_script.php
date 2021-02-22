@@ -116,91 +116,141 @@ function initCariForm(){
 				var html = '';
 				var foot = '';
 				var int = 1;
-				var totalNoaOstYesterday = 0;
-				var totalNoaOstToday = 0;
-				var totalUpOstToday = 0;
-				var totalUpaOstYesterday = 0;
-				var totalRepaymentTodayUp = 0;
-				var totalRepaymentTodayNoa = 0;
-				var totalOstNoa = 0;
-				var totalOstUp = 0;
-				var totalOstTicket = 0;
-				var totalDisbureNoa = 0;
-				var totalDisbureUp = 0;
-				var totalDisbureTicket = 0;
+
+                let totalNoaYesterday = 0;
+                let totalUpYesterday = 0;
+                let totalNoaReg = 0;
+                let totalUpReg = 0;
+                let totalNoaMor = 0;
+                let totalUpMor = 0;
+                let totalOut = 0;
+                let totalUpaOstYesterday = 0;
+                let totalNoaOstYesterday = 0;
+                let totalNoaOstToday  = 0;
+                let totalUpOstToday  = 0;
+                let totalRepaymentTodayUp  = 0;
+                let totalRepaymentTodayNoa  = 0;
+                let totalOstNoa  = 0;
+                let totalOstUp  = 0;
+                let totalNoaOstYesterdayMor  = 0;
+                let totalUpaOstYesterdayMor  = 0;
+                let totalNoaOstTodayMor  = 0;
+                let totalUpOstTodayMor  = 0;
+                let totalRepaymentTodayNoaMor  = 0;
+                let totalOstNoaMor  = 0;
+                let totalRepaymentTodayUpMor  = 0;
+                let totalOstUpMor  = 0;
+                let totalDisbureNoa  = 0;
+                let totalOst  = 0;
+                let totalDisbureUp  = 0;
+                let totalDisbureTicket = 0;
+
+                $('.today').text(response.message.today);
+                $('.yesterday').text(response.message.yesterday);
+          
+			
 				$.each(response.data, function (index, data) {
-					totalNoaOstYesterday += parseInt(data.ost_yesterday.noa);
-					totalNoaOstToday += parseInt(data.credit_today.noa);
-				    totalUpOstToday += parseInt(data.credit_today.up);
-					totalUpaOstYesterday += parseInt(data.ost_yesterday.up);
-					totalRepaymentTodayUp += parseInt(data.repayment_today.up);
-					totalRepaymentTodayNoa += parseInt(data.repayment_today.noa);
-					totalOstNoa += parseInt(data.total_outstanding.noa);
-					totalOstUp += parseInt(data.total_outstanding.up);
-					totalOstTicket += parseInt(data.total_outstanding.tiket);
-					totalDisbureNoa += parseInt(data.total_disburse.noa);
-					totalDisbureUp += parseInt(data.total_disburse.credit);
-					totalDisbureTicket += parseInt(data.total_disburse.tiket.toFixed(2));
+                    let totalUpReg = 0;
+                    let totalNoaReg = 0;
+                    let totalNoaMor = 0;
+                    let totalUpMor = 0;
+                    let totalOut = 0;
+
+                    totalNoaReg = (parseInt(data.ost_yesterday.noa_os_reguler) + parseInt(data.ost_today.noa_reguler))-(parseInt(data.ost_today.noa_rep_reguler));
+                    totalUpReg = (parseInt(data.ost_yesterday.os_reguler)+ parseInt(data.ost_today.up_reguler))-(parseInt(data.ost_today.up_rep_reguler));
+                    totalNoaMor = (parseInt(data.ost_yesterday.noa_os_mortages) + parseInt(data.ost_today.noa_mortages))-(parseInt(data.ost_today.noa_rep_mortages));
+                    totalUpMor = (parseInt(data.ost_yesterday.os_mortages)+ parseInt(data.ost_today.up_mortages))-parseInt(data.ost_today.up_rep_mortages);
+                    totalOut = parseInt(totalUpReg) + parseInt(totalUpMor); 
+
+                    totalNoaYesterday  += parseInt(data.ost_yesterday.noa_os_reguler);
+                    totalUpYesterday   += parseInt(data.ost_yesterday.os_reguler);
+
+                    totalNoaOstYesterday += parseInt(data.ost_yesterday.noa_os_reguler);
+                    totalUpaOstYesterday += parseInt(data.ost_yesterday.os_reguler);
+                    totalNoaOstToday += parseInt(data.ost_today.noa_reguler);
+                    totalUpOstToday += parseInt(data.ost_today.up_reguler);
+                    totalRepaymentTodayUp += parseInt(data.ost_today.up_rep_reguler);
+                    totalRepaymentTodayNoa += parseInt(data.ost_today.noa_rep_reguler);
+                    totalOstNoa += parseInt(totalNoaReg);
+                    totalOstUp += parseInt(totalUpReg);
+
+                    totalNoaOstYesterdayMor += parseInt(data.ost_yesterday.noa_os_mortages);
+                    totalUpaOstYesterdayMor += parseInt(data.ost_yesterday.os_mortages);
+                    totalNoaOstTodayMor += parseInt(data.ost_today.noa_mortages);
+                    totalUpOstTodayMor += parseInt(data.ost_today.up_mortages);
+                    totalRepaymentTodayUpMor += parseInt(data.ost_today.up_rep_mortages);
+                    totalRepaymentTodayNoaMor += parseInt(data.ost_today.noa_rep_mortages);
+                    totalOstNoaMor += parseInt(totalNoaMor);
+                    totalOstUpMor += parseInt(totalUpMor);
+
+                    totalOst +=  parseInt(totalUpReg+totalUpMor);
+
+                    totalDisbureNoa += parseInt(data.total_disburse.noa);
+                    totalDisbureUp += parseInt(data.total_disburse.credit);
+                    totalDisbureTicket += parseInt(data.total_disburse.tiket);
+
+
 					html += '<tr>'
 					html += '<td class="text-center">'+ int +'</td>';
-					html += '<td>'+ data.name +'</td>';
-					html += '<td>'+ data.area +'</td>';
-					html += '<td> </td>';
-					html += '<td> </td>';
-					html += '<td class="text-center">'+data.ost_yesterday.noa+'</td>';
-					html += '<td class="text-right">'+convertToRupiah(data.ost_yesterday.up)+'</td>';
-					html += '<td class="text-center">'+data.credit_today.noa+'</td>';
-					html += '<td class="text-right">'+convertToRupiah(data.credit_today.up)+'</td>';
-					html += '<td class="text-center">'+data.repayment_today.noa+'</td>';
-					html += '<td class="text-right">'+convertToRupiah(data.repayment_today.up)+'</td>';
-					html += '<td class="text-center">'+data.total_outstanding.noa+'</td>';
-					html += '<td class="text-right">'+convertToRupiah(data.total_outstanding.up)+'</td>';
-					html += '<td class="text-right">'+convertToRupiah(data.total_outstanding.tiket)+'</td>';
-					html += '<td class="text-center">'+data.total_disburse.noa+'</td>';
-					html += '<td class="text-right">'+convertToRupiah(data.total_disburse.credit)+'</td>';
-					html += '<td class="text-right">'+convertToRupiah(data.total_disburse.tiket.toFixed(2))+'</td>';
+					html += '<td class="text-center">'+ data.name +'</td>';
+					html += '<td class="text-center">'+ data.ost_yesterday.noa_os_reguler +'</td>';
+					html += '<td class="text-center">'+ data.ost_yesterday.os_reguler +'</td>';
+					html += '<td class="text-center">'+ data.ost_today.noa_reguler +'</td>';
+					html += '<td class="text-center">'+ data.ost_today.up_reguler +'</td>';
+					html += '<td class="text-center">'+ data.ost_today.noa_rep_reguler +'</td>';
+					html += '<td class="text-center">'+ data.ost_today.up_rep_reguler +'</td>';
+					html += '<td class="text-center">'+ totalNoaReg +'</td>';
+					html += '<td class="text-center">'+ totalUpReg +'</td>';
+					html += '<td class="text-center">'+ data.ost_yesterday.noa_os_mortages +'</td>';
+					html += '<td class="text-center">'+ data.ost_yesterday.os_mortages +'</td>';
+					html += '<td class="text-center">'+ data.ost_today.noa_mortages +'</td>';
+					html += '<td class="text-center">'+ data.ost_today.up_mortages +'</td>';
+					html += '<td class="text-center">'+ data.ost_today.noa_rep_mortages; +'</td>';
+					html += '<td class="text-center">'+ data.ost_today.up_rep_mortages +'</td>';
+					html += '<td class="text-center">'+ totalNoaMor +'</td>';
+					html += '<td class="text-center">'+ totalUpMor +'</td>';
+					html += '<td class="text-center">'+ totalOut +'</td>';
+					html += '<td class="text-center">'+ data.total_disburse.noa +'</td>';
+					html += '<td class="text-center">'+ data.total_disburse.credit +'</td>';
+					html += '<td class="text-center">'+ data.total_disburse.tiket.toFixed(2) +'</td>';
 					html += '</tr>'
-					int++;
-					lasttrans = data.lasttrans;
-				});
+                    int++;
+            });
 
 				$('.table').find('tbody').find('tr').remove();
 				$('.table').find('tbody').html(html);
-
-				foot += '<tr>'
-				foot += '<td class="text-right" colspan="5">Total</td>';
-				foot += '<td class="text-center">'+totalNoaOstYesterday+'</td>';
-				foot += '<td class="text-right">'+convertToRupiah(totalUpaOstYesterday)+'</td>';
-				foot += '<td class="text-center">'+totalNoaOstToday+'</td>';
-				foot += '<td class="text-right">'+convertToRupiah(totalUpOstToday)+'</td>';
-				foot += '<td class="text-center">'+totalRepaymentTodayNoa+'</td>';
-				foot += '<td class="text-right">'+convertToRupiah(totalRepaymentTodayUp)+'</td>';
-				foot += '<td class="text-center">'+totalOstNoa+'</td>';
-				foot += '<td class="text-right">'+convertToRupiah(totalOstUp)+'</td>';
-				foot += '<td class="text-right">'+convertToRupiah(totalOstTicket)+'</td>';
-				foot += '<td class="text-center">'+totalDisbureNoa+'</td>';
-				foot += '<td class="text-right">'+convertToRupiah(totalDisbureUp)+'</td>';
-				foot += '<td class="text-right">'+convertToRupiah(totalDisbureTicket)+'</td>';
-				foot += '</tr>'
-
-				$('.table').find('tfoot').remove('tr');
+                foot += '<tr></tr>'
+                foot += `<td colspan="2">Summary</td>`
+                foot += `<td>${totalNoaOstYesterday}</td>`
+                foot += `<td>${totalUpaOstYesterday}</td>`
+                foot += `<td>${totalNoaOstToday}</td>`
+                foot += `<td>${totalUpOstToday}</td>`
+                foot += `<td>${totalRepaymentTodayNoa}</td>`
+                foot += `<td>${totalRepaymentTodayUp}</td>`
+                foot += `<td>${totalOstNoa}</td>`
+                foot += `<td>${totalOstUp}</td>`
+                foot += `<td>${totalNoaOstYesterdayMor}</td>`
+                foot += `<td>${totalUpaOstYesterdayMor}</td>`
+                foot += `<td>${totalNoaOstTodayMor}</td>`
+                foot += `<td>${totalUpOstTodayMor}</td>`
+                foot += `<td>${totalRepaymentTodayNoaMor}</td>`
+                foot += `<td>${totalRepaymentTodayUpMor}</td>`
+                foot += `<td>${totalOstNoaMor}</td>`
+                foot += `<td>${totalOstUpMor}</td>`
+                foot += `<td>${totalOst}</td>`
+                foot += `<td>${totalDisbureNoa}</td>`
+                foot += `<td>${totalDisbureUp}</td>`
+                foot += `<td>${parseInt(totalDisbureTicket)/(parseInt(int)-1).toFixed(2)}</td>`
+                foot += '<tr></tr>'
+			
+            	$('.table').find('tfoot').find('tr').remove();
 				$('.table').find('tfoot').html(foot);
-
-
-				console.log(html)
 
 			},
 			error: function (jqXHR, textStatus, errorThrown){
 				KTApp.unblockPage();
 			},
 			complete:function () {
-				var date =  moment(lasttrans).format('DD-MM-YYYY');
-				var res = new Date(lasttrans);
-				var kemarin = res.setDate(res.getDate()-1);
-				var kemarin =  moment(kemarin).format('DD-MM-YYYY');
-				document.getElementById("dateos").innerHTML=kemarin;
-				document.getElementById("datecredit").innerHTML=date;
-				document.getElementById("datecicilan").innerHTML=date;
 				KTApp.unblock('#form_bukukas .kt-portlet__body', {});
 			}
 		});

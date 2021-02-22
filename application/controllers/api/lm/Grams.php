@@ -95,6 +95,7 @@ class Grams extends ApiController
 						'price_buyback_perpcs'	=> $post['price_buyback_perpcs'],
 						'price_pergram_customer'	=> $post['price_pergram_customer'],
 						'price_perpcs_customer'	=> $post['price_perpcs_customer'],
+						'date'	=> date('Y-m-d'),
 					));
 					return $this->sendMessage(true,'Successfull Insert Data Menu');
 				}else{
@@ -162,6 +163,7 @@ class Grams extends ApiController
 						'price_buyback_perpcs'	=> $post['price_buyback_perpcs'],
 						'price_pergram_customer'	=> $post['price_pergram_customer'],
 						'price_perpcs_customer'	=> $post['price_perpcs_customer'],
+						'date'	=> date('Y-m-d'),
 					));
 					return $this->sendMessage(true,'Successfully update',500 );
 				}else{
