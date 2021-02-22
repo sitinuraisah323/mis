@@ -160,6 +160,12 @@ class Outstanding extends Authenticated
 								->order_by('date','DESC')
 								->get()->row();
 
+			$getNoaReg = $this->regular->db->select('select count(id) as noa')
+			             ->from('units_regularpawns')
+						 ->where('units_regularpawns.status_transaction ','N') 
+						 ->where('units_regularpawns.amount !=','0') 
+						 ->get()->row();
+
 			$creditToday = $this->regular->getCreditToday($unit->id, $date);
 			$repaymentToday = $this->regular->getRepaymentToday($unit->id, $date);
 
@@ -187,6 +193,7 @@ class Outstanding extends Authenticated
 				$this->db->insert('units_outstanding', $data);
 			}
 		}
+
 		echo json_encode(
 			array(
 				'total_noa'	=> 'total noa '.$totalNoa.'<br>',
@@ -250,13 +257,24 @@ class Outstanding extends Authenticated
 								->where('id_unit', $unit->id)
 								->order_by('date','DESC')
 								->get()->row();
+			
+			// $sumUP = $this->regular->db->select('SUM(amount) as up,count(id) as noa')->from('units_regularpawns')
+			// 		 ->where('id_unit', $unit->id)
+			// 		 ->where('status_transaction','N')
+			// 		 ->where('amount !=','0')
+			// 		 ->get()->row();
+
+			// $sumUPMortages = $this->regular->db->select('count(id) as noa')->from('units_mortages')
+			// 		 ->where('id_unit', $unit->id)
+			// 		 ->where('status_transaction','N')
+			// 		 ->get()->row();
 
 			$creditToday 	= $this->regular->getCreditToday($unit->id, $date);
 			$repaymentToday = $this->regular->getRepaymentToday($unit->id, $date);	
-			$getOS 			= $this->regular->getOutstanding($unit->id, $date);	
+			//$getOS 			= $this->regular->getOutstanding($unit->id, $date);	
 
-			$totalNoaUnit = $getOstYesterday->noa + $creditToday->noa_regular - $repaymentToday->noa_regular;
-			$totalUpUnit  = $getOstYesterday->os + $creditToday->up_regular - $repaymentToday->up_regular;
+			$totalNoaUnit = $getOstYesterday->noa_os_regular + $creditToday->noa_regular - $repaymentToday->noa_regular;
+			$totalUpUnit  = $getOstYesterday->os_regular + $creditToday->up_regular - $repaymentToday->up_regular;
 			
 			//regular
 			$totalUp += $totalUpUnit;
@@ -264,7 +282,7 @@ class Outstanding extends Authenticated
 			$totalPelunasan +=  $repaymentToday->up_regular;
 			$totalPencairan +=  $creditToday->up_regular;
 
-			$totalNoaUnitMortages = $getOstYesterday->noa + $creditToday->noa_mortage - $repaymentToday->noa_mortage;
+			$totalNoaUnitMortages = $getOstYesterday->noa_os_mortage + $creditToday->noa_mortage - $repaymentToday->noa_mortage;
 			$totalUpUnitMortages  = $getOstYesterday->os_mortage + $creditToday->up_mortage - $repaymentToday->up_mortage;
 
 			//mortages			
@@ -281,10 +299,8 @@ class Outstanding extends Authenticated
 				'up_regular'			=> $creditToday->up_regular,
 				'noa_repyment_regular'	=> $repaymentToday->noa_regular,
 				'repyment_regular'		=> $repaymentToday->up_regular,
-				'noa_os_regular'		=> $totalNoaUnit,
+				'noa_os_regular'		=> $totalNoaUnit,//$sumUP->noa,
 				'os_regular'			=> $totalUpUnit,
-				'noa'				    => $totalNoaUnit,
-				'os'				    => $totalUpUnit,
 
 				//cicilan
 				'noa_mortage'			=> $creditToday->noa_mortage,
@@ -293,6 +309,9 @@ class Outstanding extends Authenticated
 				'repayment_mortage'		=> $repaymentToday->up_mortage,
 				'noa_os_mortage'		=> $totalNoaUnitMortages,
 				'os_mortage'			=> $totalUpUnitMortages,
+				//global 
+				//'noa'				    => + ,
+				//'os'				    => $totalUpUnit,
 			);
 
 			//echo "<pre/>";

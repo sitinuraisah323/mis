@@ -180,16 +180,16 @@ class Outstanding extends Authenticated
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		require_once APPPATH.'controllers/pdf/header.php';
 
-		// $os = $this->reportoutstanding();
-		// $grouped = $this->grouped($os);
-		// $pdf->AddPage('L', 'A3');
-		// $view = $this->load->view('dailyreport/outstanding/generate.php',['outstanding'=>$grouped,'datetrans'=> $this->datetrans()],true);
-		// $pdf->writeHTML($view);
-
-		$os = $this->data();
-		$pdf->AddPage('L');
-		$view = $this->load->view('dailyreport/outstanding/dpd.php',['dpd'=>$os,'datetrans'=> $this->datetrans()],true);
+		$newos = $this->reportoutstanding();
+		$grouped = $this->grouped($newos);
+		$pdf->AddPage('L', 'A3');
+		$view = $this->load->view('dailyreport/outstanding/generate.php',['outstanding'=>$grouped,'datetrans'=> $this->datetrans()],true);
 		$pdf->writeHTML($view);
+
+		// $os = $this->data();
+		// $pdf->AddPage('L');
+		// $view = $this->load->view('dailyreport/outstanding/dpd.php',['dpd'=>$os,'datetrans'=> $this->datetrans()],true);
+		// $pdf->writeHTML($view);
 
 		// $pdf->AddPage('L');
 		// $view = $this->load->view('dailyreport/outstanding/dpd_new.php',['dpd'=>$os,'datetrans'=> $this->datetrans()],true);
@@ -556,24 +556,6 @@ class Outstanding extends Authenticated
 
 	public function data()
 	{
-		// if($area = $this->input->get('area')){
-		// 	$this->units->db->where('id_area', $area);
-		// }else if($this->session->userdata('user')->level == 'area'){
-		// 	$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
-		// }
-		// if($id_unit = $this->input->get('id_unit')){
-		// 	$this->units->db->where('units.id', $id_unit);
-		// }else if($code = $this->input->get('code')){
-		// 	$this->units->db->where('code', zero_fill($code, 3));
-		// }else if($this->session->userdata('user')->level == 'unit'){
-		// 	$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
-		// }
-		// if($this->input->get('date')){
-		// 	$date = $this->input->get('date');
-		// }else{
-		// 	$date = date('Y-m-d');
-		// }
-
 		//$date = '2021-01-15';
 		$date = date('Y-m-d');
 		$lastdate = $this->regular->getLastDateTransaction()->date;
@@ -593,22 +575,46 @@ class Outstanding extends Authenticated
 			->join('areas','areas.id = units.id_area')
 			->get('units')->result();
 		foreach ($units as $unit){
-			$getOstYesterday = $this->regular->db
+
+				$getOstYesterday = $this->regular->db
 				->where('date <', $date)
 				->from('units_outstanding')
 				->where('id_unit', $unit->id)
 				->order_by('date','DESC')
 				->get()->row();
-			$unit->ost_yesterday = (object) array(
-				'noa'	=> $getOstYesterday->noa,
-				'up'	=> $getOstYesterday->os,
+
+				$unit->ost_yesterday = (object) array(
+				'noa'	=> $getOstYesterday->noa_os_regular,
+				'up'	=> $getOstYesterday->os_regular,
 				'noa_mortages'	=> $getOstYesterday->noa_os_mortage,
 				'up_mortages'	=> $getOstYesterday->os_mortage
-			);
+				);
+
+				$getOstToday = $this->regular->db
+				->where('date <=', $date)
+				->from('units_outstanding')
+				->where('id_unit', $unit->id)
+				->order_by('date','DESC')
+				->get()->row();
+
+				$unit->ost_today = (object) array(
+					'noa'					=> $getOstToday->noa_regular,
+					'up'					=> $getOstToday->up_regular,
+					'repayment'				=> $getOstToday->repyment_regular,
+					'noa_mortages'			=> $getOstToday->noa_mortage,
+					'repayment_mortatges'	=> $getOstToday->repayment_mortage,
+					'up_mortages'			=> $getOstToday->up_mortage,
+					'os_regular'			=> $getOstToday->os_regular,
+					'os_mortage'			=> $getOstToday->os_mortage,
+					);
+
+
 			$unit->credit_today = $this->regular->getCreditToday($unit->id, $date);
 			$unit->repayment_today = $this->regular->getRepaymentToday($unit->id, $date);
 			$totalNoa = (int) $unit->ost_yesterday->noa + $unit->credit_today->noa - $unit->repayment_today->noa;
 			$totalUp = (int) $unit->ost_yesterday->up + $unit->credit_today->up - $unit->repayment_today->up;
+			$totalOS = (int) $unit->ost_today->os_regular + $unit->ost_today->os_mortage;
+			//$totalOS = 0;
 			
 			//target
 			$target = $this->regular->db
@@ -628,6 +634,7 @@ class Outstanding extends Authenticated
 			$unit->total_outstanding = (object) array(
 				'noa'	=> $totalNoa,
 				'up'	=> $totalUp,
+				'os'	=> $totalOS,
 				'tiket'	=> round($totalUp > 0 ? $totalUp /$totalNoa : 0)
 			);
 
