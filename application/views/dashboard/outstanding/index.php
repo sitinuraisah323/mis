@@ -127,38 +127,38 @@ $this->load->view('temp/MenuBar.php');
 				<div class="col-md-12">
 					<div class="kt-section__content">
 							<table class="table">
-								<thead class="thead-light">
-									<tr>
-										<th class="text-center">No</th>
-										<th>Unit</th>
-										<th>Area</th>
-										<th class="text-center">Open</th>
-										<th class="text-center">Ijin Ojk</th>
-										<th colspan="2" class="text-center">Ost Sebelumnya(<div id="dateos"></div>)</th>
-										<th colspan="2" class="text-center">Kredit(<div id="datecredit"></div>)</th>
-										<th colspan="2" class="text-center">Pelunasan & Cicilan(<div id="datecicilan"></div>)</th>
-										<th colspan="3" class="text-center">Total Outstanding</th>
-										<th colspan="3" class="text-center">Total Disburse</th>										
-									</tr>
-									<tr>
-										<th></th>
-										<th></th>
-										<th></th>
-										<th></th>
-										<th></th>
-										<th class="text-center">Noa</th>
-										<th class="text-right">Ost</th>
-										<th class="text-center">Noa</th>
-										<th class="text-right">Ost</th>
-										<th class="text-center">Noa</th>
-										<th class="text-right">Kredit</th>
-										<th class="text-center">Noa</th>
-										<th class="text-right">Ost</th>
-										<th class="text-right">Ticket Size</th>
-										<th class="text-center">Noa</th>
-										<th class="text-right">Ost</th>
-										<th class="text-right">Ticket Size</th>										
-									</tr>
+								<thead class="thead-light"
+								<tr bgcolor="#cccccc">
+									<td rowspan="2" align="center"  width="20">No</td>
+									<td rowspan="2" align="left" width="120"> Unit</td>
+									<td colspan="8" align="center" width="480">Gadai Reguler</td>
+									<td colspan="8" align="center" width="480">Gadai Cicilan</td>
+									<td rowspan="2" align="center" width="100">Total <br/>Outstanding <br/>()</td>
+									<td colspan="3" align="center" width="200">Disburse</td>
+								</tr>
+								<tr>
+									<td align="center" width="40" bgcolor="#d6d6c2">Noa</td>
+									<td align="center" width="90" bgcolor="#d6d6c2">Ost.Kemarin <br/>(<span class="yesterday"></span>)</td>
+									<td align="center" width="30" bgcolor="#b8b894">Noa</td>
+									<td align="center" width="80" bgcolor="#b8b894">Kredit</td>
+									<td align="center" width="30" bgcolor="#d6d6c2">Noa</td>
+									<td align="center" width="80" bgcolor="#d6d6c2">Pelunasan</td>
+									<td align="center" width="40" bgcolor="#b8b894">Noa</td>
+									<td align="center" width="90" bgcolor="#b8b894">Ost. Regular<br/>(<span class="today"></span>)</td>
+
+									<td align="center" width="30" bgcolor="#d6d6c2">Noa</td>
+									<td align="center" width="90" bgcolor="#d6d6c2">Ost.Kemarin <br/>(<span class="yesterday"></span>)</td>
+									<td align="center" width="30" bgcolor="#b8b894">Noa</td>
+									<td align="center" width="90" bgcolor="#b8b894">Kredit</td>
+									<td align="center" width="30" bgcolor="#d6d6c2">Noa</td>
+									<td align="center" width="90" bgcolor="#d6d6c2">Pelunasan</td>
+									<td align="center" width="30" bgcolor="#b8b894">Noa</td>
+									<td align="center" width="90" bgcolor="#b8b894">Ost. Cicilan<br/>(<span class="today"></span>)</td>
+
+									<td align="center" width="40" bgcolor="#b8b894">Noa</td>
+									<td align="center" width="90" bgcolor="#b8b894"> Kredit</td>
+									<td align="center" width="70" bgcolor="#b8b894"> Ticket Size</td>
+								</tr>
 								</thead>
 								<tbody>
 								</tbody>

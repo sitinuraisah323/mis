@@ -116,41 +116,80 @@ class Dashboards extends ApiController
 
 		$units = $this->units->db->select('units.id, units.name, area')
 			->join('areas','areas.id = units.id_area')
+			->limit(10)
 			->get('units')->result();
+		$today = '';
+		$yesterday = '';
 		foreach ($units as $unit){
+			$getOstToday = $this->regular->db
+						->where('date <=', $date)
+						->from('units_outstanding')
+						->where('id_unit', $unit->id)
+						->order_by('date','DESC')
+						->get()->row();
+
+			$today = $getOstToday->date;
+
+			$unit->ost_today = (object) array(
+				'noa_reguler'		=> $getOstToday->noa_regular,
+				'up_reguler'		=> $getOstToday->up_regular,
+				'noa_rep_reguler'	=> $getOstToday->noa_repyment_regular,
+				'up_rep_reguler'	=> $getOstToday->repyment_regular,
+				'noa_mortages'		=> $getOstToday->noa_mortage,
+				'up_mortages'		=> $getOstToday->up_mortage,
+				'noa_rep_mortages'	=> $getOstToday->noa_repayment_mortage,
+				'up_rep_mortages'	=> $getOstToday->repayment_mortage
+			);
+			$dateYesterday = $getOstToday->date;
+
 			$getOstYesterday = $this->regular->db
-				->where('date <', $date)
-				->from('units_outstanding')
-				->where('id_unit', $unit->id)
-				->order_by('date','DESC')
-				->get()->row();
+								->where('date <', $dateYesterday)
+								->from('units_outstanding')
+								->where('id_unit', $unit->id)
+								->order_by('date','DESC')
+								->get()->row();
+
+			$yesterday = $getOstYesterday->date;
+
 			$unit->ost_yesterday = (object) array(
-				'noa'	=>(int) $getOstYesterday->noa,
-				'up'	=>(int) $getOstYesterday->os
-			);
-			$unit->credit_today = $this->regular->getCreditToday($unit->id, $date);
-			$unit->repayment_today = $this->regular->getRepaymentToday($unit->id, $date);
-			$totalNoa = (int) $unit->ost_yesterday->noa + $unit->credit_today->noa - $unit->repayment_today->noa;
-			$totalUp = (int) $unit->ost_yesterday->up + $unit->credit_today->up - $unit->repayment_today->up;
-			$unit->total_outstanding = (object) array(
-				'noa'	=>(int) $totalNoa,
-				'up'	=>(int) $totalUp,
-				'tiket'	=>(int) round($totalUp > 0 ? $totalUp /$totalNoa : 0)
-			);
-			$unit->total_disburse = $this->regular->getTotalDisburse($unit->id, null, null, $date);
+				'noa_os_reguler'	=> $getOstYesterday->noa_os_regular,
+				'os_reguler'		=> $getOstYesterday->os_regular,
+				'noa_os_mortages'	=> $getOstYesterday->noa_os_mortage,
+				'os_mortages'		=> $getOstYesterday->os_mortage
+			);		
+
+			$totalUpReg = ($unit->ost_yesterday->os_reguler+ $unit->ost_today->up_reguler)-($unit->ost_today->up_rep_reguler);
+			$totalUpMor = ($unit->ost_yesterday->os_mortages+ $unit->ost_today->up_mortages)-($unit->ost_today->up_rep_mortages);
+           
+
+			$totalOst +=  $totalUpReg+$totalUpMor;
+
+			$unit->total_outstanding = (object) [
+				'up'	=> $totalOst
+			];
+
 			$unit->dpd_yesterday = $this->regular->getDpdYesterday($unit->id, $date);
 			$unit->dpd_today = $this->regular->getDpdToday($unit->id, $date);
 			$unit->dpd_repayment_today = $this->regular->getDpdRepaymentToday($unit->id,$date);
 			$unit->total_dpd = (object) array(
-				'noa'	=>(int) $unit->dpd_today->noa + $unit->dpd_yesterday->noa - $unit->dpd_repayment_today->noa,
-				'ost'	=>(int) $unit->dpd_today->ost + $unit->dpd_yesterday->ost - $unit->dpd_repayment_today->ost,
+				//'noa'	=> $unit->dpd_today->noa + $unit->dpd_yesterday->noa,
+				//'ost'	=> $unit->dpd_today->ost + $unit->dpd_yesterday->ost,
+				'noa_today'	=> $unit->dpd_today->noa + $unit->dpd_repayment_today->noa,
+				'ost_today'	=> $unit->dpd_today->ost + $unit->dpd_repayment_today->ost,
+				'noa'	=> ($unit->dpd_today->noa + $unit->dpd_yesterday->noa +$unit->dpd_repayment_today->noa) - $unit->dpd_repayment_today->noa,
+				'ost'	=> ($unit->dpd_today->ost + $unit->dpd_yesterday->ost +$unit->dpd_repayment_today->ost) - $unit->dpd_repayment_today->ost,
 			);
-			$unit->lasttrans = $date;
-			$unit->max = $max->os;
-			//$max
-			$unit->percentage =(int) ($unit->total_dpd->ost > 0) && ($unit->total_outstanding->up > 0) ? round($unit->total_dpd->ost / $unit->total_outstanding->up, 4) : 0;
+			$unit->percentage = ($unit->total_dpd->ost > 0) && ($unit->total_outstanding->up > 0) ? round($unit->total_dpd->ost / $unit->total_outstanding->up, 4) : 0;
+	
+		
+
+			
+			$unit->total_disburse = $this->regular->getTotalDisburse($unit->id, null, null, $date);
 		}
-		$this->sendMessage($units, 'Get Data Outstanding');
+		$this->sendMessage($units, [
+			'today'	=> $today,
+			'yesterday'	=> $yesterday
+		]);
 	}
 
 	public function getos()

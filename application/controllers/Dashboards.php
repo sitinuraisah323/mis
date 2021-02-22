@@ -486,49 +486,71 @@ class Dashboards extends Authenticated
 		foreach ($units as $unit) 
 		{
 
-			$getOstYesterday = $this->regular->db
-				->where('date <', $date)
+			$getOstToday = $this->regular->db
+				->where('date <=', $date)
 				->from('units_outstanding')
 				->where('id_unit', $unit->id)
 				->order_by('date','DESC')
 				->get()->row();
-			if($getOstYesterday){
-				$unit->ost_yesterday = (object) array(
-					'noa'	=> $getOstYesterday->noa,
-					'up'	=> $getOstYesterday->os
-				);
-			}else{
-				$unit->ost_yesterday = (object) array(
-					'noa'	=> 0,
-					'up'	=> 0,
-				);
-			}
-			$unit->credit_today = $this->regular->getCreditToday($unit->id, $date);
-			$unit->repayment_today = $this->regular->getRepaymentToday($unit->id, $date);
 
-			$totalNoa = (int) $unit->ost_yesterday->noa + $unit->credit_today->noa - $unit->repayment_today->noa;
-			$totalUp = (int) $unit->ost_yesterday->up + $unit->credit_today->up - $unit->repayment_today->up;
-			$ticketsize = round($totalUp > 0 ? $totalUp /$totalNoa : 0);
+			$today = $getOstToday->date;
+
+			$unit->ost_today = (object) array(
+				'noa_reguler'		=> $getOstToday->noa_regular,
+				'up_reguler'		=> $getOstToday->up_regular,
+				'noa_rep_reguler'	=> $getOstToday->noa_repyment_regular,
+				'up_rep_reguler'	=> $getOstToday->repyment_regular,
+				'noa_mortages'		=> $getOstToday->noa_mortage,
+				'up_mortages'		=> $getOstToday->up_mortage,
+				'noa_rep_mortages'	=> $getOstToday->noa_repayment_mortage,
+				'up_rep_mortages'	=> $getOstToday->repayment_mortage
+			);
+			$dateYesterday = $getOstToday->date;
+
+			$getOstYesterday = $this->regular->db
+								->where('date <', $dateYesterday)
+								->from('units_outstanding')
+								->where('id_unit', $unit->id)
+								->order_by('date','DESC')
+								->get()->row();
+
+			$yesterday = $getOstYesterday->date;
+
+			$unit->ost_yesterday = (object) array(
+				'noa_os_reguler'	=> $getOstYesterday->noa_os_regular,
+				'os_reguler'		=> $getOstYesterday->os_regular,
+				'noa_os_mortages'	=> $getOstYesterday->noa_os_mortage,
+				'os_mortages'		=> $getOstYesterday->os_mortage
+			);		
+
+			$totalUpReg = ($unit->ost_yesterday->os_reguler+ $unit->ost_today->up_reguler)-($unit->ost_today->up_rep_reguler);
+			$totalUpMor = ($unit->ost_yesterday->os_mortages+ $unit->ost_today->up_mortages)-($unit->ost_today->up_rep_mortages);
+
+
+			$totalOst +=  $totalUpReg+$totalUpMor;
+
+			$unit->total_outstanding = (object) [
+				'up'	=> $totalOst
+			];
+
+			$unit->dpd_yesterday = $this->regular->getDpdYesterday($unit->id, $date);
+			$unit->dpd_today = $this->regular->getDpdToday($unit->id, $date);
+			$unit->dpd_repayment_today = $this->regular->getDpdRepaymentToday($unit->id,$date);
+			$unit->total_dpd = (object) array(
+				//'noa'	=> $unit->dpd_today->noa + $unit->dpd_yesterday->noa,
+				//'ost'	=> $unit->dpd_today->ost + $unit->dpd_yesterday->ost,
+				'noa_today'	=> $unit->dpd_today->noa + $unit->dpd_repayment_today->noa,
+				'ost_today'	=> $unit->dpd_today->ost + $unit->dpd_repayment_today->ost,
+				'noa'	=> ($unit->dpd_today->noa + $unit->dpd_yesterday->noa +$unit->dpd_repayment_today->noa) - $unit->dpd_repayment_today->noa,
+				'ost'	=> ($unit->dpd_today->ost + $unit->dpd_yesterday->ost +$unit->dpd_repayment_today->ost) - $unit->dpd_repayment_today->ost,
+			);
+			$unit->percentage = ($unit->total_dpd->ost > 0) && ($unit->total_outstanding->up > 0) ? round($unit->total_dpd->ost / $unit->total_outstanding->up, 4) : 0;
+
+
+
 
 			$unit->total_disburse = $this->regular->getTotalDisburse($unit->id, null, null, $date);
 
-			$objPHPExcel->getActiveSheet()->setCellValue('A'.$no, $unit->name);	
-			$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, $unit->area);	
-			$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, "-");				  	
-			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no, "-");	
-			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no, $unit->ost_yesterday->noa);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, $unit->ost_yesterday->up);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('G'.$no, $unit->credit_today->noa);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('H'.$no, $unit->credit_today->up);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('I'.$no, $unit->repayment_today->noa);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('J'.$no, $unit->repayment_today->up);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('K'.$no, $totalNoa);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('L'.$no, $totalUp);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('M'.$no, $ticketsize);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('N'.$no, $unit->total_disburse->noa);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('O'.$no, $unit->total_disburse->credit);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('P'.$no, $unit->total_disburse->tiket);				 
-			$no++;
 		}
 
 		//Redirect output to a client’s WBE browser (Excel5)

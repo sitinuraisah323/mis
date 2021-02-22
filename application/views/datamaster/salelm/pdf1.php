@@ -24,6 +24,7 @@
             </tr>
         </thead>
         <tbody>
+        <?php $totalGrams = [];?>
         <?php $totalAmount = 0; $totalHp = 0; $totalHj = 0; $totalGram = 0;?>
                <?php foreach($units as $unit):?>        
                     <tr>                    
@@ -33,10 +34,21 @@
                         <?php foreach($unit->grams as $index => $gram):?>
                             <th width="<?php echo 600/count($grams)/3;?>" align="center">
                             <?php if($gram->sales->amount):?>
-                            <?php echo $gram->sales->amount;?>
+                            <?php echo  $gram->sales->amount;?>
                             <?php else:?>
                                 -
                             <?php endif;?>
+                            <?php
+                            $calAmount =  array_key_exists($index, $totalGrams) ? $totalGrams[$index]['amount'] +  $gram->sales->amount : 0;
+                            $calBuy = array_key_exists($index, $totalGrams)  ? $totalGrams[$index]['buyback'] + ($gram->sales->price_buyback_perpcs*$gram->sales->amount) : 0;
+                            $calPcs = array_key_exists($index, $totalGrams)  ? $totalGrams[$index]['price'] + ($gram->sales->price_perpcs*$gram->sales->amount): 0;
+                            $totalGrams[$index] = [
+                                'amount'    => $calAmount,
+                                'buyback'    => $calBuy,
+                                'price'    => $calPcs,
+                                'gram'    => $gram->weight,
+                            ];
+                            ?>
                             </th>
                             <th width="<?php echo 800/count($grams)/2;?>" align="center">
                             <?php if($gram->sales->price_perpcs):?>
@@ -97,5 +109,24 @@
                <?php endforeach;?>       
         </tbody>
         <tfoot>
+            <tr bgcolor="yellow">
+                <td></td>
+                <?php $allAmount = 0; $allBuyBack = 0; $allPrice = 0; $allGram = 0?>
+                <?php foreach($totalGrams as $gram):?>
+                
+                    <?php $allAmount +=$gram['amount'];
+                     $allBuyBack += $gram['buyback'];
+                     $allPrice += $gram['price'];
+                     $allGram += $gram['amount']*$gram['gram'];
+                     ?>
+                    <td align="center"><?php echo $gram['amount'];?></td>
+                    <td align="center"><?php echo $gram['buyback'];?></td>
+                    <td align="center"><?php echo $gram['price'];?></td>
+                <?php endforeach;?>
+                <td align="center"><?php echo $allGram;?></td>
+                <td align="center"><?php echo $allAmount;?></td>
+                <td align="right"><?php echo $allBuyBack;?></td>
+                <td align="right"><?php echo $allPrice;?></td>
+            </tr>
         </tfoot>
     </table>
