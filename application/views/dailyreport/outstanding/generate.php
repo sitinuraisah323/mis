@@ -103,6 +103,7 @@
                 $totalDisbureTicketArea = 0;
 
             ?>
+            <?php $no_ = 0;?>
             <?php foreach($datas as $data): $no_++;?>
             <?php
                 //perhitungan total unit

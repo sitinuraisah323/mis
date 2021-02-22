@@ -133,7 +133,7 @@ $this->load->view('temp/MenuBar.php');
 									<td rowspan="2" align="left" width="120"> Unit</td>
 									<td colspan="8" align="center" width="480">Gadai Reguler</td>
 									<td colspan="8" align="center" width="480">Gadai Cicilan</td>
-									<td rowspan="2" align="center" width="100">Total <br/>Outstanding <br/>()</td>
+									<td rowspan="2" align="center" width="100">Total <br/>Outstanding <br/>(<span class="today"></span>)</td>
 									<td colspan="3" align="center" width="200">Disburse</td>
 								</tr>
 								<tr>

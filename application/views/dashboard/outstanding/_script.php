@@ -194,24 +194,24 @@ function initCariForm(){
 					html += '<td class="text-center">'+ int +'</td>';
 					html += '<td class="text-center">'+ data.name +'</td>';
 					html += '<td class="text-center">'+ data.ost_yesterday.noa_os_reguler +'</td>';
-					html += '<td class="text-center">'+ data.ost_yesterday.os_reguler +'</td>';
+					html += '<td class="text-center">'+ convertToRupiah(data.ost_yesterday.os_reguler) +'</td>';
 					html += '<td class="text-center">'+ data.ost_today.noa_reguler +'</td>';
-					html += '<td class="text-center">'+ data.ost_today.up_reguler +'</td>';
+					html += '<td class="text-center">'+ convertToRupiah( data.ost_today.up_reguler) +'</td>';
 					html += '<td class="text-center">'+ data.ost_today.noa_rep_reguler +'</td>';
-					html += '<td class="text-center">'+ data.ost_today.up_rep_reguler +'</td>';
+					html += '<td class="text-center">'+ convertToRupiah( data.ost_today.up_rep_reguler) +'</td>';
 					html += '<td class="text-center">'+ totalNoaReg +'</td>';
-					html += '<td class="text-center">'+ totalUpReg +'</td>';
+					html += '<td class="text-center">'+  convertToRupiah(totalUpReg) +'</td>';
 					html += '<td class="text-center">'+ data.ost_yesterday.noa_os_mortages +'</td>';
-					html += '<td class="text-center">'+ data.ost_yesterday.os_mortages +'</td>';
+					html += '<td class="text-center">'+  convertToRupiah(data.ost_yesterday.os_mortages) +'</td>';
 					html += '<td class="text-center">'+ data.ost_today.noa_mortages +'</td>';
-					html += '<td class="text-center">'+ data.ost_today.up_mortages +'</td>';
+					html += '<td class="text-center">'+  convertToRupiah(data.ost_today.up_mortages) +'</td>';
 					html += '<td class="text-center">'+ data.ost_today.noa_rep_mortages; +'</td>';
-					html += '<td class="text-center">'+ data.ost_today.up_rep_mortages +'</td>';
+					html += '<td class="text-center">'+ convertToRupiah( data.ost_today.up_rep_mortages) +'</td>';
 					html += '<td class="text-center">'+ totalNoaMor +'</td>';
-					html += '<td class="text-center">'+ totalUpMor +'</td>';
-					html += '<td class="text-center">'+ totalOut +'</td>';
+					html += '<td class="text-center">'+  convertToRupiah(totalUpMor) +'</td>';
+					html += '<td class="text-center">'+  convertToRupiah(totalOut) +'</td>';
 					html += '<td class="text-center">'+ data.total_disburse.noa +'</td>';
-					html += '<td class="text-center">'+ data.total_disburse.credit +'</td>';
+					html += '<td class="text-center">'+  convertToRupiah(data.total_disburse.credit) +'</td>';
 					html += '<td class="text-center">'+ data.total_disburse.tiket.toFixed(2) +'</td>';
 					html += '</tr>'
                     int++;
@@ -222,24 +222,24 @@ function initCariForm(){
                 foot += '<tr></tr>'
                 foot += `<td colspan="2">Summary</td>`
                 foot += `<td>${totalNoaOstYesterday}</td>`
-                foot += `<td>${totalUpaOstYesterday}</td>`
+                foot += `<td>${ convertToRupiah(totalUpaOstYesterday)}</td>`
                 foot += `<td>${totalNoaOstToday}</td>`
-                foot += `<td>${totalUpOstToday}</td>`
+                foot += `<td>${ convertToRupiah(totalUpOstToday)}</td>`
                 foot += `<td>${totalRepaymentTodayNoa}</td>`
-                foot += `<td>${totalRepaymentTodayUp}</td>`
+                foot += `<td>${ convertToRupiah(totalRepaymentTodayUp)}</td>`
                 foot += `<td>${totalOstNoa}</td>`
-                foot += `<td>${totalOstUp}</td>`
+                foot += `<td>${ convertToRupiah(totalOstUp)}</td>`
                 foot += `<td>${totalNoaOstYesterdayMor}</td>`
-                foot += `<td>${totalUpaOstYesterdayMor}</td>`
+                foot += `<td>${ convertToRupiah(totalUpaOstYesterdayMor)}</td>`
                 foot += `<td>${totalNoaOstTodayMor}</td>`
-                foot += `<td>${totalUpOstTodayMor}</td>`
+                foot += `<td>${ convertToRupiah(totalUpOstTodayMor)}</td>`
                 foot += `<td>${totalRepaymentTodayNoaMor}</td>`
-                foot += `<td>${totalRepaymentTodayUpMor}</td>`
+                foot += `<td>${ convertToRupiah(totalRepaymentTodayUpMor)}</td>`
                 foot += `<td>${totalOstNoaMor}</td>`
-                foot += `<td>${totalOstUpMor}</td>`
-                foot += `<td>${totalOst}</td>`
+                foot += `<td>${ convertToRupiah(totalOstUpMor)}</td>`
+                foot += `<td>${ convertToRupiah(totalOst)}</td>`
                 foot += `<td>${totalDisbureNoa}</td>`
-                foot += `<td>${totalDisbureUp}</td>`
+                foot += `<td>${ convertToRupiah(totalDisbureUp)}</td>`
                 foot += `<td>${parseInt(totalDisbureTicket)/(parseInt(int)-1).toFixed(2)}</td>`
                 foot += '<tr></tr>'
 			

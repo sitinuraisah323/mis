@@ -187,311 +187,63 @@ class Dashboards extends Authenticated
 			'area'	=> $area
 		));
 	}
-	
-	//report
-	public function outstandingreport(){
-		//load our new PHPExcel library
-		$this->load->library('PHPExcel');
 
-		// Create new PHPExcel object
-		$objPHPExcel = new PHPExcel();
-		$sheet = $objPHPExcel;
-		$sheets = $objPHPExcel->getActiveSheet();
-		$objPHPExcel->getProperties()->setCreator("O'nur")
-		       		->setLastModifiedBy("O'nur")
-		      		->setTitle("Reports")
-		       		->setSubject("Widams")
-		       		->setDescription("widams report ")
-		       		->setKeywords("phpExcel")
-					->setCategory("well Data");		
-	
-		$sheet->setActiveSheetIndex(0);
-		$sheet->setActiveSheetIndex(0)->mergeCells('A1:A2');
-		$sheets->getColumnDimension('A')->setWidth(20);
-		$sheets->setCellValue('A1', 'Unit')
-				->getStyle('A1:A2')
-			   ->getAlignment()				
-			   ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-		$sheets->getStyle('A1:A2')
-				->getFill()
-				->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
-				->getStartColor()
-				->setRGB('e0e0d1');
-		
-		$sheet->setActiveSheetIndex(0)->mergeCells('B1:B2');
-		$sheets->getColumnDimension('B')->setWidth(15);
-		$sheets->setCellValue('B1', 'Area')
-				->getStyle('B1:B2')
-			   ->getAlignment()				
-			   ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-		$sheets->getStyle('B1:B2')
-				->getFill()
-				->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
-				->getStartColor()
-				->setRGB('e0e0d1');
+	public function reportoutstanding()
+	{
+		$currdate = date('Y-m-d');
+		$max = 0;
+		if($this->input->post('date')){
+			$date = $this->input->post('date');
+		}else{
+			$date = date('Y-m-d');
+		}
 
-		$sheet->setActiveSheetIndex(0)->mergeCells('C1:C2');
-		$sheets->getColumnDimension('C')->setWidth(15);
-		$sheets->setCellValue('C1', 'Open')
-				->getStyle('C1:C2')
-				->getAlignment()				
-				->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-		$sheets->getStyle('C1:C2')
-				->getFill()
-				->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
-				->getStartColor()
-				->setRGB('e0e0d1');
+		$lastdate = $this->regular->getLastDateTransaction()->date;
+		if ($date > $lastdate){
+			$date = $lastdate;
+		}else{
+			$date= $date;
+		}
+		//$data = $this->regular->getLastDateTransaction();
 
-		$sheet->setActiveSheetIndex(0)->mergeCells('D1:D2');
-		$sheets->getColumnDimension('D')->setWidth(15);
-		$sheets->setCellValue('D1', 'OJK')
-				->getStyle('D1:D2')
-				->getAlignment()				
-				->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-		$sheets->getStyle('D1:D2')
-				->getFill()
-				->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
-				->getStartColor()
-				->setRGB('e0e0d1');
+		//get max
+		$max = $this->db->select_max('os')
+			->where('date',$date)
+			->from('units_outstanding')
+			->get()->row();
 
-		//Outstanding Kemarin
-		$sheet->setActiveSheetIndex(0)->mergeCells('E1:F1');
-		$sheets->getColumnDimension('E')->setWidth(15);
-		$sheets->getColumnDimension('F')->setWidth(15);
-		$sheets->setCellValue('E1', 'Outstanding Kemarin')
-			   ->getStyle('E1')
-			   ->getAlignment()				
-			   ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-		$sheets->getStyle('E1')
-				->getFill()
-				->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
-				->getStartColor()
-				->setRGB('FF0000');
-		
-		$sheets->getColumnDimension('E')->setWidth(15);
-		$sheets->setCellValue('E2', 'Noa')
-				->getStyle('E2')
-				->getAlignment()				
-				->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-				$sheets->getStyle('E2')
-				->getFill()
-				->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
-				->getStartColor()
-				->setRGB('FF0000');
+		if($area = $this->input->post('area')){
+			$this->units->db->where('id_area', $area);
+		}else if($this->session->userdata('user')->level == 'area'){
+			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
+		}
 
-		$sheets->getColumnDimension('F')->setWidth(15);
-		$sheets->setCellValue('F2', 'Outstanding')
-				->getStyle('F2')
-				->getAlignment()				
-				->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-				$sheets->getStyle('F2')
-				->getFill()
-				->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
-				->getStartColor()
-				->setRGB('FF0000');
-			//End Outstanding Kemarin
+		if($cabang = $this->input->post('cabang')){
+			$this->units->db->where('id_cabang', $cabang);
+		}else if($this->session->userdata('user')->level == 'cabang'){
+			$this->units->db->where('id_cabang', $this->session->userdata('user')->id_cabang);
+		}
 
-		//kredit hari ini
-		$sheet->setActiveSheetIndex(0)->mergeCells('G1:H1');
-		$sheets->getColumnDimension('G')->setWidth(15);
-		$sheets->getColumnDimension('H')->setWidth(15);
-		$sheets->setCellValue('G1', 'Kredit Hari Ini')
-				->getStyle('G1')
-				->getAlignment()				
-				->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-		$sheets->getStyle('G1')
-				->getFill()
-				->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
-				->getStartColor()
-				->setRGB('ff9999');
-		
-		$sheets->getColumnDimension('G')->setWidth(15);
-		$sheets->setCellValue('G2', 'Noa')
-				->getStyle('G2')
-				->getAlignment()				
-				->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-				$sheets->getStyle('G2')
-				->getFill()
-				->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
-				->getStartColor()
-				->setRGB('ff9999');
+		if($id_unit = $this->input->post('id_unit')){
+			$this->units->db->where('units.id', $id_unit);
+		}else if($code = $this->input->post('code')){
+			$this->units->db->where('code', zero_fill($code, 3));
+		}else if($this->session->userdata('user')->level == 'unit'){
+			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
+		}
 
-		$sheets->getColumnDimension('H')->setWidth(15);
-		$sheets->setCellValue('H2', 'Outstanding')
-				->getStyle('H2')
-				->getAlignment()				
-				->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-				$sheets->getStyle('H2')
-				->getFill()
-				->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
-				->getStartColor()
-				->setRGB('ff9999');
-		//end kredit hari ini
-
-		//kredit Pelunasan dan Cicilan
-		$sheet->setActiveSheetIndex(0)->mergeCells('I1:J1');
-		$sheets->getColumnDimension('I')->setWidth(15);
-		$sheets->getColumnDimension('J')->setWidth(15);
-		$sheets->setCellValue('I1', 'Pelunasan & Cicilan')
-				->getStyle('I1')
-				->getAlignment()				
-				->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-		$sheets->getStyle('I1')
-				->getFill()
-				->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
-				->getStartColor()
-				->setRGB('ffcc99');
-		
-		$sheets->getColumnDimension('I')->setWidth(15);
-		$sheets->setCellValue('I2', 'Noa')
-				->getStyle('I2')
-				->getAlignment()				
-				->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-				$sheets->getStyle('I2')
-				->getFill()
-				->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
-				->getStartColor()
-				->setRGB('ffcc99');
-
-		$sheets->getColumnDimension('J')->setWidth(15);
-		$sheets->setCellValue('J2', 'Outstanding')
-				->getStyle('J2')
-				->getAlignment()				
-				->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-				$sheets->getStyle('J2')
-				->getFill()
-				->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
-				->getStartColor()
-				->setRGB('ffcc99');
-		//end kredit hari ini
-
-		//Total Outstanding
-		$sheet->setActiveSheetIndex(0)->mergeCells('K1:M1');
-		$sheets->getColumnDimension('K')->setWidth(15);
-		$sheets->getColumnDimension('L')->setWidth(15);
-		$sheets->getColumnDimension('M')->setWidth(15);
-		$sheets->setCellValue('K1', 'Total Outstanding')
-				->getStyle('K1')
-				->getAlignment()				
-				->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-		$sheets->getStyle('K1')
-				->getFill()
-				->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
-				->getStartColor()
-				->setRGB('ffbf00');
-		
-		$sheets->getColumnDimension('K')->setWidth(15);
-		$sheets->setCellValue('K2', 'Noa')
-				->getStyle('K2')
-				->getAlignment()				
-				->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-				$sheets->getStyle('K2')
-				->getFill()
-				->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
-				->getStartColor()
-				->setRGB('ffbf00');
-
-		$sheets->getColumnDimension('L')->setWidth(15);
-		$sheets->setCellValue('L2', 'Outstanding')
-				->getStyle('L2')
-				->getAlignment()				
-				->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-				$sheets->getStyle('L2')
-				->getFill()
-				->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
-				->getStartColor()
-				->setRGB('ffbf00');
-		
-		$sheets->getColumnDimension('M')->setWidth(15);
-		$sheets->setCellValue('M2', 'Ticket Size')
-				->getStyle('M2')
-				->getAlignment()				
-				->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-				$sheets->getStyle('M2')
-				->getFill()
-				->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
-				->getStartColor()
-				->setRGB('ffbf00');
-		//end Total Outstanding
-
-		//Total Disburse
-		$sheet->setActiveSheetIndex(0)->mergeCells('N1:P1');
-		$sheets->getColumnDimension('N')->setWidth(15);
-		$sheets->getColumnDimension('O')->setWidth(15);
-		$sheets->getColumnDimension('P')->setWidth(15);
-		$sheets->setCellValue('N1', 'Total Disburse')
-				->getStyle('N1')
-				->getAlignment()				
-				->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-		$sheets->getStyle('N1')
-				->getFill()
-				->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
-				->getStartColor()
-				->setRGB('669999');
-		
-		$sheets->getColumnDimension('N')->setWidth(15);
-		$sheets->setCellValue('N2', 'Noa')
-				->getStyle('N2')
-				->getAlignment()				
-				->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-				$sheets->getStyle('N2')
-				->getFill()
-				->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
-				->getStartColor()
-				->setRGB('669999');
-
-		$sheets->getColumnDimension('O')->setWidth(15);
-		$sheets->setCellValue('O2', 'Outstanding')
-				->getStyle('O2')
-				->getAlignment()				
-				->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-				$sheets->getStyle('O2')
-				->getFill()
-				->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
-				->getStartColor()
-				->setRGB('669999');
-		
-		$sheets->getColumnDimension('P')->setWidth(15);
-		$sheets->setCellValue('P2', 'Ticket Size')
-				->getStyle('P2')
-				->getAlignment()				
-				->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-				$sheets->getStyle('P2')
-				->getFill()
-				->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
-				->getStartColor()
-				->setRGB('669999');
-		//end Total Disburse
-				
-			if($area = $this->input->post('area')){
-				$this->units->db->where('id_area', $area);
-			}else if($this->session->userdata('user')->level == 'area'){
-				$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
-			}
-			if($code = $this->input->post('code')){
-				$this->units->db->where('code', $code);
-			}else if($this->session->userdata('user')->level == 'unit'){
-				$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
-			}
-			if($this->input->post('date')){
-				$date = $this->input->post('date');
-			}else{
-				$date = date('Y-m-d');
-			}
-
-			$units = $this->units->db->select('units.id, units.name, area')
-									 ->join('areas','areas.id = units.id_area')
-									 ->get('units')->result();
-		$no=3;
-		foreach ($units as $unit) 
-		{
-
+		$units = $this->units->db->select('units.id, units.name, area')
+			->join('areas','areas.id = units.id_area')
+			->get('units')->result();
+		$today = '';
+		$yesterday = '';
+		foreach ($units as $unit){
 			$getOstToday = $this->regular->db
-				->where('date <=', $date)
-				->from('units_outstanding')
-				->where('id_unit', $unit->id)
-				->order_by('date','DESC')
-				->get()->row();
+						->where('date <=', $date)
+						->from('units_outstanding')
+						->where('id_unit', $unit->id)
+						->order_by('date','DESC')
+						->get()->row();
 
 			$today = $getOstToday->date;
 
@@ -525,9 +277,9 @@ class Dashboards extends Authenticated
 
 			$totalUpReg = ($unit->ost_yesterday->os_reguler+ $unit->ost_today->up_reguler)-($unit->ost_today->up_rep_reguler);
 			$totalUpMor = ($unit->ost_yesterday->os_mortages+ $unit->ost_today->up_mortages)-($unit->ost_today->up_rep_mortages);
+           
 
-
-			$totalOst +=  $totalUpReg+$totalUpMor;
+			$totalOst =  $totalUpReg+$totalUpMor;
 
 			$unit->total_outstanding = (object) [
 				'up'	=> $totalOst
@@ -545,21 +297,49 @@ class Dashboards extends Authenticated
 				'ost'	=> ($unit->dpd_today->ost + $unit->dpd_yesterday->ost +$unit->dpd_repayment_today->ost) - $unit->dpd_repayment_today->ost,
 			);
 			$unit->percentage = ($unit->total_dpd->ost > 0) && ($unit->total_outstanding->up > 0) ? round($unit->total_dpd->ost / $unit->total_outstanding->up, 4) : 0;
+	
+		
 
-
-
-
+			
 			$unit->total_disburse = $this->regular->getTotalDisburse($unit->id, null, null, $date);
+		}
+		return $units;
+	}
 
+	public function grouped($os)
+	{
+		$result = [];
+		foreach($os as $index =>  $data){
+			$result[$data->area][$index] = $data;
+		}
+		return $result;
+	}
+	public function datetrans(){
+		$date = date('Y-m-d');
+		$lastdate = $this->regular->getLastDateTransaction()->date;
+		if ($date > $lastdate){
+			$date = $lastdate;
+		}else{
+			$date= $date;
 		}
 
-		//Redirect output to a client’s WBE browser (Excel5)
-		$filename ="OUTSTANDING_".date('Y-m-d H:i:s');
-		header('Content-Type: application/vnd.ms-excel');
-		header('Content-Disposition: attachment;filename="'.$filename.'.xls"');
-		header('Cache-Control: max-age=0');
-		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-		$objWriter->save('php://output');
+		return date('d-m-Y',strtotime($date));
+	}
+	//report
+	public function outstandingreport(){
+		$this->load->library('pdf');
+		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		require_once APPPATH.'controllers/pdf/header.php';
+
+		$newos = $this->reportoutstanding();
+		$grouped = $this->grouped($newos);
+		$pdf->AddPage('L', 'A3');
+		$view = $this->load->view('dailyreport/outstanding/generate.php',['outstanding'=>$grouped,'datetrans'=> $this->input->post('date')],true);
+		$pdf->writeHTML($view);	
+		//download
+		$pdf->Output('GHAnet_Summary_OS'.date('d_m_Y').'.pdf', 'D');
+		//view
+		// $pdf->Output('GHAnet_Summary_'.date('d_m_Y').'.pdf', 'I');
 
 	}
 
