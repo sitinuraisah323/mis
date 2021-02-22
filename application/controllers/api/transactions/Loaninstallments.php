@@ -476,6 +476,8 @@ class Loaninstallments extends ApiController
 					if($findCustomer = $this->customers->find(array(
 						'nik'	=> $customer['I']
 					))){
+						$data['id'] = $findCustomer->id;
+						$batchUpdate[] = $data;
 					}else{
 						$batchInsert[] = $data;
 					}
@@ -653,17 +655,12 @@ class Loaninstallments extends ApiController
 							'no_sbk'	=>zero_fill( $transaction['A'], 5),
 							'id_unit'	=> $id_unit,
 							'permit'	=> $jok
-						))){							
-							if($findTransaction->status_transaction !== 'L'){
-								if($status !== 'L'){
-									$data['id'] = $findTransaction->id;
-									$batchUpdate[] = $data;
-								}
-							}
+						))){
+							$data['id'] = $findTransaction->id;
+							$batchUpdate[] = $data;
 						}else{
 							$batchInsert[] 	= $data;
 						}
-
 					}
 				}
 			}
@@ -680,7 +677,6 @@ class Loaninstallments extends ApiController
 		}
 	}
 
-	
 	public function data_transaction_repayment($id_unit, $path, $jok = 'NON-OJK')
 	{
 		$excelreader = new PHPExcel_Reader_Excel2007();
@@ -690,7 +686,8 @@ class Loaninstallments extends ApiController
 		if($repayments){
 			$bathInsert = array();
 			$bathUpdate = array();
-			foreach ($data as $key => $repayment){
+			foreach ($repayments as $key => $repayment){
+				if($key > 1){
 					$findcustomer = $this->customers->find(array('name'=> $repayment['B']));
 					if(is_null($findcustomer)){
 						$findcustomer = (object) array(
@@ -719,10 +716,14 @@ class Loaninstallments extends ApiController
 							'no_sbk'		=> zero_fill($repayment['A'], 5),
 							'permit'	=> $jok
 						))){
+							$data['id']	= $findrepayment->id;
+							$bathUpdate[] = $data;
 					}else{
 							$bathInsert[] = $data;
 						}
 					}
+
+				}
 			}
 			if(count($bathInsert)){
 				$this->repayments->db->insert_batch('units_repayments', $bathInsert);
@@ -790,10 +791,8 @@ class Loaninstallments extends ApiController
 						'id_unit'	=> $id_unit,
 						'permit'	=> $jok
 					))){
-						if($findTransaction->status_transaction !== 'L'){
-							$data['id'] = $findTransaction->id;
-							$bathUpdate[] = $data;
-						}
+						$data['id'] = $findTransaction->id;
+						$bathUpdate[] = $data;
 					}else{
 						$bathInsert[] = $data;
 					}
@@ -822,7 +821,6 @@ class Loaninstallments extends ApiController
 		if($repaymentmortage){
 			$bathInsert = array();
 			$bathUpdate = array();
-
 			foreach ($repaymentmortage as $key => $repmortage){
 				if($key > 1){
 					//$findcustomer = $this->customers->find(array('name'=> $repayment['B']));

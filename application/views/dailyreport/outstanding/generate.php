@@ -222,15 +222,18 @@
 
                 <td align="center"><?php echo number_format($totalDisbureNoaArea,0); ?></td>
                 <td align="right"><?php echo number_format($totalDisbureUpArea,0); ?></td>
-                <td align="right"><?php echo number_format($totalDisbureTicketArea,0); ?></td>
+                <td align="right"><?php echo number_format($totalDisbureUpArea/$totalDisbureNoaArea,0); ?></td>
             </tr>
     </table>
     <br/><br/>
     <?php endforeach;?>
 
-    <table class="table" border="1">   
+    <table class="table" border="1"> 
+    <tr bgcolor="#D4D5D5">
+        <td colspan="23" align="center" width="1400">Summary Outstanding</td>
+    </tr>  
     <tr bgcolor="#cccccc">
-                <td rowspan="4" align="center"  width="140" class="text-md-center"><br/>Summary<br/> Outstanding<br/> Unit</td>
+                <td rowspan="2" align="center"  width="140" class="text-md-center">Total <br/>Outstanding Kemarin<br/>(<?php echo $dateLastOST; ?>)</td>
                 <!-- <td rowspan="2" align="left" width="120"></td> -->
                 <td colspan="8" align="center" width="480">Total Gadai Reguler</td>
                 <td colspan="8" align="center" width="480">Total Gadai Cicilan</td>
@@ -261,7 +264,7 @@
                 <td align="center" width="70" bgcolor="#b8b894"> Ticket Size</td>
             </tr>         
     <tr bgcolor="#ffff00">
-                <!-- <td align="right" colspan="2"> Total_</td> -->
+                <td align="center"><?php echo number_format($totalUpaOstYesterday + $totalUpaOstYesterdayMor,0);  ?></td>
                 <td align="center"><?php echo number_format($totalNoaOstYesterday,0); ?></td>
                 <td align="right"><?php echo number_format($totalUpaOstYesterday,0); ?></td>
                 <td align="center"><?php echo number_format($totalNoaOstToday,0); ?></td>

@@ -57,10 +57,10 @@
 			<td align="right" width="90"><?php echo number_format($data->dpd_repayment_today->ost,0);?></td>
 			<td align="center" width="40"><?php echo $data->total_dpd->noa;?></td>
 			<td align="right" width="90"><?php echo number_format($data->total_dpd->ost,0);?></td>
-			<td align="right" width="130"><?php echo number_format($data->total_outstanding->up,0);?></td>
+			<td align="right" width="130"><?php echo number_format($data->total_outstanding->os,0);?></td>
 			<td align="right" width="100"><?php echo $data->percentage ? $data->percentage*100 : '' ;?></td>
 			<?php
-			$totalOs += $data->total_outstanding->up;
+			$totalOs += $data->total_outstanding->os;
 			$dpdYesterdayNoa +=$data->dpd_yesterday->noa;
 			$dpdYesterdayUp +=$data->dpd_yesterday->ost;
 			$dpdTodayNoa +=$data->total_dpd->noa_today;
