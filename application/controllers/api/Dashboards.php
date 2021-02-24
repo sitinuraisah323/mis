@@ -116,7 +116,6 @@ class Dashboards extends ApiController
 
 		$units = $this->units->db->select('units.id, units.name, area')
 			->join('areas','areas.id = units.id_area')
-			->limit(10)
 			->get('units')->result();
 		$today = '';
 		$yesterday = '';
@@ -162,7 +161,7 @@ class Dashboards extends ApiController
 			$totalUpMor = ($unit->ost_yesterday->os_mortages+ $unit->ost_today->up_mortages)-($unit->ost_today->up_rep_mortages);
            
 
-			$totalOst +=  $totalUpReg+$totalUpMor;
+			$totalOst =  $totalUpReg+$totalUpMor;
 
 			$unit->total_outstanding = (object) [
 				'up'	=> $totalOst
