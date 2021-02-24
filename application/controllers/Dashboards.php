@@ -119,6 +119,103 @@ class Dashboards extends Authenticated
         	'areas'	=> $this->areas->all()
 		));
 	}
+
+	public function pencairanmonthly_xls()
+	{
+		//load our new PHPExcel library
+		$this->load->library('PHPExcel');
+
+		// Create new PHPExcel object
+		$objPHPExcel = new PHPExcel();
+		$objPHPExcel->getProperties()->setCreator("O'nur")
+		       		->setLastModifiedBy("O'nur")
+		      		->setTitle("Reports")
+		       		->setSubject("Widams")
+		       		->setDescription("widams report ")
+		       		->setKeywords("phpExcel")
+					->setCategory("well Data");		
+	
+		$objPHPExcel->setActiveSheetIndex(0);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('A');
+		$objPHPExcel->getActiveSheet()->setCellValue('A1', 'Unit');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('B');
+		$objPHPExcel->getActiveSheet()->setCellValue('B1', 'NIC');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('C');
+        $objPHPExcel->getActiveSheet()->setCellValue('C1', 'No. SBK');
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D');
+		$objPHPExcel->getActiveSheet()->setCellValue('D1', 'Tanggal Pencairan');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('E');
+		$objPHPExcel->getActiveSheet()->setCellValue('E1', 'Nasabah');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('F');
+		$objPHPExcel->getActiveSheet()->setCellValue('F1', 'Sewa Modal');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('G');
+		$objPHPExcel->getActiveSheet()->setCellValue('G1', 'Taksiran');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('H');
+		$objPHPExcel->getActiveSheet()->setCellValue('H1', 'Admin');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('I');
+		$objPHPExcel->getActiveSheet()->setCellValue('I1', 'UP');
+
+		$this->regular->db
+			->select('units.name as unit, customers.name as customer_name,customers.nik as nik, (select date_repayment from units_repayments where units_repayments.no_sbk = units_regularpawns.no_sbk and units_repayments.id_unit = units_regularpawns.id_unit and units_repayments.permit = units_regularpawns.permit limit 1 ) as date_repayment')
+			->join('customers','units_regularpawns.id_customer = customers.id')
+			->join('units','units.id = units_regularpawns.id_unit');
+
+		if($post = $this->input->post()){
+
+			if($area = $this->input->post('area')){
+				$this->regular->db->where('id_area', $area);
+			}else if($this->session->userdata('user')->level == 'area'){
+				$this->regular->db->where('id_area', $this->session->userdata('user')->id_area);
+			}
+	
+			if($cabang = $this->input->post('cabang')){
+				$this->regular->db->where('id_cabang', $cabang);
+			}else if($this->session->userdata('user')->level == 'cabang'){
+				$this->regular->db->where('id_cabang', $this->session->userdata('user')->id_cabang);
+			}
+	
+			if($unit = $this->input->post('unit')){
+				$this->regular->db->where('id_unit', $unit);
+			}else if($this->session->userdata('user')->level == 'unit'){
+				$this->regular->db->where('units.id', $this->session->userdata('user')->id_unit);
+			}
+
+			$this->regular->db
+				->where('units_regularpawns.date_sbk >=', $post['date-start'])
+				->where('units_regularpawns.date_sbk <=', $post['date-end']);
+			if($post['id_unit']){
+				$this->regular->db
+					->where('units_regularpawns.id_unit', $post['id_unit']);
+			}
+			if($permit = $post['permit']){
+				$this->regular->db->where('units_regularpawns.permit', $permit);
+			}		
+		}
+		$data = $this->regular->all();
+		$no=2;
+		foreach ($data as $row) 
+		{
+			$objPHPExcel->getActiveSheet()->setCellValue('A'.$no, $row->unit);	
+			$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, $row->nic);	
+			$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, $row->no_sbk);				  	
+			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no, date('d/m/Y',strtotime($row->date_sbk)));				  	
+			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no, $row->customer_name);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, $row->capital_lease);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('G'.$no, $row->estimation);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('H'.$no, $row->admin);	
+			$objPHPExcel->getActiveSheet()->setCellValue('I'.$no, $row->amount);
+			$no++;
+		}
+
+		//Redirect output to a client’s WBE browser (Excel5)
+		$filename ="Pelunasan_".date('Y-m-d H:i:s');
+		header('Content-Type: application/vnd.ms-excel');
+		header('Content-Disposition: attachment;filename="'.$filename.'.xls"');
+		header('Cache-Control: max-age=0');
+		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+		$objWriter->save('php://output');
+        
+	}
 	
 	public function pelunasan()
 	{
@@ -132,6 +229,105 @@ class Dashboards extends Authenticated
         $this->load->view("dashboard/pelunasan/monthly/index",array(
         	'areas'	=> $this->areas->all()
 		));
+	}
+
+	public function pelunasanmonthly_xls()
+	{
+		//load our new PHPExcel library
+		$this->load->library('PHPExcel');
+
+		// Create new PHPExcel object
+		$objPHPExcel = new PHPExcel();
+		$objPHPExcel->getProperties()->setCreator("O'nur")
+		       		->setLastModifiedBy("O'nur")
+		      		->setTitle("Reports")
+		       		->setSubject("Widams")
+		       		->setDescription("widams report ")
+		       		->setKeywords("phpExcel")
+					->setCategory("well Data");		
+	
+		$objPHPExcel->setActiveSheetIndex(0);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('A');
+		$objPHPExcel->getActiveSheet()->setCellValue('A1', 'Unit');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('B');
+		$objPHPExcel->getActiveSheet()->setCellValue('B1', 'NIC');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('C');
+        $objPHPExcel->getActiveSheet()->setCellValue('C1', 'No. SBK');
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D');
+		$objPHPExcel->getActiveSheet()->setCellValue('D1', 'Tanggal Pelunasan');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('E');
+		$objPHPExcel->getActiveSheet()->setCellValue('E1', 'Nasabah');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('F');
+		$objPHPExcel->getActiveSheet()->setCellValue('F1', 'Sewa Modal');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('G');
+		$objPHPExcel->getActiveSheet()->setCellValue('G1', 'Taksiran');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('H');
+		$objPHPExcel->getActiveSheet()->setCellValue('H1', 'Admin');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('I');
+		$objPHPExcel->getActiveSheet()->setCellValue('I1', 'UP');
+
+		$this->regular->db
+			->select('units.name as unit, customers.name as customer_name,customers.nik as nik,date_repayment')
+			->join('customers','units_regularpawns.id_customer = customers.id')
+			->join('units_repayments','units_repayments.no_sbk = units_regularpawns.no_sbk AND units_repayments.id_unit = units_regularpawns.id_unit')
+			->join('units','units.id = units_regularpawns.id_unit');
+
+		if($post = $this->input->post()){
+
+			if($area = $this->input->post('area')){
+				$this->regular->db->where('id_area', $area);
+			}else if($this->session->userdata('user')->level == 'area'){
+				$this->regular->db->where('id_area', $this->session->userdata('user')->id_area);
+			}
+	
+			if($cabang = $this->input->post('cabang')){
+				$this->regular->db->where('id_cabang', $cabang);
+			}else if($this->session->userdata('user')->level == 'cabang'){
+				$this->regular->db->where('id_cabang', $this->session->userdata('user')->id_cabang);
+			}
+	
+			if($unit = $this->input->post('unit')){
+				$this->regular->db->where('id_unit', $unit);
+			}else if($this->session->userdata('user')->level == 'unit'){
+				$this->regular->db->where('units.id', $this->session->userdata('user')->id_unit);
+			}
+
+			$this->regular->db
+				->where('units_repayments.date_repayment >=', $post['date-start'])
+				->where('units_repayments.date_repayment <=', $post['date-end']);
+			if($post['id_unit']){
+				$this->regular->db
+					->where('units_regularpawns.id_unit', $post['id_unit']);
+			}
+			if($permit = $post['permit']){
+				$this->regular->db->where('units_regularpawns.permit', $permit);
+			}		
+		}
+		$data = $this->regular->all();
+
+		$no=2;
+		foreach ($data as $row) 
+		{
+			$objPHPExcel->getActiveSheet()->setCellValue('A'.$no, $row->unit);	
+			$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, $row->nic);	
+			$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, $row->no_sbk);				  	
+			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no, date('d/m/Y',strtotime($row->date_repayment)));				  	
+			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no, $row->customer_name);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, $row->capital_lease);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('G'.$no, $row->estimation);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('H'.$no, $row->admin);	
+			$objPHPExcel->getActiveSheet()->setCellValue('I'.$no, $row->amount);
+			$no++;
+		}
+
+		//Redirect output to a client’s WBE browser (Excel5)
+		$filename ="Pelunasan_".date('Y-m-d H:i:s');
+		header('Content-Type: application/vnd.ms-excel');
+		header('Content-Disposition: attachment;filename="'.$filename.'.xls"');
+		header('Cache-Control: max-age=0');
+		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+		$objWriter->save('php://output');
+        
 	}
 
 	public function pendapatan()

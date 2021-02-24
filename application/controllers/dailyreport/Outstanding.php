@@ -190,10 +190,10 @@ class Outstanding extends Authenticated
 		$view = $this->load->view('dailyreport/outstanding/generate.php',['outstanding'=>$grouped,'datetrans'=> $this->datetrans()],true);
 		$pdf->writeHTML($view);
 
-		// $os = $this->data();
-		// $pdf->AddPage('L');
-		// $view = $this->load->view('dailyreport/outstanding/dpd.php',['dpd'=>$os,'datetrans'=> $this->datetrans()],true);
-		// $pdf->writeHTML($view);
+		$os = $this->data();
+		$pdf->AddPage('L');
+		$view = $this->load->view('dailyreport/outstanding/dpd.php',['dpd'=>$os,'datetrans'=> $this->datetrans()],true);
+		$pdf->writeHTML($view);
 
 		// $pdf->AddPage('L');
 		// $view = $this->load->view('dailyreport/outstanding/dpd_new.php',['dpd'=>$os,'datetrans'=> $this->datetrans()],true);
@@ -642,9 +642,6 @@ class Outstanding extends Authenticated
 				$target = 0;
 			}
 
-		
-
-		
 	
 			$unit->total_outstanding = (object) array(
 				'noa'	=> $totalNoa,
@@ -665,7 +662,7 @@ class Outstanding extends Authenticated
 				'noa'	=> ($unit->dpd_today->noa + $unit->dpd_yesterday->noa +$unit->dpd_repayment_today->noa) - $unit->dpd_repayment_today->noa,
 				'ost'	=> ($unit->dpd_today->ost + $unit->dpd_yesterday->ost +$unit->dpd_repayment_today->ost) - $unit->dpd_repayment_today->ost,
 			);
-			$unit->percentage = ($unit->total_dpd->ost > 0) && ($unit->total_outstanding->up > 0) ? round($unit->total_dpd->ost / $unit->total_outstanding->up, 4) : 0;
+			$unit->percentage = ($unit->total_dpd->ost > 0) && ($unit->total_outstanding->os > 0) ? round($unit->total_dpd->ost / $unit->total_outstanding->os, 4) : 0;
 		}
 		return $units;
 	}
