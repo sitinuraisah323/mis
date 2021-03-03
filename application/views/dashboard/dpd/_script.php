@@ -104,6 +104,9 @@ function initCariForm(){
         var cabang = $('[name="cabang"]').val();
         var unit = $('[name="id_unit"]').val();
 		var date = $('[name="date"]').val();
+		$('.table').find('.date-dpd').val("");
+		$('.table').find('.date-outstanding').val("");
+		$('.table').find('.date-lastdpd').val("");
         KTApp.block('#form_bukukas .kt-portlet__body', {});
 		$.ajax({
 			type : 'GET',
@@ -171,12 +174,17 @@ function initCariForm(){
 				$('.table').find('tbody').html(html);
 				$('.table').find('tfoot').html(tfoot);
 
+				//console.log(response.message.today);
+				$('.table').find('.date-dpd').text("\n\n\n("+response.message.today+")");
+				$('.table').find('.date-outstanding').text("\n\n\n("+response.message.today+")");
+				$('.table').find('.date-lastdpd').text("\n\n\n("+response.message.yesterday+")");
 			},
 			error: function (jqXHR, textStatus, errorThrown){
 				KTApp.unblockPage();
+				
 			},
 			complete:function () {
-				KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+				KTApp.unblock('#form_bukukas .kt-portlet__body', {});				
 			}
 		});
     })

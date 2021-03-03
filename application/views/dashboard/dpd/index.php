@@ -140,11 +140,11 @@ $this->load->view('temp/MenuBar.php');
 								<th>Area</th>
 								<!-- <th  class="text-center">Open</th>
 								<th  class="text-center">Ijin Ojk</th>								 -->
-								<th colspan="2"  class="text-center">DPD Kemarin</th>
-								<th colspan="2"  class="text-center">DPD Hari Ini</th>
-								<th colspan="2"  class="text-center">Pelunasan DPD Hari Ini</th>
-								<th colspan="2"  class="text-center">Total DPD</th>
-								<th class="text-center">Outstanding</th>
+								<th colspan="2"  class="text-center">DPD Sebelumnya <span class="date-lastdpd"></th>
+								<th colspan="2"  class="text-center">DPD <span class="date-dpd"></th>
+								<th colspan="2"  class="text-center">Pelunasan DPD <span class="date-dpd"></th>
+								<th colspan="2"  class="text-center">Total DPD <span class="date-dpd"></span></th>
+								<th class="text-center">Outstanding <span class="date-outstanding"></span></th>
 								<th  class="text-center">%</th>
 						    	</tr>
 								<tr>		
