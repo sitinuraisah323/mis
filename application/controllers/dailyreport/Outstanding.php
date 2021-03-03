@@ -184,15 +184,15 @@ class Outstanding extends Authenticated
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		require_once APPPATH.'controllers/pdf/header.php';
 
-		// $newos = $this->reportoutstanding();
-		// $grouped = $this->grouped($newos);
-		// $pdf->AddPage('L', 'A3');
-		// $view = $this->load->view('dailyreport/outstanding/generate.php',['outstanding'=>$grouped,'datetrans'=> $this->datetrans()],true);
-		// $pdf->writeHTML($view);
+		$newos = $this->reportoutstanding();
+		$grouped = $this->grouped($newos);
+		$pdf->AddPage('L', 'A3');
+		$view = $this->load->view('dailyreport/outstanding/generate.php',['outstanding'=>$grouped,'datetrans'=> $this->datetrans()],true);
+		$pdf->writeHTML($view);
 
 		$os = $this->data();
 		$pdf->AddPage('L','A4');
-		$view = $this->load->view('dailyreport/outstanding/dpd_test.php',['dpd'=>$os,'datetrans'=> $this->datetrans()],true);
+		$view = $this->load->view('dailyreport/outstanding/dpd.php',['dpd'=>$os,'datetrans'=> $this->datetrans()],true);
 		$pdf->writeHTML($view);
 
 		//view

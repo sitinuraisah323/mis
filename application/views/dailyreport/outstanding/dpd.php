@@ -1,6 +1,7 @@
 <h3><br/>DPD Nasional <?php echo date('d-m-Y'); ?></h3>
-<?php 	$dateOST = date('d-m-Y',strtotime($datetrans));
-		$dateLastOST = date('d-m-Y', strtotime('-1 days', strtotime($datetrans)));
+<?php 	$dateOST = date('d-m-Y',strtotime('-1 days', strtotime($datetrans)));
+		$dateLastOST = date('d-m-Y', strtotime('-2 days', strtotime($datetrans)));
+		$OST = date('d-m-Y', strtotime($datetrans));
 ?>
 <table class="table" border="1">
 	<thead class="thead-light">
@@ -14,7 +15,7 @@
 		<th colspan="2" align="center" width="130">DPD <?php echo "<br/>".$dateOST; ?></th>
 		<th colspan="2" align="center" width="130">Pelunasan DPD <?php echo "<br/>".$dateOST; ?></th>
 		<th colspan="2" align="center" width="130">Total DPD <?php echo "<br/>".$dateOST; ?> </th>
-		<th align="right" width="130">Total OST <?php echo "<br/>".$dateOST; ?></th>
+		<th align="right" width="130">Total OST <?php echo "<br/>".$OST; ?></th>
 		<th align="right" width="100">%</th>
 	</tr>
 	<tr  bgcolor="#cccccc">
