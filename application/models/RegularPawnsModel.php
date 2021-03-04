@@ -348,15 +348,14 @@ class RegularpawnsModel extends Master
 		);
 	}
 
-	public function getDpdRepaymentToday_old($idUnit, $date)
+	public function getRepaymentDeadline($idUnit, $date)
 	{
 		$data = $this->db->select('sum(units_regularpawns.amount) as ost, count(*) as noa')
-			->from($this->table)
-			->join('units_repayments','units_repayments.no_sbk = '.$this->table.'.no_sbk')
+			->from('units_regularpawns')
+			->join('units_repayments','units_repayments.no_sbk = units_regularpawns.no_sbk AND units_repayments.id_unit=units_regularpawns.id_unit')
 			->where('units_repayments.id_unit', $idUnit)
-			->where($this->table.'.id_unit', $idUnit)
-			->where($this->table.'.status_transaction', 'N')
 			->where('units_repayments.date_repayment', $date)
+			->where('units_regularpawns.deadline', $date)
 			->get()->row();
 		return (object)array(
 			'noa' => (int) $data->noa,
@@ -370,10 +369,24 @@ class RegularpawnsModel extends Master
 			->from('units_regularpawns')
 			->join('units_repayments','units_repayments.no_sbk = units_regularpawns.no_sbk AND units_repayments.id_unit=units_regularpawns.id_unit')
 			->where('units_repayments.id_unit', $idUnit)
-			//->where($this->table.'.id_unit', $idUnit)
-			//->where($this->table.'.status_transaction', 'N')
 			->where('units_repayments.date_repayment', $date)
 			->where('units_regularpawns.deadline <=', $date)
+			->get()->row();
+		return (object)array(
+			'noa' => (int) $data->noa,
+			'ost' => (int) $data->ost,
+		);
+	}
+
+	public function getDpdRepaymentToday_old($idUnit, $date)
+	{
+		$data = $this->db->select('sum(units_regularpawns.amount) as ost, count(*) as noa')
+			->from($this->table)
+			->join('units_repayments','units_repayments.no_sbk = '.$this->table.'.no_sbk')
+			->where('units_repayments.id_unit', $idUnit)
+			->where($this->table.'.id_unit', $idUnit)
+			->where($this->table.'.status_transaction', 'N')
+			->where('units_repayments.date_repayment', $date)
 			->get()->row();
 		return (object)array(
 			'noa' => (int) $data->noa,
