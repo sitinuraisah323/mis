@@ -374,20 +374,16 @@ class Outstanding extends Authenticated
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		require_once APPPATH.'controllers/pdf/header.php';
 
-		$newos = $this->reportoutstanding();
-		$grouped = $this->grouped($newos);
-		$pdf->AddPage('L', 'A3');
-		$view = $this->load->view('dailyreport/outstanding/generate.php',['outstanding'=>$grouped,'datetrans'=> $this->datetrans()],true);
+		// $newos = $this->reportoutstanding();
+		// $grouped = $this->grouped($newos);
+		// $pdf->AddPage('L', 'A3');
+		// $view = $this->load->view('dailyreport/outstanding/generate.php',['outstanding'=>$grouped,'datetrans'=> $this->datetrans()],true);
+		// $pdf->writeHTML($view);
+
+		$os = $this->data();
+		$pdf->AddPage('L','A4');
+		$view = $this->load->view('dailyreport/outstanding/dpd.php',['dpd'=>$os,'datetrans'=> $this->datetrans()],true);
 		$pdf->writeHTML($view);
-
-		// $os = $this->data();
-		// $pdf->AddPage('L');
-		// $view = $this->load->view('dailyreport/outstanding/dpd.php',['dpd'=>$os,'datetrans'=> $this->datetrans()],true);
-		// $pdf->writeHTML($view);
-
-		// $pdf->AddPage('L');
-		// $view = $this->load->view('dailyreport/outstanding/dpd_new.php',['dpd'=>$os,'datetrans'=> $this->datetrans()],true);
-		// $pdf->writeHTML($view);
 
 		//view
 		$pdf->Output('GHAnet_Summary_'.date('d_m_Y').'.pdf', 'I');
@@ -760,10 +756,9 @@ class Outstanding extends Authenticated
 		}
 
 		$nextdate = date('Y-m-d', strtotime('+1 days', strtotime($date)));
-		$dpdlasdate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
 		$year = date('Y', strtotime('+1 days', strtotime($date)));
 		$month = date('n', strtotime('+1 days', strtotime($date)));
-		// $date = date('Y-m-d', strtotime('+1 days', strtotime($date)));
+		//$date = date('Y-m-d', strtotime('+1 days', strtotime($date)));
 
 		$units = $this->units->db->select('units.id, units.name, area')
 			->join('areas','areas.id = units.id_area')
@@ -832,9 +827,6 @@ class Outstanding extends Authenticated
 				$target = 0;
 			}
 
-		
-
-		
 	
 			$unit->total_outstanding = (object) array(
 				'noa'	=> $totalNoa,
@@ -843,19 +835,31 @@ class Outstanding extends Authenticated
 				'tiket'	=> round($totalUp > 0 ? $totalUp /$totalNoa : 0)
 			);
 
+			$dpddate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
 			$unit->total_disburse = $this->regular->getTotalDisburse($unit->id, null, null, $date);
-			$unit->dpd_yesterday = $this->regular->getDpdYesterday($unit->id, $date);
-			$unit->dpd_today = $this->regular->getDpdToday($unit->id, $date);
-			$unit->dpd_repayment_today = $this->regular->getDpdRepaymentToday($unit->id,$date);
+			$unit->dpd_yesterday = $this->regular->getDpdYesterday($unit->id, $dpddate);
+			$unit->dpd_today = $this->regular->getDpdToday($unit->id, $dpddate);
+			$unit->dpd_repayment_today = $this->regular->getDpdRepaymentToday($unit->id,$dpddate);
+			$unit->dpd_repayment_Deadline = $this->regular->getRepaymentDeadline($unit->id,$dpddate);
+			
 			$unit->total_dpd = (object) array(
 				//'noa'	=> $unit->dpd_today->noa + $unit->dpd_yesterday->noa,
 				//'ost'	=> $unit->dpd_today->ost + $unit->dpd_yesterday->ost,
-				'noa_today'	=> $unit->dpd_today->noa + $unit->dpd_repayment_today->noa,
-				'ost_today'	=> $unit->dpd_today->ost + $unit->dpd_repayment_today->ost,
-				'noa'	=> ($unit->dpd_today->noa + $unit->dpd_yesterday->noa +$unit->dpd_repayment_today->noa) - $unit->dpd_repayment_today->noa,
-				'ost'	=> ($unit->dpd_today->ost + $unit->dpd_yesterday->ost +$unit->dpd_repayment_today->ost) - $unit->dpd_repayment_today->ost,
+				// 'noa_today'	=> $unit->dpd_today->noa + $unit->dpd_repayment_today->noa,
+				// 'ost_today'	=> $unit->dpd_today->ost + $unit->dpd_repayment_today->ost,
+				// 'noa'		=> ($unit->dpd_today->noa + $unit->dpd_yesterday->noa +$unit->dpd_repayment_today->noa) - $unit->dpd_repayment_today->noa,
+				// 'ost'		=> ($unit->dpd_today->ost + $unit->dpd_yesterday->ost +$unit->dpd_repayment_today->ost) - $unit->dpd_repayment_today->ost,
+				'noa_yesterday'	=> $unit->dpd_yesterday->noa + $unit->dpd_repayment_today->noa,
+				'ost_yesterday'	=> $unit->dpd_yesterday->ost + $unit->dpd_repayment_today->ost,
+				'noa_today'	=> $unit->dpd_today->noa + $unit->dpd_repayment_Deadline->noa,
+				'ost_today'	=> $unit->dpd_today->ost + $unit->dpd_repayment_Deadline->ost,
+				'noa_repayment'	=> $unit->dpd_repayment_today->noa,
+				'ost_repayment'	=> $unit->dpd_repayment_today->ost,
+				'noa'		=> ($unit->dpd_yesterday->noa + $unit->dpd_today->noa + $unit->dpd_repayment_Deadline->noa + $unit->dpd_repayment_today->noa) - $unit->dpd_repayment_today->noa,
+				'ost'		=> ($unit->dpd_yesterday->ost + $unit->dpd_today->ost + $unit->dpd_repayment_Deadline->ost + $unit->dpd_repayment_today->ost) - $unit->dpd_repayment_today->ost,
 			);
-			$unit->percentage = ($unit->total_dpd->ost > 0) && ($unit->total_outstanding->up > 0) ? round($unit->total_dpd->ost / $unit->total_outstanding->up, 4) : 0;
+			$unit->percentage = ($unit->total_dpd->ost > 0) && ($unit->total_outstanding->os > 0) ? round($unit->total_dpd->ost / $unit->total_outstanding->os, 4) : 0;
+		//print_r($unit->dpd_repayment_Deadline);
 		}
 		return $units;
 	}

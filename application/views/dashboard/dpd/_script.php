@@ -104,6 +104,9 @@ function initCariForm(){
         var cabang = $('[name="cabang"]').val();
         var unit = $('[name="id_unit"]').val();
 		var date = $('[name="date"]').val();
+		$('.table').find('.date-dpd').val("");
+		$('.table').find('.date-outstanding').val("");
+		$('.table').find('.date-lastdpd').val("");
         KTApp.block('#form_bukukas .kt-portlet__body', {});
 		$.ajax({
 			type : 'GET',
@@ -123,6 +126,7 @@ function initCariForm(){
 				var dpdRepaymentUp = 0;
 				var dpdTotalNoa = 0;
 				var dpdTotalUp = 0;
+				var TotalOs = 0;
 				var percentage = 0;
 				$.each(response.data, function (index, data) {
 					dpdYesterdayNoa += data.dpd_yesterday.noa;
@@ -134,12 +138,11 @@ function initCariForm(){
 					dpdTotalNoa += data.total_dpd.noa;
 					dpdTotalUp += data.total_dpd.ost;
 					percentage += data.percentage;
+					TotalOs += data.total_outstanding.up;
 					html += '<tr>';
 					html += '<td  class="text-center">'+ int +'</td>';
 					html += '<td>'+ data.name +'</td>';
 					html += '<td>'+ data.area +'</td>';
-					html += '<td> </td>';
-					html += '<td> </td>';
 					html += '<td  class="text-center">'+data.dpd_yesterday.noa+'</td>';
 					html += '<td  class="text-right">'+convertToRupiah(data.dpd_yesterday.ost)+'</td>';
 					html += '<td  class="text-center">'+data.dpd_today.noa+'</td>';
@@ -148,12 +151,13 @@ function initCariForm(){
 					html += '<td  class="text-right">'+convertToRupiah(data.dpd_repayment_today.ost)+'</td>';
 					html += '<td  class="text-center">'+data.total_dpd.noa+'</td>';
 					html += '<td  class="text-right">'+convertToRupiah(data.total_dpd.ost)+'</td>';
+					html += '<td  class="text-right">'+convertToRupiah(data.total_outstanding.up)+'</td>';
 					html += '<td  class="text-center">'+parseFloat(data.percentage*100).toFixed(2)+'</td>';
 					html += '</tr>';
 					int++;
 				});
 				tfoot += '<tr>';
-				tfoot += '<td  class="text-right" colspan="5">Total</td>';
+				tfoot += '<td  class="text-right" colspan="3">Total</td>';
 				tfoot += '<td  class="text-center">'+dpdYesterdayNoa+'</td>';
 				tfoot += '<td  class="text-right">'+convertToRupiah(dpdYesterdayUp)+'</td>';
 				tfoot += '<td  class="text-center">'+dpdTodayNoa+'</td>';
@@ -162,6 +166,7 @@ function initCariForm(){
 				tfoot += '<td  class="text-right">'+convertToRupiah(dpdRepaymentUp)+'</td>';
 				tfoot += '<td  class="text-center">'+dpdTotalNoa+'</td>';
 				tfoot += '<td  class="text-right">'+convertToRupiah(dpdTotalUp)+'</td>';
+				tfoot += '<td  class="text-right">'+convertToRupiah(TotalOs)+'</td>';
 				tfoot += '<td  class="text-center">'+parseFloat(percentage*100).toFixed(2)+'</td>';
 				tfoot += '</tr>';
 
@@ -169,12 +174,17 @@ function initCariForm(){
 				$('.table').find('tbody').html(html);
 				$('.table').find('tfoot').html(tfoot);
 
+				//console.log(response.message.today);
+				$('.table').find('.date-dpd').text("\n\n\n("+response.message.today+")");
+				$('.table').find('.date-outstanding').text("\n\n\n("+response.message.today+")");
+				$('.table').find('.date-lastdpd').text("\n\n\n("+response.message.yesterday+")");
 			},
 			error: function (jqXHR, textStatus, errorThrown){
 				KTApp.unblockPage();
+				
 			},
 			complete:function () {
-				KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+				KTApp.unblock('#form_bukukas .kt-portlet__body', {});				
 			}
 		});
     })

@@ -178,12 +178,9 @@ class Dashboards extends ApiController
 				'noa'	=> ($unit->dpd_today->noa + $unit->dpd_yesterday->noa +$unit->dpd_repayment_today->noa) - $unit->dpd_repayment_today->noa,
 				'ost'	=> ($unit->dpd_today->ost + $unit->dpd_yesterday->ost +$unit->dpd_repayment_today->ost) - $unit->dpd_repayment_today->ost,
 			);
-			$unit->percentage = ($unit->total_dpd->ost > 0) && ($unit->total_outstanding->up > 0) ? round($unit->total_dpd->ost / $unit->total_outstanding->up, 4) : 0;
-	
-		
-
-			
+			$unit->percentage = ($unit->total_dpd->ost > 0) && ($unit->total_outstanding->up > 0) ? round($unit->total_dpd->ost / $unit->total_outstanding->up, 4) : 0;			
 			$unit->total_disburse = $this->regular->getTotalDisburse($unit->id, null, null, $date);
+			$unit->transdate = $date;
 		}
 		$this->sendMessage($units, [
 			'today'	=> $today,

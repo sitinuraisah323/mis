@@ -138,28 +138,30 @@ $this->load->view('temp/MenuBar.php');
 								<th  class="text-center">No</th>
 								<th>Unit</th>
 								<th>Area</th>
-								<th  class="text-center">Open</th>
-								<th  class="text-center">Ijin Ojk</th>								
-								<th colspan="2"  class="text-center">DPD Kemarin</th>
-								<th colspan="2"  class="text-center">DPD Hari Ini</th>
-								<th colspan="2"  class="text-center">Pelunasan DPD Hari Ini</th>
-								<th colspan="2"  class="text-center">Total DPD</th>
+								<!-- <th  class="text-center">Open</th>
+								<th  class="text-center">Ijin Ojk</th>								 -->
+								<th colspan="2"  class="text-center">DPD Sebelumnya <span class="date-lastdpd"></th>
+								<th colspan="2"  class="text-center">DPD <span class="date-dpd"></th>
+								<th colspan="2"  class="text-center">Pelunasan DPD <span class="date-dpd"></th>
+								<th colspan="2"  class="text-center">Total DPD <span class="date-dpd"></span></th>
+								<th class="text-center">Outstanding <span class="date-outstanding"></span></th>
 								<th  class="text-center">%</th>
 						    	</tr>
 								<tr>		
-									<th></th>
-									<th></th>
+									<!-- <th></th>
+									<th></th> -->
 									<th></th>
 									<th></th>
 									<th></th>
 									<th class="text-center">Noa</th>
-									<th class="text-right">Ost</th>
+									<th class="text-right">UP</th>
 									<th class="text-center">Noa</th>
-									<th class="text-right">Ost</th>
+									<th class="text-right">UP</th>
 									<th class="text-center">Noa</th>
-									<th class="text-right">Ost</th>
+									<th class="text-right">UP</th>
 									<th class="text-center">Noa</th>
-									<th class="text-right">Ost</th>
+									<th class="text-right">UP</th>
+									<th class="text-right"></th>
 									<th></th>
 								</tr>
 						  	</thead>

@@ -50,8 +50,8 @@
 			<td align="center" width="100"><?php echo $data->area;?></td>
 			<!-- <td align="center">-</td>
 			<td align="center">-</td> -->
-			<td align="center" width="40"><?php echo $data->total_dpd->noa_yesterday;?></td>
-			<td align="right" width="90"><?php echo number_format($data->total_dpd->ost_yesterday,0);?></td>
+			<td align="center" width="40"><?php echo $data->dpd_yesterday->noa;?></td>
+			<td align="right" width="90"><?php echo number_format($data->dpd_yesterday->ost,0);?></td>
 			<td align="center" width="40"><?php echo $data->total_dpd->noa_today;?></td>
 			<td align="right" width="90"><?php echo number_format($data->total_dpd->ost_today,0);?></td>
 			<td align="center" width="40"><?php echo $data->dpd_repayment_today->noa;?></td>
@@ -62,8 +62,8 @@
 			<td align="right" width="100"><?php echo $data->percentage ? $data->percentage*100 : '' ;?></td>
 			<?php
 			$totalOs += $data->total_outstanding->os;
-			$dpdYesterdayNoa +=$data->total_dpd->noa_yesterday;
-			$dpdYesterdayUp +=$data->total_dpd->ost_yesterday;
+			$dpdYesterdayNoa +=$data->dpd_yesterday->noa;
+			$dpdYesterdayUp +=$data->dpd_yesterday->ost;
 			$dpdTodayNoa +=$data->total_dpd->noa_today;
 			$dpdTodayUp+=$data->total_dpd->ost_today;
 			$dpdRepaymentNoa+=$data->dpd_repayment_today->noa;

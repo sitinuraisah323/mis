@@ -106,18 +106,113 @@ class Dashboards extends Authenticated
 	
 	public function pencairan()
 	{
-		
         $this->load->view("dashboard/pencairan/index",array(
         	'areas'	=> $this->areas->all()
 		));
 	}
 
 	public function pencairanmonthly()
-	{
-		
+	{		
         $this->load->view("dashboard/pencairan/monthly/index",array(
         	'areas'	=> $this->areas->all()
 		));
+	}
+
+	public function pencairanmonthly_xls()
+	{
+		//load our new PHPExcel library
+		$this->load->library('PHPExcel');
+
+		// Create new PHPExcel object
+		$objPHPExcel = new PHPExcel();
+		$objPHPExcel->getProperties()->setCreator("O'nur")
+		       		->setLastModifiedBy("O'nur")
+		      		->setTitle("Reports")
+		       		->setSubject("Widams")
+		       		->setDescription("widams report ")
+		       		->setKeywords("phpExcel")
+					->setCategory("well Data");		
+	
+		$objPHPExcel->setActiveSheetIndex(0);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('A');
+		$objPHPExcel->getActiveSheet()->setCellValue('A1', 'Unit');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('B');
+		$objPHPExcel->getActiveSheet()->setCellValue('B1', 'NIC');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('C');
+        $objPHPExcel->getActiveSheet()->setCellValue('C1', 'No. SBK');
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D');
+		$objPHPExcel->getActiveSheet()->setCellValue('D1', 'Tanggal Pencairan');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('E');
+		$objPHPExcel->getActiveSheet()->setCellValue('E1', 'Nasabah');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('F');
+		$objPHPExcel->getActiveSheet()->setCellValue('F1', 'Sewa Modal');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('G');
+		$objPHPExcel->getActiveSheet()->setCellValue('G1', 'Taksiran');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('H');
+		$objPHPExcel->getActiveSheet()->setCellValue('H1', 'Admin');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('I');
+		$objPHPExcel->getActiveSheet()->setCellValue('I1', 'UP');
+
+		$this->regular->db
+			->select('units.name as unit, customers.name as customer_name,customers.nik as nik, (select date_repayment from units_repayments where units_repayments.no_sbk = units_regularpawns.no_sbk and units_repayments.id_unit = units_regularpawns.id_unit and units_repayments.permit = units_regularpawns.permit limit 1 ) as date_repayment')
+			->join('customers','units_regularpawns.id_customer = customers.id')
+			->join('units','units.id = units_regularpawns.id_unit');
+
+		if($post = $this->input->post()){
+
+			if($area = $this->input->post('area')){
+				$this->regular->db->where('id_area', $area);
+			}else if($this->session->userdata('user')->level == 'area'){
+				$this->regular->db->where('id_area', $this->session->userdata('user')->id_area);
+			}
+	
+			if($cabang = $this->input->post('cabang')){
+				$this->regular->db->where('id_cabang', $cabang);
+			}else if($this->session->userdata('user')->level == 'cabang'){
+				$this->regular->db->where('id_cabang', $this->session->userdata('user')->id_cabang);
+			}
+	
+			if($unit = $this->input->post('unit')){
+				$this->regular->db->where('id_unit', $unit);
+			}else if($this->session->userdata('user')->level == 'unit'){
+				$this->regular->db->where('units.id', $this->session->userdata('user')->id_unit);
+			}
+
+			$this->regular->db
+				->where('units_regularpawns.date_sbk >=', $post['date-start'])
+				->where('units_regularpawns.date_sbk <=', $post['date-end']);
+			if($post['id_unit']){
+				$this->regular->db
+					->where('units_regularpawns.id_unit', $post['id_unit']);
+			}
+			if($permit = $post['permit']){
+				$this->regular->db->where('units_regularpawns.permit', $permit);
+			}		
+		}
+		$data = $this->regular->all();
+		$no=2;
+		foreach ($data as $row) 
+		{
+			$objPHPExcel->getActiveSheet()->setCellValue('A'.$no, $row->unit);	
+			$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, $row->nic);	
+			$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, $row->no_sbk);				  	
+			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no, date('d/m/Y',strtotime($row->date_sbk)));				  	
+			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no, $row->customer_name);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, $row->capital_lease);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('G'.$no, $row->estimation);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('H'.$no, $row->admin);	
+			$objPHPExcel->getActiveSheet()->setCellValue('I'.$no, $row->amount);
+			$no++;
+		}
+
+		//Redirect output to a client’s WBE browser (Excel5)
+		$filename ="Pelunasan_".date('Y-m-d H:i:s');
+		header('Content-Type: application/vnd.ms-excel');
+		header('Content-Disposition: attachment;filename="'.$filename.'.xls"');
+		header('Cache-Control: max-age=0');
+		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+		$objWriter->save('php://output');
+        
 	}
 	
 	public function pelunasan()
@@ -132,6 +227,105 @@ class Dashboards extends Authenticated
         $this->load->view("dashboard/pelunasan/monthly/index",array(
         	'areas'	=> $this->areas->all()
 		));
+	}
+
+	public function pelunasanmonthly_xls()
+	{
+		//load our new PHPExcel library
+		$this->load->library('PHPExcel');
+
+		// Create new PHPExcel object
+		$objPHPExcel = new PHPExcel();
+		$objPHPExcel->getProperties()->setCreator("O'nur")
+		       		->setLastModifiedBy("O'nur")
+		      		->setTitle("Reports")
+		       		->setSubject("Widams")
+		       		->setDescription("widams report ")
+		       		->setKeywords("phpExcel")
+					->setCategory("well Data");		
+	
+		$objPHPExcel->setActiveSheetIndex(0);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('A');
+		$objPHPExcel->getActiveSheet()->setCellValue('A1', 'Unit');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('B');
+		$objPHPExcel->getActiveSheet()->setCellValue('B1', 'NIC');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('C');
+        $objPHPExcel->getActiveSheet()->setCellValue('C1', 'No. SBK');
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D');
+		$objPHPExcel->getActiveSheet()->setCellValue('D1', 'Tanggal Pelunasan');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('E');
+		$objPHPExcel->getActiveSheet()->setCellValue('E1', 'Nasabah');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('F');
+		$objPHPExcel->getActiveSheet()->setCellValue('F1', 'Sewa Modal');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('G');
+		$objPHPExcel->getActiveSheet()->setCellValue('G1', 'Taksiran');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('H');
+		$objPHPExcel->getActiveSheet()->setCellValue('H1', 'Admin');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('I');
+		$objPHPExcel->getActiveSheet()->setCellValue('I1', 'UP');
+
+		$this->regular->db
+			->select('units.name as unit, customers.name as customer_name,customers.nik as nik,date_repayment')
+			->join('customers','units_regularpawns.id_customer = customers.id')
+			->join('units_repayments','units_repayments.no_sbk = units_regularpawns.no_sbk AND units_repayments.id_unit = units_regularpawns.id_unit')
+			->join('units','units.id = units_regularpawns.id_unit');
+
+		if($post = $this->input->post()){
+
+			if($area = $this->input->post('area')){
+				$this->regular->db->where('id_area', $area);
+			}else if($this->session->userdata('user')->level == 'area'){
+				$this->regular->db->where('id_area', $this->session->userdata('user')->id_area);
+			}
+	
+			if($cabang = $this->input->post('cabang')){
+				$this->regular->db->where('id_cabang', $cabang);
+			}else if($this->session->userdata('user')->level == 'cabang'){
+				$this->regular->db->where('id_cabang', $this->session->userdata('user')->id_cabang);
+			}
+	
+			if($unit = $this->input->post('unit')){
+				$this->regular->db->where('id_unit', $unit);
+			}else if($this->session->userdata('user')->level == 'unit'){
+				$this->regular->db->where('units.id', $this->session->userdata('user')->id_unit);
+			}
+
+			$this->regular->db
+				->where('units_repayments.date_repayment >=', $post['date-start'])
+				->where('units_repayments.date_repayment <=', $post['date-end']);
+			if($post['id_unit']){
+				$this->regular->db
+					->where('units_regularpawns.id_unit', $post['id_unit']);
+			}
+			if($permit = $post['permit']){
+				$this->regular->db->where('units_regularpawns.permit', $permit);
+			}		
+		}
+		$data = $this->regular->all();
+
+		$no=2;
+		foreach ($data as $row) 
+		{
+			$objPHPExcel->getActiveSheet()->setCellValue('A'.$no, $row->unit);	
+			$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, $row->nic);	
+			$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, $row->no_sbk);				  	
+			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no, date('d/m/Y',strtotime($row->date_repayment)));				  	
+			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no, $row->customer_name);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, $row->capital_lease);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('G'.$no, $row->estimation);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('H'.$no, $row->admin);	
+			$objPHPExcel->getActiveSheet()->setCellValue('I'.$no, $row->amount);
+			$no++;
+		}
+
+		//Redirect output to a client’s WBE browser (Excel5)
+		$filename ="Pelunasan_".date('Y-m-d H:i:s');
+		header('Content-Type: application/vnd.ms-excel');
+		header('Content-Disposition: attachment;filename="'.$filename.'.xls"');
+		header('Cache-Control: max-age=0');
+		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+		$objWriter->save('php://output');
+        
 	}
 
 	public function pendapatan()
@@ -314,6 +508,7 @@ class Dashboards extends Authenticated
 		}
 		return $result;
 	}
+
 	public function datetrans(){
 		$date = date('Y-m-d');
 		$lastdate = $this->regular->getLastDateTransaction()->date;
@@ -434,7 +629,7 @@ class Dashboards extends Authenticated
 				->setRGB('FF0000');
 
 		$sheets->getColumnDimension('F')->setWidth(15);
-		$sheets->setCellValue('F2', 'Outstanding')
+		$sheets->setCellValue('F2', 'UP')
 				->getStyle('F2')
 				->getAlignment()				
 				->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
@@ -471,7 +666,7 @@ class Dashboards extends Authenticated
 				->setRGB('ff9999');
 
 		$sheets->getColumnDimension('H')->setWidth(15);
-		$sheets->setCellValue('H2', 'Outstanding')
+		$sheets->setCellValue('H2', 'UP')
 				->getStyle('H2')
 				->getAlignment()				
 				->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
@@ -508,7 +703,7 @@ class Dashboards extends Authenticated
 				->setRGB('ffcc99');
 
 		$sheets->getColumnDimension('J')->setWidth(15);
-		$sheets->setCellValue('J2', 'Outstanding')
+		$sheets->setCellValue('J2', 'UP')
 				->getStyle('J2')
 				->getAlignment()				
 				->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
@@ -546,7 +741,7 @@ class Dashboards extends Authenticated
 				->setRGB('ffbf00');
 
 		$sheets->getColumnDimension('L')->setWidth(15);
-		$sheets->setCellValue('L2', 'Outstanding')
+		$sheets->setCellValue('L2', 'UP')
 				->getStyle('L2')
 				->getAlignment()				
 				->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
@@ -557,11 +752,22 @@ class Dashboards extends Authenticated
 				->setRGB('ffbf00');
 
 		$sheets->getColumnDimension('M')->setWidth(15);
-		$sheets->setCellValue('M2', '%')
+		$sheets->setCellValue('M2', 'Outstanding')
 				->getStyle('M2')
 				->getAlignment()				
 				->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 				$sheets->getStyle('M2')
+				->getFill()
+				->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
+				->getStartColor()
+				->setRGB('ffbf00');
+
+		$sheets->getColumnDimension('N')->setWidth(15);
+		$sheets->setCellValue('N2', '%')
+				->getStyle('N2')
+				->getAlignment()				
+				->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+				$sheets->getStyle('N2')
 				->getFill()
 				->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
 				->getStartColor()
@@ -578,51 +784,160 @@ class Dashboards extends Authenticated
 			}else if($this->session->userdata('user')->level == 'unit'){
 				$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
 			}
-			if($this->input->post('date')){
-				$date = $this->input->post('date');
+
+			$date = $this->input->post('date');		
+			$lastdate = $this->regular->getLastDateTransaction()->date;
+			if ($date > $lastdate){
+				$date = $lastdate;
 			}else{
-				$date = date('Y-m-d');
+				$date= $date;
 			}
 
+			// $units = $this->units->db->select('units.id, units.name, area')
+			// 						 ->join('areas','areas.id = units.id_area')
+			// 						 ->get('units')->result();
+			// $no=3;
+			// foreach ($units as $unit) 
+			// {
+			// 	$unit->ost_yesterday = $this->regular->getOstYesterday($unit->id, $date);
+			// 	$unit->credit_today = $this->regular->getCreditToday($unit->id, $date);
+			// 	$unit->repayment_today = $this->regular->getRepaymentToday($unit->id, $date);
+			// 	$totalNoa = (int) $unit->ost_yesterday->noa + $unit->credit_today->noa - $unit->repayment_today->noa;
+			// 	$totalUp = (int) $unit->ost_yesterday->up + $unit->credit_today->up - $unit->repayment_today->up;
+			// 	$unit->total_outstanding = (object) array(
+			// 		'noa'	=> $totalNoa,
+			// 		'up'	=> $totalUp,
+			// 		'tiket'	=> round($totalUp > 0 ? $totalUp /$totalNoa : 0)
+			// 	);
+				
+			// 	$unit->dpd_yesterday = $this->regular->getDpdYesterday($unit->id, $date);
+			// 	$unit->dpd_today = $this->regular->getDpdToday($unit->id, $date);
+			// 	$unit->dpd_repayment_today = $this->regular->getDpdRepaymentToday($unit->id,$date);
+			// 	$unit->total_dpd = (object) array(
+			// 		'noa'	=> $unit->dpd_today->noa + $unit->dpd_yesterday->noa - $unit->dpd_repayment_today->noa,
+			// 		'ost'	=> $unit->dpd_today->ost + $unit->dpd_yesterday->ost - $unit->dpd_repayment_today->ost,
+			// 	);
+			// 	$unit->percentage = ($unit->total_dpd->ost > 0) && ($unit->total_outstanding->up > 0) ? round($unit->total_dpd->ost / $unit->total_outstanding->up, 4) : 0;
+
+			if($area = $this->input->get('area')){
+				$this->units->db->where('id_area', $area);
+			}else if($this->session->userdata('user')->level == 'area'){
+				$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
+			}
+	
+			if($cabang = $this->input->get('cabang')){
+				$this->units->db->where('id_cabang', $cabang);
+			}else if($this->session->userdata('user')->level == 'cabang'){
+				$this->units->db->where('id_cabang', $this->session->userdata('user')->id_cabang);
+			}
+	
+			if($id_unit = $this->input->get('id_unit')){
+				$this->units->db->where('units.id', $id_unit);
+			}else if($code = $this->input->get('code')){
+				$this->units->db->where('code', zero_fill($code, 3));
+			}else if($this->session->userdata('user')->level == 'unit'){
+				$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
+			}
+	
 			$units = $this->units->db->select('units.id, units.name, area')
-									 ->join('areas','areas.id = units.id_area')
-									 ->get('units')->result();
-		$no=3;
-		foreach ($units as $unit) 
-		{
-			$unit->ost_yesterday = $this->regular->getOstYesterday($unit->id, $date);
-			$unit->credit_today = $this->regular->getCreditToday($unit->id, $date);
-			$unit->repayment_today = $this->regular->getRepaymentToday($unit->id, $date);
-			$totalNoa = (int) $unit->ost_yesterday->noa + $unit->credit_today->noa - $unit->repayment_today->noa;
-			$totalUp = (int) $unit->ost_yesterday->up + $unit->credit_today->up - $unit->repayment_today->up;
-			$unit->total_outstanding = (object) array(
-				'noa'	=> $totalNoa,
-				'up'	=> $totalUp,
-				'tiket'	=> round($totalUp > 0 ? $totalUp /$totalNoa : 0)
-			);
-			
-			$unit->dpd_yesterday = $this->regular->getDpdYesterday($unit->id, $date);
-			$unit->dpd_today = $this->regular->getDpdToday($unit->id, $date);
-			$unit->dpd_repayment_today = $this->regular->getDpdRepaymentToday($unit->id,$date);
-			$unit->total_dpd = (object) array(
-				'noa'	=> $unit->dpd_today->noa + $unit->dpd_yesterday->noa - $unit->dpd_repayment_today->noa,
-				'ost'	=> $unit->dpd_today->ost + $unit->dpd_yesterday->ost - $unit->dpd_repayment_today->ost,
-			);
-			$unit->percentage = ($unit->total_dpd->ost > 0) && ($unit->total_outstanding->up > 0) ? round($unit->total_dpd->ost / $unit->total_outstanding->up, 4) : 0;
-			$objPHPExcel->getActiveSheet()->setCellValue('A'.$no, $unit->name);	
-			$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, $unit->area);	
-			$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, "-");				  	
-			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no, "-");	
-			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no, $unit->dpd_yesterday->noa);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, $unit->dpd_yesterday->ost);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('G'.$no, $unit->dpd_today->noa);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('H'.$no, $unit->dpd_today->ost);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('I'.$no, $unit->dpd_repayment_today->noa);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('J'.$no, $unit->dpd_repayment_today->ost);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('K'.$no, $unit->total_dpd->noa);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('L'.$no, $unit->total_dpd->ost);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('M'.$no, round($unit->percentage*100, 3));				 				 
-			$no++;
+				->join('areas','areas.id = units.id_area')
+				->get('units')->result();
+			$today = '';
+			$yesterday = '';
+			$no=3;
+			foreach ($units as $unit){
+				$getOstToday = $this->regular->db
+							->where('date <=', $date)
+							->from('units_outstanding')
+							->where('id_unit', $unit->id)
+							->order_by('date','DESC')
+							->get()->row();
+	
+				$today = $getOstToday->date;
+	
+				$unit->ost_today = (object) array(
+					'noa_reguler'		=> $getOstToday->noa_regular,
+					'up_reguler'		=> $getOstToday->up_regular,
+					'noa_rep_reguler'	=> $getOstToday->noa_repyment_regular,
+					'up_rep_reguler'	=> $getOstToday->repyment_regular,
+					'noa_mortages'		=> $getOstToday->noa_mortage,
+					'up_mortages'		=> $getOstToday->up_mortage,
+					'noa_rep_mortages'	=> $getOstToday->noa_repayment_mortage,
+					'up_rep_mortages'	=> $getOstToday->repayment_mortage
+				);
+				$dateYesterday = $getOstToday->date;
+	
+				$getOstYesterday = $this->regular->db
+									->where('date <', $dateYesterday)
+									->from('units_outstanding')
+									->where('id_unit', $unit->id)
+									->order_by('date','DESC')
+									->get()->row();
+	
+				$yesterday = $getOstYesterday->date;
+	
+				$unit->ost_yesterday = (object) array(
+					'noa_os_reguler'	=> $getOstYesterday->noa_os_regular,
+					'os_reguler'		=> $getOstYesterday->os_regular,
+					'noa_os_mortages'	=> $getOstYesterday->noa_os_mortage,
+					'os_mortages'		=> $getOstYesterday->os_mortage
+				);		
+	
+				$totalUpReg = ($unit->ost_yesterday->os_reguler+ $unit->ost_today->up_reguler)-($unit->ost_today->up_rep_reguler);
+				$totalUpMor = ($unit->ost_yesterday->os_mortages+ $unit->ost_today->up_mortages)-($unit->ost_today->up_rep_mortages);
+			   
+	
+				$totalOst =  $totalUpReg+$totalUpMor;
+	
+				$unit->total_outstanding = (object) [
+					'up'	=> $totalOst
+				];
+	
+				$unit->dpd_yesterday = $this->regular->getDpdYesterday($unit->id, $date);
+				$unit->dpd_today = $this->regular->getDpdToday($unit->id, $date);
+				$unit->dpd_repayment_today = $this->regular->getDpdRepaymentToday($unit->id,$date);
+				$unit->total_dpd = (object) array(
+					//'noa'	=> $unit->dpd_today->noa + $unit->dpd_yesterday->noa,
+					//'ost'	=> $unit->dpd_today->ost + $unit->dpd_yesterday->ost,
+					'noa_today'	=> $unit->dpd_today->noa + $unit->dpd_repayment_today->noa,
+					'ost_today'	=> $unit->dpd_today->ost + $unit->dpd_repayment_today->ost,
+					'noa'	=> ($unit->dpd_today->noa + $unit->dpd_yesterday->noa +$unit->dpd_repayment_today->noa) - $unit->dpd_repayment_today->noa,
+					'ost'	=> ($unit->dpd_today->ost + $unit->dpd_yesterday->ost +$unit->dpd_repayment_today->ost) - $unit->dpd_repayment_today->ost,
+				);
+				$unit->percentage = ($unit->total_dpd->ost > 0) && ($unit->total_outstanding->up > 0) ? round($unit->total_dpd->ost / $unit->total_outstanding->up, 4) : 0;			
+				$unit->total_disburse = $this->regular->getTotalDisburse($unit->id, null, null, $date);
+
+				// html += '<tr>';
+				// html += '<td  class="text-center">'+ int +'</td>';
+				// html += '<td>'+ data.name +'</td>';
+				// html += '<td>'+ data.area +'</td>';
+				// html += '<td  class="text-center">'+data.dpd_yesterday.noa+'</td>';
+				// html += '<td  class="text-right">'+convertToRupiah(data.dpd_yesterday.ost)+'</td>';
+				// html += '<td  class="text-center">'+data.dpd_today.noa+'</td>';
+				// html += '<td  class="text-right">'+convertToRupiah(data.dpd_today.ost)+'</td>';
+				// html += '<td  class="text-center">'+data.dpd_repayment_today.noa+'</td>';
+				// html += '<td  class="text-right">'+convertToRupiah(data.dpd_repayment_today.ost)+'</td>';
+				// html += '<td  class="text-center">'+data.total_dpd.noa+'</td>';
+				// html += '<td  class="text-right">'+convertToRupiah(data.total_dpd.ost)+'</td>';
+				// html += '<td  class="text-right">'+convertToRupiah(data.total_outstanding.up)+'</td>';
+				// html += '<td  class="text-center">'+parseFloat(data.percentage*100).toFixed(2)+'</td>';
+				// html += '</tr>';
+
+				$objPHPExcel->getActiveSheet()->setCellValue('A'.$no, $unit->name);	
+				$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, $unit->area);	
+				$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, "-");				  	
+				$objPHPExcel->getActiveSheet()->setCellValue('D'.$no, "-");	
+				$objPHPExcel->getActiveSheet()->setCellValue('E'.$no, $unit->dpd_yesterday->noa);				 
+				$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, $unit->dpd_yesterday->ost);				 
+				$objPHPExcel->getActiveSheet()->setCellValue('G'.$no, $unit->dpd_today->noa);				 
+				$objPHPExcel->getActiveSheet()->setCellValue('H'.$no, $unit->dpd_today->ost);				 
+				$objPHPExcel->getActiveSheet()->setCellValue('I'.$no, $unit->dpd_repayment_today->noa);				 
+				$objPHPExcel->getActiveSheet()->setCellValue('J'.$no, $unit->dpd_repayment_today->ost);				 
+				$objPHPExcel->getActiveSheet()->setCellValue('K'.$no, $unit->total_dpd->noa);				 
+				$objPHPExcel->getActiveSheet()->setCellValue('L'.$no, $unit->total_dpd->ost);				 
+				$objPHPExcel->getActiveSheet()->setCellValue('M'.$no, $unit->total_outstanding->up);				 				 
+				$objPHPExcel->getActiveSheet()->setCellValue('N'.$no, round($unit->percentage*100, 2));				 				 
+				$no++;
 		}
 
 		//Redirect output to a client’s WBE browser (Excel5)
