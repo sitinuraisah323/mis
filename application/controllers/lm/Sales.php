@@ -39,11 +39,10 @@ class Sales extends Authenticated
 	public function form($id = null)
 	{
 		$getCode = $this->grams->db
-			->select('count(*)+1 as no')
+			->select('id as no')
 			->from('lm_transactions')
-			->like('code', 'LM/'.date('ym/'))
 			->get()->row();
-		$code = 'LM/'.date('ym/').$getCode->no;
+		$code = 'LM/'.date('ym/').($getCode->no+1);
 
 		if($this->session->userdata('user')->level == 'unit'){
 			$this->employees->db->where('units.id', $this->session->userdata('user')->id_unit);

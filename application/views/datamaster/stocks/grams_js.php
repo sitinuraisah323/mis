@@ -32,6 +32,7 @@
                     table.querySelector('[data-post="total"]').textContent = data.total;
                     table.querySelector('[data-post="stock_out"]').textContent = data.stock_out;
                     table.querySelector('[data-post="price"]').textContent = convertToRupiah(data.price);
+                    table.querySelector('[data-post="detail"]').setAttribute('onclick',`detailStock("${data.unit}", ${data.id})`)
                     document.querySelector('.table').querySelector('tbody').appendChild(table);
                 })
             }
@@ -77,4 +78,11 @@
                 }
             });
     });
+
+    const detailStock = (unit, weight)=>{
+        const dateStart = $('[name="date_start"]').val();
+        const dateEnd = $('[name="date_end"]').val();
+        window.location.href = 
+        `<?php echo base_url('datamaster/stocks/detail?unit=');?>${unit}&weight=${weight}&date_start=${dateStart}&date_end=${dateEnd}`;
+    }
 </script>

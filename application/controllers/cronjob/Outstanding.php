@@ -243,6 +243,7 @@ class Outstanding extends Authenticated
 		$totalNoaMortages = 0;
 		$totalPelunasanMortages = 0;
 		$totalPencairanMortages = 0;
+		$totalOst = 0;
 
 		$units = $this->units->db->select('units.id, units.name, area')
 			->join('areas','areas.id = units.id_area')
@@ -290,6 +291,7 @@ class Outstanding extends Authenticated
 			$totalPencairanMortages +=  $creditToday->up_mortage;
 			$totalUpMortages 		+=  $totalUpUnitMortages;
 			$totalNoaMortages 		+=  $totalNoaUnitMortages;
+			$totalOst =  $totalUpUnit+$totalUpUnitMortages;
 			
 			$transaction = array(
 				'id_unit'				=> $unit->id,
@@ -311,7 +313,7 @@ class Outstanding extends Authenticated
 				'os_mortage'			=> $totalUpUnitMortages,
 				//global 
 				//'noa'				    => + ,
-				//'os'				    => $totalUpUnit,
+				'os'				    => $totalOst,
 			);
 
 			//echo "<pre/>";

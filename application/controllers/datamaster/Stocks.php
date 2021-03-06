@@ -96,6 +96,45 @@ class Stocks extends Authenticated
 		$pdf->Output('GHAnet_Summary_Stocks'.$date.'.pdf', 'D');
 	}
 
+	public function detail()
+	{
+		$this->load->library('pdf');
+		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		require_once APPPATH.'controllers/pdf/header.php';
+		$dateStart = $this->input->get('date_start');
+		$dateEnd = $this->input->get('date_end');
+		$weight = $this->input->get('weight');
+		$unit = $this->input->get('unit');
+		$lm = $this->lm_detail($unit, $weight, $dateStart, $dateEnd);
+		$pdf->AddPage('L', 'A3');
+		$view = $this->load->view('datamaster/stocks/detail_pdf',[
+			'data'=>$lm,
+			'weight'=>$this->grams->find($weight)
+		],true);
+		$pdf->writeHTML($view);
+
+		// $this->salelm($pdf);
+
+				//download
+		// $pdf->Output('GHAnet_Summary_'.date('d_m_Y').'.pdf', 'D');
+		if($this->input->get('date')){
+			$date = $this->input->get('date');
+		}else{
+			$date = date('Y-m-d');
+		}
+		$pdf->Output('GHAnet_Summary_Stocks_Detail'.$date.'.pdf', 'D');
+	}
+
+	public function lm_detail($unit, $weight, $dateStart, $dateEnd)
+	{
+		$stockBegin = $this->stock->stock_begin($unit, $weight,$dateStart);
+		$stockGroupByDate = $this->stock->groupByDate($unit, $weight, $dateStart, $dateEnd);
+		return [
+			'begin' => $stockBegin,
+			'datas'	=> $stockGroupByDate,
+		];
+	}
+
 	public function lm()
 	{
 		

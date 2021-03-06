@@ -91,11 +91,16 @@ class Transactions extends ApiController
 			}
 			else
 			{
+				$getCode = $this->model->db
+					->select('id as no')
+					->from('lm_transactions')
+					->get()->row();
+				$code = 'LM/'.date('ym/').($getCode->no+1);
 				$data = array(
 					'id_unit'	=> $this->input->post('id_unit'),
 					'id_employee'	=>  (int) $this->input->post('id_employee'),
 					'date'	=> date('Y-m-d', strtotime( $this->input->post('date'))),
-					'code'	=> $this->input->post('code'),
+					'code'	=> $code,
 					'total'	=>  $this->input->post('total'),
 					'tenor'	=>  $this->input->post('tenor'),
 					'method'	=>  $this->input->post('method'),
@@ -256,6 +261,9 @@ class Transactions extends ApiController
 	public function delete($id)
 	{
 		if($this->model->delete($id)){
+			$this->gram->delete([
+				'id_lm_transaction'	=> $data->id
+			]);
 			echo json_encode(array(
 				'data'	=> 	true,
 				'status'	=> true,

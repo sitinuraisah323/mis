@@ -143,6 +143,7 @@ $this->load->view('temp/MenuBar.php');
                                     <th>Barang Keluar</th>
                                     <th>Total</th>
                                     <th class="text-right">Harga</th>
+                                    <th>Detail</th>
 						    	</tr>
 						  	</thead>
 						  	<tbody>
@@ -154,6 +155,11 @@ $this->load->view('temp/MenuBar.php');
                                     <td><span data-post="stock_out"></span></td>
                                     <td><span data-post="total"></span></td>
                                     <td class="text-right"><span data-post="price"></span></td>
+                                    <td>
+                                        <a data-post="detail" class="btn btn-info">
+                                        lihat
+                                        </a>
+                                    </td>
                                 </tr>
 						  	</tbody>
 						</table>

@@ -70,7 +70,7 @@ class LmStocksModel extends Master
 		 ) as total')
 		->from('lm_grams  as lg');
 
-	return $this->db->get()->result();
+		return $this->db->get()->result();
 	}
 
 	public function byGrams($idGrams, $idUnit = 0, $date = null, $escape = null)
@@ -150,5 +150,41 @@ class LmStocksModel extends Master
 			}
 		}
 		return $getUnits;
+	}
+
+	public function stock_begin($unit, $weight, $date)
+	{
+		$this->db
+		->select('units.name,lm_stocks.id_lm_gram, COALESCE(( 
+			sum(CASE WHEN lm_stocks.type = "DEBIT" THEN `amount` ELSE 0 END) -
+			sum(CASE WHEN type = "CREDIT" THEN `amount` ELSE 0 END)
+		),0) as stock_begin')
+		->from('lm_stocks')
+		->where('date(lm_stocks.date_receive) <', $date)
+		->join('units','units.id = lm_stocks.id_unit')
+		->where('lm_stocks.id_lm_gram', $weight)
+		->where('units.name', $unit);
+		return $this->db->get()->row();
+	}
+
+	public function groupByDate($unit, $weight, $dateStart, $dateEnd)
+	{
+		$this->db
+			->select('units.name,date_receive, lm_stocks.id_lm_gram, COALESCE(( 
+				sum(CASE WHEN lm_stocks.type = "DEBIT" THEN `amount` ELSE 0 END)
+			),0) as stock_in')
+			->select('
+			COALESCE(( 
+				sum(CASE WHEN type = "CREDIT" THEN `amount` ELSE 0 END)
+			),0) as stock_out
+			')
+			->from('lm_stocks')
+			->join('units','units.id = lm_stocks.id_unit')
+			->where('lm_stocks.id_lm_gram', $weight)
+			->where('date(lm_stocks.date_receive) >=', $dateStart)
+			->where('date(lm_stocks.date_receive) <=', $dateEnd)
+			->group_by('date_receive')
+			->where('units.name', $unit);
+		return $this->db->get()->result();
 	}
 }
