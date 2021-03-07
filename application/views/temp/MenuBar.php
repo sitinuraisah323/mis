@@ -599,13 +599,36 @@
 										</li>
 									<?php endif;?>
 									<?php if(read_access('report/regulercoc')):?>
-										<li class="kt-menu__item "  aria-haspopup="true">
-											<a  href="<?php echo base_url('report/regulercoc'); ?>" class="kt-menu__link ">
-												<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>
-												<span class="kt-menu__link-text">Coc Gadai Reguler</span>
-											</a>
-										</li>
+									<li class="kt-menu__item  kt-menu__item--submenu"  data-ktmenu-submenu-toggle="hover" aria-haspopup="true">
+										<a  href="javascript:;" class="kt-menu__link kt-menu__toggle">
+									<span class="kt-menu__link-icon">
+									<i class="fa fa-copy"><span></span></i>
+									</span>
+											<span class="kt-menu__link-text">COC</span><i class="kt-menu__hor-arrow la la-angle-right"></i><i class="kt-menu__ver-arrow la la-angle-right"></i>
+										</a>
+										<div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--right">
+											<ul class="kt-menu__subnav">			
+											<?php if(read_access('report/regulercoc')):?>
+												<li class="kt-menu__item "  aria-haspopup="true">
+													<a  href="<?php echo base_url('report/regulercoc'); ?>" class="kt-menu__link ">
+														<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>
+														<span class="kt-menu__link-text">Coc Gadai Reguler</span>
+													</a>
+												</li>
+											<?php endif;?>	
+											<?php if(read_access('report/mortagescoc')):?>
+												<li class="kt-menu__item "  aria-haspopup="true">
+													<a  href="<?php echo base_url('report/mortagescoc'); ?>" class="kt-menu__link ">
+														<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>
+														<span class="kt-menu__link-text">Coc Gadai Cicilan</span>
+													</a>
+												</li>
+											<?php endif;?>																			
+											</ul>
+										</div>
+									</li>										
 									<?php endif;?>
+								
 
 									<?php if(read_access('report/regularpawns')):?>
 									<li class="kt-menu__item  kt-menu__item--submenu"  data-ktmenu-submenu-toggle="hover" aria-haspopup="true">

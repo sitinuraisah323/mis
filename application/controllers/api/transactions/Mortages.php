@@ -449,4 +449,110 @@ class Mortages extends ApiController
 		$this->sendMessage($result, 'Get Data kredit angsuran');
 	}
 
+	public function account_coc()
+	{
+		$dateStart = $this->input->get('dateStart');
+		$dateEnd = $this->input->get('dateEnd');
+		$idUnit = $this->input->get('id_unit');
+		$area = $this->input->get('area');
+		$status = $this->input->get('status');
+		if($status){
+			$this->mortages->db->where('status_transaction', $status);
+		}
+		if($idUnit){
+			$this->mortages->db->where('units.id', $idUnit);
+		}
+		if($area){
+			$this->mortages->db->where('units.id_area', $area);
+		}
+		$result = $this->mortages->db->select('units_mortages.id,
+		units_mortages.date_sbk, units_mortages.no_sbk,
+		units_mortages.deadline, customers.name as customer,
+		units_mortages.capital_lease,
+		units_mortages.estimation,
+		units_mortages.amount_admin, 
+		units_mortages.amount_loan, 
+		units_mortages.status_transaction,
+		capital_lease,
+		units.name as unit
+		,  (select date_kredit from units_repayments_mortage
+		 where units_repayments_mortage.no_sbk = units_mortages.no_sbk 
+		 and units_repayments_mortage.id_unit = units_mortages.id_unit 
+		 and units_repayments_mortage.permit = units_mortages.permit
+		 order by date_kredit desc limit 1 ) 
+		 as date_repayment')
+		 	->select('(select COALESCE(saldo, 0) from units_repayments_mortage
+			 where units_repayments_mortage.no_sbk = units_mortages.no_sbk 
+			 and units_repayments_mortage.id_unit = units_mortages.id_unit 
+			 and units_repayments_mortage.permit = units_mortages.permit
+			 order by date_kredit desc limit 1 ) 
+			 as amount')
+			->from('units_mortages') 
+			->where('units_mortages.date_sbk >=', $dateStart)
+			->where('units_mortages.date_sbk <=', $dateEnd)
+			->join('units','units.id = units_mortages.id_unit')
+			->join('customers','customers.id = units_mortages.id_customer')
+			->get()->result();
+		if($result){
+			foreach($result as $res){
+				$calculate = $this->calculate($res);
+				$res->coc = $calculate->coc;
+				$res->pay_capital_lease = $calculate->pay_capital_lease;
+				$res->provit = $calculate->provit;
+				$res->days_credit = $calculate->days_credit;
+			}
+		}
+		return $this->sendMessage($result, 'Successfully get account coc', 200);
+	}
+
+	public function calculate($data)
+	{
+		$periodeYear = $this->input->get('period_year') ?  $this->input->get('period_year') : date('Y');
+		$periodeMonth = $this->input->get('period_month') ?  $this->input->get('period_month') : date('n');
+		$dayEnd = $this->input->get('period_month') > 0 ?   cal_days_in_month(CAL_GREGORIAN,$periodeMonth,$periodeYear) : date('d') ;
+	
+		$periodeStart = date('Y-m-d', strtotime($periodeYear.'-'.$periodeMonth.'-01'));
+		$periodeEnd = date('Y-m-d', strtotime($periodeYear.'-'.$periodeMonth.'-'.$dayEnd));
+		
+	
+		if($data->date_sbk > $periodeStart){
+			$periodeStart = $data->date_sbk;
+		}
+		if($data->date_repayment && $data->status_transaction === 'L'){
+			$periodeEnd = $data->date_repayment;
+		}
+		
+		$date1=date_create($periodeStart);
+		$date2=date_create($periodeEnd);
+		$days=date_diff($date1,$date2)->days+1;
+		if(!$data->amount) $data->amount = $data->amount_loan;
+		$up = $data->amount;
+
+		if($data->date_repayment < $periodeStart && $data->date_repayment && $data->date_repayment === 'L'){
+			$days = 0;
+		}
+
+		$capital_lease = $data->capital_lease /30;
+
+		$days_credit = $days;
+
+		if($days > 120){
+			$days_credit = 120;
+		}
+		$coc = round($up * $days/365 * 11/100);
+		$pay_capital_lease = ($data->amount_loan*$capital_lease)*$days_credit;
+		if($days > 130){
+			if($days > 150){
+				$days_credit = 150;
+			}
+			$pay_capital_lease += ($up*$capital_lease)*$days_credit-130/20;
+		}
+		return (object) [
+			'coc'	=> $coc, 
+			'pay_capital_lease'	=> $pay_capital_lease,
+			'provit'	=> $pay_capital_lease - $coc,
+			'days_credit'	=> $days
+		];
+	}
+
 }
