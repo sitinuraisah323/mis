@@ -185,6 +185,7 @@ class Insentif extends Authenticated
 						->join('areas','areas.id = units.id_area')
 						->join('cabang','cabang.id = units.id_cabang')
 						->where('month(date_sbk)', $getMonth)
+						->where('units_regularpawns.status', 'PUBLISH')
 						->where('year(date_sbk)', $getYear);
 		$transactions = $this->model->db->get()->result();
 		
@@ -296,6 +297,7 @@ class Insentif extends Authenticated
 						->join('units','units.id = units_mortages.id_unit')
 						->join('areas','areas.id = units.id_area')
 						->join('cabang','cabang.id = units.id_cabang')
+						->where('units_mortages.status', 'PUBLISH')
 						->where('month(date_sbk)', $getMonth)
 						->where('year(date_sbk)', $getYear);
 		$transactions = $this->model->db->get()->result();

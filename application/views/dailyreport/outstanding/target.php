@@ -6,6 +6,7 @@
 		<th width="20%"> Unit</th>
 		<th width="20%"> Area</th>
 		<th width="20%" align="right"> Data Pencairan/Booking  </th>
+		<th width="10%" align="center"> Noa Pencairan/Booking  </th>
 		<th width="20%" align="right"> Target </th>
 		<th width="15%" align="center"> Persentas (%) </th>
 
@@ -15,23 +16,27 @@
 	<?php $no=0;
 	$totalCredit =0;
 	$totalUp = 0;
+	$totalNoa = 0;
 	$totalPersent = 0;
-	foreach($data as $data): $no++;?>
+	foreach($data as $row): $no++;?>
 		<tr>
 			<td width="5%" align="center"> <?php echo $no;?></td>
-			<td width="20%" align="left"> <?php echo $data->name;?></td>
-			<td width="20%" align="left"> <?php echo $data->area;?></td>
-			<td width="20%" align="right"> <?php echo number_format($data->booking,0);?> </td>
-			<td width="20%" align="right"> <?php echo number_format($data->up,0);?> </td>
-			<td width="15%" align="center"> <?php echo $data->persentase ? round($data->persentase * 100) : 0;?> </td>
-            <?php $totalCredit +=$data->booking; ?>
-            <?php $totalUp +=$data->up; ?>
-            <?php $totalPersent +=$data->persentase; ?>
+			<td width="20%" align="left"> <?php echo $row->name;?></td>
+			<td width="20%" align="left"> <?php echo $row->area;?></td>
+			<td width="20%" align="right"> <?php echo number_format($row->booking,0);?> </td>
+			<td width="10%" align="center"> <?php echo $row->noa;?> </td>
+			<td width="20%" align="right"> <?php echo number_format($row->up,0);?> </td>
+			<td width="15%" align="center"> <?php echo $row->persentase ? round($row->persentase * 100) : 0;?> </td>
+            <?php $totalCredit +=$row->booking; ?>
+            <?php $totalUp +=$row->up; ?>
+            <?php $totalNoa +=$row->noa; ?>
+            <?php $totalPersent +=$row->persentase; ?>
 		</tr>
 	<?php endforeach ?>
     <tr>
     <td width="45%" align="right">Total</td>
-    <td width="20%" align="right"><?php echo number_format($totalCredit,0); ?></td>
+    <td width="20%" align="right"><?php echo number_format($totalCredit,0); ?></td>	
+    <td width="10%" align="right"><?php echo $totalNoa ?></td>
     <td width="20%" align="right"><?php echo number_format($totalUp,0); ?></td>
     <td width="15%" align="center"><?php echo round($totalCredit / $totalUp  * 100,2); ?></td>
     </tr>

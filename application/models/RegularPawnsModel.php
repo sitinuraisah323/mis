@@ -772,19 +772,24 @@ class RegularpawnsModel extends Master
 					->select('u.id, u.name, a.area as area, 
 					(
 						(select COALESCE(sum(units_regularpawns.admin), 0) from units_regularpawns where id_unit = u.id 
+						
+					and units_regularpawns.status = "PUBLISH"
 					and month(date_sbk) = "'.$getMonth.'"
 					and year(date_sbk) = "'.$getYear.'"	)
 					+	
 					(select COALESCE(sum(units_mortages.amount_admin), 0) from units_mortages where id_unit = u.id 
-					and month(date_sbk) = "'.$getMonth.'"
+					and month(date_sbk) = "'.$getMonth.'"					
+					and units_mortages.status = "PUBLISH"
 					and year(date_sbk) = "'.$getYear.'"	)			
 					) as admin,
 					(
 						(select COALESCE(sum(units_regularpawns.amount), 0) from units_regularpawns where id_unit = u.id 
-					and month(date_sbk) = "'.$getMonth.'"
+					and month(date_sbk) = "'.$getMonth.'"					
+					and units_regularpawns.status = "PUBLISH"
 					and year(date_sbk) = "'.$getYear.'"	)+
 					(select COALESCE(sum(units_mortages.amount_loan), 0) from units_mortages where id_unit = u.id 
-					and month(date_sbk) = "'.$getMonth.'"
+					and month(date_sbk) = "'.$getMonth.'"					
+					and units_mortages.status = "PUBLISH"
 					and year(date_sbk) = "'.$getYear.'"	)						
 					) as booking
 					')
@@ -829,6 +834,7 @@ class RegularpawnsModel extends Master
 				->where('units_regularpawns.id_unit', $idUnit)
 				->where('month(units_regularpawns.date_sbk)', $getMonth)
 				->where('year(units_regularpawns.date_sbk)', $getYear)
+				->where('units_regularpawns.status', 'PUBLISH')
 				->get()->result();
 
 		$getMortages = $this->db
@@ -841,6 +847,7 @@ class RegularpawnsModel extends Master
 				->where('units_mortages.id_unit', $idUnit)
 				->where('month(units_mortages.date_sbk)', $getMonth)
 				->where('year(units_mortages.date_sbk)', $getYear)
+				->where('units_mortages.status', 'PUBLISH')
 				->get()->result();
 		return (object) [
 			'regulars' => $getRegular,

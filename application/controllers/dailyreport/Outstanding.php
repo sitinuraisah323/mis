@@ -73,6 +73,18 @@ class Outstanding extends Authenticated
 							and month(date_sbk) = "'.date('n', strtotime($date)).'"
 						)
 					) as booking')
+					->select('(
+						(
+							select COALESCE(count(amount),0) from units_regularpawns ur where ur.id_unit = units.id
+							and year(date_sbk) = "'.date('Y', strtotime($date)).'"
+							and month(date_sbk) = "'.date('n', strtotime($date)).'"
+						) +
+						(
+							select COALESCE(count(amount_loan),0) from units_mortages um where um.id_unit = units.id
+							and year(date_sbk) = "'.date('Y', strtotime($date)).'"
+							and month(date_sbk) = "'.date('n', strtotime($date)).'"
+						)
+					) as noa')
 					->join('areas','areas.id = units.id_area')
 					->order_by('booking', 'desc');
 		return $this->units->db->get('units')->result();
@@ -928,9 +940,11 @@ class Outstanding extends Authenticated
 			$totalNoaMor = ($unit->ost_yesterday->noa_os_mortages + $unit->ost_today->noa_mortages)-($unit->ost_today->noa_rep_mortages);
 			$totalUpMor = ($unit->ost_yesterday->os_mortages+ $unit->ost_today->up_mortages)-($unit->ost_today->up_rep_mortages);
 			$totalOut = $totalUpReg + $totalUpMor; 
+			$totalNoa = $totalNoaReg + $totalNoaMor;
 			$unit->target_os = (int) $target->amount_outstanding;
 			$unit->total_outstanding = (object) [
-				'up'	=> 	$totalOut
+				'up'	=> 	$totalOut,
+				'noa'	=> $totalNoa
 			];
 
 			// $unit->credit_today = $this->regular->getCreditToday($unit->id, $date);
