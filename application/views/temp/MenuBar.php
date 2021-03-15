@@ -399,6 +399,14 @@
 										</a>
 										<div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--right">
 											<ul class="kt-menu__subnav">
+											<?php if(read_access('datamaster/series')):?>
+													<li class="kt-menu__item "  aria-haspopup="true">
+														<a  href="<?php echo base_url('datamaster/series'); ?>" class="kt-menu__link ">
+															<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+															<span class="kt-menu__link-text">Series</span>
+														</a>
+													</li>
+												<?php endif;?>
 												<?php if(read_access('datamaster/grams')):?>
 													<li class="kt-menu__item "  aria-haspopup="true">
 														<a  href="<?php echo base_url('datamaster/grams'); ?>" class="kt-menu__link ">
