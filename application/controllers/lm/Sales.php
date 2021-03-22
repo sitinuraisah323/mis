@@ -19,6 +19,7 @@ class Sales extends Authenticated
 		parent::__construct();
 		$this->load->model('LmGramsModel','grams');
 		$this->load->model('AreasModel','areas');
+		$this->load->model('UnitsModel','units');
 		$this->load->model('LmGramsPricesModel','prices');
 		$this->load->model('EmployeesModel','employees');
 	}
@@ -59,7 +60,8 @@ class Sales extends Authenticated
 		$this->load->view("lm/sales/sale",array(
 			'employees'	=> $employees,
 			'code'	=> $code,
-			'id'	=> $id
+			'id'	=> $id,
+			'units'	=> $this->units->all()
 		));
 	}
 

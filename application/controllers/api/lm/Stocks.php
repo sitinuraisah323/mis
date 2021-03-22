@@ -155,12 +155,16 @@ class Stocks extends ApiController
 		$dateEnd = $this->input->get('date_end');
 		$idUnit = $this->input->get('id_unit');
 		$idArea = $this->input->get('id_area');
-		if($idArea !== null){
+		$idCabang = $this->input->get('id_cabang');
+		if($idArea !== null || $idCabang !== null){
 			if($idUnit){
 				$this->units->db->where('id', $idUnit);
 			}
 			if($idArea){
 				$this->units->db->where('id_area', $idArea);
+			}
+			if($idCabang){
+				$this->units->db->where('id_cabang', $idCabang);
 			}
 			$units = $this->units->all();
 			foreach($units as $unit){

@@ -23,18 +23,30 @@
 		handleType = (event) =>{
 			const tmpEmployee = document.querySelector('.type-employee');
 			const tmpCustomer =  document.querySelector('.type-customer');
+			const tmpUnit =  document.querySelector('.type-unit');
 			if(event.target.value === 'employee'){
 				document.querySelector('[name="id_employee"]').setAttribute('required', true);
 				tmpEmployee.classList.remove('d-none');
 				tmpCustomer.classList.add('d-none');
+				tmpUnit.classList.add('d-none');
 			}else if(event.target.value === 'customer'){
 				tmpEmployee.classList.add('d-none');
 				tmpCustomer.classList.remove('d-none');
+				tmpUnit.classList.add('d-none');
 				document.querySelector('[name="id_employee"]').value = 0;
 				document.querySelector('[name="id_employee"]').removeAttribute('required', true);
+			}else if(event.target.value === 'unit'){
+				document.querySelector('[name="to_unit"]').setAttribute('required', true);
+				tmpEmployee.classList.add('d-none');
+				tmpCustomer.classList.add('d-none');
+				tmpUnit.classList.remove('d-none');
+				document.querySelector('[name="id_employee"]').value = 0;
+				document.querySelector('[name="id_employee"]').removeAttribute('required', true);
+	
 			}else{
 				tmpEmployee.classList.add('d-none');
 				tmpCustomer.classList.add('d-none');
+				tmpUnit.classList.add('d-none');
 				document.querySelector('[name="id_employee"]').value = 0;
 				document.querySelector('[name="id_employee"]').removeAttribute('required', true);
 			}
@@ -79,6 +91,9 @@
 			template.querySelector('.stock').value =stock;
 			template.querySelector('[data-post="series"]').setAttribute('required', true);
 			template.querySelector('[data-post="series"]').setAttribute('name', 'gram['+sum+'][id_series]');
+			template.querySelector('[data-post="description"]').setAttribute('name', 'gram['+sum+'][description]');
+		
+		
 			id_series ? 	template.querySelector('[data-post="series"]').value = id_series : '';
 			template.classList.remove('d-none');
 			append.append(template);

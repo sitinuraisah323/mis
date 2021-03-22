@@ -25,6 +25,10 @@ class Units extends ApiController
                 ->or_like('name',strtoupper($value));			
 			}
         }        
+
+        if($idCabang = $this->input->get('id_cabang')){
+            $this->units->db->where('id_cabang', $idCabang);
+        }
         		
         $data = $this->units->get_units();
 		echo json_encode(array(

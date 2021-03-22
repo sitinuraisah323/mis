@@ -28,12 +28,30 @@ $this->load->view('temp/MenuBar.php');
 								<option value="">Pilih Tipe Pembeli</option>
 								<option value="employee">Karyawan</option>
 								<option value="customer">Pelanggan</option>
+								<option value="unit">Antar Unit</option>
 							</select>
 						</div>   
 				   </div>   
 				</div>
 		   </div>
 		   <input type="hidden" name="type_transaction" value="SALE"/>
+		   <div class="row d-none type-unit">
+				<div class="col-md-12">
+					<div class="form-group row">
+						<label class="col-md-2">Unit <span class="text-danger text-sm-center">*wajib isi</span></label>
+						<div class="col-md-10">
+							<select class="custom-select form-control" name="to_unit">
+								<option value="">Pilih Unit </option>
+								<?php if($units):?>
+									<?php foreach ($units as $unit):?>
+										<option value="<?php echo $unit->id;?>"><?php echo $unit->name;?></option>
+									<?php endforeach;?>
+								<?php endif;?>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
 			<div class="row d-none type-employee">
 				<div class="col-md-12">
 					<div class="form-group row">
@@ -156,6 +174,7 @@ $this->load->view('temp/MenuBar.php');
 								<th>Stock Yang Tersedia</th>
 								<th>Pieces</th>
 								<th>Series</th>
+								<th>Descripsi</th>
 								<th>Total</th>
 								<th></th>
 							</tr>
@@ -178,6 +197,9 @@ $this->load->view('temp/MenuBar.php');
 									<select data-post="series" class="form-control">
 										<option value="">Pilih Series LM</option>
 									</select>
+								</td>
+								<td>
+									<textarea data-post="description" class="form-control"></textarea>
 								</td>
 								<td><input type="hidden" class="total"><span data-post="total">0</span></td>
 								<td><button type="button" class="btn btn-default btn_delete"><i class="fas fa-trash"></i></button></td>

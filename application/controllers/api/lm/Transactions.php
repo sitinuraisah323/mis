@@ -48,7 +48,15 @@ class Transactions extends ApiController
 					$datum->name = $getEmployee->name;
 					$datum->position = $getEmployee->position;
 				
-				}else{
+				}elseif($datum->to_unit){
+					$getUnit = $this->model->db
+					->select('name')
+					->from('units')
+					->where('units.id',$datum->to_unit)
+					->get()->row();
+					$datum->name = $getUnit->name;
+				}
+				else{
 					$datum->position = '';
 				}
 				$total_buyback = 0;
@@ -103,6 +111,7 @@ class Transactions extends ApiController
 					'code'	=> $code,
 					'total'	=>  $this->input->post('total'),
 					'tenor'	=>  $this->input->post('tenor'),
+					'to_unit'	=>  $this->input->post('to_unit'),
 					'method'	=>  $this->input->post('method'),
 					'name'	=>  $this->input->post('name'),
 					'nik'	=> $this->input->post('nik'),
@@ -128,6 +137,7 @@ class Transactions extends ApiController
 							'price_buyback_perpcs'	=> $value['price_buyback_perpcs'],
 							'amount'	=> $value['amount'],
 							'total'	=> $value['total'],
+							'description'	=> $value['description'],
 						);
 						if($this->input->post('type_transaction') === 'SALE'){
 							$this->stock->insert(array(
@@ -178,6 +188,7 @@ class Transactions extends ApiController
 			else
 			{
 				$data = array(
+					'to_unit'	=>  $this->input->post('to_unit'),
 					'id_unit'	=> $this->input->post('id_unit'),
 					'id_employee'	=> (int) $this->input->post('id_employee'),
 					'date'	=> date('Y-m-d', strtotime( $this->input->post('date'))),
@@ -212,6 +223,7 @@ class Transactions extends ApiController
 							'price_buyback_perpcs'	=> $value['price_buyback_perpcs'],
 							'amount'	=> $value['amount'],
 							'total'	=> $value['total'],
+							'description'	=> $value['description'],
 						);
 						if($this->input->post('type_transaction') === 'SALE'){
 							$this->stock->insert(array(

@@ -147,5 +147,5 @@ $this->load->view('temp/MenuBar.php');
 
 <?php
 $this->load->view('temp/Footer.php');
-$this->load->view('datamaster/stocks/grams_js.php');
+$this->load->view('report/stocks/grams_js.php');
 ?>

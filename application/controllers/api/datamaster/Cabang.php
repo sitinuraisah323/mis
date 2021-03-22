@@ -13,6 +13,9 @@ class Cabang extends ApiController
 	public function index()
 	{
         //$data = $this->groups->all();
+        if($area = $this->input->get('id_area')){
+            $this->cabang->db->where('id_area', $area);
+        }
         $data = $this->db->select('cabang.id,cabang.cabang,cabang.status,areas.area')
                          ->from('cabang')
                          ->join('areas','areas.id=cabang.id_area')

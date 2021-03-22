@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once APPPATH.'controllers/Middleware/Authenticated.php';
-class Stocks extends Authenticated
+class Stockslm extends Authenticated
 {
 	/**
 	 * @var string
@@ -24,16 +24,6 @@ class Stocks extends Authenticated
 
 	}
 
-	/**
-	 * Welcome Index()
-	 */
-	public function index()
-	{
-		$this->load->view('datamaster/stocks/index',array(
-			'areas'	=> $this->area->all()
-		));
-	}
-
 	public function salelm($pdf)
 	{
 		$dateStart = $this->input->get('date_start');
@@ -49,7 +39,13 @@ class Stocks extends Authenticated
 				->join('areas','areas.id = units.id_area')
 				->where('areas.id', $idArea);
 		}
+		$idCabang = $this->input->get('id_cabang');
+
+		if($idCabang){
+			$this->units->db->where('id_cabang', $idCabang);
+		}
 		$units = $this->units->all();
+	
 		foreach($units as $unit){
 			$total = 0;
 			$this->grams->db->order_by('weight', 'asc');
@@ -152,6 +148,11 @@ class Stocks extends Authenticated
 		if($idArea){
 			$this->units->db->where('id_area', $idArea);
 		}
+		$idCabang = $this->input->get('id_cabang');
+
+		if($idCabang){
+			$this->units->db->where('id_cabang', $idCabang);
+		}
 
 		$units = $this->units->db
 					->select('units.id, units.name')
@@ -181,6 +182,7 @@ class Stocks extends Authenticated
 		$date1 = date('Y-m-d', strtotime($this->input->get('date_end')));
 		$idArea = $this->input->get('id_area');
 		$idUnit = $this->input->get('id_unit');
+		$idCabang = $this->input->get('id_cabang');
 
 		$this->load->library('PHPExcel');
 
@@ -198,12 +200,15 @@ class Stocks extends Authenticated
 		$this->grams->db->order_by('weight', 'asc');
 		$grams = $this->grams->all();
 		$no=2;
-		if($idArea !== null){
+		if($idArea !== null || $idCabang !== null){
 			$objPHPExcel->setActiveSheetIndex(0);
 			$objPHPExcel->getActiveSheet()->setCellValue('A1', 'No');
 			$objPHPExcel->getActiveSheet()->setCellValue('B1', 'Unit');
 			if($idUnit){
 				$this->units->db->where('id', $idUnit);
+			}
+			if($idCabang){
+				$this->units->db->where('id_cabang', $idCabang);
 			}
 			if($idArea){
 				$this->units->db->where('id_area', $idArea);
@@ -267,7 +272,7 @@ class Stocks extends Authenticated
 	public function grams()
 	{
 		$role = 'report/stocks/roles';
-		$this->load->view('datamaster/stocks/grams',array(
+		$this->load->view('report/stocks/grams',array(
 			'areas'	=> $this->area->all(),
 			'role'	=> $role
 		));
