@@ -184,7 +184,7 @@ class LmStocksModel extends Master
 			->where('date(lm_stocks.date_receive) >=', $dateStart)
 			->where('date(lm_stocks.date_receive) <=', $dateEnd)
 			->group_by('date_receive')
-			->where('units.name', $unit);
+			->like('units.name', $unit);
 		return $this->db->get()->result();
 	}
 }
