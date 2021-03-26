@@ -80,3 +80,8 @@ function years(){
 function asset_url(){
 	return 'http://fixasset.test';
 }
+
+function days_coc($saldo = 0)
+{
+	return $saldo * ((11/100)/365);
+}

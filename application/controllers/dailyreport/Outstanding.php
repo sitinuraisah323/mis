@@ -312,7 +312,7 @@ class Outstanding extends Authenticated
 		$pdf->writeHTML($view);	
 
 		$os = $this->data();
-		$pdf->AddPage('L','A4');
+		$pdf->AddPage('L','A3');
 		$view = $this->load->view('dailyreport/outstanding/dpd.php',['dpd'=>$os,'datetrans'=> $this->datetrans()],true);
 		$pdf->writeHTML($view);		
 

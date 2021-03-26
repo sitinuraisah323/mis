@@ -102,6 +102,7 @@ class Transactions extends ApiController
 				$getCode = $this->model->db
 					->select('id as no')
 					->from('lm_transactions')
+					->order_by('id','desc')
 					->get()->row();
 				$code = 'LM/'.date('ym/').($getCode->no+1);
 				$data = array(
@@ -149,8 +150,10 @@ class Transactions extends ApiController
 								'date_receive'	=> date('Y-m-d', strtotime($this->input->post('date'))),
 								'status'	=> 'PUBLISH',
 								'price'	=> (int) $value['price_buyback_perpcs'],
-								'description' => 'Penjualan Pada Tanggal '.date('D, d M Y', strtotime($this->input->post('date'))).' dengan code '.$this->input->post('code'),
-								'reference_id'	=>  $this->input->post('code'),
+								'description' => 'Penjualan Pada Tanggal '
+								.date('D, d M Y', strtotime($this->input->post('date'))).
+								' dengan code '.$code,
+								'reference_id'	=>  $code,
 							));
 						}
 					}

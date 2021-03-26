@@ -7,8 +7,8 @@
 	<thead class="thead-light">
 	<tr  bgcolor="#cccccc">
 		<th rowspan="2" align="center" width="20">No</th>
-		<th rowspan="2" align="center" width="120">Unit</th>
-		<th rowspan="2" align="center" width="100">Area</th>
+		<th rowspan="2" align="center" width="100">Unit</th>
+		<th rowspan="2" align="center" width="80">Area</th>
 		<!-- <th rowspan="2" align="center">Open</th>
 		<th rowspan="2" align="center">Ijin Ojk</th> -->
 		<th colspan="2" align="center" width="130">DPD Sebelumnya <?php echo "<br/>".$dateLastOST; ?></th>
@@ -16,6 +16,7 @@
 		<th colspan="2" align="center" width="130">Pelunasan DPD <?php echo "<br/>".$dateOST; ?></th>
 		<th colspan="2" align="center" width="130">Total DPD <?php echo "<br/>".$dateOST; ?> </th>
 		<th align="right" width="130">Total OST <?php echo "<br/>".$OST; ?></th>
+		<th align="right" width="100">DPD COC Harian</th>
 		<th align="right" width="100">%</th>
 	</tr>
 	<tr  bgcolor="#cccccc">
@@ -46,8 +47,8 @@
 	foreach($dpd as $data): $no++;?>
 		<tr <?php echo $data->percentage*100 >= 3 ? ' bgcolor="red" ' : '';?> >
 			<td align="center" width="20"><?php echo $no;?></td>
-			<td align="left" width="120"> <?php echo $data->name;?></td>
-			<td align="center" width="100"><?php echo $data->area;?></td>
+			<td align="left" width="100"> <?php echo $data->name;?></td>
+			<td align="center" width="80"><?php echo $data->area;?></td>
 			<!-- <td align="center">-</td>
 			<td align="center">-</td> -->
 			<td align="center" width="40"><?php echo $data->total_dpd->noa_yesterday;?></td>
@@ -59,6 +60,7 @@
 			<td align="center" width="40"><?php echo $data->total_dpd->noa;?></td>
 			<td align="right" width="90"><?php echo number_format($data->total_dpd->ost,0);?></td>
 			<td align="right" width="130"><?php echo number_format($data->total_outstanding->os,0);?></td>
+			<th align="right" width="100"><?php echo number_format(days_coc($data->total_dpd->ost), 0);?></th>
 			<td align="right" width="100"><?php echo $data->percentage ? $data->percentage*100 : '' ;?></td>
 			<?php
 			$totalOs += $data->total_outstanding->os;

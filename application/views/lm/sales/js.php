@@ -224,6 +224,7 @@
 				type:"POST",
 				success:function(response){
 					location.href = '<?php echo base_url();?>/lm/sales';
+					
 				}
 			});
 		}
