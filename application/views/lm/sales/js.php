@@ -252,7 +252,7 @@
 				dataType:"JSON",
 				success:function(res){
 					const { address, code, id_employee, id_unit, method, mobile, name, nik, tenor, total, 
-					 type_buyer, type_transaction, details
+					 type_buyer, type_transaction, details, date
 					 } = res.data;
 					 document.querySelector('[name="address"]').value = address;
 					 document.querySelector('[name="code"]').value = code;
@@ -262,6 +262,7 @@
 					 document.querySelector('[name="mobile"]').value = mobile;
 					 document.querySelector('[name="name"]').value = name;
 					 document.querySelector('[name="nik"]').value = nik;
+					 document.querySelector('[name="date"]').value = date;
 					 document.querySelector('[name="tenor"]').value = tenor;
 					 document.querySelector('[name="total"]').value = total;
 					 document.querySelector('[name="type_buyer"]').value = type_buyer;

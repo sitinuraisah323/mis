@@ -111,7 +111,6 @@ function initCariForm(){
     //events
     $('#btncari').on('click',function(){
         $('.rowappend').remove();
-        KTApp.block('#tblsm', {});
         var month= $('[name="month"]').val();
         var year=$('[name="year"]').val();
         $('#tblsm').find('tbody').find('tr').remove();

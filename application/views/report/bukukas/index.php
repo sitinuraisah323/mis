@@ -123,7 +123,7 @@ $this->load->view('temp/MenuBar.php');
                     <div class="col-lg-2">
 						<label class="col-form-label">Status</label>
 						<select class="form-control" name="permit">
-							<?php foreach (array('All' => 'All','OJK' => 'OJK','NON-OJK'=>'NON OJK') as $key => $value):?>
+							<?php foreach (array('All' => 'All','OJK' => 'OJK','NON-OJK'=>'NON OJK', 'OJK-1'=>'New OJK') as $key => $value):?>
 								<option value="<?php echo $key;?>"><?php echo $value;?></option>
 							<?php endforeach;?>
 						</select>

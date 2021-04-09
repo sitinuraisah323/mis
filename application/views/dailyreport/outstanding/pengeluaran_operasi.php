@@ -2,7 +2,7 @@
 <table class="table" border="1">
 	<thead class="thead-light">
 	<tr  bgcolor="#cccccc">
-		<th align="center" width="5%"> No Perk </th>
+		<th align="center" width="15%"> No Perk </th>
 		<th width="20%"> Nama Perk</th>
 		<th width="20%"> Description</th>
 		<th width="20%" align="right"> Jumlah </th>
@@ -14,7 +14,7 @@
 	$total =0;
 	foreach($coas as $coa):?>
 		<tr>
-			<td width="5%" align="center"> <?php echo $coa->no_perk;?></td>
+			<td width="15%" align="center"> <?php echo $coa->no_perk;?></td>
 			<td width="20%" align="left"> <?php echo $coa->name_perk;?></td>
 			<td width="20%" align="left"> <?php echo $coa->description;?></td>
 			<td width="20%" align="right"> <?php echo money($coa->amount);?></td>

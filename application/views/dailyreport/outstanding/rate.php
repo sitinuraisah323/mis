@@ -76,10 +76,6 @@
         <td align="center"><?php echo round($totup_big_ntt / $totup_ntt *100, 2);?></td>
         <td align="center"><?php echo round($averageArea / $no, 2);?></td>        
         </tr>
-    
-    </table>
-    <?php endforeach;?>
-<table border="1">
     <tr bgcolor="yellow">
         <td colspan="2" align="right">Total Nasional</td>
         <td align="center"><?php echo number_format($nasionalNoa,0); ?></td>
@@ -92,4 +88,5 @@
         <td align="center"><?php echo round($bigUp / $nasionalUp *100, 2);?></td> 
         <td align="center"><?php echo round($average / $i, 2);?></td>        
     </tr>
-</table>
+    </table>
+    <?php endforeach;?>

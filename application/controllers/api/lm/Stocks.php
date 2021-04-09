@@ -169,6 +169,8 @@ class Stocks extends ApiController
 			$units = $this->units->all();
 			foreach($units as $unit){
 				$grams =  $this->model->gramsUnits($unit->id, $dateStart, $dateEnd);
+				var_dump($this->model->db->last_query());
+				exit;
 				if($grams){
 					foreach($grams as $gram){
 						$gram->unit = $unit->name;

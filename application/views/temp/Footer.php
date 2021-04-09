@@ -152,6 +152,7 @@
 <script src="<?php echo base_url(); ?>assets/vendors/general/jquery.repeater/src/jquery.input.js" type="text/javascript"></script>
 <script src="<?php echo base_url(); ?>assets/vendors/general/jquery.repeater/src/repeater.js" type="text/javascript"></script>
 <script src="<?php echo base_url(); ?>assets/vendors/general/dompurify/dist/purify.js" type="text/javascript"></script>
+<script src="<?php echo base_url(); ?>assets/vendors/general/ckeditor/ckeditor.js" type="text/javascript"></script>
 <!--end:: Global Optional Vendors -->
 
 	<!--begin::Global Theme Bundle(used by all pages) -->

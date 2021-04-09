@@ -33,7 +33,7 @@
 		</tr>
 	<?php endforeach ?>
     <tr>
-    <td width="30%" align="right">Total</td>
+    <td colspan="3" align="right">Total</td>
     <td width="20%" align="right"><?php echo number_format($totalCredit,0); ?></td>
     <td width="10%" align="right"><?php echo number_format($totalNoa,0); ?></td>
     <td width="20%" align="right"><?php echo number_format($totalUp,0); ?></td>

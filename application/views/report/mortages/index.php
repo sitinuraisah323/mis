@@ -133,7 +133,7 @@ $this->load->view('temp/MenuBar.php');
 						<label class="col-form-label">Ijin</label>
 						<select class="form-control" name="permit" id="permit">
                         <option value="">Select Ijin</option>
-							<?php foreach (array('OJK' =>'OJK','NON-OJK' => 'Non OJK') as $value => $item):?>
+							<?php foreach (array('OJK' =>'OJK','NON-OJK' => 'Non OJK','OJK-1' => 'NEW OJK') as $value => $item):?>
 								<option value="<?php echo $value;?>"><?php echo $item;?></option>
 							<?php endforeach;?>
 						</select>

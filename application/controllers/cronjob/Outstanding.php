@@ -295,34 +295,29 @@ class Outstanding extends Authenticated
 			
 			$transaction = array(
 				'id_unit'				=> $unit->id,
-				'date'					=> $date,
-				//reguler
+				'date'					=> $date,				
+				'os'				    => $totalOst,
 				'noa_regular'			=> $creditToday->noa_regular,
 				'up_regular'			=> $creditToday->up_regular,
 				'noa_repyment_regular'	=> $repaymentToday->noa_regular,
 				'repyment_regular'		=> $repaymentToday->up_regular,
-				'noa_os_regular'		=> $totalNoaUnit,//$sumUP->noa,
+				'noa_os_regular'		=> $totalNoaUnit,
 				'os_regular'			=> $totalUpUnit,
-
-				//cicilan
 				'noa_mortage'			=> $creditToday->noa_mortage,
 				'up_mortage'			=> $creditToday->up_mortage,
 				'noa_repayment_mortage'	=> $repaymentToday->noa_mortage,
 				'repayment_mortage'		=> $repaymentToday->up_mortage,
 				'noa_os_mortage'		=> $totalNoaUnitMortages,
 				'os_mortage'			=> $totalUpUnitMortages,
-				//global 
-				//'noa'				    => + ,
-				'os'				    => $totalOst,
 			);
 
 			//echo "<pre/>";
 			//print_r($transaction);
 			$check = $this->db->get_where('units_outstanding',array('id_unit' => $unit->id,'date'=>$date));
 			if($check->num_rows() > 0){
-				$this->db->update('units_outstanding', $transaction, array('id_unit' => $unit->id,'date'=>$date));
+				$this->model->db->update('units_outstanding', $transaction, array('id_unit' => $unit->id,'date'=>$date));
 			}else{
-				$this->db->insert('units_outstanding', $transaction);
+				$this->model->db->insert('units_outstanding', $transaction);
 			}			
 		}
 
