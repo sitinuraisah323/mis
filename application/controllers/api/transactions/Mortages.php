@@ -285,7 +285,7 @@ class Mortages extends ApiController
 			if($get['statusrpt']=="2"){$status=["L"];}
 			if($get['statusrpt']=="3"){$status=[""];} 
 			$this->mortages->db
-				//->where('units_mortages.date_sbk >=', $get['dateStart'])
+				->where('units_mortages.date_sbk >=', $get['dateStart'])
 				->where('units_mortages.date_sbk <=', $get['dateEnd'])
 				->where_in('units_mortages.status_transaction ', $status);
 

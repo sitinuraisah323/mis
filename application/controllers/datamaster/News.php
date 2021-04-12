@@ -16,7 +16,7 @@ class News extends Authenticated
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('AreasModel', 'areas');
+		$this->load->model('NewsCategories', 'categories');
 	}
 	public function index()
 	{
@@ -26,7 +26,8 @@ class News extends Authenticated
 	public function form($id = null)
 	{
 		$this->load->view('datamaster/news/_add', array(
-			'id'	=> $id
+			'id'	=> $id,
+			'categories'	=> $this->categories->all()
 		));
 	}
 

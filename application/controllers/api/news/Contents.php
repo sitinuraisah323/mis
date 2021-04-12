@@ -13,6 +13,17 @@ class Contents extends ApiController
 
 	public function index()
 	{
+		if($limit = $this->input->get('limit')){
+			$this->model->db->limit($limit);
+		}
+		if($title = $this->input->get('title')){
+			$this->model->db->like('title',$title);
+		}
+		$this->model->db->select('
+			(select name from news_categories where news_categories.id
+			= news_contents.id_news_category
+			) as category
+		');
 		$data = $this->model->all();
 		$this->sendMessage($data,'Successfully get Grams',200);
 	}
@@ -36,6 +47,8 @@ class Contents extends ApiController
 				$data = array(
 					'title'	=> $this->input->post('title'),
 					'description'	=> $this->input->post('description'),
+					'summary'	=> $this->input->post('summary'),
+					'id_news_category'	=> $this->input->post('id_news_category'),
 				);
 				if($_FILES['cover']['name']){
 					$config['upload_path']          = 'storage/news/';			
@@ -100,6 +113,8 @@ class Contents extends ApiController
                 $data = array(
 					'title'	=> $this->input->post('title'),
 					'description'	=> $this->input->post('description'),
+					'summary'	=> $this->input->post('summary'),
+					'id_news_category'	=> $this->input->post('id_news_category'),
 				);
 				if($_FILES['cover']['name']){
 					$config['upload_path']          = 'storage/news/';			
@@ -149,6 +164,7 @@ class Contents extends ApiController
 			$data->attachments = $this->attachments->findWhere(array(
 				'id_news_content'	=> $id
 			));
+			$data->category = $this->categories->find($data->id_news_category);
 			return $this->sendMessage($data, 'successfully show gram' ,200);
 		}else{
 			return  $this->sendMessage(false, 'message'. $id.' Not Found', 500);

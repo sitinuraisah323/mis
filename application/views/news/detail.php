@@ -5,9 +5,10 @@ $this->load->view('temp/HeadMobile.php');
 $this->load->view('temp/TopBar.php');
 $this->load->view('temp/MenuBar.php');
 ?>
+<input type="hidden" name="id" value="<?php echo $id;?>"/>
 <div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
 	<div class="row mt-5 append-template">
-		<div class="col-xl-4 col-lg-6 order-lg-1 order-xl-1 d-none" data-template="news">
+		<div class="col-xl-12 col-lg-12 order-lg-1 order-xl-1 d-none" data-template="news">
 			<!--begin:: Widgets/Blog-->
 			<div class="kt-portlet kt-portlet--height-fluid kt-widget19">
 				<div class="kt-portlet__body kt-portlet__body--fit kt-portlet__body--unfill">
@@ -17,7 +18,7 @@ $this->load->view('temp/MenuBar.php');
 						</h3>
 						<div class="kt-widget19__shadow"></div>
 						<div class="kt-widget19__labels">
-							<a href="#" class="btn btn-label-light-o2 btn-bold category ">Recent</a>
+							<a href="#" class="btn btn-label-light-o2 btn-bold ">Recent</a>
 						</div>
 					</div>
 				</div>
@@ -27,9 +28,7 @@ $this->load->view('temp/MenuBar.php');
 
 						</div>
 					</div>
-					<div class="kt-widget19__action">
-						<a href="#" class="btn btn-sm btn-label-brand btn-bold">Read More...</a>
-					</div>
+					<div class="row attachments"></div>
 				</div>
 			</div>
 		</div>
@@ -37,5 +36,5 @@ $this->load->view('temp/MenuBar.php');
 </div>
 <?php
 $this->load->view('temp/Footer.php');
-$this->load->view('news/_script.php');
+$this->load->view('news/_script_detail.php');
 ?>

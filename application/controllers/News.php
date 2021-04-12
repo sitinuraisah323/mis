@@ -18,6 +18,7 @@ class News extends Authenticated
 	{
 		parent::__construct();
 		$this->load->model('NewsContentsAttachments','attachments');
+		$this->load->model('NewsCategories','categories');
 		$this->load->model('NewsContents','model');
 	}
 
@@ -31,15 +32,8 @@ class News extends Authenticated
 	
 	public function detail($id)
 	{
-		$data = $this->model->find($id);
-		$data->attachments = $this->attachments->findWhere(array(
-			'id_news_content'	=> $data->id
-		));
-		var_dump($data);
-		exit;
-
 		return $this->load->view("news/detail",[
-			'data'	=> $data
+			'id'	=> $id
 		]);
 	}
 

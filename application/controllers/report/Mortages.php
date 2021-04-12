@@ -116,7 +116,7 @@ class Mortages extends Authenticated
 				$this->mortages->db->where('units.id_area', $area);
 			}
 			$this->mortages->db
-				//->where('units_mortages.date_sbk >=', $post['date-start'])
+				->where('units_mortages.date_sbk >=', $post['date-start'])
 				->where('units_mortages.date_sbk <=', $post['date-end'])
 				->where_in('units_mortages.status_transaction ', $status);
 			if($post['id_unit']){

@@ -15,6 +15,7 @@ const initForm = ()=>{
                 $('[name="description"]').val(res.data.description);
                 $('[name="id"]').val(res.data.id);
                 $('[name="summary"]').val(res.data.summary);
+                $('[name="id_news_category"]').val(res.data.id_news_category);
                 images = res.data.attachments;
               },
               error: function (jqXHR, textStatus, errorThrown){

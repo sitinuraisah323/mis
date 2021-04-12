@@ -42,6 +42,25 @@ $this->load->view('temp/MenuBar.php');
 			<div class="row">
 				<div class="col-md-12">
 					<div class="form-group row">
+						<label class="col-md-2" for="id_news_category">Kategori</label>
+						<div class="col-md-10">
+							<select class="form-control" name="id_news_category" id="id_news_category" required>
+								<option value="">Pilih Kategory</option>
+								<?php if($categories):?>
+									<?php foreach($categories as $category):?>
+										<option value="<?php echo $category->id?>">
+											<?php echo $category->name;?>
+										</option>
+									<?php endforeach;?>
+								<?php endif;?>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="form-group row">
 						<label class="col-md-2" for="summary">Ringkasan</label>
 						<div class="col-md-10">
 							<input type="text" class="form-control" name="summary" id="summary"/>
