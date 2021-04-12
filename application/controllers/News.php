@@ -27,13 +27,15 @@ class News extends Authenticated
 	 */
 	public function index()
 	{
-		$this->load->view("news/index");
+		$this->load->view("news/index",[
+			'categories'	=> $this->categories->all()
+		]);
 	}
 	
 	public function detail($id)
 	{
 		return $this->load->view("news/detail",[
-			'id'	=> $id
+			'id'	=> $id,
 		]);
 	}
 

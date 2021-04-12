@@ -18,7 +18,7 @@ $this->load->view('temp/MenuBar.php');
 						</h3>
 						<div class="kt-widget19__shadow"></div>
 						<div class="kt-widget19__labels">
-							<a href="#" class="btn btn-label-light-o2 btn-bold ">Recent</a>
+							<a href="#" class="btn btn-label-light-o2 btn-bold category ">Recent</a>
 						</div>
 					</div>
 				</div>
@@ -28,7 +28,45 @@ $this->load->view('temp/MenuBar.php');
 
 						</div>
 					</div>
-					<div class="row attachments"></div>
+					<hr>
+					<div class="row attachments text-center">
+						<div class="col-md-3 mt-3 d-none" data-template="pdf">
+							<a href="#">
+							<i class="fa fa-file-pdf fa-5x"></i>
+							</a>
+							<p>pdf</p>
+						</div>
+						<div class="col-md-3  mt-3 d-none" data-template="image">
+							<a href="#">
+							<img src="/"  alt="image" class="img-fluid" />
+							</a>
+							<p>pdf</p>
+						</div>
+						<div class="col-md-3  mt-3 d-none" data-template="excel">
+							<a href="#">
+							<i class="fa fa-file-excel fa-5x"></i>
+							</a>	
+							<p>pdf</p>
+						</div>
+						<div class="col-md-3  mt-3 d-none" data-template="word">
+							<a href="#">
+							<i class="fa fa-file-word fa-5x"></i>
+							</a>
+							<p>pdf</p>
+						</div>
+						<div class="col-md-3  mt-3 d-none" data-template="powerpoint">
+							<a href="#">
+							<i class="fa fa-file-powerpoint fa-5x"></i>
+							</a>
+							<p>pdf</p>
+						</div>
+						<div class="col-md-3  mt-3 d-none" data-template="file">
+							<a href="#">
+							<i class="fa fa-file fa-5x"></i>
+							</a>
+							<p>pdf</p>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

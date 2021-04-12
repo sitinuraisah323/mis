@@ -2,12 +2,14 @@
 
 function init(){
     const title = $('[name="title"]').val();
+    const id_news_category = $('[name="id_news_category"]').val();
     $.ajax({
         type : 'GET',
         url : "<?php echo base_url("api/news/contents"); ?>",
         dataType : "json",
-        data:{limit:30, title},
+        data:{limit:30, title, id_news_category},
         success : function(res){  
+            $('[data-template="news-cloned"]').remove();
             if(res.data.length > 0){
                 res.data.forEach(data=>{
                     const template = $('[data-template="news"]').clone();

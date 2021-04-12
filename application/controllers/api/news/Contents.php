@@ -19,11 +19,14 @@ class Contents extends ApiController
 		if($title = $this->input->get('title')){
 			$this->model->db->like('title',$title);
 		}
+		if($idNewsCategory = $this->input->get('id_news_category')){
+			$this->model->db->where('id_news_category', $idNewsCategory);
+		}
 		$this->model->db->select('
 			(select name from news_categories where news_categories.id
 			= news_contents.id_news_category
 			) as category
-		');
+		')->order_by('id','desc');
 		$data = $this->model->all();
 		$this->sendMessage($data,'Successfully get Grams',200);
 	}
@@ -210,6 +213,7 @@ class Contents extends ApiController
 				$data = [];
 				$data['file_name'] = $this->upload->data('file_name');
 				$data['file_type'] = strtoupper(explode('/',$this->upload->data('file_type'))[0]);
+				$data['extention'] = strtoupper(explode('/',$this->upload->data('file_type'))[1]);
 				$this->attachments->insert($data);
 				$this->attachments->db->order_by('id','desc');
 				$data = $this->attachments->all()[0];
