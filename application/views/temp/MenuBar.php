@@ -492,7 +492,7 @@
 											<ul class="kt-menu__subnav">
 												<?php if(read_access('datamaster/news/category')):?>
 													<li class="kt-menu__item "  aria-haspopup="true">
-														<a  href="<?php echo base_url('datamaster/employees'); ?>" class="kt-menu__link ">
+														<a  href="<?php echo base_url('datamaster/news/category'); ?>" class="kt-menu__link ">
 															<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
 															<span class="kt-menu__link-text">kategori</span>
 														</a>
@@ -500,7 +500,7 @@
 												<?php endif;?>
 												<?php if(read_access('datamaster/news')):?>
 													<li class="kt-menu__item "  aria-haspopup="true">
-														<a  href="<?php echo base_url('datamaster/users'); ?>" class="kt-menu__link ">
+														<a  href="<?php echo base_url('datamaster/news'); ?>" class="kt-menu__link ">
 															<i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
 															<span class="kt-menu__link-text">News</span>
 														</a>

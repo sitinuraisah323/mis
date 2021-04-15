@@ -247,7 +247,7 @@ class Outstanding extends Authenticated
 
 		$units = $this->units->db->select('units.id, units.name, area')
 			->join('areas','areas.id = units.id_area')
-			->order_by('units.id','desc')
+			->order_by('units.id','asc')
 			->get('units')->result();
 
 		foreach ($units as $unit){
@@ -273,6 +273,11 @@ class Outstanding extends Authenticated
 			$creditToday 	= $this->regular->getCreditToday($unit->id, $date);
 			$repaymentToday = $this->regular->getRepaymentToday($unit->id, $date);	
 			//$getOS 			= $this->regular->getOutstanding($unit->id, $date);	
+
+			$dpddate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
+			
+
+		
 
 			$totalNoaUnit = $getOstYesterday->noa_os_regular + $creditToday->noa_regular - $repaymentToday->noa_regular;
 			$totalUpUnit  = $getOstYesterday->os_regular + $creditToday->up_regular - $repaymentToday->up_regular;
@@ -310,6 +315,46 @@ class Outstanding extends Authenticated
 				'noa_os_mortage'		=> $totalNoaUnitMortages,
 				'os_mortage'			=> $totalUpUnitMortages,
 			);
+			$dpddate = date('Y-m-d', strtotime('-1 days', strtotime($date)));		
+			$unit->dpd_yesterday = $this->regular->getDpdYesterday($unit->id, $dpddate);
+			$unit->dpd_today = $this->regular->getDpdToday($unit->id, $dpddate);
+			$unit->dpd_repayment_today = $this->regular->getDpdRepaymentToday($unit->id,$dpddate);
+			$unit->dpd_repayment_Deadline = $this->regular->getRepaymentDeadline($unit->id,$dpddate);
+			
+			$dpdYesterday =  $this->model
+			->db
+			->order_by('date','desc')
+			->get_where('units_dpd',array('id_unit' => $unit->id,'date <'=>$date))->row();
+			
+			$noaYesterday = $dpdYesterday ?
+			$dpdYesterday->total_noa
+			 : $unit->dpd_yesterday->noa + $unit->dpd_repayment_today->noa;
+
+			$ostYesterday =   $dpdYesterday ? $dpdYesterday->total_up : 
+			 $unit->dpd_yesterday->ost + $unit->dpd_repayment_today->ost;
+
+			$total_dpd = array(
+				'id_unit'	=> $unit->id,
+				'date'	=> $date,
+				'noa_yesterday'	=> $noaYesterday,
+				'ost_yesterday'	=> $ostYesterday,
+				'noa_today'	=> $unit->dpd_today->noa + $unit->dpd_repayment_Deadline->noa,
+				'ost_today'	=> $unit->dpd_today->ost + $unit->dpd_repayment_Deadline->ost,
+				'noa_repayment'	=> $unit->dpd_repayment_today->noa,
+				'ost_repayment'	=> $unit->dpd_repayment_today->ost,
+				'total_noa'		=> ($noaYesterday + $unit->dpd_today->noa + $unit->dpd_repayment_Deadline->noa) - $unit->dpd_repayment_today->noa,
+				'total_up'		=> ($ostYesterday + $unit->dpd_today->ost + $unit->dpd_repayment_Deadline->ost ) - $unit->dpd_repayment_today->ost,
+				'os'	=> $totalOst,
+			);
+			$total_dpd['percentage'] = round(($total_dpd['total_up'] / $total_dpd['os'])*100,2);
+			
+			$checkDpd = $this->model
+				->db->get_where('units_dpd',array('id_unit' => $unit->id,'date'=>$date));
+			if($checkDpd->num_rows() > 0){
+				$this->model->db->update('units_dpd', $total_dpd, array('id_unit' => $unit->id,'date'=>$date));
+			}else{
+				$this->model->db->insert('units_dpd', $total_dpd);
+			}
 
 			//echo "<pre/>";
 			//print_r($transaction);

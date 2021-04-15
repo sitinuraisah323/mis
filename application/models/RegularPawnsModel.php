@@ -338,7 +338,6 @@ class RegularpawnsModel extends Master
 	{
 		$data = $this->db->select('sum(amount) as ost, count(*) as noa')
 			->from($this->table)
-			->where('status_transaction', 'N')
 			->where('id_unit', $idUnit)
 			->where('deadline', $date)
 			->get()->row();

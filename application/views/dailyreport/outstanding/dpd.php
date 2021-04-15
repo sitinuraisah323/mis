@@ -44,39 +44,41 @@
 	$dpdTotalUp=0;
 	$percentage=0;
 	$totalOs = 0;
+	$totalCoc = 0;
 	foreach($dpd as $data): $no++;?>
-		<tr <?php echo $data->percentage*100 >= 3 ? ' bgcolor="red" ' : '';?> >
+		<tr <?php echo $data->percentage >= 3 ? ' bgcolor="red" ' : '';?> >
 			<td align="center" width="20"><?php echo $no;?></td>
 			<td align="left" width="100"> <?php echo $data->name;?></td>
 			<td align="center" width="80"><?php echo $data->area;?></td>
 			<!-- <td align="center">-</td>
 			<td align="center">-</td> -->
-			<td align="center" width="40"><?php echo $data->total_dpd->noa_yesterday;?></td>
-			<td align="right" width="90"><?php echo number_format($data->total_dpd->ost_yesterday,0);?></td>
-			<td align="center" width="40"><?php echo $data->total_dpd->noa_today;?></td>
-			<td align="right" width="90"><?php echo number_format($data->total_dpd->ost_today,0);?></td>
-			<td align="center" width="40"><?php echo $data->dpd_repayment_today->noa;?></td>
-			<td align="right" width="90"><?php echo number_format($data->dpd_repayment_today->ost,0);?></td>
-			<td align="center" width="40"><?php echo $data->total_dpd->noa;?></td>
-			<td align="right" width="90"><?php echo number_format($data->total_dpd->ost,0);?></td>
-			<td align="right" width="130"><?php echo number_format($data->total_outstanding->os,0);?></td>
-			<th align="right" width="100"><?php echo number_format(days_coc($data->total_dpd->ost), 0);?></th>
-			<td align="right" width="100"><?php echo $data->percentage ? $data->percentage*100 : '' ;?></td>
+			<td align="center" width="40"><?php echo $data->noa_yesterday;?></td>
+			<td align="right" width="90"><?php echo number_format($data->ost_yesterday,0);?></td>
+			<td align="center" width="40"><?php echo $data->noa_today;?></td>
+			<td align="right" width="90"><?php echo number_format($data->ost_today,0);?></td>
+			<td align="center" width="40"><?php echo $data->noa_repayment;?></td>
+			<td align="right" width="90"><?php echo number_format($data->ost_repayment,0);?></td>
+			<td align="center" width="40"><?php echo $data->total_noa;?></td>
+			<td align="right" width="90"><?php echo number_format($data->total_up,0);?></td>
+			<td align="right" width="130"><?php echo number_format($data->os,0);?></td>
+			<th align="right" width="100"><?php echo number_format(days_coc($data->total_up), 0);?></th>
+			<td align="right" width="100"><?php echo $data->percentage ;?></td>
 			<?php
-			$totalOs += $data->total_outstanding->os;
-			$dpdYesterdayNoa +=$data->total_dpd->noa_yesterday;
-			$dpdYesterdayUp +=$data->total_dpd->ost_yesterday;
-			$dpdTodayNoa +=$data->total_dpd->noa_today;
-			$dpdTodayUp+=$data->total_dpd->ost_today;
-			$dpdRepaymentNoa+=$data->dpd_repayment_today->noa;
-			$dpdRepaymenUp+=$data->dpd_repayment_today->ost;
-			$dpdTotalNoa+=$data->total_dpd->noa;
-			$dpdTotalUp+=$data->total_dpd->ost;
+			$totalOs += $data->os;
+			$dpdYesterdayNoa +=$data->noa_yesterday;
+			$dpdYesterdayUp +=$data->ost_yesterday;
+			$dpdTodayNoa +=$data->noa_today;
+			$dpdTodayUp+=$data->ost_today;
+			$dpdRepaymentNoa+=$data->noa_repayment;
+			$dpdRepaymenUp+=$data->ost_repayment;
+			$dpdTotalNoa+=$data->total_noa;
+			$dpdTotalUp+=$data->total_up;
 			$percentage += $data->percentage;
+			$totalCoc += days_coc($data->total_up);
 			?>
 		</tr>
 	<?php endforeach ?>
-		<tr <?php echo $percentage/$no*100 >= 3.0 ? ' bgcolor="red" ' : '';?>>
+		<tr <?php echo $dpdTotalUp/$totalOs*100 >= 3.0 ? ' bgcolor="red" ' : '';?>>
 			<td align="right" colspan="3">Total </td>
 			<td align="center"><?php echo $dpdYesterdayNoa?></td>
 			<td align="right"><?php echo number_format($dpdYesterdayUp,0);?></td>
@@ -87,7 +89,8 @@
 			<td align="center"><?php echo $dpdTotalNoa;?></td>
 			<td align="right"><?php echo number_format($dpdTotalUp,0);?></td>
 			<td align="right"><?php echo  number_format($totalOs,2);?></td>
-			<td align="right"><?php echo  number_format($percentage/$no*100,2);?></td>
+			<td align="right"><?php echo  number_format($totalCoc,2);?></td>
+			<td align="right"><?php echo  number_format($dpdTotalUp/$totalOs*100,2);?></td>
 		</tr>
 	</tbody>
 	<tfoot>

@@ -70,6 +70,45 @@ class Dashboards extends ApiController
 		$this->sendMessage($units, 'Get Data Outstanding');
 	}
 
+	public function report_dpd()
+	{
+		if($this->input->get('date')){
+			$date = $this->input->get('date');
+		}else{
+			$date = date('Y-m-d');
+		}
+		if($area = (int) $this->input->get('area')){
+			$this->regular->db->where('units.id_area', $area);
+		}
+		if($unit = (int) $this->input->get('unit')){
+			$this->regular->db->where('units.id', $unit);
+		}
+
+		$query = $this->regular->db
+					->select('units.name as unit, areas.area, units_dpd.*')
+					->from('units_dpd')
+					->join('units','units.id = units_dpd.id_unit')
+					->join('areas','areas.id = units.id_area')
+					->where('date', $date)->get();
+		if($query->num_rows()){
+			$data = $query->result();
+			$date = $data[0]->date;
+			$today = date('Y-m-d', strtotime($date));
+			$yesterday = date('Y-m-d', strtotime($date .'-1 days'));
+			$this->sendMessage($data, [
+				'today'	=> $today,
+				'yesterday'	=> $yesterday
+			]);
+		}else{
+			$today = date('Y-m-d', strtotime($date));
+			$yesterday = date('Y-m-d', strtotime($date .'-1 days'));
+			$this->sendMessage($query->result(), [
+				'today'	=> $today,
+				'yesterday'	=> $yesterday
+			]);
+		}
+	}
+
 	public function outstanding()
 	{
 		$currdate = date('Y-m-d');

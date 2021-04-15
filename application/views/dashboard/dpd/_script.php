@@ -110,7 +110,7 @@ function initCariForm(){
         KTApp.block('#form_bukukas .kt-portlet__body', {});
 		$.ajax({
 			type : 'GET',
-			url : "<?php echo base_url("api/dashboards/outstanding"); ?>",
+			url : "<?php echo base_url("api/dashboards/report_dpd"); ?>",
 			dataType : "json",
 			data:{area:area,cabang:cabang,unit:unit,date:date},
 			success : function(response,status){
@@ -129,30 +129,30 @@ function initCariForm(){
 				var TotalOs = 0;
 				var percentage = 0;
 				$.each(response.data, function (index, data) {
-					dpdYesterdayNoa += data.dpd_yesterday.noa;
-					dpdYesterdayUp += data.dpd_yesterday.ost;
-					dpdTodayNoa += data.dpd_today.noa;
-					dpdTodayUp += data.dpd_today.ost;
-					dpdRepaymentNoa += data.dpd_repayment_today.noa;
-					dpdRepaymentUp += data.dpd_repayment_today.ost;
-					dpdTotalNoa += data.total_dpd.noa;
-					dpdTotalUp += data.total_dpd.ost;
-					percentage += data.percentage;
-					TotalOs += data.total_outstanding.up;
+					dpdYesterdayNoa += parseInt(data.noa_yesterday);
+					dpdYesterdayUp += parseInt(data.ost_yesterday);
+					dpdTodayNoa += parseInt(data.noa_today);
+					dpdTodayUp += parseInt(data.ost_today);
+					dpdRepaymentNoa += parseInt(data.noa_repayment);
+					dpdRepaymentUp += parseInt(data.ost_repayment);
+					dpdTotalNoa += parseInt(data.total_noa);
+					dpdTotalUp += parseInt(data.total_up);
+					percentage += parseInt(data.percentage);
+					TotalOs += parseInt(data.os);
 					html += '<tr>';
 					html += '<td  class="text-center">'+ int +'</td>';
-					html += '<td>'+ data.name +'</td>';
+					html += '<td>'+ data.unit +'</td>';
 					html += '<td>'+ data.area +'</td>';
-					html += '<td  class="text-center">'+data.dpd_yesterday.noa+'</td>';
-					html += '<td  class="text-right">'+convertToRupiah(data.dpd_yesterday.ost)+'</td>';
-					html += '<td  class="text-center">'+data.dpd_today.noa+'</td>';
-					html += '<td  class="text-right">'+convertToRupiah(data.dpd_today.ost)+'</td>';
-					html += '<td  class="text-center">'+data.dpd_repayment_today.noa+'</td>';
-					html += '<td  class="text-right">'+convertToRupiah(data.dpd_repayment_today.ost)+'</td>';
-					html += '<td  class="text-center">'+data.total_dpd.noa+'</td>';
-					html += '<td  class="text-right">'+convertToRupiah(data.total_dpd.ost)+'</td>';
-					html += '<td  class="text-right">'+convertToRupiah(data.total_outstanding.up)+'</td>';
-					html += '<td  class="text-center">'+parseFloat(data.percentage*100).toFixed(2)+'</td>';
+					html += '<td  class="text-center">'+data.noa_yesterday+'</td>';
+					html += '<td  class="text-right">'+convertToRupiah(data.ost_yesterday)+'</td>';
+					html += '<td  class="text-center">'+data.noa_today+'</td>';
+					html += '<td  class="text-right">'+convertToRupiah(data.ost_today)+'</td>';
+					html += '<td  class="text-center">'+data.noa_repayment+'</td>';
+					html += '<td  class="text-right">'+convertToRupiah(data.ost_repayment)+'</td>';
+					html += '<td  class="text-center">'+data.total_noa+'</td>';
+					html += '<td  class="text-right">'+convertToRupiah(data.total_up)+'</td>';
+					html += '<td  class="text-right">'+convertToRupiah(data.os)+'</td>';
+					html += '<td  class="text-center">'+parseFloat(data.percentage).toFixed(2)+'</td>';
 					html += '</tr>';
 					int++;
 				});
@@ -167,7 +167,7 @@ function initCariForm(){
 				tfoot += '<td  class="text-center">'+dpdTotalNoa+'</td>';
 				tfoot += '<td  class="text-right">'+convertToRupiah(dpdTotalUp)+'</td>';
 				tfoot += '<td  class="text-right">'+convertToRupiah(TotalOs)+'</td>';
-				tfoot += '<td  class="text-center">'+parseFloat(percentage*100).toFixed(2)+'</td>';
+				tfoot += '<td  class="text-center">'+parseFloat((dpdTotalUp/TotalOs)*100).toFixed(2)+'</td>';
 				tfoot += '</tr>';
 
 				$('.table').find('tbody').find('tr').remove();

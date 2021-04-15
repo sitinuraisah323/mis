@@ -311,7 +311,12 @@ class Outstanding extends Authenticated
 		$view = $this->load->view('dailyreport/outstanding/repayments.php',['repayments'=>$repayments,'datetrans'=> $this->datetrans()],true);
 		$pdf->writeHTML($view);	
 
-		$os = $this->data();
+		$os = $this->model->db
+			->select('units.name, areas.area, units_dpd.*')
+			->from('units_dpd')
+			->join('units','units.id = units_dpd.id_unit')
+			->join('areas','areas.id = units.id_area')
+			->where('date', date('Y-m-d', strtotime($curr)))->get()->result();
 		$pdf->AddPage('L','A3');
 		$view = $this->load->view('dailyreport/outstanding/dpd.php',['dpd'=>$os,'datetrans'=> $this->datetrans()],true);
 		$pdf->writeHTML($view);		
