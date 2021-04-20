@@ -785,39 +785,7 @@ class Dashboards extends Authenticated
 				$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
 			}
 
-			$date = $this->input->post('date');		
-			$lastdate = $this->regular->getLastDateTransaction()->date;
-			if ($date > $lastdate){
-				$date = $lastdate;
-			}else{
-				$date= $date;
-			}
-
-			// $units = $this->units->db->select('units.id, units.name, area')
-			// 						 ->join('areas','areas.id = units.id_area')
-			// 						 ->get('units')->result();
-			// $no=3;
-			// foreach ($units as $unit) 
-			// {
-			// 	$unit->ost_yesterday = $this->regular->getOstYesterday($unit->id, $date);
-			// 	$unit->credit_today = $this->regular->getCreditToday($unit->id, $date);
-			// 	$unit->repayment_today = $this->regular->getRepaymentToday($unit->id, $date);
-			// 	$totalNoa = (int) $unit->ost_yesterday->noa + $unit->credit_today->noa - $unit->repayment_today->noa;
-			// 	$totalUp = (int) $unit->ost_yesterday->up + $unit->credit_today->up - $unit->repayment_today->up;
-			// 	$unit->total_outstanding = (object) array(
-			// 		'noa'	=> $totalNoa,
-			// 		'up'	=> $totalUp,
-			// 		'tiket'	=> round($totalUp > 0 ? $totalUp /$totalNoa : 0)
-			// 	);
-				
-			// 	$unit->dpd_yesterday = $this->regular->getDpdYesterday($unit->id, $date);
-			// 	$unit->dpd_today = $this->regular->getDpdToday($unit->id, $date);
-			// 	$unit->dpd_repayment_today = $this->regular->getDpdRepaymentToday($unit->id,$date);
-			// 	$unit->total_dpd = (object) array(
-			// 		'noa'	=> $unit->dpd_today->noa + $unit->dpd_yesterday->noa - $unit->dpd_repayment_today->noa,
-			// 		'ost'	=> $unit->dpd_today->ost + $unit->dpd_yesterday->ost - $unit->dpd_repayment_today->ost,
-			// 	);
-			// 	$unit->percentage = ($unit->total_dpd->ost > 0) && ($unit->total_outstanding->up > 0) ? round($unit->total_dpd->ost / $unit->total_outstanding->up, 4) : 0;
+			$date = $this->input->post('date');	
 
 			if($area = $this->input->get('area')){
 				$this->units->db->where('id_area', $area);
@@ -839,104 +807,41 @@ class Dashboards extends Authenticated
 				$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
 			}
 	
-			$units = $this->units->db->select('units.id, units.name, area')
+			$query = $this->units->db->select('units.id, units.name, area, units_dpd.*')
+				->join('units','units.id = units_dpd.id_unit')
 				->join('areas','areas.id = units.id_area')
-				->get('units')->result();
+				->where('units_dpd.date', $date)
+				->get('units_dpd');
+			
+			if($query->num_rows()){
+				$units = $query->result();
+			}else{
+				$date = $this->regular->db->order_by('date','desc')->get('units_dpd')->row()->date;
+				$units =$this->units->db->select('units.id, units.name, area, units_dpd.*')
+					->join('units','units.id = units_dpd.id_unit')
+					->join('areas','areas.id = units.id_area')
+					->where('units_dpd.date', $date)
+					->get('units_dpd')->result();
+			}
 			$today = '';
 			$yesterday = '';
 			$no=3;
 			foreach ($units as $unit){
-				$getOstToday = $this->regular->db
-							->where('date <=', $date)
-							->from('units_outstanding')
-							->where('id_unit', $unit->id)
-							->order_by('date','DESC')
-							->get()->row();
-	
-				$today = $getOstToday->date;
-	
-				$unit->ost_today = (object) array(
-					'noa_reguler'		=> $getOstToday->noa_regular,
-					'up_reguler'		=> $getOstToday->up_regular,
-					'noa_rep_reguler'	=> $getOstToday->noa_repyment_regular,
-					'up_rep_reguler'	=> $getOstToday->repyment_regular,
-					'noa_mortages'		=> $getOstToday->noa_mortage,
-					'up_mortages'		=> $getOstToday->up_mortage,
-					'noa_rep_mortages'	=> $getOstToday->noa_repayment_mortage,
-					'up_rep_mortages'	=> $getOstToday->repayment_mortage
-				);
-				$dateYesterday = $getOstToday->date;
-	
-				$getOstYesterday = $this->regular->db
-									->where('date <', $dateYesterday)
-									->from('units_outstanding')
-									->where('id_unit', $unit->id)
-									->order_by('date','DESC')
-									->get()->row();
-	
-				$yesterday = $getOstYesterday->date;
-	
-				$unit->ost_yesterday = (object) array(
-					'noa_os_reguler'	=> $getOstYesterday->noa_os_regular,
-					'os_reguler'		=> $getOstYesterday->os_regular,
-					'noa_os_mortages'	=> $getOstYesterday->noa_os_mortage,
-					'os_mortages'		=> $getOstYesterday->os_mortage
-				);		
-	
-				$totalUpReg = ($unit->ost_yesterday->os_reguler+ $unit->ost_today->up_reguler)-($unit->ost_today->up_rep_reguler);
-				$totalUpMor = ($unit->ost_yesterday->os_mortages+ $unit->ost_today->up_mortages)-($unit->ost_today->up_rep_mortages);
-			   
-	
-				$totalOst =  $totalUpReg+$totalUpMor;
-	
-				$unit->total_outstanding = (object) [
-					'up'	=> $totalOst
-				];
-	
-				$unit->dpd_yesterday = $this->regular->getDpdYesterday($unit->id, $date);
-				$unit->dpd_today = $this->regular->getDpdToday($unit->id, $date);
-				$unit->dpd_repayment_today = $this->regular->getDpdRepaymentToday($unit->id,$date);
-				$unit->total_dpd = (object) array(
-					//'noa'	=> $unit->dpd_today->noa + $unit->dpd_yesterday->noa,
-					//'ost'	=> $unit->dpd_today->ost + $unit->dpd_yesterday->ost,
-					'noa_today'	=> $unit->dpd_today->noa + $unit->dpd_repayment_today->noa,
-					'ost_today'	=> $unit->dpd_today->ost + $unit->dpd_repayment_today->ost,
-					'noa'	=> ($unit->dpd_today->noa + $unit->dpd_yesterday->noa +$unit->dpd_repayment_today->noa) - $unit->dpd_repayment_today->noa,
-					'ost'	=> ($unit->dpd_today->ost + $unit->dpd_yesterday->ost +$unit->dpd_repayment_today->ost) - $unit->dpd_repayment_today->ost,
-				);
-				$unit->percentage = ($unit->total_dpd->ost > 0) && ($unit->total_outstanding->up > 0) ? round($unit->total_dpd->ost / $unit->total_outstanding->up, 4) : 0;			
-				$unit->total_disburse = $this->regular->getTotalDisburse($unit->id, null, null, $date);
-
-				// html += '<tr>';
-				// html += '<td  class="text-center">'+ int +'</td>';
-				// html += '<td>'+ data.name +'</td>';
-				// html += '<td>'+ data.area +'</td>';
-				// html += '<td  class="text-center">'+data.dpd_yesterday.noa+'</td>';
-				// html += '<td  class="text-right">'+convertToRupiah(data.dpd_yesterday.ost)+'</td>';
-				// html += '<td  class="text-center">'+data.dpd_today.noa+'</td>';
-				// html += '<td  class="text-right">'+convertToRupiah(data.dpd_today.ost)+'</td>';
-				// html += '<td  class="text-center">'+data.dpd_repayment_today.noa+'</td>';
-				// html += '<td  class="text-right">'+convertToRupiah(data.dpd_repayment_today.ost)+'</td>';
-				// html += '<td  class="text-center">'+data.total_dpd.noa+'</td>';
-				// html += '<td  class="text-right">'+convertToRupiah(data.total_dpd.ost)+'</td>';
-				// html += '<td  class="text-right">'+convertToRupiah(data.total_outstanding.up)+'</td>';
-				// html += '<td  class="text-center">'+parseFloat(data.percentage*100).toFixed(2)+'</td>';
-				// html += '</tr>';
 
 				$objPHPExcel->getActiveSheet()->setCellValue('A'.$no, $unit->name);	
 				$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, $unit->area);	
 				$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, "-");				  	
 				$objPHPExcel->getActiveSheet()->setCellValue('D'.$no, "-");	
-				$objPHPExcel->getActiveSheet()->setCellValue('E'.$no, $unit->dpd_yesterday->noa);				 
-				$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, $unit->dpd_yesterday->ost);				 
-				$objPHPExcel->getActiveSheet()->setCellValue('G'.$no, $unit->dpd_today->noa);				 
-				$objPHPExcel->getActiveSheet()->setCellValue('H'.$no, $unit->dpd_today->ost);				 
-				$objPHPExcel->getActiveSheet()->setCellValue('I'.$no, $unit->dpd_repayment_today->noa);				 
-				$objPHPExcel->getActiveSheet()->setCellValue('J'.$no, $unit->dpd_repayment_today->ost);				 
-				$objPHPExcel->getActiveSheet()->setCellValue('K'.$no, $unit->total_dpd->noa);				 
-				$objPHPExcel->getActiveSheet()->setCellValue('L'.$no, $unit->total_dpd->ost);				 
-				$objPHPExcel->getActiveSheet()->setCellValue('M'.$no, $unit->total_outstanding->up);				 				 
-				$objPHPExcel->getActiveSheet()->setCellValue('N'.$no, round($unit->percentage*100, 2));				 				 
+				$objPHPExcel->getActiveSheet()->setCellValue('E'.$no, $unit->noa_yesterday);				 
+				$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, $unit->ost_yesterday);				 
+				$objPHPExcel->getActiveSheet()->setCellValue('G'.$no, $unit->noa_today);				 
+				$objPHPExcel->getActiveSheet()->setCellValue('H'.$no, $unit->ost_today);				 
+				$objPHPExcel->getActiveSheet()->setCellValue('I'.$no, $unit->noa_repayment);				 
+				$objPHPExcel->getActiveSheet()->setCellValue('J'.$no, $unit->ost_repayment);				 
+				$objPHPExcel->getActiveSheet()->setCellValue('K'.$no, $unit->total_noa);				 
+				$objPHPExcel->getActiveSheet()->setCellValue('L'.$no, $unit->total_up);				 
+				$objPHPExcel->getActiveSheet()->setCellValue('M'.$no, $unit->os);				 				 
+				$objPHPExcel->getActiveSheet()->setCellValue('N'.$no, $unit->percentage);				 				 
 				$no++;
 		}
 

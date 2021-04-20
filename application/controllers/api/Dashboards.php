@@ -100,9 +100,18 @@ class Dashboards extends ApiController
 				'yesterday'	=> $yesterday
 			]);
 		}else{
+			$date = $this->regular->db->order_by('date','desc')->get('units_dpd')->row()->date;
+			$query = $this->regular->db
+					->select('units.name as unit, areas.area, units_dpd.*')
+					->from('units_dpd')
+					->join('units','units.id = units_dpd.id_unit')
+					->join('areas','areas.id = units.id_area')
+					->where('date', $date)->get();
+			$data = $query->result();
+			$date = $data[0]->date;
 			$today = date('Y-m-d', strtotime($date));
 			$yesterday = date('Y-m-d', strtotime($date .'-1 days'));
-			$this->sendMessage($query->result(), [
+			$this->sendMessage($data, [
 				'today'	=> $today,
 				'yesterday'	=> $yesterday
 			]);

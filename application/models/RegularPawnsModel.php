@@ -351,7 +351,10 @@ class RegularpawnsModel extends Master
 	{
 		$data = $this->db->select('sum(units_regularpawns.amount) as ost, count(*) as noa')
 			->from('units_regularpawns')
-			->join('units_repayments','units_repayments.no_sbk = units_regularpawns.no_sbk AND units_repayments.id_unit=units_regularpawns.id_unit')
+			->join('units_repayments','units_repayments.no_sbk = units_regularpawns.no_sbk
+			 AND units_repayments.id_unit=units_regularpawns.id_unit
+			 AND units_repayments.permit=units_regularpawns.permit
+			 ')
 			->where('units_repayments.id_unit', $idUnit)
 			->where('units_repayments.date_repayment', $date)
 			->where('units_regularpawns.deadline', $date)
@@ -366,7 +369,10 @@ class RegularpawnsModel extends Master
 	{
 		$data = $this->db->select('sum(units_regularpawns.amount) as ost, count(*) as noa')
 			->from('units_regularpawns')
-			->join('units_repayments','units_repayments.no_sbk = units_regularpawns.no_sbk AND units_repayments.id_unit=units_regularpawns.id_unit')
+			->join('units_repayments','units_repayments.no_sbk = units_regularpawns.no_sbk 
+			AND units_repayments.id_unit=units_regularpawns.id_unit
+			AND units_repayments.permit=units_regularpawns.permit
+			')
 			->where('units_repayments.id_unit', $idUnit)
 			->where('units_repayments.date_repayment', $date)
 			->where('units_regularpawns.deadline <=', $date)

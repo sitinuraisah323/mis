@@ -38,9 +38,7 @@ $('#month').select2({ placeholder: "Select Month", width: '100%' });
 $('#tahun').select2({ placeholder: "Select Year", width: '100%' });
 
 $('#btncari').on('click', function(){
-	area = $('#area').val();
-	month = $('#month').val();
-	year = $('#tahun').val();
+
 	targetBooking();
 });
 
@@ -55,14 +53,21 @@ function convertToRupiah(angka)
 
 function targetBooking(){
 
-var booking 	= [];
-var target 		= [];
-var percentage 	= [];
-var unitlabel 	= [];
-var tottarget 	 = 0;
-var totrealisasi = 0;
 KTApp.block('#form_tarBook .kt-widget14', {});
-$.ajax({
+buildTargetBooking();
+}
+
+const buildTargetBooking = ()=>{	
+	area = $('#area').val();
+	month = $('#month').val();
+	year = $('#tahun').val();
+	var booking 	= [];
+	var target 		= [];
+	var percentage 	= [];
+	var unitlabel 	= [];
+	var tottarget 	 = 0;
+	var totrealisasi = 0;
+	$.ajax({
 	url:"<?php echo base_url('api/datamaster/unitstarget/reportreal');?>",
 	type:"GET",
 	dataType:"JSON",

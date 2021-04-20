@@ -205,6 +205,74 @@ $this->load->view('temp/MenuBar.php');
             </div>
         </div>
 
+		<div class="row">
+            <div class="col-xl-12 col-lg-12">
+                <!--begin:: Widgets-->
+                <form id="form_booking" class="form-horizontal">
+                <div class="kt-portlet kt-portlet--height-fluid">
+                    <div class="kt-widget14">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="kt-widget14__header kt-margin-b-30">
+                                <h3 class="kt-widget14__title">
+                                <i class="fa fa-chart-bar"></i> Target Outstanding 
+                                    <hr/>            
+                                </h3>
+                                    <div class="kt-widget14__legends">
+                                        <div class="kt-widget14__legend">
+                                            <span class="kt-widget14__bullet kt-bg-success"></span>
+                                            <span class="kt-widget14__stats">Target  On <span class="month-target"></span> <span class="total-target"></span></span>
+                                            <span class="kt-widget14__bullet kt-bg-info"></span>
+                                            <span class="kt-widget14__stats">Target  On <span class="month-target"></span>:  <span class="total-realisasi"></span></span>
+                                        </div>
+                                    </div>	
+                            </div>                       
+                        </div>
+                        <!-- <div class="col-md-6">
+                            <span class="kt-widget14__desc">
+                                Pengeluaran <?php  //echo date('F'); ?> <span class="total-today"></span>
+                            </span>
+                            <hr>
+                        </div> -->
+                    </div>
+                        <div class="kt-widget11">
+                            <!-- <div id="graphTarBooking" style="height:300px;"></div>   -->
+                            <canvas id="graphtarOutstanding" style="height:300px;"></canvas>                         
+                        </div>
+                        <hr/>
+                        <!--begin::Accordion-->
+                        <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
+                            <div class="card">
+                                <div class="card-header" id="headingtarBooking">
+                                    <div class="card-title collapsed" data-toggle="collapse" data-target="#collapsetarBooking" aria-expanded="true" aria-controls="collapsetarBooking">
+                                        View Detail
+                                    </div>
+                                </div>
+                                <div id="collapsetarBooking" class="collapse" aria-labelledby="headingtarBooking" data-parent="#accordionExample3">
+                                    <div class="card-body">
+                                        <table class="table" id="tbltarBook">
+                                        <tr>
+                                            <td class="text-left"><b>Area</b></td>
+                                            <td class="text-left"><b>Unit</b></td>
+                                            <td class="text-center"><b>Status</b></td>
+                                            <td class="text-right"><b>Target</b></td>
+                                            <td class="text-right"><b>Realisasi</b></td>
+                                            <td class="text-right"><b>Percentage</b></td>
+                                        </tr>                                        
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>                           
+                        </div>
+                        <!--end::Accordion--> 
+                    </div>
+                </div>	        
+                </form>	        
+                <!--end:: Widgets-->    
+            </div>
+        </div>
+
+
 			</div>
 			</div>
 		</div>
