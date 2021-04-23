@@ -250,7 +250,7 @@ $this->load->view('temp/MenuBar.php');
                                 </div>
                                 <div id="collapsetarBooking" class="collapse" aria-labelledby="headingtarBooking" data-parent="#accordionExample3">
                                     <div class="card-body">
-                                        <table class="table" id="tbltarBook">
+                                        <table class="table" id="ostbltarBook">
                                         <tr>
                                             <td class="text-left"><b>Area</b></td>
                                             <td class="text-left"><b>Unit</b></td>

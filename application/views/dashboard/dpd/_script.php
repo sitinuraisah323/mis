@@ -168,7 +168,7 @@ function initCariForm(){
 				tfoot += '<td  class="text-right">'+convertToRupiah(dpdTotalUp)+'</td>';
 				tfoot += '<td  class="text-right">'+convertToRupiah(TotalOs)+'</td>';
 				tfoot += '<td  class="text-center">'+parseFloat(percentage*100).toFixed(2)+'</td>';
-+				tfoot += '</tr>';
+				tfoot += '</tr>';
 
 				$('.table').find('tbody').find('tr').remove();
 				$('.table').find('tbody').html(html);

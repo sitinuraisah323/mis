@@ -15,8 +15,7 @@ class Stocks extends ApiController
 	{
 		if($query = $this->input->post('query')){
 			if($general = $query['generalSearch']){
-				$this->model->db->like('units.name', $general)
-					->or_like('areas.area', $general);
+				$this->model->db->like('units.name', $general);
 			}
 		}
 		$this->model->db->join('lm_grams','lm_grams.id = lm_stocks.id_lm_gram')
@@ -26,6 +25,12 @@ class Stocks extends ApiController
 						->select('lm_grams.image, lm_grams.weight, units.name as unit');
 		if($this->session->userdata('user')->level == 'unit'){
 			$this->model->db->where('id_unit', $this->session->userdata('user')->id_unit);
+		}
+		if($this->session->userdata('user')->level == 'cabang'){
+			$this->model->db->where('units.id_cabang', $this->session->userdata('user')->id_cabang);
+		}
+		if($this->session->userdata('user')->level == 'area'){
+			$this->model->db->where('units.id_area', $this->session->userdata('user')->id_area);
 		}
 		$data =  $this->model->all();
 		$this->sendMessage($data,'Successfully get Grams',200);
@@ -169,8 +174,6 @@ class Stocks extends ApiController
 			$units = $this->units->all();
 			foreach($units as $unit){
 				$grams =  $this->model->gramsUnits($unit->id, $dateStart, $dateEnd);
-				var_dump($this->model->db->last_query());
-				exit;
 				if($grams){
 					foreach($grams as $gram){
 						$gram->unit = $unit->name;

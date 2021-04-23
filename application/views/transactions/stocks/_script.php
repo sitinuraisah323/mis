@@ -111,6 +111,13 @@ function initDataTable(){
                 width:60,
                 textAlign: 'center',
             },
+            {
+                field: 'unit',
+                title: 'Unit',
+                sortable: 'asc',
+                width:90,
+                textAlign: 'center',
+            },
               {
 				  field: 'amount',
 				  title: 'Pieces',
@@ -141,7 +148,7 @@ function initDataTable(){
               {
 				  field: 'type',
 				  title: 'type',
-				  width:90,
+				  width:80,
 				  textAlign: 'center',
                   template:function(row){
                       return row.type === 'CREDIT' ? 'Pengurangan' : 'Penambahan' 
@@ -150,7 +157,7 @@ function initDataTable(){
               {
 				  field: 'description',
 				  title: 'description',
-				  width:60,
+				  width:120,
 				  textAlign: 'center',
 			  },
               {
