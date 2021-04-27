@@ -243,30 +243,31 @@ class Unitsdailycash extends ApiController
 	public function modal_kerja_pusat()
 	{
 		$ignore = array('1110000');
-		if($get = $this->input->get()){
-			$category = $get['category'];
 
-			if($this->input->get('dateEnd')){
-				$this->unitsdailycash->db->where('date <=', $get['dateEnd']);
-			}
+		if($dateEnd = $this->input->get('dateEnd')){
+			$this->unitsdailycash->db->where('date <=', $dateEnd);
+		}
 
-			if($this->input->get('dateStart')){
-				$this->unitsdailycash->db->where('date >=', $get['dateStart']);
-			}
+		if($dateStart = $this->input->get('dateStart')){
+			$this->unitsdailycash->db->where('date >=', $dateStart);
+		}
 
-			if($this->input->get('id_unit')){
-				$this->unitsdailycash->db->where('id_unit', $get['id_unit']);
-			}
-				if($category=='0'){
-					$this->unitsdailycash->db->where('no_perk', '1110000');
-				}
-				
-				if($category=='1'){
-					$this->unitsdailycash->db
-					->where('SUBSTRING(no_perk,1,5) =','11100')
-					->where('type =', 'CASH_IN')
-					->where_not_in('no_perk', $ignore);
-				}
+		if($idUnit = $this->input->get('id_unit')){
+			$this->unitsdailycash->db->where('id_unit', $idUnit);
+		}
+		
+		$category = $this->input->get('category');
+		if($category==='0'){
+			$this->unitsdailycash->db->where('no_perk', '1110000');
+		}else if($category==='1'){
+			$this->unitsdailycash->db
+			->where('SUBSTRING(no_perk,1,5) =','11100')
+			->where('type =', 'CASH_IN')
+			->where_not_in('no_perk', $ignore);
+		}else{
+			$this->unitsdailycash->db
+			->where('SUBSTRING(no_perk,1,5) =','11100')
+			->where('type =', 'CASH_IN');
 		}
 
 		$this->unitsdailycash->db

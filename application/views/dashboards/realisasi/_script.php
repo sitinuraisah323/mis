@@ -54,6 +54,7 @@ function convertToRupiah(angka)
 function targetBooking(){
 
 KTApp.block('#form_tarBook .kt-widget14', {});
+KTApp.block('#form_booking .kt-widget14', {});
 buildTargetBooking();
 }
 
@@ -466,6 +467,9 @@ const buildTargetBooking = ()=>{
 	complete:function () {
 		$('#form_tarBook').find('.total-target').text(convertToRupiah(tottarget));
 		$('#form_tarBook').find('.total-realisasi').text(convertToRupiah(totrealisasi));			
+		$('#form_booking').find('.total-target').text(convertToRupiah(ostottarget));
+		$('#form_booking').find('.total-realisasi').text(convertToRupiah(ostotrealisasi));			
+	
 		var datapercentage 	= percentage;
 		var databooking 	= booking;
 		var datatarget 		= target;
@@ -535,6 +539,9 @@ const buildTargetBooking = ()=>{
 			}
 	};
 
+	// $('#graphtarOutstanding').remove();
+	// $('#graphtarBooking').remove();
+
 	var ctxOs = document.getElementById("graphtarOutstanding");
 	var myChartOs = new Chart(ctxOs, {
 		type: 'bar',
@@ -558,7 +565,8 @@ const buildTargetBooking = ()=>{
 
 
 	KTApp.unblock('#form_tarBook .kt-widget14', {});
-
+	KTApp.unblock('#form_booking .kt-widget14', {});
+	
 
 	},
 });

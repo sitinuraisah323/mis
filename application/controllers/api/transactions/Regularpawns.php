@@ -643,21 +643,21 @@ class Regularpawns extends ApiController
 				->where_in('units_regularpawns.status_transaction ', $status)
 				->where('units_regularpawns.id_customer', '0')
 				->order_by('units_regularpawns.id_unit', 'asc');
-			
-				if($area = $this->input->get('area')){
+				$area = $this->input->get('area');
+				if($area && $area !== 'all'){
 					$this->regulars->db->where('units.id_area', $area);
 				}else if($this->session->userdata('user')->level == 'area'){
 					$this->regulars->db->where('units.id_area', $this->session->userdata('user')->id_area);
 				}
 		
-				
-				if($cabang = $this->input->get('cabang')){
+				$cabang = $this->input->get('cabang');
+				if($cabang && $cabang !== 'all'){
 					$this->regulars->db->where('units.id_cabang', $cabang);
 				}else if($this->session->userdata('user')->level == 'cabang'){
 					$this->regulars->db->where('units.id_cabang', $this->session->userdata('user')->id_cabang);
 				}
-		
-				if($unit = $this->input->get('unit')){
+				$unit = $this->input->get('unit');
+				if($unit && $unit !== 'all'){
 					$this->regulars->db->where('units.id', $unit);
 				}else if($this->session->userdata('user')->level == 'unit'){
 					$this->regulars->db->where('units.id', $this->session->userdata('user')->id_unit);

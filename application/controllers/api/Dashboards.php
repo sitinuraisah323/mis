@@ -83,6 +83,9 @@ class Dashboards extends ApiController
 		if($unit = (int) $this->input->get('unit')){
 			$this->regular->db->where('units.id', $unit);
 		}
+		if($cabang = (int) $this->input->get('cabang')){
+			$this->regular->db->where('units.id_cabang', $cabang);
+		}
 
 		$query = $this->regular->db
 					->select('units.name as unit, areas.area, units_dpd.*')
@@ -101,6 +104,17 @@ class Dashboards extends ApiController
 			]);
 		}else{
 			$date = $this->regular->db->order_by('date','desc')->get('units_dpd')->row()->date;
+		
+			if($area = (int) $this->input->get('area')){
+				$this->regular->db->where('units.id_area', $area);
+			}
+			if($unit = (int) $this->input->get('unit')){
+				$this->regular->db->where('units.id', $unit);
+			}
+
+			if($cabang = (int) $this->input->get('cabang')){
+				$this->regular->db->where('units.id_cabang', $cabang);
+			}
 			$query = $this->regular->db
 					->select('units.name as unit, areas.area, units_dpd.*')
 					->from('units_dpd')

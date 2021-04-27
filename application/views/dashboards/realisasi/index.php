@@ -133,7 +133,7 @@ $this->load->view('temp/MenuBar.php');
 								<?php endforeach;?>
 							</select>
 						</div>
-						<button type="submit" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button> &nbsp
+						<button type="button" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button> &nbsp
 					</div>
 				</div>
 				</form>
