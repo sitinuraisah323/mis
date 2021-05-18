@@ -643,6 +643,7 @@ class RegularpawnsModel extends Master
 		->select('sum(units_dailycashs.amount) as up')
 		->join('units','units.id = units_dailycashs.id_unit')
 		->where('units_dailycashs.id_unit', $idUnit)
+		->where('type','CASH_IN')
 		->where_in('units_dailycashs.no_perk', $category);
 		if($method == 'daily'){
 			$this->db->where('units_dailycashs.date',$date);
@@ -650,7 +651,8 @@ class RegularpawnsModel extends Master
 			$this->db->where('units_dailycashs.date >=',date('Y-m-01', strtotime($date)));
 			$this->db->where('units_dailycashs.date <=',$date);
 		}
-		return $this->db->get('units_dailycashs')->row();
+		$data = $this->db->get('units_dailycashs')->row();
+		return $data;
 	
 	}
 

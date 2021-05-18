@@ -107,12 +107,13 @@ function initCariModalKerjaPusatForm(){
         var category = $('#categori').val();
 		var dateStart = $('[name="date-start"]').val();
 		var dateEnd = $('[name="date-end"]').val();
+		var permit = $('[name="permit"]').val();
         KTApp.block('#form_bukukas .kt-portlet__body', {});
 		$.ajax({
 			type : 'GET',
 			url : "<?php echo base_url("api/transactions/unitsdailycash/modal_kerja_pusat"); ?>",
 			dataType : "json",
-			data:{area:area,cabang:cabang,unit:unit,category:category,dateStart:dateStart,dateEnd:dateEnd},
+			data:{area:area,cabang:cabang,unit:unit,category:category,dateStart:dateStart,dateEnd:dateEnd, permit},
 			success : function(response,status){
 				KTApp.unblockPage();
 				if(response.status == true){

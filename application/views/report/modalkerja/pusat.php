@@ -123,15 +123,16 @@ $this->load->view('temp/MenuBar.php');
                     <div class="col-lg-2">
 						<label class="col-form-label">kategori</label>
                         <select class="form-control select2" name="categori" id="categori">
-                            <option></option>                                                         
+                            <option value=""></option>                                                         
                             <option value="0">Kantor Pusat</option>
                             <option value="1">Antar Unit</option>
+                            <option value="2">Antar Sistem</option>
                         </select>
                     </div>
 					<div class="col-lg-1">
 						<label class="col-form-label">Ijin</label>
 						<select class="form-control" name="permit" id="permit">
-							<?php foreach (array('OJK' =>'OJK','NON-OJK' => 'Non OJK') as $value => $item):?>
+							<?php foreach (array(''=>'All','OJK' =>'OJK','NON-OJK' => 'Non OJK','OJK-1' => 'New OJK') as $value => $item):?>
 								<option value="<?php echo $value;?>"><?php echo $item;?></option>
 							<?php endforeach;?>
 						</select>

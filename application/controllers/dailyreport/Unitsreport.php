@@ -25,6 +25,9 @@ class Unitsreport extends Authenticated
 	 */
 	public function index()
 	{
+		$this->load->library('yogadai');
+		var_dump($this->yogadai->transaction());
+		exit;
 		$this->load->view('dailyreport/unitsreport/send',array(
 			'statistic'	=> $this->model->statistic()
 		));

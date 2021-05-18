@@ -719,6 +719,15 @@ class Loaninstallments extends ApiController
 							$data['id']	= $findrepayment->id;
 							$bathUpdate[] = $data;
 					}else{
+							$where = array(
+								'id_unit'		=> $unit,
+								'no_sbk'		=> zero_fill($repayment['A'], 5),
+								'permit'	=> $jok
+							);
+							$this->repayments->db->where($where);
+							$this->repayments->db->update('units_regularpawns',[
+								'status_transaction'	=> 'L'
+							]);
 							$bathInsert[] = $data;
 						}
 					}

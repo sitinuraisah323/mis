@@ -139,6 +139,7 @@ $this->load->view('temp/MenuBar.php');
                         <label class="col-form-label">Tanggal</label>
 						<input type="date" class="form-control" name="date-end" value="<?php echo date('Y-m-d');?>">
 					</div>
+                    <input type="hidden" name="method" value="daily"/>
                     <div class="col-lg-1">
                         <label class="col-form-label">&nbsp</label>
                         <div class="position-relative">

@@ -846,7 +846,7 @@ class Dashboards extends Authenticated
 		}
 
 		//Redirect output to a client’s WBE browser (Excel5)
-		$filename ="DPD_".date('Y-m-d H:i:s');
+		$filename ="DPD ".date('D, d m Y', strtotime($date));
 		header('Content-Type: application/vnd.ms-excel');
 		header('Content-Disposition: attachment;filename="'.$filename.'.xls"');
 		header('Cache-Control: max-age=0');

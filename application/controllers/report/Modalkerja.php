@@ -78,27 +78,47 @@ class Modalkerja extends Authenticated
 		$objPHPExcel->getActiveSheet()->getColumnDimension('G');
 		$objPHPExcel->getActiveSheet()->setCellValue('G1', 'Jumlah');
 		
-		$ignore = array('1110000');
+		$ignore = array('1110000','1110099');
 		//$this->unitsdailycash->all();
-		if($post = $this->input->post()){
-			$category = $post['categori'];
-			$this->unitsdailycash->db
-				->select('units.code,units.name as unit_name')
-				->join('units','units_dailycashs.id_unit=units.id')				
-				//->where('date >=', $post['date-start'])
-				->where('date <=', $post['date-end'])
-				->where('id_unit', $post['id_unit']);
-				if($category=='0'){
-					$this->unitsdailycash->db->where('no_perk', '1110000');
-				}
-				if($category=='1'){
-					$this->unitsdailycash->db
-					->where('SUBSTRING(no_perk,1,5) =','11100')
-					->where('type =', 'CASH_IN')
-					->where_not_in('no_perk', $ignore);
-				}
-				$data = $this->unitsdailycash->all();
+		$category = $this->input->post('categori');
+		if($dateEnd = $this->input->post('date-end')){
+			$this->unitsdailycash->db->where('date <=', $dateEnd);
 		}
+
+		if($dateStart = $this->input->post('date-start')){
+			$this->unitsdailycash->db->where('date >=', $dateStart);
+		}
+
+		if($idUnit = $this->input->post('id_unit')){
+			$this->unitsdailycash->db->where('id_unit', $idUnit);
+		}
+		if($area = $this->input->post('area')){
+			$this->unitsdailycash->db->where('id_area', $area);
+		}
+
+		if($permit = $this->input->post('permit')){
+			$this->unitsdailycash->db->where('permit', $permit);
+		}
+		$this->unitsdailycash->db
+			->distinct()
+			->select('units.code,units.name as unit_name')
+			->join('units','units_dailycashs.id_unit=units.id');
+		if($category==='0'){
+			$this->unitsdailycash->db->where('no_perk', '1110000');
+		}else if($category==='1'){
+			$this->unitsdailycash->db
+			->where('SUBSTRING(no_perk,1,5) =','11100')
+			->where('type =', 'CASH_IN')
+			->where_not_in('no_perk', $ignore);
+		}else if($category === '2'){
+			$this->unitsdailycash->db->where('no_perk', '1110099');
+		}else{
+			$this->unitsdailycash->db
+			->where('SUBSTRING(no_perk,1,5) =','11100')
+			->where_in('no_perk', $ignore)
+			->where('type =', 'CASH_IN');
+		}
+		$data = $this->unitsdailycash->all();
 		$no=2;
 		$status="";
 		foreach ($data as $row) 

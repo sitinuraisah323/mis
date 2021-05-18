@@ -84,6 +84,7 @@ class Dpd extends Authenticated
 		$objPHPExcel->getActiveSheet()->setCellValue('P1', 'Denda');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('Q');
 		$objPHPExcel->getActiveSheet()->setCellValue('Q1', 'Pelunasan');
+		$objPHPExcel->getActiveSheet()->setCellValue('R1', 'Deskripsi Barang');
 		
 		if($post = $this->input->post()){
 			$date = date('Y-m-d');
@@ -103,6 +104,7 @@ class Dpd extends Authenticated
 				status_transaction,
 				code,
 				units.name as unit_name,		
+				description_1, description_2, description_3,description_4,
 				DATEDIFF('$date', units_regularpawns.deadline) as dpd				
 				")
 			->join('customers','units_regularpawns.id_customer = customers.id')
@@ -195,7 +197,8 @@ class Dpd extends Authenticated
 			$objPHPExcel->getActiveSheet()->setCellValue('O'.$no, $row->tafsiran_sewa );				 
 			$objPHPExcel->getActiveSheet()->setCellValue('P'.$no, $this->calculateDenda($row->amount,$dpd));
 			$calcup =  $row->tafsiran_sewa + $this->calculateDenda($row->amount,$dpd) + $row->amount;				 
-			$objPHPExcel->getActiveSheet()->setCellValue('Q'.$no, $calcup);				 	 
+			$objPHPExcel->getActiveSheet()->setCellValue('Q'.$no, $calcup);	
+			$objPHPExcel->getActiveSheet()->setCellValue('R'.$no, $row->description_1.' '.$row->description_2.' '.$row->description_3.' '.$row->description_4);	
 			$no++;
 		}
 
@@ -227,11 +230,7 @@ class Dpd extends Authenticated
 			}
 			$calculate = round($sumDay * $rate * $up);
 			$modusCalculate = $calculate % 500;
-			if($modusCalculate > 0){
-				$round = 500;
-			}else{
-				$round = 0;
-			}
+			$round = $modusCalculate > 0 ? 500 : 0;
 			return $calculate - $modusCalculate + $round;
 		}
 		return 0;

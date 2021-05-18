@@ -115,27 +115,62 @@ function initCariForm(){
 				//if(response.status == true){
 					var template = '';
 					var no = 1;
-					var totNoa = 0;
-					var total = 0;
+					var yesterdayOst = 0;
+					var yesterdayNoa = 0;
+                    var todayOstRegulerCredit = 0;
+                    var todayNoaRegulerCredit = 0;
+                    var todayOstRegulerRepayment = 0;
+                    var todayNoaRegulerRepayment = 0;
+
+                    var todayOstMortagesCredit = 0;
+                    var todayNoaMortagesCredit = 0;
+                    var todayOstMortagesRepayment = 0;
+                    var todayNoaMortagesRepayment = 0;
+
+                    var totalOstUp = 0;
+                    var totalDisburUp = 0;
+                    var totalDisburNoa = 0;
+
 					$.each(response.data, function (index, data) {
 						template += "<tr class='rowappend'>";
                         template += "<td class='text-center'>"+no+"</td>";
-                        template += "<td class='text-left'>"+data.area_name+"</td>";
-						template += "<td class='text-left'>"+data.name+"</td>";
-						template += "<td class='text-left'>"+data.credit_today.up_reguler+"</td>";
-						template += "<td class='text-left'>"+data.repayment_today.up+"</td>";
-						template += "<td class='text-right'>"+convertToRupiah(data.total_outstanding.up)+"</td>";
-						template += '</tr>';
+                        template += "<td class='text-left'>"+data.name+"</td>";
+                        template += "<td class='text-center'>"+data.ost_yesterday.noa+"</td>";
+                        template += "<td class='text-right'>"+data.ost_yesterday.up+"</td>";
+
+                        template += "<td class='text-center'>"+data.credit_today.noa_reguler+"</td>";
+                        template += "<td class='text-right'>"+data.credit_today.up_reguler+"</td>";
+                        template += "<td class='text-center'>"+data.repayment_today.noa_reguler+"</td>";
+                        template += "<td class='text-right'>"+data.repayment_today.up_reguler+"</td>";
+                        
+                        template += "<td class='text-center'>"+data.credit_today.noa_mortages+"</td>";
+                        template += "<td class='text-right'>"+data.credit_today.up_mortages+"</td>";
+                        template += "<td class='text-center'>"+data.repayment_today.noa_mortages+"</td>";
+                        template += "<td class='text-right'>"+data.repayment_today.up_mortages+"</td>";
+                    
+                        template += "<td class='text-right'>"+data.total_outstanding.up+"</td>";
+
+                        template += '</tr>';
 						no++;
-                        total +=data.total_outstanding.up;
-                        totNoa +=data.total_outstanding.noa;
+
+                        totalOstUp += data.total_outstanding.up;
+                        yesterdayOst += data.ost_yesterday.up;
+                        yesterdayNoa += data.ost_yesterday.noa;
+
+                        todayOstRegulerCredit += data.credit_today.up_reguler;
+                        todayNoaRegulerCredit += data.credit_today.noa_reguler;
+
+                        todayNoaRegulerRepayment += data.repayment_today.noa_reguler;
+                        todayOstRegulerRepayment += data.repayment_today.up_reguler;
+
+                        todayOstMortagesCredit += data.credit_today.up_mortages;
+                        todayNoaMortagesCredit += data.credit_today.noa_mortages;
+
+                        todayNoaMortagesRepayment += data.repayment_today.noa_mortages;
+                        todayOstMortagesRepayment += data.repayment_today.up_mortages;
+                        
                         lastdate = data.lastdate;
 					});
-                    template += '<tr class="rowappend">';
-                    template +='<td colspan="4" class="text-right"><b>Total</b></td>';                    
-                    template +='<td class="text-center"><b>'+totNoa+'</b></td>';                    
-                    template +='<td class="text-right"><b>'+convertToRupiah(total)+'</b></td>';                    
-                    template +='</tr>';
 
 					$('.kt-section__content table').append(template);
 				//}

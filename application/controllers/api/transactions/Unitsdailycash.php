@@ -242,7 +242,7 @@ class Unitsdailycash extends ApiController
 
 	public function modal_kerja_pusat()
 	{
-		$ignore = array('1110000');
+		$ignore = array('1110000','1110099');
 
 		if($dateEnd = $this->input->get('dateEnd')){
 			$this->unitsdailycash->db->where('date <=', $dateEnd);
@@ -252,8 +252,15 @@ class Unitsdailycash extends ApiController
 			$this->unitsdailycash->db->where('date >=', $dateStart);
 		}
 
-		if($idUnit = $this->input->get('id_unit')){
+		if($idUnit = $this->input->get('unit')){
 			$this->unitsdailycash->db->where('id_unit', $idUnit);
+		}
+		if($area = $this->input->get('area')){
+			$this->unitsdailycash->db->where('id_area', $area);
+		}
+
+		if($permit = $this->input->get('permit')){
+			$this->unitsdailycash->db->where('permit', $permit);
 		}
 		
 		$category = $this->input->get('category');
@@ -264,16 +271,22 @@ class Unitsdailycash extends ApiController
 			->where('SUBSTRING(no_perk,1,5) =','11100')
 			->where('type =', 'CASH_IN')
 			->where_not_in('no_perk', $ignore);
+		}else if($category === '2'){
+			$this->unitsdailycash->db->where('no_perk', '1110099');
 		}else{
 			$this->unitsdailycash->db
 			->where('SUBSTRING(no_perk,1,5) =','11100')
+			->where_in('no_perk', $ignore)
 			->where('type =', 'CASH_IN');
 		}
 
-		$this->unitsdailycash->db
-			->select('units.name as unit')
-			->join('units','units.id = units_dailycashs.id_unit');
-		$data = $this->unitsdailycash->all();
+		$this->unitsdailycash->db		
+			->select('units_dailycashs.*, units.name as unit')
+			->from('units_dailycashs')
+			->join('units','units.id = units_dailycashs.id_unit')
+			->order_by('units_dailycashs.date','asc')
+			->order_by('units_dailycashs.id_unit','asc');
+		$data = $this->unitsdailycash->db->get()->result();
 		echo json_encode(array(
 			'data'	=> $data,
 			'status'	=> true,
@@ -303,28 +316,26 @@ class Unitsdailycash extends ApiController
 
 	public function pendapatan()
 	{
-		if($get = $this->input->get()){
-			$category =null;
-			if($get['category']=='all'){
-				$data = $this->m_casing->get_list_pendapatan();
-				$category=array();
-				foreach ($data as $value) {
-					array_push($category, $value->no_perk);
-				}
-			}else{
-				$category=array($get['category']);
+		$category =null;
+		if($this->input->get('category')=='all'){
+			$data = $this->m_casing->get_list_pendapatan();
+			$category=array();
+			foreach ($data as $value) {
+				array_push($category, $value->no_perk);
 			}
-			$this->unitsdailycash->db
-				->where('type =', 'CASH_IN')
-				->where_in('no_perk', $category)
-				->where('date >=', $get['dateStart'])
-				->where('date <=', $get['dateEnd']);
-			if($this->input->get('id_unit')){
-				$this->unitsdailycash->db->where('id_unit', $get['id_unit']);
-			}
-			if($this->input->get('area')){
-				$this->unitsdailycash->db->where('id_area', $get['area']);
-			}
+		}else{
+			$category=array($get['category']);
+		}
+		$this->unitsdailycash->db
+			->where('type =', 'CASH_IN')
+			->where_in('no_perk', $category)
+			->where('date >=', $this->input->get('dateStart'))
+			->where('date <=', $this->input->get('dateEnd'));
+		if($this->input->get('id_unit')){
+			$this->unitsdailycash->db->where('id_unit', $get['id_unit']);
+		}
+		if($this->input->get('area')){
+			$this->unitsdailycash->db->where('id_area', $get['area']);
 		}
 		$this->unitsdailycash->db
 			->select('units.name as unit')
