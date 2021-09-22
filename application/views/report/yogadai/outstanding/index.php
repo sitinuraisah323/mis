@@ -76,49 +76,32 @@ $this->load->view('temp/MenuBar.php');
 				</table> -->
 				<!--end: Datatable -->
 
-				<form id="form_bukukas" class="form-horizontal" method="post" action="<?php echo base_url("dashboards/outstandingreport"); ?>">
+				<form id="form_bukukas" class="form-horizontal" method="get" action="<?php echo base_url("report/yogadai/pdf"); ?>">
 				<div class="kt-portlet__body">
 				<div class="col-md-12" >
 					<div class="form-group row">
-						<?php if($this->session->userdata('user')->level == 'unit'):?>
-								<input type="hidden" name="id_unit" value="<?php echo $this->session->userdata('user')->id_unit;?>">
-						<?php elseif($this->session->userdata('user')->level == 'area'):?>
-							<input type="hidden" name="area" value="<?php echo $this->session->userdata('user')->id_area;?>">
-							<label class="col-form-label">Unit</label>
-							<div class="col-lg-2">
-								<select class="form-control select2" name="id_unit" id="unit">
-									<option value="">All</option>
-								</select>
-							</div>	
-							<?php elseif($this->session->userdata('user')->level == 'cabang'):?>
-								<input type="hidden" name="cabang" value="<?php echo $this->session->userdata('user')->id_cabang;?>">
-								<label class="col-form-label">Unit</label>
-								<div class="col-lg-2">
-									<select class="form-control select2" name="id_unit" id="unit">
-										<option value="0">All</option>
-									</select>
-								</div>
-							<?php else:?>
+						<div class="col-md-2">
 							<label class="col-form-label">Area</label>
-							<div class="col-lg-2">
-								<select class="form-control select2" name="area" id="area">
-									<option value="0">All</option>
-									<?php
-										if (!empty($areas)){
-											foreach($areas as $row){
-											echo "<option value=".$row->id.">".$row->area."</option>";
-											}
-										}
-									?>
-								</select>
-							</div>
-						<?php endif;?>
-						<label class="col-form-label">Tanggal</label>
-						<div class="col-lg-2">
-							<input type="date" class="form-control" name="date" value="<?php echo date('Y-m-d');?>">
+							<select class="form-control" name="area_id" id="area_id">
+							</select>
+						</div>
+						<div class="col-md-2">
+							<label class="col-form-label">Branch</label>
+							<select class="form-control" name="branch_id" id="branch_id">
+							</select>
+						</div>
+						<div class="col-md-2">
+							<label class="col-form-label">Unit</label>
+							<select class="form-control" name="unit_id" id="unit_id">
+							</select>
+						</div>
+						<div class="col-md-2">
+							<label class="col-form-label">Tanggal</label>
+							<input type="date" class="form-control" name="date" value="">
 						</div>
 						<button type="button" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button> &nbsp
-						<button type="submit" class="btn btn-danger btn-icon" name="btnexport_csv" id="btnexport_csv"><i class="fa fa-file-excel"></i></button>
+						<button type="button" class="btn btn-success btn-icon" name="btnexport_csv" id="btnexport_csv"><i class="fa fa-file-excel"></i></button>
+						<button type="button" class="btn btn-danger btn-icon" name="btnexport_csv" id="btnexport_pdf"><i class="fa fa-file-pdf"></i></button>
 					</div>
 
 				</div>

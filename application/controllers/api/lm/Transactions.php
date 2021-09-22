@@ -45,8 +45,14 @@ class Transactions extends ApiController
 						->join('units','units.id = employees.id_unit')
 						->where('employees.id',$datum->id_employee)
 						->get()->row();
-					$datum->name = $getEmployee->name;
-					$datum->position = $getEmployee->position;
+					if($getEmployee){
+    					if($getEmployee->name){
+    					    $datum->name = $getEmployee->name;
+    					}
+    					if($getEmployee->position){
+    					    $datum->position = $getEmployee->position;
+    					}
+					}
 				
 				}elseif($datum->to_unit){
 					$getUnit = $this->model->db
@@ -275,10 +281,14 @@ class Transactions extends ApiController
 	}
 	public function delete($id)
 	{
+		$find = $this->model->find($id);
 		if($this->model->delete($id)){
 			$this->gram->delete([
-				'id_lm_transaction'	=> $data->id
+				'id_lm_transaction'	=> $find->id
 			]);
+			$this->stock->delete(array(
+				'reference_id'	=> $find->code
+			));
 			echo json_encode(array(
 				'data'	=> 	true,
 				'status'	=> true,

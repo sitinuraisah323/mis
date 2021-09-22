@@ -262,6 +262,7 @@
 					 document.querySelector('[name="mobile"]').value = mobile;
 					 document.querySelector('[name="name"]').value = name;
 					 document.querySelector('[name="nik"]').value = nik;
+					 document.querySelector('[name="date"]').setAttribute('min', date);
 					 document.querySelector('[name="date"]').value = date;
 					 document.querySelector('[name="tenor"]').value = tenor;
 					 document.querySelector('[name="total"]').value = total;

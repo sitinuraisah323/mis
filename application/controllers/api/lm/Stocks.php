@@ -13,11 +13,6 @@ class Stocks extends ApiController
 
 	public function index()
 	{
-		if($query = $this->input->post('query')){
-			if($general = $query['generalSearch']){
-				$this->model->db->like('units.name', $general);
-			}
-		}
 		$this->model->db->join('lm_grams','lm_grams.id = lm_stocks.id_lm_gram')
 						->join('units','units.id = lm_stocks.id_unit')
 						->order_by('lm_stocks.id','desc')
@@ -32,6 +27,36 @@ class Stocks extends ApiController
 		if($this->session->userdata('user')->level == 'area'){
 			$this->model->db->where('units.id_area', $this->session->userdata('user')->id_area);
 		}
+		if(is_array($this->input->post('query'))){
+			if(array_key_exists("generalSearch",$this->input->post('query'))){
+				$this->model->db->like('units.name', $this->input->post('query')['generalSearch']);
+			}	
+			if(array_key_exists("area",$this->input->post('query'))){
+				if($this->input->post('query')['area']){
+					$this->model->db->where('units.id_area',$this->input->post('query')['area']);
+				}
+			}
+			if(array_key_exists("unit",$this->input->post('query'))){
+				if($this->input->post('query')['unit']){
+					$this->model->db->where('units.id',$this->input->post('query')['unit']);
+				}
+			}
+			if(array_key_exists("cabang",$this->input->post('query'))){
+				if($this->input->post('query')['cabang']){
+					$this->model->db->where('units.id_cabang',$this->input->post('query')['cabang']);
+				}
+			}
+			if(array_key_exists("date_start",$this->input->post('query'))){
+				if($this->input->post('query')['date_start']){
+					$this->model->db->where('date_receive >=',$this->input->post('query')['date_start']);
+				}
+			}
+			if(array_key_exists("date_end",$this->input->post('query'))){
+				if($this->input->post('query')['date_end']){
+					$this->model->db->where('date_receive <=',$this->input->post('query')['date_end']);
+				}
+			}
+		}
 		$data =  $this->model->all();
 		$this->sendMessage($data,'Successfully get Grams',200);
 	}
@@ -42,7 +67,7 @@ class Stocks extends ApiController
 
 			$this->load->library('form_validation');
 
-			$this->form_validation->set_rules('id_unit', 'id lm gram', 'required|integer');
+			$this->form_validation->set_rules('id_unit', 'id Unit gram', 'required|integer');
 			$this->form_validation->set_rules('id_lm_gram', 'id lm gram', 'required|integer');
 			$this->form_validation->set_rules('amount', 'Amount', 'required|integer');
 			$this->form_validation->set_rules('type', 'Type', 'required');
@@ -212,5 +237,89 @@ class Stocks extends ApiController
 		return $this->sendMessage($getUnits,'successfully get data sales', 200);
 	}
 
+	public function upload()
+	{
+		$data = [];
+		if($_FILES['image']['name']){
+			$data['id_unit'] = $this->input->post('id_unit');
+			$config['upload_path']          = 'storage/stocks/';			
+			$config['allowed_types']        = '*';
+			if(!is_dir($config['upload_path'])){
+				mkdir($config['upload_path'],0777, true);
+			}
+			$this->load->library('upload', $config);
+
+			if ( ! $this->upload->do_upload('image'))
+			{
+				$error = array('error' => $this->upload->display_errors());
+
+				return $this->sendMessage(false, $error,500);
+			}
+			else
+			{
+				$data['filename'] = $this->upload->data('file_name');		
+				$data['mime'] =explode('/',$this->upload->data('file_type'))[0]; 
+			}
+			$data['date'] = date('Y-m-d');
+			$this->model->db->insert('lm_stocks_images',$data);
+			return $this->sendMessage($data,'Successfully upload', 200);
+		}
+		
+		return $this->sendMessage([
+			'message'	=> 'Failed Upload'
+		],'Failed upload', 401);
+	}
+
+	public function images()
+	{
+		if($idUnit = $this->input->get('id_unit')){
+			$this->model->db->where('id_unit', $idUnit);
+		}
+		if($name = $this->input->get('name')){
+			$this->model->db->like('nime', $name);
+		}
+		$date = date('Y-m-d');
+		if(is_array($this->input->post('query'))){
+			if(array_key_exists("generalSearch",$this->input->post('query'))){
+				$this->model->db->like('units.name', $this->input->post('query')['generalSearch']);
+			}	
+			if(array_key_exists("area",$this->input->post('query'))){
+				if($this->input->post('query')['area'] != 0){
+					$this->model->db->where('units.id_area', $this->input->post('query')['area']);
+
+				}
+			}	
+			if(array_key_exists("unit",$this->input->post('query'))){
+				if($this->input->post('query')['unit'] != 0){
+					$this->model->db->where('units.id', $this->input->post('query')['unit']);
+				}
+			}	
+			if(array_key_exists("date",$this->input->post('query'))){
+				$date =  $this->input->post('query')['date'];
+				$this->model->db->where('date', $date);
+			}	
+		}
+
+		$this->model->db->select('lm_stocks_images.*, units.name as unit')
+			->join('units','units.id = lm_stocks_images.id_unit')
+			->from('lm_stocks_images')
+			->order_by('lm_stocks_images.id', 'desc');
+		$data = $this->model->db->get()->result();
+
+		if($data){
+			foreach($data as $unit){
+				$grams =  $this->model->gramsUnits($unit->id_unit, $unit->date, $unit->date);
+			
+				$unit->grams = $grams;
+			}
+		}
+		return $this->sendMessage($data,'Successfully get upload', 200);
+	}
+
+	public function images_delete($id)
+	{
+		$this->model->db->where('id', $id)->delete('lm_stocks_images');
+		return $this->sendMessage($data,'Successfully delete upload', 200);
+	}
 
 }

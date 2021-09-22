@@ -453,7 +453,7 @@ class Loaninstallments extends ApiController
 						'birth_place'	=>  $customer['F'],
 						'address'	=> $customer['G'],
 						'nik'	=> $customer['I'],
-						'city'	=> $customer['F'],
+						'city'	=> $customer['S'],
 						'sibling_name'	=> $customer['N'],
 						'sibling_address_1'	=> $customer['O'],
 						'sibling_address_2'	=> $customer['P'],
@@ -540,6 +540,7 @@ class Loaninstallments extends ApiController
 					if($kdkas==$cashcode || $kdkas==$cashcodeBank){				
 						//transaksi
 						$data = array(
+							'trans'			=> $udc['D'],
 							'id_unit'		=> $unit,
 							'no_perk'		=> $udc['A'],
 							'code_trans'	=> $numeric,

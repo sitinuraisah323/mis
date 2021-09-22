@@ -13,26 +13,44 @@ class Customers extends ApiController
 
 	public function index()
 	{
-		$level = $this->session->userdata('user')->level;
-		$idunit = $this->session->userdata('user')->id_unit;
-		$this->customers->db->join('units','units.id=customers.id_unit')->order_by('customers.id','asc');
-
-			if($level == 'unit'){
-				$this->customers->db->where('units.id', $this->session->userdata('user')->id_unit);
+		if(is_array($this->input->post('query'))){
+			if(array_key_exists("generalSearch",$this->input->post('query'))){
+				$this->customers->db->like('customers.name', $this->input->post('query')['generalSearch']);
+			}			
+			if(array_key_exists("limit",$this->input->post('query'))){
+				if($this->input->post('query')['limit'] !== 'all'){
+					$this->customers->db->limit($this->input->post('query')['limit']);
+				}
 			}
-
-			if($level == 'cabang'){
-				$this->customers->db->where('units.id_cabang', $this->session->userdata('user')->id_cabang);
+			if(array_key_exists("area",$this->input->post('query'))){
+				if($this->input->post('query')['area']){
+					$this->customers->db->where('units.id_area',$this->input->post('query')['area']);
+				}
 			}
-
-		if($post = $this->input->post()){
-			if(is_array($post['query'])){
-				$value = $post['query']['generalSearch'];
-					$this->customers->db->like('customers.name', $value);												
+			if(array_key_exists("unit",$this->input->post('query'))){
+				if($this->input->post('query')['unit']){
+					$this->customers->db->where('units.id',$this->input->post('query')['unit']);
+				}
 			}
+			if(array_key_exists("cabang",$this->input->post('query'))){
+				if($this->input->post('query')['cabang']){
+					$this->customers->db->where('units.id_cabang',$this->input->post('query')['cabang']);
+				}
+			}
+		}else{
+			if((int) $this->input->get('cabang')){
+				$this->customers->db->where('units.id_cabang', $this->input->get('cabang') );
+			}
+			if((int) $this->input->get('unit')){
+				$this->customers->db->where('units.id',$this->input->get('unit'));
+			}
+			if((int) $this->input->get('area')){
+				$this->customers->db->where('units.id_area',$this->input->get('area'));
+			}
+			$this->customers->db->limit(100);
 		}
-
-		$data =  $this->customers->all();				
+		$this->customers->db->join('units','units.id = customers.id_unit');
+		$data =  $this->customers->all();
 		echo json_encode(array(
 			'data'	=> $data,
 			'message'	=> 'Successfully Get Data Regular Pawns'
@@ -245,6 +263,44 @@ class Customers extends ApiController
 			));
 		}
 
+	}
+	
+	public function performances()
+	{
+		$area = $this->input->get('area') ;
+		$queryArea = $area ? " and units.id_area = '$area' " : '';
+
+		$unit = $this->input->get('unit') ;
+		$queryUnit = $unit ? " and units.id = '$unit' " : '';
+
+		$permit = $this->input->get('permit') ;
+		$queryPermit = $permit ? " and ur2.permit = '$permit' " : '';
+
+		$dateStart = $this->input->get('dateStart') ?  $this->input->get('dateStart') : '';
+		$dateEnd = $this->input->get('dateEnd') ?  $this->input->get('dateEnd') : '';
+		$query = "select (1) as kode_nasabah, c2.id, c2.name, c2.birth_place ,c2.birth_date, 
+			concat(c2.address,' RT ',c2.rt,' RW ',c2.rw, ' KEC ', c2.kecamatan,' KOTA ', c2.city, ' ',c2.province ) as address,
+			c2.nik, (0) as number_identitas, c2.no_cif, (0) as npwp, areas.area, units.name as unit
+			FROM customers c2 
+			join units on units.id = c2.id_unit 
+			join areas on areas.id = units.id_area 
+			where c2.id in(select ur2.id_customer from units_regularpawns ur2
+			join units on units.id = ur2.id_unit
+			join areas on areas.id = units.id_area
+			where date_sbk >= '$dateStart' and date_sbk <= '$dateEnd' $queryPermit $queryArea $queryUnit) 
+			and c2.id not in ( select ur2.id_customer from units_regularpawns ur2
+			join units on units.id = ur2.id_unit
+			join areas on areas.id = units.id_area
+			where date_sbk <'$dateStart' $queryPermit $queryArea $queryUnit)
+			$queryArea
+		";
+		$data = $this->customers->db->query($query)->result();
+
+		echo json_encode(array(
+				'data'	=> 	$data,
+				'message'	=> 'Successfully get performance editeed'
+			));
+		
 	}
 
 }

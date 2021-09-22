@@ -865,6 +865,86 @@ class Dashboards extends Authenticated
 		$this->load->view('dashboard/reach/index');
 	}
 
+	public function pengeluaran_pdf()
+	{
+		$this->load->library('pdf');
+		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		require_once APPPATH.'controllers/pdf/header.php';
+	
+		$pdf->AddPage('L', 'A4');
+		$view = $this->load->view('dashboard/pengeluaran/pdf.php',[
+			'units'=>$this->pengeluaran_daily(),
+		],true);
+		$pdf->writeHTML($view);
+	
+	
+		//download
+		$pdf->Output('GHNet_Pengeluaran'.date('d_m_Y').'.pdf', 'D');
+	}
+
+	public function pengeluaran_excel()
+	{
+		//load our new PHPExcel library
+		$this->load->library('PHPExcel');
+		$columns = array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V',
+		'W','X','Y','Z','AA','AB','AC','AD','AF','AG','AH','AI','AJ','AK','AL','AM','AN','AO','AP','AQ','AR','AS','AR',
+		'AS','AT','AU','AV','AW','AX','AY','AZ'
+			);
+		// Create new PHPExcel object
+		$objPHPExcel = new PHPExcel();
+		$objPHPExcel->getProperties()->setCreator("O'nur")
+			->setLastModifiedBy("O'nur")
+			->setTitle("Reports")
+			->setSubject("Widams")
+			->setDescription("widams report ")
+			->setKeywords("phpExcel")
+			->setCategory("well Data");
+
+		$objPHPExcel->setActiveSheetIndex(0);
+		$units = $this->pengeluaran_daily();
+		$no = 1;
+		foreach ($units as $index => $row)
+		{
+			if($index == 0){		
+				$i = 0;
+				$objPHPExcel->getActiveSheet()->setCellValue($columns[$i].$no, $row['no']);
+				$i++;
+				$objPHPExcel->getActiveSheet()->setCellValue($columns[$i].$no, $row['unit']);
+				$i++;
+				$objPHPExcel->getActiveSheet()->setCellValue($columns[$i].$no, $row['unit']);
+				$i++;
+				foreach($row['dates'] as $date){
+					$objPHPExcel->getActiveSheet()->setCellValue($columns[$i].$no, $date);
+					$i++;
+				}
+			}else{
+				$i = 0;
+				$objPHPExcel->getActiveSheet()->setCellValue($columns[$i].$no, $row->id);
+				$i++;
+				$objPHPExcel->getActiveSheet()->setCellValue($columns[$i].$no, $row->name);
+				$i++;
+				$objPHPExcel->getActiveSheet()->setCellValue($columns[$i].$no, $row->area);
+				$i++;
+				foreach($row->dates as $date){
+					$objPHPExcel->getActiveSheet()->setCellValue($columns[$i].$no, $date);
+					$i++;
+				}
+			}
+			$no++;
+		}
+
+		//Redirect output to a client’s WBE browser (Excel5)
+		$filename ="Report Pengeluaran Ghanet ".date('Y-m-d H:i:s');
+		header('Content-Type: application/vnd.ms-excel');
+		header('Content-Disposition: attachment;filename="'.$filename.'.xls"');
+		header('Cache-Control: max-age=0');
+		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+		$objWriter->save('php://output');
+		// if($post = $this->input->post()){
+		// 	echo $post['area'];
+		// }
+	}
+
 	public function pendapatan_pdf()
 	{
 		$this->load->library('pdf');
@@ -984,6 +1064,53 @@ class Dashboards extends Authenticated
 			$dates = array();
 			foreach($daterange as $date){
 				$dates[] =  (int) $this->regular->getPendapatan($unit->id, $date->format('Y-m-d'), $this->input->get('method'))->up;
+			}
+			$unit->dates = $dates;
+			$result[] = $unit;
+		}
+		return $result;
+	}
+
+	public function pengeluaran_daily()
+	{
+		if($area = $this->input->get('area')){
+			$this->units->db->where('id_area', $area);
+		}
+
+		if($cabang = $this->input->get('cabang')){
+			$this->units->db->where('units.id_cabang', $cabang);
+		}
+
+		if($unit = $this->input->get('unit')){
+			$this->units->db->where('units.id', $unit);
+		}
+
+		if($this->input->get('date-start')){
+			$date = $this->input->get('date-start');
+		}else{
+			$date = date('Y-m-d');
+		}
+
+		$date = date('Y-m-d', strtotime($date. ' +1 days'));
+		$begin = new DateTime( $date );
+		$end = new DateTime($date);
+		$end = $end->modify( '-6 day' );
+		$interval = new DateInterval('P1D');
+		$daterange = new DatePeriod($end, $interval ,$begin);
+
+		$dates = array();
+		foreach($daterange as $date){
+			$dates[] =  $date->format('Y-m-d');
+		}
+
+		$result[] = array('no' => 'No','unit'=> 'Unit','area'=>'Area','dates'=>$dates);
+		$units = $this->units->db->select('units.id, units.name, areas.area as area')
+			->join('areas','areas.id = units.id_area')
+			->get('units')->result();
+		foreach ($units as $unit){
+			$dates = array();
+			foreach($daterange as $date){
+				$dates[] =  (int) $this->regular->getPengeluaran($unit->id, $date->format('Y-m-d'), $this->input->get('method'))->up;
 			}
 			$unit->dates = $dates;
 			$result[] = $unit;

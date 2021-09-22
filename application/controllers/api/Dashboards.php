@@ -626,6 +626,53 @@ class Dashboards extends ApiController
 		return $this->sendMessage($data,'Successfully get Pendapatan');
 	}
 
+	public function pengeluaran_daily()
+	{
+		if($area = $this->input->get('area')){
+			$this->units->db->where('id_area', $area);
+		}
+
+		if($cabang = $this->input->get('cabang')){
+			$this->units->db->where('units.id_cabang', $cabang);
+		}
+
+		if($unit = $this->input->get('unit')){
+			$this->units->db->where('units.id', $unit);
+		}
+
+		if($this->input->get('date')){
+			$date = $this->input->get('date');
+		}else{
+			$date = date('Y-m-d');
+		}
+
+		$date = date('Y-m-d', strtotime($date. ' +1 days'));
+		$begin = new DateTime( $date );
+		$end = new DateTime($date);
+		$end = $end->modify( '-6 day' );
+		$interval = new DateInterval('P1D');
+		$daterange = new DatePeriod($end, $interval ,$begin);
+
+		$dates = array();
+		foreach($daterange as $date){
+			$dates[] =  $date->format('Y-m-d');
+		}
+
+		$result[] = array('no' => 'No','unit'=> 'Unit','area'=>'Area','dates'=>$dates);
+		$units = $this->units->db->select('units.id, units.name, areas.area as area')
+			->join('areas','areas.id = units.id_area')
+			->get('units')->result();
+		foreach ($units as $unit){
+			$dates = array();
+			foreach($daterange as $date){
+				$dates[] =  (int) $this->regular->getPengeluaran($unit->id, $date->format('Y-m-d'), $this->input->get('method'))->up;
+			}
+			$unit->dates = $dates;
+			$result[] = $unit;
+		}
+		return $this->sendMessage($result,'Successfully get Pendapatan');
+	}
+
 	public function pengeluaran()
 	{
 		$listperk = $this->m_casing->get_list_pengeluaran();
@@ -1466,4 +1513,82 @@ class Dashboards extends ApiController
 		$this->sendMessage($unit, 'Get Data karatase');
 	}
 
+	public function new_outstanding()
+	{
+			$currdate = date('Y-m-d');
+		$max = 0;
+		if($this->input->get('date')){
+			$date = $this->input->get('date');
+		}else{
+			$date = date('Y-m-d');
+		}
+
+		$lastdate = $this->regular->getLastDateTransaction()->date;
+		if ($date > $lastdate){
+			$date = $lastdate;
+		}else{
+			$date= $date;
+		}
+		//$data = $this->regular->getLastDateTransaction();
+
+		//get max
+		$max = $this->db->select_max('os')
+			->where('date',$date)
+			->from('units_outstanding')
+			->get()->row();
+
+		if($area = $this->input->get('area')){
+			$this->units->db->where('id_area', $area);
+		}else if($this->session->userdata('user')->level == 'area'){
+			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
+		}
+
+		if($cabang = $this->input->get('cabang')){
+			$this->units->db->where('id_cabang', $cabang);
+		}else if($this->session->userdata('user')->level == 'cabang'){
+			$this->units->db->where('id_cabang', $this->session->userdata('user')->id_cabang);
+		}
+
+		if($id_unit = $this->input->get('id_unit')){
+			$this->units->db->where('units.id', $id_unit);
+		}else if($code = $this->input->get('code')){
+			$this->units->db->where('code', zero_fill($code, 3));
+		}else if($this->session->userdata('user')->level == 'unit'){
+			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
+		}
+
+		$units = $this->units->db->select('units.id, units.name, area,id_area')
+			->join('areas','areas.id = units.id_area')
+			->get('units')->result();
+		$today = '';
+		$yesterday = '';
+		
+		foreach ($units as $unit){
+			$getOstToday = $this->regular->db
+						->where('date <=', $date)
+						->from('units_outstanding')
+						->where('id_unit', $unit->id)
+						->order_by('date','DESC')
+						->get()->row();
+			$max = $this->db->select('sum(os) as os')
+						->where('date',$getOstToday->date)
+						->join('units', 'units.id = units_outstanding.id_unit')
+						->where('units.id_area', $unit->id_area)
+						->from('units_outstanding')
+						->get()->row()->os;					
+			$unit->max = $max;
+			$getOstYesterday = $this->regular->db
+						->where('date <', $getOstToday->date)
+						->from('units_outstanding')
+						->where('id_unit', $unit->id)
+						->order_by('date','DESC')
+						->get()->row();
+			$unit->total_outstanding->up = $getOstToday->os;
+			$unit->ost_yesterday->up = $getOstYesterday->os;
+		}
+		$this->sendMessage($units, [
+			'today'	=> $today,
+			'yesterday'	=> $yesterday
+		]);
+	}
 }

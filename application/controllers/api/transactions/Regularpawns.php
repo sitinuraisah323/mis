@@ -156,24 +156,42 @@ class Regularpawns extends ApiController
 
 	public function getcustomers()
 	{
-		$this->regulars->db->select('*,units.name as unit_name,customers.name as customer')
+		$date = $this->input->get('date') ? $this->input->get('date') : date('Y-m-d');
+
+		$this->regulars->db->select('
+		units_regularpawns.no_sbk, date_sbk,units_regularpawns.amount,
+		customers.no_cif,	customers.job, units_regularpawns.ktp, (select date_repayment from units_repayments
+		where units_regularpawns.id_repayment = units_repayments.id
+		limit 1
+		) as repayment,deadline, capital_lease,
+		units.name as unit_name,customers.name as customer
+		')
+			 ->from('units_regularpawns')
 			 ->join('units','units.id=units_regularpawns.id_unit')
 			 ->join('customers','customers.id=units_regularpawns.id_customer')
-			 ->where('units_regularpawns.amount !=','0')
-			 ->where('units_regularpawns.status_transaction ','N')
-			 ->order_by('units_regularpawns.ktp','asc');
+			 ->where(' NOT EXISTS (
+				 select 1 from units_repayments 
+				 where units_repayments.id = units_regularpawns.id_repayment
+				 and	units_repayments.date_repayment <= "'.$date.'"
+			 )')
+			 ->where('units_regularpawns.date_sbk <=', $date)
+			 ->where('units_regularpawns.amount !=','0');
 
-			 if($area = $this->input->get('area')){
-				$this->regulars->db->where('units.id_area', $area);
-			}else if($this->session->userdata('user')->level == 'area'){
-				$this->regulars->db->where('units.id_area', $this->session->userdata('user')->id_area);
-			}
+		if($area = $this->input->get('area')){
+			$this->regulars->db->where('units.id_area', $area);
+		}else if($this->session->userdata('user')->level == 'area'){
+			$this->regulars->db->where('units.id_area', $this->session->userdata('user')->id_area);
+		}
 
-			if($permit = $this->input->get('permit')){
-				$this->regulars->db->where('units_regularpawns.permit', $permit);
-			}	
+		if($unit = $this->input->get('unit')){
+			$this->regulars->db->where('units.id', $unit);
+		}
+
+		if($permit = $this->input->get('permit')){
+			$this->regulars->db->where('units_regularpawns.permit', $permit);
+		}	
 		
-		$data =  $this->regulars->all();
+		$data =  $this->regulars->db->get()->result();
 		echo json_encode(array(
 			'data'		=> $data,
 			'message'	=> 'Successfully Get Data Regular Pawns'
@@ -924,6 +942,51 @@ class Regularpawns extends ApiController
 			return $this->sendMessage($result, 'Successfully get Insentif');
 		}
 		return $this->sendMessage([],'Id Unit, Month and Year Request Should');
+	}
+
+	public function transactionmiss()
+	{
+		$result = [];
+		$month = $this->input->get('get') ? $this->input->get('get') : date('n');
+		$year = $this->input->get('year') ? $this->input->get('year') : date('Y');
+		$permit = $this->input->get('permit') ? $this->input->get('permit') : 'OJK';
+		$idUnit = $this->input->get('id_unit') ? $this->input->get('id_unit') : false;
+		$idArea = $this->input->get('id_area') ? $this->input->get('id_area') : false;
+		$queryUnit = '';
+		$queryArea = '';
+		if($idUnit){
+			$queryUnit = " and id_unit = $idUnit ";
+		}
+		if($idArea){
+			$queryArea = " and id_area = $idArea ";
+		}
+		if($this->input->get('type') === 'CASH'){
+			$result = $this->regulars->db->query("			
+				select units_dailycashs.id, name as unit,no_perk, date, description, type, amount  from units_dailycashs 
+				join units on units.id = units_dailycashs.id_unit
+				where  month(date) = $month and year(date) = $year and permit = '$permit' $queryArea $queryUnit
+				and SUBSTRING(trans, 1, 5) not in (
+					select units_regularpawns.no_sbk from units_regularpawns 
+					join units on units_regularpawns.id_unit = units.id
+					where month(date) = $month and year(date) = $year and permit = '$permit' $queryArea $queryUnit
+				)
+				and SUBSTRING(trans, 6, 7) = 'RC' 
+			")->result();
+		}else{
+			$result = $this->regulars->db->query("			
+			select * from units_regularpawns 
+			join units on units_regularpawns.id_unit = units.id
+			where no_sbk not in(
+				SELECT SUBSTRING(trans, 1, 5)
+				FROM units_dailycashs
+				join units on units_dailycashs.id_unit = units.id
+				where  SUBSTRING(trans, 6, 7) = 'RC'
+				and year(date) = $year and month(date) = $month
+				and permit = 'OJK' $queryArea $queryUnit
+			) and year(date_sbk) = $year and month(date_sbk) = $month and permit = '$permit' $queryArea $queryUnit
+			")->result();
+		}
+		return $this->sendMessage($result, 'Successfully get Miss Transaction');
 	}
 
 }

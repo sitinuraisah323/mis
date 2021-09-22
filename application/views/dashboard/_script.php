@@ -195,8 +195,9 @@ function totoutstanding() {
 	});
 }
 
-function outstanding() {
-	$('svg').remove();
+function outstanding(e) {
+	e.target.remove();
+	// $('svg').remove();
     $('#graphOutstanding').empty();
 	$('#tblOut').empty();
 	var pencentage =0;
@@ -207,7 +208,7 @@ function outstanding() {
 	 var yesterday = 0;
 
     $.ajax({
-		url:"<?php echo base_url('api/dashboards/outstanding');?>",
+		url:"<?php echo base_url('api/dashboards/new_outstanding');?>",
 		type:"GET",
 		dataType:"JSON",
 		data:{
@@ -238,11 +239,15 @@ function outstanding() {
 				{
 					percentage = (parseInt(unit.total_outstanding.up)/parseInt(unit.max))*100;
 					templateJBR += "<tr class='rowappendjabar'>";
-					templateJBR += "<td class='text-right' width='30%'><b>"+unit.name+"</b></td>";
-					templateJBR += "<td class='text-left'  width='60%'><div class='progress progress-sm'><div class='progress-bar kt-bg-primary' role='progressbar' style='width: "+percentage+"%;' aria-valuenow='"+unit.total_outstanding.up+"' aria-valuemin='"+unit.max+"' aria-valuemax=''></div></div></td>";
-					templateJBR += "<td class='text-right' width='10%'><b>"+convertToRupiah(unit.total_outstanding.up)+"</b></td>";
+					templateJBR += `<td class='text-right' width='30%'><b>
+						${unit.name}
+					</b></td>`;
+					templateJBR += "<td class='text-left'  width='60%'><div class='progress progress-sm'><div class='progress-bar kt-bg-primary' role='progressbar'  style='width:"+percentage+"%'></div></div></td>";
+					templateJBR += `<td class='text-right' width='10%'><b>
+							${convertToRupiah(unit.total_outstanding.up)}
+					</b></td>`;
 					templateJBR += '</tr>';
-					totjabar +=unit.total_outstanding.up;
+					totjabar += parseInt(unit.total_outstanding.up);
 				}
 
 				if(unit.area=='Jawa Timur')
@@ -250,7 +255,7 @@ function outstanding() {
 					percentage = (parseInt(unit.total_outstanding.up)/parseInt(unit.max))*100;
 					templateJTM += "<tr class='rowappendjatim'>";
 					templateJTM += "<td class='text-right' width='30%'><b>"+unit.name+"</b></td>";
-					templateJTM += "<td class='text-left'  width='60%'><div class='progress progress-sm'><div class='progress-bar kt-bg-primary' role='progressbar' style='width: "+percentage+"%;' aria-valuenow='"+unit.total_outstanding.up+"' aria-valuemin='"+unit.max+"' aria-valuemax=''></div></div></td>";
+					templateJTM += "<td class='text-left'  width='60%'><div class='progress progress-sm'><div class='progress-bar kt-bg-primary' role='progressbar' style='width: "+percentage+"%;'></div></div></td>";
 					templateJTM += "<td class='text-right' width='10%'><b>"+convertToRupiah(unit.total_outstanding.up)+"</b></td>";
 					templateJTM += '</tr>';
 					totjatim +=unit.total_outstanding.up;
@@ -261,10 +266,10 @@ function outstanding() {
 					percentage = (parseInt(unit.total_outstanding.up)/parseInt(unit.max))*100;
 					templateNTB += "<tr class='rowappendntb'>";
 					templateNTB += "<td class='text-right' width='30%'><b>"+unit.name+"</b></td>";
-					templateNTB += "<td class='text-left'  width='60%'><div class='progress progress-sm'><div class='progress-bar kt-bg-primary' role='progressbar' style='width: "+percentage+"%;' aria-valuenow='"+unit.total_outstanding.up+"' aria-valuemin='"+unit.max+"' aria-valuemax=''></div></div></td>";
+					templateNTB += "<td class='text-left'  width='60%'><div class='progress progress-sm'><div class='progress-bar kt-bg-primary' role='progressbar' style='width: "+percentage+"%;'></div></div></td>";
 					templateNTB += "<td class='text-right' width='10%'><b>"+convertToRupiah(unit.total_outstanding.up)+"</b></td>";
 					templateNTB += '</tr>';
-					totntb +=unit.total_outstanding.up;
+					totntb += parseInt(unit.total_outstanding.up);
 				}
 
 				if(unit.area=='NTT')
@@ -272,10 +277,10 @@ function outstanding() {
 					percentage = (parseInt(unit.total_outstanding.up)/parseInt(unit.max))*100;
 					templateNTT += "<tr class='rowappendntt'>";
 					templateNTT += "<td class='text-right' width='30%'><b>"+unit.name+"</b></td>";
-					templateNTT += "<td class='text-left'  width='60%'><div class='progress progress-sm'><div class='progress-bar kt-bg-primary' role='progressbar' style='width: "+percentage+"%;' aria-valuenow='"+unit.total_outstanding.up+"' aria-valuemin='"+unit.max+"' aria-valuemax=''></div></div></td>";
+					templateNTT += "<td class='text-left'  width='60%'><div class='progress progress-sm'><div class='progress-bar kt-bg-primary' role='progressbar' style='width: "+percentage+"%;'></div></div></td>";
 					templateNTT += "<td class='text-right' width='10%'><b>"+convertToRupiah(unit.total_outstanding.up)+"</b></td>";
 					templateNTT += '</tr>';
-					totntt +=unit.total_outstanding.up;
+					totntt += parseInt(unit.total_outstanding.up);
 				}
 			});
 
@@ -353,8 +358,9 @@ function outstanding() {
 	});
 }
 
-function OSMortage() {
-	$('svg').remove();
+function OSMortage(e) {
+	e.target.remove();
+	// $('svg').remove();
     $('#graphOsCicilan').empty();
 	$('#tblOutcicilan').empty();
 	var permit = "";
@@ -515,8 +521,9 @@ function OSMortage() {
 	});
 }
 
-function disburse() {
-	$('svg').remove();
+function disburse(e) {
+	e.target.remove();
+	// $('svg').remove();
 	$('#graphDisburse').empty();
 	var transaction = [];
 	var totalYesterday = 0;
@@ -908,8 +915,9 @@ function pencairan() {
 
 }
 
-function pelunasan() {
-	$('svg').remove();
+function pelunasan(e) {
+	e.target.remove();
+	// $('svg').remove();
 	$('#graphPelunasan').empty();
 	//var currdate = '2020-07-20';
 	var totalCurr = 0;
@@ -1083,8 +1091,9 @@ function pelunasan() {
 
 }
 
-function dpd() {
-	$('svg').remove();
+function dpd(e) {
+	e.target.remove();
+	// $('svg').remove();
 	$('#graphDPD').empty();
 	var transaction = [];
 	var total = 0;
@@ -1238,8 +1247,9 @@ function dpd() {
 
 }
 
-function saldo() {
-	$('svg').remove();
+function saldo(e) {
+	e.target.remove();
+	// $('svg').remove();
 	$('#graphSaldo').empty();
 	var transaction = [];
 	var totalCurr = 0;
@@ -1400,8 +1410,9 @@ function saldo() {
 
 }
 
-function pengeluaran() {
-	$('svg').remove();
+function pengeluaran(e) {
+	// $('svg').remove();
+	e.target.remove();
 	$('#graphPengeluaran').empty();
 	var total = 0;
 	var totalYesterday = 0;
@@ -1561,8 +1572,9 @@ function pengeluaran() {
 
 }
 
-function pendapatan() {
-	$('svg').remove();
+function pendapatan(e) {
+	// $('svg').remove();
+	e.target.remove();
 	$('#graphPendapatan').empty();
 	//var currdate = '2020-07-20';
 	var total = 0;
@@ -1722,8 +1734,8 @@ function pendapatan() {
 	});
 }
 
-function lm(){
-
+function lm(e){
+	e.target.remove();
 	var stock 	 	= [];
 	var totstock 	= 0;
 	var sales 	 	= [];
@@ -1956,8 +1968,8 @@ function lm(){
 	});
 }
 
-function targetBooking(){
-
+function targetBooking(e){
+	e.target.remove();
 	var booking 	= [];
 	var target 		= [];
 	var percentage 	= [];
@@ -2215,8 +2227,8 @@ function targetBooking(){
 	});
 }
 
-function targetOutstanding(){
-
+function targetOutstanding(e){
+	e.target.remove();
 	var booking 	 = [];
 	var target 		 = [];
 	var percentage 	 = [];
@@ -2480,17 +2492,15 @@ function notfound(){
 }
 
 jQuery(document).ready(function() {
-	outstanding();
-	OSMortage();
-	disburse();
-	pelunasan();
-	dpd();
-	saldo();
-	pengeluaran();
-	pendapatan();	
-	lm();
-	targetBooking();
-	targetOutstanding();
+	// disburse();
+	// pelunasan();
+	// dpd();
+	// saldo();
+	// pengeluaran();
+	// pendapatan();	
+	// lm();
+	// targetBooking();
+	// targetOutstanding();
 });
 
 </script>

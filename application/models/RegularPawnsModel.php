@@ -340,6 +340,7 @@ class RegularpawnsModel extends Master
 			->from($this->table)
 			->where('id_unit', $idUnit)
 			->where('deadline', $date)
+			->where('status_transaction','N')
 			->get()->row();
 		return (object)array(
 			'noa' => (int)$data->noa,
@@ -630,6 +631,32 @@ class RegularpawnsModel extends Master
 		);
 	}
 
+	public function getPengeluaran($idUnit, $date, $method = '')
+	{
+		$this->load->model('MappingcaseModel', 'm_casing');	
+		$data = $this->m_casing->get_list_pengeluaran();
+		$category=array();
+		foreach ($data as $value) {
+			array_push($category, $value->no_perk);
+		}
+
+		$this->db
+		->select('sum(units_dailycashs.amount) as up')
+		->join('units','units.id = units_dailycashs.id_unit')
+		->where('units_dailycashs.id_unit', $idUnit)
+		->where('type','CASH_OUT')
+		->where_in('units_dailycashs.no_perk', $category);
+		if($method == 'daily'){
+			$this->db->where('units_dailycashs.date',$date);
+		}else{
+			$this->db->where('units_dailycashs.date >=',date('Y-m-01', strtotime($date)));
+			$this->db->where('units_dailycashs.date <=',$date);
+		}
+		$data = $this->db->get('units_dailycashs')->row();
+		return $data;
+	
+	}
+
 	public function getPendapatan($idUnit, $date, $method = '')
 	{
 		$this->load->model('MappingcaseModel', 'm_casing');	
@@ -862,5 +889,33 @@ class RegularpawnsModel extends Master
 		];
 
 	}
+
+	public function getRealOS($idUnit,$today)
+	{
+		$regular 	= $this->db->select('SUM(amount) as up,COUNT(*) as noa')
+					 ->from('units_regularpawns')
+					 ->where('status_transaction','N')
+					 ->where('id_unit',$idUnit)
+					 ->where('date_sbk <=',$today)
+					 ->where('amount !=','0')
+					 ->get()->row();					 
+
+		$mortages = $this->db->select('SUM(amount_loan) AS up,SUM(amount_loan - (SELECT COUNT(DISTINCT(date_kredit)) FROM units_repayments_mortage WHERE units_repayments_mortage.no_sbk =units_mortages.no_sbk AND units_repayments_mortage.id_unit =units_mortages.id_unit) * installment) AS saldocicilan,COUNT(*) AS noa')
+						->from('units_mortages')
+						->join('customers','units_mortages.id_customer = customers.id')			
+						->where('units_mortages.status_transaction ','N')
+						->where('units_mortages.id_unit ', $idUnit)						
+						->where('date_sbk <=',$today)
+						->get()->row();								
+		
+		return (object)array(
+			"outstanding"=>(int) $regular->up + (int) $mortages->saldocicilan,
+			"osReg"=>(int) $regular->up,
+			"noaReg"=>(int) $regular->noa,
+			"osNonReg"=>(int) $mortages->saldocicilan,
+			"noaNonReg"=>(int) $mortages->noa
+		);	
+	}
+
 
 }

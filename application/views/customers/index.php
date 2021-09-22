@@ -72,22 +72,74 @@ $this->load->view('temp/MenuBar.php');
 					</div>
 					<!--end: Alerts -->
 					<!--begin: Search Form -->
-					<div class="kt-form kt-form--label-right kt-margin-t-20 kt-margin-l-20 kt-margin-r-20  kt-margin-b-10">
+					<form action="<?php echo base_url('datamaster/customers/excel');?>" class="kt-form kt-form--label-right kt-margin-t-20 kt-margin-l-20 kt-margin-r-20  kt-margin-b-10">
 						<div class="row align-items-center">
-							<div class="col-xl-8 order-2 order-xl-1">
-								<div class="row align-items-center">
-									<div class="col-md-4 kt-margin-b-20-tablet-and-mobile">
-										<div class="kt-input-icon kt-input-icon--left">
-											<input type="text" class="form-control" placeholder="Search..." id="generalSearch">
-											<span class="kt-input-icon__icon kt-input-icon__icon--left">
-                                            <span><i class="la la-search"></i></span>
-                                        </span>
-										</div>
-									</div>
+							<div class="col-md-4 my-4">
+							<label class="col-form-label">Cari</label>
+								<div class="kt-input-icon kt-input-icon--left">
+									<input type="text" class="form-control" placeholder="Search..." name="generalSearch" id="generalSearch">
+									<span class="kt-input-icon__icon kt-input-icon__icon--left">
+									<span><i class="la la-search"></i></span>
+									</span>
 								</div>
 							</div>
+							
+							<?php if($this->session->userdata('user')->level == 'unit'):?>
+								<input type="hidden" name="id_unit" value="<?php echo $this->session->userdata('user')->id_unit;?>">
+							<?php elseif($this->session->userdata('user')->level == 'area'):?>
+								<input type="hidden" name="area" value="<?php echo $this->session->userdata('user')->id_area;?>">
+								<div class="col-lg-2">
+									<label class="col-form-label">Unit</label>
+									<select class="form-control select2" name="id_unit" id="unit">
+										<option value="0">All</option>
+									</select>
+								</div>                
+							<?php elseif($this->session->userdata('user')->level == 'cabang'):?>
+							<input type="hidden" id="cabang" name="cabang" value="<?php echo $this->session->userdata('user')->id_cabang;?>">
+							<div class="col-lg-2">
+							<label class="col-form-label">Unit</label>
+								<select class="form-control select2" name="id_unit" id="unit">
+									<option value="0">All</option>
+								</select>
+							</div>
+							<?php else:?>
+								<div class="col-lg-2">
+									<label class="col-form-label">Area</label>
+									<select class="form-control select2" name="area" id="area">
+										<option value="0">All</option>
+										<?php
+											if (!empty($areas)){
+												foreach($areas as $row){
+												echo "<option value=".$row->id.">".$row->area."</option>";
+												}
+											}
+										?>
+									</select>
+								</div>
+								<div class="col-lg-2">
+									<label class="col-form-label">Unit</label>
+									<select class="form-control select2" name="id_unit" id="unit">
+										<option value="0">All</option>
+									</select>
+								</div>
+							<?php endif ;?>
+							<div class="col-lg-2">
+								<label class="col-form-label">Limit</label>
+								<select class="form-control " id="limit" name="limit">
+									<?php for($i = 1; $i<=10;$i++):?>
+										<option value="<?php echo $i*100;?>"><?php echo $i*100;?></option>
+									<?php endfor;?>
+									<option value="all">All</option>
+								</select>
+							</div>
+							<?php if($this->session->userdata('user')->level !== 'unit' && $this->session->userdata('user')->level !== 'area' && $this->session->userdata('user')->level !== 'cabang' ):?>
+
+								<div class="col-lg-2">  
+									<input type="submit" class="btn btn-danger btn-icon" value="excel" name="btnexport_csv">
+								</div>
+							<?php endif;?>
 						</div>
-					</div>
+					</form>
 					<!--end: Search Form -->
 				</div>
 				<?php //print_r($areas); ?>
@@ -271,6 +323,9 @@ $this->load->view('temp/MenuBar.php');
 		</div>
 	</div>
 </form>
+<input type="hidden" name="url_get" id="url_get" value="<?php echo base_url('api/report/bukukas/get_transaksi_unit') ?>"/>
+<input type="hidden" name="url_get_units" id="url_get_units" value="<?php echo base_url('api/datamaster/units/get_unit_bycabang') ?>"/>
+<input type="hidden" name="url_get_unit" id="url_get_unit" value="<?php echo base_url('api/datamaster/units/get_units_byarea') ?>"/>
 
 <?php
 $this->load->view('temp/Footer.php', array(

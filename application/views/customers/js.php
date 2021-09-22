@@ -94,13 +94,18 @@
 	});
 
 
-	function initDataTable(){
+	function initDataTable(){		
+		var general = $('#generalSearch').val();
+		var limit= $('#limit').val();
+		var area = $('#area').val();
+		var unit= $('#unit').val();
+		var cabang = $('#cabang').val();
 		var option = {
 			data: {
 				type: 'remote',
 				source: {
 					read: {
-						url: '<?php echo base_url("api/datamaster/customers"); ?>',
+						url: `<?php echo base_url("api/datamaster/customers"); ?>?area=${area}&unit=${unit}&cabang=${cabang}`,
 						map: function(raw) {
 							// sample data mapping
 							var dataSet = raw;
@@ -316,13 +321,83 @@
 				header:true
 			}
 		}
+
 		datatable = $('#kt_datatable').KTDatatable(option);
 		datatable.on("kt-datatable--on-layout-updated",function(){
-			//initDTEvents();
-		})
+			// initDTEvents();
+		});
+	
+		
+
+		
+		$('#limit').on('change', function() {
+			datatable.search($(this).val().toLowerCase(), 'limit');
+		});
+
+		$('#area').on('change', function() {
+			datatable.search($(this).val().toLowerCase(), 'area');
+		});
+		$('#unit').on('change', function() {
+			datatable.search($(this).val().toLowerCase(), 'unit');
+		});
+		$('#cabang').on('change', function() {
+			datatable.search($(this).val().toLowerCase(), 'cabang');
+		});
+		
 	}
 
 	$(document).ready(function () {
 		initDataTable();
 	});
-</script
+
+	var type = $('[name="area"]').attr('type');
+	if(type == 'hidden'){
+		$('[name="area"]').trigger('change');
+	}
+	
+$('[name="area"]').on('change',function(){
+        var area = $('[name="area"]').val();
+        var units =  $('[name="id_unit"]');
+        var url_data = $('#url_get_unit').val() + '/' + area;
+        $.get(url_data, function (data, status) {
+            var response = JSON.parse(data);
+            if (status) {
+                $("#unit").empty();
+				var opt = document.createElement("option");
+				opt.value = "0";
+				opt.text = "All";
+				units.append(opt);
+                for (var i = 0; i < response.data.length; i++) {
+                    var opt = document.createElement("option");
+                    opt.value = response.data[i].id;
+                    opt.text = response.data[i].name;
+                    units.append(opt);
+                }
+            }
+        });
+});
+
+$('[name="cabang"]').on('change',function(){
+	var cabang = $('[name="cabang"]').val();
+	var units =  $('[name="id_unit"]');
+	var url_data = $('#url_get_units').val() + '/' + cabang;
+
+
+
+	$.get(url_data, function (data, status) {
+		var response = JSON.parse(data);
+		if (status) {
+			$("#unit").empty();
+			units.append('<option value="0">All</option>');
+			for (var i = 0; i < response.data.length; i++) {
+				var opt = document.createElement("option");
+				opt.value = response.data[i].id;
+				opt.text = response.data[i].name;
+				units.append(opt);
+			}
+		}
+	});
+});
+$('#area').select2({ placeholder: "Select Area", width: '100%' });
+$('#unit').select2({ placeholder: "Select Unit", width: '100%' });
+</script>

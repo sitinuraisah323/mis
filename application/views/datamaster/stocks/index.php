@@ -73,23 +73,69 @@ $this->load->view('temp/MenuBar.php');
                 <!--end: Alerts -->           
                 <!--begin: Search Form -->
                 <div class="kt-form kt-form--label-right kt-margin-t-20 kt-margin-l-20 kt-margin-r-20  kt-margin-b-10">
-                    <div class="row align-items-center">
-                        <div class="col-xl-8 order-2 order-xl-1">
-                            <div class="row align-items-center">                
-                                <div class="col-md-4 kt-margin-b-20-tablet-and-mobile">
-                                    <div class="kt-input-icon kt-input-icon--left">
-                                        <input type="text" class="form-control" placeholder="Search..." id="generalSearch">
-                                        <span class="kt-input-icon__icon kt-input-icon__icon--left">
-                                            <span><i class="la la-search"></i></span>
-                                        </span>
-                                    </div>
-                                </div>                
+                    <form class="row align-items-center" action="<?php echo base_url('datamaster/stocks/excel');?>" method="post" >
+                        <div class="col-md-2">
+                            <label for="general" class="col-form-label">Cari</label>
+                            <input type="text" class="form-control" id="generalSearch" name="generalSearch">
+                        </div>    
+                        <?php if($this->session->userdata('user')->level == 'unit'):?>
+                            <input type="hidden" name="id_unit" value="<?php echo $this->session->userdata('user')->id_unit;?>">
+                        <?php elseif($this->session->userdata('user')->level == 'area'):?>
+                            <input type="hidden" name="area" value="<?php echo $this->session->userdata('user')->id_area;?>">
+                            <div class="col-md-2">
+                                <label class="col-form-label">Unit</label>
+                                <select class="form-control select2" name="id_unit" id="unit">
+                                    <option value="0">All</option>
+                                </select>
                             </div>
-                        </div>      
-                    </div>
+                        <?php elseif($this->session->userdata('user')->level == 'cabang'):?>
+                            <input type="hidden" name="cabang" value="<?php echo $this->session->userdata('user')->id_cabang;?>">
+                             <div class="col-md-2">
+                                <label class="col-form-label">Unit</label>
+                                <select class="form-control select2" name="id_unit" id="unit">
+                                    <option value="0">All</option>
+                                </select>
+                            </div>
+                        <?php else:?>
+                            <div class="col-md-2">
+                                <label class="col-form-label">Area</label>
+                                <select class="form-control select2" name="area" id="area">
+                                    <option value="0">All</option>
+                                    <?php
+                                        if (!empty($areas)){
+                                            foreach($areas as $row){
+                                            echo "<option value=".$row->id.">".$row->area."</option>";
+                                            }
+                                        }
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="col-form-label">Unit</label>
+                                <select class="form-control select2" name="id_unit" id="unit">
+                                    <option value="0">All</option>
+                                </select>
+                            </div>
+                        <?php endif ;?>  
+                        <div class="col-md-2">
+                        <label class="col-form-label">Tanggal</label>					
+                            <input type="date" class="form-control" name="date_start" id="date_start" >
+                        </div>
+                        <div class="col-md-2">
+                        <label class="col-form-label">Sampai</label>
+                            <input type="date" class="form-control" name="date_end" id="date_end" >
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-info"><i class="fas fa-file-excel"></i></button>
+                        </div>
+                    </form>
                 </div>      
                 <!--end: Search Form -->
             </div>
+            <input type="hidden" name="url_get" id="url_get" value="<?php echo base_url('api/report/bukukas/get_transaksi_unit') ?>"/>
+    <input type="hidden" name="url_get_units" id="url_get_units" value="<?php echo base_url('api/datamaster/units/get_unit_bycabang') ?>"/>
+	<input type="hidden" name="url_get_unit" id="url_get_unit" value="<?php echo base_url('api/datamaster/units/get_units_byarea') ?>"/>
+
             <?php //print_r($areas); ?>
             <!--begin: Datatable -->        
             <table class="kt-datatable" id="kt_datatable" width="100%">

@@ -45,7 +45,9 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <label>Date</label>
-                                <input type="date" name="date_receive" class="form-control"/>
+                                <input type="date" name="date_receive" class="form-control"
+                                min="<?php echo date('Y-m-d');?>"
+                                />
                             </div>
                             <div class="col-md-6">
                                 <label>No Referensi</label>

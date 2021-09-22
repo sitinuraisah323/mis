@@ -131,10 +131,10 @@ $this->load->view('temp/MenuBar.php');
                             ?>
                             </select>
                     </div>
-                    <!-- <div class="col-lg-2">
+                    <div class="col-lg-2">
                         <label class="col-form-label">Tanggal</label>					
 						<input type="date" class="form-control" name="date-start" value="<?php echo date('Y-m-01');?>">
-					</div> -->
+					</div>
 					<div class="col-lg-2">
                         <label class="col-form-label">Tanggal</label>
 						<input type="date" class="form-control" name="date-end" value="<?php echo date('Y-m-d');?>">
@@ -160,6 +160,8 @@ $this->load->view('temp/MenuBar.php');
 						      		<th class="text-left">Area</th>
 						      		<th class="text-left">Unit</th>
 						      		<th class="text-center">Tanggal</th>
+						      		<th class="text-left">No Perk</th>
+						      		<th class="text-left">Uraian</th>
 						      		<th class="text-right">Jumlah</th>
 						    	</tr>
 						  	</thead>

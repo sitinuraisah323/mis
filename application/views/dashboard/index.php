@@ -52,7 +52,7 @@ $currmonth = date('Y-m-d');
 								<div class="col-md-12">
 									<h3 class="kt-widget14__title">
 										<i class="fa fa-chart-bar"></i> Outstanding Nasional(Regular)
-                                        <hr/>
+                                        <i class="fa fa-eye pull-right" onclick="outstanding(event)"></i>
 									</h3>									
                                         <div class="kt-widget14__legends">
                                             <div class="kt-widget14__legend">
@@ -103,7 +103,7 @@ $currmonth = date('Y-m-d');
 								<div class="col-md-12">
 									<h3 class="kt-widget14__title">
 										<i class="fa fa-chart-bar"></i> Outstanding Nasional(Cicilan)
-                                        <hr/>
+                                        <i class="fa fa-eye pull-right" onclick="OSMortage(event)"></i>
 									</h3>									
                                         <div class="kt-widget14__legends">
                                             <div class="kt-widget14__legend">
@@ -162,7 +162,7 @@ $currmonth = date('Y-m-d');
 								<div class="col-md-12">
 									<h3 class="kt-widget14__title">
 										<i class="fa fa-chart-bar"></i> Booking Nasional
-                                        <hr/>
+                                        <i class="fa fa-eye pull-right" onclick="disburse(event)"></i>
 									</h3>
                                     <div class="kt-widget14__legends">
                                         <div class="kt-widget14__legend">
@@ -214,7 +214,7 @@ $currmonth = date('Y-m-d');
                                 <div class="col-md-12">
                                 <h3 class="kt-widget14__title">
                                    <i class="fa fa-chart-bar"></i> Pelunasan   
-                                   <hr/>          
+                                   <i class="fa fa-eye pull-right" onclick="pelunasan(event)"></i>
                                 </h3>
                                     <div class="kt-widget14__legends">
                                         <div class="kt-widget14__legend">
@@ -284,7 +284,7 @@ $currmonth = date('Y-m-d');
                                 <div class="col-md-12">
                                     <h3 class="kt-widget14__title">
                                     <i class="fa fa-chart-bar"></i> Day Past Due(DPD) Nasional  
-                                    <hr/>           
+                                    <i class="fa fa-eye pull-right" onclick="dpd(event)"></i>
                                     </h3>
                                     <div class="kt-widget14__legends">
                                         <div class="kt-widget14__legend">
@@ -345,7 +345,7 @@ $currmonth = date('Y-m-d');
                                 <div class="col-md-12">
                                     <h3 class="kt-widget14__title">
                                     <i class="fa fa-chart-bar"></i> Saldo Kas Nasional  
-                                    <hr/>           
+                                    <i class="fa fa-eye pull-right" onclick="saldo(event)"></i>
                                     </h3>
                                     <div class="kt-widget14__legends">
                                         <div class="kt-widget14__legend">
@@ -413,7 +413,7 @@ $currmonth = date('Y-m-d');
                             <div class="kt-widget14__header kt-margin-b-30">
                                 <h3 class="kt-widget14__title">
                                 <i class="fa fa-chart-bar"></i> Pengeluaran 
-                                    <hr/>            
+                                <i class="fa fa-eye pull-right" onclick="pengeluaran(event)"></i>        
                                 </h3>
                                     <div class="kt-widget14__legends">
                                         <div class="kt-widget14__legend">
@@ -475,7 +475,7 @@ $currmonth = date('Y-m-d');
                                 <div class="kt-widget14__header kt-margin-b-30">
                                     <h3 class="kt-widget14__title">
                                          <i class="fa fa-chart-bar"></i>  Pendapatan  
-                                         <hr/>           
+                                         <i class="fa fa-eye pull-right" onclick="pendapatan(event)"></i>         
                                     </h3>
                                     <div class="kt-widget14__legends">
                                         <div class="kt-widget14__legend">
@@ -540,7 +540,7 @@ $currmonth = date('Y-m-d');
                             <div class="kt-widget14__header kt-margin-b-30">
                                 <h3 class="kt-widget14__title">
                                 <i class="fa fa-chart-bar"></i> LM Monitoring 
-                                    <hr/>            
+                                <i class="fa fa-eye pull-right" onclick="lm(event)"></i>         
                                 </h3>
                                     <div class="kt-widget14__legends">
                                         <div class="kt-widget14__legend">
@@ -602,7 +602,7 @@ $currmonth = date('Y-m-d');
                             <div class="kt-widget14__header kt-margin-b-30">
                                 <h3 class="kt-widget14__title">
                                 <i class="fa fa-chart-bar"></i> Target Booking 
-                                    <hr/>            
+                                <i class="fa fa-eye pull-right" onclick="targetBooking(event)"></i>  
                                 </h3>
                                     <div class="kt-widget14__legends">
                                         <div class="kt-widget14__legend">
@@ -671,7 +671,7 @@ $currmonth = date('Y-m-d');
                                 <div class="kt-widget14__header kt-margin-b-30">
                                     <h3 class="kt-widget14__title">
                                          <i class="fa fa-chart-bar"></i>  Target Outstanding  
-                                         <hr/>           
+                                         <i class="fa fa-eye pull-right" onclick="targetOutstanding(event)"></i>   
                                     </h3>
                                     <div class="kt-widget14__legends">
                                         <div class="kt-widget14__legend">

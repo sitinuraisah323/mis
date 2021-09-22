@@ -7,13 +7,12 @@ class Outstanding extends ApiController
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->library('yogadai');
+		$this->load->library('myyogadai');
 	}
 
 	public function index()
 	{
-        return json_encode($this->yogadai->transaction());
-        
+		return $this->sendMessage($this->myyogadai->transaction($this->input->get('date'))->data,'Successfull');            
     }
 
 

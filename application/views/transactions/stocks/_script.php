@@ -51,6 +51,7 @@ function initDTEvents(){
                 $('#modal_add').find('[name="id"]').val(response.data.id);
                 $('#modal_add').find('[name="id_lm_gram"]').val(response.data.id_lm_gram);
                 $('#modal_add').find('[name="amount"]').val(response.data.amount);
+                $('#modal_add').find('[name="date_receive"]').attr('min', response.data.date_receive);
                 $('#modal_add').find('[name="date_receive"]').val(response.data.date_receive);
                 $('#modal_add').find('[name="status"]').val(response.data.status);
                 $('#modal_add').find('[name="description"]').val(response.data.description);
@@ -229,6 +230,7 @@ var clearForm = function(){
     $('[name="amount"]').val('');
     $('[name="reference_id"]').val('');
     $('[name="date_receive"]').val('');
+    $('[name="date_receive"]').attr('min','<?php echo date('Y-m-d');?>');
     $('[name="price"]').val('');
 }
     

@@ -84,7 +84,7 @@ $this->load->view('temp/MenuBar.php');
                 <?php if($this->session->userdata('user')->level == 'cabang'):?>
                         <input type="hidden" name="cabang" value="<?php echo $this->session->userdata('user')->id_cabang;?>">
 						<label class="col-form-label">Unit</label>
-						<div class="col-lg-2">
+						<div class="col-md-2">
 							<select class="form-control select2" name="id_unit" id="unit">
 								<option value="0">All</option>
 							</select>
@@ -92,7 +92,7 @@ $this->load->view('temp/MenuBar.php');
 
                 <?php else: ?>
 					<label class="col-form-label">Area</label>
-                    <div class="col-lg-2">
+                    <div class="col-md-2">
                         <select class="form-control select2" name="area" id="area">
                             <option value="0">All</option>
                             <?php
@@ -106,20 +106,23 @@ $this->load->view('temp/MenuBar.php');
                     </div>
 
                 <?php endif;?>
-                    <div class="col-lg-2">
+                    <div class="col-md-2">
                         <select class="form-control select2" name="method" id="method">
                             <option value="daily">Harian</option>
                             <option value="montly">Bulanan</option>
                         </select>
                     </div>
 					<label class="col-form-label">Tanggal</label>
-					<div class="col-lg-2">
+					<div class="col-md-2">
 						<input type="date" class="form-control" name="date-start" value="<?php echo date('Y-m-d');?>">
 					</div>
-					<button type="button" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>
+                    <div class="col-md-4">
+                    <button type="button" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>
 					<button type="submit" class="btn btn-danger" name="btncari"><i class="fa fa-file-pdf"></i></button>
 					<button type="button" class="btn btn-success" name="btncari" onclick="excel()" ><i class="fa fa-file-excel"></i></button>
-				</div>
+		
+                    </div>
+					</div>
 
             </div>
 

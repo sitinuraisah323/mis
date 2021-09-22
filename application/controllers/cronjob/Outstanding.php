@@ -272,7 +272,9 @@ class Outstanding extends Authenticated
 
 			$creditToday 	= $this->regular->getCreditToday($unit->id, $date);
 			$repaymentToday = $this->regular->getRepaymentToday($unit->id, $date);	
-			//$getOS 			= $this->regular->getOutstanding($unit->id, $date);	
+			//$getOS 			= $this->regular->getOutstanding($unit->id, $date);
+			//get real OS
+			$realos 		= $this->regular->getRealOS($unit->id,$date);
 
 			$dpddate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
 			
@@ -300,6 +302,14 @@ class Outstanding extends Authenticated
 			
 			$transaction = array(
 				'id_unit'				=> $unit->id,
+
+				'noa_os_mortage_yesterday'		=> $getOstYesterday->noa_os_mortage,
+				'os_mortage_yesterday'			=> $getOstYesterday->os_mortage,
+
+				'noa_os_regular_yesterday'		=> $getOstYesterday->noa_os_regular,
+				'os_regular_yesterday'			=> $getOstYesterday->os_regular,
+			
+
 				'date'					=> $date,				
 				'os'				    => $totalOst,
 				'noa_regular'			=> $creditToday->noa_regular,
@@ -314,38 +324,54 @@ class Outstanding extends Authenticated
 				'repayment_mortage'		=> $repaymentToday->up_mortage,
 				'noa_os_mortage'		=> $totalNoaUnitMortages,
 				'os_mortage'			=> $totalUpUnitMortages,
+				'noa_real_reguler'		=> $realos->noaReg,
+				'os_real_reguler'		=> $realos->osReg,
+				'noa_real_mortage'		=> $realos->noaNonReg,
+				'os_real_mortage'		=> $realos->osNonReg,
+				'real_outstanding'		=> $realos->outstanding,
 			);
-			$dpddate = date('Y-m-d', strtotime('-1 days', strtotime($date)));		
+			$dpddate = date('Y-m-d', strtotime($date));		
+			$mindate = date('Y-m-d', strtotime($date.' -1 days'));
 			$unit->dpd_yesterday = $this->regular->getDpdYesterday($unit->id, $dpddate);
-			$unit->dpd_today = $this->regular->getDpdToday($unit->id, $dpddate);
+			$unit->dpd_today = $this->regular->getDpdToday($unit->id, $mindate);
 			$unit->dpd_repayment_today = $this->regular->getDpdRepaymentToday($unit->id,$dpddate);
 			$unit->dpd_repayment_Deadline = $this->regular->getRepaymentDeadline($unit->id,$dpddate);
 			
+
 			$dpdYesterday =  $this->model
-			->db
-			->order_by('date','desc')
-			->get_where('units_dpd',array('id_unit' => $unit->id,'date <'=>$date))->row();
+			->db->order_by('date','desc')->get_where('units_dpd',array('id_unit' => $unit->id,'date <'=>$date))->row();
+			
 			
 			$noaYesterday = $dpdYesterday ?
 			$dpdYesterday->total_noa
-			 : $unit->dpd_yesterday->noa + $unit->dpd_repayment_today->noa;
+			 : $unit->dpd_yesterday->noa;
 
 			$ostYesterday =   $dpdYesterday ? $dpdYesterday->total_up : 
-			 $unit->dpd_yesterday->ost + $unit->dpd_repayment_today->ost;
-
+			 $unit->dpd_yesterday->ost;
+			 
+			 
+	        $os =  $this->model
+			->db->select('sum(amount) as os, count(*) as noa')
+			->from('units_regularpawns')
+			->where('deadline <=', $date)
+			->where('id_unit', $unit->id)
+			->where('status_transaction','N')
+			->get()->row();
+            
 			$total_dpd = array(
 				'id_unit'	=> $unit->id,
 				'date'	=> $date,
 				'noa_yesterday'	=> $noaYesterday,
 				'ost_yesterday'	=> $ostYesterday,
-				'noa_today'	=> $unit->dpd_today->noa + $unit->dpd_repayment_Deadline->noa,
-				'ost_today'	=> $unit->dpd_today->ost + $unit->dpd_repayment_Deadline->ost,
+				'noa_today'	=> $unit->dpd_today->noa,
+				'ost_today'	=> $unit->dpd_today->ost,
 				'noa_repayment'	=> $unit->dpd_repayment_today->noa,
 				'ost_repayment'	=> $unit->dpd_repayment_today->ost,
-				'total_noa'		=> ($noaYesterday + $unit->dpd_today->noa + $unit->dpd_repayment_Deadline->noa) - $unit->dpd_repayment_today->noa,
-				'total_up'		=> ($ostYesterday + $unit->dpd_today->ost + $unit->dpd_repayment_Deadline->ost ) - $unit->dpd_repayment_today->ost,
-				'os'	=> $totalOst,
+		    	'total_noa'		=> abs($noaYesterday +  $unit->dpd_today->noa- $unit->dpd_repayment_today->noa),
+				'total_up'		=> abs($ostYesterday + $unit->dpd_today->ost -  $unit->dpd_repayment_today->ost),
+					'os'	=> $totalOst,
 			);
+			
 			$total_dpd['percentage'] = round(($total_dpd['total_up'] / $total_dpd['os'])*100,2);
 			
 			$checkDpd = $this->model
@@ -360,7 +386,8 @@ class Outstanding extends Authenticated
 			//print_r($transaction);
 			$check = $this->db->get_where('units_outstanding',array('id_unit' => $unit->id,'date'=>$date));
 			if($check->num_rows() > 0){
-				$this->model->db->update('units_outstanding', $transaction, array('id_unit' => $unit->id,'date'=>$date));
+				//$this->model->db->update('units_outstanding', $transaction, array('id_unit' => $unit->id,'date'=>$date));
+				$this->model->db->update('units_outstanding', $transaction, array('id_unit' => $unit->id,'date'=>$date,'noa_real_reguler'=>$realos->noaReg,'os_real_reguler'=>$realos->osReg,'noa_real_mortage'=>$realos->noaNonReg,'os_real_mortage'=>$realos->osNonReg,'real_outstanding'=>$realos->outstanding));
 			}else{
 				$this->model->db->insert('units_outstanding', $transaction);
 			}			
@@ -383,6 +410,83 @@ class Outstanding extends Authenticated
 		echo "<br/>";
 		$this->repairtransaction();
 
+
+	}
+	
+	public function dpdrepair(){
+
+		if($date = $this->input->get('date')){
+			$date = $date;
+		}else{
+			$date = date('Y-m-d');
+		}
+
+		$units = $this->units->db->select('units.id, units.name, area')
+				 ->join('areas','areas.id = units.id_area')
+				 ->order_by('units.id','desc')
+				 ->get('units')->result();
+
+		foreach ($units as $unit){
+			$getReg = $this->regular->db->select('sum(amount) as up,count(id) as noa')
+			             ->from('units_regularpawns')
+						 ->where('units_regularpawns.status_transaction ','N') 
+						 ->where('units_regularpawns.amount !=','0') 
+						 ->where('units_regularpawns.deadline <=',$date) 
+						 ->where('units_regularpawns.id_unit ',$unit->id) 
+						 ->get()->row();
+
+			$data = array(				
+				'date'		=> $date,
+				//'id_unit'	=> $unit->id
+				//'unit'		=> $unit->name,
+				'total_up '	=> (int) $getReg->up,
+				'total_noa'	=> (int) $getReg->noa,				
+				);
+
+				$check = $this->db->get_where('units_dpd',array('id_unit' => $unit->id,'date'=>$date));
+				if($check->num_rows() > 0){
+					$this->db->update('units_dpd', $data, array('id_unit' => $unit->id,'date'=>$date));
+				}else{
+					$this->db->insert('units_dpd', $data);
+				}
+
+				echo '<pre>';
+				print_r($data);
+		}
+
+		//echo '<pre>';
+		//print_r($units);
+
+	}
+	
+	public function getos(){
+
+		if($date = $this->input->get('date')){
+			$date = $date;
+		}else{
+			$date = date('Y-m-d');
+		}		
+
+		$units = $this->units->db->select('units.id, units.name, area')
+				->join('areas','areas.id = units.id_area')
+				->order_by('units.id','asc')
+				->get('units')->result();
+
+		foreach ($units as $unit){	
+			$os 	= $this->regular->getRealOS($unit->id,$date);
+			$summary = array(
+				'id_unit'				=> $unit->name,
+				'date'					=> $date,				
+				'noa_real_reguler'		=> $os->noaReg,
+				'os_real_reguler'		=> $os->osReg,
+				'noa_real_mortage'		=> $os->noaNonReg,
+				'os_real_mortage'		=> $os->osNonReg,
+				'real_outstanding'		=> $os->outstanding,
+			);	
+			
+			echo"<pre/>";
+			print_r($summary);
+		}
 
 	}
 

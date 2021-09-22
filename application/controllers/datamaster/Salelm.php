@@ -78,9 +78,15 @@ class Salelm extends Authenticated
 		$objPHPExcel->getActiveSheet()->getColumnDimension($columns[$i])->setWidth(20);
 		$objPHPExcel->getActiveSheet()->setCellValue($columns[$i].'1', 'Total');
 
+		$i++;	
+		$objPHPExcel->getActiveSheet()->getColumnDimension($columns[$i])->setWidth(20);
+		$objPHPExcel->getActiveSheet()->setCellValue($columns[$i].'1', 'Total Gramasi');
 		$i++;
 		$objPHPExcel->getActiveSheet()->getColumnDimension($columns[$i])->setWidth(20);
-		$objPHPExcel->getActiveSheet()->setCellValue($columns[$i].'1', 'Status');
+		$objPHPExcel->getActiveSheet()->setCellValue($columns[$i].'1', 'Total HP');
+		$i++;
+		$objPHPExcel->getActiveSheet()->getColumnDimension($columns[$i])->setWidth(20);
+		$objPHPExcel->getActiveSheet()->setCellValue($columns[$i].'1', 'Total HJ');
 
 		$dateStart = $this->input->get('date_start');
 		$dateEnd = $this->input->get('date_end');
@@ -104,6 +110,11 @@ class Salelm extends Authenticated
 			$objPHPExcel->getActiveSheet()->setCellValue('A'.$no, $incriment);
 			$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, $row->name);
 			$i = 2;
+			
+			$totalGramasi = 0;
+			$totalPcs = 0;
+			$totalHP = 0;
+			$totalHJ = 0;
 			foreach ($datagrams as $grams){
 				$sale =  $this->model->saleGrams($grams->id, $row->id,$dateStart, $dateEnd);
 				$objPHPExcel->getActiveSheet()->setCellValue($columns[$i].$no,$sale->amount);
@@ -112,7 +123,19 @@ class Salelm extends Authenticated
 				$i++;
 				$objPHPExcel->getActiveSheet()->setCellValue($columns[$i].$no,$sale->price_buyback_perpcs);
 				$i++;
+				$totalGramasi += $sale->amount * $sale->weight;
+				$totalPcs += $sale->amount;
+				$totalHP += $sale->price_perpcs * $sale->amount;
+				$totalHJ += $sale->price_buyback_perpcs * $sale->amount;
 			}
+			$objPHPExcel->getActiveSheet()->setCellValue($columns[$i].$no,$totalPcs);
+			$i++;
+			$objPHPExcel->getActiveSheet()->setCellValue($columns[$i].$no,$totalGramasi);
+			$i++;
+			$objPHPExcel->getActiveSheet()->setCellValue($columns[$i].$no,$totalHP);
+			$i++;
+			$objPHPExcel->getActiveSheet()->setCellValue($columns[$i].$no,$totalHJ);
+			$no++;
 			$no++;
 			$incriment++;
 		}

@@ -219,19 +219,23 @@ class Stockslm extends Authenticated
 				$objPHPExcel->getActiveSheet()->setCellValue($cel[$index].'1', $row->weight);
 			}
 			$objPHPExcel->getActiveSheet()->setCellValue('J1', 'Total');
+			$objPHPExcel->getActiveSheet()->setCellValue('K1', 'Total Gramasi');
 			$units = $this->units->all();
 			foreach($units as $unit){
 				$i = $no+1;
 				$objPHPExcel->getActiveSheet()->setCellValue('A'.$no,$i);
 				$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, $unit->name);
 				$total = 0;
+				$totalGrams = 0;
 				foreach ($grams  as $index => $row)
 				{
 					$stock =  $this->stock->byGrams($row->id, $unit->id,$date1);
 					$total += $stock;
+					$totalGrams += $stock*$row->weight;
 					$objPHPExcel->getActiveSheet()->setCellValue($cel[$index].$no, $stock);
 				}
 				$objPHPExcel->getActiveSheet()->setCellValue('J'.$no, $total);
+				$objPHPExcel->getActiveSheet()->setCellValue('K'.$no, $totalGrams);
 				$no++;
 			}
 		}else{

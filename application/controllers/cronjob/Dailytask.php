@@ -26,7 +26,22 @@ class Dailytask extends Authenticated
 	 */
 
    public function index(){
-
+      $this->regular->db->where('id_repayment',null)
+         ->limit(200)
+         ->order_by('id','asc');
+      $reguler = $this->regular->all();
+      if($reguler){
+         foreach($reguler as $data){
+            $pelunasan = $this->regular->db
+                  ->from('units_repayments')
+                  ->where('id_unit', $data->id_unit)
+                  ->where('permit', $data->permit)
+                  ->where('no_sbk', $data->no_sbk)->get()->row();
+            if($pelunasan){
+               $this->regular->update(['id_repayment'=>$pelunasan->id], $data->id);
+            }
+         }
+      }
    }
 
 

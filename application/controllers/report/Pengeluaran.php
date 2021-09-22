@@ -76,10 +76,13 @@ class Pengeluaran extends Authenticated
 		$objPHPExcel->getActiveSheet()->setCellValue('D1', 'Bulan');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('E');
 		$objPHPExcel->getActiveSheet()->setCellValue('E1', 'Tahun');
+		
 		$objPHPExcel->getActiveSheet()->getColumnDimension('F');
-		$objPHPExcel->getActiveSheet()->setCellValue('F1', 'Uraian');
+		$objPHPExcel->getActiveSheet()->setCellValue('F1', 'No Perk');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('G');
-		$objPHPExcel->getActiveSheet()->setCellValue('G1', 'Jumlah');
+		$objPHPExcel->getActiveSheet()->setCellValue('G1', 'Uraian');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('H');
+		$objPHPExcel->getActiveSheet()->setCellValue('H1', 'Jumlah');
 
 		$category =null;
 		if($this->input->post('category')=='all'){
@@ -93,8 +96,11 @@ class Pengeluaran extends Authenticated
 		}	
 		$method = $this->input->post('method');
 		if($method === 'daily'){
+			if($dateStart = $this->input->post('date-start')){
+				$this->unitsdailycash->db->where('date >=', $dateStart);
+			}
 			$date = $this->input->post('date-end');
-			$this->unitsdailycash->db->where('date', $date);
+			$this->unitsdailycash->db->where('date <=', $date);
 		}else{
 			$dateEnd = $this->input->post('date-end');
 			$dateStart = date('Y-m-d', strtotime($dateEnd.' -7 days'));
@@ -114,7 +120,7 @@ class Pengeluaran extends Authenticated
 		}
 
 		$this->unitsdailycash->db
-				->select('units.code,units.name as unit_name')
+				->select('units.code,units.name as unit_name, no_perk')
 				->join('units','units.id = units_dailycashs.id_unit')
 				->where('type =', 'CASH_OUT')
 				->where_in('no_perk', $category)
@@ -129,8 +135,9 @@ class Pengeluaran extends Authenticated
 			$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, date('d/m/Y',strtotime($row->date)));				  	
 			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no, date('F',strtotime($row->date)));				  	
 			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no, date('Y',strtotime($row->date)));				 
-			$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, $row->description);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('G'.$no, $row->amount);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, $row->no_perk);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('G'.$no, $row->description);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('H'.$no, $row->amount);				 
 			$no++;
 		}
 

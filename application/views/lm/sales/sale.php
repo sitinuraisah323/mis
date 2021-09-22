@@ -108,7 +108,9 @@ $this->load->view('temp/MenuBar.php');
 					<div class="form-group row">
 						<label class="col-md-3">Date</label>
 						<div class="col-md-9">
-							<input type="date" name="date" class="form-control" value="<?php echo date('Y-m-d');?>">
+							<input type="date" name="date" class="form-control" value="<?php echo date('Y-m-d');?>"
+							min="<?php echo date('Y-m-d');?>"
+							required>
 						</div>
 					</div>
 				</div>

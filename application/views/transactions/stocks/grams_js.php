@@ -40,7 +40,7 @@
                 tr += `<td >${totalPieces}</td>`
                 tr += `<td>${totalWeight.toFixed(2)}</td>`
                 tr += '</tr>'
-                $('.table').find('tbody').append(tr);
+                $('.table-grams').find('tbody').append(tr);
             }
         })
     }
@@ -59,4 +59,78 @@
         const id_unit =  event.target.closest('form').querySelector('[name="id_unit"]').value;
         window.location.href = `<?php echo base_url('transactions/stocks/pdf');?>?date_start=${date_start}&date_end=${date_end}&id_unit=${id_unit}`
     }
+
+    const uploadStock = ()=>{
+        $('.modal-stock').modal('show');
+    }
+
+    const viewStockImage = ()=>{
+        const id_unit = "<?php echo $this->session->userdata('user')->id_unit;?>";
+        $('.modal-stock-image').find('tbody').find('tr').remove();
+        $.ajax({
+            type: 'GET',
+            url: "<?php echo base_url('api/lm/stocks/images');?>",
+            data:{id_unit},
+            dataType:"JSON",
+            success : function(res){   
+                let template = '';
+                if(res.data){
+                    res.data.forEach(data=>{
+                        template += `<tr>`;
+                        template += `<td>${data.unit}</td>`;
+                        template += `<td><image src="<?php echo base_url('storage/stocks');?>/${data.filename}"
+                            class="img-fluid"
+                            style="width:50%"
+                         /></td>`;
+                         template += `<td>${data.date}</td>`;
+                        template += `</tr>`;
+                    })
+                }
+                $('.modal-stock-image').find('tbody').append(template);
+            },
+            complete:function(res){
+                $('.modal-stock-image').modal('show');
+            },
+            error: function (jqXHR, textStatus, errorThrown){
+           }
+        }); 
+      
+    }
+
+    const fileHander = (event)=>{
+        const file = event.target.files[0];
+        const size = file.size;
+        const type = file.type.split('/')[0];
+        const id_unit = "<?php echo $this->session->userdata('user')->id_unit;?>";
+        $('.modal-stock').find('#btn_add_submit').attr('disabled',true);
+        if(size > 1000000){
+            swal.fire('Perhatikan','Ukuran image lebih dari 1mb','error')
+            return;
+        }
+        if(type !== 'image'){
+            swal.fire('Perhatikan','File harus berupa image','error')
+            return;
+        }
+        const form = new FormData();
+        form.append('image', file);
+        form.append('id_unit', id_unit);
+        $.ajax({
+            type : 'POST',
+            url : "<?php echo base_url('api/lm/stocks/upload');?>",
+            data :form,
+            processData: false,
+            contentType: false,
+            typeData:"JSON",
+            success : function(res){   
+                swal.fire('Perhatikan','File Success diUpload','success')
+            },
+            complete:function(res){
+                $('.modal-stock').find('#btn-miss').attr('disabled',false);
+            },
+            error: function (jqXHR, textStatus, errorThrown){
+           }
+        }); 
+    }
+
+
 </script>

@@ -10,13 +10,6 @@ function convertToRupiah(angka)
 	return rupiah.split('',rupiah.length-1).reverse().join('');
 }
 
-// function convertToRupiah(angka){
-//    var reverse = angka.toString().split('').reverse().join(''),
-//    ribuan = reverse.match(/\d{1,3}/g);
-//    ribuan = ribuan.join('.').split('').reverse().join('');
-//    return ribuan;
-//  }
-
 function initAlert(){
     AlertUtil = {
         showSuccess : function(message,timeout){
@@ -103,23 +96,29 @@ function initCariForm(){
 
     $('#area').select2({ placeholder: "Select area", width: '100%' });
     $('#unit').select2({ placeholder: "Select Unit", width: '100%' });
+    $('#method').select2({ placeholder: "Select Method", width: '100%' });
     $('#status').select2({ placeholder: "Select a status", width: '100%' });
     //events
     $('#btncari').on('click',function(){
         $('.rowappend').remove();
-        var area = $('#area').val();
-		var dateStart = $('[name="date-start"]').val();
+		var	area = $('[name="area"]').val();
+        var cabang = $('[name="cabang"]').val();
+        var unit = $('[name="id_unit"]').val();
+		var date = $('[name="date-start"]').val();
+		var method = $('[name="method"]').val();
         KTApp.block('#form_bukukas .kt-portlet__body', {});
 		$.ajax({
 			type : 'GET',
-			url : "<?php echo base_url("api/dashboards/pencairan"); ?>",
+			url : "<?php echo base_url("api/dashboards/pengeluaran_daily"); ?>",
 			dataType : "json",
-			data:{area:area,date:dateStart},
+			data:{area:area,unit:unit,cabang:cabang,date:date,method},
 			success : function(response,status){
 				KTApp.unblockPage();
 				var body = '';
 				var head = '';
 				var int = 0;
+				var summary = [];
+				var foot = '';
 				$.each(response.data, function (index, data) {
 					if(index > 0){
 						body += '<tr>';
@@ -127,7 +126,12 @@ function initCariForm(){
 						body += '<td>'+data.name+'</td>'
 						body += '<td>'+data.area+'</td>'
 						$.each(data.dates, function (index, date) {
-							body += '<td>'+date+'</td>';
+							body += '<td class="text-right">'+convertToRupiah(date)+'</td>';
+							if(summary[index]){
+								summary[index] = parseInt(summary[index]) + parseInt(date);
+							}else{
+								summary[index] = parseInt(date);
+							}
 						});
 						body += '</tr>';
 					}else{
@@ -136,16 +140,26 @@ function initCariForm(){
 						head += '<td>'+data.unit+'</td>'
 						head += '<td>'+data.area+'</td>'
 						$.each(data.dates, function (index, date) {
-							head += '<td>'+date+'</td>';
+
+							head += '<td class="text-right">'+date+'</td>';
 						})
 						head += '</tr>';
 					}
 					int++;
 				});
+			    foot += '<tr>';
+				foot += '<td colspan="3" class="text-right">Total</td>'
+				$.each(summary, function (index, date) {
+					foot += '<td class="text-right">'+convertToRupiah(date)+'</td>';
+				});
+				foot += '</tr>';
+
 				$('.table').find('tbody').find('tr').remove();
 				$('.table').find('thead').find('tr').remove();
+				$('.table').find('tfoot').find('tr').remove();
 				$('.table').find('thead').html(head);
 				$('.table').find('tbody').html(body);
+				$('.table').find('tfoot').html(foot);
 
 			},
 			error: function (jqXHR, textStatus, errorThrown){
@@ -162,29 +176,63 @@ function initCariForm(){
     }
 }
 
-function initGetUnit(){
-    $("#area").on('change',function(){
-        var area = $('#area').val();
-        var units =  document.getElementById('unit');
-        var url_data = $('#url_get_unit').val() + '/' + area;
-        $.get(url_data, function (data, status) {
-            var response = JSON.parse(data);
-            if (status) {
-                $("#unit").empty();
-                for (var i = 0; i < response.data.length; i++) {
-                    var opt = document.createElement("option");
-                    opt.value = response.data[i].id;
-                    opt.text = response.data[i].name;
-                    units.appendChild(opt);
-                }
-            }
-        });
-    });
+$('[name="area"]').on('change',function(){
+	var area = $('[name="area"]').val();
+	var units =  $('[name="id_unit"]');
+	var url_data = $('#url_get_unit').val() + '/' + area;
+	$.get(url_data, function (data, status) {
+		var response = JSON.parse(data);
+		if (status) {
+			$("#unit").empty();
+			units.append('<option value="0">All</option>');
+			for (var i = 0; i < response.data.length; i++) {
+				var opt = document.createElement("option");
+				opt.value = response.data[i].code;
+				opt.text = response.data[i].name;
+				units.append(opt);
+			}
+		}
+	});
+});
+var type = $('[name="area"]').attr('type');
+if(type == 'hidden'){
+	$('[name="area"]').trigger('change');
+}
+
+$('[name="cabang"]').on('change',function(){
+	var cabang = $('[name="cabang"]').val();
+	var units =  $('[name="id_unit"]');
+	var url_data = $('#url_get_units').val() + '/' + cabang;
+	$.get(url_data, function (data, status) {
+		var response = JSON.parse(data);
+		if (status) {
+			$("#unit").empty();
+			units.append('<option value="0">All</option>');
+			for (var i = 0; i < response.data.length; i++) {
+				var opt = document.createElement("option");
+				opt.value = response.data[i].id;
+				opt.text = response.data[i].name;
+				units.append(opt);
+			}
+		}
+	});
+});
+
+var typecabang = $('[name="cabang"]').attr('type');
+if(typecabang == 'hidden'){
+	$('[name="cabang"]').trigger('change');
+}
+
+const excel = ()=>{
+	const id_unit = $('#unit').val() ? $('#unit').val() : '';
+	const area = $('#area').val();
+	const method = $('#method').val();
+	const date = $('[name="date-start"]').val();
+	window.location.href = `<?php echo base_url();?>dashboards/pengeluaran_excel?date-start=${date}&id_unit=${id_unit}&area=${area}&method=${method}`;
 }
 
 jQuery(document).ready(function() {
     initCariForm();
-    initGetUnit();
 });
 
 </script>

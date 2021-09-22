@@ -50,7 +50,9 @@ function initDTEvents(){
                 KTApp.unblockPage();
                 $('#modal_add').find('[name="id"]').val(response.data.id);
                 $('#modal_add').find('[name="id_lm_gram"]').val(response.data.id_lm_gram);
+                $('#modal_add').find('[name="id_unit"]').val(response.data.id_unit);
                 $('#modal_add').find('[name="amount"]').val(response.data.amount);
+                $('#modal_add').find('[name="price"]').val(response.data.price);
                 $('#modal_add').find('[name="date_receive"]').val(response.data.date_receive);
                 $('#modal_add').find('[name="status"]').val(response.data.status);
                 $('#modal_add').find('[name="description"]').val(response.data.description);
@@ -140,7 +142,7 @@ function initDataTable(){
 			  {
 				  field: 'date_receive',
 				  title: 'Tanggal',
-				  width:60,
+				  width:80,
 				  textAlign: 'center',
 			  },
               {
@@ -155,7 +157,7 @@ function initDataTable(){
               {
 				  field: 'description',
 				  title: 'description',
-				  width:60,
+				  width:120,
 				  textAlign: 'center',
 			  },
               {
@@ -192,6 +194,24 @@ function initDataTable(){
             header:true
           }
     }
+
+		$('#area').on('change', function() {
+			datatable.search($(this).val().toLowerCase(), 'area');
+		});
+		$('#unit').on('change', function() {
+			datatable.search($(this).val().toLowerCase(), 'unit');
+		});
+		$('#cabang').on('change', function() {
+			datatable.search($(this).val().toLowerCase(), 'cabang');
+		});
+        $('#date_start').on('change', function() {
+			datatable.search($(this).val().toLowerCase(), 'date_start');
+		});
+        $('#date_end').on('change', function() {
+			datatable.search($(this).val().toLowerCase(), 'date_end');
+		});
+    $('#area').select2({ placeholder: "Select a area", width: '100%' });
+    $('#unit').select2({ placeholder: "Select a Unit", width: '100%' });
     datatable = $('#kt_datatable').KTDatatable(option);
     datatable.on("kt-datatable--on-layout-updated",function(){
         initDTEvents();
@@ -212,6 +232,8 @@ var clearForm = function(){
     $('[name="description"]').val('');
     $('[name="amount"]').val('');
     $('[name="reference_id"]').val('');
+    $('[name="price"]').val('');
+    $('[name="id_unit"]').val('');
     $('[name="date_receive"]').val('');
 }
     
@@ -275,5 +297,56 @@ jQuery(document).ready(function() {
     initDataTable();
     initItem();
 });
+
+$('[name="area"]').on('change',function(){
+        var area = $('[name="area"]').val();
+        var units =  $('[name="id_unit"]');
+        var url_data = $('#url_get_unit').val() + '/' + area;
+        $.get(url_data, function (data, status) {
+            var response = JSON.parse(data);
+            if (status) {
+                $("#unit").empty();
+				var opt = document.createElement("option");
+				opt.value = "0";
+				opt.text = "All";
+				units.append(opt)
+                for (var i = 0; i < response.data.length; i++) {
+                    var opt = document.createElement("option");
+                    opt.value = response.data[i].id;
+                    opt.text = response.data[i].name;
+                    units.append(opt);
+                }
+            }
+        });
+});
+
+var type = $('[name="area"]').attr('type');
+if(type == 'hidden'){
+    $('[name="area"]').trigger('change');
+}
+
+$('[name="cabang"]').on('change',function(){
+	var cabang = $('[name="cabang"]').val();
+	var units =  $('[name="id_unit"]');
+	var url_data = $('#url_get_units').val() + '/' + cabang;
+	$.get(url_data, function (data, status) {
+		var response = JSON.parse(data);
+		if (status) {
+			$("#unit").empty();
+			units.append('<option value="0">All</option>');
+			for (var i = 0; i < response.data.length; i++) {
+				var opt = document.createElement("option");
+				opt.value = response.data[i].id;
+				opt.text = response.data[i].name;
+				units.append(opt);
+			}
+		}
+	});
+});
+
+var typecabang = $('[name="cabang"]').attr('type');
+if(typecabang == 'hidden'){
+	$('[name="cabang"]').trigger('change');
+}
 
 </script>

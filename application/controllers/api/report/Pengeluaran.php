@@ -15,7 +15,56 @@ class Pengeluaran extends ApiController
 
 	public function index()
 	{
+		$listdata=array();
+        if($this->input->get('category')!='all'){
+            $listdata = $this->input->get('category');
+        }else{           
+            $listperk = $this->m_casing->get_list_pengeluaran();
+            foreach ($listperk as $value) 
+            {
+                array_push($listdata, $value->no_perk);
+            }
+        }		
 		
+		if($this->input->get('area')){
+			$area = $this->input->get('area');
+			$this->units->db->where('id_area', $area);
+		}else if($this->session->userdata('user')->level == 'area'){
+			$this->units->db->where('id_area', $this->session->userdata('user')->id_area);
+		}
+
+		if($this->input->get('unit')){
+			$code = $this->input->get('unit');
+			$this->units->db->where('id_unit', $code);
+		}else if($this->session->userdata('user')->level == 'unit'){
+			$this->units->db->where('id_unit', $this->session->userdata('user')->id_unit);
+		}
+		if($this->input->get('dateStart')){
+			$dateStart = date('Y-m-d',strtotime($this->input->get('dateStart')));
+            $this->units->db->where('date >=', $dateStart);
+		}
+		if($this->input->get('dateEnd')){
+			$dateEnd = date('Y-m-d',strtotime($this->input->get('dateEnd')));
+            $this->units->db->where('date <=', $dateEnd);
+		}
+
+		if($idUnit = $this->input->get('id_unit')){
+			$this->units->db->where('id_unit', $idUnit);
+		}
+		
+		$this->units->db->select('units.id, no_perk, description,units.name,areas.area,units_dailycashs.date,amount')
+		    ->join('units','units.id = units_dailycashs.id_unit')
+			->join('areas','areas.id = units.id_area')
+			->from('units_dailycashs')
+			->where('type','CASH_OUT')
+			->where_in('no_perk', $listdata)
+			->order_by('id_area','asc')
+			->order_by('date','asc')
+			->order_by('units.name','asc')
+			->order_by('amount','desc');
+        $data = $this->units->db->get()->result();
+        
+		return $this->sendMessage($data,'Successfully get pengeluaran');
     }
 
     public function daily()

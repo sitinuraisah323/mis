@@ -109,9 +109,9 @@ function initCariForm(){
         KTApp.block('#form_bukukas .kt-portlet__body', {});
 		$.ajax({
 			type : 'GET',
-			url : "<?php echo base_url("api/report/pengeluaran/daily"); ?>",
+			url : "<?php echo base_url("api/report/pengeluaran"); ?>",
 			dataType : "json",
-			data:{area:area,id_unit:unit,category:category,dateEnd:dateEnd},
+			data:{area,id_unit:unit,category,dateEnd,dateStart},
 			success : function(response,status){
 				KTApp.unblockPage();
 				//if(response.status == true){
@@ -126,6 +126,8 @@ function initCariForm(){
                     template +='<td class="text-left">'+data.area+'</td>';
                     template +='<td class="text-left">'+data.name+'</td>';
                     template +='<td class="text-center">'+date+'</td>';
+                    template +='<td class="text-left">'+data.no_perk+'</td>';
+                    template +='<td class="text-left">'+data.description+'</td>';
                     template +='<td class="text-right">'+convertToRupiah(data.amount)+'</td>';
                     template +='</tr>';
                     total +=  parseInt(data.amount);

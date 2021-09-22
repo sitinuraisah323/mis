@@ -129,24 +129,16 @@ function initCariForm(){
 					grams.forEach(weight=>html += `<td>${weight}</td>`);
 					html += `<td class="text-right">${convertToRupiah(total)}</td>`;
 					html += `<td class="text-right">${convertToRupiah(total_buyback)}</td>`;
-					<?php if($this->session->userdata('user')->level === 'area'):?>
-						if(last_log === 'ON_PROGRESS'){
-							html += `<td><select name="change-status" data-code="${code}" class="form-control" onchange="change(this)">`;
-							logs.forEach(log=>{
-								const {item,value}	= log;
-								if(item == last_log){
-									html += `<option value="${item}" selected >${value}</option>`;
-								}else{
-									html += `<option value="${item}">${value}</option>`;
-								}
-							})
-							html +=		`</select></td>`;
-						}else{
-							html += `<td></td>`;
-						}
+					<?php if($this->session->userdata('user')->level === 'pusat' || $this->session->userdata('user')->level === 'administrator'):?>
+                        html += `<td>
+                        <a href="<?php echo base_url();?>/lm/sales/form/${id}"><i class="flaticon-edit-1"></i></a>
+                        <a onclick="deleteHander(${id})"><i class="fas fa-trash"></i></a>
+                        </td>`;   
+				
+                    <?php else:?>    
+                     html += `<td><a href="<?php echo base_url();?>/lm/sales/form/${id}"><i class="flaticon-edit-1"></i></a></td>`;   
 					<?php endif;?>
-                    html += `<td><a href="<?php echo base_url();?>/lm/sales/form/${id}"><i class="flaticon-edit-1"></i></a></td>`;
-					html += `</tr>`;
+                	html += `</tr>`;
 				})
 				$('tbody').find('tr').remove();
 				$('[data-append="item"]').append(html);
@@ -213,6 +205,32 @@ function change(element) {
 			AlertUtil.showSuccess(response.message,5000);
 		},
 	});
+}
+
+const deleteHander = (id)=>{
+    swal.fire({
+            title: 'Anda Yakin?',
+            text: "Akan menghapus data ini",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Hapus'
+        }).then(function(result) {
+            if (result.value) {
+                KTApp.blockPage();
+                $.ajax({
+                    type : 'GET',
+                    url : "<?php echo base_url("api/lm/transactions/delete"); ?>/"+id,
+                    dataType : "json",
+                    success : function(data,status){
+                        $('#btncari').trigger('click');
+                    },
+                    error: function (jqXHR, textStatus, errorThrown){
+                        KTApp.unblockPage();
+                        AlertUtil.showFailed("Cannot communicate with server please check your internet connection");
+                    }
+                });  
+            }
+        });
 }
 
 </script>

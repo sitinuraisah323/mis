@@ -38,7 +38,11 @@ $this->load->view('temp/MenuBar.php');
                 </div>
                 <div class="kt-portlet__head-toolbar">
                     <div class="kt-portlet__head-wrapper">
-
+                        <?php if($this->session->userdata('user')->level == 'unit'):?>
+                        <button type="button" onclick="uploadStock(event)" class="btn btn-info">
+                            Upload Foto Stock
+                        </button>                      
+                        <?php endif;?>
                     </div>
                 </div>
             </div>
@@ -95,15 +99,18 @@ $this->load->view('temp/MenuBar.php');
                         <button type="submit" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>
                         <button type="button" onclick="excel(event)" class="btn btn-danger btn-icon" name="btnexport_csv" id="btnexport_csv"><i class="fa fa-file-excel"></i></button>
                         <button type="button" onclick="pdf(event)" class="btn btn-danger btn-icon" name="btnexport_csv" id="btnexport_csv"><i class="fa fa-file-pdf"></i></button>
+                        <?php if($this->session->userdata('user')->level == 'unit'):?>
+                            <button type="button" class="btn btn-brand btn-icon"  onclick="viewStockImage()"><i class="fa fa-eye"></i></button>
+                      
+                        <?php endif;?>
                         </div>
                     </div>                  
 				</div>
 
             </div>
-
             <div class="col-md-12">
                 <div class="kt-section__content">
-						<table class="table">
+						<table class="table table-striped table-bordered table-grams">
 						  	<thead class="thead-light">
 						    	<tr>
 									<th>Gramasi</th>
@@ -136,7 +143,74 @@ $this->load->view('temp/MenuBar.php');
     </div>
 </div>
 </div>
-
+<div class="modal fade modal-stock" id="modal_add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Upload Image</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body form">
+                <form action="#" id="form_add" class="form-horizontal">
+                    <div class="form-body">
+                        <div class="row">    
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="file">Image</label>
+                                    <input type="file" class="form-control" id="file" name="file"
+                                    onchange="fileHander(event)"
+                                    >	                            		
+                                </div>
+                            </div>                            
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                id="btn-miss"
+                >Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade modal-stock-image"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">List Image</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body form">
+                <form class="form-horizontal">
+                    <div class="form-body">
+                        <div class="row">    
+                            <div class="col-md-12 table-responsive">
+                                <table class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Unit</th>
+                                            <th>Image</th>
+                                            <th>Tanggal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>                            
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                id="btn-miss"
+                >Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 <?php
 $this->load->view('temp/Footer.php');
 $this->load->view('transactions/stocks/grams_js.php');

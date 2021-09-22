@@ -24,6 +24,17 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">
+                                <label>Unit</label>
+                                <select name="id_unit" class="form-control" required>
+                                    <option value="">Pilih Unit</option>
+                                    <?php if($units):?>
+                                        <?php foreach($units as $unit):?>
+                                            <option value="<?php echo $unit->id;?>"><?php echo $unit->name;?></option>
+                                        <?php endforeach?>
+                                    <?php endif;?>
+                                </select>
+                            </div>
+                            <div class="col-md-12">
                                 <label>Lm</label>
                                 <select name="id_lm_gram" class="form-control" required>
                                     <option value="">Pilih Lm</option>
@@ -35,9 +46,10 @@
                                 <label>Jumlah</label>
                                 <input type="number" name="amount" class="form-control"/>
                             </div>
+                            
                             <div class="col-md-6">
-                                <label>No Referensi</label>
-                                <input type="text" name="reference_id" class="form-control"/>
+                                <label>Harga</label>
+                                <input type="text" name="price" class="form-control"/>
                             </div>
                         </div>
                         <div class="row">
@@ -45,14 +57,13 @@
                                 <label>Date</label>
                                 <input type="date" name="date_receive" class="form-control"/>
                             </div>
+                            
                             <div class="col-md-6">
-                                <label>Status</label>
-                                <select name="status" class="form-control" required>
-                                    <option value="PUBLISH">Publish</option>
-                                    <option value="UNPUBLISH">Unpublish</option>
-                                </select>
+                                <label>No Referensi</label>
+                                <input type="text" name="reference_id" class="form-control"/>
                             </div>
                         </div>
+                        <input type="hidden" name="status" value="PUBLISH"/>
                         <div class="row">
                             <div class="col-md-12">
                                 <label>Deskripsi</label>

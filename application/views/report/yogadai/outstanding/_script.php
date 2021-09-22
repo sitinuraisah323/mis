@@ -99,9 +99,9 @@ function initCariForm(){
     //events
     $('#btncari').on('click',function(){
         $('.rowappend').remove();
-        var area = $('[name="area"]').val();
-        var cabang = $('[name="cabang"]').val();
-        var unit = $('[name="id_unit"]').val();
+        var area = $('[name="area_id"]').val();
+        var cabang = $('[name="branch_id"]').val();
+        var unit = $('[name="unit_id"]').val();
 		var date = $('[name="date"]').val();
 		var lastdate ="";
         KTApp.block('#form_bukukas .kt-portlet__body', {});
@@ -129,7 +129,7 @@ function initCariForm(){
 
                     var totalOstUp = 0;
                     var totalDisburUp = 0;
-                    var totalDisburNoa = 0;
+                    var totalDisburNoa = 0
 
 					$.each(response.data, function (index, data) {
 						template += "<tr class='rowappend'>";
@@ -149,9 +149,16 @@ function initCariForm(){
                         template += "<td class='text-right'>"+data.repayment_today.up_mortages+"</td>";
                     
                         template += "<td class='text-right'>"+data.total_outstanding.up+"</td>";
-
+                     
+                        template += "<td class='text-center'>"+data.total_disburse.noa+"</td>";
+                        template += "<td class='text-right'>"+data.total_disburse.credit+"</td>";
+                        template += "<td class='text-right'>"+data.total_disburse.tiket+"</td>";
+                       
                         template += '</tr>';
 						no++;
+
+                        totalDisburUp += data.total_disburse.credit;
+                        totalDisburNoa += data.total_disburse.noa;
 
                         totalOstUp += data.total_outstanding.up;
                         yesterdayOst += data.ost_yesterday.up;
@@ -172,6 +179,30 @@ function initCariForm(){
                         lastdate = data.lastdate;
 					});
 
+                    template += "<tr class='rowappend'>";
+                    template += "<td class='text-center'></td>";
+                    template += "<td class='text-left'></td>";
+                    template += "<td class='text-center'>"+yesterdayNoa+"</td>";
+                    template += "<td class='text-right'>"+yesterdayOst+"</td>";
+
+                    template += "<td class='text-center'>"+todayNoaRegulerCredit+"</td>";
+                    template += "<td class='text-right'>"+todayOstRegulerCredit+"</td>";
+                    template += "<td class='text-center'>"+todayNoaRegulerRepayment+"</td>";
+                    template += "<td class='text-right'>"+todayOstRegulerRepayment+"</td>";
+                    
+                    template += "<td class='text-center'>"+todayNoaMortagesCredit+"</td>";
+                    template += "<td class='text-right'>"+todayOstMortagesCredit+"</td>";
+                    template += "<td class='text-center'>"+todayNoaMortagesRepayment+"</td>";
+                    template += "<td class='text-right'>"+todayOstMortagesRepayment+"</td>";
+                
+                    template += "<td class='text-right'>"+totalOstUp+"</td>";
+                    
+                    template += "<td class='text-center'>"+totalDisburNoa+"</td>";
+                    template += "<td class='text-right'>"+totalDisburUp+"</td>";
+                    template += "<td class='text-right'>"+(totalDisburUp/totalDisburNoa).toFixed(2)+"</td>";
+                    
+                    template += '</tr>';
+
 					$('.kt-section__content table').append(template);
 				//}
 			},
@@ -191,60 +222,88 @@ function initCariForm(){
     }
 }
 
-    $('[name="area"]').on('change',function(){
-        var area = $(this).val();
-        var units =  document.getElementById('unit');
-        var url_data = $('#url_get_unit').val() + '/' + area;
-        $.get(url_data, function (data, status) {
-            var response = JSON.parse(data);
-            if (status) {
-                $("#unit").empty();
-                var opt = document.createElement("option");
-                    opt.value = "all";
-                    opt.text ="All";
-                    units.appendChild(opt);
-                for (var i = 0; i < response.data.length; i++) {
-                    var opt = document.createElement("option");
-                    opt.value = response.data[i].id;
-                    opt.text = response.data[i].name;
-                    units.appendChild(opt);
-                }
-            }
-        });
+
+
+
+const initArea = ()=>{
+    $.ajax({
+        type : 'GET',
+        url : "<?php echo base_url("api/yogadai/datamaster/areas"); ?>",
+        dataType : "json",
+        success:function(res){
+            let template = '<option value="">All</option>';
+            res.data.forEach(res=>{
+                template += `<option value="${res.id}">${res.name}</option>`;
+            })
+            $('[name="area_id"]').append(template);
+        },
+        error:function(e){
+            console.log(e);
+        }
     });
+}
+
+$('[name="area_id"]').on('change', function(){
+    let area_id = $(this).val();
+    $('[name="branch_id"]').empty();
+    $('[name="unit_id"]').empty();
+    $.ajax({
+        type : 'GET',
+        url : "<?php echo base_url("api/yogadai/datamaster/branchies"); ?>/"+area_id,
+        dataType : "json",
+        success:function(res){
+            let template = '<option value="">All</option>';
+            res.data.forEach(res=>{
+                template += `<option value="${res.id}">${res.name}</option>`;
+            })
+            $('[name="branch_id"]').append(template);
+        },
+        error:function(e){
+            console.log(e);
+        }
+    });
+})
+
+
+$('[name="branch_id"]').on('change', function(){
+    let branch_id = $(this).val();
+    $('[name="unit_id"]').empty();
+    $.ajax({
+        type : 'GET',
+        url : "<?php echo base_url("api/yogadai/datamaster/units"); ?>/"+branch_id,
+        dataType : "json",
+        success:function(res){
+            let template = '<option value="">All</option>';
+            res.data.forEach(res=>{
+                template += `<option value="${res.name}">${res.name}</option>`;
+            })
+            $('[name="unit_id"]').append(template);
+        },
+        error:function(e){
+            console.log(e);
+        }
+    });
+})
+
+$('#btnexport_csv').on('click', function(e){
+    var area = $('[name="area_id"]').val() ? $('[name="area_id"]').val() : '';
+    var cabang = $('[name="branch_id"]').val() ? $('[name="branch_id"]').val() : '';
+    var unit = $('[name="unit_id"]').val() ? $('[name="unit_id"]').val() : '';
+    var date = $('[name="date"]').val() ? $('[name="date"]').val() : '';
+    window.location.href = `<?php echo base_url('report/yogadai/excel');?>?area=${area}&cabang=${cabang}&unit=${unit}&date=${date}`;
+});
+$('#btnexport_pdf').on('click', function(e){
+    var area = $('[name="area_id"]').val() ? $('[name="area_id"]').val() : '';
+    var cabang = $('[name="branch_id"]').val() ? $('[name="branch_id"]').val() : '';
+    var unit = $('[name="unit_id"]').val() ? $('[name="unit_id"]').val() : '';
+    var date = $('[name="date"]').val() ? $('[name="date"]').val() : '';
+    window.location.href = `<?php echo base_url('report/yogadai/pdf');?>?area=${area}&cabang=${cabang}&unit=${unit}&date=${date}`;
+});
+
+
 
 jQuery(document).ready(function() {
     initCariForm();
+    initArea();
 });
-
-
-var type = $('[name="area"]').attr('type');
-if(type == 'hidden'){
-	$('[name="area"]').trigger('change');
-}
-
-$('[name="cabang"]').on('change',function(){
-	var cabang = $('[name="cabang"]').val();
-	var units =  $('[name="id_unit"]');
-	var url_data = $('#url_get_units').val() + '/' + cabang;
-	$.get(url_data, function (data, status) {
-		var response = JSON.parse(data);
-		if (status) {
-			$("#unit").empty();
-			units.append('<option value="0">All</option>');
-			for (var i = 0; i < response.data.length; i++) {
-				var opt = document.createElement("option");
-				opt.value = response.data[i].id;
-				opt.text = response.data[i].name;
-				units.append(opt);
-			}
-		}
-	});
-});
-
-var typecabang = $('[name="cabang"]').attr('type');
-if(typecabang == 'hidden'){
-	$('[name="cabang"]').trigger('change');
-}
-
 </script>

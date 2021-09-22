@@ -18,7 +18,7 @@ class LmTransactionsModel extends Master
 			->where('units.id', $idUnit)
 			->where('lm_grams.id', $idGram)
 			->where('lm_transactions.type_transaction','SALE')->get()->row()->amount;
-		$get =  $this->db->select('lm_transactions_grams.price_perpcs,lm_transactions_grams.price_buyback_perpcs ')
+		$get =  $this->db->select('lm_transactions_grams.price_perpcs,lm_transactions_grams.price_buyback_perpcs, lm_grams.weight')
 			->from('lm_transactions_grams')
 			->join('lm_transactions','lm_transactions.id = lm_transactions_grams.id_lm_transaction')
 			->join('series','series.id = lm_transactions_grams.id_series')
@@ -32,8 +32,9 @@ class LmTransactionsModel extends Master
 		
 		return (object) [
 			'amount'	=> $amount,
-			'price_perpcs' => $amount ? $get->price_perpcs : '0',
-			'price_buyback_perpcs' => $amount ? $get->price_buyback_perpcs : '0',
+			'price_perpcs' => $amount ? $get->price_perpcs : 0,
+			'price_buyback_perpcs' => $amount ? $get->price_buyback_perpcs : 0,
+			'weight'	=> $amount ? $get->weight : 0
 		];
 	}
 

@@ -76,12 +76,12 @@ $this->load->view('temp/MenuBar.php');
             </table> -->
             <!--end: Datatable -->
 
-            <form id="form_bukukas" class="form-horizontal">
+            <form id="form_bukukas" class="form-horizontal" action="<?php echo base_url('dashboards/pengeluaran_pdf');?>">
             <div class="kt-portlet__body">
             <div class="col-md-12" >
                 <div class="form-group row">
 					<label class="col-form-label">Area</label>
-                    <div class="col-lg-2">
+                    <div class="col-md-2">
                         <select class="form-control select2" name="area" id="area">
                             <option></option>
                             <?php
@@ -93,11 +93,23 @@ $this->load->view('temp/MenuBar.php');
                             ?>
                         </select>
                     </div>
+                    <div class="col-md-2">
+                        <select class="form-control select2" name="method" id="method">
+                            <option value="daily">Harian</option>
+                            <option value="montly">Bulanan</option>
+                        </select>
+                    </div>
 					<label class="col-form-label">Tanggal</label>
-					<div class="col-lg-2">
+					<div class="col-md-2">
 						<input type="date" class="form-control" name="date-start" value="<?php echo date('Y-m-d');?>">
 					</div>
-					<button type="button" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>
+                    <div class="col-md-3">
+                    <button type="button" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>
+					<button type="submit" class="btn btn-danger" name="btncari"><i class="fa fa-file-pdf"></i></button>
+					<button type="button" class="btn btn-success" name="btncari" onclick="excel()" ><i class="fa fa-file-excel"></i></button>
+		
+             
+                    </div>
 				</div>
 
             </div>
@@ -128,5 +140,5 @@ $this->load->view('temp/MenuBar.php');
 
 <?php
 $this->load->view('temp/Footer.php');
-$this->load->view('dashboard/pelunasan/_script.php');
+$this->load->view('dashboard/pengeluaran/_script.php');
 ?>

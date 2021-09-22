@@ -4,6 +4,7 @@ var cariForm;
 
 function convertToRupiah(angka)
 {
+    if(angka === '') return 0;
 	var rupiah = '';		
 	var angkarev = angka.toString().split('').reverse().join('');
 	for(var i = 0; i < angkarev.length; i++) if(i%3 == 0) rupiah += angkarev.substr(i,3)+'.';
@@ -136,29 +137,38 @@ function initCariForm(){
         var area = $('[name="area"]').val();
         var unit = $('[name="id_unit"]').val();
         var permit = $('[name="permit"]').val();
+        var date = $('[name="date"]').val();
         KTApp.block('#form_bukukas .kt-portlet__body', {});
 		$.ajax({
 			type : 'GET',
 			url : "<?php echo base_url("api/transactions/regularpawns/getcustomers"); ?>",
 			dataType : "json",
-            data:{permit:permit, area:area},
+            data:{permit, area, unit, date},
             
             success : function(response,status){
 				KTApp.unblockPage();
 				//if(response.status == true){
 					var template ="";
 					var no =1;
+                    let int = 0;
 					$.each(response.data, function (index, data) {
 
 						template += "<tr class='rowappend' bgcolor='#F7F9F9' >";
 						template += "<td class='text-center'>"+no+"</td>";
 						template += "<td class='text-left'>"+data.unit_name+"</td>";
+						template += "<td class='text-left'>"+data.date_sbk+"</td>";
+						template += "<td class='text-left'>"+data.deadline+"</td>";
                         template += "<td class='text-center'>"+data.no_cif+"</td>";
                         template += "<td class='text-left'>"+data.ktp+"</td>";
                         template += "<td class='text-left'>"+data.customer+"</td>";
 						template += "<td class='text-center'>"+data.no_sbk+"</td>";
                         template += "<td class='text-right'>"+convertToRupiah(data.amount)+"</td>";
                         template += "<td class='text-left'>"+data.job+"</td>";
+                          template += "<td class='text-left'>"+data.capital_lease+"</td>";
+                               template += "<td class='text-left'>"+data.repayment+"</td>";
+                        template += "</tr>";
+
+                        int += parseInt(data.amount);
 
                         // template += '</tr>'; 
                         // if(data.payments!=""){
@@ -186,6 +196,17 @@ function initCariForm(){
                         // }                    
                         no++;                        
 					});
+                    template += "<tr class='rowappend' bgcolor='#F7F9F9' >";
+                    template += "<td class='text-center'></td>";
+                    template += "<td class='text-center'></td>";
+                    template += "<td class='text-center'></td>";
+                    template += "<td class='text-center'></td>";
+                    template += "<td class='text-center'></td>";
+                    template += "<td class='text-center'></td>";
+                    template += "<td class='text-center'></td>";
+                    template += "<td class='text-center'></td>";
+                    template += "<td class='text-left'>"+convertToRupiah(int)+"</td>";
+                    template += "<td class='text-left'></td></tr>";
 					$('.kt-section__content .table').append(template);
 				//}
 			},

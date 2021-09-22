@@ -81,6 +81,11 @@ $this->load->view('temp/MenuBar.php');
             <div class="col-md-12" > 
 
                 <div class="form-group row">
+                <div class="col-lg-2">
+                    <label class="col-form-label">date</label>
+                    <input type="date" class="form-control" name="date"  value="<?php echo date('Y-m-d');?>"/>
+                </div>
+
                 <?php if($this->session->userdata('user')->level == 'unit'):?>
                     <input type="hidden" name="id_unit" value="<?php echo $this->session->userdata('user')->id_unit;?>">
                 <?php elseif($this->session->userdata('user')->level == 'area'):?>
@@ -102,6 +107,7 @@ $this->load->view('temp/MenuBar.php');
                    <div class="col-lg-2">
                     <label class="col-form-label">Area</label>
                         <select class="form-control select2" name="area" id="area">
+                        <option value="0">All</option>
                             <?php
                                 if (!empty($areas)){
                                     foreach($areas as $row){
@@ -121,6 +127,7 @@ $this->load->view('temp/MenuBar.php');
                     <div class="col-lg-2">
 						<label class="col-form-label">Status</label>
 						<select class="form-control" name="permit">
+                        <option value="">All</option>
 							<?php foreach (array('OJK' => 'OJK','NON-OJK'=>'NON OJK') as $key => $value):?>
 								<option value="<?php echo $key;?>"><?php echo $value;?></option>
 							<?php endforeach;?>
@@ -142,12 +149,16 @@ $this->load->view('temp/MenuBar.php');
 						    	<tr>
 						      		<th class="text-center">No</th>
 						      		<th class="text-left">Unit</th>
+						      		<th class="text-left">Tanggal Sge</th>
+						      		<th class="text-left">Tanggal Jatuh tempo</th>
 						      		<th class="text-center">CIF</th>
 						      		<th class="text-left">KTP</th>
 						      		<th class="text-left">Nasabah</th>
 						      		<th  class="text-center">No. SGE</th>
 						      		<th  class="text-right">UP</th>
 						      		<th  class="text-left">Pekerjaan</th>
+						      		<th  class="text-left">Sewa Modal</th>
+						      		<th  class="text-left">Pelunasan</th>
 						    	</tr>
 						  	</thead>
 						  	<tbody>						    					    	

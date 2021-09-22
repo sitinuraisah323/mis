@@ -9,7 +9,7 @@
         </div>              
         <div class="col-lg-2">
         <label class="col-form-label">Unit</label>
-            <select class="form-control select2" name="id_unit" id="id_unit">
+            <select class="form-control select2" name="id_unit" id="unit">
                 <option value="0">All</option>
             </select>
     </div>
@@ -19,7 +19,7 @@
         <input type="hidden"  name="area" value="0"/>
         <input type="hidden" name="cabang" value="<?php echo $this->session->userdata('user')->id_cabang;?>" />
         <label class="col-form-label">Unit</label>
-            <select class="form-control select2" name="id_unit" id="id_unit">
+            <select class="form-control select2" name="id_unit" id="unit">
                 <option value="0">All</option>
         </select>
     </div>
@@ -41,16 +41,10 @@
                     }
                 ?>
             </select>
-        </div>             
-        <div class="col-lg-2">
-        <label class="col-form-label">Cabang</label>
-            <select class="form-control select2" name="cabang" id="cabang">
-                <option value="0">All</option>
-            </select>
-        </div>              
+        </div>          
         <div class="col-lg-2">
         <label class="col-form-label">Unit</label>
-            <select class="form-control select2" name="id_unit" id="id_unit">
+            <select class="form-control select2" name="id_unit" id="unit">
                 <option value="0">All</option>
             </select>
     </div>

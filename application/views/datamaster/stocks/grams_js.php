@@ -7,16 +7,21 @@
     $('[name="area"]').on('change',function(){
             var area = $('[name="area"]').val();
             var cabang =  $('[name="cabang"]');
+            var unit =  $('[name="id_unit"]');
             var url_data = '<?php echo base_url();?>/api/datamaster/cabang?id_area='+area;
             $.get(url_data, function (data, status) {
                 var response = JSON.parse(data);
                 if (status) {
-                    $("#unit").empty();
+                    $("#id_unit").empty();
                     $("#cabang").empty();
                     var opt = document.createElement("option");
                     opt.value = "0";
                     opt.text = "All";
-                    cabang.append(opt)
+                    cabang.append(opt);
+                    var opt = document.createElement("option");
+                        opt.value = '0';
+                        opt.text = 'All';
+                        unit.append(opt);
                     for (var i = 0; i < response.data.length; i++) {
                         var opt = document.createElement("option");
                         opt.value = response.data[i].id;
@@ -34,7 +39,11 @@
             $.get(url_data, function (data, status) {
                 var response = JSON.parse(data);
                 if (status) {
-                    $("#unit").empty();
+                    $("#id_unit").empty();
+                    var opt = document.createElement("option");
+                        opt.value = '0';
+                        opt.text = 'All';
+                        unit.append(opt);
                     for (var i = 0; i < response.data.length; i++) {
                         var opt = document.createElement("option");
                         opt.value = response.data[i].id;
@@ -90,19 +99,19 @@
     const excel = (event) =>{
         const date_start = event.target.closest('form').querySelector('[name="date_start"]').value;
         const date_end = event.target.closest('form').querySelector('[name="date_end"]').value;
-        const id_unit = $('[name="id_unit"]').val();
-        const id_cabang = $('[name="cabang"]').val();
-        const id_area = $('[name="area"]').val();
-        window.location.href = `<?php echo base_url('report/stockslm/export');?>?date_start=${date_start}&date_end=${date_end}&id_area=${id_area}&id_unit=${id_unit}&id_cabang=${id_cabang}`
+        const id_unit = parseInt($('[name="id_unit"]').val());
+        const id_cabang = parseInt($('[name="cabang"]').val());
+        const id_area = parseInt($('[name="area"]').val());
+        window.location.href = `<?php echo base_url('datamaster/stocks/export');?>?date_start=${date_start}&date_end=${date_end}&id_area=${id_area}&id_unit=${id_unit}&id_cabang=${id_cabang}`
     }
 
     const pdf = (event) =>{
         const date = event.target.closest('form').querySelector('[name="date_end"]').value;
         const date_start = event.target.closest('form').querySelector('[name="date_start"]').value;
-        const id_unit = $('[name="id_unit"]').val();
-        const id_cabang = $('[name="cabang"]').val();
-        const id_area = $('[name="area"]').val();
-        window.location.href = `<?php echo base_url('report/stockslm/pdf');?>?date=${date}&date_start=${date_start}&id_area=${id_area}&id_unit=${id_unit}&id_cabang=${id_cabang}`
+        const id_unit = parseInt($('[name="id_unit"]').val());
+        const id_cabang = parseInt($('[name="cabang"]').val());
+        const id_area = parseInt($('[name="area"]').val());
+        window.location.href = `<?php echo base_url('datamaster/stocks/pdf');?>?date=${date}&date_start=${date_start}&id_area=${id_area}&id_unit=${id_unit}&id_cabang=${id_cabang}`
     }
     
   
@@ -111,7 +120,7 @@
         const dateStart = $('[name="date_start"]').val();
         const dateEnd = $('[name="date_end"]').val();
         window.location.href = 
-        `<?php echo base_url('report/stockslm/detail?unit=');?>${unit}&weight=${weight}&date_start=${dateStart}&date_end=${dateEnd}`;
+        `<?php echo base_url('datamaster/stocks/detail?unit=');?>${unit}&weight=${weight}&date_start=${dateStart}&date_end=${dateEnd}`;
     }
 
     $(document).ready(function(){        
