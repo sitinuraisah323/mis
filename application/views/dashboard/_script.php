@@ -142,6 +142,9 @@ function initCariForm(){
 		var dateStart = $('[name="date-start"]').val();
         KTApp.block('#form_bukukas .kt-portlet__body', {});
         //alert(transaksi);
+		// if(transakai=="OUTSTANDING"){
+		// 	outstanding();
+		// }
         if(transaksi=="OUTSTANDING"){
             outstanding();
         }else if(transaksi=="PENCAIRAN"){

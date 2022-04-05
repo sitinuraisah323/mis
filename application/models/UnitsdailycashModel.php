@@ -80,13 +80,14 @@ class UnitsdailycashModel extends Master
 		);
 	}
 
-	public function getSummaryCashoutPerk($date,$perk,$idUnit)
+	public function getSummaryCashoutPerk($year, $date,$perk,$idUnit)
 	{
 		$data = $this->db->select('coa.name_perk,units_dailycashs.no_perk,sum(amount) as amount')
 			->from('units_dailycashs')
 			->join('coa','coa.no_perk=units_dailycashs.no_perk')
 			->where('units_dailycashs.type =', 'CASH_OUT')
 			->where('MONTH(date) =', $date)
+			->where('YEAR(date) =', $year)
 			->where_in('units_dailycashs.no_perk ', $perk)
 			->where('units_dailycashs.id_unit', $idUnit)
 			->group_by('units_dailycashs.id_unit')
@@ -103,21 +104,23 @@ class UnitsdailycashModel extends Master
 					->from('units_saldo')
 					->where('units_saldo.id_unit', $idUnit)
 					->get()->row();
-
+        if($saldo->cut_off){
+            $this->units->db->where('units_dailycashs.date >',$saldo->cut_off);
+        }
 		$cashin = $this->units->db->select('sum(amount) as amount')
 					->from('units_dailycashs')
 					->where('units_dailycashs.type','CASH_IN')
 					->where('units_dailycashs.id_unit', $idUnit)
-					->where('units_dailycashs.date >',$saldo->cut_off)
 					->where('units_dailycashs.date <=',$date)
 					->get()->row();
-
+        if($saldo->cut_off){
+            $this->units->db->where('units_dailycashs.date >',$saldo->cut_off);
+        }
 		
 		$cashout = $this->units->db->select('sum(amount) as amount')
 					->from('units_dailycashs')
 					->where('units_dailycashs.type','CASH_OUT')
 					->where('units_dailycashs.id_unit', $idUnit)
-					->where('units_dailycashs.date >',$saldo->cut_off)
 					->where('units_dailycashs.date <=',$date)
 					->get()->row();
 
@@ -134,20 +137,22 @@ class UnitsdailycashModel extends Master
 					->from('units_saldo')
 					->where('units_saldo.id_unit', $idUnit)
 					->get()->row();
-
+        if($saldo->cut_off){
+            $this->units->db->where('units_dailycashs.date >',$saldo->cut_off);
+        }
 		$cashin = $this->units->db->select('sum(amount) as amount')
 					->from('units_dailycashs')
 					->where('units_dailycashs.type','CASH_IN')
 					->where('units_dailycashs.id_unit', $idUnit)
-					->where('units_dailycashs.date >',$saldo->cut_off)
 					->where('units_dailycashs.date <',$date)
 					->get()->row();
-		
+	   if($saldo->cut_off){
+            $this->units->db->where('units_dailycashs.date >',$saldo->cut_off);
+        }
 		$cashout = $this->units->db->select('sum(amount) as amount')
 					->from('units_dailycashs')
 					->where('units_dailycashs.type','CASH_OUT')
 					->where('units_dailycashs.id_unit', $idUnit)
-					->where('units_dailycashs.date >',$saldo->cut_off)
 					->where('units_dailycashs.date <',$date)
 					->get()->row();
 

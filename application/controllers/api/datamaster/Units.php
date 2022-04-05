@@ -29,6 +29,17 @@ class Units extends ApiController
         if($idCabang = $this->input->get('id_cabang')){
             $this->units->db->where('id_cabang', $idCabang);
         }
+         if($this->session->userdata('user')->level == 'unit'){
+			$this->units->db->where('a.id', $this->session->userdata('user')->id_unit);
+		}
+
+        if($this->session->userdata('user')->level == 'cabang'){
+			$this->units->db->where('a.id_cabang', $this->session->userdata('user')->id_cabang);
+		}
+
+        if($this->session->userdata('user')->level == 'area'){
+			$this->units->db->where('a.id_area', $this->session->userdata('user')->id_area);
+		}
         		
         $data = $this->units->get_units();
 		echo json_encode(array(
@@ -73,6 +84,15 @@ class Units extends ApiController
 			'message'	=> 'Successfully Get Data Units'
 		));
     }    
+
+    public function get_customers_bycif($cif)
+	{
+		echo json_encode(array(
+			'data'	    => 	$this->units->get_customers_bycif($cif,$unit),
+			'status'	=> true,
+			'message'	=> 'Successfully Get Data Units'
+		));
+    }
 
     public function get_units_sbk($unit)
 	{

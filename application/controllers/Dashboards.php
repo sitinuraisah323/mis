@@ -78,6 +78,12 @@ class Dashboards extends Authenticated
 			'areas'	=> $this->areas->all()
 		));
     }
+    
+    public function kasir()
+	{
+		$data['permit'] = "All";
+		$this->load->view("dashboard/kasir",$data);
+	}
 
     public function pusat()
 	{

@@ -126,7 +126,7 @@ function initCariForm(){
                     var todayNoaMortagesCredit = 0;
                     var todayOstMortagesRepayment = 0;
                     var todayNoaMortagesRepayment = 0;
-
+                    var totalOstNoa = 0;
                     var totalOstUp = 0;
                     var totalDisburUp = 0;
                     var totalDisburNoa = 0
@@ -147,8 +147,9 @@ function initCariForm(){
                         template += "<td class='text-right'>"+data.credit_today.up_mortages+"</td>";
                         template += "<td class='text-center'>"+data.repayment_today.noa_mortages+"</td>";
                         template += "<td class='text-right'>"+data.repayment_today.up_mortages+"</td>";
-                    
+                    template += "<td class='text-right'>"+data.total_outstanding.noa+"</td>";
                         template += "<td class='text-right'>"+data.total_outstanding.up+"</td>";
+                        totalOstNoa += data.total_outstanding.noa;
                      
                         template += "<td class='text-center'>"+data.total_disburse.noa+"</td>";
                         template += "<td class='text-right'>"+data.total_disburse.credit+"</td>";
@@ -194,6 +195,7 @@ function initCariForm(){
                     template += "<td class='text-right'>"+todayOstMortagesCredit+"</td>";
                     template += "<td class='text-center'>"+todayNoaMortagesRepayment+"</td>";
                     template += "<td class='text-right'>"+todayOstMortagesRepayment+"</td>";
+                    template += "<td class='text-right'>"+totalOstNoa+"</td>";
                 
                     template += "<td class='text-right'>"+totalOstUp+"</td>";
                     
@@ -307,3 +309,6 @@ jQuery(document).ready(function() {
     initArea();
 });
 </script>
+
+
+

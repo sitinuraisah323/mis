@@ -202,13 +202,15 @@ class Dashboards extends ApiController
 				'up_rep_mortages'	=> $getOstToday->repayment_mortage
 			);
 			$dateYesterday = $getOstToday->date;
-
+            // var_dump($dateYesterday); exit;
 			$getOstYesterday = $this->regular->db
 								->where('date <', $dateYesterday)
-								->from('units_outstanding')
 								->where('id_unit', $unit->id)
+								->from('units_outstanding')
 								->order_by('date','DESC')
 								->get()->row();
+// 			var_dump($getOstYesterday); exit;
+					
 
 			$yesterday = $getOstYesterday->date;
 
@@ -285,7 +287,8 @@ class Dashboards extends ApiController
 			->get('units')->result();
 		foreach ($units as $unit)
 		{
-			$unit->os = $this->regular->getOS($unit->id, $date,$permit);
+		    $getOs =  $this->regular->getOS($unit->id, $date,$permit);
+		    $unit->os = $getOs < 0 ? 0 : $getOs;
 		}
 		$this->sendMessage($units, 'Get Data Outstanding');
 	}
@@ -805,7 +808,7 @@ class Dashboards extends ApiController
 		if($this->input->get('date_end')){
 			$date_end = $this->input->get('date_end');
 		}else{
-			$date_end = date('Y-m-d');
+			$date_end = date('2021-01-30');
 		}
 
 		if($this->input->get('area')){
@@ -1149,6 +1152,115 @@ class Dashboards extends ApiController
             }
         }
         return $this->sendMessage($units,'Successfully get report realisasi');		
+	}
+	
+	public function getlmsummary()
+	{
+		$perk = array('1110103','1110104','1110105','1110106','1110107','1110108','1110109');
+		if($area = $this->input->get('area')){
+            $this->units->db->where('id_area', $area);
+        }else if($this->session->userdata('user')->level === 'area'){
+            $this->units->db->where('id_area', $this->session->userdata('user')->id_area);
+		}
+		
+		if($cabang = $this->input->get('cabang')){
+			$this->units->db->where('id_cabang', $cabang);
+		}else if($this->session->userdata('user')->level == 'cabang'){
+			$this->units->db->where('id_cabang', $this->session->userdata('user')->id_cabang);
+		}
+		
+		if($code = $this->input->get('unit')){
+			if($code!='all'){
+			$this->units->db->where('units.id', $code);
+			}
+		}else if($this->session->userdata('user')->level == 'unit'){
+			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
+		}		
+
+        if($this->session->userdata('user')->level === 'unit'){
+            $this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
+        }else if($unit = $this->input->get('id_unit')){
+            $this->units->db->where('units.id', $unit);
+		}
+		
+		$this->units->db->select('units.id, name, areas.area,
+								  SUM(CASE WHEN TYPE = "CASH_OUT" THEN amount ELSE 0 END) purchase,
+								  COUNT(CASE WHEN TYPE = "CASH_OUT" THEN units_dailycashs.id ELSE 0 END) qty_purchase,
+								  SUM(CASE WHEN TYPE = "CASH_IN" THEN amount ELSE 0 END) sales,
+								  COUNT(CASE WHEN TYPE = "CASH_IN" THEN units_dailycashs.id ELSE 0 END) qty_sales')
+			->join('areas','areas.id = units.id_area')
+			->join('units_dailycashs','units_dailycashs.id_unit=units.id');
+
+			if($sdate = $this->input->get('sdate')){
+				$this->units->db->where('date >=',$sdate);
+			}
+
+			if($edate = $this->input->get('edate')){
+				$this->units->db->where('date <=',$edate);
+			}
+
+			if($gramasi = $this->input->get('gramasi')){
+				$this->units->db->where_in('no_perk',$gramasi);
+			}else{
+				$this->units->db->where_in('no_perk',$perk );
+			}
+
+        $units = $this->units->db
+					->group_by('units.id')
+					->get('units')->result();
+
+		return $this->sendMessage($units,'Successfully get report lm');
+	}
+	
+	public function getlmtransaction()
+	{
+		$perk = array('1110103','1110104','1110105','1110106','1110107','1110108','1110109');
+		if($area = $this->input->get('area')){
+            $this->units->db->where('id_area', $area);
+        }else if($this->session->userdata('user')->level === 'area'){
+            $this->units->db->where('id_area', $this->session->userdata('user')->id_area);
+		}
+		
+		if($cabang = $this->input->get('cabang')){
+			$this->units->db->where('id_cabang', $cabang);
+		}else if($this->session->userdata('user')->level == 'cabang'){
+			$this->units->db->where('id_cabang', $this->session->userdata('user')->id_cabang);
+		}
+		
+		if($code = $this->input->get('unit')){
+			if($code!='all'){
+			$this->units->db->where('units.id', $code);
+			}
+		}else if($this->session->userdata('user')->level == 'unit'){
+			$this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
+		}		
+
+        if($this->session->userdata('user')->level === 'unit'){
+            $this->units->db->where('units.id', $this->session->userdata('user')->id_unit);
+        }else if($unit = $this->input->get('id_unit')){
+            $this->units->db->where('units.id', $unit);
+		}
+		
+		$this->units->db->select('units.id, name, areas.area,no_perk,date,description,type,amount,permit')
+			->join('areas','areas.id = units.id_area')
+			->join('units_dailycashs','units_dailycashs.id_unit=units.id');
+
+			if($sdate = $this->input->get('sdate')){
+				$this->units->db->where('date >=',$sdate);
+			}
+
+			if($edate = $this->input->get('edate')){
+				$this->units->db->where('date <=',$edate);
+			}
+
+			if($gramasi = $this->input->get('gramasi')){
+				$this->units->db->where_in('no_perk',$gramasi);
+			}else{
+				$this->units->db->where_in('no_perk',$perk );
+			}
+
+        $units = $this->units->db->get('units')->result();
+		return $this->sendMessage($units,'Successfully get report lm');
 	}
 
 	public function unitprofit()
@@ -1512,7 +1624,7 @@ class Dashboards extends ApiController
 		}
 		$this->sendMessage($unit, 'Get Data karatase');
 	}
-
+	
 	public function new_outstanding()
 	{
 			$currdate = date('Y-m-d');
@@ -1570,25 +1682,156 @@ class Dashboards extends ApiController
 						->where('id_unit', $unit->id)
 						->order_by('date','DESC')
 						->get()->row();
-			$max = $this->db->select('sum(os) as os')
-						->where('date',$getOstToday->date)
-						->join('units', 'units.id = units_outstanding.id_unit')
-						->where('units.id_area', $unit->id_area)
-						->from('units_outstanding')
-						->get()->row()->os;					
-			$unit->max = $max;
-			$getOstYesterday = $this->regular->db
-						->where('date <', $getOstToday->date)
-						->from('units_outstanding')
-						->where('id_unit', $unit->id)
-						->order_by('date','DESC')
-						->get()->row();
-			$unit->total_outstanding->up = $getOstToday->os;
-			$unit->ost_yesterday->up = $getOstYesterday->os;
+			if($getOstToday){
+		    	$max = $this->db->select('sum(os) as os')
+					->where('date',$getOstToday->date)
+					->join('units', 'units.id = units_outstanding.id_unit')
+					->where('units.id_area', $unit->id_area)
+					->from('units_outstanding')
+					->get()->row()->os;					
+    			$unit->max = $max;
+    			$getOstYesterday = $this->regular->db
+    						->where('date <', $getOstToday->date)
+    						->from('units_outstanding')
+    						->where('id_unit', $unit->id)
+    						->order_by('date','DESC')
+    						->get()->row();
+    			$unit->total_outstanding->up = $getOstToday->os;
+    			$unit->ost_yesterday->up = $getOstYesterday->os;
+			}else{
+		    	$unit->total_outstanding->up = 0;
+    			$unit->ost_yesterday->up = 0;
+			}
+		
 		}
 		$this->sendMessage($units, [
 			'today'	=> $today,
 			'yesterday'	=> $yesterday
 		]);
 	}
+	
+	
+	  public function SummaryPenaksir()
+	{
+		$idUnit = $this->session->userdata('user')->id_unit;
+
+		$date = date('Y-m-d');
+		$lastdate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
+
+		$regular 	 = $this->db->select('COUNT(units_regularpawns_verified.id) as noa')
+					 ->from('units_regularpawns_verified')
+					 ->where('units_regularpawns_verified.date_create > ',"2021-11-10")       
+					 ->where('units_regularpawns_verified.id_unit ',$idUnit)
+					 ->get()->row();	
+					 
+		// $mortages 	= $this->db->select('SUM(amount_loan) as up,COUNT(*) as noa')
+		// 			 ->from('units_mortages')
+		// 			 //->where('status_transaction','N')
+		// 			 ->where('date_sbk >=','2020-10-01')
+		// 	         ->where('date_sbk <=','2021-03-31')
+		// 			 ->where('id_unit',$idUnit)
+		// 			 ->get()->row();
+
+		$sumregular = $this->db->select('SUM(qty) as qty,SUM(bruto) as bruto,SUM(net) as net')
+					 ->from('units_regularpawns_summary')
+					 ->where('units_regularpawns_summary.date_create > ',"2021-11-10")  
+					 ->where('id_unit',$idUnit)
+					 ->get()->row();
+		
+		// $summortages = $this->db->select('SUM(qty) as qty,SUM(bruto) as bruto,SUM(net) as net,')
+		// 			 ->from('units_mortages_summary')
+		// 			  ->where('id_unit',$idUnit)
+		// 			 ->get()->row();
+
+		$lmregular = $this->db->select('SUM(qty) as qty,SUM(bruto) as bruto,SUM(net) as net')
+					 ->from('units_regularpawns_summary')
+					 ->where('model','LOGAM MULIA')
+					 ->where('units_regularpawns_summary.date_create > ',"2021-11-10") 
+					 ->where('id_unit',$idUnit)
+					 ->get()->row();
+		$jwregular = $this->db->select('SUM(qty) as qty,SUM(bruto) as bruto,SUM(net) as net')
+					 ->from('units_regularpawns_summary')
+					 ->where('model','PERHIASAN')
+					 ->where('units_regularpawns_summary.date_create > ',"2021-11-10") 
+					 ->where('id_unit',$idUnit)
+					 ->get()->row();
+		
+		// $lmmortages = $this->db->select('SUM(qty) as qty,SUM(bruto) as bruto,SUM(net) as net')
+		// 			 ->from('units_mortages_summary')
+		// 			 ->where('model','LOGAM MULIA')
+		// 			  ->where('id_unit',$idUnit)
+		// 			 ->get()->row();
+
+		// $jwmortages = $this->db->select('SUM(qty) as qty,SUM(bruto) as bruto,SUM(net) as net')
+		// 			 ->from('units_mortages_summary')
+		// 			 ->where('model','PERHIASAN')
+		// 			  ->where('id_unit',$idUnit)
+		// 			 ->get()->row();
+        
+		$lastveregular = $this->db->select('COUNT(units_regularpawns_verified.id) as verified')
+					 ->from('units_regularpawns_verified')
+					 ->where('units_regularpawns_verified.is_verified ',"VERIFIED")       
+					 ->where('units_regularpawns_verified.date_create >',"2021-11-10")       
+					 ->where('units_regularpawns_verified.id_unit ',$idUnit)
+					 ->get()->row();
+
+		// $lasvermortages ="SELECT COUNT(units_mortages_header.id) AS verified FROM units_mortages_header WHERE id_unit='$idUnit' and date_create < '$date' ";
+		// $lasvermortages = $this->db->query($lasvermortages)->row();		
+
+		$ver_regular = $this->db->select('COUNT(units_regularpawns_verified.id) as verified')
+					 ->from('units_regularpawns_verified')
+					//  ->join('units_regularpawns_header', 'units_regularpawns_header.id_unit=units_regularpawns.id_unit AND units_regularpawns_header.no_sbk=units_regularpawns.no_sbk AND units_regularpawns_header.permit=units_regularpawns.permit' ,'left')
+					//  ->join('units','units.id=units_regularpawns.id_unit')
+					//  ->join('customers','customers.id=units_regularpawns.id_customer')
+					//  ->where(' NOT EXISTS (
+					// 		  SELECT 1 FROM units_repayments WHERE units_repayments.id = units_regularpawns.id_repayment 
+					// 		  AND units_repayments.date_repayment <= "2021-03-31")')
+					 ->where('units_regularpawns_verified.is_verified ',"VERIFIED")       
+					 ->where('units_regularpawns_verified.id_unit ',$idUnit)
+					 ->get()->row();
+		
+	    // $ver_mortages ="SELECT COUNT(DISTINCT CONCAT(id_unit,no_sbk,permit)) AS verified FROM units_mortages_header WHERE id_unit='$idUnit'";
+		// $ver_mortages = $this->db->query($ver_mortages)->row();
+
+		$verified = (int) $ver_regular->verified;// + (int) $ver_mortages->verified;
+
+		$data = array("regular_noa"=>(int) $regular->noa,
+					  //"mortages_noa"=>(int) $mortages->noa,					  
+					  "regular_qty"=>(int) $sumregular->qty,
+					  "regular_bruto"=>(int) $sumregular->bruto,
+					  "regular_net"=>(int) $sumregular->net,
+					  //"mortages_qty"=>(int) $summortages->qty,
+					  //"mortages_bruto"=>(int) $summortages->bruto,
+					  //"mortages_net"=>(int) $summortages->net,
+					  "lmregular_qty"=>(int) $lmregular->qty,
+					  "lmregular_bruto"=>(int) $lmregular->bruto,
+					  "lmregular_net"=>(int) $lmregular->net,
+					  "jwregular_qty"=>(int) $jwregular->qty,
+					  "jwregular_bruto"=>(int) $jwregular->bruto,
+					  "jwregular_net"=>(int) $jwregular->net,
+					  //"lmmortages_qty"=>(int) $lmmortages->qty,
+					  //"lmmortages_bruto"=>(int) $lmmortages->bruto,
+					  //"lmmortages_net"=>(int) $lmmortages->net,
+					  //"jwmortages_qty"=>(int) $jwmortages->qty,
+					  //"jwmortages_bruto"=>(int) $jwmortages->bruto,
+					  //"jwmortages_net"=>(int) $jwmortages->net,
+					  "tot_noa"=>(int) $regular->noa,// + (int) $mortages->noa,
+					  "tot_qty"=>(int) $sumregular->qty,// + (int) $summortages->qty,
+					  "tot_bruto"=>(int) $sumregular->bruto,// + (int) $summortages->bruto,
+					  "tot_net"=>(int) $sumregular->net, //+ (int) $summortages->net,
+					  "tot_lm"=>(int) $lmregular->qty,// + (int) $lmmortages->qty,
+					  "tot_jewel"=>(int) $jwregular->qty, //+ (int) $jwmortages->qty,
+					  "tot_lm_bruto"=>(int) $lmregular->bruto, //+ (int) $lmmortages->bruto,
+					  "tot_jewel_bruto"=>(int) $jwregular->bruto, //+ (int) $jwmortages->bruto,
+					  "tot_lm_net"=>(int) $lmregular->net,// + (int) $lmmortages->net,
+					  "tot_jewel_net"=>(int) $jwregular->net,// + (int) $jwmortages->net,
+					  "verified"=> $verified,
+					  "unverified"=> ($regular->noa) - $verified,
+					  "lastverified"=> $lastveregular->verified,// + (int) $lasvermortages->verified,
+					  );		
+
+		return $this->sendMessage($data,'Get Summary Penaksir');
+	}
+	
+
 }

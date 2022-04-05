@@ -111,6 +111,7 @@ function initCariForm(){
     //events
     $('#btncari').on('click',function(){
         $('.rowappend').remove();
+        // KTApp.block('#tblsm', {});
         var month= $('[name="month"]').val();
         var year=$('[name="year"]').val();
         $('#tblsm').find('tbody').find('tr').remove();
@@ -125,17 +126,17 @@ function initCariForm(){
                 let  i = 1;
                 let admin = 0;
                 details.forEach(data=>{
-                    let tr  = '<tr>';
+                    let tr  = '<tr class="rowappend">';
                     tr += `<td>${i}</td>`;
                     tr += `<td>${data.area}</td>`;
                     tr += `<td>${data.name}</td>`;
                     tr += `<td class="text-right">${convertToRupiah(data.admin)}</td>`;
                     tr += `<td class="text-right">${convertToRupiah(data.booking)}</td>`;
-                    tr += `<td class="text-right">${convertToRupiah(data.target_booking)}</td>`;
-                    tr += `<td class="text-right">${(data.booking/data.target_booking*100).toFixed(2)} %</td>`;
+                    tr += `<td class="text-right">${data.target_booking ? convertToRupiah(data.target_booking) : 0}</td>`;
+                    tr += `<td class="text-right">${data.target_booking ? (data.booking/data.target_booking*100).toFixed(2) : 0} %</td>`;
                     tr += `<td class="text-right">${convertToRupiah(data.outstanding)}</td>`;
-                    tr += `<td class="text-right">${convertToRupiah(data.target_os)}</td>`;
-                    tr += `<td class="text-right">${(data.outstanding/data.target_os*100).toFixed(2)} %</td>`;
+                    tr += `<td class="text-right">${data.target_os ? convertToRupiah(data.target_os) : 0}</td>`;
+                    tr += `<td class="text-right">${data.target_os ? (data.outstanding/data.target_os*100).toFixed(2) : 0} %</td>`;
 					      tr += `<td>
                     <button class="btn btn-info" onclick="details(${data.id},${month},${year})" type="button">Detail</button>
                     </td>`;
@@ -144,7 +145,7 @@ function initCariForm(){
                     admin += parseInt(data.admin);
                     $('#tblsm').find('tbody').append(tr);
                 });
-                let tr  = '<tr>';
+                let tr  = '<tr class="rowappend">';
                     tr += `<td>Total Admin</td>`;
                     tr += `<td>${convertToRupiah(admin)}</td>`;
                     tr += `<td>Insentif Unit</td>`;

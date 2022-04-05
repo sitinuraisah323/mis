@@ -12,7 +12,8 @@ class Outstanding extends ApiController
 
 	public function index()
 	{
-		return $this->sendMessage($this->myyogadai->transaction($this->input->get('date'))->data,'Successfull');            
+	    $date = $this->input->get('date');
+		return $this->sendMessage($this->myyogadai->transaction($date)->data,'Successfull');            
     }
 
 

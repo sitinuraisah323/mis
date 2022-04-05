@@ -137,9 +137,12 @@ function initCariForm(){
                     var amountBalanceFinal = 0;
                     var amountGap = 0;
                     var amountBalanceFirst = 0;
+                    var noaregular = 0;
                     var osreg = 0;
                     var osnonreg = 0;
+                    var noatotal = 0;
                     var totos = 0;
+                    var noacicilan = 0;
                     var oscicilan = 0;
 					$.each(response.data, function (index, data) {
 						template += "<tr class='rowappend'>";
@@ -154,10 +157,14 @@ function initCariForm(){
                             template += "<td class='text-right'>"+convertToRupiah(parseInt(data.bapkas.amount_balance_final))+"</td>";
                             template += "<td class='text-right'>"+convertToRupiah(parseInt(data.bapkas.amount_gap))+"</td>";
                             if(data.bapkas.os_cicilan!=null){oscicilan= parseInt(data.bapkas.os_cicilan);}else{oscicilan=0;}
+                            template += "<td class='text-right'>"+convertToRupiah(parseInt(data.bapkas.noa_regular))+"</td>";
                             template += "<td class='text-right'>"+convertToRupiah(parseInt(data.bapkas.os_unit))+"</td>";
+                            template += "<td class='text-right'>"+convertToRupiah(parseInt(data.bapkas.noa_cicilan))+"</td>";
                             template += "<td class='text-right'>"+convertToRupiah(parseInt(oscicilan))+"</td>";
+                            template += "<td class='text-right'>"+convertToRupiah(parseInt(data.bapkas.noa_regular)+parseInt(data.bapkas.noa_cicilan))+"</td>";
                             template += "<td class='text-right'>"+convertToRupiah(parseInt(data.bapkas.os_unit)+parseInt(oscicilan))+"</td>";
                             template += "<td class='text-center'><span data-id='"+data.bapkas.id+"' href='' class='btn btn-sm btn-clean btn-icon btn-icon-md viewBtn' title='View Data' data-toggle='modal' data-target='#modal_view'><i class='flaticon-eye' style='cursor:pointer;'></i></span></td>";
+                            noatotal += parseInt(data.bapkas.noa_regular)+parseInt(data.bapkas.noa_cicilan);
                             totos += parseInt(data.bapkas.os_unit)+parseInt(oscicilan);
                         }else{
                             template += "<td class='text-left'>-</td>";
@@ -171,6 +178,9 @@ function initCariForm(){
                             template += "<td class='text-center'>-</td>";
                             template += "<td class='text-center'>-</td>";
                             template += "<td class='text-center'>-</td>";
+                            template += "<td class='text-center'>-</td>";
+                            template += "<td class='text-center'>-</td>";
+                            template += "<td class='text-center'>-</td>";
                         }
                         template += '</tr>';
                         console.log(data);
@@ -180,8 +190,11 @@ function initCariForm(){
                             amountBalanceFinal += parseInt(data.bapkas.amount_balance_final);
                             amountGap += parseInt(data.bapkas.amount_gap);
                             amountBalanceFirst += parseInt(data.bapkas.amount_balance_first);
+                            noaregular += parseInt(data.bapkas.noa_regular);
                             osreg += parseInt(data.bapkas.os_unit);
+                            noacicilan += parseInt(data.bapkas.noa_cicilan);
                             osnonreg += parseInt(oscicilan);
+                            noatotal += parseInt(data.bapkas.noa_regular)+parseInt(data.bapkas.noa_cicilan);
                             totos += parseInt(data.bapkas.os_unit)+parseInt(oscicilan);
                         }
                         no++;
@@ -191,10 +204,14 @@ function initCariForm(){
                     $('.kt-section__content table').find('tfoot').find('.pengeluaran').text(convertToRupiah(parseInt(amountOut)));
                     $('.kt-section__content table').find('tfoot').find('.saldoakhir').text(convertToRupiah(parseInt(amountBalanceFinal)));
                     $('.kt-section__content table').find('tfoot').find('.selisih').text(convertToRupiah(parseInt(amountGap)));
+                    $('.kt-section__content table').find('tfoot').find('.noaregular').text(convertToRupiah(parseInt(noaregular)));
                     $('.kt-section__content table').find('tfoot').find('.osreg').text(convertToRupiah(parseInt(osreg)));
+                    $('.kt-section__content table').find('tfoot').find('.noacicilan').text(convertToRupiah(parseInt(noacicilan)));
                     $('.kt-section__content table').find('tfoot').find('.osnonreg').text(convertToRupiah(parseInt(osnonreg)));
-                    $('.kt-section__content table').find('tfoot').find('.totos').text(convertToRupiah(parseInt(totos)));
+                    $('.kt-section__content table').find('tfoot').find('.noatotal').text(convertToRupiah(parseInt(noatotal/2)));
+                    $('.kt-section__content table').find('tfoot').find('.totos').text(convertToRupiah(parseInt(totos/2)));
 					$('.kt-section__content table').append(template);
+                    
 				}
 			},
 			error: function (jqXHR, textStatus, errorThrown){
@@ -260,8 +277,10 @@ function popView(el)
                     $('#pengeluaran').val(formatRupiah(response.data.amount_out));
                     $('#mutasi').val(formatRupiah(response.data.amount_mutation));
                     $('#saldoakhir').val(formatRupiah(response.data.amount_balance_final));
-                    $('#selisih').val(formatRupiah(response.data.amount_gap));                   
-                    $('#os_unit').val((parseInt(response.data.os_unit)+parseInt(response.data.os_cicilan)));                   
+                    $('#selisih').val(formatRupiah(response.data.amount_gap));        
+                    $('#noa_regular').val(formatRupiah(response.data.noa_regular));
+                    $('#noa_cicilan').val(formatRupiah(response.data.noa_cicilan));           
+                    $('#os_unit').val(formatRupiah(response.data.os_unit)+parseInt(response.data.os_cicilan));                   
                     $('#note').val(response.data.note);                   
                     
 				}

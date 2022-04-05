@@ -68,7 +68,7 @@ class UnitsModel extends Master
 	public function get_customers_gadaireguler_byunit($unit)
 	{
 		$this->db->distinct();
-		$this->db->select('b.nik,b.name');		
+		$this->db->select('b.nik,b.name, b.no_cif');		
 		$this->db->join('customers as b','b.id=a.id_customer');		
 		$this->db->where('a.id_unit',$unit);		
 		$this->db->order_by('b.name','asc');		
@@ -83,6 +83,19 @@ class UnitsModel extends Master
 		$this->db->where('a.id_unit',$unit);		
 		$this->db->order_by('b.name','asc');		
 		return $this->db->get('units_mortages as a')->result();
+	}
+
+    	public function get_customers_bycif($cif, $unit)
+	{
+		$this->db->distinct();
+		$this->db->select('b.nik,b.name, b.no_cif');		
+		$this->db->join('customers as b','b.id=a.id_customer');		
+		$this->db->where('b.no_cif', $cif);	
+		$this->db->where('b.id_unit', $unit);			
+		$this->db->order_by('b.name','asc');		
+		$data = $this->db->get('units_regularpawns as a')->result();
+		
+		// var_dump($data); exit;
 	}
 
 	public function typerates()
@@ -144,6 +157,7 @@ class UnitsModel extends Master
 			) as total_up
 			")
 			->join('areas','areas.id = units.id_area')
+			->where('areas.status', 'PUBLISH')
 			->order_by('areas.id','asc')
 			->order_by('total_up','desc')
 			->get('units')->result();

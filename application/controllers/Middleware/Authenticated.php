@@ -3,10 +3,13 @@ date_default_timezone_set("Asia/Bangkok");
 require_once APPPATH.'controllers/Controller.php';
 class Authenticated extends Controller
 {
+
 	public function __construct()
 	{
+
 		parent::__construct();
 		$session = $this->session->userdata();
+		
 		if($session['logged_in'] == false){
 			redirect(base_url('login'));
 		}

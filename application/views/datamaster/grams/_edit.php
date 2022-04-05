@@ -21,6 +21,16 @@
 
 							<div class="col-md-12">
 								<div class="form-group">
+									<label>Jenis LM</label>
+									<select name="type" class="form-control">
+										<option value="HA">HA</option>
+										<option value="EMASKITA">EMASKITA</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="col-md-12">
+								<div class="form-group">
 									<label>Berat</label>
 									<input type="text" name="weight" class="form-control">
 								</div>

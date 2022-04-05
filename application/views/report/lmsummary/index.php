@@ -120,11 +120,31 @@ $this->load->view('temp/MenuBar.php');
 							</select>
 						</div>
 					<?php endif ;?>
+
+                    <div class="col-lg-2">
+							<label class="col-form-label">Gramasi</label>
+							<select class="form-control select2" name="gramasi" id="gramasi">
+								<option value="">All</option>
+								<option value="1110103">0,1 Gram</option>
+								<option value="1110104">0,25 Gram</option>
+								<option value="1110105">0,5 Gram</option>
+								<option value="1110106">1 Gram</option>
+								<option value="1110107">2.5 Gram</option>
+								<option value="1110108">5 Gram</option>
+								<option value="01110109">10 Gram</option>
+							</select>
+						</div>
 					
 					<div class="col-lg-2">
-						<label class="col-form-label">Tanggal</label>
-						<input type="date" class="form-control" name="date" value="<?php echo date('Y-m-d');?>">
-					</div>                 
+						<label class="col-form-label">Dari</label>
+						<input type="date" class="form-control" name="sdate" value="<?php echo date('Y-m-01');?>">
+					</div>    
+
+                    <div class="col-lg-2">
+						<label class="col-form-label">Sampai</label>
+						<input type="date" class="form-control" name="edate" value="<?php echo date('Y-m-d');?>">
+					</div> 
+
                     <div class="col-lg-2">
                         <label class="col-form-label">&nbsp</label>
                         <div class="position-relative">
@@ -146,7 +166,7 @@ $this->load->view('temp/MenuBar.php');
 									<th class="text-left">Unit</th>
 									<th class='text-right'>Purchases</th>
 									<th class='text-right'>Sales</th>
-									<th class='text-right'>Percentage</th>
+									<!-- <th class='text-right'>Percentage</th> -->
 									<th></th>
 						    	</tr>
 						  	</thead>

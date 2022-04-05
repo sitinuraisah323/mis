@@ -93,6 +93,122 @@
 		return false;
 	});
 
+// function initCariForm(){
+//     //validator
+//     var validator = $("#form_usia").validate({
+//         ignore:[],
+//         rules: {
+//             area: {
+//                 required: true,
+//             },
+//             unit: {
+//                 required: true,
+//             }
+//         },
+//         invalidHandler: function(event, validator) {
+//             KTUtil.scrollTop();
+//         }
+//     });
+
+//     $('#usiadari').select2({ placeholder: " Select Usiadari", width: '80%' });
+//     $('#usiasampai').select2({ placeholder: "Select Usiasampai", width: '80%' });
+//     //events
+//     $('#btncari').on('click',function(){
+//         $('.rowappend').remove();
+//         var usiadari = $('[name="usiadari"]').val();
+//         var usiasampai = $('[name="usiasampai"]').val();
+//         KTApp.block('#form_usia .kt-portlet__body', {});
+// 		$.ajax({
+// 			type : 'GET',
+// 			url : "<?php echo base_url("api/datamaster/customers/usia"); ?>",
+// 			dataType : "json",
+// 			data:{usiadari:usiadari,usiasampai:usiasampaid},
+// 			success : function(response,status){
+// 				KTApp.unblockPage();
+// 				if(response.status == true){
+// 					var template = '';
+// 					var no = 1;
+// 					var amount = 0;
+// 					var admin = 0;
+//                     var status="";
+// 					$.each(response.data, function (index, data) {
+// 						template += "<tr class='rowappend'>";
+// 						template += "<td class='text-center'>"+data.no_cif+"</td>";
+// 						template += "<td class='text-center'>"+data.nik+"</td>";
+// 						template += "<td class='text-center'>"+data.name+"</td>";
+// 						template += "<td class='text-center'>"+data.gender+"</td>";
+// 						template += "<td class='text-center'>"+data.marital+"</td>";
+// 						template += "<td class='text-center'>"+data.birth_place+"</td>";
+// 						template += "<td class='text-center'>"+data.birth_date+"</td>";
+// 						template += "<td class='text-center'>"+data.mobile+"</td>";
+// 						template += "<td class='text-center'>"+data.rt+"</td>";
+// 						template += "<td class='text-center'>"+data.rw+"</td>";
+// 						template += "<td class='text-center'>"+data.kelurahan+"</td>";
+// 						template += "<td class='text-center'>"+data.kecamatan+"</td>";
+// 						template += "<td class='text-center'>"+data.kodepos+"</td>";
+// 						template += "<td class='text-center'>"+data.province+"</td>";
+// 						template += "<td class='text-center'>"+data.city+"</td>";
+// 						template += "<td class='text-center'>"+data.address+"</td>";
+// 						template += "<td class='text-center'>"+data.citizenship+"</td>";
+// 						template += "<td class='text-center'>"+data.mother_name+"</td>";
+// 						template += "<td class='text-center'>"+data.sibling_name+"</td>";
+// 						template += "<td class='text-center'>"+data.sibling_birth_place+"</td>";
+// 						template += "<td class='text-center'>"+data.sibling_birth_date+"</td>";
+// 						template += "<td class='text-center'>"+data.sibling_address_1+"</td>";
+// 						template += "<td class='text-center'>"+data.sibling_address_2+"</td>";
+// 						template += "<td class='text-center'>"+data.sibling_job+"</td>";
+// 						template += "<td class='text-center'>"+data.sibling_relation+"</td>";
+// 						template += "<td class='text-center'>"+data.status+"</td>";
+// 						template += "<td class='text-center'>"+data.sibling_address_2+"</td>";
+// 						template += "<td class='text-center'>"+data.sibling_address_2+"</td>";
+// 						template += "<td class='text-center'>"+data.sibling_address_2+"</td>";
+// 						template += "<td class='text-center'>"+moment(data.date_sbk).format('DD-MM-YYYY')+"</td>";
+//                         template += "<td class='text-center'>"+moment(data.deadline).format('DD-MM-YYYY')+"</td>";
+//                         if(data.date_repayment!=null){ var DateRepayment = moment(data.date_repayment).format('DD-MM-YYYY');}else{ var DateRepayment = "-";}
+// 						template += "<td class='text-center'>"+DateRepayment+"</td>";
+// 						template += "<td>"+data.customer_name+"</td>";
+// 						template += "<td class='text-center'>"+data.capital_lease+"</td>";
+// 						template += "<td class='text-right'>"+convertToRupiah(data.estimation)+"</td>";
+// 						template += "<td class='text-right'>"+convertToRupiah(data.admin)+"</td>";
+// 						template += "<td class='text-right'>"+convertToRupiah(data.amount)+"</td>";
+//                         if(data.status_transaction=="L"){ status="Lunas";}
+//                         else if(data.status_transaction=="N"){ status="Aktif";}
+//                         template += "<td class='text-center'>"+status+"</td>";
+//                         template += "<td class='text-right'>";
+//                         if(data.description_1!=null){template += "- " + data.description_1;}
+//                         if(data.description_2!=null){template += "<br>- " + data.description_2;}
+//                         if(data.description_3!=null){template += "<br>- " + data.description_3;}
+//                         if(data.description_4!=null){template += "<br>- " + data.description_4;}
+//                         template +="</td>";
+// 						template += '</tr>';
+// 						no++;
+// 						amount += parseInt(data.amount);
+// 						admin += parseInt(data.admin);
+// 					});
+// 					template += "<tr class='rowappend'>";
+// 					template += "<td colspan='8' class='text-right'>Total</td>";
+// 					template += "<td class='text-right'>"+convertToRupiah(admin)+"</td>";
+// 					template += "<td class='text-right'>"+convertToRupiah(amount)+"</td>";
+// 					template += "<td class='text-right'></td>";
+// 					template += "<td class='text-right'></td>";
+// 					template += '</tr>';
+// 					$('.kt-section__content table').append(template);
+// 				}
+// 			},
+// 			error: function (jqXHR, textStatus, errorThrown){
+// 				KTApp.unblockPage();
+// 			},
+// 			complete:function () {
+// 				KTApp.unblock('#form_bukukas .kt-portlet__body', {});
+// 			}
+// 		});
+//     })
+
+//     return {
+//         validator:validator
+//     }
+// }
+
 
 	function initDataTable(){		
 		var general = $('#generalSearch').val();
@@ -100,12 +216,14 @@
 		var area = $('#area').val();
 		var unit= $('#unit').val();
 		var cabang = $('#cabang').val();
+		var usiadari = $('#usiadari').val();
+		var usiasampai = $('#usiasampai').val();
 		var option = {
 			data: {
 				type: 'remote',
 				source: {
 					read: {
-						url: `<?php echo base_url("api/datamaster/customers"); ?>?area=${area}&unit=${unit}&cabang=${cabang}`,
+						url: `<?php echo base_url("api/datamaster/customers"); ?>?area=${area}&unit=${unit}&cabang=${cabang}&usiadari=${usiadari}&usiasampai=${usiasampai}`,
 						map: function(raw) {
 							// sample data mapping
 							var dataSet = raw;
@@ -189,6 +307,26 @@
 					title: 'Tanggal Lahir',
 					sortable: 'asc',
 					textAlign: 'left',
+				},
+				{
+					field: 'age_customer',
+					title: 'Age',
+					sortable: 'asc',
+					textAlign: 'left',
+					template: function(row){
+						return Math.floor(row.age_customer/365);
+
+					}
+					// sortable: false,
+					// width: 100,
+					// overflow: 'visible',
+					// textAlign: 'center',
+					// autoHide: false,
+					// template: function (row) {
+					// 	var result ="";
+					// 	result = row.birth_date;
+					// 	return result;
+					// }
 				},
 				{
 					field: 'mobile',
@@ -343,6 +481,12 @@
 		$('#cabang').on('change', function() {
 			datatable.search($(this).val().toLowerCase(), 'cabang');
 		});
+		$('#usiadari').on('change', function() {
+			datatable.search($(this).val().toLowerCase(), 'usiadari');
+
+		});$('#usiasampai').on('change', function() {
+			datatable.search($(this).val().toLowerCase(), 'usiasampai');
+		});
 		
 	}
 
@@ -353,6 +497,14 @@
 	var type = $('[name="area"]').attr('type');
 	if(type == 'hidden'){
 		$('[name="area"]').trigger('change');
+	}
+	var type = $('[name="usiadari"]').attr('type');
+	if(type == 'hidden'){
+		$('[name="usiadari"]').trigger('change');
+	}
+	var type = $('[name="usiasampai"]').attr('type');
+	if(type == 'hidden'){
+		$('[name="usiasampai"]').trigger('change');
 	}
 	
 $('[name="area"]').on('change',function(){
@@ -377,6 +529,30 @@ $('[name="area"]').on('change',function(){
         });
 });
 
+// $('[name="usiadari"]').on('change',function(){
+//         var usiadari = $('[name="usiadari"]').val();
+//         var usiasampai =  $('[name="usiasampai"]');
+// 		var units =  $('[name="id_unit"]');
+//         var url_data = $('#url_get_usiasampai').val() + '/' + usiadari;
+//         $.get(url_data, function (data, status) {
+//             var response = JSON.parse(data);
+//             if (status) {
+//                 $("#usiasampai").empty();
+// 				var opt = document.createElement("option");
+// 				opt.value = "0";
+// 				opt.text = "All";
+// 				units.append(opt);
+//                 for (var i = 0; i < response.data.length; i++) {
+//                     var opt = document.createElement("option");
+//                     opt.value = response.data[i].id;
+//                     opt.text = response.data[i].name;
+//                     usiasampai.append(opt);
+//                 }
+//             }
+//         });
+// });
+
+
 $('[name="cabang"]').on('change',function(){
 	var cabang = $('[name="cabang"]').val();
 	var units =  $('[name="id_unit"]');
@@ -400,4 +576,6 @@ $('[name="cabang"]').on('change',function(){
 });
 $('#area').select2({ placeholder: "Select Area", width: '100%' });
 $('#unit').select2({ placeholder: "Select Unit", width: '100%' });
+$('#usiadari').select2({ placeholder: "Select usiadari", width: '100%' });
+$('#usiasampai').select2({ placeholder: "Select usiasampai", width: '100%' });
 </script>

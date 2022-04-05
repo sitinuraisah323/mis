@@ -34,15 +34,16 @@ $this->load->view('temp/MenuBar.php');
                     </span>
 					<h3 class="kt-portlet__head-title">
 						Data Gadai Regular
+						<?php //var_dump($this->session->userdata('user')); ?>
 					</h3>
 				</div>
 				<div class="kt-portlet__head-toolbar">
 					<div class="kt-portlet__head-wrapper">
-					<?php if($this->session->userdata('user')->level=='administrator'){ ?>
-						<button type="button" class="btn btn-brand btn-icon-sm upload" >
-							<i class="flaticon2-plus"></i> Upload
+					<?php //if($this->session->userdata('user')->level=='administrator'){ ?>
+						<button type="button" class="btn btn-brand btn-icon-sm upload" onclick="btnreload()" >
+							<i class="flaticon2-reload"></i> Reload
 						</button>
-					<?php } ?>
+					<?php //} ?>
 					</div>
 				</div>
 			</div>

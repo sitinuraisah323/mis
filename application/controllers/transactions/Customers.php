@@ -17,6 +17,8 @@ class Customers extends Authenticated
 	{
 		parent::__construct();
 		$this->load->model('CustomersModel', 'customers');
+		$this->load->model('AreasModel', 'areas');
+
 	}
 
 	/**
@@ -25,7 +27,7 @@ class Customers extends Authenticated
 	public function index()
 	{
 		$this->load->view('customers/index', array(
-			'customers'	=> $this->customers->all()
+		    'areas'	=> $this->areas->all()
 		));
 	}
 }

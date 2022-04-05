@@ -136,6 +136,7 @@ $this->load->view('temp/MenuBar.php');
 						</select>
                     </div> -->
                 <?php endif ;?>
+                <!--
                     <div class="col-lg-2">
 						<label class="col-form-label">Status</label>
 						<select class="form-control" name="permit">
@@ -145,6 +146,7 @@ $this->load->view('temp/MenuBar.php');
 							<?php endforeach;?>
 						</select>
 					</div>
+					-->
                     <div class="col-lg-2">
                         <label class="col-lg-1 col-form-label">&nbsp&nbsp</label>
                         <button type="button" class="btn btn-brand btn-icon" name="btncarinasabah" id="btncarinasabah"><i class="fa fa-search"></i></button>
@@ -171,6 +173,7 @@ $this->load->view('temp/MenuBar.php');
 						      		<th  class="text-center">No Identitas Lainnya</th>
 						      		<th  class="text-right">No Cif</th>
 						      		<th  class="text-center">No NPWP</th>
+						      		<th  class="text-center">No Hp</th>
 						    	</tr>
 						  	</thead>
 						  	<tbody>						    					    	

@@ -664,7 +664,7 @@ table.dataTable > tbody > tr.child span.dtr-title {
   font-weight: bold; }
 
 div.dtr-modal {
-  position: fixed;
+  position: auto;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   top: 0;
@@ -675,7 +675,7 @@ div.dtr-modal {
   padding: 10em 1em; }
 
 div.dtr-modal div.dtr-modal-display {
-  position: absolute;
+  position: aoto;
   top: 0;
   left: 0;
   bottom: 0;
@@ -723,7 +723,7 @@ div.dtr-modal div.dtr-modal-background {
 
 @media screen and (max-width: 767px) {
   div.dtr-modal div.dtr-modal-display {
-    width: 95%; } }
+    width: 100%; } }
 
 div.dtr-bs-modal table.table tr:first-child td {
   border-top: none; }

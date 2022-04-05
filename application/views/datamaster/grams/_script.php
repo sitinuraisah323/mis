@@ -113,6 +113,12 @@ function initDataTable(){
                       return  e.avatar ? `<img src="${e.avatar}" class="img-fluid"/>` : '';
                   }
 			  },
+              {
+				  field: 'type',
+				  title: 'Type',
+				  width:60,
+				  textAlign: 'center',
+			  },
 			  {
 				  field: 'weight',
 				  title: 'weight',
@@ -376,6 +382,7 @@ function initEditForm(){
         $('[name="price_pergram"]').val(groupObject.price_pergram);
 		$('[name="price_buyback_perpcs"]').val(groupObject.price_buyback_perpcs);
 		$('[name="price_buyback_pergram"]').val(groupObject.price_buyback_pergram);
+		$('[name="type"]').val(groupObject.type);
         $("#edit_area").trigger('change');
     }
     

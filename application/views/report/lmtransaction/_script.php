@@ -4,7 +4,7 @@ var cariForm;
 
 function convertToRupiah(angka)
 {
-	var rupiah = '';		
+	var rupiah = '';
 	var angkarev = angka.toString().split('').reverse().join('');
 	for(var i = 0; i < angkarev.length; i++) if(i%3 == 0) rupiah += angkarev.substr(i,3)+'.';
 	return rupiah.split('',rupiah.length-1).reverse().join('');
@@ -89,71 +89,66 @@ function initCariForm(){
                 required: true,
             }
         },
-        invalidHandler: function(event, validator) {   
+        invalidHandler: function(event, validator) {
             KTUtil.scrollTop();
         }
-    });   
+    });
 
-    $('#area').select2({ placeholder: "Please select a area", width: '100%' });
-    $('#unit').select2({ placeholder: "Please select a Unit", width: '100%' });
-    $('#permit').select2({ placeholder: "Please select a Permit", width: '100%' });
-
+    $('#area').select2({ placeholder: "Select Area", width: '100%' });
+    $('#unit').select2({ placeholder: "Select Unit", width: '100%' });
+    $('#gramasi').select2({ placeholder: "Select Gram", width: '100%' });
     //events
     $('#btncari').on('click',function(){
         $('.rowappend').remove();
         var area = $('[name="area"]').val();
         var cabang = $('[name="cabang"]').val();
         var unit = $('[name="id_unit"]').val();
-        var permit = $('[name="permit"]').val();
-		var dateStart = $('[name="date-start"]').val();
-		var dateEnd = $('[name="date-end"]').val();
+		var sdate = $('[name="sdate"]').val();
+		var edate = $('[name="edate"]').val();
+		var gramasi = $('[name="gramasi"]').val();
+        //var dt = new Date(date);
+		//var dmonth = dt.getMonth();
         KTApp.block('#form_bukukas .kt-portlet__body', {});
 		$.ajax({
 			type : 'GET',
-			url : "<?php echo base_url("api/transactions/unitsdailycash/lmtransaction"); ?>",
+			url : "<?php echo base_url("api/dashboards/getlmtransaction"); ?>",
 			dataType : "json",
-			data:{area:area,cabang:cabang,unit:unit,dateStart:dateStart,dateEnd:dateEnd,permit:permit},
+			data:{area:area,cabang:cabang,unit:unit,sdate:sdate,edate:edate,gramasi:gramasi},
 			success : function(response,status){
 				KTApp.unblockPage();
-                console.log(response.data);
-				if(response.data.length > 0){
+				if(response.status == 200){
 					var template = '';
-                    var currentSaldo = 0;
-                    var TotSaldoIn = 0;
-                    var TotSaldoOut = 0;
-                    var no = 0;
-                    console.log(response.data);
+					var no = 1;
+					var totNoa = 0;
+					var sales = 0;
+					var purchases = 0;
 					$.each(response.data, function (index, data) {
-                      
-						var cashin=0;
-						var cashout=0;
-						if(data.type=='CASH_IN'){cashin= data.amount; currentSaldo +=  parseInt(data.amount); TotSaldoIn +=  parseInt(data.amount);}
-						if(data.type=='CASH_OUT'){cashout= data.amount; currentSaldo -=  parseInt(data.amount); TotSaldoOut +=  parseInt(data.amount);}
-
+                        //if(data.)
+						template += "<tr class='rowappend'>";
+                        template += "<td class='text-center'>"+no+"</td>";
+                        template += "<td class='text-left'>"+data.area+"</td>";
+						template += "<td class='text-left'>"+data.name+"</td>";
+						template += "<td class='text-left'>"+data.no_perk+"</td>";
+                        if(data.type=='CASH_OUT'){ purchases= data.amount;}else{purchases=0;}
+                        if(data.type=='CASH_IN'){ sales= data.amount;}else{sales=0;}
+						template += "<td class='text-right'>"+convertToRupiah(purchases)+"</td>";
+						template += "<td class='text-right'>"+convertToRupiah(sales)+"</td>";
+						template += "<td class='text-left'>"+data.description+"</td>";
+						template += '</tr>';
 						no++;
-                       
-							var date = moment(data.date).format('DD-MM-YYYY');
-							var month = moment(data.date).format('MMMM');
-							var year = moment(data.date).format('YYYY');						
-                            template += '<tr class="rowappend">';
-                            template +='<td class="text-center">'+no+'</td>';
-                            template +='<td class="text-center">'+data.name+'</td>';
-                            template +='<td class="text-center">'+data.no_perk+'</td>';
-                            template +='<td>'+date+'</td>';
-                            template +='<td class="text-center">'+month+'</td>';
-                            template +='<td class="text-center">'+year+'</td>';
-                            template +='<td>'+data.description+'</td>';
-                            template +='<td class="text-right">'+convertToRupiah(cashout)+'</td>';
-                            template +='<td class="text-right">'+convertToRupiah(cashin)+'</td>';
-                            template +='</tr>';
+                        //purchases +=data.lm.purchase;
+                        //sales +=data.lm.sales;
+                        //totNoa +=data.noa;
 					});
-
                     template += '<tr class="rowappend">';
-                    template +='<td colspan="7" class="text-right"><b>Total</b></td>';
-                    template +='<td class="text-right"><b>'+convertToRupiah(TotSaldoOut)+'</b></td>';                    
-                    template +='<td class="text-right"><b>'+convertToRupiah(TotSaldoIn)+'</b></td>';
+                    template +='<td colspan="3" class="text-right"><b>Total</b></td>';                    
+                    template +='<td class="text-right"><b></b></td>';                    
+                    template +='<td class="text-right"><b></b></td>';                    
+                    template +='<td class="text-right"><b></b></td>';                    
+                    template +='<td class="text-right"><b></b></td>';                    
                     template +='</tr>';
-					$('.kt-section__content #tblbukukas').append(template);
+					console.log(template);
+					$('.table').find('tbody').append(template);
 				}
 			},
 			error: function (jqXHR, textStatus, errorThrown){
@@ -164,40 +159,42 @@ function initCariForm(){
 			}
 		});
     })
-    
+
     return {
         validator:validator
     }
 }
 
-jQuery(document).ready(function() {     
-    initCariForm();  
-});
-
-$('[name="area"]').on('change',function(){
-        var area = $('[name="area"]').val();
-        var units =  $('[name="id_unit"]');
+    $('[name="area"]').on('change',function(){
+        var area = $(this).val();
+        var units =  document.getElementById('unit');
         var url_data = $('#url_get_unit').val() + '/' + area;
         $.get(url_data, function (data, status) {
             var response = JSON.parse(data);
             if (status) {
                 $("#unit").empty();
-				var opt = document.createElement("option");
-				opt.value = "0";
-				opt.text = "All";
-				units.append(opt)
+                var opt = document.createElement("option");
+                    opt.value = "all";
+                    opt.text ="All";
+                    units.appendChild(opt);
                 for (var i = 0; i < response.data.length; i++) {
                     var opt = document.createElement("option");
                     opt.value = response.data[i].id;
                     opt.text = response.data[i].name;
-                    units.append(opt);
+                    units.appendChild(opt);
                 }
             }
         });
+    });
+
+jQuery(document).ready(function() {
+    initCariForm();
 });
+
+
 var type = $('[name="area"]').attr('type');
 if(type == 'hidden'){
-    $('[name="area"]').trigger('change');
+	$('[name="area"]').trigger('change');
 }
 
 

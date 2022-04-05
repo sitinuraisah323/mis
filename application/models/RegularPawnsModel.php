@@ -8,6 +8,65 @@ class RegularpawnsModel extends Master
 
 	public $primary_key = 'id';
 
+
+	public function getOsSmartphone($idUnit, $today)
+	{
+		$noaYesterday = $this->db->select('count(*) as noa')->from($this->table)
+			->where('id_unit', $idUnit)
+			->where('status_transaction', 'N')
+			->where('date_sbk <', $today)
+			->like('description_1', 'HP')->get()->row();
+
+		$upYesterday = $this->db->select('sum(amount) as up')->from($this->table)
+			->where('id_unit', $idUnit)
+			->where('status_transaction', 'N')
+			->where('date_sbk <', $today)
+			->like('description_1', 'HP')->get()->row();
+
+		$noaToday = $this->db->select('count(*) as noa')->from($this->table)
+			->where('id_unit', $idUnit)
+			->where('amount !=', '0')
+			->where('date_sbk', $today)
+			->like('description_1', 'HP')->get()->row();
+
+		$upToday = $this->db->select('sum(amount) as up')->from($this->table)
+			->where('id_unit', $idUnit)
+			->where('amount !=', '0')
+			->where('date_sbk', $today)
+			->like('description_1', 'HP')->get()->row();
+
+		return (object)array(
+			'noaYesterday' 	=> (int) $noaYesterday->noa,
+			'upYesterday' 	=> (int) $upYesterday->up,
+			'noaToday' 	=> (int) $noaToday->noa,
+			'upToday' 	=> (int) $upToday->up,
+		);
+	}
+
+	public function getSmartphone($idUnit, $today)
+	{
+
+		$noaRegular = $this->db->select('*')->from('units_regularpawns')
+			->where('id_unit', $idUnit)
+			->where('amount !=', '0')
+			->where('date_sbk', $today)->get()->result();
+
+		$upRegular = $this->db->select('*')->from($this->table)
+			->where('id_unit', $idUnit)
+			->where('amount !=', '0')
+			->where('date_sbk', $today)->get()->result();
+
+			// var_dump($noaRegular);
+			// exit;
+
+		return array(
+			
+			'noa_regular' 	=> $noaRegular->noa,
+			'up_regular' 	=> $upRegular->up,
+			
+		);
+	}
+
 	public function getOstYesterday($idUnit, $today)
 	{
 		$noaRegular = $this->db->select('count(*) as noa')->from($this->table)
@@ -250,9 +309,21 @@ class RegularpawnsModel extends Master
 				$this->db->where('MONTH(date_sbk)',$month);
 			}
 		}
+
+		//tambahan 17/01/2022
+		
+		$tgl = explode("-", $date);
+		// echo $tgl[0]; exit;
+		if($tgl[0]==2022){
 		//$date =22;$month =8;$year =2020;
 		$dataRegular = $this->db->select('sum(amount) as up, count(*) as noa')->from('units_regularpawns')
+		->where('YEAR(date_sbk)', $date)
+		->where('id_unit', $idUnit)->get()->row();
+		}else{
+				$dataRegular = $this->db->select('sum(amount) as up, count(*) as noa')->from('units_regularpawns')
+	// ->where('YEAR(date_sbk)', $date)
 			->where('id_unit', $idUnit)->get()->row();
+		}
 		$noaRegular = (int)$dataRegular->noa;
 		$upRegular = (int)$dataRegular->up;
 
@@ -862,7 +933,7 @@ class RegularpawnsModel extends Master
 				->select('units_regularpawns.id, no_sbk, date_sbk, nic, units.name as unit, 	(
 					select customers.name from customers where customers.id = units_regularpawns.id_customer
 				) as customer,
-				 estimation, admin, amount')
+				 estimation, admin, amount, permit')
 				->from('units_regularpawns')
 				->join('units','units.id = units_regularpawns.id_unit')
 				->where('units_regularpawns.id_unit', $idUnit)
@@ -875,7 +946,7 @@ class RegularpawnsModel extends Master
 				->select('units_mortages.id, no_sbk, nic,date_sbk, units.name as unit,
 				(
 					select customers.name from customers where customers.id = units_mortages.id_customer
-				) as customer, estimation, amount_admin as admin, amount_loan as amount')
+				) as customer, estimation, amount_admin as admin, amount_loan as amount, permit')
 				->from('units_mortages')
 				->join('units','units.id = units_mortages.id_unit')
 				->where('units_mortages.id_unit', $idUnit)
@@ -889,7 +960,7 @@ class RegularpawnsModel extends Master
 		];
 
 	}
-
+	
 	public function getRealOS($idUnit,$today)
 	{
 		$regular 	= $this->db->select('SUM(amount) as up,COUNT(*) as noa')
@@ -900,13 +971,17 @@ class RegularpawnsModel extends Master
 					 ->where('amount !=','0')
 					 ->get()->row();					 
 
-		$mortages = $this->db->select('SUM(amount_loan) AS up,SUM(amount_loan - (SELECT COUNT(DISTINCT(date_kredit)) FROM units_repayments_mortage WHERE units_repayments_mortage.no_sbk =units_mortages.no_sbk AND units_repayments_mortage.id_unit =units_mortages.id_unit) * installment) AS saldocicilan,COUNT(*) AS noa')
+		$mortages = $this->db->select('SUM(amount_loan) AS up,SUM((SELECT saldo FROM units_repayments_mortage 
+										WHERE units_mortages.`id_unit`=units_repayments_mortage.`id_unit` 
+										AND units_mortages.`no_sbk`=units_repayments_mortage.`no_sbk`
+										ORDER BY date_kredit DESC 
+										LIMIT 1)) AS saldocicilan,COUNT(*) AS noa')
 						->from('units_mortages')
 						->join('customers','units_mortages.id_customer = customers.id')			
 						->where('units_mortages.status_transaction ','N')
 						->where('units_mortages.id_unit ', $idUnit)						
 						->where('date_sbk <=',$today)
-						->get()->row();								
+						->get()->row();									
 		
 		return (object)array(
 			"outstanding"=>(int) $regular->up + (int) $mortages->saldocicilan,
@@ -916,6 +991,26 @@ class RegularpawnsModel extends Master
 			"noaNonReg"=>(int) $mortages->noa
 		);	
 	}
+	
+	public function get_detail_oneobligor($ktp,$cif,$unit,$statusrpt)
+	{
+		$status =null;
+			if($statusrpt=="0"){$status=["N","L"];}
+			if($statusrpt=="1"){$status=["N"];}
+			if($statusrpt=="2"){$status=["L"];}
+			// echo $statusrpt; var_dump($status); exit;
 
+		$this->db->select('*,units.name as unit, customers.name as customer_name,customers.nik as nik');
+			$this->db->join('customers','units_regularpawns.id_customer = customers.id');
+			$this->db->join('units','units.id = units_regularpawns.id_unit');
+			$this->db->where('units_regularpawns.ktp', $ktp);
+			$this->db->where('customers.no_cif', $cif);
+			if($statusrpt!="0"){
+				$this->db->where('units_regularpawns.status_transaction', $status[0]);
+			}
+			$this->db->where('units_regularpawns.id_unit', $unit);
+			return $this->db->get('units_regularpawns')->result();
+		$status =null;
+	}
 
 }

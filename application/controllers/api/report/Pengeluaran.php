@@ -252,6 +252,11 @@ class Pengeluaran extends ApiController
             $this->units->db->where('MONTH(date)', $month);
 		}
 		
+		if($this->input->get('dateEnd')){
+			$year = date('Y',strtotime($this->input->get('dateEnd')));
+            $this->units->db->where('YEAR(date)', $year);
+		}
+		
 		$units  = $this->units->db->select('units.id, units.name,areas.area, sum(amount) as amount')
 		    ->join('units','units.id = units_dailycashs.id_unit')
 			->join('areas','areas.id = units.id_area')
@@ -264,7 +269,7 @@ class Pengeluaran extends ApiController
 			->order_by('amount','desc')
 			->get()->result();
 		foreach ($units as $unit) {
-			$unit->perk = $this->unitsdailycash->getSummaryCashoutPerk($month,$listdata,$unit->id);
+			$unit->perk = $this->unitsdailycash->getSummaryCashoutPerk($year,$month,$listdata,$unit->id);
 		}
 		//$data = $this->units->db->get()->result();
 		return $this->sendMessage($units,'Successfully get pengeluaran');

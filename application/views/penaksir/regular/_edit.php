@@ -10,37 +10,17 @@
             <div class="modal-body form">
                 <form action="#" id="form_edit" class="form-horizontal">
                     <input type="hidden" id="no_sbk" name="no_sbk"/>
-                    <input type="hidden" id="id_unit" name="id_unit"/>
+                    <input type="hidden" id="id_unit" name="id_unit" value="<?php echo $this->session->userdata('user')->id_unit; ?>"/>
+                    <input type="hidden" id="permit" name="permit"/>
                     <input type="hidden" id="nic" name="nic"/>
                     <input type="hidden" id="id_customer" name="id_customer"/>
+                    <input type="hidden" id="customer" name="customer"/>
+                    <input type="hidden" id="amount" name="amount"/>
+                    <input type="hidden" id="estimation" name="estimation"/>
                     <div class="form-body">
                     <div class="kt-portlet__body">                          
 
-                        <div class="row"> 
-
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>Status</label>
-                                        <select class="form-control" name="status" id="status">
-                                            <option value=""></option>                                            
-                                            <option value="Baru">Baru</option>                                            
-                                            <option value="Perpanjangan">Perpanjangan</option>                                            
-                                        </select> 	                            		
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Pilih Nomer BTE Perpanjangan</label>
-                                        <select class="form-control" name="no_referensi" id="no_referensi">
-                                            <option value=""></option>                                            
-                                        </select> 	                            		
-                                </div>
-                            </div>    
-
-                             <div class="col-md-3">
-                             
-                             </div>                      
+                        <div class="row">                     
 
                             <div class="col-md-12">
                                 <table class="table" id="mdl_vwcicilan">
@@ -53,6 +33,7 @@
                                             <th class='text-center'>Taksiran</th>
                                             <th class='text-right'>UP</th>
                                             <th class='text-right'>Jenis Barang</th>
+                                            <th class='text-right'>Status</th>
                                             <th class='text-right'>Keterangan</th>
                                         </tr>
                                     </thead>
@@ -98,6 +79,15 @@
                                             <td>
                                                 <select class="form-control karatase">
                                                     <option value=""></option>
+                                                    <option value="1" data-attribute="PERHIASAN">1 Karat</option>
+                                                    <option value="2" data-attribute="PERHIASAN">2 Karat</option>
+                                                    <option value="3" data-attribute="PERHIASAN">3 Karat</option>
+                                                    <option value="4" data-attribute="PERHIASAN">4 Karat</option>
+                                                    <option value="5" data-attribute="PERHIASAN">5 Karat</option>
+                                                    <option value="6" data-attribute="PERHIASAN">6 Karat</option>
+                                                    <option value="7" data-attribute="PERHIASAN">7 Karat</option>
+                                                    <option value="8" data-attribute="PERHIASAN">8 Karat</option>
+                                                    <option value="9" data-attribute="PERHIASAN">9 Karat</option>
                                                     <option value="10" data-attribute="PERHIASAN">10 Karat</option>
                                                     <option value="11" data-attribute="PERHIASAN">11 Karat</option>
                                                     <option value="12" data-attribute="PERHIASAN">12 Karat</option>

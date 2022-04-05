@@ -4,7 +4,7 @@
 		<tr  bgcolor="#cccccc">
 			<th rowspan="2" width="5%"> No </th>
 			<th rowspan="2" width="20%"> Unit </th>
-			<th colspan="7" width="35%"> Gramasi</th>
+			<th colspan="<?php echo count($grams);?>" width="35%"> Gramasi</th>
 			<th rowspan="2" width="10%" style="text-align:right"> Total Pcs</th>
 			<th rowspan="2" width="10%" style="text-align:right"> Total Gramasi</th>
 		</tr>

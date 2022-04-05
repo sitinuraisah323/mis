@@ -5,6 +5,14 @@ var AlertUtil;
 var createForm;
 var editForm;
 
+function convertToRupiah(angka)
+{
+	var rupiah = '';		
+	var angkarev = angka.toString().split('').reverse().join('');
+	for(var i = 0; i < angkarev.length; i++) if(i%3 == 0) rupiah += angkarev.substr(i,3)+'.';
+	return rupiah.split('',rupiah.length-1).reverse().join('');
+}
+
 function initDTEvents(){
     $(".btn_delete").on("click",function(){
         var targetId = $(this).data("id");
@@ -165,6 +173,9 @@ function initDataTable(){
 				  title: 'Price',
 				  width:60,
 				  textAlign: 'right',
+				  template: function(row){
+				      return convertToRupiah(row.price);
+				  }
 			  },
               {
 				  field: 'status',

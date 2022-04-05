@@ -87,11 +87,24 @@ class Yogadai extends Authenticated
 		$dateEnd = $this->input->post('date_end');
 		$unitName = $this->input->post('unit_id');
 		$transactionStatus = $this->input->post('transaction_status');
-		$data = $this->myyogadai->transaction_detail($dateStart, $dateEnd, $unitName, $transactionStatus);
+		$buildData = [];
+	    for($i = 1; $i<10000;$i++){
+	    	$data = $this->myyogadai->transaction_detail($dateStart, $dateEnd, $unitName, $transactionStatus, $i);
+	    	if($data->data){
+	    	    foreach($data->data as $dat){
+	    	        $buildData[] = $dat;
+	    	    }
+	    	}
+	        
+	        if($data->pagination->last_page){
+	            $i = 10000;
+	        }
+	    }
+	    	
 		$no=2;
 		$status="";
 		$i = 0;
-		foreach ($data->data as $row) 
+		foreach ($buildData as $row) 
 		{
 			$i++;
 			$objPHPExcel->getActiveSheet()->setCellValue('A'.$no, $i);				  	
@@ -126,7 +139,7 @@ class Yogadai extends Authenticated
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		require_once APPPATH.'controllers/pdf/header.php';
 		$pdf->AddPage('L', 'A3');
-		$date = $this->input->get('date_start') ? $this->input->get('date_start') : date('Y-m-d');
+		$date = $this->input->get('date') ? $this->input->get('date') : date('Y-m-d');
 		$os =  $this->myyogadai->transaction($date, $this->input->get('unit_id'));
 		$view = $this->load->view('report/yogadai/pdf',['outstanding'=>$os,'datetrans'=>$date],true);
 		$pdf->writeHTML($view);
@@ -191,7 +204,7 @@ class Yogadai extends Authenticated
 		$objPHPExcel->getActiveSheet()->mergeCells('N1:P1');
 
 
-		$date = $this->input->get('date_start') ? $this->input->get('date_start') : date('Y-m-d');
+		$date = $this->input->get('date') ? $this->input->get('date') : date('Y-m-d');
 		$data =  $this->myyogadai->transaction($date, $this->input->get('unit_id'));
 		$no=3;
 		$status="";

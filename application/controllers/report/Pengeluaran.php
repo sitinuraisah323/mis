@@ -206,7 +206,11 @@ class Pengeluaran extends Authenticated
 		if($this->input->post('date-end')){
 			$month = date('m',strtotime($this->input->post('date-end')));
             $this->units->db->where('MONTH(date)', $month);
-		}		
+		}	
+			if($this->input->post('date-end')){
+			$year = date('Y',strtotime($this->input->post('date-end')));
+            $this->units->db->where('YEAR(date)', $year);
+		}	
 		$units  = $this->units->db->select('units.id, units.name,areas.area, sum(amount) as amount')
 		    ->join('units','units.id = units_dailycashs.id_unit')
 			->join('areas','areas.id = units.id_area')
@@ -227,7 +231,7 @@ class Pengeluaran extends Authenticated
 			$objPHPExcel->getActiveSheet()->setCellValue('B'.$no, $row->area);	
 			$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, $row->name);				  	
 			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no, date('F',strtotime($this->input->post('date-end'))));				  	
-			$row->perk = $this->unitsdailycash->getSummaryCashoutPerk($month,$listdata,$row->id);	
+			$row->perk = $this->unitsdailycash->getSummaryCashoutPerk($year,$month,$listdata,$row->id);	
 			if($row->perk){
 				$sum = 0;
 				foreach($row->perk as $perk){

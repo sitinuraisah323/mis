@@ -82,17 +82,21 @@ class Pendapatan extends Authenticated
 				$category=array($post['category']);
 			}
 			$this->unitsdailycash->db
-				->select('units.code,units.name as unit_name')
-				->join('units','units.id = units_dailycashs.id_unit')
 				->where('type =', 'CASH_IN')
 				->where_in('no_perk', $category)
 				->where('date >=', $post['date-start'])
-				->where('date <=', $post['date-end'])
-				->where('id_unit', $post['id_unit'])
-				->order_by('date', 'asc');
-
-			//$this->unitsdailycash->db->join('units','units.id = units_dailycashs.id_unit');
-			$data = $this->unitsdailycash->all();
+				->where('date <=', $post['date-end']);
+			if($this->input->post('id_unit')){
+				$this->unitsdailycash->db->where('id_unit', $post['id_unit']);
+			}
+			if($this->input->post('area')){
+				$this->unitsdailycash->db->where('id_area', $post['area']);
+			}
+		}
+		$this->unitsdailycash->db
+			->select('units.name as unit')
+			->join('units','units.id = units_dailycashs.id_unit');
+		$data = $this->unitsdailycash->all();
 		}
 				
 		$no=2;

@@ -11,6 +11,9 @@ class Regularpawns extends ApiController
 		$this->load->model('CustomersModel', 'customers');
 		$this->load->model('regularpawnshistoryModel', 'customerrepair');
 		$this->load->model('UnitsModel', 'units');
+		$this->load->model('AreasModel', 'model');
+		$this->load->model('UnitsSmartphone', 'smartphone');
+
 
 	}
 
@@ -19,8 +22,9 @@ class Regularpawns extends ApiController
 		$this->regulars->db->select('*,units.name as unit_name,customers.name as customer')
 			 ->join('units','units.id=units_regularpawns.id_unit')
 			 ->join('customers','customers.id=units_regularpawns.id_customer')
-			 ->join('units_regularpawns_summary', 'units_regularpawns_summary.id_unit=units_regularpawns.id_unit AND units_regularpawns_summary.no_sbk=units_regularpawns.no_sbk','left')
+			 ->join('units_regularpawns_summary', 'units_regularpawns_summary.id_unit=units_regularpawns.id_unit AND units_regularpawns_summary.no_sbk=units_regularpawns.no_sbk AND units_regularpawns_summary.permit=units_regularpawns.permit' ,'left')
 			 ->where('units_regularpawns.amount !=','0')
+			 ->order_by('units_regularpawns.id_unit','asc')
 			 ->order_by('units_regularpawns.no_sbk','asc');
 
 		if($this->session->userdata('user')->level == 'unit'){
@@ -41,6 +45,16 @@ class Regularpawns extends ApiController
 			$this->regulars->db->where('units_regularpawns.status_transaction','N');
 			$this->regulars->db->where('units.id', $this->session->userdata('user')->id_unit);
 
+		}
+		
+		if($this->session->userdata('user')->level == 'kasir'){
+			$this->regulars->db->where('units_regularpawns_summary.model',null);
+			//$this->regulars->db->where('units_regularpawns.status_transaction','N');
+			$this->regulars->db->where('units_regularpawns.date_sbk >=','2020-10-01');
+			$this->regulars->db->where('units_regularpawns.date_sbk <=','2021-03-31');
+			$this->regulars->db->limit(100);
+			//$this->db->limit(10);
+			$this->regulars->db->where('units.id', $this->session->userdata('user')->id_unit);
 		}
 
 		if($this->session->userdata('user')->level == 'cabang'){
@@ -476,6 +490,210 @@ class Regularpawns extends ApiController
 
 	}
 
+
+	public function generate_smartphone(){
+		$this->regulars->db
+			->select('units.name as unit, customers.name as customer_name,customers.nik as nik, (select date_repayment from units_repayments where units_repayments.no_sbk = units_regularpawns.no_sbk and units_repayments.id_unit = units_regularpawns.id_unit and units_repayments.permit = units_regularpawns.permit limit 1 ) as date_repayment')
+			->join('customers','units_regularpawns.id_customer = customers.id')
+			->join('units','units.id = units_regularpawns.id_unit')
+			->like('description_1', 'HP');
+
+		if($get = $this->input->get()){
+			$status =null;
+			$nasabah = $get['nasabah'];
+			if($get['statusrpt']=="0"){$status=["N","L"];}
+			if($get['statusrpt']=="1"){$status=["N"];}
+			if($get['statusrpt']=="2"){$status=["L"];}
+			if($get['statusrpt']=="3"){$status=[""];}
+
+			// if($area = $this->input->get('area')){
+			// 	$this->regulars->db->where('id_area', $area);
+			// }
+
+			if($area = $this->input->get('area')){
+				$this->regulars->db->where('id_area', $area);
+			}else if($this->session->userdata('user')->level == 'area'){
+				$this->regulars->db->where('id_area', $this->session->userdata('user')->id_area);
+			}
+	
+			
+			if($cabang = $this->input->get('cabang')){
+				$this->regulars->db->where('id_cabang', $cabang);
+			}else if($this->session->userdata('user')->level == 'cabang'){
+				$this->regulars->db->where('id_cabang', $this->session->userdata('user')->id_cabang);
+			}
+	
+			if($unit = $this->input->get('unit')){
+				$this->regulars->db->where('id_unit', $unit);
+			}else if($this->session->userdata('user')->level == 'unit'){
+				$this->regulars->db->where('units.id', $this->session->userdata('user')->id_unit);
+			}
+
+			$this->regulars->db
+				->where('units_regularpawns.date_sbk >=', $get['dateStart'])
+				->where('units_regularpawns.date_sbk <=', $get['dateEnd'])
+				->where_in('units_regularpawns.status_transaction ', $status);
+			if($get['id_unit']){
+				$this->regulars->db
+					->where('units_regularpawns.id_unit', $get['id_unit']);
+			}
+			if($permit = $get['permit']){
+				$this->regulars->db->where('units_regularpawns.permit', $permit);
+			}
+			if($nasabah!="all" && $nasabah != null){
+				$this->regulars->db->where('customers.nik', $nasabah);
+			}
+			if($sortBy = $this->input->get('sort_by')){
+				$this->regulars->db->order_by('units_regularpawns.'.$sortBy, $this->input->get('sort_method'));
+			}
+			if($type = $this->input->get('type')){
+				$this->regulars->db->where('units_regularpawns.type_bmh', $type === 'OPSI' ? 'RB' : 'RC');
+			}
+		}
+		if($no_sbk = $this->input->get('no_sbk')){
+			$this->regulars->db->where('units_regularpawns.no_sbk',  $no_sbk);
+		}
+			// $this->regulars->db->order_by('');
+
+
+		$data = $this->regulars->all();
+		// var_dump($data);
+		// exit;
+
+		foreach($data as $datas){
+			// echo $datas->customer_name;
+			// exit;
+			$smartphone = array(
+				'no_sbk'				=> $datas->no_sbk,
+				'nic'					=> $datas->nic,				
+				'id_customer'			=> $datas->id_customer,
+				'ktp'					=> $datas->ktp,
+				'date_sbk'				=> $datas->date_sbk,
+				'deadline'				=> $datas->deadline,
+				'amount'				=> $datas->amount,
+				'date_auction'			=> $datas->date_auction,
+				'estimation'			=> $datas->estimation,
+				'admin'					=> $datas->admin,
+				'capital_lease_old'		=> $datas->capital_lease_old,
+				'periode'				=> $datas->periode,
+				'installment'			=> $datas->installment,
+				'status_transaction'	=> $datas->status_transaction,
+				'id_unit'				=> $datas->id_unit,
+				'type_item'				=> $datas->type_item,
+				'type_bmh'				=> $datas->type_bmh,
+				'description_1'			=> $datas->description_1,
+				'description_2'			=> $datas->description_2,
+				'description_3'			=> $datas->description_3,
+				'description_4'			=> $datas->description_4,
+				'permit'				=> $datas->permit,
+				'status'				=> $datas->status,
+				'date_create'			=> $datas->date_create,
+				'date_update'			=> $datas->date_update,
+				'user_create'			=> $datas->user_create,
+				'user_update'			=> $datas->user_update,
+				'capital_lease'			=> $datas->capital_lease,
+				'id_repayment'			=> $datas->id_repayment,
+
+			);
+
+			$check = $this->db->get_where('units_smartphone',array('no_sbk' => $datas->no_sbk,'date_sbk'=>$datas->date_sbk, 'id_unit'=>$datas->id_unit));
+			if($check->num_rows() > 0){
+				$this->model->db->where('id_unit', $datas->id_unit);
+				$this->model->db->where('date_sbk', $datas->date_sbk);
+				$this->model->db->where('no_sbk', $datas->no_sbk);
+				$this->model->db->update('units_smartphone', $smartphone);
+			}else{
+				$this->model->db->insert('units_smartphone', $smartphone);
+			}
+		}
+		
+
+		echo json_encode(array(
+			'data'	=> $data,
+			'status'	=> true,
+			'message'	=> 'Successfully Get Data Gadai Smartphone'
+		));
+	}
+
+	public function smartphone(){
+		$this->smartphone->db
+			->select('units.name as unit, customers.name as customer_name,customers.nik as nik, (select date_repayment from units_repayments where units_repayments.no_sbk = units_smartphone.no_sbk and units_repayments.id_unit = units_smartphone.id_unit and units_repayments.permit = units_smartphone.permit limit 1 ) as date_repayment')
+			->join('customers','units_smartphone.id_customer = customers.id')
+			->join('units','units.id = units_smartphone.id_unit')
+			->like('description_1', 'HP');
+
+		if($get = $this->input->get()){
+			$status =null;
+			$nasabah = $get['nasabah'];
+			if($get['statusrpt']=="0"){$status=["N","L"];}
+			if($get['statusrpt']=="1"){$status=["N"];}
+			if($get['statusrpt']=="2"){$status=["L"];}
+			if($get['statusrpt']=="3"){$status=[""];}
+
+			// if($area = $this->input->get('area')){
+			// 	$this->regulars->db->where('id_area', $area);
+			// }
+
+			if($area = $this->input->get('area')){
+				$this->smartphone->db->where('id_area', $area);
+			}else if($this->session->userdata('user')->level == 'area'){
+				$this->smartphone->db->where('id_area', $this->session->userdata('user')->id_area);
+			}
+	
+			
+			if($cabang = $this->input->get('cabang')){
+				$this->smartphone->db->where('id_cabang', $cabang);
+			}else if($this->session->userdata('user')->level == 'cabang'){
+				$this->smartphone->db->where('id_cabang', $this->session->userdata('user')->id_cabang);
+			}
+	
+			if($unit = $this->input->get('unit')){
+				$this->smartphone->db->where('id_unit', $unit);
+			}else if($this->session->userdata('user')->level == 'unit'){
+				$this->smartphone->db->where('units.id', $this->session->userdata('user')->id_unit);
+			}
+
+			$this->smartphone->db
+				->where('units_smartphone.date_sbk >=', $get['dateStart'])
+				->where('units_smartphone.date_sbk <=', $get['dateEnd'])
+				->where_in('units_smartphone.status_transaction ', $status);
+			if($get['id_unit']){
+				$this->smartphone->db
+					->where('units_smartphone.id_unit', $get['id_unit']);
+			}
+			if($permit = $get['permit']){
+				$this->smartphone->db->where('units_smartphone.permit', $permit);
+			}
+			if($nasabah!="all" && $nasabah != null){
+				$this->smartphone->db->where('customers.nik', $nasabah);
+			}
+			if($sortBy = $this->input->get('sort_by')){
+				$this->smartphone->db->order_by('units_smartphone.'.$sortBy, $this->input->get('sort_method'));
+			}
+			if($type = $this->input->get('type')){
+				$this->smartphone->db->where('units_smartphone.type_bmh', $type === 'OPSI' ? 'RB' : 'RC');
+			}
+		}
+		if($no_sbk = $this->input->get('no_sbk')){
+			$this->smartphone->db->where('units_smartphone.no_sbk',  $no_sbk);
+		}
+			// $this->smartphone->db->order_by('');
+
+
+		$data = $this->smartphone->all();
+		// var_dump($data);
+		// exit;
+
+		
+		
+
+		echo json_encode(array(
+			'data'	=> $data,
+			'status'	=> true,
+			'message'	=> 'Successfully Get Data Gadai Smartphone'
+		));
+	}
+
 	public function report()
 	{
 		$this->regulars->db
@@ -530,6 +748,9 @@ class Regularpawns extends ApiController
 			}
 			if($sortBy = $this->input->get('sort_by')){
 				$this->regulars->db->order_by('units_regularpawns.'.$sortBy, $this->input->get('sort_method'));
+			}
+			if($type = $this->input->get('type')){
+				$this->regulars->db->where('units_regularpawns.type_bmh', $type === 'OPSI' ? 'RB' : 'RC');
 			}
 		}
 		if($no_sbk = $this->input->get('no_sbk')){
@@ -595,9 +816,10 @@ class Regularpawns extends ApiController
 		$this->regulars->db
 			->select('units.name as unit, customers.name as customer_name,customers.nik as nik,date_repayment')
 			->join('customers','units_regularpawns.id_customer = customers.id')
-			->join('units_repayments','units_repayments.no_sbk = units_regularpawns.no_sbk AND units_repayments.id_unit = units_regularpawns.id_unit')
+			->join('units_repayments','units_repayments.no_sbk = units_regularpawns.no_sbk AND units_repayments.id_unit = units_regularpawns.id_unit
+			 AND units_repayments.permit = units_regularpawns.permit')
 			->join('units','units.id = units_regularpawns.id_unit');
-
+        
 		if($get = $this->input->get()){
 
 			if($area = $this->input->get('area')){
@@ -845,11 +1067,16 @@ class Regularpawns extends ApiController
 	{		
 		$id = $this->input->get('id');
 		$unit = $this->input->get('unit');
+		$customers = $this->db->select('id, name')
+						->where('id_unit',$unit)
+						->from('customers')
+						->get()->result();
 		$units = $this->db->select('*')
 						->where('id',$id)
 						->where('id_unit',$unit)
 						->from('units_regularpawns')
 						->get()->row();
+		$units->options = $customers;
 		return $this->sendMessage($units, 'Get Data Regular Pawns');
 	}
 
@@ -943,21 +1170,22 @@ class Regularpawns extends ApiController
 		}
 		return $this->sendMessage([],'Id Unit, Month and Year Request Should');
 	}
-
+	
+	
 	public function transactionmiss()
 	{
 		$result = [];
 		$month = $this->input->get('get') ? $this->input->get('get') : date('n');
 		$year = $this->input->get('year') ? $this->input->get('year') : date('Y');
 		$permit = $this->input->get('permit') ? $this->input->get('permit') : 'OJK';
-		$idUnit = $this->input->get('id_unit') ? $this->input->get('id_unit') : false;
-		$idArea = $this->input->get('id_area') ? $this->input->get('id_area') : false;
+		$idUnit = $this->input->get('id_unit') ? $this->input->get('id_unit') : '';
+		$idArea = $this->input->get('id_area') ? $this->input->get('id_area') : '';
 		$queryUnit = '';
 		$queryArea = '';
-		if($idUnit){
+		if($idUnit && $idUnit != 'all'){
 			$queryUnit = " and id_unit = $idUnit ";
 		}
-		if($idArea){
+		if($idArea && $idArea != 'all'){
 			$queryArea = " and id_area = $idArea ";
 		}
 		if($this->input->get('type') === 'CASH'){
@@ -970,7 +1198,7 @@ class Regularpawns extends ApiController
 					join units on units_regularpawns.id_unit = units.id
 					where month(date) = $month and year(date) = $year and permit = '$permit' $queryArea $queryUnit
 				)
-				and SUBSTRING(trans, 6, 7) = 'RC' 
+				and SUBSTRING(trans, 6, 7) in ('RC','OP') 
 			")->result();
 		}else{
 			$result = $this->regulars->db->query("			
@@ -980,9 +1208,9 @@ class Regularpawns extends ApiController
 				SELECT SUBSTRING(trans, 1, 5)
 				FROM units_dailycashs
 				join units on units_dailycashs.id_unit = units.id
-				where  SUBSTRING(trans, 6, 7) = 'RC'
+				where  SUBSTRING(trans, 6, 7) in ('RC','OP') 
 				and year(date) = $year and month(date) = $month
-				and permit = 'OJK' $queryArea $queryUnit
+				and permit = '$permit' $queryArea $queryUnit
 			) and year(date_sbk) = $year and month(date_sbk) = $month and permit = '$permit' $queryArea $queryUnit
 			")->result();
 		}

@@ -58,6 +58,7 @@ class Myyogadai {
     public function transaction($date = '')
     {
            $url = $this->url.'/api/v1/publishers/transactions/today';
+            // var_dump($url); exit;
 
            $date = $date ?  $date : date('Y-m-d');
 
@@ -67,18 +68,24 @@ class Myyogadai {
 
            $data = http_build_query($dataArray);
            $getUrl = $url."?".$data;
+//  var_dump($getUrl); exit;
 
            $crl = curl_init();
+            // var_dump($crl); exit;
 
            $headr = array();
            $headr[] = 'Content-type: application/json';
-           $headr[] = 'Authorization: Bearer '.$this->token;
+        //    $headr[] = 'Authorization: Bearer '.$this->token;
            curl_setopt($crl, CURLOPT_URL,$getUrl);
            curl_setopt($crl, CURLOPT_HTTPHEADER,$headr);
            curl_setopt($crl, CURLOPT_RETURNTRANSFER, 1); 
+        //    var_dump(curl_setopt($crl, CURLOPT_RETURNTRANSFER, 1)); exit;
            $res = curl_exec($crl);
+                    //    var_dump($res); exit;
+
            curl_close($crl);  
-           
+                    //    var_dump($res); exit;
+
            return json_decode($res);
     }
     public function transaction_detail($dateStart = '', $dateEnd = '', $unitname = '', $transactionStatus, $page= 1)

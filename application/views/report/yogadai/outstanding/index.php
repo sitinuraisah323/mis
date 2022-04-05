@@ -108,7 +108,7 @@ $this->load->view('temp/MenuBar.php');
 				</form>
 
 				<div class="col-md-12">
-					<div class="kt-section__content">
+					<div class="kt-section__content table-responsive">
 							<table class="table">
 								<thead class="thead-light"
 								<tr bgcolor="#cccccc">
@@ -116,7 +116,7 @@ $this->load->view('temp/MenuBar.php');
 									<td rowspan="2" align="left" width="120"> Unit</td>
 									<td colspan="6" align="center" width="480">Gadai Reguler</td>
 									<td colspan="4" align="center" width="480">Gadai Cicilan</td>
-									<td rowspan="2" align="center" width="100">Total <br/>Outstanding <br/>(<span class="today"></span>)</td>
+									<td colspan="2" align="center" width="100">Total <br/>Outstanding <br/>(<span class="today"></span>)</td>
 									<td colspan="3" align="center" width="200">Disburse</td>
 								</tr>
 								<tr>
@@ -131,6 +131,8 @@ $this->load->view('temp/MenuBar.php');
 									<td align="center" width="90" bgcolor="#b8b894">Kredit</td>
 									<td align="center" width="30" bgcolor="#d6d6c2">Noa</td>
 									<td align="center" width="90" bgcolor="#d6d6c2">Pelunasan</td>
+									<td align="center" width="40" bgcolor="#b8b894">Noa</td>
+									<td align="center" width="90" bgcolor="#b8b894">Ost</td>
 								
 									<td align="center" width="40" bgcolor="#b8b894">Noa</td>
 									<td align="center" width="90" bgcolor="#b8b894"> Kredit</td>

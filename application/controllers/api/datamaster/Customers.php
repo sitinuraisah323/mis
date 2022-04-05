@@ -13,6 +13,7 @@ class Customers extends ApiController
 
 	public function index()
 	{
+		
 		if(is_array($this->input->post('query'))){
 			if(array_key_exists("generalSearch",$this->input->post('query'))){
 				$this->customers->db->like('customers.name', $this->input->post('query')['generalSearch']);
@@ -37,6 +38,23 @@ class Customers extends ApiController
 					$this->customers->db->where('units.id_cabang',$this->input->post('query')['cabang']);
 				}
 			}
+			if(array_key_exists("usiadari",$this->input->post('query'))){
+				if($this->input->post('query')['usiadari']){
+					$now = date('Y-m-d');
+					$unit = $this->session->userdata('user')->id_unit;
+					$this->customers->db->where("floor(datediff('$now', birth_date)/365) >=",$this->input->post('query')['usiadari'])
+										->where('units.id', $unit);
+				}
+				
+			}
+			if(array_key_exists("usiasampai",$this->input->post('query'))){
+				if($this->input->post('query')['usiasampai']){
+					$unit = $this->session->userdata('user')->id_unit;
+					$now = date('Y-m-d');
+					$this->customers->db->where("floor(datediff('$now', birth_date)/365) <=",$this->input->post('query')['usiasampai'])
+										->where('units.id', $unit);
+				}
+			}
 		}else{
 			if((int) $this->input->get('cabang')){
 				$this->customers->db->where('units.id_cabang', $this->input->get('cabang') );
@@ -47,15 +65,63 @@ class Customers extends ApiController
 			if((int) $this->input->get('area')){
 				$this->customers->db->where('units.id_area',$this->input->get('area'));
 			}
+			if((int) $this->input->get('usiadari')){
+				$unit = $this->session->userdata('user')->id_unit;
+				$now = date('Y-m-d');
+				$this->customers->db->where("floor(datediff('$now', birth_date)/365) >=",$this->input->get('usiadari'))
+									->where('units.id', $unit);
+			}
+			if((int) $this->input->get('usiasampai')){
+				$unit = $this->session->userdata('user')->id_unit;
+				$now = date('Y-m-d');
+				$this->customers->db->where("floor(datediff('$now', birth_date)/365) <=",$this->input->get('usiasampai'))
+									->where('units.id', $unit);
+			}
 			$this->customers->db->limit(100);
 		}
-		$this->customers->db->join('units','units.id = customers.id_unit');
+		// $age = $this->customers->getUsia();
+		if ( $this->session->userdata( 'user' )->level == 'unit' ){
+			$unit = $this->session->userdata('user')->id_unit;
+			$now = date('Y-m-d');
+			$this->customers->db
+			->select("datediff('$now', birth_date) as age_customer")
+			->join('units','units.id = customers.id_unit')
+			->where('units.id', $unit);;
+			$data =  $this->customers->all();
+			echo json_encode(array(
+				'data'	=> $data,
+				'message'	=> 'Successfully Get Data Regular Pawns'
+			));
+		}else{
+			$now = date('Y-m-d');
+		$this->customers->db
+		->select("datediff('$now', birth_date) as age_customer")
+		->join('units','units.id = customers.id_unit');
 		$data =  $this->customers->all();
 		echo json_encode(array(
 			'data'	=> $data,
 			'message'	=> 'Successfully Get Data Regular Pawns'
 		));
+		}
 	}
+
+	// public function get_customers_usiadari($usiadari)
+	// {
+	// 	echo json_encode(array(
+	// 		'data'	    => 	$this->customers->usiadari($usiadari),
+	// 		'status'	=> true,
+	// 		'message'	=> 'Successfully Get Data Cusotomers'
+	// 	));
+    // }
+
+	// public function get_customers_usiadari($usiasampai)
+	// {
+	// 	echo json_encode(array(
+	// 		'data'	    => 	$this->customers->usiasampai($usiasampai),
+	// 		'status'	=> true,
+	// 		'message'	=> 'Successfully Get Data Customers'
+	// 	));
+    // }
 
 	public function insert()
 	{
@@ -280,7 +346,7 @@ class Customers extends ApiController
 		$dateEnd = $this->input->get('dateEnd') ?  $this->input->get('dateEnd') : '';
 		$query = "select (1) as kode_nasabah, c2.id, c2.name, c2.birth_place ,c2.birth_date, 
 			concat(c2.address,' RT ',c2.rt,' RW ',c2.rw, ' KEC ', c2.kecamatan,' KOTA ', c2.city, ' ',c2.province ) as address,
-			c2.nik, (0) as number_identitas, c2.no_cif, (0) as npwp, areas.area, units.name as unit
+			c2.nik, (0) as number_identitas, c2.no_cif, (0) as npwp, areas.area, units.name as unit, mobile
 			FROM customers c2 
 			join units on units.id = c2.id_unit 
 			join areas on areas.id = units.id_area 
@@ -302,5 +368,7 @@ class Customers extends ApiController
 			));
 		
 	}
+
+	
 
 }

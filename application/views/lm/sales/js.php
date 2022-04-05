@@ -53,13 +53,27 @@
 		}
 		appendGram(data){
 			grams = data;
-			data.forEach(data=>{
-				const {weight, id, price_perpcs} = data;
-				const opt = document.createElement('option');
-				opt.text = weight+' Gram'+' Rp '+price_perpcs;
-				opt.value = id;
-				document.querySelector('.search-purchase').appendChild(opt);
-			});
+			let groupby = [];
+            data.forEach(data=>{
+                if(!groupby[data.type]){
+                    groupby[data.type] = [];
+                }
+                groupby[data.type].push(data);
+            });
+            const keys = Object.keys(groupby);
+            const values = Object.values(groupby);
+
+            values.forEach((data, i)=>{
+                const optGroup = document.createElement('optgroup');
+                optGroup.label =  keys[i];
+                data.forEach(lm=>{                    
+                    const opt = document.createElement('option');
+                    opt.textContent =   `${lm.weight} gram Rp ${lm.price_perpcs}`;
+                    opt.value = lm.id;
+                    optGroup.appendChild(opt);
+                })
+				document.querySelector('.search-purchase').appendChild(optGroup);
+            });
 		}
 		getChoice(id){
 			const getGramById = grams.filter(gram=>{
@@ -262,7 +276,7 @@
 					 document.querySelector('[name="mobile"]').value = mobile;
 					 document.querySelector('[name="name"]').value = name;
 					 document.querySelector('[name="nik"]').value = nik;
-					 document.querySelector('[name="date"]').setAttribute('min', date);
+	 				 document.querySelector('[name="date"]').setAttribute('min', date);
 					 document.querySelector('[name="date"]').value = date;
 					 document.querySelector('[name="tenor"]').value = tenor;
 					 document.querySelector('[name="total"]').value = total;

@@ -166,6 +166,10 @@ function initDataTable(){
 				  title: 'Price',
 				  width:60,
 				  textAlign: 'center',
+				  template:function(row){
+                    result =convertToRupiah(row.price);
+                    return result;
+                 }
 			  },
               {
 				  field: 'status',
@@ -279,12 +283,29 @@ function initItem(){
         type:"GET",
         dataType:"JSON",
         success : function(res,status){
-           const form = document.querySelector('#modal_add').querySelector('[name="id_lm_gram"]');
+            const form = document.querySelector('#modal_add').querySelector('[name="id_lm_gram"]');
+            let groupby = [];
             res.data.forEach(data=>{
-                const opt = document.createElement('option');
-                opt.textContent =   `${data.weight} gram`;
-                opt.value = data.id;
-                form.appendChild(opt);
+                if(!groupby[data.type]){
+                    groupby[data.type] = [];
+                }
+                groupby[data.type].push(data);
+            });
+            const keys = Object.keys(groupby);
+            const values = Object.values(groupby);
+
+            values.forEach((data, i)=>{
+                const optGroup = document.createElement('optgroup');
+                optGroup.label =  keys[i];
+
+
+                data.forEach(lm=>{                    
+                    const opt = document.createElement('option');
+                    opt.textContent =   `${lm.weight} gram`;
+                    opt.value = lm.id;
+                    optGroup.appendChild(opt);
+                })
+                form.appendChild(optGroup);
             });
         }
     })

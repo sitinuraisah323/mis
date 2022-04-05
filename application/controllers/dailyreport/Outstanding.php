@@ -86,6 +86,7 @@ class Outstanding extends Authenticated
 						)
 					) as noa')
 					->join('areas','areas.id = units.id_area')
+					->where('areas.status', 'PUBLISH')
 					->order_by('booking', 'desc');
 		return $this->units->db->get('units')->result();
 	}
@@ -108,6 +109,7 @@ class Outstanding extends Authenticated
 		$insert = [];
 		$update = [];
 		$data = [];
+		
 		foreach($units as $index => $unit){
 			$akumulasiUp = (int) $this->repayments->db->select('sum(urm.money_loan) as up,
 			count(id) as noa
@@ -168,6 +170,23 @@ class Outstanding extends Authenticated
 				->where('urm.id_unit', $unit->id)
 				->get()->row()->up;
 
+			$akumulasiNoa = (int) $this->repayments->db->select('sum(urm.money_loan) as up,
+			count(id) as noa
+			')
+				->from('units_repayments urm')
+				->where('urm.date_repayment >=', $dateStart)
+				->where('urm.date_repayment <=', $date)
+				->where('urm.id_unit', $unit->id)
+				->get()->row()->noa;
+
+			$todayNoa = (int) $this->repayments->db->select('sum(urm.money_loan) as up,
+				count(id) as noa
+				')
+				->from('units_repayments urm')
+				->where('urm.date_repayment', $date)
+				->where('urm.id_unit', $unit->id)
+				->get()->row()->noa;
+
 			$wherePrev = "
 			(select deadline  from units_mortages um
 			where um.id_unit = urm.id_unit
@@ -198,6 +217,28 @@ class Outstanding extends Authenticated
 				->where($whereOver)
 				->where('urm.id_unit', $unit->id)
 				->get()->row()->up;
+				
+				$explode=explode("-",$date); 
+			//  var_dump($explode); exit;
+			$disburseUpReg = (int) $this->repayments->db->select('sum(urm.money_loan) as up,
+			count(id) as noa
+			')
+				->from('units_repayments urm')
+				->where('year(urm.date_repayment)', $explode[0])
+				// ->where('urm.date_repayment >=', $dateStart)
+				// ->where('urm.date_repayment <=', $date)
+				->where('urm.id_unit', $unit->id)
+				->get()->row()->up;
+
+			$disburseNoaReg = (int) $this->repayments->db->select('sum(urm.money_loan) as up,
+			count(id) as noa
+			')
+				->from('units_repayments urm')
+				->where('year(urm.date_repayment)', $explode[0])
+				// ->where('urm.date_repayment >=', $dateStart)
+				// ->where('urm.date_repayment <=', $date)
+				->where('urm.id_unit', $unit->id)
+				->get()->row()->noa;
 
 			$check = $this->repayments_summaries->find([
 				'date'	=> $date,
@@ -209,44 +250,58 @@ class Outstanding extends Authenticated
 					'id'	=> $check->id,
 					'id_unit'	=> $unit->id,
 					'date'	=> $date,
+					
+					'noa_ak' =>  $akumulasiNoa,
 					'akumulasi_up'	=>  $akumulasiUp,
 					'akumulasi_over'	=> $akumulasiOver > 0 ? (($akumulasiOver / $akumulasiUp) *100) : 0,
 					'akumulasi_prev'	=>  $akumulasiPrev > 0 ? (($akumulasiPrev / $akumulasiUp) * 100) : 0,
+					'noa_to'	=> $todayNoa,
 					'today_up'	=> $todayUp,
 					'today_over'	=> $todayOver > 0 ? (($todayOver / $todayUp) * 100) : 0,
 					'today_prev'	=> $todayPrev > 0 ? (($todayPrev / $todayUp) * 100) : 0,
 					'today_up_loan'	=> $mortagesTodayUp,
 					'today_over_loan'	=> $mortagesTodayOver > 0 ? (($mortagesTodayOver / $mortagesTodayUp) * 100) : 0,
 					'today_prev_loan'	=> $mortagesTodayPrev > 0 ? (($mortagesTodayPrev / $mortagesTodayUp) * 100) : 0,
+					'disburse_noa'	=> $disburseNoaReg,
+					'disburse_up'	=> $disburseUpReg,
 			
 				];
 			}else{			
 				$insert[$index] = [
 					'id_unit'	=> $unit->id,
 					'date'	=> $date,
+					'noa_to'	=> $todayNoa,
 					'today_up'	=> $todayUp,
 					'today_over'	=> $todayOver > 0 ? (($todayOver / $todayUp) * 100) : 0,
 					'today_prev'	=> $todayPrev > 0 ? (($todayPrev / $todayUp) * 100) : 0,
+					'noa_ak'	=>  $akumulasiNoa,
 					'akumulasi_up'	=>  $akumulasiUp,
 					'akumulasi_over'	=> $akumulasiOver > 0 ? (($akumulasiOver / $akumulasiUp) *100) : 0,
 					'akumulasi_prev'	=>  $akumulasiPrev > 0 ? (($akumulasiPrev / $akumulasiUp) * 100) : 0,
 					'today_up_loan'	=> $mortagesTodayUp,
 					'today_over_loan'	=> $mortagesTodayOver > 0 ? (($mortagesTodayOver / $mortagesTodayUp) * 100) : 0,
 					'today_prev_loan'	=> $mortagesTodayPrev > 0 ? (($mortagesTodayPrev / $mortagesTodayUp) * 100) : 0,
+					'disburse_noa'	=> $disburseNoaReg,
+					'disburse_up'	=> $disburseUpReg,
 				];
 			}
 			$data[$index] = (object) [
 				'id_unit'	=> $unit->id,
 				'date'	=> $date,
+				
+				'noa_ak'	=>  $akumulasiNoa,
 				'akumulasi_up'	=>  $akumulasiUp,
 				'akumulasi_over'	=> $akumulasiOver > 0 ? (($akumulasiOver / $akumulasiUp) *100) : 0,
 				'akumulasi_prev'	=>  $akumulasiPrev > 0 ? (($akumulasiPrev / $akumulasiUp) * 100) : 0,
+				'noa_to'	=> $todayNoa,
 				'today_up'	=> $todayUp,
 				'today_over'	=> $todayOver > 0 ? (($todayOver / $todayUp) * 100) : 0,
 				'today_prev'	=> $todayPrev > 0 ? (($todayPrev / $todayUp) * 100) : 0,
 				'today_up_loan'	=> $mortagesTodayUp,
 				'today_over_loan'	=> $mortagesTodayOver > 0 ? (($mortagesTodayOver / $mortagesTodayUp) * 100) : 0,
 				'today_prev_loan'	=> $mortagesTodayPrev > 0 ? (($mortagesTodayPrev / $mortagesTodayUp) * 100) : 0,
+				'disburse_noa'	=> $disburseNoaReg,
+				'disburse_up'	=> $disburseUpReg,
 			];
 		}
 		if(count($insert)){
@@ -256,6 +311,222 @@ class Outstanding extends Authenticated
 			$this->repayments->db->update_batch('units_repayments_summaries', $update, 'id');
 		}
 		return (object) $data;
+	}
+
+	public function calculate_smartphone()
+	{
+		$units = $this->units->db->select('id, name')->from('units')
+			->get()->result();
+		$dateStart = date('Y-m-d', strtotime(date('Y-m-01', strtotime($date))));
+		$date = date('Y-m-d', strtotime($date));
+
+		$insert = [];
+		$update = [];
+		$data = [];
+
+		foreach($units as $index => $unit){
+			$akumulasiUp = (int) $this->regular->db->select('sum(reg.amount) as up,
+			count(id) as noa
+			')
+				->from('units_regularpawns reg')
+				->where('reg.date_sbk >=', $dateStart)
+				->where('reg.date_repayment <=', $date)
+				->where('reg.id_unit', $unit->id)
+				->like('reg.descripton_1', 'HP')
+				->get()->row()->up;
+
+			$akumulasiOver = (int) $this->regular->db->select('sum(reg.amount) as up,
+			count(id) as noa
+			')
+				->from('units_regularpawns reg')
+				->where('reg.date_sbk >=', $dateStart)
+				->where('reg.date_sbk <=', $date)
+				->where('reg.id_unit', $unit->id)
+				->get()->row()->up;
+
+			$akumulasiPrev = (int) $this->regular->db->select('sum(reg.amount) as up,
+				count(id) as noa
+				')
+					->from('units_regularpawns reg')
+					->where('reg.date_sbk >=', $dateStart)
+					->where('reg.date_sbk <=', $date)
+					->where("DATEDIFF(reg.date_sbk, reg.date_sbk) <=", 120)
+					->where('reg.id_unit', $unit->id)
+					->get()->row()->up;
+
+			$todayUp = (int) $this->repayments->db->select('sum(reg.amount) as up,
+				count(id) as noa
+				')
+				->from('units_regularpawns reg')
+				->where('urm.date_sbk', $date)
+				->where('urm.id_unit', $unit->id)
+				->get()->row()->up;
+			$todayOver = (int) $this->repayments->db->select('sum(reg.amount) as up,
+				count(id) as noa
+				')
+				->from('units_repayments urm')
+				->where('urm.date_repayment', $date)
+				->where("DATEDIFF( urm.date_repayment, urm.date_sbk) >", 120)
+				->where('urm.id_unit', $unit->id)
+				->get()->row()->up;
+			
+			$todayPrev =  (int) $this->repayments->db->select('sum(urm.money_loan) as up,
+				count(id) as noa
+				')
+				->from('units_repayments urm')
+				->where('urm.date_repayment', $date)
+				->where("DATEDIFF(urm.date_repayment, urm.date_sbk) <=", 120)
+				->where('urm.id_unit', $unit->id)
+				->get()->row()->up;
+			$mortagesTodayUp = (int) $this->repayments->db->select('sum(urm.amount) as up,
+				count(id) as noa
+				')
+				->from('units_repayments_mortage urm')
+				->where('urm.date_kredit', $date)
+				->where('urm.id_unit', $unit->id)
+				->get()->row()->up;
+
+			$akumulasiNoa = (int) $this->repayments->db->select('sum(urm.money_loan) as up,
+			count(id) as noa
+			')
+				->from('units_repayments urm')
+				->where('urm.date_repayment >=', $dateStart)
+				->where('urm.date_repayment <=', $date)
+				->where('urm.id_unit', $unit->id)
+				->get()->row()->noa;
+
+			$todayNoa = (int) $this->repayments->db->select('sum(urm.money_loan) as up,
+				count(id) as noa
+				')
+				->from('units_repayments urm')
+				->where('urm.date_repayment', $date)
+				->where('urm.id_unit', $unit->id)
+				->get()->row()->noa;
+
+			$wherePrev = "
+			(select deadline  from units_mortages um
+			where um.id_unit = urm.id_unit
+			and um.no_sbk = urm.no_sbk
+			and um.permit = urm.permit
+			limit 1)
+			>= urm.date_kredit";
+
+			$whereOver = "
+			(select deadline  from units_mortages um
+			where um.id_unit = urm.id_unit
+			and um.no_sbk = urm.no_sbk
+			and um.permit = urm.permit
+			limit 1)
+			<= urm.date_kredit";
+			
+			$mortagesTodayPrev = (int) $this->repayments->db->select('sum(amount) as up
+			')
+				->from('units_repayments_mortage urm')
+				->where('urm.date_kredit', $date)
+				->where($wherePrev)
+				->where('urm.id_unit', $unit->id)
+				->get()->row()->up;
+			$mortagesTodayOver = (int) $this->repayments->db->select('sum(amount) as up
+			')
+				->from('units_repayments_mortage urm')
+				->where('urm.date_kredit', $date)
+				->where($whereOver)
+				->where('urm.id_unit', $unit->id)
+				->get()->row()->up;
+				
+				$explode=explode("-",$date); 
+			//  var_dump($explode); exit;
+			$disburseUpReg = (int) $this->repayments->db->select('sum(urm.money_loan) as up,
+			count(id) as noa
+			')
+				->from('units_repayments urm')
+				->where('year(urm.date_repayment)', $explode[0])
+				// ->where('urm.date_repayment >=', $dateStart)
+				// ->where('urm.date_repayment <=', $date)
+				->where('urm.id_unit', $unit->id)
+				->get()->row()->up;
+
+			$disburseNoaReg = (int) $this->repayments->db->select('sum(urm.money_loan) as up,
+			count(id) as noa
+			')
+				->from('units_repayments urm')
+				->where('year(urm.date_repayment)', $explode[0])
+				// ->where('urm.date_repayment >=', $dateStart)
+				// ->where('urm.date_repayment <=', $date)
+				->where('urm.id_unit', $unit->id)
+				->get()->row()->noa;
+
+			$check = $this->repayments_summaries->find([
+				'date'	=> $date,
+				'id_unit'	=> $unit->id
+			]);
+
+			if($check){
+				$update[$index] = [
+					'id'	=> $check->id,
+					'id_unit'	=> $unit->id,
+					'date'	=> $date,
+					
+					'noa_ak' =>  $akumulasiNoa,
+					'akumulasi_up'	=>  $akumulasiUp,
+					'akumulasi_over'	=> $akumulasiOver > 0 ? (($akumulasiOver / $akumulasiUp) *100) : 0,
+					'akumulasi_prev'	=>  $akumulasiPrev > 0 ? (($akumulasiPrev / $akumulasiUp) * 100) : 0,
+					'noa_to'	=> $todayNoa,
+					'today_up'	=> $todayUp,
+					'today_over'	=> $todayOver > 0 ? (($todayOver / $todayUp) * 100) : 0,
+					'today_prev'	=> $todayPrev > 0 ? (($todayPrev / $todayUp) * 100) : 0,
+					'today_up_loan'	=> $mortagesTodayUp,
+					'today_over_loan'	=> $mortagesTodayOver > 0 ? (($mortagesTodayOver / $mortagesTodayUp) * 100) : 0,
+					'today_prev_loan'	=> $mortagesTodayPrev > 0 ? (($mortagesTodayPrev / $mortagesTodayUp) * 100) : 0,
+					'disburse_noa'	=> $disburseNoaReg,
+					'disburse_up'	=> $disburseUpReg,
+			
+				];
+			}else{			
+				$insert[$index] = [
+					'id_unit'	=> $unit->id,
+					'date'	=> $date,
+					'noa_to'	=> $todayNoa,
+					'today_up'	=> $todayUp,
+					'today_over'	=> $todayOver > 0 ? (($todayOver / $todayUp) * 100) : 0,
+					'today_prev'	=> $todayPrev > 0 ? (($todayPrev / $todayUp) * 100) : 0,
+					'noa_ak'	=>  $akumulasiNoa,
+					'akumulasi_up'	=>  $akumulasiUp,
+					'akumulasi_over'	=> $akumulasiOver > 0 ? (($akumulasiOver / $akumulasiUp) *100) : 0,
+					'akumulasi_prev'	=>  $akumulasiPrev > 0 ? (($akumulasiPrev / $akumulasiUp) * 100) : 0,
+					'today_up_loan'	=> $mortagesTodayUp,
+					'today_over_loan'	=> $mortagesTodayOver > 0 ? (($mortagesTodayOver / $mortagesTodayUp) * 100) : 0,
+					'today_prev_loan'	=> $mortagesTodayPrev > 0 ? (($mortagesTodayPrev / $mortagesTodayUp) * 100) : 0,
+					'disburse_noa'	=> $disburseNoaReg,
+					'disburse_up'	=> $disburseUpReg,
+				];
+			}
+			$data[$index] = (object) [
+				'id_unit'	=> $unit->id,
+				'date'	=> $date,
+				
+				'noa_ak'	=>  $akumulasiNoa,
+				'akumulasi_up'	=>  $akumulasiUp,
+				'akumulasi_over'	=> $akumulasiOver > 0 ? (($akumulasiOver / $akumulasiUp) *100) : 0,
+				'akumulasi_prev'	=>  $akumulasiPrev > 0 ? (($akumulasiPrev / $akumulasiUp) * 100) : 0,
+				'noa_to'	=> $todayNoa,
+				'today_up'	=> $todayUp,
+				'today_over'	=> $todayOver > 0 ? (($todayOver / $todayUp) * 100) : 0,
+				'today_prev'	=> $todayPrev > 0 ? (($todayPrev / $todayUp) * 100) : 0,
+				'today_up_loan'	=> $mortagesTodayUp,
+				'today_over_loan'	=> $mortagesTodayOver > 0 ? (($mortagesTodayOver / $mortagesTodayUp) * 100) : 0,
+				'today_prev_loan'	=> $mortagesTodayPrev > 0 ? (($mortagesTodayPrev / $mortagesTodayUp) * 100) : 0,
+				'disburse_noa'	=> $disburseNoaReg,
+				'disburse_up'	=> $disburseUpReg,
+			];
+		}
+		if(count($insert)){
+			$this->repayments->db->insert_batch('units_repayments_summaries', $insert);
+		}
+		if(count($update)){
+			$this->repayments->db->update_batch('units_repayments_summaries', $update, 'id');
+		}
+		return (object) $data;	
 	}
 
 	/**
@@ -269,20 +540,24 @@ class Outstanding extends Authenticated
 		$curr = $this->datetrans();
 
 		$repayments = $this->repayments_summaries->db
-			->select('units.name as unit, areas.area, units_repayments_summaries.*')
+			->select('units.name as unit, areas.area, date,noa_ak, akumulasi_up, akumulasi_over, akumulasi_prev, noa_to, today_up, today_prev, today_over, today_up_loan, today_prev_loan, 
+			today_over_loan, disburse_noa, disburse_up')
 			->from('units_repayments_summaries')
 			->join('units','units.id =units_repayments_summaries.id_unit ')
 			->join('areas','areas.id = units.id_area')
+			->where('areas.status', 'PUBLISH')
 			->where('date', date('Y-m-d', strtotime($curr)) )
 			->get()->result();
 
 		if(count($repayments) <= 0){
-			$this->calculate_repayment($this->datetrans());
+			$this->calculate_repayment($curr);
 			$repayments = $this->repayments_summaries->db
-				->select('units.name as unit, areas.area,units_repayments_summaries.*')
+				->select('units.name as unit, areas.area, date, noa_ak, akumulasi_up, akumulasi_over, noa_to akumulasi_prev, today_up, today_prev, today_over, today_up_loan, today_prev_loan, 
+			today_over_loan, disburse_noa, disburse_up')
 				->from('units_repayments_summaries')
 				->join('units','units.id = units_repayments_summaries.id_unit ')
 				->join('areas','areas.id = units.id_area')
+				->where('areas.status', 'PUBLISH')
 				->where('date', date('Y-m-d', strtotime($curr)) )
 				->get()->result();
 		}
@@ -295,11 +570,45 @@ class Outstanding extends Authenticated
 		// $view = $this->load->view('dailyreport/outstanding/index.php',['outstanding'=>$grouped,'datetrans'=> $this->datetrans()],true);
 		// $pdf->writeHTML($view);
 
+	//Outstanding Gcore
+		$this->load->library('gcore');
+		// $areas = $this->gcore->areas()->data;
+		$panak = "61611e1d8614149f281503a8";
+		$jabar = "60c6befbe64d1e2428630162";
+		$ntt = "60c6bfcce64d1e242863024a";
+		$lawu = "62280b69861414b1beffc464";
+		$panakukang =  $this->gcore->transaction($curr, $panak, $branch, $unit, 0); 
+		// var_dump($panakukang); exit;
+		$osSiscol =  $this->gcore->transaction($curr, $jabar, $branch, $unit, 0); 
+		$osNtt = $this->gcore->transaction($curr, $ntt, $branch, $unit, 0);
+		$osLawu = $this->gcore->transaction($curr, $lawu, $branch, $unit, 0);
+
 		$newos = $this->reportoutstanding();
-		$grouped = $this->grouped($newos);
+
+		$grouped = $this->grouped($newos); 
 		$pdf->AddPage('L', 'A3');
-		$view = $this->load->view('dailyreport/outstanding/generate.php',['outstanding'=>$grouped,'datetrans'=> $this->datetrans()],true);
+		$view = $this->load->view('dailyreport/outstanding/generate.php',
+		[
+			'outstanding' => $grouped,
+			'datetrans' => $curr, 
+			'osSiscol' => $osSiscol, 
+			'panakukang' => $panakukang, 
+			'osNtt' => $osNtt,
+			'osLawu' => $osLawu
+		], 
+		true);
+
 		$pdf->writeHTML($view);
+	//end OS gGcore
+
+	//Os Ghanet aja
+		// $newos = $this->reportoutstanding();
+
+		// $grouped = $this->grouped($newos);
+		// $pdf->AddPage('L', 'A3');
+		// $view = $this->load->view('dailyreport/outstanding/generate.php',['outstanding'=>$grouped,'datetrans'=> $curr],true);
+		// $pdf->writeHTML($view);
+	//End Ghanet
 
 		// $osmortages = $this->dataMortages();
 		// $groupedMortages = $this->grouped($osmortages);
@@ -307,8 +616,9 @@ class Outstanding extends Authenticated
 		// $view = $this->load->view('dailyreport/outstanding/mortages.php',['outstanding'=>$groupedMortages,'datetrans'=> $this->datetrans()],true);
 		// $pdf->writeHTML($view);
 
-		$pdf->AddPage('L','A4');
-		$view = $this->load->view('dailyreport/outstanding/repayments.php',['repayments'=>$repayments,'datetrans'=> $this->datetrans()],true);
+// dipakai
+		$pdf->AddPage('L','A3');
+		$view = $this->load->view('dailyreport/outstanding/repayments.php',['repayments'=>$repayments,'datetrans'=> $curr],true);
 		$pdf->writeHTML($view);	
 
 		$os = $this->model->db
@@ -316,18 +626,26 @@ class Outstanding extends Authenticated
 			->from('units_dpd')
 			->join('units','units.id = units_dpd.id_unit')
 			->join('areas','areas.id = units.id_area')
+			->where('areas.status', 'PUBLISH')
 			->where('date', date('Y-m-d', strtotime($curr)))->get()->result();
 		$pdf->AddPage('L','A3');
-		$view = $this->load->view('dailyreport/outstanding/dpd.php',['dpd'=>$os,'datetrans'=> $this->datetrans()],true);
+		$view = $this->load->view('dailyreport/outstanding/dpd.php',['dpd'=>$os,'datetrans'=>$curr],true);
 		$pdf->writeHTML($view);		
+		
+		$this->load->library('myyogadai');
+		$yukGadaiOs =  $this->myyogadai->transaction($curr, 0);
+		$pdf->AddPage('L','A3');
+		$view =$this->load->view('report/yogadai/pdf',['outstanding'=>$yukGadaiOs,'datetrans'=>$curr],true);
+		$pdf->writeHTML($view);	
 
 		$pdf->AddPage('L','A4');
-		$view = $this->load->view('dailyreport/outstanding/target.php',['data'=>$this->target($this->datetrans()),'datetrans'=> $this->datetrans()],true);
+		$view = $this->load->view('dailyreport/outstanding/target.php',['data'=>$this->target($curr),'datetrans'=> $curr],true);
 		$pdf->writeHTML($view);
-
 		$pdf->AddPage('L','A4');
-		$view = $this->load->view('dailyreport/outstanding/target_os.php',['data'=>$newos,'datetrans'=> $this->datetrans()],true);
+		$view = $this->load->view('dailyreport/outstanding/target_os.php',['data'=>$newos,'datetrans'=>$curr],true);
 		$pdf->writeHTML($view);
+	
+	//End dipakai
 
 		// $pdf->AddPage('L');
 		// $view = $this->load->view('dailyreport/outstanding/pencairan.php',['pencairan'	=> $this->pencairan()],true);
@@ -336,46 +654,51 @@ class Outstanding extends Authenticated
 		// $pdf->AddPage('L');
 		// $view = $this->load->view('dailyreport/outstanding/pelunasan.php',['pelunasan'	=> $this->pelunasan()],true);
 		// $pdf->writeHTML($view);
+//dipakai
 
 		$pdf->AddPage('L','A4');
 		$group = $this->grouped($this->rate());
 		$view = $this->load->view('dailyreport/outstanding/rate.php',['areas'	=> $group],true);
 		$pdf->writeHTML($view);
 
-		$pdf->AddPage('L','A4');
-		$view = $this->load->view('dailyreport/outstanding/saldo.php',[
-			'saldo'	=> $this->saldounit($this->datetrans()),
-			'datetrans'=> $this->datetrans()],true);
-		$pdf->writeHTML($view);
+//End dipakai
 
+// 		$pdf->AddPage('L','A4');
+// 		$view = $this->load->view('dailyreport/outstanding/saldo.php',[
+// 			'saldo'	=> $this->saldounit($curr),
+// 			'datetrans'=> $curr],true);
+// 		$pdf->writeHTML($view);
+
+//dipakai
 		$pdf->AddPage('L','A4');
 		$view = $this->load->view('dailyreport/outstanding/pendapatan.php',['pendapatan'	=> $this->pendapatan(),
-		'datetrans'=> $this->datetrans()],true);
+		'datetrans'=> $curr],true);
 		$pdf->writeHTML($view);
 
 		$pdf->AddPage('L','A4');
 		$view = $this->load->view('dailyreport/outstanding/pengeluaran.php',['pengeluaran'	=> $this->pengeluaran(),
-		'datetrans'=> $this->datetrans()],true);
+		'datetrans'=> $curr],true);
 		$pdf->writeHTML($view);
 
-		$coas = $this->dailycash->pengeluaran_perk($this->datetrans());
+		$coas = $this->dailycash->pengeluaran_perk($curr);
 
 		$pdf->AddPage('L','A4');
 		$view = $this->load->view('dailyreport/outstanding/pengeluaran_operasi',[
 			'coas'=>$coas	,
-			'datetrans'	=> $this->datetrans()
+			'datetrans'	=>$curr
 		],true);
 
 		$pdf->writeHTML($view);
-		
 
-		$areas = $this->dailycash-> getCocCalcutation(null,  11,date('n', strtotime($this->datetrans())), date('Y', strtotime($this->datetrans())),  0,  0);
-		$pdf->AddPage('L','A4');
-		$view = $this->load->view('report/coc/pdf.php',[
-			'areas'=>$areas	,
-			'datetrans'	=> $this->datetrans()
-		],true);
-		$pdf->writeHTML($view);
+	//End dipakai
+
+// 		$areas = $this->dailycash-> getCocCalcutation(null,  11,date('n', strtotime($curr)), date('Y', strtotime($curr)),  0,  0);
+// 		$pdf->AddPage('L','A4');
+// 		$view = $this->load->view('report/coc/pdf.php',[
+// 			'areas'=>$areas	,
+// 			'datetrans'	=> $this->datetrans()
+// 		],true);
+// 		$pdf->writeHTML($view);
 
 	
 	
@@ -881,7 +1204,7 @@ class Outstanding extends Authenticated
 		return $units;
 	}
 
-	public function reportoutstanding()
+public function reportoutstanding()
 	{
 		//$date = '2021-01-15';
 		$date = date('Y-m-d');
@@ -899,7 +1222,9 @@ class Outstanding extends Authenticated
 
 		$units = $this->units->db->select('units.id, units.name, area')
 			->join('areas','areas.id = units.id_area')
+			->where('areas.status', 'PUBLISH')
 			->get('units')->result();
+			
 		foreach ($units as $unit){
 
 			$getOstYesterday = $this->regular->db
@@ -908,7 +1233,6 @@ class Outstanding extends Authenticated
 								->where('id_unit', $unit->id)
 								->order_by('date','DESC')
 								->get()->row();
-
 			$unit->ost_yesterday = (object) array(
 				'noa_os_reguler'	=> $getOstYesterday->noa_os_regular,
 				'os_reguler'		=> $getOstYesterday->os_regular,
@@ -940,6 +1264,7 @@ class Outstanding extends Authenticated
 					->where('year', date('Y', strtotime($date)))
 					->where('id_unit', $unit->id)
 					->get('units_targets')->row();
+					
 			$totalNoaReg = ($unit->ost_yesterday->noa_os_reguler + $unit->ost_today->noa_reguler)-($unit->ost_today->noa_rep_reguler);
 			$totalUpReg = ($unit->ost_yesterday->os_reguler+ $unit->ost_today->up_reguler)-($unit->ost_today->up_rep_reguler);
 			$totalNoaMor = ($unit->ost_yesterday->noa_os_mortages + $unit->ost_today->noa_mortages)-($unit->ost_today->noa_rep_mortages);
@@ -977,10 +1302,12 @@ class Outstanding extends Authenticated
 			// );
 			// $unit->percentage = ($unit->total_dpd->ost > 0) && ($unit->total_outstanding->up > 0) ? round($unit->total_dpd->ost / $unit->total_outstanding->up, 4) : 0;
 		}
+		
 		//echo "<pre/>";
 		//print_r($units);
 		return $units;
 	}
+
 
 
 	public function dataMortages()
@@ -1062,6 +1389,8 @@ class Outstanding extends Authenticated
 		}
 
 		$month = date('n', strtotime($this->datetrans()));
+		
+		$year = date('Y', strtotime($this->datetrans()));
 
 		$this->units->db->select('units.name,areas.area, sum(amount) as amount')
 			->join('units','units.id = units_dailycashs.id_unit')
@@ -1069,6 +1398,7 @@ class Outstanding extends Authenticated
 			->from('units_dailycashs')
 			->where('type','CASH_IN')	
 			->where('MONTH(date)', $month)
+			->where('YEAR(date)', $year)
 			->where_in('no_perk', $category)
 			->group_by('units.name')
 			->group_by('areas.area')
@@ -1115,12 +1445,15 @@ class Outstanding extends Authenticated
 
 		$month = date('n', strtotime($this->datetrans()));
 		
+		$year = date('Y', strtotime($this->datetrans()));
+		
 		$this->units->db->select('units.name,areas.area, sum(amount) as amount')
 			->join('units','units.id = units_dailycashs.id_unit')
 			->join('areas','areas.id = units.id_area')
 			->from('units_dailycashs')
 			->where('type','CASH_OUT')
 			->where('MONTH(date)', $month)
+			->where('YEAR(date)', $year)
 			->where_in('no_perk', $category)
 			->group_by('units.name')
 			->group_by('areas.area')

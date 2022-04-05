@@ -174,6 +174,14 @@ $this->load->view('temp/MenuBar.php');
                         </select>
 					</div>
                     <div class="col-lg-2">
+						<label class="col-form-label">Jenis</label>
+                        <select class="form-control select2" name="type" id="type">
+                            <option value="">All</option>
+                            <option value="REGULER">Reguler</option>
+                            <option value="OPSI">Opsi</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-2">
                         <label class="col-form-label">&nbsp</label>
                         <div class="position-relative">
                         <button type="button" class="btn btn-brand btn-icon" name="btncari" id="btncari"><i class="fa fa-search"></i></button>
@@ -186,7 +194,7 @@ $this->load->view('temp/MenuBar.php');
             </div>
 
             <div class="col-md-12">
-                <div class="kt-section__content">
+                <div class="kt-section__content table-responsive">
 						<table class="table">
 						  	<thead class="thead-light">
 						    	<tr>
@@ -204,6 +212,7 @@ $this->load->view('temp/MenuBar.php');
 									<th class='text-right'>UP</th>
 									<th class='text-center'>Status</th>
 									<th class='text-center'>Description</th>
+									<th class='text-center'>Type</th>
 									<th></th>
 						    	</tr>
 						  	</thead>

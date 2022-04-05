@@ -213,6 +213,7 @@ function initCariForm(){
                         template += "<td class='text-center'>-</td>";
 						template += "<td class='text-center'>"+data.no_cif+"</td>";
                         template += "<td class='text-center'>-</td>";
+                        template += "<td class='text-center'>"+data.mobile+"</td>";
                         template += "</tr>";
                         no++;                        
 					});

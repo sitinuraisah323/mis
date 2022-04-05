@@ -52,13 +52,13 @@ class Nasabah extends Authenticated
 		$queryUnit = '';
 
 		$permit = $this->input->get('permit') ;
-		$queryPermit = $permit ? " and ur2.permit = '$permit' " : '';
+		$queryPermit = '';
 
 		$dateStart = $this->input->get('dateStart') ?  $this->input->get('dateStart') : '';
 		$dateEnd = $this->input->get('dateEnd') ?  $this->input->get('dateEnd') : '';
 		$query = "select (1) as kode_nasabah, c2.id, c2.name, c2.birth_place ,c2.birth_date, 
 			concat(c2.address,' RT ',c2.rt,' RW ',c2.rw, ' KEC ', c2.kecamatan,' KOTA ', c2.city, ' ',c2.province ) as address,
-			c2.nik, (0) as number_identitas, c2.no_cif, (0) as npwp, areas.area, units.name as unit
+			c2.nik, (0) as number_identitas, c2.no_cif, (0) as npwp, areas.area, units.name as unit, mobile
 			FROM customers c2 
 			join units on units.id = c2.id_unit 
 			join areas on areas.id = units.id_area 
@@ -104,11 +104,17 @@ class Nasabah extends Authenticated
 		$objPHPExcel->getActiveSheet()->setCellValue('H1', 'No Cif');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('I');
 		$objPHPExcel->getActiveSheet()->setCellValue('I1', 'NPWP');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('J');
+		$objPHPExcel->getActiveSheet()->setCellValue('J1', 'No HP');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('K');
+		$objPHPExcel->getActiveSheet()->setCellValue('K1', 'Area');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('L');
+		$objPHPExcel->getActiveSheet()->setCellValue('L1', 'Unit');
 
 		$objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
 		
 		$objPHPExcel->getActiveSheet()
-			->getStyle('A1:H1')
+			->getStyle('A1:L1')
 			->getFill()
 			->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
 			->getStartColor()
@@ -130,6 +136,10 @@ class Nasabah extends Authenticated
 			$objPHPExcel->getActiveSheet()->setCellValue('G'.$no, '');
 			$objPHPExcel->getActiveSheet()->setCellValue('H'.$no, $row->no_cif);
 			$objPHPExcel->getActiveSheet()->setCellValue('I'.$no, '');
+			$objPHPExcel->getActiveSheet()->setCellValue('J'.$no, $row->mobile);
+		    $objPHPExcel->getActiveSheet()->setCellValue('K'.$no, $row->area);
+			$objPHPExcel->getActiveSheet()->setCellValue('L'.$no, $row->unit);
+			
 			$no++;
 		}
 

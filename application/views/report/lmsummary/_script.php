@@ -96,21 +96,24 @@ function initCariForm(){
 
     $('#area').select2({ placeholder: "Select Area", width: '100%' });
     $('#unit').select2({ placeholder: "Select Unit", width: '100%' });
+    $('#gramasi').select2({ placeholder: "Select Gram", width: '100%' });
     //events
     $('#btncari').on('click',function(){
         $('.rowappend').remove();
         var area = $('[name="area"]').val();
         var cabang = $('[name="cabang"]').val();
         var unit = $('[name="id_unit"]').val();
-		var date = $('[name="date"]').val();
+		var sdate = $('[name="sdate"]').val();
+		var edate = $('[name="edate"]').val();
+		var gramasi = $('[name="gramasi"]').val();
         //var dt = new Date(date);
 		//var dmonth = dt.getMonth();
         KTApp.block('#form_bukukas .kt-portlet__body', {});
 		$.ajax({
 			type : 'GET',
-			url : "<?php echo base_url("api/dashboards/lm"); ?>",
+			url : "<?php echo base_url("api/dashboards/getlmsummary"); ?>",
 			dataType : "json",
-			data:{area:area,cabang:cabang,unit:unit,date:date},
+			data:{area:area,cabang:cabang,unit:unit,sdate:sdate,edate:edate,gramasi:gramasi},
 			success : function(response,status){
 				KTApp.unblockPage();
 				if(response.status == 200){
@@ -120,23 +123,24 @@ function initCariForm(){
 					var sales = 0;
 					var purchases = 0;
 					$.each(response.data, function (index, data) {
+                        //if(data.)
 						template += "<tr class='rowappend'>";
                         template += "<td class='text-center'>"+no+"</td>";
                         template += "<td class='text-left'>"+data.area+"</td>";
 						template += "<td class='text-left'>"+data.name+"</td>";
-						template += "<td class='text-right'>"+convertToRupiah(data.lm.purchase)+"</td>";
-						template += "<td class='text-right'>"+convertToRupiah(data.lm.sales)+"</td>";
-						template += "<td class='text-right'>"+data.percentage+"</td>";
+						template += "<td class='text-right'>"+convertToRupiah(data.purchase)+"</td>";
+						template += "<td class='text-right'>"+convertToRupiah(data.sales)+"</td>";
+						//template += "<td class='text-right'></td>";
 						template += '</tr>';
 						no++;
-                        purchases +=data.lm.purchase;
-                        sales +=data.lm.sales;
+                        //purchases +=data.lm.purchase;
+                        //sales +=data.lm.sales;
                         //totNoa +=data.noa;
 					});
                     template += '<tr class="rowappend">';
                     template +='<td colspan="3" class="text-right"><b>Total</b></td>';                    
-                    template +='<td class="text-right"><b>'+convertToRupiah(purchases)+'</b></td>';                    
-                    template +='<td class="text-right"><b>'+convertToRupiah(sales)+'</b></td>';                    
+                    template +='<td class="text-right"><b></b></td>';                    
+                    template +='<td class="text-right"><b></b></td>';                    
                     template +='<td class="text-right"><b></b></td>';                    
                     template +='</tr>';
 					console.log(template);

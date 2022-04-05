@@ -24,7 +24,8 @@ class Outstanding extends Authenticated
 		$this->load->model('regularpawnshistoryModel', 'regularrepair');
 		$this->load->model('MortagesModel', 'mortages');
 		$this->load->model('CustomersModel', 'customers');
-		$this->load->model('CustomersrepairModel', 'customersrepair');		
+		$this->load->model('CustomersrepairModel', 'customersrepair');
+		$this->load->model('Smartphone', 'smartphone');		
 	}
 
 	/**
@@ -223,9 +224,141 @@ class Outstanding extends Authenticated
 		if($db){ echo "Success repair data";}
 	}
 
-	public function generate(){
+	public function generate_smartphone($date)
+	{
+		$this->regular->db
+			->select('units.name as unit, customers.name as customer_name,customers.nik as nik, (select date_repayment from units_repayments where units_repayments.no_sbk = units_regularpawns.no_sbk and units_repayments.id_unit = units_regularpawns.id_unit and units_repayments.permit = units_regularpawns.permit limit 1 ) as date_repayment')
+			->join('customers','units_regularpawns.id_customer = customers.id')
+			->join('units','units.id = units_regularpawns.id_unit')
+			->like('description_1', 'HP');
 
-		if($date = $this->input->get('date')){
+		if($get = $this->input->get()){
+			$status =null;
+			$nasabah = $get['nasabah'];
+			if($get['statusrpt']=="0"){$status=["N","L"];}
+			if($get['statusrpt']=="1"){$status=["N"];}
+			if($get['statusrpt']=="2"){$status=["L"];}
+			if($get['statusrpt']=="3"){$status=[""];}
+
+			// if($area = $this->input->get('area')){
+			// 	$this->regular->db->where('id_area', $area);
+			// }
+
+			if($area = $this->input->get('area')){
+				$this->regular->db->where('id_area', $area);
+			}else if($this->session->userdata('user')->level == 'area'){
+				$this->regular->db->where('id_area', $this->session->userdata('user')->id_area);
+			}
+	
+			
+			if($cabang = $this->input->get('cabang')){
+				$this->regular->db->where('id_cabang', $cabang);
+			}else if($this->session->userdata('user')->level == 'cabang'){
+				$this->regular->db->where('id_cabang', $this->session->userdata('user')->id_cabang);
+			}
+	
+			if($unit = $this->input->get('unit')){
+				$this->regular->db->where('id_unit', $unit);
+			}else if($this->session->userdata('user')->level == 'unit'){
+				$this->regular->db->where('units.id', $this->session->userdata('user')->id_unit);
+			}
+
+			$this->regular->db
+				->where('units_regularpawns.date_sbk =', $date)
+				->where_in('units_regularpawns.status_transaction ', $status);
+			if($get['id_unit']){
+				$this->regular->db
+					->where('units_regularpawns.id_unit', $get['id_unit']);
+			}
+			if($permit = $get['permit']){
+				$this->regular->db->where('units_regularpawns.permit', $permit);
+			}
+			if($nasabah!="all" && $nasabah != null){
+				$this->regular->db->where('customers.nik', $nasabah);
+			}
+			if($sortBy = $this->input->get('sort_by')){
+				$this->regular->db->order_by('units_regularpawns.'.$sortBy, $this->input->get('sort_method'));
+			}
+			if($type = $this->input->get('type')){
+				$this->regular->db->where('units_regularpawns.type_bmh', $type === 'OPSI' ? 'RB' : 'RC');
+			}
+		}
+		if($no_sbk = $this->input->get('no_sbk')){
+			$this->regular->db->where('units_regularpawns.no_sbk',  $no_sbk);
+		}
+			// $this->regular->db->order_by('');
+
+
+		$data = $this->regular->all();
+		// var_dump($data);
+		// exit;
+
+		foreach($data as $datas){
+			// echo $datas->customer_name;
+			// exit;
+			$smartphone = array(
+				'no_sbk'				=> $datas->no_sbk,
+				'nic'					=> $datas->nic,				
+				'id_customer'			=> $datas->id_customer,
+				'ktp'					=> $datas->ktp,
+				'date_sbk'				=> $datas->date_sbk,
+				'deadline'				=> $datas->deadline,
+				'amount'				=> $datas->amount,
+				'date_auction'			=> $datas->date_auction,
+				'estimation'			=> $datas->estimation,
+				'admin'					=> $datas->admin,
+				'capital_lease_old'		=> $datas->capital_lease_old,
+				'periode'				=> $datas->periode,
+				'installment'			=> $datas->installment,
+				'status_transaction'	=> $datas->status_transaction,
+				'id_unit'				=> $datas->id_unit,
+				'type_item'				=> $datas->type_item,
+				'type_bmh'				=> $datas->type_bmh,
+				'description_1'			=> $datas->description_1,
+				'description_2'			=> $datas->description_2,
+				'description_3'			=> $datas->description_3,
+				'description_4'			=> $datas->description_4,
+				'permit'				=> $datas->permit,
+				'status'				=> $datas->status,
+				'date_create'			=> $datas->date_create,
+				'date_update'			=> $datas->date_update,
+				'user_create'			=> $datas->user_create,
+				'user_update'			=> $datas->user_update,
+				'capital_lease'			=> $datas->capital_lease,
+				'id_repayment'			=> $datas->id_repayment,
+
+			);
+
+			$check = $this->db->get_where('units_smartphone',array('no_sbk' => $datas->no_sbk,'date_sbk'=>$datas->date_sbk, 'id_unit'=>$datas->id_unit));
+			if($check->num_rows() > 0){
+				$this->model->db->where('id_unit', $datas->id_unit);
+				$this->model->db->where('date_sbk', $datas->date_sbk);
+				$this->model->db->where('no_sbk', $datas->no_sbk);
+				$this->model->db->update('units_smartphone', $smartphone);
+			}else{
+				$this->model->db->insert('units_smartphone', $smartphone);
+			}
+		}
+	}
+
+
+	// public function getSmartphone($today)
+	// {
+	// 	$data = $this->regular->db
+	// 	->select('*')
+	// 	->from('units_regularpawns')
+	// 	->where('date_sbk', $today)
+	// 	->like('description_1', 'HP')
+	// 	->get()->result();
+		
+	// 	return $data;
+	// }
+
+	public function generate()
+	{
+
+		if($date = $this->input->get('date'))
+		{
 			$date = $date;
 		}else{
 			$date = date('Y-m-d');
@@ -245,12 +378,27 @@ class Outstanding extends Authenticated
 		$totalPencairanMortages = 0;
 		$totalOst = 0;
 
-		$units = $this->units->db->select('units.id, units.name, area')
+		//smartphone
+			$smartphone = $this->generate_smartphone($date);
+			
+
+		$this->units->db->select('units.id, units.name, area')
 			->join('areas','areas.id = units.id_area')
-			->order_by('units.id','asc')
-			->get('units')->result();
+			->order_by('units.id','asc');
+		if($idUnit = $this->input->get('id_unit')){
+		    $this->units->db->where('units.id', $idUnit);
+		}
+		if($idArea = $this->input->get('id_area')){
+		    $this->units->db->where('units.id_area', $idArea);
+		}
+
+		
+		$units = $this->units->db->get('units')->result();
 
 		foreach ($units as $unit){
+
+			
+			
 			//get os yesterday
 			$getOstYesterday = $this->model->db
 								->where('date <', $date)
@@ -277,6 +425,7 @@ class Outstanding extends Authenticated
 			$realos 		= $this->regular->getRealOS($unit->id,$date);
 
 			$dpddate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
+
 			
 
 		
@@ -302,14 +451,6 @@ class Outstanding extends Authenticated
 			
 			$transaction = array(
 				'id_unit'				=> $unit->id,
-
-				'noa_os_mortage_yesterday'		=> $getOstYesterday->noa_os_mortage,
-				'os_mortage_yesterday'			=> $getOstYesterday->os_mortage,
-
-				'noa_os_regular_yesterday'		=> $getOstYesterday->noa_os_regular,
-				'os_regular_yesterday'			=> $getOstYesterday->os_regular,
-			
-
 				'date'					=> $date,				
 				'os'				    => $totalOst,
 				'noa_regular'			=> $creditToday->noa_regular,
@@ -376,7 +517,8 @@ class Outstanding extends Authenticated
 			
 			$checkDpd = $this->model
 				->db->get_where('units_dpd',array('id_unit' => $unit->id,'date'=>$date));
-			if($checkDpd->num_rows() > 0){
+			if($checkDpd->num_rows() > 0)
+			{
 				$this->model->db->update('units_dpd', $total_dpd, array('id_unit' => $unit->id,'date'=>$date));
 			}else{
 				$this->model->db->insert('units_dpd', $total_dpd);
@@ -386,8 +528,9 @@ class Outstanding extends Authenticated
 			//print_r($transaction);
 			$check = $this->db->get_where('units_outstanding',array('id_unit' => $unit->id,'date'=>$date));
 			if($check->num_rows() > 0){
-				//$this->model->db->update('units_outstanding', $transaction, array('id_unit' => $unit->id,'date'=>$date));
-				$this->model->db->update('units_outstanding', $transaction, array('id_unit' => $unit->id,'date'=>$date,'noa_real_reguler'=>$realos->noaReg,'os_real_reguler'=>$realos->osReg,'noa_real_mortage'=>$realos->noaNonReg,'os_real_mortage'=>$realos->osNonReg,'real_outstanding'=>$realos->outstanding));
+				$this->model->db->where('id_unit', $unit->id);
+				$this->model->db->where('date', $date);
+				$this->model->db->update('units_outstanding', $transaction);
 			}else{
 				$this->model->db->insert('units_outstanding', $transaction);
 			}			

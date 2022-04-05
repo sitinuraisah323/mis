@@ -101,6 +101,7 @@ function initCariForm(){
     $('#sort_method').select2({ placeholder: "Select a Sort", width: '100%' });
     $('#sort_by').select2({ placeholder: "Select a Sort", width: '100%' });
     $('#no_sbk').select2({ placeholder: "Select a No SBK", width: '100%' });
+    $('#type').select2({ placeholder: "Pilih jenis transaksi", width: '100%' });
     //events
     $('#btncari').on('click',function(){
         $('.rowappend').remove();
@@ -114,12 +115,14 @@ function initCariForm(){
         var sort_by = $('[name="sort_by"]').val();
         var sort_method = $('[name="sort_method"]').val();
         var no_sbk = $('[name="no_sbk"]').val();
+        var type = $('[name="type"]').val();
         KTApp.block('#form_bukukas .kt-portlet__body', {});
 		$.ajax({
 			type : 'GET',
 			url : "<?php echo base_url("api/transactions/regularpawns/report"); ?>",
 			dataType : "json",
-			data:{no_sbk,area:area,id_unit:unit,statusrpt:statusrpt,nasabah:nasabah,dateStart:dateStart,dateEnd:dateEnd,permit:permit, sort_by, sort_method},
+			data:{no_sbk,area:area,id_unit:unit,statusrpt:statusrpt,nasabah:nasabah,
+            dateStart:dateStart,dateEnd:dateEnd,permit:permit, sort_by, sort_method, type},
 			success : function(response,status){
 				KTApp.unblockPage();
 				if(response.status == true){
@@ -152,6 +155,7 @@ function initCariForm(){
                         if(data.description_3!=null){template += "<br>- " + data.description_3;}
                         if(data.description_4!=null){template += "<br>- " + data.description_4;}
                         template +="</td>";
+                        template += `<td class='text-center'>${data.type_bmh === 'RC' ? 'REGULER' : 'OPSI'}</td>`;
 						template += '</tr>';
 						no++;
 						amount += parseInt(data.amount);

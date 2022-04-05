@@ -52,7 +52,7 @@ function initDTEvents(){
         KTApp.blockPage();
         $.ajax({
             type : 'GET',
-			url : "<?php echo base_url("api/transactions/regularpawns/get_byid"); ?>",
+			url : "<?php echo base_url("api/transactions/barangjaminan/get_byid"); ?>",
             data : {id:targetId},
             dataType : "json",
             success : function(response,status){
@@ -142,6 +142,11 @@ function initAlert(){
     })
 }
 
+function btnreload(){
+    //alert('test');
+    datatable.reload();
+}
+
 function initEditForm(){
     //remove class 
     
@@ -194,26 +199,32 @@ function initEditForm(){
 
     var populateForm = function(groupObject){
         $("#no_sbk").val(groupObject.no_sbk);
-        $("#id_unit").val(groupObject.id_unit);
+        //$("#id_unit").val(groupObject.id_unit);
         $("#nic").val(groupObject.nic);
+        $("#permit").val(groupObject.permit);        
         $("#id_customer").val(groupObject.id_customer);
+        $("#customer").val(groupObject.customer);
+        $("#amount").val(groupObject.amount);
+        $("#estimation").val(groupObject.estimation);
 
         //get customers
         //customersList(groupObject.id_unit,groupObject.id_customer);
-
 		//table description
 		$('.rowappend_mdl').remove();
 		var template = '';
 		var type = '';
+		var permit = '';
 		template += "<tr class='rowappend_mdl'>";
 		template += "<td class='text-center'>"+groupObject.no_sbk+"</td>";
-		template += "<td class='text-center'>"+groupObject.name+"</td>";
+		template += "<td class='text-center'>"+groupObject.customer+"</td>";
 		template += "<td class='text-center'>"+groupObject.date_sbk+"</td>";
 		template += "<td class='text-center'>"+groupObject.deadline+"</td>";
 		template += "<td class='text-center'>"+convertToRupiah(groupObject.estimation)+"</td>";
 		template += "<td class='text-center'>"+convertToRupiah(groupObject.amount)+"</td>";
 		if(groupObject.type_item == 'P'){ type = 'Perhiasan'; }else{type = 'Latakan';}
+		if(groupObject.permit == 'OJK-1'){ permit = 'New OJK'; }else{permit = groupObject.permit;}
 		template += "<td class='text-right'>"+type+"</td>";
+        template += "<td class='text-right'>"+permit+"</td>";
 		template += "<td class='text-right'>";
 		if(groupObject.description_1!=null){template += "- " + groupObject.description_1;}
 		if(groupObject.description_2!=null){template += "<br>- " + groupObject.description_2;}
@@ -237,7 +248,7 @@ function initDataTable(){
 			type: 'remote',
 			source: {
 				read: {
-					url: '<?php echo base_url("api/transactions/regularpawns"); ?>',
+					url: '<?php echo base_url("api/transactions/regularpawnssummary/get_transaction"); ?>',
 					map: function(raw) {
 						// sample data mapping
 						var dataSet = raw;
@@ -274,7 +285,7 @@ function initDataTable(){
 				textAlign: 'left',
 			},
 			{
-				field: 'unit_name',
+				field: 'name',
 				title: 'Unit',
 				width:120,
 				textAlign: 'left',
@@ -293,13 +304,13 @@ function initDataTable(){
 				width:80,
 				textAlign: 'left',
 			},
-			{
-				field: 'deadline',
-				title: 'Deadline',
-				sortable: 'asc',
-				width:80,
-				textAlign: 'left',
-			},
+// 			{
+// 				field: 'deadline',
+// 				title: 'Deadline',
+// 				sortable: 'asc',
+// 				width:80,
+// 				textAlign: 'left',
+// 			},
 			// {
 			// 	field: 'date_auction',
 			// 	title: 'Lelang',
@@ -307,13 +318,13 @@ function initDataTable(){
 			// 	width:60,
 			// 	textAlign: 'left',
 			// },
-			{
-				field: 'estimation',
-				title: 'Taksiran',
-				sortable: 'asc',
-				width:60,
-				textAlign: 'left',
-			},
+// 			{
+// 				field: 'estimation',
+// 				title: 'Taksiran',
+// 				sortable: 'asc',
+// 				width:60,
+// 				textAlign: 'left',
+// 			},
 			{
 				field: 'amount',
 				title: 'UP',
@@ -351,17 +362,17 @@ function initDataTable(){
 					return result;
 				}
 			},{
-				field: 'status_transaction',
+				field: 'permit',
 				title: 'Status',
 				sortable: 'asc',
 				width:60,
 				textAlign: 'left',
 				template: function (row) {
 					var result;
-					if(row.status_transaction == 'L'){
-						result = 'Lunas';
+					if(row.permit == 'OJK-1'){
+						result = 'New OJK';
 					}else{
-						result = 'Aktif';
+						result = row.permit;
 					}
 					return result;
 				}
@@ -371,12 +382,6 @@ function initDataTable(){
 				sortable: 'asc',
 				width:200,
 				textAlign: 'left',
-				template: function (row) {
-					var result ="";
-					//result = result + '<button data-id="' + row.id + '" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-edit" title="Edit" ><i class="flaticon-edit-1" style="cursor:pointer;"></i></button>';
-					result = result + row.description_1 +" | "+ row.description_2 + " | "+ row.description_3 + " | " + row.description_4;
-					return result;
-				}
 			},
 			{
 				field: 'action',
@@ -472,6 +477,7 @@ $('[name="no_referensi"]').on('change',function(){
                         template += "<td class='text-center'>"+convertToRupiah(response.data.amount)+"</td>";
                         if(response.data.type_item == 'P'){ type = 'Perhiasan'; }else{type = 'Latakan';}
                         template += "<td class='text-right'>"+type+"</td>";
+                        template += "<td class='text-right'>"+response.data.permit+"</td>";
                         template += "<td class='text-right'>";
                         if(response.data.description_1!=null){template += "- " + response.data.description_1;}
                         if(response.data.description_2!=null){template += "<br>- " + response.data.description_2;}
@@ -481,7 +487,7 @@ $('[name="no_referensi"]').on('change',function(){
                         template += '</tr>';
                     //});
                     $('.kt-portlet__body #mdl_vwcicilan').append(template);   
-                    editItems(response.data.summary);    
+                    //editItems(response.data.summary);    
                     //getType();                   
 				}
 			}
@@ -492,7 +498,7 @@ $('[name="status"]').on('change',function(){
     var idunit = $('[name="id_unit"]').val();
     var customer = $('[name="id_customer"]').val(); 
     var status = $('[name="status"]').val(); 
-    if(status==="Perpanjangan"){
+    if(status==="PERPANJANGAN"){
         customersList(idunit,customer);
     }else{
         $("#no_referensi").empty(); 
