@@ -146,6 +146,7 @@ function initCariForm(){
                     template +='<td class="text-center">'+no+'</td>';
                     template +='<td class="text-center">'+data.name+'</td>';
                     template +='<td class="text-center">'+data.no_perk+'</td>';
+                    // template +='<td>'+moment(data.date_kredit).format('DD-MM-YYYY')+'</td>';
                     template +='<td>'+date+'</td>';
                     template +='<td class="text-center">'+month+'</td>';
                     template +='<td class="text-center">'+year+'</td>';

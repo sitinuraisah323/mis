@@ -538,6 +538,7 @@ class Loaninstallments extends ApiController
 					if($kdkas==$cashcode || $kdkas==$cashcodeBank){				
 						//transaksi
 						$data = array(
+							'trans'			=> $udc['D'],
 							'id_unit'		=> $unit,
 							'no_perk'		=> $udc['A'],
 							'code_trans'	=> $numeric,

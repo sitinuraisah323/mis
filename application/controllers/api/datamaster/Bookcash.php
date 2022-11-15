@@ -83,6 +83,13 @@ class Bookcash extends ApiController
             $this->form_validation->set_rules( 'noa_regular', 'noa regular', 'required' );
             $this->form_validation->set_rules( 'noa_cicilan', 'noa cicilan', 'required' );
 
+            $this->form_validation->set_rules( 'noa_booking', 'noa booking', 'required' );
+            $this->form_validation->set_rules( 'noa_repay', 'noa repayment', 'required' );
+            $this->form_validation->set_rules( 'noa_dpd', 'noa dpd', 'required' );
+            $this->form_validation->set_rules( 'booking', 'booking', 'required' );
+            $this->form_validation->set_rules( 'repayment', 'repayment', 'required' );
+            $this->form_validation->set_rules( 'dpd', 'dpd', 'required' );
+
             if ( $this->form_validation->run() == FALSE )
             {
                 echo json_encode( array(
@@ -108,6 +115,16 @@ class Bookcash extends ApiController
                     'os_unit'				=> $this->convertNumber( $post['os_unit'] ),
                     'noa_cicilan'			=> $this->convertNumber( $post['noa_cicilan'] ),
                     'os_cicilan'			=> $this->convertNumber( $post['os_cicilan'] ),
+                    'noa_booking'			=> $this->convertNumber( $post['noa_booking'] ),
+                    'booking'			=> $this->convertNumber( $post['booking'] ),
+                    'noa_repay'			=> $this->convertNumber( $post['noa_repay'] ),
+                    'repayment'				=> $this->convertNumber( $post['repayment'] ),
+                    'noa_dpd'			=> $this->convertNumber( $post['noa_dpd'] ),
+                    'dpd'			=> $this->convertNumber( $post['dpd'] ),
+                    'amount_outnon'			=> $this->convertNumber( $post['pengeluarannon'] ),
+                    'amount_inmoker'			=> $this->convertNumber( $post['penerimaanmoker'] ),
+                    'total_amountin'			=> $this->convertNumber( $post['total_penerimaan'] ),
+                    'total_amountout'			=> $this->convertNumber( $post['total_pengeluaran'] ),
                     'timestamp'		=> date( 'Y-m-d H:i:s' ),
                     'user_create'	=> $this->session->userdata( 'user' )->id,
                     'user_update'	=> $this->session->userdata( 'user' )->id
@@ -212,9 +229,23 @@ class Bookcash extends ApiController
                     'os_unit'				=> $this->convertNumber( $post['e_os_unit'] ),
                     'noa_cicilan'			=> $this->convertNumber( $post['e_noa_cicilan'] ),
                     'os_cicilan'			=> $this->convertNumber( $post['e_os_cicilan'] ),
+                    
+                    'noa_booking'			=> $this->convertNumber( $post['e_noa_booking'] ),
+                    'booking'			=> $this->convertNumber( $post['e_booking'] ),
+                    'noa_repay'			=> $this->convertNumber( $post['e_noa_repay'] ),
+                    'repayment'				=> $this->convertNumber( $post['e_repayment'] ),
+                    'noa_dpd'			=> $this->convertNumber( $post['e_noa_dpd'] ),
+                    'dpd'			=> $this->convertNumber( $post['e_dpd'] ),
+                    'amount_outnon'			=> $this->convertNumber( $post['e_pengeluarannon'] ),
+                    'amount_inmoker'			=> $this->convertNumber( $post['e_penerimaanmoker'] ),
+                    'total_amountin'			=> $this->convertNumber( $post['e_total_penerimaan'] ),
+                    'total_amountout'			=> $this->convertNumber( $post['e_total_pengeluaran'] ),
+
                     'timestamp'		=> date( 'Y-m-d H:i:s' ),
                     'user_create'	=> $this->session->userdata( 'user' )->id,
-                    'user_update'	=> $this->session->userdata( 'user' )->id
+                    'user_update'	=> $this->session->userdata( 'user' )->id,
+
+                    
                 );
 
                 if ( $this->model->update( $data, $id ) ) {

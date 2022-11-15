@@ -249,6 +249,9 @@
                                     </a>
                                 </li>
                                 <?php endif;?>
+
+
+
                                 <?php if(read_access('dashboards/pengeluaran')):?>
                                 <li class="kt-menu__item " aria-haspopup="true">
                                     <a href="<?php echo base_url('dashboards/pengeluaran'); ?>" class="kt-menu__link ">
@@ -258,6 +261,7 @@
                                     </a>
                                 </li>
                                 <?php endif;?>
+
                             </ul>
                         </div>
                     </li>
@@ -873,7 +877,7 @@
                         <div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--left">
                             <ul class="kt-menu__subnav">
 
-								
+
 
                                 <?php if(read_access('report/regularpawns')):?>
                                 <li class="kt-menu__item " aria-haspopup="true">
@@ -899,6 +903,45 @@
                                     </a>
                                 </li>
                                 <?php endif;?>
+
+                                <?php if(read_access('report/smartphone')):?>
+                                <li class="kt-menu__item  kt-menu__item--submenu" data-ktmenu-submenu-toggle="hover"
+                                    aria-haspopup="true">
+                                    <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
+                                        <span class="kt-menu__link-icon">
+                                            <i class="fa fa-copy"><span></span></i>
+                                        </span>
+                                        <span class="kt-menu__link-text">Gadai Smartphone</span><i
+                                            class="kt-menu__hor-arrow la la-angle-right"></i><i
+                                            class="kt-menu__ver-arrow la la-angle-right"></i>
+                                    </a>
+                                    <div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--right">
+                                        <ul class="kt-menu__subnav">
+                                            <?php if(read_access('report/smartphone')):?>
+                                            <li class="kt-menu__item " aria-haspopup="true">
+                                                <a href="<?php echo base_url('report/smartphone'); ?>"
+                                                    class="kt-menu__link ">
+                                                    <span class="kt-menu__link-icon"><i
+                                                            class="fa fa-file"><span></span></i></span>
+                                                    <span class="kt-menu__link-text">Gadai Smartphone</span>
+                                                </a>
+                                            </li>
+                                            <?php endif;?>
+                                            <?php if(read_access('report/smartphone')):?>
+                                            <li class="kt-menu__item " aria-haspopup="true">
+                                                <a href="<?php echo base_url('report/smartphone/dpd'); ?>"
+                                                    class="kt-menu__link ">
+                                                    <span class="kt-menu__link-icon"><i
+                                                            class="fa fa-file"><span></span></i></span>
+                                                    <span class="kt-menu__link-text">DPD Smartphone</span>
+                                                </a>
+                                            </li>
+                                            <?php endif;?>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <?php endif;?>
+
                                 <?php if(read_access('report/regulercoc')):?>
                                 <li class="kt-menu__item  kt-menu__item--submenu" data-ktmenu-submenu-toggle="hover"
                                     aria-haspopup="true">
@@ -1020,6 +1063,18 @@
                                                 </a>
                                             </li>
                                             <?php endif;?>
+
+                                            <?php if(read_access('report/pendapatan')):?>
+                                            <li class="kt-menu__item " aria-haspopup="true">
+                                                <a href="<?php echo base_url('report/pendapatan/smartphone'); ?>"
+                                                    class="kt-menu__link ">
+                                                    <i
+                                                        class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+                                                    <span class="kt-menu__link-text">Pendapatan Smartphone</span>
+                                                </a>
+                                            </li>
+                                            <?php endif;?>
+
                                             <?php if(read_access('report/pengeluaran')):?>
                                             <li class="kt-menu__item  kt-menu__item--submenu"
                                                 data-ktmenu-submenu-toggle="hover" aria-haspopup="true">
@@ -1421,7 +1476,7 @@
                                 </li>
                                 <?php endif;?>
 
-								<?php if(read_access('report/yogadai')):?>
+                                <?php if(read_access('report/gcore')):?>
                                 <li class="kt-menu__item  kt-menu__item--submenu" data-ktmenu-submenu-toggle="hover"
                                     aria-haspopup="true">
                                     <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
@@ -1440,13 +1495,59 @@
                                                     class="kt-menu__link ">
                                                     <i
                                                         class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
-                                                    <span class="kt-menu__link-text">Outstanding</span>
+                                                    <span class="kt-menu__link-text">Summary Outstanding</span>
                                                 </a>
                                             </li>
                                             <?php endif;?>
-                                            
+
+                                            <?php if(read_access('report/gcore/dpd')):?>
+                                            <li class="kt-menu__item " aria-haspopup="true">
+                                                <a href="<?php echo base_url('report/gcore/dpd'); ?>"
+                                                    class="kt-menu__link ">
+                                                    <i
+                                                        class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+                                                    <span class="kt-menu__link-text">DPD</span>
+                                                </a>
+                                            </li>
+                                            <?php endif;?>
+
+                                            <?php if(read_access('report/gcore1/detailos')):?>
+                                            <li class="kt-menu__item " aria-haspopup="true">
+                                                <a href="<?php echo base_url('report/gcore1/detailos'); ?>"
+                                                    class="kt-menu__link ">
+                                                    <i
+                                                        class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+                                                    <span class="kt-menu__link-text">Detail OS</span>
+                                                </a>
+                                            </li>
+                                            <?php endif;?>
+
+                                            <?php if(read_access('report/gcore/pendapatan')):?>
+                                            <li class="kt-menu__item " aria-haspopup="true">
+                                                <a href="<?php echo base_url('report/gcore/pendapatan'); ?>"
+                                                    class="kt-menu__link ">
+                                                    <i
+                                                        class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+                                                    <span class="kt-menu__link-text">Pendapatan</span>
+                                                </a>
+                                            </li>
+                                            <?php endif;?>
+
+                                            <?php if(read_access('report/gcore/rate')):?>
+                                            <li class="kt-menu__item " aria-haspopup="true">
+                                                <a href="<?php echo base_url('report/gcore/rate'); ?>"
+                                                    class="kt-menu__link ">
+                                                    <i
+                                                        class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+                                                    <span class="kt-menu__link-text">Rate</span>
+                                                </a>
+                                            </li>
+                                            <?php endif;?>
+
                                         </ul>
                                     </div>
+
+
                                 </li>
                                 <?php endif;?>
 
@@ -1488,7 +1589,7 @@
                                 </li>
                                 <?php endif;?>
 
-								
+
 
                                 <?php if(read_access('report/bapkas')):?>
                                 <li class="kt-menu__item " aria-haspopup="true">
@@ -1649,6 +1750,113 @@
                         </div>
                     </li>
                     <?php endif;?>
+
+                    	<?php if(read_access('gcore')):?>
+						<li class="kt-menu__item  kt-menu__item--submenu kt-menu__item--rel"  data-ktmenu-submenu-toggle="click" aria-haspopup="true">
+							<a  href="javascript:;" class="kt-menu__link kt-menu__toggle"><span class="kt-menu__link-text">Report Gcore</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
+							<div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--left">
+								<ul class="kt-menu__subnav">
+									<!--<li class="kt-menu__item "  aria-haspopup="true">-->
+									<!--	<a  href="<?php echo base_url('report/gcore/outstanding'); ?>" class="kt-menu__link ">-->
+									<!--		<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>-->
+									<!--		<span class="kt-menu__link-text">Outstanding</span>-->
+									<!--	</a>-->
+									<!--</li>-->
+									<?php if(read_access('gcore')):?>
+									<li class="kt-menu__item "  aria-haspopup="true">
+										<a  href="<?php echo base_url('gcore/gcore/dpd'); ?>" class="kt-menu__link ">
+											<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>
+											<span class="kt-menu__link-text">DPD</span>
+										</a>
+									</li>
+                                    <?php endif; ?>
+									<li class="kt-menu__item "  aria-haspopup="true">
+										<a  href="<?php echo base_url('gcore/detailos'); ?>" class="kt-menu__link ">
+											<span class="kt-menu__link-icon"><i class="fa fa-file"><span></span></i></span>
+											<span class="kt-menu__link-text">Detail OS</span>
+										</a>
+									</li>
+
+                                    <li class="kt-menu__item  kt-menu__item--submenu" data-ktmenu-submenu-toggle="hover"
+                                    aria-haspopup="true">
+                                    <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
+                                        <span class="kt-menu__link-icon">
+                                            <i class="fa fa-copy"><span></span></i>
+                                        </span>
+                                        <span class="kt-menu__link-text">Kantor Pusat</span><i
+                                            class="kt-menu__hor-arrow la la-angle-right"></i><i
+                                            class="kt-menu__ver-arrow la la-angle-right"></i>
+                                    </a>
+                                    <div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--right">
+                                        <ul class="kt-menu__subnav">
+                                            <?php if(read_access('gcore')):?>
+                                            <li class="kt-menu__item " aria-haspopup="true">
+                                                <a href="<?php echo base_url('gcore/kp'); ?>"
+                                                    class="kt-menu__link ">
+                                                    <span class="kt-menu__link-icon"><i
+                                                            class="fa fa-file"><span></span></i></span>
+                                                    <span class="kt-menu__link-text">Outstanding</span>
+                                                </a>
+                                            </li>
+                                            <?php endif;?>
+                                            <?php if(read_access('gcore')):?>
+                                            <li class="kt-menu__item " aria-haspopup="true">
+                                                <a href="<?php echo base_url('gcore/pencairan'); ?>"
+                                                    class="kt-menu__link ">
+                                                    <span class="kt-menu__link-icon"><i
+                                                            class="fa fa-file"><span></span></i></span>
+                                                    <span class="kt-menu__link-text">Pencairan</span>
+                                                </a>
+                                            </li>
+                                            <?php endif;?>
+                                            <?php if(read_access('gcore')):?>
+                                            <li class="kt-menu__item " aria-haspopup="true">
+                                                <a href="<?php echo base_url('gcore/pelunasan'); ?>"
+                                                    class="kt-menu__link ">
+                                                    <span class="kt-menu__link-icon"><i
+                                                            class="fa fa-file"><span></span></i></span>
+                                                    <span class="kt-menu__link-text">Pelunasan</span>
+                                                </a>
+                                            </li>
+                                            <?php endif;?>
+                                            <?php if(read_access('gcore')):?>
+                                            <li class="kt-menu__item " aria-haspopup="true">
+                                                <a href="<?php echo base_url('gcore/pendapatan'); ?>"
+                                                    class="kt-menu__link ">
+                                                    <span class="kt-menu__link-icon"><i
+                                                            class="fa fa-file"><span></span></i></span>
+                                                    <span class="kt-menu__link-text">Pendapatan</span>
+                                                </a>
+                                            </li>
+                                            <?php endif;?>
+                                            <?php if(read_access('gcore')):?>
+                                            <li class="kt-menu__item " aria-haspopup="true">
+                                                <a href="<?php echo base_url('gcore/pengeluaran'); ?>"
+                                                    class="kt-menu__link ">
+                                                    <span class="kt-menu__link-icon"><i
+                                                            class="fa fa-file"><span></span></i></span>
+                                                    <span class="kt-menu__link-text">Pengeluaran</span>
+                                                </a>
+                                            </li>
+                                            <?php endif;?>
+                                            <?php if(read_access('gcore')):?>
+                                            <li class="kt-menu__item " aria-haspopup="true">
+                                                <a href="<?php echo base_url('gcore/typerate'); ?>"
+                                                    class="kt-menu__link ">
+                                                    <span class="kt-menu__link-icon"><i
+                                                            class="fa fa-file"><span></span></i></span>
+                                                    <span class="kt-menu__link-text">Rate</span>
+                                                </a>
+                                            </li>
+                                            <?php endif;?>
+                                        </ul>
+                                    </div>
+                                </li>
+
+								</ul>
+							</div>
+						</li>
+					<?php endif;?>
 
                     <?php if(read_access('lm')):?>
                     <li class="kt-menu__item  kt-menu__item--submenu kt-menu__item--rel"

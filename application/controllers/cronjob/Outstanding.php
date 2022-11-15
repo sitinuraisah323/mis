@@ -24,8 +24,7 @@ class Outstanding extends Authenticated
 		$this->load->model('regularpawnshistoryModel', 'regularrepair');
 		$this->load->model('MortagesModel', 'mortages');
 		$this->load->model('CustomersModel', 'customers');
-		$this->load->model('CustomersrepairModel', 'customersrepair');
-		$this->load->model('Smartphone', 'smartphone');		
+		$this->load->model('CustomersrepairModel', 'customersrepair');		
 	}
 
 	/**
@@ -223,7 +222,7 @@ class Outstanding extends Authenticated
 
 		if($db){ echo "Success repair data";}
 	}
-
+	
 	public function generate_smartphone($date)
 	{
 		$this->regular->db
@@ -264,7 +263,7 @@ class Outstanding extends Authenticated
 			}
 
 			$this->regular->db
-				->where('units_regularpawns.date_sbk =', $date)
+				// ->where('units_regularpawns.date_sbk =', $date)
 				->where_in('units_regularpawns.status_transaction ', $status);
 			if($get['id_unit']){
 				$this->regular->db
@@ -341,28 +340,17 @@ class Outstanding extends Authenticated
 		}
 	}
 
+	public function generate(){
 
-	// public function getSmartphone($today)
-	// {
-	// 	$data = $this->regular->db
-	// 	->select('*')
-	// 	->from('units_regularpawns')
-	// 	->where('date_sbk', $today)
-	// 	->like('description_1', 'HP')
-	// 	->get()->result();
-		
-	// 	return $data;
-	// }
-
-	public function generate()
-	{
-
-		if($date = $this->input->get('date'))
-		{
+		if($date = $this->input->get('date')){
 			$date = $date;
 		}else{
 			$date = date('Y-m-d');
 		}
+		
+		//smartphone
+		$smartphone = $this->generate_smartphone($date);
+
 
 		//$date = '2020-10-27';
 		$totalUp = 0;
@@ -378,10 +366,6 @@ class Outstanding extends Authenticated
 		$totalPencairanMortages = 0;
 		$totalOst = 0;
 
-		//smartphone
-			$smartphone = $this->generate_smartphone($date);
-			
-
 		$this->units->db->select('units.id, units.name, area')
 			->join('areas','areas.id = units.id_area')
 			->order_by('units.id','asc');
@@ -391,14 +375,9 @@ class Outstanding extends Authenticated
 		if($idArea = $this->input->get('id_area')){
 		    $this->units->db->where('units.id_area', $idArea);
 		}
-
-		
 		$units = $this->units->db->get('units')->result();
 
 		foreach ($units as $unit){
-
-			
-			
 			//get os yesterday
 			$getOstYesterday = $this->model->db
 								->where('date <', $date)
@@ -425,7 +404,6 @@ class Outstanding extends Authenticated
 			$realos 		= $this->regular->getRealOS($unit->id,$date);
 
 			$dpddate = date('Y-m-d', strtotime('-1 days', strtotime($date)));
-
 			
 
 		
@@ -517,8 +495,7 @@ class Outstanding extends Authenticated
 			
 			$checkDpd = $this->model
 				->db->get_where('units_dpd',array('id_unit' => $unit->id,'date'=>$date));
-			if($checkDpd->num_rows() > 0)
-			{
+			if($checkDpd->num_rows() > 0){
 				$this->model->db->update('units_dpd', $total_dpd, array('id_unit' => $unit->id,'date'=>$date));
 			}else{
 				$this->model->db->insert('units_dpd', $total_dpd);

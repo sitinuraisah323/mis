@@ -153,7 +153,9 @@ function initCariForm(){
                             template += "<td class='text-center'>"+moment(data.bapkas.date).format('DD-MM-YYYY')+"</td>";
                             template += "<td class='text-right'>"+convertToRupiah(parseInt(data.bapkas.amount_balance_first))+"</td>";
                             template += "<td class='text-right'>"+convertToRupiah(parseInt(data.bapkas.amount_in))+"</td>";
+                            template += "<td class='text-right'>"+convertToRupiah(parseInt(data.bapkas.amount_inmoker))+"</td>";
                             template += "<td class='text-right'>"+convertToRupiah(parseInt(data.bapkas.amount_out))+"</td>";
+                            template += "<td class='text-right'>"+convertToRupiah(parseInt(data.bapkas.amount_outnon))+"</td>";
                             template += "<td class='text-right'>"+convertToRupiah(parseInt(data.bapkas.amount_balance_final))+"</td>";
                             template += "<td class='text-right'>"+convertToRupiah(parseInt(data.bapkas.amount_gap))+"</td>";
                             if(data.bapkas.os_cicilan!=null){oscicilan= parseInt(data.bapkas.os_cicilan);}else{oscicilan=0;}

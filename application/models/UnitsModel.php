@@ -33,6 +33,16 @@ class UnitsModel extends Master
 		return $this->db->get('units as a')->result();
 	}
 
+	public function get_unit_bybranch($cabang)
+	{
+		$this->db->select('a.id, a.name, a.code, a.office_id');
+		// $this->db->join('cabang as b','b.id=a.id_cabang');		
+		$this->db->where('a.branch_id',$cabang);		
+		$this->db->order_by('a.id','desc');		
+		return $this->db->get('units as a')->result();
+	}
+
+	
 	public function get_unit()
 	{
 		$this->db->select('a.id,b.cabang,a.name, a.code,c.area');
@@ -157,7 +167,7 @@ class UnitsModel extends Master
 			) as total_up
 			")
 			->join('areas','areas.id = units.id_area')
-			->where('areas.status', 'PUBLISH')
+			// ->where('areas.status', 'PUBLISH')
 			->order_by('areas.id','asc')
 			->order_by('total_up','desc')
 			->get('units')->result();

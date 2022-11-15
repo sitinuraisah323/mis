@@ -478,6 +478,13 @@ class RegularpawnsModel extends Master
 			->get()->row();
 	}
 
+	public function LastDateTransaction()
+	{
+		return $this->db->select('date_sbk as date')->from($this->table)
+			->order_by('date_sbk', 'desc')
+			->get()->row()->date;
+	}
+
 	public function getLastDateTransactionUnit($idunit)
 	{
 		return $this->db->select('date_sbk as date')->from($this->table)

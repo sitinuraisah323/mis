@@ -219,26 +219,26 @@ class Dpd extends Authenticated
 	
 	}
 
-	function calculateDenda($up, $dpd) {
-		$sumDay = intval($dpd - 15);
-		if($sumDay > 0){
-			$rate=0;
-			if(intval($up) < 10000000){
-				$rate = 0.0583/100;
-			}else{
-				$rate = 0.0433/100;
-			}
-			$calculate = round($sumDay * $rate * $up);
-			$modusCalculate = $calculate % 500;
-			if($modusCalculate > 0){
-				$round = 500;
-			}else{
-				$round = 0;
-			}
-			return $calculate - $modusCalculate + $round;
-		}
-		return 0;
-	}
+	// function calculateDenda($up, $dpd) {
+	// 	$sumDay = intval($dpd - 15);
+	// 	if($sumDay > 0){
+	// 		$rate=0;
+	// 		if(intval($up) < 10000000){
+	// 			$rate = 0.0583/100;
+	// 		}else{
+	// 			$rate = 0.0433/100;
+	// 		}
+	// 		$calculate = round($sumDay * $rate * $up);
+	// 		$modusCalculate = $calculate % 500;
+	// 		if($modusCalculate > 0){
+	// 			$round = 500;
+	// 		}else{
+	// 			$round = 0;
+	// 		}
+	// 		return $calculate - $modusCalculate + $round;
+	// 	}
+	// 	return 0;
+	// }
 
 	function date_between($dateStart, $dateEnd) {
 		$date1 = new DateTime($dateStart);
@@ -252,6 +252,8 @@ class Dpd extends Authenticated
 
 		//To display the final no. of days (result)
 		return $Difference_In_Days;
+
+			
 	}
 
 }

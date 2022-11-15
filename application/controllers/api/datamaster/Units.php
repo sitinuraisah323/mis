@@ -8,7 +8,10 @@ class Units extends ApiController
 	{
 		parent::__construct();
 		$this->load->model('UnitsModel', 'units');
+        $this->load->model('CabangModel', 'cabang');
+        $this->load->model('AreasModel', 'areas');
 	}
+
 
 	public function index()
 	{
@@ -62,6 +65,34 @@ class Units extends ApiController
 	{
 		echo json_encode(array(
 			'data'	    => 	$this->units->get_units_byarea($area),
+			'status'	=> true,
+			'message'	=> 'Successfully Get Data Units'
+		));
+    }
+
+    //detail OS
+     public function get_area()
+	{
+		echo json_encode(array(
+			'data'	    => 	$this->areas->get_area(),
+			'status'	=> true,
+			'message'	=> 'Successfully Get Data Units'
+		));
+    }
+
+      public function get_branch_byarea($area)
+	{
+		echo json_encode(array(
+			'data'	    => 	$this->cabang->get_branch_byarea($area),
+			'status'	=> true,
+			'message'	=> 'Successfully Get Data Units'
+		));
+    }
+
+    public function get_unit_bybranch($cabang)
+	{
+		echo json_encode(array(
+			'data'	    => 	$this->units->get_unit_bybranch($cabang),
 			'status'	=> true,
 			'message'	=> 'Successfully Get Data Units'
 		));

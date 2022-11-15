@@ -618,9 +618,11 @@ class Regularpawns extends ApiController
 	public function smartphone(){
 		$this->smartphone->db
 			->select('units.name as unit, customers.name as customer_name,customers.nik as nik, (select date_repayment from units_repayments where units_repayments.no_sbk = units_smartphone.no_sbk and units_repayments.id_unit = units_smartphone.id_unit and units_repayments.permit = units_smartphone.permit limit 1 ) as date_repayment')
+			->join('units_repayments as repay')
 			->join('customers','units_smartphone.id_customer = customers.id')
 			->join('units','units.id = units_smartphone.id_unit')
 			->like('description_1', 'HP');
+// 			->order_by('units.name', 'asc');
 
 		if($get = $this->input->get()){
 			$status =null;
@@ -653,10 +655,19 @@ class Regularpawns extends ApiController
 				$this->smartphone->db->where('units.id', $this->session->userdata('user')->id_unit);
 			}
 
-			$this->smartphone->db
+			// if($status == 'L'){
+			// 	$this->smartphone->db
+			// 	->where('repay.date_repayment >=', $get['dateStart'])
+			// 	->where('repay.date_repayment <=', $get['dateEnd'])
+			// 	->where_in('repay.status_transaction ', $status);
+			// }else{
+				$this->smartphone->db
 				->where('units_smartphone.date_sbk >=', $get['dateStart'])
 				->where('units_smartphone.date_sbk <=', $get['dateEnd'])
 				->where_in('units_smartphone.status_transaction ', $status);
+			// }
+
+			
 			if($get['id_unit']){
 				$this->smartphone->db
 					->where('units_smartphone.id_unit', $get['id_unit']);
@@ -691,6 +702,118 @@ class Regularpawns extends ApiController
 			'data'	=> $data,
 			'status'	=> true,
 			'message'	=> 'Successfully Get Data Gadai Smartphone'
+		));
+	}
+	
+	public function dpd()
+	{
+	    $last = $this->regulars->LastDateTransaction();
+		$date = date('Y-m-d');
+		$this->smartphone->db
+			->select("customers.name as customer_name,address,units.name, mobile, ROUND(units_smartphone.capital_lease * 1 * amount) as tafsiran_sewa,
+				CASE WHEN amount <=1000000 THEN 9000
+				WHEN amount <= 2500000 THEN 20000
+				WHEN amount <= 5000000 THEN 27000
+				WHEN amount <= 10000000 THEN 37000
+				WHEN amount <= 15000000 THEN 72000
+				WHEN amount <= 20000000 THEN 82000
+				WHEN amount <= 25000000 THEN 102000
+				WHEN amount <= 50000000 THEN 122000
+				WHEN amount <= 75000000 THEN 137000
+				ELSE '152000'
+				END AS new_admin, 
+				status_transaction,
+				DATEDIFF('$date', units_smartphone.deadline) as dpd				
+				")
+			->join('customers','units_smartphone.id_customer = customers.id')
+			->join('units','units.id = units_smartphone.id_unit')
+			->where('units_smartphone.status_transaction ', 'N');
+
+		if($date = $this->input->get('dateEnd')){
+			$this->smartphone->db
+			->where('deadline <=', $this->input->get('dateEnd'));	
+		}else{
+			$this->smartphone->db
+			->where('deadline <=', $date);	
+		}
+			// ->where("DATEDIFF('$date', units_smartphone.deadline) >", 30);
+		if($get = $this->input->get()){
+			$this->smartphone->db
+				->where('units_smartphone.deadline >=', $this->input->get('dateStart'));
+
+			// if($this->input->get('area')){
+			// 	$this->smartphone->db->where('units.id_area', $get['area']);
+			// }
+
+			// if($this->input->get('cabang')){
+			// 	$this->smartphone->db->where('units.id_cabang', $get['cabang']);
+			// }
+
+			// if($this->input->get('unit')){
+			// 	$this->smartphone->db->where('units_smartphone.id_unit', $get['unit']);
+			// }
+
+			if($area = $this->input->get('area')){
+				$this->smartphone->db->where('units.id_area', $area);
+			}else if($this->session->userdata('user')->level == 'area'){
+				$this->smartphone->db->where('units.id_area', $this->session->userdata('user')->id_area);
+			}
+	
+			
+			if($cabang = $this->input->get('cabang')){
+				$this->smartphone->db->where('units.id_cabang', $cabang);
+			}else if($this->session->userdata('user')->level == 'cabang'){
+				$this->smartphone->db->where('units.id_cabang', $this->session->userdata('user')->id_cabang);
+			}
+	
+			if($unit = $this->input->get('unit')){
+				$this->smartphone->db->where('units.id', $unit);
+			}else if($this->session->userdata('user')->level == 'unit'){
+				$this->smartphone->db->where('units.id', $this->session->userdata('user')->id_unit);
+			}			
+
+			if($permit = $this->input->get('permit')){
+				$this->smartphone->db->where('units_smartphone.permit', $permit);
+			}
+			if($packet = $this->input->get('packet')){
+				if($packet === '120-135'){
+					$this->smartphone->db
+						->where("DATEDIFF('$date', units_smartphone.deadline) >=", 0)
+						->where("DATEDIFF('$date', units_smartphone.deadline) <=", 15)
+					->where('deadline <',$this->input->get('dateEnd') ? $this->input->get('dateEnd') : date('Y-m-d'));
+				}
+				if($packet === '136-150'){
+					$this->smartphone->db
+					->where("DATEDIFF('$date', units_smartphone.deadline) >=", 16)
+					->where("DATEDIFF('$date', units_smartphone.deadline) <=", 30)
+					->where('deadline <',$this->input->get('dateEnd') ? $this->input->get('dateEnd') : date('Y-m-d'));
+				}
+				if($packet === '>150'){
+					$this->smartphone->db				
+					->where("DATEDIFF('$date', units_smartphone.deadline) >=", 31);
+				}
+				if($packet === '-7'){
+					$this->smartphone->db
+					->where("DATEDIFF('$date', units_smartphone.deadline) >=", -7)
+					->where("DATEDIFF('$date', units_smartphone.deadline) <=", 0);
+				}
+				if($packet === '-10'){
+					$this->smartphone->db
+					->where("DATEDIFF('$date', units_smartphone.deadline) >=", -10)
+					->where("DATEDIFF('$date', units_smartphone.deadline) <=", 0);
+				}
+				if($packet === 'all'){
+					$this->smartphone->db
+					->where('deadline <', date('Y-m-d'));			
+				}
+			}
+		}
+		$this->smartphone->db->order_by('dpd','DESC');
+		$data = $this->smartphone->all();
+		echo json_encode(array(
+			'data'	=> $data,
+			'status'	=> true,
+			'message'	=> 'Successfully Get Data Regular Pawns'
 		));
 	}
 
@@ -1216,5 +1339,26 @@ class Regularpawns extends ApiController
 		}
 		return $this->sendMessage($result, 'Successfully get Miss Transaction');
 	}
+	// function database2()
+	// {
+	// 	// echo "yess"; exit;
+	// 	//load class database
+	// 		// $DB1=$this->load->database('default',TRUE);
+	// 		$DB2=$this->load->database('db2',TRUE);
+ 
+ 
+	// 		$querydb2 = $DB2->select('*')->get('pawn_transactions'); // tampil data DB2 table admin
+	// 		$user2 = $querydb2->result();
+ 
+	// 		$viewData = array();
+	// 		// $data['db1Data']=$user1;
+	// 		$data['db2Data']=$user2;
+	// 		var_dump($user2);exit;
+ 
+	// 		$this->load->view('data',$data);
+	// }
+
+	
+	
 
 }

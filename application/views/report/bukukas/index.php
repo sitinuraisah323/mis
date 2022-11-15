@@ -154,6 +154,7 @@ $this->load->view('temp/MenuBar.php');
 						      		<th class="text-center">No</th>
 						      		<th class="text-center">Unit</th>
 						      		<th class="text-center">No Perk</th>
+                                    <!-- <th>Tanggal Kredit</th> -->
 						      		<th>Tanggal</th>
 						      		<th class="text-center">Bulan</th>
 						      		<th class="text-center">Tahun</th>

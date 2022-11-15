@@ -86,7 +86,7 @@ class Customers extends Authenticated
 		}else{
 			$now = date('Y-m-d');
 		$this->customers->db
-		->select("datediff('$now', birth_date) as age_customer")
+		->select("datediff('$now', birth_date) as age_customer, units.name as unit")
 		->join('units','units.id = customers.id_unit');
 		$data =  $this->customers->all();
 		// echo json_encode(array(
@@ -173,7 +173,7 @@ class Customers extends Authenticated
 		$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(10);
 
 		$objPHPExcel->getActiveSheet()
-			->getStyle('A1:V1')
+			->getStyle('A1:W1')
 			->getFill()
 			->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
 			->getStartColor()

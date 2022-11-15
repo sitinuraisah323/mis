@@ -37,12 +37,23 @@ function convertToRupiah(angka) {
 
 var saldoawal = document.getElementById('saldoawal');
 var penerimaan = document.getElementById('penerimaan');
+var penerimaanmoker = document.getElementById('penerimaanmoker');
+
 var pengeluaran = document.getElementById('pengeluaran');
 var totmutasi = document.getElementById('totmutasi');
+
+var total_penerimaan = document.getElementById('total_penerimaan');
+var total_pengeluaran = document.getElementById('total_pengeluaran');
+
 var osunit = document.getElementById('os_unit');
 var oscicialn = document.getElementById('os_cicilan');
 var noaregular = document.getElementById('noa_regular');
 var noacicilan = document.getElementById('noa_cicilan');
+
+var booking = document.getElementById('booking');
+var repayment = document.getElementById('repayment');
+var dpd = document.getElementById('dpd');
+var pengeluarannon = document.getElementById('pengeluarannon');
 
 osunit.addEventListener('keyup', function(e) {
     convertNumber();
@@ -70,7 +81,36 @@ penerimaan.addEventListener('keyup', function(e) {
     hitung();
     calculateSum();
 });
+
+penerimaanmoker.addEventListener('keyup', function(e) {
+    convertNumber();
+    hitung();
+    calculateSum();
+});
+
 pengeluaran.addEventListener('keyup', function(e) {
+    convertNumber();
+    hitung();
+    calculateSum();
+});
+
+
+booking.addEventListener('keyup', function(e) {
+    convertNumber();
+    hitung();
+    calculateSum();
+});
+repayment.addEventListener('keyup', function(e) {
+    convertNumber();
+    hitung();
+    calculateSum();
+});
+dpd.addEventListener('keyup', function(e) {
+    convertNumber();
+    hitung();
+    calculateSum();
+});
+pengeluarannon.addEventListener('keyup', function(e) {
     convertNumber();
     hitung();
     calculateSum();
@@ -78,13 +118,25 @@ pengeluaran.addEventListener('keyup', function(e) {
 
 var esaldoawal = document.getElementById('e_saldoawal');
 var epenerimaan = document.getElementById('e_penerimaan');
+var epenerimaanmoker = document.getElementById('e_penerimaanmoker');
 var epengeluaran = document.getElementById('e_pengeluaran');
+
 var etotmutasi = document.getElementById('e_totmutasi');
+var etotal_penerimaan = document.getElementById('e_total_penerimaan');
+var etotal_pengeluaran = document.getElementById('e_total_pengeluaran');
+
 var eosunit = document.getElementById('e_os_unit');
 var eoscicilan = document.getElementById('e_os_cicilan');
 var enoaregular = document.getElementById('e_noa_regular');
 var enoacicilan = document.getElementById('e_noa_cicilan');
 
+var ebooking = document.getElementById('e_booking');
+var erepayment = document.getElementById('e_repayment');
+var edpd = document.getElementById('e_dpd');
+var enoabooking = document.getElementById('e_noa_booking');
+var enoarepay = document.getElementById('e_noa_repay');
+var enoadpd = document.getElementById('e_noa_dpd');
+var epengeluarannon = document.getElementById('e_pengeluarannon');
 
 esaldoawal.addEventListener('keyup', function(e) {
     convertEditNumber();
@@ -92,6 +144,11 @@ esaldoawal.addEventListener('keyup', function(e) {
     e_calculateSum();
 });
 epenerimaan.addEventListener('keyup', function(e) {
+    convertEditNumber();
+    e_hitung();
+    e_calculateSum();
+});
+epenerimaanmoker.addEventListener('keyup', function(e) {
     convertEditNumber();
     e_hitung();
     e_calculateSum();
@@ -118,54 +175,137 @@ enoacicilan.addEventListener('keyup', function(e) {
     e_hitung();
 });
 
+ebooking.addEventListener('keyup', function(e) {
+    convertEditNumber();
+    e_hitung();
+});
+erepayment.addEventListener('keyup', function(e) {
+    convertEditNumber();
+    e_hitung();
+});
+edpd.addEventListener('keyup', function(e) {
+    convertEditNumber();
+    e_hitung();
+});
+enoabooking.addEventListener('keyup', function(e) {
+    convertEditNumber();
+    e_hitung();
+});
+enoarepay.addEventListener('keyup', function(e) {
+    convertEditNumber();
+    e_hitung();
+});
+enoadpd.addEventListener('keyup', function(e) {
+    convertEditNumber();
+    e_hitung();
+});
+
+epengeluarannon.addEventListener('keyup', function(e) {
+    convertEditNumber();
+    e_hitung();
+});
+
 function convertNumber() {
     var saldoawal = document.getElementById('saldoawal');
     var penerimaan = document.getElementById('penerimaan');
+    var penerimaanmoker = document.getElementById('penerimaanmoker');
     var pengeluaran = document.getElementById('pengeluaran');
     var noaregular = document.getElementById('noa_regular');
     var osunit = document.getElementById('os_unit');
     var noacicilan = document.getElementById('noa_cicilan');
     var oscicialn = document.getElementById('os_cicilan');
 
+    var booking = document.getElementById('booking');
+    var noabooking = document.getElementById('noa_booking');
+    var repayment = document.getElementById('repayment');
+    var noarepay = document.getElementById('noa_repay');
+    var dpd = document.getElementById('dpd');
+    var noadpd = document.getElementById('noa_dpd');
+    var pengeluarannon = document.getElementById('pengeluarannon');
+
+
+
     saldoawal.value = formatRupiah(saldoawal.value);
     penerimaan.value = formatRupiah(penerimaan.value);
+    penerimaanmoker.value = formatRupiah(penerimaanmoker.value);
     pengeluaran.value = formatRupiah(pengeluaran.value);
     noaregular.value = formatRupiah(noaregular.value);
     osunit.value = formatRupiah(osunit.value);
     noacicilan.value = formatRupiah(noacicilan.value);
     oscicialn.value = formatRupiah(oscicialn.value);
+
+
+    booking.value = formatRupiah(booking.value);
+    noa_booking.value = formatRupiah(noa_booking.value);
+    repayment.value = formatRupiah(repayment.value);
+    noa_repay.value = formatRupiah(noa_repay.value);
+    dpd.value = formatRupiah(dpd.value);
+    noa_dpd.value = formatRupiah(noa_dpd.value);
+    pengeluarannon.value = formatRupiah(pengeluarannon.value);
+
 }
 
 function convertEditNumber() {
     var saldoawal = document.getElementById('e_saldoawal');
     var penerimaan = document.getElementById('e_penerimaan');
+    var penerimaanmoker = document.getElementById('e_penerimaanmoker');
     var pengeluaran = document.getElementById('e_pengeluaran');
     var osunit = document.getElementById('e_os_unit');
     var oscicilan = document.getElementById('e_os_cicilan');
     var noaregular = document.getElementById('e_noa_regular');
     var noacicilan = document.getElementById('e_noa_cicilan');
 
+    var booking = document.getElementById('e_booking');
+    var noabooking = document.getElementById('e_noa_booking');
+    var repayment = document.getElementById('e_repayment');
+    var noarepay = document.getElementById('e_noa_repay');
+    var dpd = document.getElementById('e_dpd');
+    var noadpd = document.getElementById('e_noa_dpd');
+    var pengeluarannon = document.getElementById('e_pengeluarannon');
+
     saldoawal.value = formatRupiah(saldoawal.value);
     penerimaan.value = formatRupiah(penerimaan.value);
+    penerimaanmoker.value = formatRupiah(penerimaanmoker.value);
     pengeluaran.value = formatRupiah(pengeluaran.value);
     osunit.value = formatRupiah(osunit.value);
     oscicilan.value = formatRupiah(oscicilan.value);
     noaregular.value = formatRupiah(noaregular.value);
     noacicilan.value = formatRupiah(noacicilan.value);
+
+    booking.value = formatRupiah(booking.value);
+    noabooking.value = formatRupiah(noabooking.value);
+    repayment.value = formatRupiah(repayment.value);
+    noarepay.value = formatRupiah(noarepay.value);
+    dpd.value = formatRupiah(dpd.value);
+    noadpd.value = formatRupiah(noadpd.value);
+    pengeluarannon.value = formatRupiah(pengeluarannon.value);
 }
 
 function convertView() {
     var saldoawal = document.getElementById('v_saldoawal');
     var penerimaan = document.getElementById('v_penerimaan');
+    var penerimaanmoker = document.getElementById('v_penerimaanmoker');
     var pengeluaran = document.getElementById('v_pengeluaran');
     var total = document.getElementById('v_total');
     var selisih = document.getElementById('v_selisih');
     var saldoakhir = document.getElementById('v_saldoakhir');
+
     var mutasi = document.getElementById('v_mutasi');
+    var total_penerimaan = document.getElementById('v_total_penerimaan');
+    var total_pengeluaran = document.getElementById('v_total_pengeluaran');
+
     var osunit = document.getElementById('v_os_unit');
     var oscicilan = document.getElementById('v_os_cicilan');
     var noaregular = document.getElementById('v_noa_regular');
     var noacicilan = document.getElementById('v_noa_cicilan');
+
+    var booking = document.getElementById('v_booking');
+    var noabooking = document.getElementById('v_noa_booking');
+    var repayment = document.getElementById('v_repayment');
+    var noarepay = document.getElementById('v_noa_repay');
+    var dpd = document.getElementById('v_dpd');
+    var noadpd = document.getElementById('v_noa_dpd');
+    var pengeluarannon = document.getElementById('v_pengeluarannon');
 
     saldoawal.value = formatRupiah(saldoawal.value);
     penerimaan.value = formatRupiah(penerimaan.value);
@@ -177,20 +317,44 @@ function convertView() {
     oscicilan.value = formatRupiah(oscicilan.value);
     noaregular.value = formatRupiah(noaregular.value);
     noacicilan.value = formatRupiah(noacicilan.value);
+
+    booking.value = formatRupiah(booking.value);
+    noabooking.value = formatRupiah(noabooking.value);
+    repayment.value = formatRupiah(repayment.value);
+    noarepay.value = formatRupiah(noarepay.value);
+    dpd.value = formatRupiah(dpd.value);
+    noadpd.value = formatRupiah(noadpd.value);
+    pengeluarannon.value = formatRupiah(pengeluarannon.value);
+
     if (parseInt(mutasi.value) > 0) {
         mutasi.value = formatRupiah(mutasi.value);
     }
+    if (parseInt(total_penerimaan.value) > 0) {
+        total_penerimaan.value = formatRupiah(total_penerimaan.value);
+    }
+    if (parseInt(total_pengeluaran.value) > 0) {
+        total_pengeluaran.value = formatRupiah(total_pengeluaran.value);
+    }
+
 }
 
 function convertEdit() {
     var saldoawal = document.getElementById('e_saldoawal');
     var penerimaan = document.getElementById('e_penerimaan');
+    var penerimaanmoker = document.getElementById('e_penerimaanmoker');
     var pengeluaran = document.getElementById('e_pengeluaran');
     var total = document.getElementById('e_total');
     var selisih = document.getElementById('e_selisih');
     var saldoakhir = document.getElementById('e_saldoakhir');
     var totmutasi = document.getElementById('e_totmutasi');
     var mutasi = document.getElementById('e_mutasi');
+
+
+    var total_penerimaan = document.getElementById('e_total_penerimaan');
+    var totpenerimaan = document.getElementById('e_totpenerimaan');
+    var total_pengeluaran = document.getElementById('e_total_pengeluaran');
+    var totpengeluaran = document.getElementById('e_totpengeluaran');
+
     var osunit = document.getElementById('e_os_unit');
     var oscicilan = document.getElementById('e_os_cicilan');
     var noaregular = document.getElementById('e_noa_regular');
@@ -198,8 +362,17 @@ function convertEdit() {
     var enoa = document.getElementById('e_noa');
     var eos = document.getElementById('e_os');
 
+    var booking = document.getElementById('e_booking');
+    var noabooking = document.getElementById('e_noa_booking');
+    var repayment = document.getElementById('e_repayment');
+    var noarepay = document.getElementById('e_noa_repay');
+    var dpd = document.getElementById('e_dpd');
+    var noadpd = document.getElementById('e_noa_dpd');
+    var pengeluarannon = document.getElementById('e_pengeluarannon');
+
     saldoawal.value = formatRupiah(saldoawal.value);
     penerimaan.value = formatRupiah(penerimaan.value);
+    penerimaanmoker.value = formatRupiah(penerimaanmoker.value);
     pengeluaran.value = formatRupiah(pengeluaran.value);
     total.value = formatRupiah(total.value);
     selisih.value = formatRupiah(selisih.value);
@@ -208,8 +381,23 @@ function convertEdit() {
     oscicilan.value = formatRupiah(oscicilan.value);
     noaregular.value = formatRupiah(noaregular.value);
     noacicilan.value = formatRupiah(noacicilan.value);
+
+    booking.value = formatRupiah(booking.value);
+    noabooking.value = formatRupiah(noabooking.value);
+    repayment.value = formatRupiah(repayment.value);
+    noarepay.value = formatRupiah(noarepay.value);
+    dpd.value = formatRupiah(dpd.value);
+    noadpd.value = formatRupiah(noadpd.value);
+    pengeluarannon.value = formatRupiah(pengeluarannon.value);
+
     if (parseInt(totmutasi.value) > 0) {
         totmutasi.value = formatRupiah(totmutasi.value);
+    }
+    if (parseInt(total_pengeluaran.value) > 0) {
+        total_pengeluaran.value = formatRupiah(total_pengeluaran.value);
+    }
+    if (parseInt(total_penerimaan.value) > 0) {
+        total_penerimaan.value = formatRupiah(total_penerimaan.value);
     }
     if (parseInt(enoa.value) > 0) {
         enoa.value = formatRupiah(enoa.value);
@@ -372,11 +560,22 @@ function initDataTable() {
             },
             {
                 field: 'amount_in',
-                title: 'Penerimaan',
+                title: 'Penerimaan Operasional',
                 textAlign: 'left',
                 template: function(row) {
                     var result = "<div class='date-td'>";
                     result = convertToRupiah(row.amount_in);
+                    result = result + "</div>";
+                    return result;
+                }
+            },
+            {
+                field: 'amount_inmoker',
+                title: 'Penerimaan Moker',
+                textAlign: 'left',
+                template: function(row) {
+                    var result = "<div class='date-td'>";
+                    result = convertToRupiah(row.amount_inmoker);
                     result = result + "</div>";
                     return result;
                 }
@@ -399,6 +598,74 @@ function initDataTable() {
                 template: function(row) {
                     var result = "<div class='date-td'>";
                     result = convertToRupiah(row.amount_balance_final);
+                    result = result + "</div>";
+                    return result;
+                }
+            },
+            {
+                field: 'noa_booking',
+                title: 'NOA Booking',
+                textAlign: 'left',
+                template: function(row) {
+                    var result = "<div class='date-td'>";
+                    result = convertToRupiah(row.noa_booking);
+                    result = result + "</div>";
+                    return result;
+                }
+            },
+            {
+                field: 'booking',
+                title: 'Booking',
+                textAlign: 'left',
+                template: function(row) {
+                    var result = "<div class='date-td'>";
+                    result = convertToRupiah(row.booking);
+                    result = result + "</div>";
+                    return result;
+                }
+            },
+            {
+                field: 'noa_repay',
+                title: 'NOA Pelunasan',
+                textAlign: 'left',
+                template: function(row) {
+                    var result = "<div class='date-td'>";
+                    result = convertToRupiah(row.noa_repay);
+                    result = result + "</div>";
+                    return result;
+                }
+            },
+            {
+                field: 'repayment',
+                title: 'Pelunasan',
+                textAlign: 'left',
+                template: function(row) {
+                    var result = "<div class='date-td'>";
+                    result = convertToRupiah(row.repayment);
+                    result = result + "</div>";
+                    return result;
+                }
+            },
+
+
+            {
+                field: 'noa_dpd',
+                title: 'NOA DPD',
+                textAlign: 'left',
+                template: function(row) {
+                    var result = "<div class='date-td'>";
+                    result = convertToRupiah(row.noa_dpd);
+                    result = result + "</div>";
+                    return result;
+                }
+            },
+            {
+                field: 'dpd',
+                title: 'DPD',
+                textAlign: 'left',
+                template: function(row) {
+                    var result = "<div class='date-td'>";
+                    result = convertToRupiah(row.dpd);
                     result = result + "</div>";
                     return result;
                 }
@@ -460,6 +727,7 @@ function initDataTable() {
                         <?php if($this->session->userdata('user')->level=='administrator'){ ?>
                         result = result + '<span data-id="' + row.id +
                             '" href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md btn_delete" title="Delete" ><i class="flaticon2-trash" style="cursor:pointer;"></i></span>';
+
                         <?php } ?>
                         <?php } ?>
 
@@ -470,6 +738,8 @@ function initDataTable() {
                     result = result + '<a href="<?php echo base_url('transactions/bookcash/preview'); ?>/' +
                         row.id +
                         '" target="_blank" class="btn btn-sm btn-clean btn-icon btn-icon-md pdfBtn" title="Preview BAP Kas"><i class="flaticon2-print" style="cursor:pointer;"></i></a>';
+
+                    // result = result + "<span data-id='"+ row.id +"' href='' class='btn btn-sm btn-clean btn-icon btn-icon-md EditBtn' title='Edit Data' data-toggle='modal' data-target='#modal_edit'><i class='flaticon-edit-1' style='cursor:pointer;'></i></span>";
 
                     return result;
                 }
@@ -589,26 +859,41 @@ function initCariForm() {
     //events
     $('#btn_add_submit').on('click', function() {
         var isValid = $("#form_add").valid();
+        var os = $('[name="os"]').val();
+        var noa = $('[name="noa"]').val();
+        var saldo = $('[name="saldoakhir"]').val();
         if (isValid) {
             KTApp.block('#modal_add .modal-content', {});
-            $.ajax({
-                type: 'POST',
-                url: "<?php echo base_url("api/datamaster/bookcash/insert"); ?>",
-                data: $('#form_add').serialize(),
-                dataType: "json",
-                success: function(data, status) {
-                    KTApp.unblock('#modal_add .modal-content');
-                    if (data.status == true) {
-                        datatable.reload();
-                        $('#modal_add').modal('hide');
-                        AlertUtil.showSuccess(data.message, 5000);
-                    } else {
-                        AlertUtil.showFailedDialogAdd(data.message);
-                    }
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    KTApp.unblock('#modal_add .modal-content');
-                    AlertUtil.showFailedDialogAdd("server busy please try again later");
+            swal.fire({
+                title: 'Anda Yakin?',
+                text: "Total Os = " + os + ", Noa = " + noa + ", Saldo Akhir = " + saldo,
+                type: 'warning',
+                showBackButton: true,
+                confirmButtonText: 'Ya, Benar'
+            }).then(function(result) {
+                if (result.value) {
+                    // KTApp.blockPage();
+                    $.ajax({
+                        type: 'POST',
+                        url: "<?php echo base_url("api/datamaster/bookcash/insert"); ?>",
+                        data: $('#form_add').serialize(),
+                        dataType: "json",
+                        success: function(data, status) {
+                            KTApp.unblock('#modal_add .modal-content');
+                            if (data.status == true) {
+                                datatable.reload();
+                                $('#modal_add').modal('hide');
+                                AlertUtil.showSuccess(data.message, 5000);
+                            } else {
+                                AlertUtil.showFailedDialogAdd(data.message);
+                            }
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            KTApp.unblock('#modal_add .modal-content');
+                            AlertUtil.showFailedDialogAdd(
+                                "server busy please try again later");
+                        }
+                    });
                 }
             });
         }
@@ -665,8 +950,15 @@ function clear() {
     $('#saldoawal').val("");
     $('#penerimaan').val("");
     $('#pengeluaran').val("");
+
     $('#totmutasi').val("");
     $('#mutasi').val("");
+
+    $('#total_penerimaan').val("");
+    $('#totpenerimaan').val("");
+    $('#total_pengeluaran').val("");
+    $('#totpengeluaran').val("");
+
     $('#saldoakhir').val("");
     $('#total').val("");
     $('#selisih').val("");
@@ -675,6 +967,16 @@ function clear() {
     $('#noa_regular').val("");
     $('#noa_cicilan').val("");
     $('#os_unit').val("");
+
+    $('#booking').val("");
+    $('#noa_booking').val("");
+    $('#repayment').val("");
+    $('#noa_repayment').val("");
+    $('#dpd').val("");
+    $('#noa_dpd').val("");
+    $('#pengeluarannon').val("");
+    $('#penerimaanmoker').val("");
+
 }
 
 function popAdd(el) {
@@ -708,8 +1010,7 @@ function popAdd(el) {
                     template +=
                         "<td><input type='text' class='form-control form-control-sm total' id='k_total_" +
                         no +
-                        "' name='" + convertToRupiah(+"k_total[] " + ) +
-                        "' style='background-color:grey; color:white;' readonly></td>";
+                        "' name='k_total[]' style='background-color:grey; color:white;' readonly></td>";
                     template += '</tr>';
                     no++;
                 });
@@ -793,10 +1094,15 @@ function popEdit(el) {
                 $('#e_date').val(response.data.date);
                 $('#e_saldoawal').val(response.data.amount_balance_first);
                 $('#e_penerimaan').val(response.data.amount_in);
+                $('#e_penerimaanmoker').val(response.data.amount_inmoker);
                 $('#e_pengeluaran').val(response.data.amount_out);
                 $('#e_totmutasi').val(response.data.amount_mutation);
                 $('#e_saldoakhir').val(response.data.amount_balance_final);
                 $('#e_mutasi').val(response.data.amount_mutation);
+
+                $('#e_total_penerimaan').val(response.data.total_amountin);
+                $('#e_total_pengeluaran').val(response.data.total_amountout);
+
                 $('#e_total').val(response.data.total);
                 $('#e_selisih').val(response.data.amount_gap);
                 $('#e_note').val(response.data.note);
@@ -806,6 +1112,14 @@ function popEdit(el) {
                 $('#e_noa_cicilan').val(response.data.noa_cicilan);
                 $('#e_noa').val(parseInt(response.data.noa_cicilan) + parseInt(response.data.noa_regular));
                 $('#e_os').val(parseInt(response.data.os_cicilan) + parseInt(response.data.os_unit));
+
+                $('#e_booking').val(response.data.booking);
+                $('#e_noa_booking').val(response.data.noa_booking);
+                $('#e_repayment').val(response.data.repayment);
+                $('#e_noa_repay').val(response.data.noa_repay);
+                $('#e_dpd').val(response.data.dpd);
+                $('#e_noa_dpd').val(response.data.noa_dpd);
+                $('#e_pengeluarannon').val(response.data.amount_outnon);
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -848,7 +1162,7 @@ function popEdit(el) {
                         k_totpecahan = parseInt(data.amount) * parseInt(data.summary);
                         templateKertas +=
                             "<td class='text-right'><input type='text' class='form-control form-control-sm e_total' name='e_k_total[]' value=" +
-                            convertToRupiah(k_totpecahan) + " readonly></td>";
+                            k_totpecahan + " readonly></td>";
                         templateKertas += '</tr>';
                         totalkertas += k_totpecahan;
                         no++;
@@ -857,7 +1171,7 @@ function popEdit(el) {
                         templateLogam += "<tr class='rowappend_logam'>";
                         templateLogam +=
                             "<td><input type='text' class='form-control form-control-sm e_pecahan' name='e_l_pecahan[]' value=" +
-                            convertToRupiah(data.amount) +
+                            data.amount +
                             " readonly><input type='hidden' class='form-control form-control-sm e_pecahan' name='e_l_money[]' value=" +
                             data.id + " readonly></td>";
                         templateLogam +=
@@ -866,13 +1180,13 @@ function popEdit(el) {
                         l_totpecahan = parseInt(data.amount) * parseInt(data.summary);
                         templateLogam +=
                             "<td class='text-right'><input type='text' class='form-control form-control-sm e_total' name='e_l_total[]' value='" +
-                            convertToRupiah(l_totpecahan) + "' readonly></td>";
+                            l_totpecahan + "' readonly></td>";
                         templateLogam += '</tr>';
                         totallogam += l_totpecahan;
                         no++;
                     }
                 });
-                total = convertToRupiah(parseInt(totalkertas) + parseInt(totallogam));
+                total = parseInt(totalkertas) + parseInt(totallogam);
                 $('#e_kertas').append(templateKertas);
                 $('#e_logam').append(templateLogam);
                 $('#e_total').val(total);
@@ -908,8 +1222,13 @@ function popView(el) {
                 $('#v_date').val(response.data.date);
                 $('#v_saldoawal').val(response.data.amount_balance_first);
                 $('#v_penerimaan').val(response.data.amount_in);
+                $('#v_penerimaanmoker').val(response.data.amount_inmoker);
                 $('#v_pengeluaran').val(response.data.amount_out);
                 $('#v_mutasi').val(response.data.amount_mutation);
+
+                $('#v_total_penerimaan').val(response.data.total_amountin);
+                $('#v_total_pengeluaran').val(response.data.total_amountout);
+
                 $('#v_saldoakhir').val(response.data.amount_balance_final);
                 $('#v_selisih').val(response.data.amount_gap);
                 $('#v_note').val(response.data.note);
@@ -919,6 +1238,14 @@ function popView(el) {
                 $('#v_noa_cicilan').val(response.data.noa_cicilan);
                 $('#v_os_unit').val(parseInt(response.data.os_unit) + parseInt(response.data.os_cicilan));
                 $('#v_noa').val(parseInt(response.data.noa_regular) + parseInt(response.data.noa_cicilan));
+
+                $('#v_booking').val(response.data.booking);
+                $('#v_noa_booking').val(response.data.noa_booking);
+                $('#v_repayment').val(response.data.repayment);
+                $('#v_noa_repay').val(response.data.noa_repay);
+                $('#v_dpd').val(response.data.dpd);
+                $('#v_noa_dpd').val(response.data.noa_dpd);
+                $('#v_pengeluarannon').val(response.data.amount_outnon);
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -999,11 +1326,14 @@ function popView(el) {
 function hitung() {
     var saldoawal = $("#saldoawal").val();
     var penerimaan = $("#penerimaan").val();
+    var penerimaanmoker = $("#penerimaanmoker").val();
     var pengeluaran = $("#pengeluaran").val();
     var osregular = $("#os_unit").val();
     var oscicilan = $("#os_cicilan").val();
     var noaregular = $("#noa_regular").val();
     var noacicilan = $("#noa_cicilan").val();
+
+    var pengeluarannon = $("#pengeluarannon").val();
 
     if (saldoawal) {
         saldoawal = formatNumber(saldoawal);
@@ -1014,6 +1344,11 @@ function hitung() {
         penerimaan = formatNumber(penerimaan);
     } else {
         penerimaan = 0;
+    }
+    if (penerimaanmoker) {
+        penerimaanmoker = formatNumber(penerimaanmoker);
+    } else {
+        penerimaanmoker = 0;
     }
     if (pengeluaran) {
         pengeluaran = formatNumber(pengeluaran);
@@ -1041,10 +1376,23 @@ function hitung() {
         noacicilan = 0;
     }
 
+    if (pengeluarannon) {
+        pengeluarannon = formatNumber(pengeluarannon);
+    } else {
+        pengeluarannon = 0;
+    }
+
     var os = (parseInt(osregular)) + parseInt(oscicilan);
     var noa = (parseInt(noaregular)) + parseInt(noacicilan);
-    var mutasi = (parseInt(penerimaan)) - parseInt(pengeluaran);
-    var saldoakhir = (parseInt(saldoawal) + parseInt(penerimaan)) - parseInt(pengeluaran);
+
+    var totpenerimaan = (parseInt(penerimaan)) + parseInt(penerimaanmoker);
+    var totpengeluaran = (parseInt(pengeluaran)) + parseInt(pengeluarannon);
+
+    var mutasi = (parseInt(penerimaan)) + (parseInt(penerimaanmoker)) - parseInt(pengeluaran) - parseInt(
+        pengeluarannon);
+    var saldoakhir = (parseInt(saldoawal) + parseInt(penerimaan)) + (parseInt(penerimaanmoker)) - parseInt(
+        pengeluaran) - parseInt(pengeluarannon);
+
     if (!isNaN(os)) {
         $('[name="os"]').val(os);
     }
@@ -1055,17 +1403,37 @@ function hitung() {
         $('[name="totmutasi"]').val(mutasi);
         $('[name="mutasi"]').val(mutasi);
     }
+
+    if (!isNaN(totpenerimaan)) {
+        $('[name="total_penerimaan"]').val(totpenerimaan);
+        $('[name="totpenerimaan"]').val(totpenerimaan);
+    }
+
+    if (!isNaN(totpengeluaran)) {
+        $('[name="total_pengeluaran"]').val(totpengeluaran);
+        $('[name="totpengeluaran"]').val(totpengeluaran);
+    }
+
     if (!isNaN(saldoakhir)) {
         $('[name="saldoakhir"]').val(saldoakhir);
     }
 
     var totmutasi = document.getElementById('totmutasi');
+    var total_penerimaan = document.getElementById('total_penerimaan');
+    var total_pengeluaran = document.getElementById('total_pengeluaran');
+
     var saldoakhir = document.getElementById('saldoakhir');
     var outstanding = document.getElementById('os');
     var noatotal = document.getElementById('noa');
 
     if (mutasi > 0) {
         totmutasi.value = formatRupiah(totmutasi.value);
+    }
+    if (total_penerimaan > 0) {
+        total_penerimaan.value = formatRupiah(total_penerimaan.value);
+    }
+    if (total_pengeluaran > 0) {
+        total_pengeluaran.value = formatRupiah(total_pengeluaran.value);
     }
     if (saldoakhir > 0) {
         saldoakhir.value = formatRupiah(saldoakhir.value);
@@ -1082,11 +1450,22 @@ function hitung() {
 function e_hitung() {
     var saldoawal = $("#e_saldoawal").val();
     var penerimaan = $("#e_penerimaan").val();
+    var penerimaanmoker = $("#e_penerimaanmoker").val();
     var pengeluaran = $("#e_pengeluaran").val();
     var osunit = $("#e_os_unit").val();
     var oscicilan = $("#e_os_cicilan").val();
     var noaregular = $("#e_noa_regular").val();
     var noacicilan = $("#e_noa_cicilan").val();
+
+    var booking = $("#e_booking").val();
+    var repayment = $("#e_repayment").val();
+    var dpd = $("#e_dpd").val();
+    var noabooking = $("#e_noa_booking").val();
+    var noarepay = $("#e_noa_repay").val();
+    var noadpd = $("#e_noa_dpd").val();
+
+
+    var pengeluarannon = $("#e_pengeluarannon").val();
 
     if (osunit) {
         osunit = formatNumber(osunit);
@@ -1118,15 +1497,32 @@ function e_hitung() {
     } else {
         penerimaan = 0;
     }
+    if (penerimaanmoker) {
+        penerimaanmoker = formatNumber(penerimaanmoker);
+    } else {
+        penerimaanmoker = 0;
+    }
     if (pengeluaran) {
         pengeluaran = formatNumber(pengeluaran);
     } else {
         pengeluaran = 0;
     }
+    if (pengeluarannon) {
+        pengeluarannon = formatNumber(pengeluarannon);
+    } else {
+        pengeluarannon = 0;
+    }
     var os = (parseInt(osunit)) + parseInt(oscicilan);
     var noa = (parseInt(noaregular)) + parseInt(noacicilan);
-    var mutasi = (parseInt(penerimaan)) - parseInt(pengeluaran);
-    var saldoakhir = (parseInt(saldoawal) + parseInt(penerimaan)) - parseInt(pengeluaran);
+
+    var mutasi = (parseInt(penerimaan)) + (parseInt(penerimaanmoker)) - parseInt(pengeluaran) - parseInt(
+        pengeluarannon);
+    var totpenerimaan = (parseInt(penerimaan)) + (parseInt(penerimaanmoker));
+    var totpengeluaran = (parseInt(pengeluaran)) + (parseInt(pengeluarannon));
+
+
+    var saldoakhir = (parseInt(saldoawal) + parseInt(penerimaan)) + (parseInt(penerimaanmoker)) - parseInt(
+        pengeluaran) - parseInt(pengeluarannon);
     if (!isNaN(os)) {
         $('[name="e_os"]').val(os);
     }
@@ -1137,19 +1533,41 @@ function e_hitung() {
         $('[name="e_totmutasi"]').val(mutasi);
         $('[name="e_mutasi"]').val(mutasi);
     }
+    if (!isNaN(totpenerimaan)) {
+        $('[name="e_total_penerimaan"]').val(totpenerimaan);
+        $('[name="e_totpenerimaan"]').val(totpenerimaan);
+    }
+    if (!isNaN(totpengeluaran)) {
+        $('[name="e_total_pengeluaran"]').val(totpengeluaran);
+        $('[name="e_totpengeluaran"]').val(totpengeluaran);
+    }
+
     if (!isNaN(saldoakhir)) {
         $('[name="e_saldoakhir"]').val(saldoakhir);
     }
 
     var totmutasi = document.getElementById('e_totmutasi');
+    var total_penerimaan = document.getElementById('e_total_penerimaan');
+    var total_pengeluaran = document.getElementById('e_total_pengeluaran');
+
     var saldoakhir = document.getElementById('e_saldoakhir');
     var outstanding = document.getElementById('e_os');
     var noatotal = document.getElementById('e_noa');
+
     if (mutasi > 0) {
         outstanding.value = formatRupiah(outstanding.value);
     }
     if (os > 0) {
         totmutasi.value = formatRupiah(totmutasi.value);
+    }
+
+
+    if (totpenerimaan > 0) {
+        total_penerimaan.value = formatRupiah(total_penerimaan.value);
+    }
+
+    if (totpengeluaran > 0) {
+        total_pengeluaran.value = formatRupiah(total_pengeluaran.value);
     }
     outstanding.value = formatRupiah(outstanding.value);
     saldoakhir.value = formatRupiah(saldoakhir.value);
@@ -1225,6 +1643,8 @@ function e_calculateSum() {
         }
     });
     selisih = parseInt(formatNumber(saldoakhir)) - parseInt(total);
+    console.log('selisih');
+    console.log(selisih);
     $('[name="e_total"]').val(total);
     $('[name="e_selisih"]').val(selisih);
 

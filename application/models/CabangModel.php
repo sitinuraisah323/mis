@@ -15,6 +15,14 @@ class CabangModel extends Master
 		return $this->db->get('cabang as a')->result();
 	}
 
+	public function get_branch_byarea($area)
+	{
+		$this->db->select('a.id,b.area,a.cabang, a.branch_id');
+		$this->db->join('areas as b','b.id=a.id_area');		
+		$this->db->where('a.area_id',$area);		
+		$this->db->order_by('a.id','asc');		
+		return $this->db->get('cabang as a')->result();
+	}
 	public function get_cabang()
 	{
 		$this->db->select('a.id,b.area,a.cabang');

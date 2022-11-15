@@ -155,7 +155,7 @@ $db[ 'default' ] = array(
 
     'password' => 'aisyah',
 
-    'database' => 'u8665498_ghanet',
+    'database' => 'db_ghanet',
 
     'dbdriver' => 'mysqli',
 
@@ -187,3 +187,118 @@ $db[ 'default' ] = array(
 
 );
 
+    // $db [ 'db2' ][ 'dsn' ]  =  'pgsql:host=pgm-d9j27ilqxc110opbko.pgsql.ap-southeast-5.rds.aliyuncs.com;port=1921;dbname=gcore_transaction_db' ;
+
+$db[ 'db2' ] = array(
+
+    'dsn'	=> 'pgsql:host=pgm-d9j27ilqxc110opbko.pgsql.ap-southeast-5.rds.aliyuncs.com;port=1921;dbname=gcore_transaction_db',
+
+    'hostname' => 'pgm-d9j27ilqxc110opbko.pgsql.ap-southeast-5.rds.aliyuncs.com',
+
+    'username' => 'deploy',
+
+    'password' => 'Doterb2020',
+
+    'database' => 'gcore_transaction_db',
+
+    'dbdriver' => 'pdo',
+
+    'dbprefix' => '',
+
+    'pconnect' => FALSE,
+
+    'db_debug' => ( ENVIRONMENT !== 'production' ),
+
+    'cache_on' => FALSE,
+
+    'cachedir' => '',
+
+    'char_set' => 'utf8',
+
+    'dbcollat' => 'utf8_general_ci',
+
+    'swap_pre' => '',
+
+    'encrypt' => FALSE,
+
+    'compress' => FALSE,
+
+    'stricton' => FALSE,
+
+    'failover' => array(),
+
+    'save_queries' => TRUE,
+
+    // 'port'     => 1921,
+
+);
+
+$db[ 'db3' ] = array(
+
+    'dsn'	=> 'pgsql:host=pgm-d9j27ilqxc110opbko.pgsql.ap-southeast-5.rds.aliyuncs.com;port=1921;dbname=gcore_accounting_db',
+
+    'hostname' => 'pgm-d9j27ilqxc110opbko.pgsql.ap-southeast-5.rds.aliyuncs.com',
+
+    'username' => 'deploy',
+
+    'password' => 'Doterb2020',
+
+    'database' => 'gcore_accounting_db',
+
+    'dbdriver' => 'pdo',
+
+    'dbprefix' => '',
+
+    'pconnect' => FALSE,
+
+    'db_debug' => ( ENVIRONMENT !== 'production' ),
+
+    'cache_on' => FALSE,
+
+    'cachedir' => '',
+
+    'char_set' => 'utf8',
+
+    'dbcollat' => 'utf8_general_ci',
+
+    'swap_pre' => '',
+
+    'encrypt' => FALSE,
+
+    'compress' => FALSE,
+
+    'stricton' => FALSE,
+
+    'failover' => array(),
+
+    'save_queries' => TRUE,
+
+    // 'port'     => 1921,
+
+);
+
+
+$db['server'] = array(
+	'dsn'	=> '',
+	'hostname' => '192.168.3.66',
+	'username' => 'root',
+	'password' => 'aisyah',
+	'database' => 'db_ghanet',
+	'dbdriver' => 'mysqli',
+	'dbprefix' => '',
+	'pconnect' => FALSE,
+	'db_debug' => (ENVIRONMENT !== 'production'),
+	'cache_on' => FALSE,
+	'cachedir' => '',
+	'char_set' => 'utf8',
+	'dbcollat' => 'utf8_general_ci',
+	'swap_pre' => '',
+	'encrypt' => FALSE,
+	'compress' => FALSE,
+	'stricton' => FALSE,
+	'failover' => array(),
+	'save_queries' => TRUE
+);
+
+//Load Database kedua
+// $db2 = $this->load->database('db2', TRUE);

@@ -86,7 +86,8 @@ class Customers extends ApiController
 			$this->customers->db
 			->select("datediff('$now', birth_date) as age_customer")
 			->join('units','units.id = customers.id_unit')
-			->where('units.id', $unit);;
+			->where('units.id', $unit)
+			->where('customers.date_create >=', '2022-01-04 08:27:09');
 			$data =  $this->customers->all();
 			echo json_encode(array(
 				'data'	=> $data,
@@ -96,7 +97,9 @@ class Customers extends ApiController
 			$now = date('Y-m-d');
 		$this->customers->db
 		->select("datediff('$now', birth_date) as age_customer")
-		->join('units','units.id = customers.id_unit');
+		->join('units','units.id = customers.id_unit')
+		->where('customers.date_create >=', '2022-01-04 08:27:09');
+		
 		$data =  $this->customers->all();
 		echo json_encode(array(
 			'data'	=> $data,

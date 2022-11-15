@@ -54,22 +54,25 @@ class Bukukas extends Authenticated
 		$objPHPExcel->getActiveSheet()->getColumnDimension('C');
         $objPHPExcel->getActiveSheet()->setCellValue('C1', 'NO PERK');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('D');
-        $objPHPExcel->getActiveSheet()->setCellValue('D1', 'Tanggal');
-        $objPHPExcel->getActiveSheet()->getColumnDimension('E');
-		$objPHPExcel->getActiveSheet()->setCellValue('E1', 'Bulan');
-		$objPHPExcel->getActiveSheet()->getColumnDimension('F');
-		$objPHPExcel->getActiveSheet()->setCellValue('F1', 'Tahun');
+        $objPHPExcel->getActiveSheet()->setCellValue('D1', 'Tanggal Kredit');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('E');
+        $objPHPExcel->getActiveSheet()->setCellValue('E1', 'Tanggal');
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F');
+		$objPHPExcel->getActiveSheet()->setCellValue('F1', 'Bulan');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('G');
-		$objPHPExcel->getActiveSheet()->setCellValue('G1', 'Uraian');
+		$objPHPExcel->getActiveSheet()->setCellValue('G1', 'Tahun');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('H');
-		$objPHPExcel->getActiveSheet()->setCellValue('H1', 'Penerimaan');
+		$objPHPExcel->getActiveSheet()->setCellValue('H1', 'Uraian');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('I');
-		$objPHPExcel->getActiveSheet()->setCellValue('I1', 'Pengeluaran');
+		$objPHPExcel->getActiveSheet()->setCellValue('I1', 'Penerimaan');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('J');
-		$objPHPExcel->getActiveSheet()->setCellValue('J1', 'Saldo');
+		$objPHPExcel->getActiveSheet()->setCellValue('J1', 'Pengeluaran');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('K');
+		$objPHPExcel->getActiveSheet()->setCellValue('K1', 'Saldo');
 
 		$data = $this->reportsaldoawal();	
-
+ 
+		// var_dump($data); exit;
 		$no=2;
 		$cashin=0;
 		$cashout=0;
@@ -87,26 +90,28 @@ class Bukukas extends Authenticated
 				$objPHPExcel->getActiveSheet()->setCellValue('E'.$no, '');				  	
 				$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, '');	
 			}else{				
-				$objPHPExcel->getActiveSheet()->setCellValue('E'.$no, date('F',strtotime($row->date)));				  	
-				$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, date('Y',strtotime($row->date)));	
-				$objPHPExcel->getActiveSheet()->setCellValue('D'.$no, date('d/m/Y',strtotime($row->date)));	
+				$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, date('F',strtotime($row->date)));				  	
+				$objPHPExcel->getActiveSheet()->setCellValue('G'.$no, date('Y',strtotime($row->date)));	
+				$objPHPExcel->getActiveSheet()->setCellValue('E'.$no, date('d/m/Y',strtotime($row->date)));	
+				$objPHPExcel->getActiveSheet()->setCellValue('D'.$no, date('d/m/Y',strtotime($row->date_kredit)));	
+
 			}
 					  				 
-			$objPHPExcel->getActiveSheet()->setCellValue('G'.$no, $row->description);
+			$objPHPExcel->getActiveSheet()->setCellValue('H'.$no, $row->description);
 			if($row->type =="CASH_IN"){$cashin= $row->amount; $currentSaldo += $row->amount; $TotSaldoIn +=  $row->amount;}else{$cashin=$cashin;}
 			if($row->type =="CASH_OUT"){$cashout= $row->amount; $currentSaldo -=  $row->amount; $TotSaldoOut +=  $row->amount;}else{$cashout=$cashout;}		 
 			if($row->type == "CASH_IN" && $index != 0){
-				$objPHPExcel->getActiveSheet()->setCellValue('H'.$no, $cashin);		
+				$objPHPExcel->getActiveSheet()->setCellValue('I'.$no, $cashin);		
 			}else{
-				$objPHPExcel->getActiveSheet()->setCellValue('H'.$no, 0);	
+				$objPHPExcel->getActiveSheet()->setCellValue('I'.$no, 0);	
 			}
 			if($row->type == "CASH_OUT" && $index != 0){
-				$objPHPExcel->getActiveSheet()->setCellValue('I'.$no, $cashout);
+				$objPHPExcel->getActiveSheet()->setCellValue('J'.$no, $cashout);
 			}else{
-				$objPHPExcel->getActiveSheet()->setCellValue('I'.$no, 0);
+				$objPHPExcel->getActiveSheet()->setCellValue('J'.$no, 0);
 			}
 						 
-			$objPHPExcel->getActiveSheet()->setCellValue('J'.$no, $currentSaldo);				 
+			$objPHPExcel->getActiveSheet()->setCellValue('K'.$no, $currentSaldo);				 
 			$no++;
 		}
 

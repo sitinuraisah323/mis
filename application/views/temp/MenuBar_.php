@@ -201,7 +201,8 @@
 											<span class="kt-menu__link-text">Pendapatan</span>
 										</a>
 									</li>	
-									<?php endif;?>								
+									<?php endif;?>			
+														
 								</ul>
 							</div>
 						</li>

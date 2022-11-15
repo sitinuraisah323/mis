@@ -76,7 +76,7 @@ $this->load->view('temp/MenuBar.php');
             </table> -->
             <!--end: Datatable -->
 
-            <form id="form_bukukas" class="form-horizontal" method="post" action="<?php echo base_url("report/regularpawns/export"); ?>">
+            <form id="form_bukukas" class="form-horizontal" method="post" action="<?php echo base_url("report/regularpawns/export_smartphone"); ?>">
             <div class="kt-portlet__body">
             <div class="col-md-12" >
                 <div class="form-group row">
@@ -230,7 +230,6 @@ $this->load->view('temp/MenuBar.php');
 									<th class='text-right'>UP</th>
 									<th class='text-center'>Status</th>
 									<th class='text-center'>Description</th>
-									<th class='text-center'>Type</th>
 									<th></th>
 						    	</tr>
 						  	</thead>

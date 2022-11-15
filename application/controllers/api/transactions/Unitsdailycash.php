@@ -11,6 +11,8 @@ class Unitsdailycash extends ApiController
 		$this->load->model('MappingcaseModel', 'm_casing');
 		$this->load->model('UnitsModel', 'units');
 		$this->load->model('UnitsSaldo', 'saldo');
+		$this->load->model('RegularPawnsModel', 'regular');	
+
 	}
 
 	public function index()
@@ -316,28 +318,26 @@ class Unitsdailycash extends ApiController
 
 	public function pendapatan()
 	{
-		if($get = $this->input->get()){
-			$category =null;
-			if($get['category']=='all'){
-				$data = $this->m_casing->get_list_pendapatan();
-				$category=array();
-				foreach ($data as $value) {
-					array_push($category, $value->no_perk);
-				}
-			}else{
-				$category=array($get['category']);
+		$category =null;
+		if($this->input->get('category')=='all'){
+			$data = $this->m_casing->get_list_pendapatan_all();
+			$category=array();
+			foreach ($data as $value) {
+				array_push($category, $value->no_perk);
 			}
-			$this->unitsdailycash->db
-				->where('type =', 'CASH_IN')
-				->where_in('no_perk', $category)
-				->where('date >=', $get['dateStart'])
-				->where('date <=', $get['dateEnd']);
-			if($this->input->get('id_unit')){
-				$this->unitsdailycash->db->where('id_unit', $get['id_unit']);
-			}
-			if($this->input->get('area')){
-				$this->unitsdailycash->db->where('id_area', $get['area']);
-			}
+		}else{
+			$category=array($this->input->get('category'));
+		}
+		$this->unitsdailycash->db
+			->where('type =', 'CASH_IN')
+			->where_in('no_perk', $category)
+			->where('date >=', $this->input->get('dateStart'))
+			->where('date <=', $this->input->get('dateEnd'));
+		if($this->input->get('id_unit')){
+			$this->unitsdailycash->db->where('id_unit', $this->input->get('id_unit'));
+		}
+		if($this->input->get('area')){
+			$this->unitsdailycash->db->where('id_area', $this->input->get('area'));
 		}
 		$this->unitsdailycash->db
 			->select('units.name as unit')
@@ -349,6 +349,98 @@ class Unitsdailycash extends ApiController
 			'message'	=> 'Successfully Get Data Regular Pawns'
 		));
 	}
+
+	public function get_noSbk($start, $end){
+		// var_dump($dateStart);
+		// var_dump($dateEnd); exit;
+		$this->load->model('UnitsSmartphone', 'smartphone');	
+		$this->smartphone->db
+			->select('no_sbk, id_unit', 'date_sbk as sbk', 'description_1', 'permit' )
+			->from('units_smartphone')
+			->where('date_sbk >=', $start)
+			->where('date_sbk <=', $end)
+			// ->join('units','units.id = units_regularpawns.id_unit')
+			->like('description_1', 'HP');
+		$data = $this->smartphone->db->get()->result();
+		// var_dump($data); exit;
+		return $data;
+	}
+
+	public function pendapatan_smartphone()
+	{
+		$category =null;
+		$get = $this->input->get();
+		
+		$no_sbk = $this->get_noSbk($get['dateStart'], $get['dateEnd']);
+			// var_dump($no_sbk); exit;
+		$sbk = array();
+		$dateSbk = array();
+		$idUnit = array();
+
+		// $date = array();
+		foreach($no_sbk as $no){
+			// var_dump($no->sbk); exit;
+			array_push($sbk, $no->no_sbk);
+			// array_push($dateSbk, $no->date_sbk);
+			// array_push($idUnit, $no->id_unit);
+		}
+		if($this->input->get('category')=='all'){
+			$data = $this->m_casing->get_list_pendapatan_smartphone();
+
+			// $no_sbk = $this->get_noSbk();
+			// var_dump($no_sbk); exit;
+
+			$category=array();
+			foreach ($data as $value) {
+				array_push($category, $value->no_perk);
+			}
+		}else{
+			$category=array($get['category']);
+		}
+		
+		$this->unitsdailycash->db
+			->where('type =', 'CASH_IN')	
+			->where_in('no_perk', $category)
+			->where_in('code_trans', $sbk)
+			// ->where_in('id_unit', $idUnit)
+			// ->where_in('date', $date)
+			->where('date >=', $this->input->get('dateStart'))
+			->where('date <=', $this->input->get('dateEnd'));
+			// ->like('trans ', 'OP');
+
+			if($this->input->get('category')=='4120101'){
+			$this->unitsdailycash->db
+				->like('trans ', 'OP');
+			}
+
+			else if($this->input->get('category')=='4110101'){
+				$this->unitsdailycash->db
+				->like('trans ', 'OL');
+			}
+
+		if($this->input->get('id_unit')){
+			$this->unitsdailycash->db->where('id_unit', $get['id_unit']);
+		}
+		if($this->input->get('area')){
+			$this->unitsdailycash->db->where('id_area', $get['area']);
+		}
+		
+
+		$this->unitsdailycash->db
+			->select('units.name as unit')
+			->join('units','units.id = units_dailycashs.id_unit')
+			->order_by('units.name', 'asc');
+
+		$data = $this->unitsdailycash->all();
+		// var_dump($data); exit;
+		echo json_encode(array(
+			'data'	=> $data,
+			'status'	=> true,
+			'message'	=> 'Successfully Get Data Regular Pawns',
+		));
+	
+	}
+
 
 	public function summarycashin()
 	{
@@ -512,12 +604,17 @@ class Unitsdailycash extends ApiController
 		}
 		$this->unitsdailycash->db
 			->select('
-			 (sum(CASE WHEN type = "CASH_IN" THEN `amount` ELSE 0 END) - sum(CASE WHEN type = "CASH_OUT" THEN `amount` ELSE 0 END)) as amount
-			 			')
+			 (sum(CASE WHEN type = "CASH_IN" THEN `amount` ELSE 0 END) - sum(CASE WHEN type = "CASH_OUT" THEN `amount` ELSE 0 END)) as amount,
+			 ')
 			->from('units_dailycashs')
 			->join('units','units.id = units_dailycashs.id_unit');
-			//->order_by('units_dailycashs.date','asc');
 		$saldo = (int) $this->unitsdailycash->db->get()->row()->amount;
+		// $this->unitsdailycash->db
+		// 	->select('
+		// 	 (select date_sbk as date_kredit from units_regularpawns as reg where reg.no_sbk=units_dailycashs.code_trans and reg.permit=units_dailycashs.permit and reg.id_unit=units_dailycashs.id_unit) as date_kredit		')
+		// 	->from('units_dailycashs')
+		// 	->join('units','units.id = units_dailycashs.id_unit');
+		// $kredit = (int) $this->unitsdailycashs->db->get()->row()->date_kredit;
 
 	
 		$total = $saldo + $totalsaldoawal;
@@ -541,7 +638,8 @@ class Unitsdailycash extends ApiController
 			'description'	=> 'saldo awal',
 			'cash_code'	=>  'KT',
 			'type'	=> $total > 0 ? 'CASH_IN' : 'CASH_OUT',
-			'amount'	=> $total
+			'amount'	=> $total,
+			// 'date_kredit' => $kredit
 		);
 
 		if($get = $this->input->get()){
@@ -558,10 +656,19 @@ class Unitsdailycash extends ApiController
 				$this->unitsdailycash->db->where('id_area', $get['area']);
 			}
 		}
+		// $kredit = $this->unitsdailycash->db
+		// 	->select('units.name, 
+		// 	(select date_sbk as date_kredit from units_regularpawns as reg where reg.no_sbk=units_dailycashs.code_trans and reg.permit=units_dailycashs.permit and reg.id_unit=units_dailycashs.id_unit) as date_kredit')
+		// 	->join('units','units.id = units_dailycashs.id_unit');
+
+		// $getCash = $this->unitsdailycash->all();
 		$this->unitsdailycash->db
-			->select('units.name')
+			->select('units.name, 
+			')
 			->join('units','units.id = units_dailycashs.id_unit');
 		$getCash = $this->unitsdailycash->all();
+		// var_dump($getCash); exit;
+		
 		array_unshift( $getCash, $data);
 		echo json_encode(array(
 			'data'	=> 	$getCash,

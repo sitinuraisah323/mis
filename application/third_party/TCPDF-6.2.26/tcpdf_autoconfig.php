@@ -102,8 +102,8 @@ if (!defined('K_PATH_IMAGES')) {
 
 if (!defined('PDF_HEADER_LOGO')) {
 	$tcpdf_header_logo = '';
-	if (@file_exists(K_PATH_IMAGES.'gha_logo.jpg')) {
-		$tcpdf_header_logo = 'gha_logo.jpg';
+	if (@file_exists(K_PATH_IMAGES.'tcpdf_logo.jpg')) {
+		$tcpdf_header_logo = 'tcpdf_logo.jpg';
 	}
 	define ('PDF_HEADER_LOGO', $tcpdf_header_logo);
 }
@@ -145,11 +145,11 @@ if (!defined('PDF_AUTHOR')) {
 }
 
 if (!defined('PDF_HEADER_TITLE')) {
-	define ('PDF_HEADER_TITLE', 'Solan Printing Report');
+	define ('PDF_HEADER_TITLE', 'TCPDF Example');
 }
 
 if (!defined('PDF_HEADER_STRING')) {
-	define ('PDF_HEADER_STRING', "by Nicola Asuni - Tecnick.com");
+	define ('PDF_HEADER_STRING', "by Nicola Asuni - Tecnick.com\nwww.tcpdf.org");
 }
 
 if (!defined('PDF_UNIT')) {

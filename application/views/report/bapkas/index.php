@@ -151,8 +151,10 @@ if ( !empty( $areas ) ) {
 <!-- <th class = 'text-left'>Kasir</th> -->
 <th class = 'text-center'>Tanggal</th>
 <th class = 'text-right'>Saldo Awal</th>
-<th class = 'text-right'>Penerimaan</th>
-<th class = 'text-right'>Pengeluaran</th>
+<th class = 'text-right'>Penerimaan Operasional</th>
+<th class = 'text-right'>Penerimaan Moker</th>
+<th class = 'text-right'>Pengeluaran Transaksional</th>
+<th class = 'text-right'>Pengeluaran Non Transaksional</th>
 <th class = 'text-right'>Saldo Akhir</th>
 <th class = 'text-right'>Selisih</th>
 <th class = 'text-right'>NOA Reg</th>

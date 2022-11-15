@@ -121,7 +121,8 @@ function initCariForm(){
         KTApp.block('#form_bukukas .kt-portlet__body', {});
 		$.ajax({
 			type : 'GET',
-			url : "<?php echo base_url("api/transactions/regularpawns/smartphone"); ?>",
+			 url : "<?php echo base_url("api/transactions/regularpawns/smartphone"); ?>",
+            // url : "<?php //echo base_url("dailyreport/outstanding/get_pendapatan");?>",
 			dataType : "json",
 			data:{no_sbk,area:area,id_unit:unit,statusrpt:statusrpt,nasabah:nasabah,
             dateStart:dateStart,dateEnd:dateEnd,permit:permit, sort_by, sort_method, type, merk},
@@ -157,7 +158,6 @@ function initCariForm(){
                         if(data.description_3!=null){template += "<br>- " + data.description_3;}
                         if(data.description_4!=null){template += "<br>- " + data.description_4;}
                         template +="</td>";
-                        template += `<td class='text-center'>${data.type_bmh === 'RC' ? 'REGULER' : 'OPSI'}</td>`;
 						template += '</tr>';
 						no++;
 						amount += parseInt(data.amount);

@@ -3,6 +3,7 @@ error_reporting(0);
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once APPPATH.'controllers/Middleware/Authenticated.php';
 
+
 class Outstanding extends Authenticated
 {
 	/**
@@ -30,12 +31,15 @@ class Outstanding extends Authenticated
 		$this->load->model('LmStocksModel','stock');
 		$this->load->model('LmGramsModel','grams');
 		$this->load->model('RepaymentSummaryModel','repayments_summaries');
+		$this->db2 = $this->load->database('db2',TRUE);
+		$this->db3 = $this->load->database('db3',TRUE);
+
 	}
 
 	public function target($date)
 	{		
 		$this->units->db
-					->select('units.id, units.name, area')
+					->select('units.id, units.name, area, units.code')
 					->select('(
 						select COALESCE(t.amount_booking,0) from units_targets t where units.id = t.id_unit
 						and month = "'.date('n', strtotime($date)).'"
@@ -109,7 +113,6 @@ class Outstanding extends Authenticated
 		$insert = [];
 		$update = [];
 		$data = [];
-		
 		foreach($units as $index => $unit){
 			$akumulasiUp = (int) $this->repayments->db->select('sum(urm.money_loan) as up,
 			count(id) as noa
@@ -313,222 +316,6 @@ class Outstanding extends Authenticated
 		return (object) $data;
 	}
 
-	public function calculate_smartphone()
-	{
-		$units = $this->units->db->select('id, name')->from('units')
-			->get()->result();
-		$dateStart = date('Y-m-d', strtotime(date('Y-m-01', strtotime($date))));
-		$date = date('Y-m-d', strtotime($date));
-
-		$insert = [];
-		$update = [];
-		$data = [];
-
-		foreach($units as $index => $unit){
-			$akumulasiUp = (int) $this->regular->db->select('sum(reg.amount) as up,
-			count(id) as noa
-			')
-				->from('units_regularpawns reg')
-				->where('reg.date_sbk >=', $dateStart)
-				->where('reg.date_repayment <=', $date)
-				->where('reg.id_unit', $unit->id)
-				->like('reg.descripton_1', 'HP')
-				->get()->row()->up;
-
-			$akumulasiOver = (int) $this->regular->db->select('sum(reg.amount) as up,
-			count(id) as noa
-			')
-				->from('units_regularpawns reg')
-				->where('reg.date_sbk >=', $dateStart)
-				->where('reg.date_sbk <=', $date)
-				->where('reg.id_unit', $unit->id)
-				->get()->row()->up;
-
-			$akumulasiPrev = (int) $this->regular->db->select('sum(reg.amount) as up,
-				count(id) as noa
-				')
-					->from('units_regularpawns reg')
-					->where('reg.date_sbk >=', $dateStart)
-					->where('reg.date_sbk <=', $date)
-					->where("DATEDIFF(reg.date_sbk, reg.date_sbk) <=", 120)
-					->where('reg.id_unit', $unit->id)
-					->get()->row()->up;
-
-			$todayUp = (int) $this->repayments->db->select('sum(reg.amount) as up,
-				count(id) as noa
-				')
-				->from('units_regularpawns reg')
-				->where('urm.date_sbk', $date)
-				->where('urm.id_unit', $unit->id)
-				->get()->row()->up;
-			$todayOver = (int) $this->repayments->db->select('sum(reg.amount) as up,
-				count(id) as noa
-				')
-				->from('units_repayments urm')
-				->where('urm.date_repayment', $date)
-				->where("DATEDIFF( urm.date_repayment, urm.date_sbk) >", 120)
-				->where('urm.id_unit', $unit->id)
-				->get()->row()->up;
-			
-			$todayPrev =  (int) $this->repayments->db->select('sum(urm.money_loan) as up,
-				count(id) as noa
-				')
-				->from('units_repayments urm')
-				->where('urm.date_repayment', $date)
-				->where("DATEDIFF(urm.date_repayment, urm.date_sbk) <=", 120)
-				->where('urm.id_unit', $unit->id)
-				->get()->row()->up;
-			$mortagesTodayUp = (int) $this->repayments->db->select('sum(urm.amount) as up,
-				count(id) as noa
-				')
-				->from('units_repayments_mortage urm')
-				->where('urm.date_kredit', $date)
-				->where('urm.id_unit', $unit->id)
-				->get()->row()->up;
-
-			$akumulasiNoa = (int) $this->repayments->db->select('sum(urm.money_loan) as up,
-			count(id) as noa
-			')
-				->from('units_repayments urm')
-				->where('urm.date_repayment >=', $dateStart)
-				->where('urm.date_repayment <=', $date)
-				->where('urm.id_unit', $unit->id)
-				->get()->row()->noa;
-
-			$todayNoa = (int) $this->repayments->db->select('sum(urm.money_loan) as up,
-				count(id) as noa
-				')
-				->from('units_repayments urm')
-				->where('urm.date_repayment', $date)
-				->where('urm.id_unit', $unit->id)
-				->get()->row()->noa;
-
-			$wherePrev = "
-			(select deadline  from units_mortages um
-			where um.id_unit = urm.id_unit
-			and um.no_sbk = urm.no_sbk
-			and um.permit = urm.permit
-			limit 1)
-			>= urm.date_kredit";
-
-			$whereOver = "
-			(select deadline  from units_mortages um
-			where um.id_unit = urm.id_unit
-			and um.no_sbk = urm.no_sbk
-			and um.permit = urm.permit
-			limit 1)
-			<= urm.date_kredit";
-			
-			$mortagesTodayPrev = (int) $this->repayments->db->select('sum(amount) as up
-			')
-				->from('units_repayments_mortage urm')
-				->where('urm.date_kredit', $date)
-				->where($wherePrev)
-				->where('urm.id_unit', $unit->id)
-				->get()->row()->up;
-			$mortagesTodayOver = (int) $this->repayments->db->select('sum(amount) as up
-			')
-				->from('units_repayments_mortage urm')
-				->where('urm.date_kredit', $date)
-				->where($whereOver)
-				->where('urm.id_unit', $unit->id)
-				->get()->row()->up;
-				
-				$explode=explode("-",$date); 
-			//  var_dump($explode); exit;
-			$disburseUpReg = (int) $this->repayments->db->select('sum(urm.money_loan) as up,
-			count(id) as noa
-			')
-				->from('units_repayments urm')
-				->where('year(urm.date_repayment)', $explode[0])
-				// ->where('urm.date_repayment >=', $dateStart)
-				// ->where('urm.date_repayment <=', $date)
-				->where('urm.id_unit', $unit->id)
-				->get()->row()->up;
-
-			$disburseNoaReg = (int) $this->repayments->db->select('sum(urm.money_loan) as up,
-			count(id) as noa
-			')
-				->from('units_repayments urm')
-				->where('year(urm.date_repayment)', $explode[0])
-				// ->where('urm.date_repayment >=', $dateStart)
-				// ->where('urm.date_repayment <=', $date)
-				->where('urm.id_unit', $unit->id)
-				->get()->row()->noa;
-
-			$check = $this->repayments_summaries->find([
-				'date'	=> $date,
-				'id_unit'	=> $unit->id
-			]);
-
-			if($check){
-				$update[$index] = [
-					'id'	=> $check->id,
-					'id_unit'	=> $unit->id,
-					'date'	=> $date,
-					
-					'noa_ak' =>  $akumulasiNoa,
-					'akumulasi_up'	=>  $akumulasiUp,
-					'akumulasi_over'	=> $akumulasiOver > 0 ? (($akumulasiOver / $akumulasiUp) *100) : 0,
-					'akumulasi_prev'	=>  $akumulasiPrev > 0 ? (($akumulasiPrev / $akumulasiUp) * 100) : 0,
-					'noa_to'	=> $todayNoa,
-					'today_up'	=> $todayUp,
-					'today_over'	=> $todayOver > 0 ? (($todayOver / $todayUp) * 100) : 0,
-					'today_prev'	=> $todayPrev > 0 ? (($todayPrev / $todayUp) * 100) : 0,
-					'today_up_loan'	=> $mortagesTodayUp,
-					'today_over_loan'	=> $mortagesTodayOver > 0 ? (($mortagesTodayOver / $mortagesTodayUp) * 100) : 0,
-					'today_prev_loan'	=> $mortagesTodayPrev > 0 ? (($mortagesTodayPrev / $mortagesTodayUp) * 100) : 0,
-					'disburse_noa'	=> $disburseNoaReg,
-					'disburse_up'	=> $disburseUpReg,
-			
-				];
-			}else{			
-				$insert[$index] = [
-					'id_unit'	=> $unit->id,
-					'date'	=> $date,
-					'noa_to'	=> $todayNoa,
-					'today_up'	=> $todayUp,
-					'today_over'	=> $todayOver > 0 ? (($todayOver / $todayUp) * 100) : 0,
-					'today_prev'	=> $todayPrev > 0 ? (($todayPrev / $todayUp) * 100) : 0,
-					'noa_ak'	=>  $akumulasiNoa,
-					'akumulasi_up'	=>  $akumulasiUp,
-					'akumulasi_over'	=> $akumulasiOver > 0 ? (($akumulasiOver / $akumulasiUp) *100) : 0,
-					'akumulasi_prev'	=>  $akumulasiPrev > 0 ? (($akumulasiPrev / $akumulasiUp) * 100) : 0,
-					'today_up_loan'	=> $mortagesTodayUp,
-					'today_over_loan'	=> $mortagesTodayOver > 0 ? (($mortagesTodayOver / $mortagesTodayUp) * 100) : 0,
-					'today_prev_loan'	=> $mortagesTodayPrev > 0 ? (($mortagesTodayPrev / $mortagesTodayUp) * 100) : 0,
-					'disburse_noa'	=> $disburseNoaReg,
-					'disburse_up'	=> $disburseUpReg,
-				];
-			}
-			$data[$index] = (object) [
-				'id_unit'	=> $unit->id,
-				'date'	=> $date,
-				
-				'noa_ak'	=>  $akumulasiNoa,
-				'akumulasi_up'	=>  $akumulasiUp,
-				'akumulasi_over'	=> $akumulasiOver > 0 ? (($akumulasiOver / $akumulasiUp) *100) : 0,
-				'akumulasi_prev'	=>  $akumulasiPrev > 0 ? (($akumulasiPrev / $akumulasiUp) * 100) : 0,
-				'noa_to'	=> $todayNoa,
-				'today_up'	=> $todayUp,
-				'today_over'	=> $todayOver > 0 ? (($todayOver / $todayUp) * 100) : 0,
-				'today_prev'	=> $todayPrev > 0 ? (($todayPrev / $todayUp) * 100) : 0,
-				'today_up_loan'	=> $mortagesTodayUp,
-				'today_over_loan'	=> $mortagesTodayOver > 0 ? (($mortagesTodayOver / $mortagesTodayUp) * 100) : 0,
-				'today_prev_loan'	=> $mortagesTodayPrev > 0 ? (($mortagesTodayPrev / $mortagesTodayUp) * 100) : 0,
-				'disburse_noa'	=> $disburseNoaReg,
-				'disburse_up'	=> $disburseUpReg,
-			];
-		}
-		if(count($insert)){
-			$this->repayments->db->insert_batch('units_repayments_summaries', $insert);
-		}
-		if(count($update)){
-			$this->repayments->db->update_batch('units_repayments_summaries', $update, 'id');
-		}
-		return (object) $data;	
-	}
-
 	/**
 	 * Welcome Index()
 	 */
@@ -537,174 +324,218 @@ class Outstanding extends Authenticated
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		require_once APPPATH.'controllers/pdf/header.php';
 
-		$curr = $this->datetrans();
+		$curr = "2022-11-14";
+		$ghanet = $this->datetrans();
+		$date_start = date('Y-m-01', strtotime($curr));
 
-		$repayments = $this->repayments_summaries->db
-			->select('units.name as unit, areas.area, date,noa_ak, akumulasi_up, akumulasi_over, akumulasi_prev, noa_to, today_up, today_prev, today_over, today_up_loan, today_prev_loan, 
-			today_over_loan, disburse_noa, disburse_up')
-			->from('units_repayments_summaries')
-			->join('units','units.id =units_repayments_summaries.id_unit ')
-			->join('areas','areas.id = units.id_area')
-			->where('areas.status', 'PUBLISH')
-			->where('date', date('Y-m-d', strtotime($curr)) )
-			->get()->result();
+// 		$repayments = $this->repayments_summaries->db
+// 			->select('units.name as unit, areas.area, date,noa_ak, akumulasi_up, akumulasi_over, akumulasi_prev, noa_to, today_up, today_prev, today_over, today_up_loan, today_prev_loan, 
+// 			today_over_loan, disburse_noa, disburse_up')
+// 			->from('units_repayments_summaries')
+// 			->join('units','units.id =units_repayments_summaries.id_unit ')
+// 			->join('areas','areas.id = units.id_area')
+// 			->where('areas.status', 'PUBLISH')
+// 			->where('date', date('Y-m-d', strtotime($curr)) )
+// 			->get()->result();
 
-		if(count($repayments) <= 0){
-			$this->calculate_repayment($curr);
-			$repayments = $this->repayments_summaries->db
-				->select('units.name as unit, areas.area, date, noa_ak, akumulasi_up, akumulasi_over, noa_to akumulasi_prev, today_up, today_prev, today_over, today_up_loan, today_prev_loan, 
-			today_over_loan, disburse_noa, disburse_up')
-				->from('units_repayments_summaries')
-				->join('units','units.id = units_repayments_summaries.id_unit ')
-				->join('areas','areas.id = units.id_area')
-				->where('areas.status', 'PUBLISH')
-				->where('date', date('Y-m-d', strtotime($curr)) )
-				->get()->result();
-		}
-
-		
-
-		//$os = $this->data();
-		// $grouped = $this->grouped($os);
-		// $pdf->AddPage('L');
-		// $view = $this->load->view('dailyreport/outstanding/index.php',['outstanding'=>$grouped,'datetrans'=> $this->datetrans()],true);
-		// $pdf->writeHTML($view);
+// 		if(count($repayments) <= 0){
+// 			$this->calculate_repayment($curr);
+// 			$repayments = $this->repayments_summaries->db
+// 				->select('units.name as unit, areas.area, date, noa_ak, akumulasi_up, akumulasi_over, noa_to akumulasi_prev, today_up, today_prev, today_over, today_up_loan, today_prev_loan, 
+// 			today_over_loan, disburse_noa, disburse_up')
+// 				->from('units_repayments_summaries')
+// 				->join('units','units.id = units_repayments_summaries.id_unit ')
+// 				->join('areas','areas.id = units.id_area')
+// 				->where('areas.status', 'PUBLISH')
+// 				->where('date', date('Y-m-d', strtotime($curr)) )
+// 				->get()->result();
+// 		}
 
 	//Outstanding Gcore
 		$this->load->library('gcore');
-		// $areas = $this->gcore->areas()->data;
 		$panak = "61611e1d8614149f281503a8";
-		$jabar = "60c6befbe64d1e2428630162";
+		$jabar = "60c6befbe64d1e2428630162"; 
 		$ntt = "60c6bfcce64d1e242863024a";
 		$lawu = "62280b69861414b1beffc464";
+		$ntb = "60c6bfa6e64d1e2428630213"; 
+		$gtam3 ="60c6bf2ce64d1e2428630199"; 
+		$gtam2 ="60c6bf63e64d1e24286301d9"; 
+		$gtam1 ="6296cca7861414086c6ba4d4"; 
+
+		
 		$panakukang =  $this->gcore->transaction($curr, $panak, $branch, $unit, 0); 
 		// var_dump($panakukang); exit;
 		$osSiscol =  $this->gcore->transaction($curr, $jabar, $branch, $unit, 0); 
 		$osNtt = $this->gcore->transaction($curr, $ntt, $branch, $unit, 0);
 		$osLawu = $this->gcore->transaction($curr, $lawu, $branch, $unit, 0);
+		$osNtb = $this->gcore->transaction($curr, $ntb, $branch, $unit, 0);
+		$osGtam3 = $this->gcore->transaction($curr, $gtam3, $branch, $unit, 0);
+		$osGtam2 = $this->gcore->transaction($curr, $gtam2, $branch, $unit, 0);
+		$osGtam1 = $this->gcore->transaction($curr, $gtam1, $branch, $unit, 0);
 
-		$newos = $this->reportoutstanding();
+		// $newos = $this->reportoutstanding();
 
-		$grouped = $this->grouped($newos); 
+		// $os = $this->outstandings($curr); 
+		// $grouped = $this->grouped($os);
+
+		// $pdf->AddPage('L', 'A3');
+		// $view = $this->load->view('dailyreport/outstanding/generate.php',['outstanding'=>$grouped,'datetrans'=> $curr],true);
+		// $pdf->writeHTML($view);
+
+
+
+		// exit;
+		// var_dump($grouped); exit;
+
+		// foreach ($grouped as $key=>$item){
+		// 	// foreach($item as $data){
+		// 		echo $item[0]->noaYesterday;
+		// 	// }
+		// 	// echo "$key => $item]->noaYesterday <br>";
+		// }
+		// 		// var_dump($grouped); 
+		// 		exit;
+
 		$pdf->AddPage('L', 'A3');
 		$view = $this->load->view('dailyreport/outstanding/generate.php',
 		[
-			'outstanding' => $grouped,
+			// 'outstanding' => $grouped,
 			'datetrans' => $curr, 
 			'osSiscol' => $osSiscol, 
 			'panakukang' => $panakukang, 
 			'osNtt' => $osNtt,
-			'osLawu' => $osLawu
+			'osLawu' => $osLawu,
+			'osNtb' => $osNtb,
+			'osGtam3' => $osGtam3,
+			'osGtam2' => $osGtam2,
+			'osGtam1' => $osGtam1
 		], 
 		true);
 
 		$pdf->writeHTML($view);
+		// exit;
 	//end OS gGcore
 
-	//Os Ghanet aja
-		// $newos = $this->reportoutstanding();
+// // dipakai
+// 		$pdf->AddPage('L','A3');
+// 		$view = $this->load->view('dailyreport/outstanding/repayments.php',['repayments'=>$repayments,'datetrans'=> $curr],true);
+// 		$pdf->writeHTML($view);	
 
-		// $grouped = $this->grouped($newos);
-		// $pdf->AddPage('L', 'A3');
-		// $view = $this->load->view('dailyreport/outstanding/generate.php',['outstanding'=>$grouped,'datetrans'=> $curr],true);
-		// $pdf->writeHTML($view);
-	//End Ghanet
-
-		// $osmortages = $this->dataMortages();
-		// $groupedMortages = $this->grouped($osmortages);
-		// $pdf->AddPage('L');
-		// $view = $this->load->view('dailyreport/outstanding/mortages.php',['outstanding'=>$groupedMortages,'datetrans'=> $this->datetrans()],true);
-		// $pdf->writeHTML($view);
-
-// dipakai
-		$pdf->AddPage('L','A3');
-		$view = $this->load->view('dailyreport/outstanding/repayments.php',['repayments'=>$repayments,'datetrans'=> $curr],true);
-		$pdf->writeHTML($view);	
-
-		$os = $this->model->db
-			->select('units.name, areas.area, units_dpd.*')
-			->from('units_dpd')
-			->join('units','units.id = units_dpd.id_unit')
-			->join('areas','areas.id = units.id_area')
-			->where('areas.status', 'PUBLISH')
-			->where('date', date('Y-m-d', strtotime($curr)))->get()->result();
-		$pdf->AddPage('L','A3');
-		$view = $this->load->view('dailyreport/outstanding/dpd.php',['dpd'=>$os,'datetrans'=>$curr],true);
-		$pdf->writeHTML($view);		
+// 		$os = $this->model->db
+// 			->select('units.name, areas.area, units_dpd.*')
+// 			->from('units_dpd')
+// 			->join('units','units.id = units_dpd.id_unit')
+// 			->join('areas','areas.id = units.id_area')
+// 			->where('areas.status', 'PUBLISH')
+// 			->where('date', date('Y-m-d', strtotime($curr)))->get()->result();
+// 		$pdf->AddPage('L','A3');
+// 		$view = $this->load->view('dailyreport/outstanding/dpd.php',['dpd'=>$os,'datetrans'=>$curr],true);
+// 		$pdf->writeHTML($view);		
 		
-		$this->load->library('myyogadai');
-		$yukGadaiOs =  $this->myyogadai->transaction($curr, 0);
+// 		$this->load->library('myyogadai');
+// 		$yukGadaiOs =  $this->myyogadai->transaction($curr, 0);
+// 		$pdf->AddPage('L','A3');
+// 		$view =$this->load->view('report/yogadai/pdf',['outstanding'=>$yukGadaiOs,'datetrans'=>$curr],true);
+// 		$pdf->writeHTML($view);	
+
+// 		$pdf->AddPage('L','A4');
+// 		$view = $this->load->view('dailyreport/outstanding/target.php',['data'=>$this->target($curr),'datetrans'=> $curr],true);
+// 		$pdf->writeHTML($view);
+
+		//Target Booking
+		$pdf->AddPage('L','A4');
+		$view = $this->load->view('dailyreport/outstanding/gcore_target.php',['target'=>$this->gcore_target($curr, $date_start),'datetrans'=> $curr],true);
+		$pdf->writeHTML($view);
+
+		//Target OS
+		$pdf->AddPage('L','A4');
+		$view = $this->load->view('dailyreport/outstanding/gcore_target_os.php',['target'=>$this->gcore_target_os($curr, $date_start),'datetrans'=> $curr],true);
+		$pdf->writeHTML($view);
+
+		// $pdf->AddPage('L','A3');
+		// $view = $this->load->view('dailyreport/outstanding/target_os.php',['data'=>$newos,'datetrans'=>$curr],true);
+		// $pdf->writeHTML($view);
+
+		
+
+	
+// 	//End dipakai
+	
+// //dipakai
+
+// 		$pdf->AddPage('L','A4');
+// 		$group = $this->grouped($this->rate());
+// 		$view = $this->load->view('dailyreport/outstanding/rate.php',['areas'	=> $group],true);
+// 		$pdf->writeHTML($view);
+
+// //End dipakai
+
+// //dipakai
+
+		// $pdf->AddPage('L','A4');
+		// $group = $this->grouped($this->rate());
+		// $view = $this->load->view('dailyreport/outstanding/gcore_rate.php',['rate'	=> $this->gcore_rate()],true);
+		// $pdf->writeHTML($view);
+
+// //End dipakai
+
+//dipakai
+		// $pdf->AddPage('L','A4');
+		// $view = $this->load->view('dailyreport/outstanding/pendapatan.php',['pendapatan'	=> $this->pendapatan(),
+		// 'datetrans'=> $ghanet],true);
+		// $pdf->writeHTML($view);
+		
+		//Pendapatan Gcore
+		$pdf->AddPage('L', 'A4');
+		$view = $this->load->view('dailyreport/outstanding/gcore_pendapatan.php', ['pendapatan' => $this->gcore_pendapatan($curr, $date_start),
+		'datetrans' => $curr], true);
+		$pdf->writeHTML($view);
+
+		// $pdf->AddPage('L','A4');
+		// $view = $this->load->view('dailyreport/outstanding/pengeluaran.php',['pengeluaran'	=> $this->pengeluaran(),
+		// 'datetrans'=> $ghanet],true);
+		// $pdf->writeHTML($view);
+		
+//		pengeluaran Gcore
+		$pdf->AddPage('L','A4');
+		$view = $this->load->view('dailyreport/outstanding/gcore_pengeluaran.php',['pengeluaran'	=> $this->gcore_pengeluaran($curr, $date_start),
+		'datetrans'=> $curr],true);
+		$pdf->writeHTML($view);
+
+		// $coas = $this->dailycash->pengeluaran_perk($curr);
+
+		// $pdf->AddPage('L','A4');
+		// $view = $this->load->view('dailyreport/outstanding/pengeluaran_operasi',[
+		// 	'coas'=>$coas	,
+		// 	'datetrans'	=>$curr
+		// ],true);
+
+		// $pdf->writeHTML($view);
+
+	//End dipakai
+
+	//Gcore Oneobligor
+		$pdf->AddPage('L','A4');
+		$view = $this->load->view('dailyreport/outstanding/gcore_oneObligor.php',['oneobligor'	=> $this->gcore_oneObligor($curr, $date_start),
+		'datetrans'=> $curr],true);
+		$pdf->writeHTML($view);
+	
+	// SWAMANDIRI RATE
 		$pdf->AddPage('L','A3');
-		$view =$this->load->view('report/yogadai/pdf',['outstanding'=>$yukGadaiOs,'datetrans'=>$curr],true);
-		$pdf->writeHTML($view);	
-
-		$pdf->AddPage('L','A4');
-		$view = $this->load->view('dailyreport/outstanding/target.php',['data'=>$this->target($curr),'datetrans'=> $curr],true);
-		$pdf->writeHTML($view);
-		$pdf->AddPage('L','A4');
-		$view = $this->load->view('dailyreport/outstanding/target_os.php',['data'=>$newos,'datetrans'=>$curr],true);
-		$pdf->writeHTML($view);
-	
-	//End dipakai
-
-		// $pdf->AddPage('L');
-		// $view = $this->load->view('dailyreport/outstanding/pencairan.php',['pencairan'	=> $this->pencairan()],true);
-		// $pdf->writeHTML($view);
-
-		// $pdf->AddPage('L');
-		// $view = $this->load->view('dailyreport/outstanding/pelunasan.php',['pelunasan'	=> $this->pelunasan()],true);
-		// $pdf->writeHTML($view);
-//dipakai
-
-		$pdf->AddPage('L','A4');
-		$group = $this->grouped($this->rate());
-		$view = $this->load->view('dailyreport/outstanding/rate.php',['areas'	=> $group],true);
+		$view = $this->load->view('dailyreport/outstanding/gcore_swamandiri.php',[
+			'gcda'	=> $this->swamandiri_gcda($date_start),
+			'gtam2'	=> $this->swamandiri_gtam2($date_start),
+			'gtam3'	=> $this->swamandiri_gtam3($date_start),
+			'gcta'	=> $this->swamandiri_gcta($date_start),
+			'gcam'	=> $this->swamandiri_gcam($date_start),
+			'gtam1' => $this->swamandiri_gtam1($date_start),
+			'gtam11' => $this->swamandiri_gtam11($date_start),
+			'datetrans'=> $curr],true);
 		$pdf->writeHTML($view);
 
-//End dipakai
-
-// 		$pdf->AddPage('L','A4');
-// 		$view = $this->load->view('dailyreport/outstanding/saldo.php',[
-// 			'saldo'	=> $this->saldounit($curr),
-// 			'datetrans'=> $curr],true);
-// 		$pdf->writeHTML($view);
-
-//dipakai
-		$pdf->AddPage('L','A4');
-		$view = $this->load->view('dailyreport/outstanding/pendapatan.php',['pendapatan'	=> $this->pendapatan(),
-		'datetrans'=> $curr],true);
-		$pdf->writeHTML($view);
-
-		$pdf->AddPage('L','A4');
-		$view = $this->load->view('dailyreport/outstanding/pengeluaran.php',['pengeluaran'	=> $this->pengeluaran(),
-		'datetrans'=> $curr],true);
-		$pdf->writeHTML($view);
-
-		$coas = $this->dailycash->pengeluaran_perk($curr);
-
-		$pdf->AddPage('L','A4');
-		$view = $this->load->view('dailyreport/outstanding/pengeluaran_operasi',[
-			'coas'=>$coas	,
-			'datetrans'	=>$curr
-		],true);
-
-		$pdf->writeHTML($view);
-
-	//End dipakai
-
-// 		$areas = $this->dailycash-> getCocCalcutation(null,  11,date('n', strtotime($curr)), date('Y', strtotime($curr)),  0,  0);
-// 		$pdf->AddPage('L','A4');
-// 		$view = $this->load->view('report/coc/pdf.php',[
-// 			'areas'=>$areas	,
-// 			'datetrans'	=> $this->datetrans()
-// 		],true);
-// 		$pdf->writeHTML($view);
-
-	
-	
 	
 		//download
-		$pdf->Output('GHAnet_Summary_'.date('d_m_Y').'.pdf', 'D');
+		$pdf->Output('GHAnet_Summary_'.date('d_m_Y', strtotime($curr)).'.pdf', 'D');
 		//view
 		// $pdf->Output('GHAnet_Summary_'.date('d_m_Y').'.pdf', 'I');
 	}
@@ -714,11 +545,6 @@ class Outstanding extends Authenticated
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		require_once APPPATH.'controllers/pdf/header.php';
 
-		// $newos = $this->reportoutstanding();
-		// $grouped = $this->grouped($newos);
-		// $pdf->AddPage('L', 'A3');
-		// $view = $this->load->view('dailyreport/outstanding/generate.php',['outstanding'=>$grouped,'datetrans'=> $this->datetrans()],true);
-		// $pdf->writeHTML($view);
 
 		$os = $this->data();
 		$pdf->AddPage('L','A4');
@@ -1258,13 +1084,13 @@ public function reportoutstanding()
 				'up_rep_mortages'	=> $getOstToday->repayment_mortage
 			);
 
+
 			$target = $this->regular->db
 					->select('amount_booking, amount_outstanding')
 					->where('month', date('n', strtotime($date)))
 					->where('year', date('Y', strtotime($date)))
 					->where('id_unit', $unit->id)
 					->get('units_targets')->row();
-					
 			$totalNoaReg = ($unit->ost_yesterday->noa_os_reguler + $unit->ost_today->noa_reguler)-($unit->ost_today->noa_rep_reguler);
 			$totalUpReg = ($unit->ost_yesterday->os_reguler+ $unit->ost_today->up_reguler)-($unit->ost_today->up_rep_reguler);
 			$totalNoaMor = ($unit->ost_yesterday->noa_os_mortages + $unit->ost_today->noa_mortages)-($unit->ost_today->noa_rep_mortages);
@@ -1277,30 +1103,10 @@ public function reportoutstanding()
 				'noa'	=> $totalNoa
 			];
 
-			// $unit->credit_today = $this->regular->getCreditToday($unit->id, $date);
-			// $unit->repayment_today = $this->regular->getRepaymentToday($unit->id, $date);
-			// $totalNoa = (int) $unit->ost_yesterday->noa + $unit->credit_today->noa - $unit->repayment_today->noa;
-			// $totalUp = (int) $unit->ost_yesterday->up + $unit->credit_today->up - $unit->repayment_today->up;
-				
-			// $unit->total_outstanding = (object) array(
-			// 	'noa'	=> $totalNoa,
-			// 	'up'	=> $totalUp,
-			// 	'tiket'	=> round($totalUp > 0 ? $totalUp /$totalNoa : 0)
-			// );
+			
 
 			$unit->total_disburse = $this->regular->getTotalDisburse($unit->id, null, null, $date);
-			// $unit->dpd_yesterday = $this->regular->getDpdYesterday($unit->id, $date);
-			// $unit->dpd_today = $this->regular->getDpdToday($unit->id, $date);
-			// $unit->dpd_repayment_today = $this->regular->getDpdRepaymentToday($unit->id,$date);
-			// $unit->total_dpd = (object) array(
-			// 	//'noa'	=> $unit->dpd_today->noa + $unit->dpd_yesterday->noa,
-			// 	//'ost'	=> $unit->dpd_today->ost + $unit->dpd_yesterday->ost,
-			// 	'noa_today'	=> $unit->dpd_today->noa + $unit->dpd_repayment_today->noa,
-			// 	'ost_today'	=> $unit->dpd_today->ost + $unit->dpd_repayment_today->ost,
-			// 	'noa'	=> ($unit->dpd_today->noa + $unit->dpd_yesterday->noa +$unit->dpd_repayment_today->noa) - $unit->dpd_repayment_today->noa,
-			// 	'ost'	=> ($unit->dpd_today->ost + $unit->dpd_yesterday->ost +$unit->dpd_repayment_today->ost) - $unit->dpd_repayment_today->ost,
-			// );
-			// $unit->percentage = ($unit->total_dpd->ost > 0) && ($unit->total_outstanding->up > 0) ? round($unit->total_dpd->ost / $unit->total_outstanding->up, 4) : 0;
+		
 		}
 		
 		//echo "<pre/>";
@@ -1358,7 +1164,7 @@ public function reportoutstanding()
 
 	public function pendapatan()
 	{
-		$listperk = $this->m_casing->get_list_pendapatan();
+		$listperk = $this->m_casing->get_list_pendapatan_all();
 		$category=array();
 		foreach ($listperk as $value) {
 			array_push($category, $value->no_perk);
@@ -1409,6 +1215,273 @@ public function reportoutstanding()
 		//echo "<pre/>";
 		//print_r($data);
 		return  $data;
+	}
+
+	public function gcore_target($date, $date_start)
+	{		
+		$unit = $this->units->db
+					->select('units.id, units.name, area, units.code')
+					->select('(
+						select COALESCE(t.amount_booking,0) from units_targets t where units.id = t.id_unit
+						and month = "'.date('n', strtotime($date)).'"
+						and year = "'.date('Y', strtotime($date)).'"
+						limit 1
+					) as target')
+					->join('areas','areas.id = units.id_area')
+					->order_by('area', 'asc')
+					->get('units')->result();
+
+			$units = [];
+			$no = 0;
+			$month = date('m');
+			$year = date('Y');
+
+			foreach($unit as $data){
+				$booking = $this->get_booking($data->code, $date, $date_start);
+				
+				$units[$no]['area'] = $data->area;
+				$units[$no]['unit'] = $data->name;
+				$units[$no]['booking'] = $booking->booking;
+				$units[$no]['noa'] = $booking->noa;
+				$units[$no]['target'] = $data->target;
+				// var_dump($units);exit;
+				$no++;
+			}
+				// var_dump($units);exit;
+		return  $units;
+
+					
+	}
+
+	public function get_booking($code, $date, $date_start)
+	{
+
+		return $this->db2->select('COALESCE(count(id),0) as noa, COALESCE(sum(loan_amount),0) as booking')
+		->from('pawn_transactions')
+		->where_in('office_code', $code)
+		->where('contract_date >=', $date_start)
+		->where('contract_date <=', $date)
+		->group_start()
+ 		->like('sge', 'GC')
+		->group_end()
+		->get()->row();
+	}
+	
+	public function gcore_target_os($date, $date_start)
+	{		
+		$this->load->library('gcore');
+		$panak = "61611e1d8614149f281503a8";
+		$jabar = "60c6befbe64d1e2428630162"; 
+		$ntt = "60c6bfcce64d1e242863024a";
+		$lawu = "62280b69861414b1beffc464"; 
+		$ntb = "60c6bfa6e64d1e2428630213"; 
+		$gtam3 ="60c6bf2ce64d1e2428630199"; 
+		$gtam2 ="60c6bf63e64d1e24286301d9"; 
+		$gtam1 ="6296cca7861414086c6ba4d4"; 
+
+		
+		// $panakukang =  $this->gcore->transaction($curr, $panak, $branch, $unit, 0); 
+		// // var_dump($panakukang); exit;
+		// $osSiscol =  $this->gcore->transaction($curr, $jabar, $branch, $unit, 0); 
+		// $osNtt = $this->gcore->transaction($curr, $ntt, $branch, $unit, 0);
+		// $osLawu = $this->gcore->transaction($curr, $lawu, $branch, $unit, 0);
+		// $osNtb = $this->gcore->transaction($curr, $ntb, $branch, $unit, 0);
+		// $osGtam3 = $this->gcore->transaction($curr, $gtam3, $branch, $unit, 0);
+		// $osGtam2 = $this->gcore->transaction($curr, $gtam2, $branch, $unit, 0);
+		// $osGtam1 = $this->gcore->transaction($curr, $gtam1, $branch, $unit, 0);
+		
+		$unit = $this->units->db
+					->select('units.id, units.name, area, units.code')
+					->select('(
+						select COALESCE(t.amount_outstanding,0) from units_targets t where units.id = t.id_unit
+						and month = "'.date('n', strtotime($date)).'"
+						and year = "'.date('Y', strtotime($date)).'"
+						limit 1
+					) as target')
+					->join('areas','areas.id = units.id_area')
+					->order_by('area', 'asc')
+					->get('units')->result();
+
+			$units = [];
+			$no = 0;
+			$month = date('m');
+			$year = date('Y');
+			$os = 0;
+
+			foreach($unit as $data){
+				$area = $this->get_areaunit($data->code, $date, $date_start);
+				// var_dump($area);exit;
+				
+				if($area->area_id == $panak){
+					$os =  $this->gcore->transaction($date, $area->area_id , $area->branch_id ,$area->office_id, 0)->data; 
+				}elseif($area->area_id == $jabar){
+					$os =  $this->gcore->transaction($date, $area->area_id , $area->branch_id ,$area->office_id, 0)->data; 
+				}elseif($area->area_id == $ntt){
+					$os = $this->gcore->transaction($date, $area->area_id , $area->branch_id ,$area->office_id, 0)->data;
+				}elseif($area->area_id == $lawu){
+					$os = $this->gcore->transaction($date, $area->area_id , $area->branch_id ,$area->office_id, 0)->data;
+					//  var_dump($os);exit;
+				}elseif($area->area_id == $ntb){
+					$os = $this->gcore->transaction($date, $area->area_id , $area->branch_id ,$area->office_id, 0)->data;
+					// echo "Hi";exit;
+				}elseif($area->area_id == $gtam3){
+					$os = $this->gcore->transaction($date, $area->area_id , $area->branch_id ,$area->office_id, 0)->data;
+				}elseif($area->area_id == $gtam2){
+					$os = $this->gcore->transaction($date, $area->area_id , $area->branch_id ,$area->office_id, 0)->data;
+				}elseif($area->area_id == $gtam1){
+					$os = $this->gcore->transaction($date, $area->area_id , $area->branch_id ,$area->office_id, 0)->data;
+				}
+				
+				foreach($os as $dataOs){
+					$units[$no]['area'] = $data->area;
+					$units[$no]['unit'] = $data->name;
+
+					// foreach($os as $data){
+						$units[$no]['os'] = $dataOs->total_outstanding->os;
+						$units[$no]['noa'] = $dataOs->total_outstanding->noa;
+
+					$units[$no]['target'] = $data->target;
+				}
+				$no++;
+				
+			}
+		return  $units;
+
+					
+	}
+
+	public function get_areaunit($code, $date, $date_start)
+	{
+
+		return $this->db2->select('office_code as code, area_id, branch_id, office_id ')
+		->from('pawn_transactions')
+		->where_in('office_code', $code)
+		->get()->row();
+	}
+
+	public function gcore_pendapatan( $date1, $date_start)
+	{
+		
+		$date_end = date('Y-m-d', strtotime($this->datetrans()));
+		// $date1 = "2022-07-12";
+		$date = date('Y-m-01');
+		// var_dump($year); exit;
+
+			$unit = $this->db2->select('office_id, office_name, region_id')
+			->distinct('office_id')
+			->from('pawn_transactions')
+			->order_by('office_name', 'asc')
+			->group_by('office_id')
+			->group_by('office_name')
+			->group_by('region_id')->get()->result();
+			// var_dump($unit);exit;
+
+			$units = [];
+			$no = 0;
+			foreach($unit as $data){
+				$pawn = $this->get_admin($data->office_name, $date1, $date_start);
+				$pay = $this->get_sewa($data->office_name, $date1, $date_start);
+				$other = $this->get_lainnya($data->office_name, $data->region_id, $date1, $date_start);
+				// var_dump($other);exit;
+				$units[$no]['unit'] = $data->office_name;
+				// $units[$no]['admin'] = $pawn->admin;
+				// $units[$no]['sewa'] = $pay->sewa;
+				// $units[$no]['denda'] = $pay->denda;
+				$units[$no]['lain'] = $other;
+				$units[$no]['saldo'] = $pawn->admin + $pay->sewa + $pay->denda + $other;
+				// var_dump($units);exit;
+				$no++;
+			}
+				// var_dump($units);exit;
+		return  $units;
+	}
+
+	public function get_admin($unit, $date1, $date_start)
+	{
+		// echo 'yes'; exit;
+		// $DB2 = $this->load->database('db2',TRUE);
+
+		$date_end = date('Y-m-d', strtotime($this->datetrans()));
+		// $date = date('Y-m-01');
+		// $date1 = "2022-07-12";
+
+		return $this->db2->select('lower(office_name) as office_name, sum(admin_fee) as admin')
+		->from('pawn_transactions')
+		->where_in('office_name', $unit)
+		->where('contract_date >=', $date_start)
+		->where('contract_date <=', $date1)
+		->where('status !=', 5)
+		->where('deleted_at', null)
+		->group_start()
+ 		->like('sge', 'GC')
+		->group_end()
+		->group_by('office_name')
+		->get()->row();
+	}
+
+	public function get_sewa($unit, $date1, $date_start)
+	{
+		// echo 'yes'; exit;
+		// $DB2 = $this->load->database('db2',TRUE);
+
+		$date_end = date('Y-m-d', strtotime($this->datetrans()));
+		$date = date('Y-m-01');
+		// $date1 = "2022-07-12";
+
+		return $this->db2->select(' sum(rental_amount) as sewa, sum(fine_amount) as denda')
+		->from('pawn_transactions as pawn')
+		->join('transaction_payment_details as detail', 'detail.pawn_transaction_id=pawn.id')
+		->where_in('office_name', $unit)
+		->where('repayment_date >=', $date_start)
+		->where('repayment_date <=', $date1)
+		->where('pawn.status !=', 5)
+		->where('pawn.deleted_at', null)
+		->get()->row();
+	}
+
+	public function get_lainnya($unit, $region, $date1, $date_start)
+	{
+
+		$date_end = date('Y-m-d', strtotime($this->datetrans()));
+		$date = date('Y-m-01');
+		// $date1 = "2022-07-12";
+ 
+		$cetakan1 = $this->db3->select("sum(amount) as lainnya ")
+		->from("non_transactional_transactions trans")
+		->join('non_transactionals as non', 'non.id=trans.non_transactional_id')
+		->join('non_transactional_items as items', 'items.non_transactional_id=non.id')
+		->join('accounts', 'accounts.id=items.account_id')
+		->where_in("office_name", $unit)
+		->where("trans.created_at >=", $date_start)
+		->where('trans.created_at <=', $date1)
+		->where('transaction_type', '0')
+		->where('items.region_id', $region)
+		->where('accounts.account_number','5132100')
+		->group_start()
+        ->like('trans.description', 'BTE')
+		->or_like('trans.description', 'SGE')
+		->group_end()
+		->get()->row();
+
+		$cetakan2 = $this->db3->select("sum(amount) as lainnya ")
+		->from("non_transactional_transactions trans")
+		->join('non_transactionals as non', 'non.id=trans.non_transactional_id')
+		->join('non_transactional_items as items', 'items.non_transactional_id=non.id')
+		->join('accounts', 'accounts.id=items.account_id')
+		->where_in("office_name", $unit)
+		->where("trans.created_at >=", $date_start)
+		->where('trans.created_at <=', $date1)
+		->where('transaction_type', '0')
+		->where('items.region_id', $region)
+		->where('accounts.account_number','4122000')
+		->group_start()
+        ->like('trans.description', 'BTE')
+		->or_like('trans.description', 'SGE')
+		->group_end()
+		->get()->row();
+
+		$data = $cetakan1->lainnya + $cetakan2->lainnya;
+		return $data;
 	}
 
 	public function pengeluaran()
@@ -1462,6 +1535,610 @@ public function reportoutstanding()
 		$data = $this->units->db->get()->result();
 		return $data; //->sendMessage($data,'Successfully get Pendapatan');
 	}
+	
+	public function gcore_pengeluaran($date1, $date_start)
+	{
+		$date1 = date('Y-m-d', strtotime('+1 days', strtotime($date1)));
+		$date_end = date('Y-m-d', strtotime($this->datetrans()));
+		$date = date('Y-m-01');
+		// $date1 = "2022-07-12";
+		
+		// $date_end = date('Y-m-d', strtotime($this->datetrans()));
 
+		// $date = date('Y-m-01');
+		// var_dump($year); exit;
+
+		$units = $this->db3->select(" office_name, sum(amount) as lainnya ")
+		->from("non_transactional_transactions as trans")
+		->join('non_transactionals as non', 'non.id=trans.non_transactional_id')
+		// ->join('non_transactional_items as items', 'items.non_transactional_id=non.id', 'items.region_id=trans.region_id')
+		// ->join('accounts', 'accounts.id=items.account_id')
+		// ->where_in("office_name", $unit)
+		->where("trans.created_at >=", $date_start)
+		->where('trans.created_at <=', $date1)
+		->where('transaction_type', '1')
+		->group_by('office_name')		
+		->get()->result();
+
+
+				// var_dump($units);exit;
+		return  $units;
+	}
+
+	public function get_datapengeluaran($unit, $region, $date1, $date_start)
+	{
+
+		$date1 = date('Y-m-d', strtotime('+1 days', strtotime($date1)));
+		$date_end = date('Y-m-d', strtotime($this->datetrans()));
+		$date = date('Y-m-01');
+		// $date1 = "2022-07-12";
+
+		// echo $yesterday; exit;
+ 
+		$cetakan1 = $this->db3->select("sum(amount) as lainnya ")
+		->from("non_transactional_transactions trans")
+		->join('non_transactionals as non', 'non.id=trans.non_transactional_id')
+		->join('non_transactional_items as items', 'items.non_transactional_id=non.id')
+		->join('accounts', 'accounts.id=items.account_id')
+		->where_in("office_name", $unit)
+		->where("trans.created_at >=", $date_start)
+		->where('trans.created_at <=', $date1)
+		->where('transaction_type', '1')
+		->where('items.region_id', $region)		
+		->get()->row();
+
+
+		$data = $cetakan1->lainnya;
+		return $data;
+	}
+
+		public function swamandiri_gcta($date_start)
+	{
+		$rate = 1.90;
+		$selisih = 0.06;
+		// $date = date('Y-m-01');
+		
+		$data = $this->db2
+		->select(" pawn_transactions.area_id,office_name, cif_number, sge, customers.name, contract_date, due_date, auction_date, maximum_loan,loan_amount, admin_fee, interest_rate, interest_rate - '$rate' as selisih"
+			)
+		->from('pawn_transactions')
+		->join('customers', 'customers.id=pawn_transactions.customer_id')
+		->where('area_id', '60c6bfa6e64d1e2428630213')
+		->where('contract_date >=' , $date_start )
+		->where('interest_rate >', $rate)
+		->where("interest_rate - '$rate' >=", 0.06)
+		->where('product_name !=','Gadai Smartphone')
+		// ->order_by('pawn_transactions.region_id')
+		->order_by('pawn_transactions.office_name')
+		->get()->result();
+
+		// var_dump($data);
+
+		return $data;
+	}
+
+	public function swamandiri_gcam($date_start)
+	{
+		$rate = 1.90;
+		$selisih = 0.06;
+		// $date = date('Y-m-01');
+		
+		$data = $this->db2
+		->select(" pawn_transactions.area_id,office_name, cif_number, sge, customers.name, contract_date, due_date, auction_date, maximum_loan,loan_amount, admin_fee, interest_rate, interest_rate - '$rate' as selisih"
+			)
+		->from('pawn_transactions')
+		->join('customers', 'customers.id=pawn_transactions.customer_id')
+		->where('area_id', '60c6bfcce64d1e242863024a')
+		->where('contract_date >=' , $date_start )
+		->where('interest_rate >', $rate)
+		->where("interest_rate - '$rate' >=", 0.06)
+		->where('product_name !=','Gadai Smartphone')
+		// ->order_by('pawn_transactions.region_id')
+		->order_by('pawn_transactions.office_name')
+		->get()->result();
+
+		// var_dump($data);
+
+		return $data;
+	}
+
+	public function swamandiri_gcda($date_start)
+	{
+		$ratemin = 1.80;
+		$ratemax = 1.90;
+		$selisih = 0.06;
+		$date = date('Y-m-01');
+		
+		$datamin = $this->db2
+		->select(" pawn_transactions.area_id,office_name, cif_number, sge, customers.name, contract_date, due_date, auction_date, maximum_loan,loan_amount, admin_fee, interest_rate, interest_rate - '$ratemin' as selisih"
+			)
+		->from('pawn_transactions')
+		->join('customers', 'customers.id=pawn_transactions.customer_id')
+		->where('area_id', '60c6befbe64d1e2428630162')
+		->where('contract_date >=' , $date_start )
+		->where('payment_status', TRUE )
+		->where('loan_amount <=', '500000')
+		->where('interest_rate >', $ratemin)
+		->where("interest_rate - '$ratemin' >=", 0.06)
+		->where('product_name !=','Gadai Smartphone')
+		// ->order_by('pawn_transactions.region_id')
+		->order_by('pawn_transactions.office_name')
+		->get()->result();
+
+		$datamax = $this->db2
+		->select(" pawn_transactions.area_id,office_name, cif_number, sge, customers.name, contract_date, due_date, auction_date, maximum_loan,loan_amount, admin_fee, interest_rate, interest_rate - '$ratemax' as selisih"
+			)
+		->from('pawn_transactions')
+		->join('customers', 'customers.id=pawn_transactions.customer_id')
+		->where('area_id', '60c6befbe64d1e2428630162')
+		->where('contract_date >=' , $date_start )
+		->where('payment_status', TRUE )
+		->where('loan_amount >', '500000')
+		->where('interest_rate >', $ratemax)
+		->where("interest_rate - '$ratemax' >=", 0.06)
+		->where('product_name !=','Gadai Smartphone')
+		// ->order_by('pawn_transactions.region_id')
+		->order_by('pawn_transactions.office_name')
+		->get()->result();
+
+		// var_dump($data);
+
+		return array(
+			'min' => $datamin,
+			'max' => $datamax
+		);
+	}
+	
+	public function swamandiri_gtam1($date_start)
+	{
+		$ratemin = 1.75;
+		$ratemax = 1.80;
+		$selisih = 0.06;
+		$persen = 100;
+		$date = date('Y-m-01');
+		
+		$datamin = $this->regular->db
+		->select("units.name as unit,nic, no_sbk, date_sbk, customers.name as nasabah, deadline, date_auction,amount, admin, capital_lease, capital_lease * 100 - '$ratemin' as selisih"
+			)
+		->from('units_regularpawns')
+		->join('customers', 'customers.id=units_regularpawns.id_customer')
+		->join('units', 'units.id=units_regularpawns.id_unit')
+		->where('units.id_area', '2')
+		->where('date_sbk >=' , $date_start )
+		->where('status_transaction', 'L' )
+		->where('amount <=', '500000')
+		->where("capital_lease * '$persen' >", $ratemin)
+		->where("capital_lease * '$persen' - '$ratemin' >=", 0.06)
+		->not_like('description_1', 'HP')
+		// // ->order_by('pawn_transactions.region_id')
+		->order_by('units.name')
+		->get()->result();
+
+		// var_dump($datamin);exit;
+
+		$datamax = $this->regular->db
+		->select("units.name as unit,nic, no_sbk, date_sbk, customers.name as nasabah, deadline, date_auction,amount, admin, capital_lease, capital_lease * 100 - '$ratemax' as selisih"
+			)
+		->from('units_regularpawns')
+		->join('customers', 'customers.id=units_regularpawns.id_customer')
+		->join('units', 'units.id=units_regularpawns.id_unit')
+		->where('units.id_area', '2')
+		->where('date_sbk >=' , $date_start )
+		->where('status_transaction', 'L' )
+		->where('amount >', '500000')
+		->where("capital_lease * '$persen' >", $ratemax)
+		->where("capital_lease * '$persen' - '$ratemax' >=", 0.06)
+		->not_like('description_1', 'HP')
+		// // ->order_by('pawn_transactions.region_id')
+		->order_by('units.name')
+		->get()->result();
+
+		// var_dump($datamax);exit;
+		
+		
+
+		return array(
+			'min' => $datamin,
+			'max' => $datamax
+		);
+
+	}
+
+	public function swamandiri_gtam2($date_start)
+	{
+		$ratemin = 1.75;
+		$ratemax = 1.80;
+		$selisih = 0.06;
+		// $date = date('Y-m-01');
+		
+		$datamin = $this->db2
+		->select(" pawn_transactions.area_id,office_name, cif_number, sge, customers.name, contract_date, due_date, auction_date, maximum_loan,loan_amount, admin_fee, interest_rate, interest_rate - '$ratemin' as selisih"
+			)
+		->from('pawn_transactions')
+		->join('customers', 'customers.id=pawn_transactions.customer_id')
+		->where('area_id', '60c6bf63e64d1e24286301d9')
+		->where('contract_date >=' , $date_start)
+		->where('payment_status', TRUE )
+		->where('loan_amount <=', '500000')
+		->where('interest_rate >', $ratemin)
+		->where("interest_rate - '$ratemin' >=", 0.06)
+		->where('product_name !=','Gadai Smartphone')
+		// ->order_by('pawn_transactions.region_id')
+		->order_by('pawn_transactions.office_name')
+		->get()->result();
+
+		$datamax = $this->db2
+		->select(" pawn_transactions.area_id,office_name, cif_number, sge, customers.name, contract_date, due_date, auction_date, maximum_loan,loan_amount, admin_fee, interest_rate, interest_rate - '$ratemax' as selisih"
+			)
+		->from('pawn_transactions')
+		->join('customers', 'customers.id=pawn_transactions.customer_id')
+		->where('area_id', '60c6bf63e64d1e24286301d9')
+		->where('contract_date >=' , $date_start )
+		->where('payment_status', TRUE )
+		->where('loan_amount >', '500000')
+		->where('interest_rate >', $ratemax)
+		->where("interest_rate - '$ratemax' >=", 0.06)
+		->where('product_name !=','Gadai Smartphone')
+		// ->order_by('pawn_transactions.region_id')
+		->order_by('pawn_transactions.office_name')
+		->get()->result();
+
+		// var_dump($data);
+
+		return array(
+			'min' => $datamin,
+			'max' => $datamax
+		);
+
+		
+	}
+
+	public function swamandiri_gtam3($date_start)
+	{
+		$ratemin = 1.75;
+		$ratemax = 1.80;
+		$selisih = 0.06;
+		$date = date('Y-m-01');
+		
+		$datamin = $this->db2
+		->select(" pawn_transactions.area_id,office_name, cif_number, sge, customers.name, contract_date, due_date, auction_date, maximum_loan,loan_amount, admin_fee, interest_rate, interest_rate - '$ratemin' as selisih"
+			)
+		->from('pawn_transactions')
+		->join('customers', 'customers.id=pawn_transactions.customer_id')
+		->where('area_id', '60c6bf2ce64d1e2428630199')
+		->where('contract_date >=' , $date_start )
+		->where('payment_status', TRUE )
+		->where('loan_amount <=', '500000')
+		->where('interest_rate >', $ratemin)
+		->where("interest_rate - '$ratemin' >=", 0.06)
+		->where('product_name !=','Gadai Smartphone')
+		// ->order_by('pawn_transactions.region_id')
+		->order_by('pawn_transactions.office_name')
+		->get()->result();
+
+		$datamax = $this->db2
+		->select(" pawn_transactions.area_id,office_name, cif_number, sge, customers.name, contract_date, due_date, auction_date, maximum_loan,loan_amount, admin_fee, interest_rate, interest_rate - '$ratemax' as selisih"
+			)
+		->from('pawn_transactions')
+		->join('customers', 'customers.id=pawn_transactions.customer_id')
+		->where('area_id', '60c6bf2ce64d1e2428630199')
+		->where('contract_date >=' , $date_start )
+		->where('payment_status', TRUE )
+		->where('loan_amount >', '500000')
+		->where('interest_rate >', $ratemax)
+		->where("interest_rate - '$ratemax' >=", 0.06)
+		->where('product_name !=','Gadai Smartphone')
+		// ->order_by('pawn_transactions.region_id')
+		->order_by('pawn_transactions.office_name')
+		->get()->result();
+
+		// var_dump($data);
+
+		return array(
+			'min' => $datamin,
+			'max' => $datamax
+		);
+
+	}
+	
+	public function swamandiri_gtam11($date_start)
+	{
+		$ratemin = 1.75;
+		$ratemax = 1.80;
+		$selisih = 0.06;
+		$date = date('Y-m-01');
+		
+		$datamin = $this->db2
+		->select(" pawn_transactions.area_id,office_name, cif_number, sge, customers.name, contract_date, due_date, auction_date, maximum_loan,loan_amount, admin_fee, interest_rate, interest_rate - '$ratemin' as selisih"
+			)
+		->from('pawn_transactions')
+		->join('customers', 'customers.id=pawn_transactions.customer_id')
+		->where('area_id', '6296cca7861414086c6ba4d4')
+		->where('contract_date >=' , $date_start )
+		->where('payment_status', TRUE )
+		->where('loan_amount <=', '500000')
+		->where('interest_rate >', $ratemin)
+		->where("interest_rate - '$ratemin' >=", 0.06)
+		->where('product_name !=','Gadai Smartphone')
+		// ->order_by('pawn_transactions.region_id')
+		->order_by('pawn_transactions.office_name')
+		->get()->result();
+
+		$datamax = $this->db2
+		->select(" pawn_transactions.area_id,office_name, cif_number, sge, customers.name, contract_date, due_date, auction_date, maximum_loan,loan_amount, admin_fee, interest_rate, interest_rate - '$ratemax' as selisih"
+			)
+		->from('pawn_transactions')
+		->join('customers', 'customers.id=pawn_transactions.customer_id')
+		->where('area_id', '6296cca7861414086c6ba4d4')
+		->where('contract_date >=' , $date_start )
+		->where('payment_status', TRUE )
+		->where('loan_amount >', '500000')
+		->where('interest_rate >', $ratemax)
+		->where("interest_rate - '$ratemax' >=", 0.06)
+		->where('product_name !=','Gadai Smartphone')
+		// ->order_by('pawn_transactions.region_id')
+		->order_by('pawn_transactions.office_name')
+		->get()->result();
+
+		// var_dump($data);
+
+		return array(
+			'min' => $datamin,
+			'max' => $datamax
+		);
+
+	}
+
+	public function gcore_oneObligor($date1)
+	{
+
+		$units = $this->db2->select('area_id, office_code, lower(office_name) as office_name,customers.name as customer, customers.cif_number, sum(loan_amount) as up,')
+		->from('pawn_transactions')
+		->join('customers', 'customers.id=pawn_transactions.customer_id')
+		->where('payment_status', FALSE)
+		->where('contract_date <=', $date1)
+		->where('pawn_transactions.status !=', 5 )
+		->where('pawn_transactions.deleted_at', null)
+		->group_start()
+        ->where('pawn_transactions.payment_amount', null)
+		->or_where('pawn_transactions.payment_amount', 0)
+		->group_end()
+		->group_by('area_id')
+		->group_by('office_code')
+		->group_by('office_name')
+		->group_by('cif_number')
+		->group_by('customers.name')
+		->having('sum(loan_amount) >= 250000000')
+		->order_by('area_id', 'asc')
+		->order_by('office_name', 'asc')
+		->order_by('sum(loan_amount)', 'desc')
+		->get()->result();
+			// var_dump($unit);exit;
+
+				// var_dump($units);exit;
+		return  $units;
+	}
+
+	function outstandings($date){
+
+		
+		// $date = '2022-10-12';
+		$date_1 = date('Y-m-d', strtotime('-1 days', strtotime($date)));
+
+		// var_dump($date_1); exit;
+
+		$units = $this->units->db->select('units.office_id, units.name, area')
+			->join('areas','areas.id = units.id_area')
+			->order_by('areas.id')
+			->get('units')->result();
+
+		$data = [];
+		$a = 0;
+		foreach($units as $unit){
+
+			$getOstYesterday = $this->get_os($unit->office_id, $date_1);
+
+			// echo $getOstYesterday['noa']; exit;
+
+			$unit->ost_yesterday = (object) array(
+				'noa'	=> $getOstYesterday['noa'],
+				'os'		=> $getOstYesterday['os'],
+				
+			);
+
+			$getPencairan =  $this->pencairann($unit->office_id, $date);
+			
+			$unit->pencairan = (object) array(
+				'noa'		=> $getPencairan['noa'],
+				'os'		=> $getPencairan['os'],
+			);
+
+			$getRepayment =  $this->repaymentt($unit->office_id, $date);
+			
+			$unit->repayment = (object) array(
+				'noa'		=> $getRepayment['noa'],
+				'os'		=> $getRepayment['os'],
+			);
+
+			$getOstToday =  $this->get_os($unit->office_id, $date);
+			
+			$unit->ost_today = (object) array(
+				'noa'		=> $getOstToday['noa'],
+				'os'		=> $getOstToday['os'],
+			);
+
+			$getDisburse =  $this->disbursee($unit->office_id, $date);
+			
+			$unit->disburse = (object) array(
+				'noa'		=> $getDisburse['noa'],
+				'os'		=> $getDisburse['os'],
+			);
+
+		
+
+			// $unit->total_disburse = $this->regular->getTotalDisburse($unit->id, null, null, $date);
+
+			// $today =
+			// $yesterday = 
+			// $pencairan = $this->pencairann($unit->office_id, $date);
+			// $repayment = $this->repaymentt($unit->office_id, $date);
+			// $disburse = $this->disbursee($unit->office_id, $date);
+
+			// echo $pencairan['os']; exit;
+
+			// $data[$unit->area][$a]['unit'] = $unit->name;
+			// $data[$unit->area][$a]['dateYesterday'] = $date_1;
+			// $data[$unit->area][$a]['noaYesterday'] = $yesterday['noa'];
+			// $data[$unit->area][$a]['osYesterday'] = $yesterday['os'];
+
+			// $data[$unit->area][$a]['noaPencairan'] = $pencairan['noa'];
+			// $data[$unit->area][$a]['osPencairan'] = $pencairan['os'];
+
+			// $data[$unit->area][$a]['noaRepayment'] = $repayment['noa'];
+			// $data[$unit->area][$a]['osrepayment'] = $repayment['os'];
+
+
+			// $data[$unit->area][$a]['dateToday'] = $date;
+			// $data[$unit->area][$a]['noaToday'] = $today['noa'];
+			// $data[$unit->area][$a]['osToday'] = $today['os'];
+			
+			// $data[$unit->area][$a]['ticketSize'] = round($disburse['os']/$disburse['noa']);
+			// $data[$unit->area][$a]['noaDisburse'] = $disburse['noa'];
+			// $data[$unit->area][$a]['osDisburse'] = $disburse['os'];
+
+			// $a++;
+		}
+
+		// var_dump($units); exit;
+
+		return $units;
+	}
+
+	function get_os($office_id, $date)
+	{
+		$month = date('m', strtotime($date));
+		$year = date('Y', strtotime($date));
+
+
+		$akumulasiActive = $this->db2->select('count(loan_amount) as noa, sum(loan_amount) as os ')
+			->from('pawn_transactions')
+		// ->join('customers', 'customers.id = pawn_transactions.id')
+			->where('pawn_transactions.office_id', $office_id)
+			->where('pawn_transactions.contract_date <=', $date)
+			->where('pawn_transactions.status !=', 5)
+			->where('pawn_transactions.status !=', 4)
+			->where('pawn_transactions.transaction_type !=', 4)
+			->where('pawn_transactions.deleted_at', null)
+			->where('pawn_transactions.payment_status', false)
+			->get()->row();
+
+
+		$akumulasiRepayment = $this->db2->select('count(loan_amount) as noa, sum(loan_amount) as os')
+			->from('pawn_transactions')
+		// ->join('customers', 'customers.id = pawn_transactions.id')
+            ->where('pawn_transactions.office_id', $office_id)
+			->where('pawn_transactions.contract_date <=', $date)
+			->where('pawn_transactions.repayment_date >', $date)
+			->where('pawn_transactions.status !=', 5)
+			->where('pawn_transactions.status !=', 4)
+			->where('pawn_transactions.transaction_type !=', 4)
+			->where('pawn_transactions.deleted_at', null)
+			->where('pawn_transactions.payment_status', true)
+			->get()->row();
+
+
+			$data = [
+				'noa' => $akumulasiActive->noa + $akumulasiRepayment->noa,
+				'os' => $akumulasiActive->os + $akumulasiRepayment->os
+			];
+			// var_dump($data);exit;
+			return $data;
+	}
+
+	function pencairann($office_id, $date)
+	{
+		$date_1 = date('Y-m-01', strtotime($date));
+		$month = date('m', strtotime($date));
+		$year = date('Y', strtotime($date));
+
+
+
+		$pencairan = $this->db2->select('count(loan_amount) as noa, sum(loan_amount) as os')
+			->from('pawn_transactions')
+		// ->join('customers', 'customers.id = pawn_transactions.id')
+            ->where('pawn_transactions.contract_date ', $date)
+            ->where('pawn_transactions.office_id', $office_id)
+			->where('pawn_transactions.status !=', 5)
+			->where('pawn_transactions.status !=', 4)
+			->where('pawn_transactions.transaction_type !=', 4)
+			->where('pawn_transactions.deleted_at', null)
+			->get()->row();
+
+			// var_dump($pencairan); exit;
+
+			$data = [
+				'noa' => $pencairan->noa,
+				'os' => $pencairan->os 
+			];
+			return $data;
+	}
+
+	function repaymentt($office_id, $date)
+	{
+		$date_1 = date('Y-m-01', strtotime($date));
+		$month = date('m', strtotime($date));
+		$year = date('Y', strtotime($date));
+
+		// var_dump($year);exit;
+
+		$pencairan = $this->db2->select('count(loan_amount) as noa, sum(loan_amount) as os')
+			->from('pawn_transactions')
+		// ->join('customers', 'customers.id = pawn_transactions.id')
+            ->where('pawn_transactions.repayment_date ', $date)
+            ->where('pawn_transactions.office_id', $office_id)
+			->where('pawn_transactions.status !=', 5)
+			->where('pawn_transactions.status !=', 4)
+			->where('pawn_transactions.transaction_type !=', 4)
+			->where('pawn_transactions.deleted_at', null)			
+			->where('pawn_transactions.payment_status', true)
+			->get()->row();
+
+			
+
+			$data = [
+				'noa' => $pencairan->noa,
+				'os' => $pencairan->os 
+			];
+			return $data;
+	}
+
+	function disbursee($office_id, $date)
+	{
+		$date_1 = date('Y-01-01', strtotime($date));
+		$month = date('m', strtotime($date));
+		$year = date('Y', strtotime($date));
+
+		// var_dump($year);exit;
+
+
+		$pencairan = $this->db2->select('count(loan_amount) as noa, sum(loan_amount) as os')
+			->from('pawn_transactions')
+		// ->join('customers', 'customers.id = pawn_transactions.id')
+			->where('pawn_transactions.contract_date >=', $date_1)
+            ->where('pawn_transactions.contract_date <=', $date)
+            ->where('pawn_transactions.office_id', $office_id)
+			->where('pawn_transactions.status !=', 5)
+			->where('pawn_transactions.status !=', 4)
+			->where('pawn_transactions.transaction_type !=', 4)
+			->where('pawn_transactions.deleted_at', null)
+			->get()->row();
+
+			$data = [
+				'noa' => $pencairan->noa,
+				'os' => $pencairan->os 
+			];
+			return $data;
+	}
 
 }
+

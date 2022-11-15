@@ -52,6 +52,15 @@ class Units extends ApiController
 		));
     }
 
+    public function get_cabang_byarea($area)
+	{
+		echo json_encode(array(
+			'data'	    => 	$this->units->get_cabang_byarea($area),
+			'status'	=> true,
+			'message'	=> 'Successfully Get Data Units'
+		));
+    }
+
     public function get_unit_bycabang($cabang)
 	{
 		echo json_encode(array(

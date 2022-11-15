@@ -185,6 +185,7 @@ function initCariForm(){
         validator:validator
     }
 }
+
 $('[name="area"]').on('change',function(){
         var area = $('[name="area"]').val();
         var units =  $('[name="id_unit"]');

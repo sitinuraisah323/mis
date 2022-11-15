@@ -61,23 +61,35 @@ class Bapkas extends Authenticated
 		$objPHPExcel->getActiveSheet()->getColumnDimension('E');
 		$objPHPExcel->getActiveSheet()->setCellValue('E1', 'Saldo Awal');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('F');
-		$objPHPExcel->getActiveSheet()->setCellValue('F1', 'Penerimaan');
+		$objPHPExcel->getActiveSheet()->setCellValue('F1', 'Penerimaan Operasional');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('G');
-		$objPHPExcel->getActiveSheet()->setCellValue('G1', 'Pengeluaran');
+		$objPHPExcel->getActiveSheet()->setCellValue('G1', 'Penerimaan Moker');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('H');
-		$objPHPExcel->getActiveSheet()->setCellValue('H1', 'Saldo Akhir');
+		$objPHPExcel->getActiveSheet()->setCellValue('H1', 'Total Penerimaan');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('I');
-		$objPHPExcel->getActiveSheet()->setCellValue('I1', 'NOA Regular');
+		$objPHPExcel->getActiveSheet()->setCellValue('I1', 'Pengeluaran Transaksioanl');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('J');
-		$objPHPExcel->getActiveSheet()->setCellValue('J1', 'OS Regular');
+		$objPHPExcel->getActiveSheet()->setCellValue('J1', 'Pengeluaran Non Transaksional');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('K');
-		$objPHPExcel->getActiveSheet()->setCellValue('K1', 'NOA Cicilan');
+		$objPHPExcel->getActiveSheet()->setCellValue('K1', 'Total Pengeluaran');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('L');
-		$objPHPExcel->getActiveSheet()->setCellValue('L1', 'OS Cicilan');
+		$objPHPExcel->getActiveSheet()->setCellValue('L1', 'Saldo Akhir');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('M');
-		$objPHPExcel->getActiveSheet()->setCellValue('M1', 'NOA Total');		
+		$objPHPExcel->getActiveSheet()->setCellValue('M1', 'NOA Regular');
 		$objPHPExcel->getActiveSheet()->getColumnDimension('N');
-		$objPHPExcel->getActiveSheet()->setCellValue('N1', 'Total OS');		
+		$objPHPExcel->getActiveSheet()->setCellValue('N1', 'OS Regular');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('O');
+		$objPHPExcel->getActiveSheet()->setCellValue('O1', 'NOA Cicilan');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('P');
+		$objPHPExcel->getActiveSheet()->setCellValue('P1', 'OS Cicilan');
+		$objPHPExcel->getActiveSheet()->getColumnDimension('Q');
+		$objPHPExcel->getActiveSheet()->setCellValue('Q1', 'NOA Total');		
+		$objPHPExcel->getActiveSheet()->getColumnDimension('R');
+		$objPHPExcel->getActiveSheet()->setCellValue('R1', 'Total OS');	
+		$objPHPExcel->getActiveSheet()->getColumnDimension('S');
+		$objPHPExcel->getActiveSheet()->setCellValue('S1', 'Nominal Selisih');	
+		$objPHPExcel->getActiveSheet()->getColumnDimension('T');
+		$objPHPExcel->getActiveSheet()->setCellValue('T1', 'Deskripsi');
 		if($post = $this->input->post()){
 			$this->model->db
 			->select('units.code,units.name as unit_name')
@@ -98,16 +110,22 @@ class Bapkas extends Authenticated
 			$objPHPExcel->getActiveSheet()->setCellValue('C'.$no, $row->kasir);				  	
 			$objPHPExcel->getActiveSheet()->setCellValue('D'.$no, date('d/m/Y',strtotime($row->date)));				  	
 			$objPHPExcel->getActiveSheet()->setCellValue('E'.$no, $row->amount_balance_first);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, $row->amount_in);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('G'.$no, $row->amount_out);				 
-			$objPHPExcel->getActiveSheet()->setCellValue('H'.$no, $row->amount_balance_final);	
+			$objPHPExcel->getActiveSheet()->setCellValue('F'.$no, $row->amount_in);				 				 
+			$objPHPExcel->getActiveSheet()->setCellValue('G'.$no, $row->amount_inmoker);			 				 
+			$objPHPExcel->getActiveSheet()->setCellValue('H'.$no, $row->total_amountin);		
+			$objPHPExcel->getActiveSheet()->setCellValue('I'.$no, $row->amount_out);	
+			$objPHPExcel->getActiveSheet()->setCellValue('J'.$no, $row->amount_outnon);				
+			$objPHPExcel->getActiveSheet()->setCellValue('K'.$no, $row->total_amountout);			 
+			$objPHPExcel->getActiveSheet()->setCellValue('L'.$no, $row->amount_balance_final);	
 			if($row->os_cicilan!=null){$oscicilan= $row->os_cicilan;}else{$oscicilan=0;}	
-			$objPHPExcel->getActiveSheet()->setCellValue('I'.$no, $row->noa_regular);
-			$objPHPExcel->getActiveSheet()->setCellValue('J'.$no, $row->os_unit);
-			$objPHPExcel->getActiveSheet()->setCellValue('K'.$no, $row->noa_cicilan);
-			$objPHPExcel->getActiveSheet()->setCellValue('L'.$no, $oscicilan);
-			$objPHPExcel->getActiveSheet()->setCellValue('M'.$no, $row->noa_regular + $row->noa_cicilan);
-			$objPHPExcel->getActiveSheet()->setCellValue('N'.$no, $row->os_unit + $oscicilan);		 
+			$objPHPExcel->getActiveSheet()->setCellValue('M'.$no, $row->noa_regular);
+			$objPHPExcel->getActiveSheet()->setCellValue('N'.$no, $row->os_unit);
+			$objPHPExcel->getActiveSheet()->setCellValue('O'.$no, $row->noa_cicilan);
+			$objPHPExcel->getActiveSheet()->setCellValue('P'.$no, $oscicilan);
+			$objPHPExcel->getActiveSheet()->setCellValue('Q'.$no, $row->noa_regular + $row->noa_cicilan);
+			$objPHPExcel->getActiveSheet()->setCellValue('R'.$no, $row->os_unit + $oscicilan);		
+			$objPHPExcel->getActiveSheet()->setCellValue('S'.$no, $row->amount_gap);	
+
 			$no++;
 		}
 

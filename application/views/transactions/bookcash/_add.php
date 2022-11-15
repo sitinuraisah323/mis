@@ -1,7 +1,7 @@
 <!--begin::Modal-->
 <div class="modal fade" id="modal_add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content" style="min-height: 590px;">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">BAP Kas</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -16,7 +16,7 @@
                                   <?php  //echo $this->session->userdata('user')->level; ?>
                                 <?php if($this->session->userdata('user')->level == 'administrator'):?>                                
                                     <label class="col-lg-4 col-form-label">Units</label>
-                                    <div class="col-lg-8">
+                                    <div class="col-lg-6">
                                         <select class="form-control form-control-sm select2" name="id_unit" id="id_unit">
                                             <option value="">Pilih Unit</option>
                                             <?php foreach ($units as $unit):?>
@@ -31,69 +31,123 @@
                                     <input type="hidden" class="form-control form-control-sm" name="id_unit" id="id_unit" value="<?php echo $this->session->userdata('user')->id_unit;?>">
                                 <?php endif; ?>
                                 
+                                <?php if($this->session->userdata('user')->level == 'kasir'):?>  
+                                    <input type="hidden" class="form-control form-control-sm" name="id_unit" id="id_unit" value="<?php echo $this->session->userdata('user')->id_unit;?>">
+                                <?php endif; ?>
+                                
                                     <label class="col-lg-4 col-form-label">Kasir</label>
-                                    <div class="col-lg-8">
-                                        <input type="text" class="form-control form-control-sm" id="kasir" name="kasir" style="font-size: 13px">
+                                    <div class="col-lg-6">
+                                        <input type="text" class="form-control form-control-sm" id="kasir" name="kasir" style="font-size: 15px">
                                     </div>
                                     <label class="col-lg-4 col-form-label">Tanggal</label>
-                                    <div class="col-lg-8">
-                                        <input type="text" class="form-control form-control-sm" id="date" name="date" value="<?php echo date('d-m-Y'); ?>" style="font-size: 13px" style="background-color:grey; color:white;" readonly>
+                                    <div class="col-lg-6">
+                                        <input type="text" class="form-control form-control-sm" id="date" name="date" value="<?php echo date('d-m-Y'); ?>" style="font-size: 15px" style="background-color:grey; color:white;" readonly>
                                     </div>
                                     
+                                    <label class="col-lg-4 col-form-label">Booking</label>
+                                    <div class="col-lg-4">
+                                        <input type="text" class="form-control form-control-sm" id="booking" name="booking" value="0" style="font-size: 15px">
+                                    </div>
+                                    <label class="col-lg-1 col-form-label" >NOA</label>
+                                    <div class="col-lg-3">
+                                        <input type="text" class="form-control form-control-sm" id="noa_booking" name="noa_booking" value="0" style="font-size: 15px">
+                                    </div>
+
+                                    <label class="col-lg-4 col-form-label">Pelunasan</label>
+                                    <div class="col-lg-4">
+                                        <input type="text" class="form-control form-control-sm" id="repayment" name="repayment" value="0" style="font-size: 15px">
+                                    </div>
+                                    <label class="col-lg-1 col-form-label" >NOA</label>
+                                    <div class="col-lg-3">
+                                        <input type="text" class="form-control form-control-sm" id="noa_repay" name="noa_repay" value="0" style="font-size: 15px">
+                                    </div>
+
+                                    <label class="col-lg-4 col-form-label">DPD</label>
+                                    <div class="col-lg-4">
+                                        <input type="text" class="form-control form-control-sm" id="dpd" name="dpd" value="0" style="font-size: 15px">
+                                    </div>
+                                    <label class="col-lg-1 col-form-label" >NOA</label>
+                                    <div class="col-lg-3">
+                                        <input type="text" class="form-control form-control-sm" id="noa_dpd" name="noa_dpd" value="0" style="font-size: 15px">
+                                    </div>
                                     
                                     <label class="col-lg-4 col-form-label">Sisa UP Regular</label>
                                     <div class="col-lg-4">
-                                        <input type="text" class="form-control form-control-sm" id="os_unit" name="os_unit" value="0" style="font-size: 13px">
+                                        <input type="text" class="form-control form-control-sm" id="os_unit" name="os_unit" value="0" style="font-size: 15px">
                                     </div>
                                     <label class="col-lg-1 col-form-label">NOA</label>
                                     <div class="col-lg-3">
-                                        <input type="text" class="form-control form-control-sm" id="noa_regular" name="noa_regular" value="0" style="font-size: 13px">
+                                        <input type="text" class="form-control form-control-sm" id="noa_regular" name="noa_regular" value="0" style="font-size: 15px">
                                     </div>
                                     
                                     <label class="col-lg-4 col-form-label">Sisa UP Cicilan</label>
                                     <div class="col-lg-4">
-                                        <input type="text" class="form-control form-control-sm" id="os_cicilan" name="os_cicilan" value="0" style="font-size: 13px">
+                                        <input type="text" class="form-control form-control-sm" id="os_cicilan" name="os_cicilan" value="0" style="font-size: 15px">
                                     </div>
                                     <label class="col-lg-1 col-form-label" >NOA</label>
                                     <div class="col-lg-3">
-                                        <input type="text" class="form-control form-control-sm" id="noa_cicilan" name="noa_cicilan" value="0" style="font-size: 13px">
+                                        <input type="text" class="form-control form-control-sm" id="noa_cicilan" name="noa_cicilan" value="0" style="font-size: 15px">
                                     </div>
                                     
                                     <label class="col-lg-4 col-form-label">OS Unit</label>
                                     <div class="col-lg-4">
-                                        <input type="text" class="form-control form-control-sm" id="os" name="os" value="0" style="background-color:grey; color:white; font-size: 13px" readonly>
+                                        <input type="text" class="form-control form-control-sm" id="os" name="os" value="0" style="background-color:grey; color:white; font-size: 15px" readonly>
                                     </div>
                                     <label class="col-lg-1 col-form-label">Total</label>
                                     <div class="col-lg-3">
-                                        <input type="text" class="form-control form-control-sm" id="noa" name="noa" value="0" style="background-color:grey; color:white; font-size: 13px" readonly >
-                                    </div>
+                                        <input type="text" class="form-control form-control-sm" id="noa" name="noa" value="0" style="background-color:grey; color:white; font-size: 15px" readonly >
+                                    </div>                               
+
                                 </div>
                             </div>  
 
                             <div class="col-md-6">   
                                 <div class="form-group row">                          
                                     <label class="col-lg-4 col-form-label">Saldo Awal</label>
-                                    <div class="col-lg-8">
-                                        <input type="text" class="form-control form-control-sm"   id="saldoawal" name="saldoawal" style="font-size: 13px">
-                                    </div>
-                                    <label class="col-lg-4 col-form-label">Penerimaan</label>
                                     <div class="col-lg-6">
-                                        <input type="text" class="form-control form-control-sm" id="penerimaan" name="penerimaan" style="font-size: 13px">
+                                        <input type="text" class="form-control form-control-sm"   id="saldoawal" name="saldoawal" style="font-size: 15px">
+                                    </div>
+                                    <label class="col-lg-4 col-form-label">Penerimaan Operasional</label>
+                                    <div class="col-lg-6">
+                                        <input type="text" class="form-control form-control-sm" id="penerimaan" name="penerimaan" style="font-size: 15px">
                                     </div>
                                     
+                                    <label class="col-lg-4 col-form-label">Penerimaan Moker</label>
+                                    <div class="col-lg-6">
+                                        <input type="text" class="form-control form-control-sm" id="penerimaanmoker" name="penerimaanmoker" style="font-size: 15px">
+                                    </div>
+
+                                    <label class="col-lg-4 col-form-label">Penerimaan </label>
+                                    <div class="col-lg-6">
+                                        <input type="text" class="form-control form-control-sm" id="total_penerimaan" name="total_penerimaan" value="0" style="font-size: 15px; background-color:grey; color:white; font-size: 15px" readonly>
+                                    <input type="hidden" class="form-control form-control-sm" id="totpenerimaan" name="totpenerimaan" style="font-size: 15px" style="background-color:grey; color:white;" readonly>
+                                   
+                                    </div>
+                                    
+                                    <label class="col-lg-4 col-form-label">Pengeluaran Transaksional</label>
+                                    <div class="col-lg-6">
+                                        <input type="text" class="form-control form-control-sm" id="pengeluaran" name="pengeluaran" style="font-size: 15px">
+                                    </div>
+
+                                    <label class="col-lg-4 col-form-label">Pengeluaran non Transaksional</label>
+                                    <div class="col-lg-6">
+                                        <input type="text" class="form-control form-control-sm" id="pengeluarannon" name="pengeluarannon" style="font-size: 15px">
+                                    </div>
                                     <label class="col-lg-4 col-form-label">Pengeluaran</label>
                                     <div class="col-lg-6">
-                                        <input type="text" class="form-control form-control-sm" id="pengeluaran" name="pengeluaran" style="font-size: 13px">
+                                        <input type="text" class="form-control form-control-sm" id="total_pengeluaran" name="total_pengeluaran" value="0" style="font-size: 15px; background-color:grey; color:white; font-size: 15px" readonly>
+                                    <input type="hidden" class="form-control form-control-sm" id="totpengeluaran" name="totpengeluaran" style="font-size: 15px" style="background-color:grey; color:white;" readonly>
+            
                                     </div>
                                     
                                     <label class="col-lg-4 col-form-label">Total Mutasi</label>
-                                    <div class="col-lg-8">
-                                    <input type="text" class="form-control form-control-sm" id="totmutasi" name="totmutasi" style="background-color:grey; color:white; font-size: 13px" readonly >
-                                    <input type="hidden" class="form-control form-control-sm" id="mutasi" name="mutasi" style="font-size: 13px" style="background-color:grey; color:white;" readonly>
+                                    <div class="col-lg-6">
+                                    <input type="text" class="form-control form-control-sm" id="totmutasi" name="totmutasi" style="background-color:grey; color:white; font-size: 15px" readonly >
+                                    <input type="hidden" class="form-control form-control-sm" id="mutasi" name="mutasi" style="font-size: 15px" style="background-color:grey; color:white;" readonly>
                                     </div>
                                     <label class="col-lg-4 col-form-label">Saldo Akhir</label>
-                                    <div class="col-lg-8">
-                                        <input type="text" class="form-control form-control-sm" id="saldoakhir" name="saldoakhir" value="0" style="background-color:grey; color:white; font-size: 13px" readonly>
+                                    <div class="col-lg-6">
+                                        <input type="text" class="form-control form-control-sm" id="saldoakhir" name="saldoakhir" value="0" style="background-color:grey; color:white; font-size: 15px" readonly>
                                     </div>
                                 </div>
                             </div> 
@@ -129,18 +183,18 @@
                                 <div class="form-group row">                          
                                     <label class="col-lg-2 col-form-label">Total</label>
                                     <div class="col-lg-4">
-                                        <input type="text" class="form-control form-control-sm" id="total" name="total" style="font-size: 13px" style="background-color:grey; color:white;" readonly>
+                                        <input type="text" class="form-control form-control-sm" id="total" name="total" style="font-size: 15px" style="background-color:grey; color:white;" readonly>
                                     </div>
                                     <label class="col-lg-4 col-form-label">Selisih uang fisik dengan saldo akhir</label>
                                     <div class="col-lg-2">
-                                        <input type="text" class="form-control form-control-sm" id="selisih" name="selisih" style="font-size: 13px" style="background-color:grey; color:white;" readonly>
+                                        <input type="text" class="form-control form-control-sm" id="selisih" name="selisih" style="font-size: 15px" style="background-color:grey; color:white;" readonly>
                                     </div>
                                 </div> 
 
                                  <div class="form-group row">                          
                                     <label class="col-lg-2 col-form-label">Note</label>
                                     <div class="col-lg-10">
-                                        <input type="text" class="form-control form-control" id="note" name="note" style="font-size: 13px">
+                                        <input type="text" class="form-control form-control" id="note" name="note" style="font-size: 15px">
                                     </div>                                    
                                 </div>      
                             </div>

@@ -24,19 +24,32 @@
                                 <div class="col-lg-8">
                                     <input type="text" class="form-control form-control-sm" id="v_date" name="v_date" style="background-color:grey; color:white;" readonly>
                                 </div> 
-                                <!-- <label class="col-lg-4 col-form-label">NOA Regular</label>
-                                    <div class="col-lg-8">
-                                        <input type="text" class="form-control form-control-sm" id="v_noa_regular" name="v_os_unit" style="background-color:grey; color:white;" readonly>
+                              
+                                <label class="col-lg-4 col-form-label">Booking</label>
+                                    <div class="col-lg-4">
+                                        <input type="text" class="form-control form-control-sm" id="v_booking" name="v_booking"  style="background-color:grey; color:white;" readonly>
                                     </div>
-                                <label class="col-lg-4 col-form-label">NOA Cicilan</label>
-                                    <div class="col-lg-8">
-                                        <input type="text" class="form-control form-control-sm" id="v_noa_cicilan" name="v_os_unit" style="background-color:grey; color:white;" readonly>
-                                    </div>    
-                                <label class="col-lg-4 col-form-label">Sisa OS UP Unit</label>
-                                    <div class="col-lg-8">
-                                        <input type="text" class="form-control form-control-sm" id="v_os_unit" name="v_os_unit" style="background-color:grey; color:white;" readonly>
-                                    </div> -->
-                                
+                                    <label class="col-lg-2 col-form-label">NOA</label>
+                                    <div class="col-lg-2">
+                                        <input type="text" class="form-control form-control-sm" id="v_noa_booking" name="v_noa_booking"  style="background-color:grey; color:white;" readonly>
+                                    </div>
+                                    
+                                    <label class="col-lg-4 col-form-label">Pelunasan</label>
+                                    <div class="col-lg-4">
+                                        <input type="text" class="form-control form-control-sm" id="v_repayment" name="v_repayment" style="background-color:grey; color:white;" readonly>
+                                    </div>
+                                    <label class="col-lg-2 col-form-label">NOA</label>
+                                    <div class="col-lg-2">
+                                        <input type="text" class="form-control form-control-sm" id="v_noa_repay" name="v_noa_repay" style="background-color:grey; color:white;" readonly>
+                                    </div>
+                                     <label class="col-lg-4 col-form-label">DPD</label>
+                                    <div class="col-lg-4">
+                                        <input type="text" class="form-control form-control-sm" id="v_dpd" name="v_dpd" style="background-color:grey; color:white;" readonly>
+                                    </div>
+                                    <label class="col-lg-2 col-form-label">NOA</label>
+                                    <div class="col-lg-2">
+                                        <input type="text" class="form-control form-control-sm" id="v_noa_dpd" name="v_noa_dpd" style="background-color:grey; color:white;" readonly>
+                                    </div>
 
                                     <label class="col-lg-4 col-form-label">Sisa UP Regular</label>
                                     <div class="col-lg-4">
@@ -73,14 +86,31 @@
                                 <div class="col-lg-8">
                                     <input type="text" class="form-control form-control-sm" id="v_saldoawal" name="v_saldoawal" style="background-color:grey; color:white;" readonly>
                                 </div> 
-                                <label class="col-lg-4 col-form-label">Penerimaan</label>
+                                <label class="col-lg-4 col-form-label">Penerimaan Operasional</label>
                                 <div class="col-lg-6">
                                     <input type="text" class="form-control form-control-sm" id="v_penerimaan" name="v_penerimaan" style="background-color:grey; color:white;" readonly>
                                 </div> 
+                                <label class="col-lg-4 col-form-label">Penerimaan Moker</label>
+                                <div class="col-lg-6">
+                                    <input type="text" class="form-control form-control-sm" id="v_penerimaanmoker" name="v_penerimaanmoker" style="background-color:grey; color:white;" readonly>
+                                </div> 
+                                <label class="col-lg-4 col-form-label">Total Penerimaan</label>
+                                <div class="col-lg-6">
+                                    <input type="text" class="form-control form-control-sm" id="v_total_peneriamaan" name="v_total_peneriamaan" style="background-color:grey; color:white;" readonly>
+                                </div> 
+                                
                                 <div class="col-lg-2"></div>
-                                <label class="col-lg-4 col-form-label">Pengeluaran</label>
+                                <label class="col-lg-4 col-form-label">Pengeluaran Transaksional</label>
                                 <div class="col-lg-6">
                                     <input type="text" class="form-control form-control-sm" id="v_pengeluaran" name="v_pengeluaran" style="background-color:grey; color:white;" readonly>
+                                </div> 
+                                <label class="col-lg-4 col-form-label">Pengeluaran Non Transaksional</label>
+                                <div class="col-lg-6">
+                                    <input type="text" class="form-control form-control-sm" id="v_pengeluarannon" name="v_pengeluarannon" style="background-color:grey; color:white;" readonly>
+                                </div> 
+                                <label class="col-lg-4 col-form-label">Total Pengeluaran</label>
+                                <div class="col-lg-6">
+                                    <input type="text" class="form-control form-control-sm" id="v_total_pengeluaran" name="v_total_pengeluaran" style="background-color:grey; color:white;" readonly>
                                 </div> 
                                 <div class="col-lg-2"></div>
                                 <label class="col-lg-4 col-form-label">Mutasi</label>

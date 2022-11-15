@@ -10,6 +10,16 @@ class Master extends CI_Model
 
 	public $level = false;
 
+	public function __construct()
+	{
+        parent::__construct();
+		$this->db2 = $this->load->database('db2',TRUE);
+		$this->db3 = $this->load->database('db3',TRUE);
+
+	}
+
+
+
 	public function insert(array $data)
 	{
 		return $this->db->insert($this->table, $data);
@@ -69,6 +79,7 @@ class Master extends CI_Model
 			->get()->result();
 	}
 
+	
 
 	public function update(array $data, $condition = array())
 	{
@@ -140,6 +151,27 @@ class Master extends CI_Model
 		}
 		return $this->db->delete($this->table, $condition);
 
+	}
+
+	public function getAll($limit = null)
+	{
+		// if($this->level){
+		// 	if($this->session->userdata('user')->level == 'unit'){
+		// 		$this->db2->where($this->table.'.id_unit', $this->session->userdata('user')->id_unit);
+		// 	}elseif($this->session->userdata('user')->level == 'area'){
+		// 		$this->db2->where('id_area', $this->session->userdata('user')->id_area);
+		// 	}
+		// }
+		if(!is_null($limit)){
+			$this->db2->limit($limit);
+		}
+		if($this->hirarki){
+			$this->db2->order_by('order','ASC');
+		}
+		return $this->db2
+			->select($this->table.'.*')
+			->from($this->table)
+			->get()->result();
 	}
 
 

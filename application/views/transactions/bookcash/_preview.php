@@ -27,40 +27,52 @@
 		<td>
 		<table>
 			<tr>
-				<td width="80">Saldo Awal</td>
+				<td width="160">Saldo Awal</td>
 				<td width="10"> :</td>
 				<td width="80"> </td>
-				<td width="200"> <?php echo number_format($bookcash->amount_balance_first,0); ?></td>
+				<td width="200">Rp. <?php echo number_format($bookcash->amount_balance_first,0); ?></td>
 			</tr>
 			<tr>
-				<td width="80">Penerimaan </td>
+				<td width="160">Penerimaan Operasional</td>
 				<td width="10"> :</td>
-				<td width="80"> <?php echo number_format($bookcash->amount_in,0); ?></td>
+				<td width="80">Rp. <?php echo number_format($bookcash->amount_in,0); ?></td>
 				<td width="200"></td>
 			</tr>
 			<tr>
-				<td width="80">Pengeluaran </td>
+				<td width="160">Penerimaan Moker</td>
 				<td width="10"> :</td>
-				<td width="80"> <?php echo number_format($bookcash->amount_out,0); ?></td>
+				<td width="80">Rp. <?php echo number_format($bookcash->amount_inmoker,0); ?></td>
 				<td width="200"></td>
 			</tr>
 			<tr>
-				<td width="80">Mutasi </td>
+				<td width="160">Pengeluaran Transaksional</td>
 				<td width="10"> :</td>
-				<td width="80"> <?php echo number_format($bookcash->amount_mutation,0); ?></td>
+				<td width="80">Rp. <?php echo number_format($bookcash->amount_out,0); ?></td>
 				<td width="200"></td>
 			</tr>
 			<tr>
-				<td width="80">Saldo Akhir </td>
+				<td width="160">Pengeluaran Non Transaksional</td>
 				<td width="10"> :</td>
-				<td width="80"> </td>
-				<td width="200"> <?php echo number_format($bookcash->amount_balance_final,0); ?></td>
+				<td width="80">Rp. <?php echo number_format($bookcash->amount_outnon,0); ?></td>
+				<td width="200"></td>
 			</tr>
 			<tr>
-				<td width="80">Sisa UP Kredit </td>
+				<td width="160">Mutasi </td>
+				<td width="10"> :</td>
+				<td width="80">Rp. <?php echo number_format($bookcash->amount_mutation,0); ?></td>
+				<td width="200"></td>
+			</tr>
+			<tr>
+				<td width="160">Saldo Akhir </td>
 				<td width="10"> :</td>
 				<td width="80"> </td>
-				<td width="200"> <?php echo number_format($bookcash->os_unit+$bookcash->os_cicilan,0); ?></td>
+				<td width="200">Rp. <?php echo number_format($bookcash->amount_balance_final,0); ?></td>
+			</tr>
+			<tr>
+				<td width="160">Sisa UP Kredit </td>
+				<td width="10"> :</td>
+				<td width="80"> </td>
+				<td width="200">Rp. <?php echo number_format($bookcash->os_unit+$bookcash->os_cicilan,0); ?></td>
 			</tr>
 		</table>
 		</td>
